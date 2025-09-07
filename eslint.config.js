@@ -1,3 +1,6 @@
+// For more info, see https://github.com/storybookjs/eslint-plugin-storybook#configuration-flat-config-format
+import storybook from 'eslint-plugin-storybook';
+
 // @ts-check
 import js from '@eslint/js';
 import globals from 'globals';
@@ -9,8 +12,7 @@ export default [
   // ESLint가 무시할 파일/폴더를 정의
   {
     ignores: ['.next', 'dist', 'build', 'coverage', 'node_modules'],
-  },
-  // 코드 실행 환경 및 전역 변수 설정
+  }, // 코드 실행 환경 및 전역 변수 설정
   {
     languageOptions: {
       // 전역 변수 설정 (브라우저, Node.js 환경)
@@ -28,12 +30,9 @@ export default [
         tsconfigRootDir: import.meta.dirname,
       },
     },
-  },
-  // 기본 JavaScript 규칙 적용
-  js.configs.recommended,
-  // TypeScript 추천 규칙 적용
-  ...tseslint.configs.recommended,
-  // Prettier 플러그인과 규칙을 적용하여 코드 포맷팅
+  }, // 기본 JavaScript 규칙 적용
+  js.configs.recommended, // TypeScript 추천 규칙 적용
+  ...tseslint.configs.recommended, // Prettier 플러그인과 규칙을 적용하여 코드 포맷팅
   {
     files: ['**/*.{js,jsx,ts,tsx}'],
     plugins: { prettier },
@@ -46,15 +45,14 @@ export default [
       // TypeScript의 사용하지 않는 변수 규칙 (접두사 '_'를 가진 변수는 무시)
       '@typescript-eslint/no-unused-vars': ['error', { argsIgnorePattern: '^_' }],
     },
-  },
-  // `next-env.d.ts` 파일에 대한 규칙 예외 처리
+  }, // `next-env.d.ts` 파일에 대한 규칙 예외 처리
   {
     files: ['next-env.d.ts'],
     rules: {
       // Next.js가 자동으로 생성하는 파일이므로, triple-slash-reference 규칙을 무시
       '@typescript-eslint/triple-slash-reference': 'off',
     },
-  },
-  // eslint-config-prettier를 마지막에 추가하여 포맷팅 충돌 방지
+  }, // eslint-config-prettier를 마지막에 추가하여 포맷팅 충돌 방지
   configPrettier,
+  ...storybook.configs['flat/recommended'],
 ];

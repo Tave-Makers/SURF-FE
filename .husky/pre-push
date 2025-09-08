@@ -1,11 +1,16 @@
-#!/bin/sh
-. "$(dirname "$0")/_/husky.sh"
-
 branch_name=$(git rev-parse --abbrev-ref HEAD)
 
-if ! echo "$branch_name" | grep -Eq '^(feat|fix|hotfix|refactor|style|docs|chore|test|release)\/[a-z0-9._-]+$'; then
-  echo "❌ 브랜치 네이밍 규칙 위반: $branch_name"
+echo "🔍 브랜치 네이밍 규칙 검사 중..."
+
+if ! echo "$branch_name" | grep -Eq '^(feat|fix|hotfix|refactor|style|docs|chore|test|release)/[a-z0-9._-]+$'; then
+  echo ""
+  echo "❌ 브랜치 네이밍이 규칙에 맞지 않습니다."
+  echo "👉 규칙 예시:"
+  echo "   feat/login-api"
+  echo "   chore/update_eslint-10.2.0"
+  echo ""
+  echo "📖 허용된 prefix: feat, fix, hotfix, refactor, style, docs, chore, test, release"
   exit 1
 fi
 
-echo "✅ 브랜치 네이밍 규칙 통과"
+echo "✅ 브랜치 네이밍 규칙 통과 🎉"

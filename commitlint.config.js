@@ -1,12 +1,19 @@
 export default {
-  extends: ['@commitlint/config-conventional'],
+  parserPreset: {
+    parserOpts: {
+      headerPattern:
+        /^\[(?<type>feat|fix|refactor|style|format|docs|chore|add|del|test)\]\[(?<nickname>[a-z0-9_-]+)\]: (?<subject>.+)$/,
+      headerCorrespondence: ['type', 'nickname', 'subject'],
+    },
+  },
   rules: {
-    // Surf 규칙: [type][nickname]: 메시지 (이슈번호는 선택)
-    'header-pattern': [
+    'type-enum': [
       2,
       'always',
-      /^\[(feat|fix|refactor|style|format|docs|chore|add|del|test)\]\[[a-z0-9_-]+\]: .+(?:\(#\d+\))?$/,
+      ['feat', 'fix', 'refactor', 'style', 'format', 'docs', 'chore', 'add', 'del', 'test'],
     ],
+    'subject-empty': [2, 'never'],
+    'type-empty': [2, 'never'],
     'header-max-length': [2, 'always', 100],
   },
 };

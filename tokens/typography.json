@@ -1,0 +1,203 @@
+{
+  "fileName": "Tave Makers",
+  "textStyles": [
+    {
+      "name": "Head/26_700_-1",
+      "fontFamily": "Pretendard",
+      "fontWeight": "Bold",
+      "fontSize": 26,
+      "letterSpacing": {
+        "unit": "PERCENT",
+        "value": -1
+      },
+      "textCase": "ORIGINAL"
+    },
+    {
+      "name": "Head/18_700_-1",
+      "fontFamily": "Pretendard",
+      "fontWeight": "Bold",
+      "fontSize": 18,
+      "letterSpacing": {
+        "unit": "PERCENT",
+        "value": -1
+      },
+      "textCase": "ORIGINAL"
+    },
+    {
+      "name": "Body/18_600_-2",
+      "fontFamily": "Pretendard",
+      "fontWeight": "SemiBold",
+      "fontSize": 18,
+      "letterSpacing": {
+        "unit": "PERCENT",
+        "value": -2
+      },
+      "textCase": "ORIGINAL"
+    },
+    {
+      "name": "Body/16_600_-1",
+      "fontFamily": "Pretendard",
+      "fontWeight": "SemiBold",
+      "fontSize": 16,
+      "letterSpacing": {
+        "unit": "PERCENT",
+        "value": -1
+      },
+      "textCase": "ORIGINAL"
+    },
+    {
+      "name": "Body/16_700_-1",
+      "fontFamily": "Pretendard",
+      "fontWeight": "Bold",
+      "fontSize": 16,
+      "letterSpacing": {
+        "unit": "PERCENT",
+        "value": -1
+      },
+      "textCase": "ORIGINAL"
+    },
+    {
+      "name": "Body/16_700_-2",
+      "fontFamily": "Pretendard",
+      "fontWeight": "Bold",
+      "fontSize": 16,
+      "letterSpacing": {
+        "unit": "PERCENT",
+        "value": -1
+      },
+      "textCase": "ORIGINAL"
+    },
+    {
+      "name": "Body/14_700_-1",
+      "fontFamily": "Pretendard",
+      "fontWeight": "Bold",
+      "fontSize": 14,
+      "letterSpacing": {
+        "unit": "PERCENT",
+        "value": -1
+      },
+      "textCase": "ORIGINAL"
+    },
+    {
+      "name": "Body/14_600_-1_20",
+      "fontFamily": "Pretendard",
+      "fontWeight": "SemiBold",
+      "fontSize": 14,
+      "letterSpacing": {
+        "unit": "PERCENT",
+        "value": -1
+      },
+      "textCase": "ORIGINAL"
+    },
+    {
+      "name": "Body/14_600_-1_24",
+      "fontFamily": "Pretendard",
+      "fontWeight": "SemiBold",
+      "fontSize": 14,
+      "letterSpacing": {
+        "unit": "PERCENT",
+        "value": -1
+      },
+      "textCase": "ORIGINAL"
+    },
+    {
+      "name": "Body/14_400_-2_24",
+      "fontFamily": "Pretendard",
+      "fontWeight": "Regular",
+      "fontSize": 14,
+      "letterSpacing": {
+        "unit": "PERCENT",
+        "value": -2
+      },
+      "textCase": "ORIGINAL"
+    },
+    {
+      "name": "Body/14_400_-2_22",
+      "fontFamily": "Pretendard",
+      "fontWeight": "Regular",
+      "fontSize": 14,
+      "letterSpacing": {
+        "unit": "PERCENT",
+        "value": -2
+      },
+      "textCase": "ORIGINAL"
+    },
+    {
+      "name": "Body/12_600",
+      "fontFamily": "Pretendard",
+      "fontWeight": "SemiBold",
+      "fontSize": 12,
+      "letterSpacing": {
+        "unit": "PERCENT",
+        "value": 0
+      },
+      "textCase": "ORIGINAL"
+    },
+    {
+      "name": "Body/12_400_-2",
+      "fontFamily": "Pretendard",
+      "fontWeight": "Regular",
+      "fontSize": 12,
+      "letterSpacing": {
+        "unit": "PERCENT",
+        "value": -2
+      },
+      "textCase": "ORIGINAL"
+    },
+    {
+      "name": "Caption/12_700",
+      "fontFamily": "Pretendard",
+      "fontWeight": "Bold",
+      "fontSize": 12,
+      "letterSpacing": {
+        "unit": "PERCENT",
+        "value": -1
+      },
+      "textCase": "ORIGINAL"
+    },
+    {
+      "name": "Caption/12_400",
+      "fontFamily": "Pretendard",
+      "fontWeight": "Regular",
+      "fontSize": 12,
+      "letterSpacing": {
+        "unit": "PERCENT",
+        "value": -1
+      },
+      "textCase": "ORIGINAL"
+    },
+    {
+      "name": "Caption/10_400_-1",
+      "fontFamily": "Pretendard",
+      "fontWeight": "Regular",
+      "fontSize": 10,
+      "letterSpacing": {
+        "unit": "PERCENT",
+        "value": -1
+      },
+      "textCase": "ORIGINAL"
+    },
+    {
+      "name": "Caption/10_600_-1",
+      "fontFamily": "Pretendard",
+      "fontWeight": "SemiBold",
+      "fontSize": 10,
+      "letterSpacing": {
+        "unit": "PERCENT",
+        "value": -1
+      },
+      "textCase": "ORIGINAL"
+    },
+    {
+      "name": "Caption/9_600_-4",
+      "fontFamily": "Pretendard",
+      "fontWeight": "SemiBold",
+      "fontSize": 9,
+      "letterSpacing": {
+        "unit": "PERCENT",
+        "value": -4
+      },
+      "textCase": "ORIGINAL"
+    }
+  ]
+}

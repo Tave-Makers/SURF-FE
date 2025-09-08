@@ -4,7 +4,7 @@ pnpm exec commitlint --edit "$1"
 status=$?
 
 if [ $status -ne 0 ]; then
-  echo "❌ 커밋 메시지가 규칙에 맞지 않습니다."
+  echo "❌ 커밋 메시지 규칙 위반"
   echo "👉 규칙 예시:"
   echo "   [feat][nickname]: 새로운 기능 추가 (#123)"
   echo "   [fix][nickname]: 버그 수정 (#99)"

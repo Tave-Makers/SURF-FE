@@ -53,10 +53,9 @@ export default [
     },
   },
 
-  // 3) 기본 JS/TS 권장 규칙
+  // 3) 기본 JS/TS 권장 규칙(+TS 타입체크)
   js.configs.recommended,
-  ...tseslint.configs.recommended,
-
+  ...tseslint.configs.recommendedTypeChecked,
   // 4) Next.js 권장 규칙
   // core-web-vitals preset을 적용하면 Next 공식 권장 규칙 세트가 들어옵니다.
   {

@@ -1,5 +1,9 @@
-const layout = () => {
-  return <div>layout</div>;
-};
+import type { ReactNode } from 'react';
 
-export default layout;
+export default function RootLayout({ children }: { children: ReactNode }) {
+  return (
+    <html lang="ko">
+      <body>{children}</body>
+    </html>
+  );
+}

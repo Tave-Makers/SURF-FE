@@ -67,12 +67,22 @@ export default [
   ...storybook.configs['flat/recommended'],
 
   // 6) Prettier: 마지막에 둬서 포맷 규칙 충돌 제거 + 플러그인 룰 적용
+  // JS: base rule 사용
   {
-    files: ['**/*.{js,jsx,ts,tsx}'],
+    files: ['**/*.{js,jsx}'],
     rules: {
+      'no-unused-vars': ['error', { argsIgnorePattern: '^_' }],
+      // React 17+ 자동 JSX 런타임
       'react/react-in-jsx-scope': 'off',
+    },
+  },
+  // TS: TS 전용 rule 사용
+  {
+    files: ['**/*.{ts,tsx}'],
+    rules: {
       'no-unused-vars': 'off',
       '@typescript-eslint/no-unused-vars': ['error', { argsIgnorePattern: '^_' }],
+      'react/react-in-jsx-scope': 'off',
     },
   },
   configPrettier,

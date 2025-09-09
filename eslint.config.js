@@ -3,6 +3,8 @@ import js from '@eslint/js';
 import globals from 'globals';
 import tseslint from 'typescript-eslint';
 import configPrettier from 'eslint-config-prettier';
+import reactPlugin from 'eslint-plugin-react';
+import reactHooksPlugin from 'eslint-plugin-react-hooks';
 import nextPlugin from '@next/eslint-plugin-next';
 import storybook from 'eslint-plugin-storybook';
 
@@ -58,8 +60,14 @@ export default [
   // 4) Next.js 권장 규칙
   // core-web-vitals preset을 적용하면 Next 공식 권장 규칙 세트가 들어옵니다.
   {
-    plugins: { '@next/next': nextPlugin },
+    plugins: {
+      '@next/next': nextPlugin,
+      react: reactPlugin,
+      'react-hooks': reactHooksPlugin,
+    },
     rules: {
+      ...reactPlugin.configs.recommended.rules,
+      ...reactHooksPlugin.configs.recommended.rules,
       ...nextPlugin.configs['core-web-vitals'].rules,
     },
   },

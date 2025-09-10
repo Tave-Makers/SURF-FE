@@ -9,17 +9,14 @@ import nextPlugin from '@next/eslint-plugin-next';
 import storybook from 'eslint-plugin-storybook';
 
 export default [
-  // 1) .eslintignore 대체: lint 대상에서 완전히 제외
+  // 1) .eslintignore 대체
   {
     ignores: [
-      // 빌드 산출물
       '.next/',
       'out/',
       'build/',
       'dist/',
-      // 의존성
       'node_modules/',
-      // 정적/문서/락파일 등
       'public/',
       'assets/',
       '*.svg',
@@ -28,7 +25,6 @@ export default [
       '*.md',
       '*.lock',
       'pnpm-lock.yaml',
-      // (선택) 설정 파일을 lint에서 제외하고 싶다면 아래 유지
       'next.config.js',
       'next-env.d.ts',
       'postcss.config.mjs',
@@ -43,21 +39,41 @@ export default [
         ...globals.browser,
         ...globals.node,
       },
+      ecmaVersion: 2020,
+      sourceType: 'module',
+    },
+  },
+
+  // 3) 기본 JS 규칙
+  js.configs.recommended,
+
+  // 4) TypeScript 파일 전용 설정
+  {
+    files: ['**/*.{ts,tsx}'],
+    languageOptions: {
       parser: tseslint.parser,
       parserOptions: {
-        ecmaVersion: 2020,
-        sourceType: 'module',
         project: 'tsconfig.json',
         tsconfigRootDir: import.meta.dirname,
       },
     },
+    rules: {
+      ...tseslint.configs.recommendedTypeChecked[1].rules,
+      '@typescript-eslint/no-unused-vars': ['error', { argsIgnorePattern: '^_' }],
+      'react/react-in-jsx-scope': 'off',
+    },
   },
 
-  // 3) 기본 JS/TS 권장 규칙(+TS 타입체크)
-  js.configs.recommended,
-  ...tseslint.configs.recommendedTypeChecked,
-  // 4) Next.js 권장 규칙
-  // core-web-vitals preset을 적용하면 Next 공식 권장 규칙 세트가 들어옵니다.
+  // 5) JavaScript 파일 전용 설정
+  {
+    files: ['**/*.{js,jsx}'],
+    rules: {
+      'no-unused-vars': ['error', { argsIgnorePattern: '^_' }],
+      'react/react-in-jsx-scope': 'off',
+    },
+  },
+
+  // 6) Next.js & React 규칙
   {
     plugins: {
       '@next/next': nextPlugin,
@@ -70,27 +86,10 @@ export default [
       ...nextPlugin.configs['core-web-vitals'].rules,
     },
   },
-  // 5) Storybook 권장 규칙 (Flat Config용)
+
+  // 7) Storybook
   ...storybook.configs['flat/recommended'],
 
-  // 6) Prettier: 마지막에 둬서 포맷 규칙 충돌 제거 + 플러그인 룰 적용
-  // JS: base rule 사용
-  {
-    files: ['**/*.{js,jsx}'],
-    rules: {
-      'no-unused-vars': ['error', { argsIgnorePattern: '^_' }],
-      // React 17+ 자동 JSX 런타임
-      'react/react-in-jsx-scope': 'off',
-    },
-  },
-  // TS: TS 전용 rule 사용
-  {
-    files: ['**/*.{ts,tsx}'],
-    rules: {
-      'no-unused-vars': 'off',
-      '@typescript-eslint/no-unused-vars': ['error', { argsIgnorePattern: '^_' }],
-      'react/react-in-jsx-scope': 'off',
-    },
-  },
+  // 8) Prettier (마지막)
   configPrettier,
 ];

@@ -1,13 +1,5 @@
-<<<<<<< HEAD
-#!/usr/bin/env sh
-"$(dirname -- "$0")/_/husky.sh"
-
 set -eu
 echo "🔍 브랜치 네이밍 규칙 검사 실행"
-=======
-set -eu
-echo "🔍 브랜치 네이밍 규칙 검사 중..."
->>>>>>> d186d13ab38f3ebee1df9222a1fc14b498a88379
 
 had_input=false
 while read -r local_ref local_sha remote_ref remote_sha; do
@@ -42,8 +34,4 @@ if [ "$had_input" = false ]; then
   esac
 fi
 
-<<<<<<< HEAD
 echo "✅ 브랜치 네이밍 규칙 통과"
-=======
-echo "✅ 브랜치 네이밍 규칙 통과"
->>>>>>> d186d13ab38f3ebee1df9222a1fc14b498a88379

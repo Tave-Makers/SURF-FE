@@ -87,6 +87,9 @@ export default [
       react: {
         version: 'detect',
       },
+      'import/resolver': {
+        typescript: {},
+      },
     },
     rules: {
       ...reactPlugin.configs.recommended.rules,

@@ -1,5 +1,4 @@
-const page = () => {
-  return <div>login</div>;
-};
-
-export default page;
+import LoginPage from '@/pages/login/ui/LoginPage';
+export default function LoginPageRoute() {
+  return <LoginPage />;
+}

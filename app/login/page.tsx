@@ -1,4 +1,4 @@
 import LoginPage from '@/app-pages/login/ui/LoginPage';
-export default function LoginPageRoute() {
+export default function Page() {
   return <LoginPage />;
 }

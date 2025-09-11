@@ -1,4 +1,9 @@
+<<<<<<< HEAD
 echo "🔍 커밋 메시지 규칙 검사 실행"
+=======
+set -eu
+echo "🔍 커밋 메시지 규칙 검사 중..."
+>>>>>>> d186d13ab38f3ebee1df9222a1fc14b498a88379
 
 # commitlint 실행 
 if ! npx --no -- commitlint --edit "$1" >/dev/null 2>&1; then
@@ -12,4 +17,8 @@ if ! npx --no -- commitlint --edit "$1" >/dev/null 2>&1; then
   exit 1
 fi
 
+<<<<<<< HEAD
 echo "✅ 커밋 메시지 규칙 통과"
+=======
+echo "✅ 커밋 메시지 규칙 통과"
+>>>>>>> d186d13ab38f3ebee1df9222a1fc14b498a88379

@@ -1,0 +1,15 @@
+echo "🔍 커밋 메시지 규칙 검사 실행"
+
+# commitlint 실행 
+if ! npx --no -- commitlint --edit "$1" >/dev/null 2>&1; then
+  echo ""
+  echo "❌ 커밋 메시지 규칙 위반"
+  echo "👉 규칙 예시:"
+  echo "   [feat][nickname]: 새로운 기능 추가 (#123)"
+  echo "   [fix][nickname]: 버그 수정 (#99)"
+  echo ""
+  echo "📖 허용된 타입: feat, fix, refactor, style, format, docs, chore, add, del, test"
+  exit 1
+fi
+
+echo "✅ 커밋 메시지 규칙 통과"

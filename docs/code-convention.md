@@ -88,7 +88,7 @@ fix/navbar-overlap-210
 
 #### 🧪 테스트 용이성
 - 단위 테스트/통합 테스트 작성이 쉬운 구조를 유지합니다.
-- 중요한 로직은 Vitest + React Testing Library 기반 테스트를 권장합니다. // 추후 논의
+- 중요한 로직은 Vitest + React Testing Library 기반 테스트를 권장합니다. // 추후 논의 필요
 - Storybook을 통한 UI 테스트를 병행합니다.
 
 #### 🔧 유지보수성

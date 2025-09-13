@@ -71,10 +71,7 @@ export default [
   // 6. Storybook 규칙
   ...storybook.configs['flat/recommended'],
 
-  // 7. Prettier (포맷팅 규칙을 끄는 역할이므로, 모든 규칙 적용 후 위치)
-  configPrettier,
-
-  // 8. **커스텀 오버라이드 규칙 (모든 규칙을 덮어쓰므로 맨 마지막)**
+  // 7. **커스텀 오버라이드 규칙 (모든 규칙을 덮어쓰므로 Prettier보다 먼저)**
   {
     files: ['**/*.{ts,tsx,js,jsx}'],
     languageOptions: {
@@ -94,4 +91,7 @@ export default [
       'react/prop-types': 'off',
     },
   },
+
+  // 8. Prettier (포맷팅 규칙을 끄는 역할이므로, 모든 규칙 적용 후 위치)
+  configPrettier,
 ];

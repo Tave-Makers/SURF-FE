@@ -1,0 +1,127 @@
+@layer utilities {
+  .text-head-26-700--1 {
+    font-family: Pretendard, sans-serif;
+    font-size: 26px;
+    font-weight: 700;
+    letter-spacing: -0.01em;
+  }
+
+  .text-head-18-700--1 {
+    font-family: Pretendard, sans-serif;
+    font-size: 18px;
+    font-weight: 700;
+    letter-spacing: -0.01em;
+  }
+
+  .text-body-18-600--2 {
+    font-family: Pretendard, sans-serif;
+    font-size: 18px;
+    font-weight: 600;
+    letter-spacing: -0.02em;
+  }
+
+  .text-body-16-600--1 {
+    font-family: Pretendard, sans-serif;
+    font-size: 16px;
+    font-weight: 600;
+    letter-spacing: -0.01em;
+  }
+
+  .text-body-16-700--1 {
+    font-family: Pretendard, sans-serif;
+    font-size: 16px;
+    font-weight: 700;
+    letter-spacing: -0.01em;
+  }
+
+  .text-body-16-700--2 {
+    font-family: Pretendard, sans-serif;
+    font-size: 16px;
+    font-weight: 700;
+    letter-spacing: -0.01em;
+  }
+
+  .text-body-14-700--1 {
+    font-family: Pretendard, sans-serif;
+    font-size: 14px;
+    font-weight: 700;
+    letter-spacing: -0.01em;
+  }
+
+  .text-body-14-600--1-20 {
+    font-family: Pretendard, sans-serif;
+    font-size: 14px;
+    font-weight: 600;
+    letter-spacing: -0.01em;
+  }
+
+  .text-body-14-600--1-24 {
+    font-family: Pretendard, sans-serif;
+    font-size: 14px;
+    font-weight: 600;
+    letter-spacing: -0.01em;
+  }
+
+  .text-body-14-400--2-24 {
+    font-family: Pretendard, sans-serif;
+    font-size: 14px;
+    font-weight: 400;
+    letter-spacing: -0.02em;
+  }
+
+  .text-body-14-400--2-22 {
+    font-family: Pretendard, sans-serif;
+    font-size: 14px;
+    font-weight: 400;
+    letter-spacing: -0.02em;
+  }
+
+  .text-body-12-600 {
+    font-family: Pretendard, sans-serif;
+    font-size: 12px;
+    font-weight: 600;
+    letter-spacing: 0em;
+  }
+
+  .text-body-12-400--2 {
+    font-family: Pretendard, sans-serif;
+    font-size: 12px;
+    font-weight: 400;
+    letter-spacing: -0.02em;
+  }
+
+  .text-caption-12-700 {
+    font-family: Pretendard, sans-serif;
+    font-size: 12px;
+    font-weight: 700;
+    letter-spacing: -0.01em;
+  }
+
+  .text-caption-12-400 {
+    font-family: Pretendard, sans-serif;
+    font-size: 12px;
+    font-weight: 400;
+    letter-spacing: -0.01em;
+  }
+
+  .text-caption-10-400--1 {
+    font-family: Pretendard, sans-serif;
+    font-size: 10px;
+    font-weight: 400;
+    letter-spacing: -0.01em;
+  }
+
+  .text-caption-10-600--1 {
+    font-family: Pretendard, sans-serif;
+    font-size: 10px;
+    font-weight: 600;
+    letter-spacing: -0.01em;
+  }
+
+  .text-caption-9-600--4 {
+    font-family: Pretendard, sans-serif;
+    font-size: 9px;
+    font-weight: 600;
+    letter-spacing: -0.04em;
+  }
+}

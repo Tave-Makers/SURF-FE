@@ -10,7 +10,9 @@
     "lint": "eslint",
     "prepare": "husky",
     "storybook": "storybook dev -p 6006",
-    "build-storybook": "storybook build"
+    "build-storybook": "storybook build",
+    "convert-typo": "node --loader ts-node/esm tokens/convert-typo.ts",
+    "convert-color": "node --loader ts-node/esm tokens/convert-color.ts"
   },
   "lint-staged": {
     "*.{js,jsx,ts,tsx}": [

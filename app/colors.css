@@ -1,0 +1,73 @@
+@import 'tailwindcss';
+
+@theme {
+  --color-foreground-secondary: #3f3f3f;
+  --color-foreground-secondary-darker: #2e2e2e;
+  --color-foreground-success: #00794e;
+  --color-foreground-success-darker: #006140;
+  --color-foreground-warning: #cc5418;
+  --color-foreground-warning-darker: #b24513;
+  --color-foreground-danger: #be2b2f;
+  --color-foreground-danger-darker: #9c2427;
+  --color-foreground-hint: #828282;
+  --color-foreground-hint-darker: #696969;
+  --color-foreground-contrast: #2e2e2e;
+  --color-foreground-contrast-darker: #222222;
+  --color-foreground-accent: #ffffff;
+  --color-foreground-normal: #222222;
+  --color-foreground-normal-darker: #3f3f3f;
+  --color-background-secondary: #ffffff;
+  --color-background-tertiary: #ededed;
+  --color-background-quaternary: #d9d9d9;
+  --color-background-hint: #828282;
+  --color-background-contrast: #3f3f3f;
+  --color-background-normal: #ffffff;
+  --color-background-normal-lighter: #ffffff;
+  --color-background-normal-darker: #f7f7f7;
+  --color-background-tag-orange: #ff7122;
+  --color-background-tag-green: #0bda51;
+  --color-background-tag-sky: #15a4ec;
+  --color-background-tag-purple: #881aef;
+  --color-background-tag-pink: #ff69b4;
+  --color-border-normal: #c4c4c4;
+  --color-border-secondary: #d9d9d9;
+  --color-border-hint: #696969;
+  --color-border-contrast: #3f3f3f;
+  --color-logo-normal: #161616;
+}
+
+[data-theme='dark'] {
+  --color-foreground-secondary: #3f3f3f;
+  --color-foreground-secondary-darker: #2e2e2e;
+  --color-foreground-success: #00794e;
+  --color-foreground-success-darker: #006140;
+  --color-foreground-warning: #cc5418;
+  --color-foreground-warning-darker: #b24513;
+  --color-foreground-danger: #be2b2f;
+  --color-foreground-danger-darker: #9c2427;
+  --color-foreground-hint: #828282;
+  --color-foreground-hint-darker: #696969;
+  --color-foreground-contrast: #2e2e2e;
+  --color-foreground-contrast-darker: #222222;
+  --color-foreground-accent: #ffffff;
+  --color-foreground-normal: #222222;
+  --color-foreground-normal-darker: #3f3f3f;
+  --color-background-secondary: #ffffff;
+  --color-background-tertiary: #ededed;
+  --color-background-quaternary: #d9d9d9;
+  --color-background-hint: #828282;
+  --color-background-contrast: #3f3f3f;
+  --color-background-normal: #ffffff;
+  --color-background-normal-lighter: #ffffff;
+  --color-background-normal-darker: #f7f7f7;
+  --color-background-tag-orange: #ff7122;
+  --color-background-tag-green: #0bda51;
+  --color-background-tag-sky: #15a4ec;
+  --color-background-tag-purple: #881aef;
+  --color-background-tag-pink: #ff69b4;
+  --color-border-normal: #c4c4c4;
+  --color-border-secondary: #d9d9d9;
+  --color-border-hint: #696969;
+  --color-border-contrast: #3f3f3f;
+  --color-logo-normal: #161616;
+}

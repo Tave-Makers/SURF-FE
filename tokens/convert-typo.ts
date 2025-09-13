@@ -22,7 +22,7 @@ interface TokenFile {
 }
 
 // 경로 설정
-const tokensPath = path.resolve('typography.json');
+const tokensPath = path.resolve('tokens/typography.json');
 const outPath = path.resolve('app/font-tokens.css');
 
 // JSON 로드

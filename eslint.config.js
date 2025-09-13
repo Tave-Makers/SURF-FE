@@ -7,6 +7,7 @@ import reactPlugin from 'eslint-plugin-react';
 import reactHooksPlugin from 'eslint-plugin-react-hooks';
 import nextPlugin from '@next/eslint-plugin-next';
 import storybook from 'eslint-plugin-storybook';
+import jsxA11y from 'eslint-plugin-jsx-a11y';
 
 export default [
   // 1. .eslintignore 대체 (맨 위)
@@ -56,6 +57,7 @@ export default [
       '@next/next': nextPlugin,
       react: reactPlugin,
       'react-hooks': reactHooksPlugin,
+      'jsx-a11y': jsxA11y,
     },
     settings: {
       react: { version: 'detect' },
@@ -65,6 +67,7 @@ export default [
       ...reactPlugin.configs.recommended.rules,
       ...reactHooksPlugin.configs.recommended.rules,
       ...nextPlugin.configs['core-web-vitals'].rules,
+      ...jsxA11y.configs.recommended.rules,
     },
   },
 

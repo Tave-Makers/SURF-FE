@@ -88,8 +88,9 @@ export default [
     rules: {
       // Next.js 13+에서는 필요 없음
       'react/react-in-jsx-scope': 'off',
-      // 이 규칙이 모든 no-unused-vars 규칙을 덮어씁니다.
-      'no-unused-vars': ['error', { argsIgnorePattern: '^_' }],
+      // TypeScript & JavaScript 공통: 타입스크립트 플러그인 규칙 사용
+      'no-unused-vars': 'off', // 기본 규칙을 끕니다.
+      '@typescript-eslint/no-unused-vars': ['error', { argsIgnorePattern: '^_' }],
       // TypeScript 파일에서 propTypes 경고 무시
       'react/prop-types': 'off',
     },

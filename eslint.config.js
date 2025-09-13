@@ -77,6 +77,9 @@ export default [
   // 7. **커스텀 오버라이드 규칙 (모든 규칙을 덮어쓰므로 Prettier보다 먼저)**
   {
     files: ['**/*.{ts,tsx,js,jsx}'],
+    plugins: {
+      '@typescript-eslint': tseslint.plugin,
+    },
     languageOptions: {
       parser: tseslint.parser,
       parserOptions: {

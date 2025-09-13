@@ -70,5 +70,5 @@ Object.entries(darkColors).forEach(([key, value]) => {
 });
 cssOutput += '}\n';
 
-fs.writeFileSync('app/colors.css', cssOutput, 'utf-8');
-console.log('✅ Generated app/colors.css');
+fs.writeFileSync('app/color-tokens.css', cssOutput, 'utf-8');
+console.log('✅ Generated app/color-tokens.css');

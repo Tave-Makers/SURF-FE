@@ -9,7 +9,7 @@ import nextPlugin from '@next/eslint-plugin-next';
 import storybook from 'eslint-plugin-storybook';
 
 export default [
-  // 1) .eslintignore 대체
+  // 1. .eslintignore 대체 (맨 위)
   {
     ignores: [
       '.next/',
@@ -32,7 +32,7 @@ export default [
     ],
   },
 
-  // 2) 공통 언어 옵션
+  // 2. 공통 언어 옵션
   {
     languageOptions: {
       globals: {
@@ -44,39 +44,13 @@ export default [
     },
   },
 
-  // 3) 기본 JS 규칙
+  // 3. 기본 JS 규칙
   js.configs.recommended,
 
-  // 4) TypeScript 파일 전용 설정
-  {
-    files: ['**/*.{ts,tsx}'],
-    languageOptions: {
-      parser: tseslint.parser,
-      parserOptions: {
-        project: 'tsconfig.json',
-        tsconfigRootDir: import.meta.dirname,
-      },
-    },
-    plugins: {
-      '@typescript-eslint': tseslint.plugin,
-    },
-    rules: {
-      ...tseslint.configs.recommendedTypeChecked[1].rules,
-      '@typescript-eslint/no-unused-vars': ['error', { argsIgnorePattern: '^_' }],
-      'react/react-in-jsx-scope': 'off',
-    },
-  },
+  // 4. TypeScript 기본 규칙
+  ...tseslint.configs.recommendedTypeChecked,
 
-  // 5) JavaScript 파일 전용 설정
-  {
-    files: ['**/*.{js,jsx}'],
-    rules: {
-      'no-unused-vars': ['error', { argsIgnorePattern: '^_' }],
-      'react/react-in-jsx-scope': 'off',
-    },
-  },
-
-  // 6) Next.js & React 규칙
+  // 5. Next.js & React 기본 규칙
   {
     plugins: {
       '@next/next': nextPlugin,
@@ -84,24 +58,40 @@ export default [
       'react-hooks': reactHooksPlugin,
     },
     settings: {
-      react: {
-        version: 'detect',
-      },
-      'import/resolver': {
-        typescript: {},
-      },
+      react: { version: 'detect' },
+      'import/resolver': { typescript: {} },
     },
     rules: {
       ...reactPlugin.configs.recommended.rules,
       ...reactHooksPlugin.configs.recommended.rules,
       ...nextPlugin.configs['core-web-vitals'].rules,
-      'react/react-in-jsx-scope': 'off',
     },
   },
 
-  // 7) Storybook
+  // 6. Storybook 규칙
   ...storybook.configs['flat/recommended'],
 
-  // 8) Prettier (마지막)
+  // 7. Prettier (포맷팅 규칙을 끄는 역할이므로, 모든 규칙 적용 후 위치)
   configPrettier,
+
+  // 8. **커스텀 오버라이드 규칙 (모든 규칙을 덮어쓰므로 맨 마지막)**
+  {
+    files: ['**/*.{ts,tsx,js,jsx}'],
+    languageOptions: {
+      parser: tseslint.parser,
+      parserOptions: {
+        // 타입 정보를 가져올 모든 tsconfig.json 경로를 명시
+        project: ['./tsconfig.json', './.storybook/tsconfig.json'],
+        tsconfigRootDir: import.meta.dirname,
+      },
+    },
+    rules: {
+      // Next.js 13+에서는 필요 없음
+      'react/react-in-jsx-scope': 'off',
+      // 이 규칙이 모든 no-unused-vars 규칙을 덮어씁니다.
+      'no-unused-vars': ['error', { argsIgnorePattern: '^_' }],
+      // TypeScript 파일에서 propTypes 경고 무시
+      'react/prop-types': 'off',
+    },
+  },
 ];

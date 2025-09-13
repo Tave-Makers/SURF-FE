@@ -1,21 +1,19 @@
 {
-  "primary": {
-    "color-background-primary": {
-      "$type": "color",
-      "$value": "{color.blue-500}"
-    },
-    "color-border-primary": {
-      "$type": "color",
-      "$value": "{color.blue-500}"
-    },
-    "color-foreground-primary": {
-      "$type": "color",
-      "$value": "{color.blue-600}"
-    },
-    "color-foreground-primary-darker": {
-      "$type": "color",
-      "$value": "{color.blue-700}"
-    }
+  "color-background-primary": {
+    "$type": "color",
+    "$value": "{color.blue-500}"
+  },
+  "color-border-primary": {
+    "$type": "color",
+    "$value": "{color.blue-500}"
+  },
+  "color-foreground-primary": {
+    "$type": "color",
+    "$value": "{color.blue-600}"
+  },
+  "color-foreground-primary-darker": {
+    "$type": "color",
+    "$value": "{color.blue-700}"
   },
   "color-foreground-secondary": {
     "$type": "color",

@@ -10,7 +10,17 @@ interface LetterSpacing {
 interface TextStyle {
   name: string;
   fontFamily: string;
-  fontWeight: 'Bold' | 'SemiBold' | 'Regular' | string;
+  fontWeight:
+    | 'thin'
+    | 'extraLight'
+    | 'light'
+    | 'regular'
+    | 'medium'
+    | 'semiBold'
+    | 'bold'
+    | 'extraBold'
+    | 'black'
+    | string;
   fontSize: number;
   letterSpacing?: LetterSpacing;
   textCase?: 'ORIGINAL' | string;
@@ -21,12 +31,14 @@ interface TokenFile {
   textStyles: TextStyle[];
 }
 
-// 경로 설정
-const tokensPath = path.resolve('tokens/typography.json');
-const outPath = path.resolve('app/font-tokens.css');
+// 원시 토큰 로드
+const fontTokensPath = path.resolve('tokens/typography.json');
+
+// 실사용 토큰 경로 설정
+const outPath = path.resolve('src/shared/styles/font-tokens.css');
 
 // JSON 로드
-const tokens: TokenFile = JSON.parse(fs.readFileSync(tokensPath, 'utf-8'));
+const tokens: TokenFile = JSON.parse(fs.readFileSync(fontTokensPath, 'utf-8'));
 const styles: TextStyle[] = tokens.textStyles;
 
 // 유틸리티 클래스 생성
@@ -36,10 +48,18 @@ styles.forEach((style: TextStyle) => {
   const className = style.name.replace(/\//g, '-').replace(/_/g, '-').toLowerCase();
 
   // font-weight 처리
-  let fontWeight: string | number = style.fontWeight.toLowerCase();
-  if (fontWeight === 'bold') fontWeight = 700;
-  if (fontWeight === 'semibold') fontWeight = 600;
-  if (fontWeight === 'regular') fontWeight = 400;
+  const weightMap: Record<string, number> = {
+    thin: 100,
+    extraLight: 200,
+    light: 300,
+    regular: 400,
+    medium: 500,
+    semiBold: 600,
+    bold: 700,
+    extraBold: 800,
+    black: 900,
+  };
+  const fontWeight: string | number = weightMap[style.fontWeight.toLowerCase()] ?? style.fontWeight;
 
   // letterSpacing 변환 (퍼센트 → em)
   let letterSpacing = '';
@@ -47,18 +67,15 @@ styles.forEach((style: TextStyle) => {
     letterSpacing = style.letterSpacing.value / 100 + 'em';
   }
 
-  cssOutput += `
-  .text-${className} {
+  cssOutput += `  .text-${className} {
     font-family: ${style.fontFamily}, sans-serif;
     font-size: ${style.fontSize}px;
     font-weight: ${fontWeight};
     ${letterSpacing ? `letter-spacing: ${letterSpacing};` : ''}
-    ${style.textCase && style.textCase !== 'ORIGINAL' ? `text-transform: ${style.textCase.toLowerCase()};` : ''}
   }\n`;
 });
 
 cssOutput += `}\n`;
 
-// 결과 저장
 fs.writeFileSync(outPath, cssOutput, 'utf-8');
 console.log(`✅ Generated ${outPath}`);

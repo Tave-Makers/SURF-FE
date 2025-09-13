@@ -1,0 +1,64 @@
+import fs from 'fs';
+import path from 'path';
+
+// 타입 정의
+interface LetterSpacing {
+  unit: 'PERCENT' | string;
+  value: number;
+}
+
+interface TextStyle {
+  name: string;
+  fontFamily: string;
+  fontWeight: 'Bold' | 'SemiBold' | 'Regular' | string;
+  fontSize: number;
+  letterSpacing?: LetterSpacing;
+  textCase?: 'ORIGINAL' | string;
+}
+
+interface TokenFile {
+  fileName: string;
+  textStyles: TextStyle[];
+}
+
+// 경로 설정
+const tokensPath = path.resolve('typography.json');
+const outPath = path.resolve('app/font-tokens.css');
+
+// JSON 로드
+const tokens: TokenFile = JSON.parse(fs.readFileSync(tokensPath, 'utf-8'));
+const styles: TextStyle[] = tokens.textStyles;
+
+// 유틸리티 클래스 생성
+let cssOutput = `@layer utilities {\n`;
+
+styles.forEach((style: TextStyle) => {
+  const className = style.name.replace(/\//g, '-').replace(/_/g, '-').toLowerCase();
+
+  // font-weight 처리
+  let fontWeight: string | number = style.fontWeight.toLowerCase();
+  if (fontWeight === 'bold') fontWeight = 700;
+  if (fontWeight === 'semibold') fontWeight = 600;
+  if (fontWeight === 'regular') fontWeight = 400;
+
+  // letterSpacing 변환 (퍼센트 → em)
+  let letterSpacing = '';
+  if (style.letterSpacing?.unit === 'PERCENT') {
+    letterSpacing = style.letterSpacing.value / 100 + 'em';
+  }
+
+  cssOutput += `
+  .text-${className} {
+    font-family: ${style.fontFamily}, sans-serif;
+    font-size: ${style.fontSize}px;
+    font-weight: ${fontWeight};
+    ${letterSpacing ? `letter-spacing: ${letterSpacing};` : ''}
+    ${style.textCase && style.textCase !== 'ORIGINAL' ? `text-transform: ${style.textCase.toLowerCase()};` : ''}
+  }\n`;
+});
+
+cssOutput += `}\n`;
+
+// 결과 저장
+fs.writeFileSync(outPath, cssOutput, 'utf-8');
+console.log(`✅ Generated ${outPath}`);

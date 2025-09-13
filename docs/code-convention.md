@@ -69,7 +69,7 @@ fix/navbar-overlap-210
   - 함수명, 변수명, 파일명 → `getUserInfo`, `userList`
 - **PascalCase**
   - 클래스명, 인터페이스명, React 컴포넌트명 → `UserService`, `LoginForm`
-- **SNAKE_CASE**
+- **UPPER_SNAKE_CASE**
   - 상수, 매크로, 환경변수, DB 속성 → `MAX_RETRY_COUNT`, `DB_USER_NAME`
 - **kebab-case**
   - URL, CSS 클래스명, 폴더명 → `/user-profile`, `.main-header`
@@ -88,7 +88,7 @@ fix/navbar-overlap-210
 
 #### 🧪 테스트 용이성
 - 단위 테스트/통합 테스트 작성이 쉬운 구조를 유지합니다.
-- 중요한 로직은 Jest/RTL 기반 테스트를 권장합니다.
+- 중요한 로직은 Vitest + React Testing Library 기반 테스트를 권장합니다. // 추후 논의 필요
 - Storybook을 통한 UI 테스트를 병행합니다.
 
 #### 🔧 유지보수성

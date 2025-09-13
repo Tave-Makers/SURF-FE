@@ -1,0 +1,8 @@
+@import 'tailwindcss';
+@import './font-tokens.css';
+@import './color-tokens.css';
+
+html,
+body {
+  font-family: Pretendard, sans-serif;
+}

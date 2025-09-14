@@ -1,13 +1,13 @@
 'use client';
 
 type ControlRadioProps = {
-  id: string;
-  name: string;
-  value: string;
-  label?: string;
-  checked?: boolean;
-  disabled?: boolean;
-  onChange?: (e: React.ChangeEvent<HTMLInputElement>) => void;
+  id: string; // input과 label 연결용 고유 ID
+  name: string; // 라디오 그룹 이름 (동일 name → 그룹화)
+  value: string; // 선택 시 전달되는 값
+  label?: string; // 라디오 버튼 옆 텍스트
+  checked?: boolean; // 현재 선택 상태 (controlled component)
+  disabled?: boolean; // 비활성화 여부
+  onChange?: (e: React.ChangeEvent<HTMLInputElement>) => void; // 값 변경 핸들러
 };
 
 export const ControlRadio: React.FC<ControlRadioProps> = ({

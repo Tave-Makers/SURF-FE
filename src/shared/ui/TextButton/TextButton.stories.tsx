@@ -30,7 +30,7 @@ const meta = {
   parameters: {
     docs: {
       description: {
-        component: '프로젝트 공통 SolidButton 입니다.',
+        component: '프로젝트 공통 TextButton 입니다.',
       },
     },
   },

@@ -17,7 +17,7 @@ export const HomePage = () => {
       {/* Solid 아이콘 */}
       <SurfIcon
         name="SmileCircleSolid"
-        size="m"
+        size="l"
         className="cursor-pointer text-[color:var(--color-foreground-primary)] hover:text-[color:var(--color-foreground-warning)]"
       />
     </div>

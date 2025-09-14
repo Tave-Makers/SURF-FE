@@ -1,9 +1,9 @@
 import type { Meta, StoryObj } from '@storybook/nextjs-vite';
-import SolidButton from './TextButton';
+import TextButton from './TextButton';
 
 const meta = {
   title: 'Shared/UI/TextButton',
-  component: SolidButton,
+  component: TextButton,
   tags: ['autodocs'],
   args: {
     title: '버튼',
@@ -34,7 +34,7 @@ const meta = {
       },
     },
   },
-} satisfies Meta<typeof SolidButton>;
+} satisfies Meta<typeof TextButton>;
 
 export default meta;
 type Story = StoryObj<typeof meta>;
@@ -48,9 +48,9 @@ export const Sizes: Story = {
   args: { variant: 'primary' },
   render: (args) => (
     <div style={{ display: 'flex', gap: 12 }}>
-      <SolidButton {...args} size="s" title="Small" />
-      <SolidButton {...args} size="m" title="Medium" />
-      <SolidButton {...args} size="l" title="Large" />
+      <TextButton {...args} size="s" title="Small" />
+      <TextButton {...args} size="m" title="Medium" />
+      <TextButton {...args} size="l" title="Large" />
     </div>
   ),
 };

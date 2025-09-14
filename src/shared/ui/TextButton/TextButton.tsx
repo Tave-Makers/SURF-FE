@@ -45,7 +45,7 @@ export default function TextButton({
       type="button"
       disabled={isDisabled}
       className={[
-        'inline-flex w-full items-center justify-center gap-1 px-2.5 py-3',
+        'inline-flex w-full items-center justify-center gap-1 px-3 py-2.5',
         sizeMap[size],
         isDisabled ? disabledClass[variant] : variantMap[variant],
       ].join(' ')}

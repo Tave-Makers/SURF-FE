@@ -1,7 +1,7 @@
 # ---------------------------------------------------------------- #
 # CodeRabbit 기본 설정 (언어 및 페르소나)
 # ---------------------------------------------------------------- #
-language: "ko-KR"
+language: 'ko-KR'
 
 # 페르소나와 응답 톤앤매너 지시 (최대 250자)
 tone_instructions: >
@@ -15,13 +15,13 @@ tone_instructions: >
 # 코드 리뷰 기능 세부 설정
 # ---------------------------------------------------------------- #
 reviews:
-  profile: "chill"                   # 리뷰 톤
-  request_changes_workflow: false    # 모든 코멘트 resolve 시 자동 Approve
-  high_level_summary: true           # PR 전체 요약
-  changed_files_summary: false       # 파일 단위 요약
-  sequence_diagrams: false           # 시퀀스 다이어그램
-  poem: false                        # 리뷰 요약에 시 포함
-  assess_linked_issues: true         # 연결된 이슈 분석
+  profile: 'chill' # 리뷰 톤
+  request_changes_workflow: false # 모든 코멘트 resolve 시 자동 Approve
+  high_level_summary: true # PR 전체 요약
+  changed_files_summary: false # 파일 단위 요약
+  sequence_diagrams: false # 시퀀스 다이어그램
+  poem: false # 리뷰 요약에 시 포함
+  assess_linked_issues: true # 연결된 이슈 분석
   related_issues: false
   related_prs: false
   suggested_labels: false
@@ -30,7 +30,7 @@ reviews:
   auto_assign_reviewers: false
 
   path_instructions:
-    - path: "**"
+    - path: '**'
       instructions: |
         1. 기수가 바뀌어도 코드 품질, 일관성과 지식 전승이 유지되도록, 네이밍, 주석, 문서화를 철저히 확인해 주세요.
         2. 새로운 기능 추가나 수정 시, 기존 코드와의 호환성, 재사용성뿐 아니라 **확장 가능한 구조**인지도 검토해 주세요.
@@ -43,8 +43,8 @@ reviews:
         9. 리뷰는 꼭 필요한 부분에 집중하되, 전체 맥락 이해를 돕기 위해 추가 설명은 캡션이나 요약으로 제공해 주세요.
 
   auto_review:
-    enabled: true                     # PR 생성 시 자동 리뷰
-    auto_incremental_review: true     # 새 커밋 시 변경 부분만 리뷰
+    enabled: true # PR 생성 시 자동 리뷰
+    auto_incremental_review: true # 새 커밋 시 변경 부분만 리뷰
 
 tools:
   gitleaks:
@@ -58,7 +58,7 @@ tools:
 # 채팅 기능 세부 설정
 # ---------------------------------------------------------------- #
 chat:
-  auto_reply: true   # @coderabbitai 태그 없이도 자동 답글
+  auto_reply: false # @coderabbitai 태그 없이도 자동 답글
 
 # ---------------------------------------------------------------- #
 # Knowledge Base 세부 설정
@@ -68,11 +68,11 @@ knowledge_base:
     enabled: true
   code_guidelines:
     enabled: true
-    filePatterns: 
-      - "docs/code-convention.md"
+    filePatterns:
+      - 'docs/code-convention.md'
   learnings:
-    scope: "local"
+    scope: 'local'
   issues:
-    scope: "local"
+    scope: 'local'
   pull_requests:
-    scope: "local"
+    scope: 'local'

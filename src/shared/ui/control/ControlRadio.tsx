@@ -34,7 +34,7 @@ export const ControlRadio: React.FC<ControlRadioProps> = ({
         checked={checked}
         disabled={disabled}
         onChange={onChange}
-        className="peer checked:border-background-primary border-border-normal checked:bg-background-primary h-[1.25rem] w-[1.25rem] cursor-pointer appearance-none rounded-full border p-[3.2px] checked:bg-clip-content disabled:cursor-not-allowed"
+        className="checked:border-background-primary border-border-normal checked:bg-background-primary h-[1.25rem] w-[1.25rem] cursor-pointer appearance-none rounded-full border p-[3.2px] checked:bg-clip-content disabled:cursor-not-allowed"
       />
       <span className="text-border-contrast text-caption-12-400">{label}</span>
     </label>

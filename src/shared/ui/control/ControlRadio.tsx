@@ -8,22 +8,22 @@ export type ControlRadioProps = Omit<InputHTMLAttributes<HTMLInputElement>, 'typ
   name: string; // 라디오 그룹 이름
   value: string; // 선택 시 전달되는 값
   label?: string; // 라디오 버튼 옆 텍스트
-  checked?: boolean; // Controlled 방식
-  defaultChecked?: boolean; // Uncontrolled 초기값
-  disabled?: boolean; // 비활성화 여부
+  isChecked?: boolean; // Controlled 방식
+  isDefaultChecked?: boolean; // Uncontrolled 초기값
+  isDisabled?: boolean; // 비활성화 여부
   onChange?: (e: ChangeEvent<HTMLInputElement>) => void;
 };
 
 export const ControlRadio = forwardRef<HTMLInputElement, ControlRadioProps>(
   (
-    { id, name, value, label, checked, defaultChecked, disabled = false, onChange, ...rest },
+    { id, name, value, label, isChecked, isDefaultChecked, isDisabled = false, onChange, ...rest },
     ref,
   ) => {
     return (
       <label
         htmlFor={id}
         className={`inline-flex cursor-pointer items-center gap-[0.625rem] ${
-          disabled ? 'cursor-not-allowed opacity-50' : ''
+          isDisabled ? 'cursor-not-allowed opacity-50' : ''
         }`}
       >
         <input
@@ -31,9 +31,9 @@ export const ControlRadio = forwardRef<HTMLInputElement, ControlRadioProps>(
           name={name}
           type="radio"
           value={value}
-          checked={checked}
-          defaultChecked={defaultChecked}
-          disabled={disabled}
+          checked={isChecked}
+          defaultChecked={isDefaultChecked}
+          disabled={isDisabled}
           onChange={onChange}
           ref={ref}
           className="checked:border-background-primary border-border-normal checked:bg-background-primary h-[1.25rem] w-[1.25rem] cursor-pointer appearance-none rounded-full border p-[3.2px] checked:bg-clip-content disabled:cursor-not-allowed"

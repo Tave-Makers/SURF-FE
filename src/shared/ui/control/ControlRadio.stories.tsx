@@ -19,7 +19,7 @@ export const Default: Story = {
     name: 'example',
     value: 'one',
     label: 'Option One',
-    checked: false,
+    isChecked: false,
   },
 };
 
@@ -29,7 +29,7 @@ export const Checked: Story = {
     name: 'example',
     value: 'two',
     label: 'Option Two',
-    checked: true,
+    isChecked: true,
   },
 };
 
@@ -39,6 +39,6 @@ export const Disabled: Story = {
     name: 'example',
     value: 'three',
     label: 'Option Three',
-    disabled: true,
+    isDisabled: true,
   },
 };

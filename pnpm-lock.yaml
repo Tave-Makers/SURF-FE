@@ -33,6 +33,9 @@ importers:
       '@eslint/js':
         specifier: ^9.35.0
         version: 9.35.0
+      '@mynaui/icons-react':
+        specifier: ^0.3.9
+        version: 0.3.9(react@19.1.0)
       '@next/eslint-plugin-next':
         specifier: ^15.5.2
         version: 15.5.2
@@ -689,6 +692,11 @@ packages:
     peerDependencies:
       '@types/react': '>=16'
       react: '>=16'
+
+  '@mynaui/icons-react@0.3.9':
+    resolution: {integrity: sha512-xUCDqnFm4kM3MFNcVFxWrLho1L1iI5/S9601vnsITM5F/mGQFJupk1SY2YsBCwGjNZlmYkBzJx3sJVV9Wb4TbA==}
+    peerDependencies:
+      react: ^16.5.1 || ^17.0.0 || ^18.0.0 || ^19.0.0
 
   '@napi-rs/wasm-runtime@0.2.12':
     resolution: {integrity: sha512-ZVWUcfwY4E/yPitQJl481FjFo3K22D6qF0DuFH6Y/nbnE11GY5uguDxZMGXPQ8WQ0128MXQD7TnfHyK4oWoIJQ==}
@@ -4164,6 +4172,11 @@ snapshots:
     dependencies:
       '@types/mdx': 2.0.13
       '@types/react': 19.1.12
+      react: 19.1.0
+
+  '@mynaui/icons-react@0.3.9(react@19.1.0)':
+    dependencies:
+      prop-types: 15.8.1
       react: 19.1.0
 
   '@napi-rs/wasm-runtime@0.2.12':

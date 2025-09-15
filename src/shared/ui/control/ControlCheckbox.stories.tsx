@@ -17,7 +17,7 @@ type Story = StoryObj<typeof ControlCheckbox>;
 
 export const Uncontrolled: Story = {
   args: {
-    defaultChecked: true,
+    isDefaultChecked: true,
   },
 };
 
@@ -29,7 +29,7 @@ export const Controlled: Story = {
       <div className="space-y-2">
         <ControlCheckbox
           {...args}
-          checked={checked}
+          isChecked={checked}
           onChange={(e) => setChecked(e.target.checked)}
         />
         <p className="text-sm">현재 상태: {checked ? '✅ 체크됨' : '❌ 체크 안 됨'}</p>
@@ -40,8 +40,8 @@ export const Controlled: Story = {
 
 export const Disabled: Story = {
   args: {
-    disabled: true,
-    defaultChecked: true,
+    isDisabled: true,
+    isDefaultChecked: true,
     label: '비활성화 체크박스',
   },
 };

@@ -1,7 +1,4 @@
-'use client';
-
 import { SurfIcon } from '@/shared/ui/icon/SurfIcon';
-import SolidButton from '@/shared/ui/solid-button/SolidButton';
 
 export const HomePage = () => {
   return (
@@ -21,16 +18,6 @@ export const HomePage = () => {
         size="l"
         className="cursor-pointer text-[color:var(--color-foreground-primary)] hover:text-[color:var(--color-foreground-warning)]"
       />
-
-      <SolidButton
-        size="m"
-        variant="primary"
-        onClick={() => {
-          alert('SolidButton 클릭!');
-        }}
-      >
-        버튼
-      </SolidButton>
     </div>
   );
 };

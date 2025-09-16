@@ -19,13 +19,15 @@ export const SearchField: Story = {
   render: (args) => {
     const [search, setSearch] = useState('');
     return (
-      <TextInput
-        {...args}
-        mode="SearchField"
-        value={search}
-        onChange={setSearch}
-        onSubmit={(val: string) => alert(`검색: ${val}`)}
-      />
+      <div className="w-[19.56rem]">
+        <TextInput
+          {...args}
+          mode="SearchField"
+          value={search}
+          onChange={setSearch}
+          onSubmit={(val: string) => alert(`검색: ${val}`)}
+        />
+      </div>
     );
   },
   args: {
@@ -39,13 +41,15 @@ export const TextField: Story = {
   render: (args) => {
     const [comment, setComment] = useState('');
     return (
-      <TextInput
-        {...args}
-        mode="TextField"
-        value={comment}
-        onChange={setComment}
-        onClick={() => alert('아이콘 클릭됨')}
-      />
+      <div className="w-[19.56rem]">
+        <TextInput
+          {...args}
+          mode="TextField"
+          value={comment}
+          onChange={setComment}
+          onClick={() => alert('아이콘 클릭됨')}
+        />
+      </div>
     );
   },
   args: {
@@ -63,7 +67,7 @@ export const WithRef: Story = {
     const [isActive, setIsActive] = useState(false);
 
     return (
-      <div style={{ display: 'flex', gap: '8px' }}>
+      <div className="flex w-[20rem] flex-col gap-4">
         <TextInput
           {...args}
           ref={inputRef}

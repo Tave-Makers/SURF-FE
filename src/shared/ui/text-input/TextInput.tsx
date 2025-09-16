@@ -50,7 +50,7 @@ const TextInput = forwardRef<HTMLInputElement, TextInputProps>((props, ref) => {
   };
 
   return (
-    <div className="flex h-[2.25rem] w-[19.56rem] shrink-0 items-center justify-between rounded-[62.43rem] bg-[var(--color-background-tertiary)] py-[0.37rem] pr-[0.5rem] pl-[0.75rem]">
+    <div className="flex h-[2.25rem] w-full shrink-0 items-center justify-between rounded-[62.43rem] bg-[var(--color-background-tertiary)] py-[0.37rem] pr-[0.5rem] pl-[0.75rem]">
       <input
         value={value}
         onChange={(e) => onChange(e.target.value)}

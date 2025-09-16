@@ -2,7 +2,7 @@
 
 import type { ComponentProps, ButtonHTMLAttributes } from 'react';
 import { forwardRef } from 'react';
-import { SurfIcon } from '@/shared/ui/icon/SurfIcon';
+import { SurfIcon } from '@/shared/ui/icon-folder/SurfIcon';
 
 type SurfIconName = ComponentProps<typeof SurfIcon>['name'];
 

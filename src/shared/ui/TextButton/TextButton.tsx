@@ -1,40 +1,53 @@
-import type { ComponentProps } from 'react';
+'use client';
+
+import type { ComponentProps, ButtonHTMLAttributes, ReactNode } from 'react';
 import { SurfIcon } from '@/shared/ui/Icon/SurfIcon';
 
 type SurfIconName = ComponentProps<typeof SurfIcon>['name'];
 
-type TextButtonProps = {
-  size: 's' | 'm' | 'l';
-  variant: 'primary' | 'secondary' | 'warning';
-  btnText: string;
-  isDisabled?: boolean;
-  leftIconName?: SurfIconName | null | undefined;
-  rightIconName?: SurfIconName | null | undefined;
+type ButtonSize = 's' | 'm' | 'l';
+type ButtonVariant = 'primary' | 'secondary' | 'warning';
+
+type TextButtonProps = ButtonHTMLAttributes<HTMLButtonElement> & {
+  size: ButtonSize;
+  variant: ButtonVariant;
+  disabled?: boolean;
+  leftIconName?: SurfIconName | null;
+  rightIconName?: SurfIconName | null;
+  children: ReactNode;
+  type?: 'button' | 'submit' | 'reset';
   onClick?: () => void;
 };
 
 export default function TextButton({
   size = 'm',
   variant = 'primary',
-  btnText,
+  disabled = false,
   leftIconName,
   rightIconName,
-  isDisabled = false,
+  children,
+  type = 'button',
   onClick,
 }: TextButtonProps) {
-  const sizeMap: Record<typeof size, string> = {
-    s: 'h-8 text-body-14-600--1-20',
-    m: 'h-10 text-body-16-600--1',
-    l: 'h-12 text-body-16-600--1',
+  const sizeHeightMap: Record<ButtonSize, string> = {
+    s: 'h-8',
+    m: 'h-10',
+    l: 'h-12',
   };
 
-  const variantMap: Record<typeof variant, string> = {
+  const sizeTextMap: Record<ButtonSize, string> = {
+    s: 'text-body-14-600--1-20',
+    m: 'text-body-16-600--1',
+    l: 'text-body-16-600--1',
+  };
+
+  const variantMap: Record<ButtonVariant, string> = {
     primary: 'text-background-primary hover:text-foreground-primary',
     secondary: 'text-foreground-normal-darker hover:text-foreground-normal',
     warning: 'text-foreground-danger hover:text-foreground-danger-darker',
   };
 
-  const disabledClass: Record<typeof variant, string> = {
+  const disabledMap: Record<ButtonVariant, string> = {
     primary: 'text-foreground-primary cursor-not-allowed opacity-30',
     secondary: 'text-foreground-normal-darker cursor-not-allowed opacity-30',
     warning: 'text-foreground-danger cursor-not-allowed opacity-30',
@@ -42,18 +55,19 @@ export default function TextButton({
 
   return (
     <button
-      type="button"
-      disabled={isDisabled}
+      type={type}
+      disabled={disabled}
       onClick={onClick}
       className={[
         'inline-flex w-full items-center justify-center gap-1 px-3 py-2.5',
-        sizeMap[size],
-        isDisabled ? disabledClass[variant] : variantMap[variant],
+        sizeHeightMap[size],
+        sizeTextMap[size],
+        disabled ? disabledMap[variant] : variantMap[variant],
       ].join(' ')}
     >
-      {leftIconName && <SurfIcon name={leftIconName} size={size} />}
-      <span>{btnText}</span>
-      {rightIconName && <SurfIcon name={rightIconName} size={size} />}
+      {leftIconName && <SurfIcon name={leftIconName} size={size} aria-hidden />}
+      <span>{children}</span>
+      {rightIconName && <SurfIcon name={rightIconName} size={size} aria-hidden />}
     </button>
   );
 }

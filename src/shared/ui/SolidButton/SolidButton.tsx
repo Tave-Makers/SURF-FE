@@ -1,34 +1,47 @@
-import type { ComponentProps } from 'react';
+'use client';
+
+import type { ComponentProps, ButtonHTMLAttributes, ReactNode } from 'react';
 import { SurfIcon } from '@/shared/ui/Icon/SurfIcon';
 
 type SurfIconName = ComponentProps<typeof SurfIcon>['name'];
 
-type SolidButtonProps = {
-  size: 's' | 'm' | 'l';
-  variant: 'primary' | 'secondary' | 'danger' | 'warning';
-  btnText: string;
-  isDisabled?: boolean;
-  leftIconName?: SurfIconName | null | undefined;
-  rightIconName?: SurfIconName | null | undefined;
+type ButtonSize = 's' | 'm' | 'l';
+type ButtonVariant = 'primary' | 'secondary' | 'danger' | 'warning';
+
+type SolidButtonProps = ButtonHTMLAttributes<HTMLButtonElement> & {
+  size: ButtonSize;
+  variant: ButtonVariant;
+  disabled?: boolean;
+  leftIconName?: SurfIconName | null;
+  rightIconName?: SurfIconName | null;
+  children: ReactNode;
+  type?: 'button' | 'submit' | 'reset';
   onClick?: () => void;
 };
 
 export default function SolidButton({
   size = 'm',
   variant = 'primary',
-  btnText,
-  isDisabled = false,
+  disabled = false,
   leftIconName,
   rightIconName,
+  children,
+  type = 'button',
   onClick,
 }: SolidButtonProps) {
-  const sizeMap: Record<typeof size, string> = {
-    s: 'h-8 text-body-14-600--1-20',
-    m: 'h-10 text-body-16-600--1',
-    l: 'h-12 text-body-16-600--1',
+  const sizeHeightMap: Record<ButtonSize, string> = {
+    s: 'h-8',
+    m: 'h-10',
+    l: 'h-12',
   };
 
-  const variantMap: Record<typeof variant, string> = {
+  const sizeTextMap: Record<ButtonSize, string> = {
+    s: 'text-body-14-600--1-20',
+    m: 'text-body-16-600--1',
+    l: 'text-body-16-600--1',
+  };
+
+  const variantMap: Record<ButtonVariant, string> = {
     primary: 'text-foreground-accent bg-background-primary hover:bg-foreground-primary',
     secondary: 'text-foreground-normal bg-background-tertiary hover:bg-background-quaternary',
     danger: 'text-foreground-accent bg-foreground-danger hover:bg-foreground-danger-darker',
@@ -40,18 +53,19 @@ export default function SolidButton({
 
   return (
     <button
-      type="button"
-      disabled={isDisabled}
+      type={type}
+      disabled={disabled}
       onClick={onClick}
       className={[
         'inline-flex w-full items-center justify-center gap-1 rounded px-3 py-2.5',
-        sizeMap[size],
-        isDisabled ? disabledClass : variantMap[variant],
+        sizeHeightMap[size],
+        sizeTextMap[size],
+        disabled ? disabledClass : variantMap[variant],
       ].join(' ')}
     >
-      {leftIconName && <SurfIcon name={leftIconName} size={size} />}
-      <span>{btnText}</span>
-      {rightIconName && <SurfIcon name={rightIconName} size={size} />}
+      {leftIconName && <SurfIcon name={leftIconName} size={size} aria-hidden />}
+      <span>{children}</span>
+      {rightIconName && <SurfIcon name={rightIconName} size={size} aria-hidden />}
     </button>
   );
 }

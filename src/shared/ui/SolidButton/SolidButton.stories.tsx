@@ -6,12 +6,13 @@ const meta = {
   component: SolidButton,
   tags: ['autodocs'],
   args: {
-    btnText: '버튼',
     size: 'm',
     variant: 'primary',
-    isDisabled: false,
+    disabled: false,
     leftIconName: null,
     rightIconName: null,
+    children: '버튼',
+    type: 'button',
     onClick: () => alert('SolidButton 클릭!'),
   },
   argTypes: {
@@ -23,8 +24,8 @@ const meta = {
       control: { type: 'radio' },
       options: ['primary', 'secondary', 'danger', 'warning'],
     },
-    btnText: { control: 'text' },
-    isDisabled: { control: 'boolean' },
+    children: { control: 'text' },
+    disabled: { control: 'boolean' },
     leftIconName: { control: false },
     rightIconName: { control: false },
   },
@@ -50,22 +51,35 @@ export const Sizes: Story = {
   args: { variant: 'primary' },
   render: (args) => (
     <div style={{ display: 'flex', gap: 12 }}>
-      <SolidButton {...args} size="s" btnText="Small" />
-      <SolidButton {...args} size="m" btnText="Medium" />
-      <SolidButton {...args} size="l" btnText="Large" />
+      <SolidButton {...args} size="s">
+        Small
+      </SolidButton>
+      <SolidButton {...args} size="m">
+        Medium
+      </SolidButton>
+      <SolidButton {...args} size="l">
+        Large
+      </SolidButton>
     </div>
   ),
 };
 
 // 아이콘 상태들 비교
 export const NoIcons: Story = {
-  args: { leftIconName: null, rightIconName: null, btnText: '아이콘 없음' },
+  args: { leftIconName: null, rightIconName: null, children: '아이콘 없음' },
 };
 
 export const WithRightIcon: Story = {
   args: {
     rightIconName: 'ChevronRight',
-    btnText: '오른쪽 아이콘',
+    children: '오른쪽 아이콘',
+  },
+};
+
+export const WithLeftIcon: Story = {
+  args: {
+    leftIconName: 'Plus',
+    children: '왼쪽 아이콘',
   },
 };
 
@@ -73,14 +87,14 @@ export const BothIcons: Story = {
   args: {
     leftIconName: 'Plus',
     rightIconName: 'ChevronRight',
-    btnText: '양쪽 아이콘',
+    children: '양쪽 아이콘',
   },
 };
 
 export const Disabled: Story = {
   args: {
-    isDisabled: true,
-    btnText: '비활성화',
+    disabled: true,
+    children: '비활성화',
     leftIconName: 'Plus',
     rightIconName: 'ChevronRight',
   },

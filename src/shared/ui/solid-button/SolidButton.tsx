@@ -20,21 +20,24 @@ type SolidButtonProps = ButtonHTMLAttributes<HTMLButtonElement> & {
   onClick?: ButtonHTMLAttributes<HTMLButtonElement>['onClick'];
 };
 
-export default forwardRef<HTMLButtonElement, SolidButtonProps>(function SolidButton({
-  size = 'm',
-  variant = 'primary',
-  disabled = false,
-  leftIconName,
-  rightIconName,
-  children,
-  type = 'button',
-  onClick,
-  ...rest
-}: SolidButtonProps) {
+export default forwardRef<HTMLButtonElement, SolidButtonProps>(function SolidButton(
+  {
+    size = 'm',
+    variant = 'primary',
+    disabled = false,
+    leftIconName,
+    rightIconName,
+    children,
+    type = 'button',
+    onClick,
+    ...rest
+  },
+  ref,
+) {
   const sizeHeightMap: Record<ButtonSize, string> = {
-    s: 'h-8',
-    m: 'h-10',
-    l: 'h-12',
+    s: 'h-[2rem]',
+    m: 'h-[2.5rem]',
+    l: 'h-[3rem]',
   };
 
   const sizeTextMap: Record<ButtonSize, string> = {
@@ -55,12 +58,13 @@ export default forwardRef<HTMLButtonElement, SolidButtonProps>(function SolidBut
 
   return (
     <button
+      ref={ref}
       type={type}
       disabled={disabled}
       onClick={onClick}
       {...rest}
       className={[
-        'inline-flex w-full items-center justify-center gap-1 rounded px-3 py-2.5',
+        'inline-flex w-full items-center justify-center gap-[0.62rem] rounded px-[0.75rem] py-[0.62rem]',
         sizeHeightMap[size],
         sizeTextMap[size],
         disabled ? disabledClass : variantMap[variant],

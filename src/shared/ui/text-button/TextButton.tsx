@@ -20,21 +20,24 @@ type TextButtonProps = ButtonHTMLAttributes<HTMLButtonElement> & {
   onClick?: ButtonHTMLAttributes<HTMLButtonElement>['onClick'];
 };
 
-export default forwardRef<HTMLButtonElement, TextButtonProps>(function TextButton({
-  size = 'm',
-  variant = 'primary',
-  disabled = false,
-  leftIconName,
-  rightIconName,
-  children,
-  type = 'button',
-  onClick,
-  ...rest
-}: TextButtonProps) {
+export default forwardRef<HTMLButtonElement, TextButtonProps>(function TextButton(
+  {
+    size = 'm',
+    variant = 'primary',
+    disabled = false,
+    leftIconName,
+    rightIconName,
+    children,
+    type = 'button',
+    onClick,
+    ...rest
+  },
+  ref,
+) {
   const sizeHeightMap: Record<ButtonSize, string> = {
-    s: 'h-8',
-    m: 'h-10',
-    l: 'h-12',
+    s: 'h-[2rem]',
+    m: 'h-[2.5rem]',
+    l: 'h-[3rem]',
   };
 
   const sizeTextMap: Record<ButtonSize, string> = {
@@ -57,12 +60,13 @@ export default forwardRef<HTMLButtonElement, TextButtonProps>(function TextButto
 
   return (
     <button
+      ref={ref}
       type={type}
       disabled={disabled}
       onClick={onClick}
       {...rest}
       className={[
-        'inline-flex w-full items-center justify-center gap-1 px-3 py-2.5',
+        'inline-flex w-full items-center justify-center gap-[0.62rem] px-[0.75rem] py-[0.62rem]',
         sizeHeightMap[size],
         sizeTextMap[size],
         disabled ? disabledMap[variant] : variantMap[variant],

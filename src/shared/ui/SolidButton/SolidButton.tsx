@@ -5,19 +5,21 @@ type SurfIconName = React.ComponentProps<typeof SurfIcon>['name'];
 type SolidButtonProps = {
   size: 's' | 'm' | 'l';
   variant: 'primary' | 'secondary' | 'danger' | 'warning';
-  title: string;
+  btnText: string;
   isDisabled?: boolean;
-  leftIcon?: SurfIconName | null | undefined;
-  rightIcon?: SurfIconName | null | undefined;
+  leftIconName?: SurfIconName | null | undefined;
+  rightIconName?: SurfIconName | null | undefined;
+  onClick?: () => void;
 };
 
 export default function SolidButton({
   size = 'm',
   variant = 'primary',
-  title,
+  btnText,
   isDisabled = false,
-  leftIcon,
-  rightIcon,
+  leftIconName,
+  rightIconName,
+  onClick,
 }: SolidButtonProps) {
   const sizeMap: Record<typeof size, string> = {
     s: 'h-8 text-body-14-600--1-20',
@@ -39,15 +41,16 @@ export default function SolidButton({
     <button
       type="button"
       disabled={isDisabled}
+      onClick={onClick}
       className={[
         'inline-flex w-full items-center justify-center gap-1 rounded px-3 py-2.5',
         sizeMap[size],
         isDisabled ? disabledClass : variantMap[variant],
       ].join(' ')}
     >
-      {leftIcon && <SurfIcon name={leftIcon} size={size} />}
-      <span>{title}</span>
-      {rightIcon && <SurfIcon name={rightIcon} size={size} />}
+      {leftIconName && <SurfIcon name={leftIconName} size={size} />}
+      <span>{btnText}</span>
+      {rightIconName && <SurfIcon name={rightIconName} size={size} />}
     </button>
   );
 }

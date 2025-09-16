@@ -6,12 +6,13 @@ const meta = {
   component: TextButton,
   tags: ['autodocs'],
   args: {
-    title: '버튼',
+    btnText: '버튼',
     size: 'm',
     variant: 'primary',
     isDisabled: false,
-    leftIcon: null,
-    rightIcon: null,
+    leftIconName: null,
+    rightIconName: null,
+    onClick: () => alert('TextButton 클릭!'),
   },
   argTypes: {
     size: {
@@ -22,10 +23,10 @@ const meta = {
       control: { type: 'radio' },
       options: ['primary', 'secondary', 'warning'],
     },
-    title: { control: 'text' },
+    btnText: { control: 'text' },
     isDisabled: { control: 'boolean' },
-    leftIcon: { control: 'text' },
-    rightIcon: { control: 'text' },
+    leftIconName: { control: 'text' },
+    rightIconName: { control: 'text' },
   },
   parameters: {
     docs: {
@@ -48,38 +49,38 @@ export const Sizes: Story = {
   args: { variant: 'primary' },
   render: (args) => (
     <div style={{ display: 'flex', gap: 12 }}>
-      <TextButton {...args} size="s" title="Small" />
-      <TextButton {...args} size="m" title="Medium" />
-      <TextButton {...args} size="l" title="Large" />
+      <TextButton {...args} size="s" btnText="Small" />
+      <TextButton {...args} size="m" btnText="Medium" />
+      <TextButton {...args} size="l" btnText="Large" />
     </div>
   ),
 };
 
-// 아이콘 상태들
+// 아이콘 상태들 비교
 export const NoIcons: Story = {
-  args: { leftIcon: null, rightIcon: null, title: '아이콘 없음' },
+  args: { leftIconName: null, rightIconName: null, btnText: '아이콘 없음' },
 };
 
 export const WithRightIcon: Story = {
   args: {
-    rightIcon: 'ChevronRight',
-    title: '오른쪽 아이콘',
+    rightIconName: 'ChevronRight',
+    btnText: '오른쪽 아이콘',
   },
 };
 
 export const BothIcons: Story = {
   args: {
-    leftIcon: 'Plus',
-    rightIcon: 'ChevronRight',
-    title: '양쪽 아이콘',
+    leftIconName: 'Plus',
+    rightIconName: 'ChevronRight',
+    btnText: '양쪽 아이콘',
   },
 };
 
 export const Disabled: Story = {
   args: {
     isDisabled: true,
-    title: '비활성화',
-    leftIcon: 'Plus',
-    rightIcon: 'ChevronRight',
+    btnText: '비활성화',
+    leftIconName: 'Plus',
+    rightIconName: 'ChevronRight',
   },
 };

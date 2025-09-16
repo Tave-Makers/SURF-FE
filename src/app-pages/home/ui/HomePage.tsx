@@ -1,4 +1,4 @@
-import { SurfIcon } from '@/shared/ui/icon-folder/SurfIcon';
+import { SurfIcon } from '@/shared/ui/icon/SurfIcon';
 
 export const HomePage = () => {
   return (

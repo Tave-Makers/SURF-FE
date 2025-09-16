@@ -12,12 +12,9 @@ type ButtonVariant = 'primary' | 'secondary' | 'warning';
 type TextButtonProps = ButtonHTMLAttributes<HTMLButtonElement> & {
   size: ButtonSize;
   variant: ButtonVariant;
-  disabled?: boolean;
   leftIconName?: SurfIconName | null;
   rightIconName?: SurfIconName | null;
   children: ReactNode;
-  type?: 'button' | 'submit' | 'reset';
-  onClick?: ButtonHTMLAttributes<HTMLButtonElement>['onClick'];
 };
 
 export default forwardRef<HTMLButtonElement, TextButtonProps>(function TextButton(

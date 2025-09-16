@@ -12,12 +12,9 @@ type ButtonVariant = 'primary' | 'secondary' | 'danger' | 'warning';
 type SolidButtonProps = ButtonHTMLAttributes<HTMLButtonElement> & {
   size: ButtonSize;
   variant: ButtonVariant;
-  disabled?: boolean;
   leftIconName?: SurfIconName | null;
   rightIconName?: SurfIconName | null;
   children: ReactNode;
-  type?: 'button' | 'submit' | 'reset';
-  onClick?: ButtonHTMLAttributes<HTMLButtonElement>['onClick'];
 };
 
 export default forwardRef<HTMLButtonElement, SolidButtonProps>(function SolidButton(

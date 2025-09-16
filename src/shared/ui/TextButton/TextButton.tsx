@@ -16,7 +16,7 @@ type TextButtonProps = ButtonHTMLAttributes<HTMLButtonElement> & {
   rightIconName?: SurfIconName | null;
   children: ReactNode;
   type?: 'button' | 'submit' | 'reset';
-  onClick?: () => void;
+  onClick?: ButtonHTMLAttributes<HTMLButtonElement>['onClick'];
 };
 
 export default function TextButton({
@@ -28,6 +28,7 @@ export default function TextButton({
   children,
   type = 'button',
   onClick,
+  ...rest
 }: TextButtonProps) {
   const sizeHeightMap: Record<ButtonSize, string> = {
     s: 'h-8',
@@ -58,6 +59,7 @@ export default function TextButton({
       type={type}
       disabled={disabled}
       onClick={onClick}
+      {...rest}
       className={[
         'inline-flex w-full items-center justify-center gap-1 px-3 py-2.5',
         sizeHeightMap[size],
@@ -65,9 +67,9 @@ export default function TextButton({
         disabled ? disabledMap[variant] : variantMap[variant],
       ].join(' ')}
     >
-      {leftIconName && <SurfIcon name={leftIconName} size={size} aria-hidden />}
+      {leftIconName && <SurfIcon name={leftIconName} size={size} />}
       <span>{children}</span>
-      {rightIconName && <SurfIcon name={rightIconName} size={size} aria-hidden />}
+      {rightIconName && <SurfIcon name={rightIconName} size={size} />}
     </button>
   );
 }

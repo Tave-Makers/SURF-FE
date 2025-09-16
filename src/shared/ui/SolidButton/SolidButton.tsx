@@ -16,7 +16,7 @@ type SolidButtonProps = ButtonHTMLAttributes<HTMLButtonElement> & {
   rightIconName?: SurfIconName | null;
   children: ReactNode;
   type?: 'button' | 'submit' | 'reset';
-  onClick?: () => void;
+  onClick?: ButtonHTMLAttributes<HTMLButtonElement>['onClick'];
 };
 
 export default function SolidButton({
@@ -28,6 +28,7 @@ export default function SolidButton({
   children,
   type = 'button',
   onClick,
+  ...rest
 }: SolidButtonProps) {
   const sizeHeightMap: Record<ButtonSize, string> = {
     s: 'h-8',
@@ -56,6 +57,7 @@ export default function SolidButton({
       type={type}
       disabled={disabled}
       onClick={onClick}
+      {...rest}
       className={[
         'inline-flex w-full items-center justify-center gap-1 rounded px-3 py-2.5',
         sizeHeightMap[size],
@@ -63,9 +65,9 @@ export default function SolidButton({
         disabled ? disabledClass : variantMap[variant],
       ].join(' ')}
     >
-      {leftIconName && <SurfIcon name={leftIconName} size={size} aria-hidden />}
+      {leftIconName && <SurfIcon name={leftIconName} size={size} />}
       <span>{children}</span>
-      {rightIconName && <SurfIcon name={rightIconName} size={size} aria-hidden />}
+      {rightIconName && <SurfIcon name={rightIconName} size={size} />}
     </button>
   );
 }

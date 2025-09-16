@@ -2,7 +2,7 @@
 
 import { forwardRef } from 'react';
 import type { InputHTMLAttributes, ChangeEvent } from 'react';
-import { Check } from '@mynaui/icons-react';
+import { SurfIcon } from '../icon/SurfIcon';
 
 export type ControlCheckboxProps = Omit<
   InputHTMLAttributes<HTMLInputElement>,
@@ -37,8 +37,8 @@ export const ControlCheckbox = forwardRef<HTMLInputElement, ControlCheckboxProps
             className="peer bg-background-normal checked:bg-background-primary border-border-normal h-full w-full cursor-pointer appearance-none rounded-[0.125rem] border checked:border-none disabled:cursor-not-allowed"
             {...rest}
           />
-          <span className="text-foreground-accent pointer-events-none absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 opacity-0 peer-checked:opacity-100">
-            <Check className="h-[1rem] w-[1rem] stroke-[1.2px]" />
+          <span className="text-foreground-accent pointer-events-none absolute top-1/2 left-1/2 flex h-full w-full -translate-x-1/2 -translate-y-1/2 items-center justify-center opacity-0 peer-checked:opacity-100">
+            <SurfIcon name="Check" size="s" color="currentColor" />
           </span>
         </div>
         {label && <span className="text-caption-12-400 text-border-contrast">{label}</span>}

@@ -1,6 +1,7 @@
 'use client';
 
 import type { ComponentProps, ButtonHTMLAttributes, ReactNode } from 'react';
+import { forwardRef } from 'react';
 import { SurfIcon } from '@/shared/ui/Icon/SurfIcon';
 
 type SurfIconName = ComponentProps<typeof SurfIcon>['name'];
@@ -19,7 +20,7 @@ type SolidButtonProps = ButtonHTMLAttributes<HTMLButtonElement> & {
   onClick?: ButtonHTMLAttributes<HTMLButtonElement>['onClick'];
 };
 
-export default function SolidButton({
+export default forwardRef<HTMLButtonElement, SolidButtonProps>(function SolidButton({
   size = 'm',
   variant = 'primary',
   disabled = false,
@@ -70,4 +71,4 @@ export default function SolidButton({
       {rightIconName && <SurfIcon name={rightIconName} size={size} />}
     </button>
   );
-}
+});

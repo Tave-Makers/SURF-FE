@@ -1,6 +1,7 @@
 'use client';
 
 import type { ComponentProps, ButtonHTMLAttributes, ReactNode } from 'react';
+import { forwardRef } from 'react';
 import { SurfIcon } from '@/shared/ui/Icon/SurfIcon';
 
 type SurfIconName = ComponentProps<typeof SurfIcon>['name'];
@@ -19,7 +20,7 @@ type TextButtonProps = ButtonHTMLAttributes<HTMLButtonElement> & {
   onClick?: ButtonHTMLAttributes<HTMLButtonElement>['onClick'];
 };
 
-export default function TextButton({
+export default forwardRef<HTMLButtonElement, TextButtonProps>(function TextButton({
   size = 'm',
   variant = 'primary',
   disabled = false,
@@ -72,4 +73,4 @@ export default function TextButton({
       {rightIconName && <SurfIcon name={rightIconName} size={size} />}
     </button>
   );
-}
+});

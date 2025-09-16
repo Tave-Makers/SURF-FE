@@ -6,10 +6,6 @@ const meta: Meta<typeof TextInput> = {
   title: 'Shared/UI/TextInput',
   component: TextInput,
   argTypes: {
-    mode: {
-      control: 'radio',
-      options: ['SearchField', 'TextField'],
-    },
     placeholder: { control: 'text' },
     hasIcon: { control: 'boolean' },
   },

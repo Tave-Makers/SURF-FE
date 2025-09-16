@@ -192,15 +192,4 @@
     text-transform: none;
     text-decoration: none;
   }
-
-  .placeholder-body-14-600--1-24::placeholder {
-    font-family: Pretendard, sans-serif;
-    font-weight: 600;
-    line-height: 24px;
-    font-size: 14px;
-    letter-spacing: -0.01em;
-    text-indent: 0px;
-    text-transform: none;
-    text-decoration: none;
-  }
 }

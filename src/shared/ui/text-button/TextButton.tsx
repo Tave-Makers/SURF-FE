@@ -73,7 +73,7 @@ export default forwardRef<HTMLButtonElement, TextButtonProps>(function TextButto
       ].join(' ')}
     >
       {leftIconName && <SurfIcon name={leftIconName} size={size} />}
-      <span>{children}</span>
+      {children && <span>{children}</span>}
       {rightIconName && <SurfIcon name={rightIconName} size={size} />}
     </button>
   );

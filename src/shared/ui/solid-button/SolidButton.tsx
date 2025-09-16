@@ -71,7 +71,7 @@ export default forwardRef<HTMLButtonElement, SolidButtonProps>(function SolidBut
       ].join(' ')}
     >
       {leftIconName && <SurfIcon name={leftIconName} size={size} />}
-      <span>{children}</span>
+      {children && <span>{children}</span>}
       {rightIconName && <SurfIcon name={rightIconName} size={size} />}
     </button>
   );

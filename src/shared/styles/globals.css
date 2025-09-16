@@ -6,3 +6,8 @@ html,
 body {
   font-family: Pretendard, sans-serif;
 }
+
+input,
+textarea {
+  outline: none;
+}

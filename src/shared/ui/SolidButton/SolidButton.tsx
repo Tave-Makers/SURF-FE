@@ -1,6 +1,7 @@
+import type { ComponentProps } from 'react';
 import { SurfIcon } from '@/shared/ui/Icon/SurfIcon';
 
-type SurfIconName = React.ComponentProps<typeof SurfIcon>['name'];
+type SurfIconName = ComponentProps<typeof SurfIcon>['name'];
 
 type SolidButtonProps = {
   size: 's' | 'm' | 'l';

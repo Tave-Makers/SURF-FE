@@ -55,7 +55,7 @@ const TextInput = forwardRef<HTMLInputElement, TextInputProps>((props, ref) => {
         value={value}
         onChange={(e) => onChange(e.target.value)}
         ref={internalRef}
-        className="placeholder:text-body-14-600--1-20 placeholder:[var(--color-background-quaternary)] text-body-14-400--2-22"
+        className="placeholder-body-14-600--1-24 text-body-14-400--2-22 text-[color:var(--color-foreground-normal)] placeholder:[color:var(--color-background-quaternary)]"
         placeholder={placeholder}
       />
 

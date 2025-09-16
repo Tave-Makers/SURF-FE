@@ -1,7 +1,7 @@
 'use client';
 
-import { SurfIcon } from '@/shared/ui/Icon/SurfIcon';
-import SolidButton from '@/shared/ui/SolidButton/SolidButton';
+import { SurfIcon } from '@/shared/ui/icon/SurfIcon';
+import SolidButton from '@/shared/ui/solid-button/SolidButton';
 
 export const HomePage = () => {
   return (

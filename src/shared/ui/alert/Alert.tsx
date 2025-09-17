@@ -37,7 +37,7 @@ export default function Alert({
 
   return (
     <section
-      className="bg-background-normal flex w-[15.93rem] flex-col gap-[1rem] overflow-hidden rounded-[0.5rem] px-[1.25rem] pt-[1.25rem] pb-[1rem]"
+      className="bg-background-normal flex w-[17.18rem] flex-col gap-[1rem] overflow-hidden rounded-[0.5rem] px-[1.25rem] pt-[1.25rem] pb-[1rem]"
       role={isError ? 'alert' : undefined}
       aria-labelledby="alert-title"
       aria-describedby={infoText ? 'alert-desc' : undefined}

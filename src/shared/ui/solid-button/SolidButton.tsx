@@ -62,16 +62,22 @@ export default forwardRef<HTMLButtonElement, SolidButtonProps>(function SolidBut
       onClick={onClick}
       {...rest}
       className={[
-        'inline-flex w-full items-center justify-center gap-[0.62rem] overflow-hidden rounded px-[0.75rem] py-[0.62rem]',
+        'inline-flex w-full items-center justify-center overflow-hidden rounded px-[0.75rem] py-[0.62rem]',
         sizeHeightMap[size],
         sizeTextMap[size],
         disabled ? disabledClass : variantMap[variant],
         className,
       ].join(' ')}
     >
-      {leftIconName && <SurfIcon name={leftIconName} size={size} />}
+      {leftIconName && (
+        <SurfIcon name={leftIconName} size={size} className="h-[1.5rem] w-[1.5rem]" />
+      )}
+      <div className="h-[1.5rem] w-[0.25rem]"></div>
       {children && <span>{children}</span>}
-      {rightIconName && <SurfIcon name={rightIconName} size={size} />}
+      <div className="h-[1.5rem] w-[0.25rem]"></div>
+      {rightIconName && (
+        <SurfIcon name={rightIconName} size={size} className="h-[1.5rem] w-[1.5rem]" />
+      )}
     </button>
   );
 });

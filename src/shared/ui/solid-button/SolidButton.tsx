@@ -66,7 +66,7 @@ export const SolidButton = forwardRef<HTMLButtonElement, SolidButtonProps>(
           'inline-flex w-full items-center justify-center overflow-hidden rounded px-[0.75rem] py-[0.62rem]',
           sizeHeightMap[size],
           sizeTextMap[size],
-          disabled ? disabledClass : [variantMap[variant], 'cursor-pointer'],
+          disabled ? disabledClass : `${variantMap[variant]} cursor-pointer`,
           className,
         ].join(' ')}
       >

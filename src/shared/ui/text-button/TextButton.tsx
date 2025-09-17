@@ -68,7 +68,7 @@ export const TextButton = forwardRef<HTMLButtonElement, TextButtonProps>(
           'inline-flex w-full items-center justify-center overflow-hidden px-[0.75rem] py-[0.62rem]',
           sizeHeightMap[size],
           sizeTextMap[size],
-          disabled ? disabledMap[variant] : [variantMap[variant], 'cursor-pointer'],
+          disabled ? disabledMap[variant] : `${variantMap[variant]} cursor-pointer`,
           className,
         ].join(' ')}
       >

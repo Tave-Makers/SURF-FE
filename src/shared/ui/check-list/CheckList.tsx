@@ -1,3 +1,4 @@
+'use client';
 import React from 'react';
 import { SurfIcon } from '../icon/SurfIcon';
 
@@ -18,8 +19,11 @@ export default function CheckList({
 }: CheckListProps) {
   return (
     <div className="flex w-full items-center gap-[0.35rem] pr-[0.62rem]">
-      {/* 체크 토글 버튼 */}
-      <button onClick={() => onChange(!isChecked, id)} className="cursor-pointer">
+      {/* 체크 토글 버튼 및 제목 */}
+      <button
+        className="flex w-full cursor-pointer items-center justify-center gap-[0.35rem]"
+        onClick={() => onChange(!isChecked, id)}
+      >
         <SurfIcon
           name="Check"
           size="m"
@@ -29,19 +33,17 @@ export default function CheckList({
               : 'text-[color:var(--color-foreground-hint)]'
           }
         />
-      </button>
-      {/* 제목 및 우측 버튼*/}
-      <button className="flex w-full cursor-pointer" onClick={() => onClickItem?.(id)}>
         <div className="text-[color: var(--color-foreground-secondary-darker)] text-body-14-600--1-24 flex shrink-0 grow basis-0">
           {title}
         </div>
-        <div>
-          <SurfIcon
-            name="ChevronRight"
-            size="s"
-            className="text-[color:var(--color-foreground-hint)]"
-          />
-        </div>
+      </button>
+      {/* 우측 버튼*/}
+      <button onClick={() => onClickItem?.(id)} className="cursor-pointer">
+        <SurfIcon
+          name="ChevronRight"
+          size="m"
+          className="text-[color:var(--color-foreground-hint)]"
+        />
       </button>
     </div>
   );

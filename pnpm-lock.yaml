@@ -8,6 +8,9 @@ importers:
 
   .:
     dependencies:
+      '@mynaui/icons-react':
+        specifier: ^0.3.9
+        version: 0.3.9(react@19.1.0)
       next:
         specifier: 15.5.2
         version: 15.5.2(@babel/core@7.28.4)(react-dom@19.1.0(react@19.1.0))(react@19.1.0)
@@ -33,9 +36,6 @@ importers:
       '@eslint/js':
         specifier: ^9.35.0
         version: 9.35.0
-      '@mynaui/icons-react':
-        specifier: ^0.3.9
-        version: 0.3.9(react@19.1.0)
       '@next/eslint-plugin-next':
         specifier: ^15.5.2
         version: 15.5.2

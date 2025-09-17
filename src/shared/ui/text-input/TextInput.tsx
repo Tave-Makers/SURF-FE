@@ -32,7 +32,7 @@ const DEFAULTS = {
   TextField: { hasIcon: true, isActive: false },
 } as const;
 
-const TextInput = forwardRef<HTMLInputElement, TextInputProps>((props, ref) => {
+export const TextInput = forwardRef<HTMLInputElement, TextInputProps>((props, ref) => {
   const { mode, value, onChange } = props;
   const internalRef = useRef<HTMLInputElement>(null);
 
@@ -101,4 +101,3 @@ const TextInput = forwardRef<HTMLInputElement, TextInputProps>((props, ref) => {
 });
 
 TextInput.displayName = 'TextInput';
-export default TextInput;

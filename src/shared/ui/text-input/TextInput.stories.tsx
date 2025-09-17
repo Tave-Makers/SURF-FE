@@ -1,6 +1,6 @@
 import { useRef, useState } from 'react';
 import type { Meta, StoryObj } from '@storybook/nextjs-vite';
-import TextInput from './TextInput';
+import { TextInput } from './TextInput';
 
 const meta: Meta<typeof TextInput> = {
   title: 'Shared/UI/TextInput',

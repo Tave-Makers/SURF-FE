@@ -7,7 +7,6 @@ type SheetProps = {
   description?: string; // 시트 설명
   children: React.ReactNode; // 시트 내용
   hasTitleSection?: boolean; // 제목 및 설명 표시 여부
-  hasGrabber?: boolean; // 그랩바 표시 여부
   hasBtn?: boolean; // 버튼 표시 여부
   hasTwoSolidBtns?: boolean; // 두 개의 솔리드 버튼 표시 여부
   hasTextBtn?: boolean; // 텍스트 버튼 표시 여부

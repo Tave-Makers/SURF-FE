@@ -3,6 +3,7 @@ import type { Meta, StoryObj } from '@storybook/nextjs-vite';
 import Sheet from './Sheet';
 import CheckList from '../check-list/CheckList';
 import { useState } from 'react';
+import { Sheet as ModalSheet } from 'react-modal-sheet';
 
 const meta: Meta<typeof Sheet> = {
   title: 'Shared/UI/Sheet',
@@ -15,7 +16,6 @@ const meta: Meta<typeof Sheet> = {
     hasBtn: { control: 'boolean' },
     hasTwoSolidBtns: { control: 'boolean' },
     hasTextBtn: { control: 'boolean' },
-    hasGrabber: { table: { disable: true } },
     children: { table: { disable: true } },
   },
 };
@@ -90,6 +90,48 @@ export const WithBox: Story = {
     title: '박스 예제',
     description: '임의의 콘텐츠를 넣을 수 있습니다',
     hasBtn: false,
+    hasTitleSection: true,
+  },
+};
+
+/* react-modal-sheet 라이브러리 사용 예시 */
+export const InModalSheetLib: Story = {
+  render: (args) => {
+    const [open, setOpen] = useState(false);
+    const [checked, setChecked] = useState(false);
+
+    return (
+      <div>
+        <button className="rounded bg-blue-500 px-4 py-2 text-white" onClick={() => setOpen(true)}>
+          모달 열기
+        </button>
+
+        <ModalSheet isOpen={open} onClose={() => setOpen(false)} className="w-[20rem]">
+          <ModalSheet.Container>
+            <ModalSheet.Header />
+            <ModalSheet.Content>
+              <Sheet {...args}>
+                <CheckList
+                  id={1}
+                  title="약관에 동의합니다."
+                  isChecked={checked}
+                  onChange={(next) => setChecked(next)}
+                  onClickItem={(id) => alert(`${id}번 약관 상세로 이동합니다.`)}
+                />
+              </Sheet>
+            </ModalSheet.Content>
+          </ModalSheet.Container>
+          <ModalSheet.Backdrop />
+        </ModalSheet>
+      </div>
+    );
+  },
+  args: {
+    title: '모달 시트',
+    description: 'react-modal-sheet 안에서 사용 예시',
+    hasBtn: true,
+    hasTwoSolidBtns: false,
+    hasTextBtn: true,
     hasTitleSection: true,
   },
 };

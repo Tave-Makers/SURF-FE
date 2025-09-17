@@ -57,6 +57,14 @@ const TextInput = forwardRef<HTMLInputElement, TextInputProps>((props, ref) => {
         ref={internalRef}
         className="placeholder-body-14-600--1-24 text-body-14-400--2-22 text-[color:var(--color-foreground-normal)] placeholder:[color:var(--color-background-quaternary)]"
         placeholder={placeholder}
+        onKeyDown={(e) => {
+          if (e.key === 'Enter') {
+            e.preventDefault();
+            if (mode === 'SearchField') {
+              handleSearch();
+            }
+          }
+        }}
       />
 
       {/* SearchField: hasIcon이 true일 경우 아이콘 표시*/}

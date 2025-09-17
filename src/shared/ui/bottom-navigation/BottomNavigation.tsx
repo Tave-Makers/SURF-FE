@@ -1,3 +1,4 @@
+'use client';
 import React, { useState } from 'react';
 import { SurfIcon } from '../icon/SurfIcon';
 
@@ -7,11 +8,15 @@ const navItems = [
   { id: 'mypage', label: '마이페이지', activeIcon: 'SmileCircleSolid', defaultIcon: 'SmileCircle' },
 ] as const;
 
-export default function BottomNavigation() {
+export function BottomNavigation() {
   const [active, setActive] = useState('home');
 
   return (
-    <nav className="absolute bottom-0 left-0 flex h-[4.5rem] w-full justify-around rounded-t-[0.625rem] bg-[var(--color-background-normal)] pb-[0.75rem] shadow-[0_2px_30px_0_rgba(0,0,0,0.10)]">
+    <nav
+      role="navigation"
+      aria-label="하단 네비게이션"
+      className="absolute bottom-0 left-0 flex h-[4.5rem] w-full justify-around rounded-t-[0.625rem] bg-[var(--color-background-normal)] pb-[0.75rem] shadow-[0_2px_30px_0_rgba(0,0,0,0.10)]"
+    >
       {navItems.map((item) => (
         <button
           key={item.id}

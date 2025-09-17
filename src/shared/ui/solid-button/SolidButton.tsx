@@ -9,7 +9,7 @@ type SurfIconName = ComponentProps<typeof SurfIcon>['name'];
 type ButtonSize = 's' | 'm' | 'l';
 type ButtonVariant = 'primary' | 'secondary' | 'danger' | 'warning';
 
-type SolidButtonProps = ButtonHTMLAttributes<HTMLButtonElement> & {
+export type SolidButtonProps = ButtonHTMLAttributes<HTMLButtonElement> & {
   size: ButtonSize;
   variant: ButtonVariant;
   leftIconName?: SurfIconName | null;
@@ -17,17 +17,21 @@ type SolidButtonProps = ButtonHTMLAttributes<HTMLButtonElement> & {
   onClick?: (e: React.MouseEvent<HTMLButtonElement>) => void;
 };
 
-export default forwardRef<HTMLButtonElement, SolidButtonProps>(function SolidButton({
-  size = 'm',
-  variant = 'primary',
-  disabled = false,
-  leftIconName,
-  rightIconName,
-  children,
-  type = 'button',
-  onClick,
-  ...rest
-}: SolidButtonProps) {
+export default forwardRef<HTMLButtonElement, SolidButtonProps>(function SolidButton(
+  {
+    size = 'm',
+    variant = 'primary',
+    disabled = false,
+    leftIconName,
+    rightIconName,
+    children,
+    type = 'button',
+    onClick,
+    className,
+    ...rest
+  },
+  ref,
+) {
   const sizeHeightMap: Record<ButtonSize, string> = {
     s: 'h-[2rem]',
     m: 'h-[2.5rem]',
@@ -52,15 +56,17 @@ export default forwardRef<HTMLButtonElement, SolidButtonProps>(function SolidBut
 
   return (
     <button
+      ref={ref}
       type={type}
       disabled={disabled}
       onClick={onClick}
       {...rest}
       className={[
-        'inline-flex w-full items-center justify-center gap-[0.62rem] rounded px-[0.75rem] py-[0.62rem]',
+        'inline-flex w-full items-center justify-center gap-[0.62rem] overflow-hidden rounded px-[0.75rem] py-[0.62rem]',
         sizeHeightMap[size],
         sizeTextMap[size],
         disabled ? disabledClass : variantMap[variant],
+        className,
       ].join(' ')}
     >
       {leftIconName && <SurfIcon name={leftIconName} size={size} />}

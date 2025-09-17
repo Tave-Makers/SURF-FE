@@ -9,7 +9,7 @@ type SurfIconName = ComponentProps<typeof SurfIcon>['name'];
 type ButtonSize = 's' | 'm' | 'l';
 type ButtonVariant = 'primary' | 'secondary' | 'warning';
 
-type TextButtonProps = ButtonHTMLAttributes<HTMLButtonElement> & {
+export type TextButtonProps = ButtonHTMLAttributes<HTMLButtonElement> & {
   size: ButtonSize;
   variant: ButtonVariant;
   leftIconName?: SurfIconName | null;
@@ -17,17 +17,21 @@ type TextButtonProps = ButtonHTMLAttributes<HTMLButtonElement> & {
   onClick?: (e: React.MouseEvent<HTMLButtonElement>) => void;
 };
 
-export default forwardRef<HTMLButtonElement, TextButtonProps>(function TextButton({
-  size = 'm',
-  variant = 'primary',
-  disabled = false,
-  leftIconName,
-  rightIconName,
-  children,
-  type = 'button',
-  onClick,
-  ...rest
-}: TextButtonProps) {
+export default forwardRef<HTMLButtonElement, TextButtonProps>(function TextButton(
+  {
+    size = 'm',
+    variant = 'primary',
+    disabled = false,
+    leftIconName,
+    rightIconName,
+    children,
+    type = 'button',
+    onClick,
+    className,
+    ...rest
+  },
+  ref,
+) {
   const sizeHeightMap: Record<ButtonSize, string> = {
     s: 'h-[2rem]',
     m: 'h-[2.5rem]',
@@ -54,15 +58,17 @@ export default forwardRef<HTMLButtonElement, TextButtonProps>(function TextButto
 
   return (
     <button
+      ref={ref}
       type={type}
       disabled={disabled}
       onClick={onClick}
       {...rest}
       className={[
-        'inline-flex w-full items-center justify-center gap-[0.62rem] px-[0.75rem] py-[0.62rem]',
+        'inline-flex w-full items-center justify-center gap-[0.62rem] overflow-hidden px-[0.75rem] py-[0.62rem]',
         sizeHeightMap[size],
         sizeTextMap[size],
         disabled ? disabledMap[variant] : variantMap[variant],
+        className,
       ].join(' ')}
     >
       {leftIconName && <SurfIcon name={leftIconName} size={size} />}

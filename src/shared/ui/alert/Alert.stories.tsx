@@ -69,6 +69,8 @@ export const DefaultTwoButtons: Story = {
     rightBtnText: '로그아웃',
     leftSolidButtonVariant: 'secondary',
     rightSolidButtonVariant: 'primary',
+    onRightBtnClick: () => {},
+    onLeftBtnClick: () => {},
   },
 };
 
@@ -81,6 +83,9 @@ export const OneButton: Story = {
     infoText: '변경 사항이 정상적으로 반영되었어요.',
     rightBtnText: '확인',
     rightSolidButtonVariant: 'primary',
+    onRightBtnClick: () => {
+      alert('Right button clicked');
+    },
   },
 };
 
@@ -93,6 +98,9 @@ export const Error: Story = {
     infoText: '네트워크 상태를 확인한 뒤 다시 시도해 주세요.',
     rightBtnText: '확인',
     textButtonVariant: 'primary',
+    onRightBtnClick: () => {
+      alert('Error state right button clicked');
+    },
   },
 };
 
@@ -107,6 +115,12 @@ export const CustomSolidVariants: Story = {
     rightBtnText: '삭제',
     leftSolidButtonVariant: 'secondary',
     rightSolidButtonVariant: 'danger',
+    onRightBtnClick: () => {
+      alert('Delete action confirmed');
+    },
+    onLeftBtnClick: () => {
+      alert('Delete action cancelled');
+    },
   },
 };
 
@@ -122,5 +136,11 @@ export const LongText: Story = {
     rightBtnText: '진행',
     leftSolidButtonVariant: 'secondary',
     rightSolidButtonVariant: 'primary',
+    onRightBtnClick: () => {
+      alert('Long text action confirmed');
+    },
+    onLeftBtnClick: () => {
+      alert('Long text action cancelled');
+    },
   },
 };

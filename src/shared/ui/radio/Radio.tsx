@@ -3,16 +3,33 @@
 import { forwardRef } from 'react';
 import type { InputHTMLAttributes, ChangeEvent } from 'react';
 
-export type RadioProps = Omit<InputHTMLAttributes<HTMLInputElement>, 'type' | 'children'> & {
-  id: string; // input과 label 연결용 고유 ID
+type BaseProps = Omit<
+  InputHTMLAttributes<HTMLInputElement>,
+  'type' | 'children' | 'className' | 'checked' | 'defaultChecked' | 'disabled' | 'onChange'
+> & {
+  id: string; // 고유 ID (label과 연결)
   name: string; // 라디오 그룹 이름
   value: string; // 선택 시 전달되는 값
   label?: string; // 라디오 버튼 옆 텍스트
-  isChecked?: boolean; // Controlled 방식
-  isDefaultChecked?: boolean; // Uncontrolled 초기값
   isDisabled?: boolean; // 비활성화 여부
-  onChange?: (e: ChangeEvent<HTMLInputElement>) => void;
 };
+
+// Controlled 전용
+type ControlledProps = {
+  isChecked: boolean;
+  onChange: (e: ChangeEvent<HTMLInputElement>) => void;
+  isDefaultChecked?: never;
+};
+
+// Uncontrolled 전용
+type UncontrolledProps = {
+  isDefaultChecked?: boolean;
+  onChange?: (e: ChangeEvent<HTMLInputElement>) => void;
+  isChecked?: never;
+};
+
+// 최종 RadioProps
+export type RadioProps = BaseProps & (ControlledProps | UncontrolledProps);
 
 export const Radio = forwardRef<HTMLInputElement, RadioProps>(
   (

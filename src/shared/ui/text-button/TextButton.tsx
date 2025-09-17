@@ -65,10 +65,10 @@ export const TextButton = forwardRef<HTMLButtonElement, TextButtonProps>(
         onClick={onClick}
         {...rest}
         className={[
-          'inline-flex w-full cursor-pointer items-center justify-center overflow-hidden px-[0.75rem] py-[0.62rem]',
+          'inline-flex w-full items-center justify-center overflow-hidden px-[0.75rem] py-[0.62rem]',
           sizeHeightMap[size],
           sizeTextMap[size],
-          disabled ? disabledMap[variant] : variantMap[variant],
+          disabled ? disabledMap[variant] : [variantMap[variant], 'cursor-pointer'],
           className,
         ].join(' ')}
       >

@@ -22,7 +22,11 @@ export default function CheckList({
       {/* 체크 토글 버튼 및 제목 */}
       <button
         className="flex w-full cursor-pointer items-center justify-center gap-[0.35rem]"
+        type="button"
+        aria-pressed={!!isChecked}
+        aria-label={`${title} 체크 전환`}
         onClick={() => onChange(!isChecked, id)}
+        data-checked={!!isChecked}
       >
         <SurfIcon
           name="Check"

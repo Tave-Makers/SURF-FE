@@ -2,7 +2,7 @@ import type { Meta, StoryObj } from '@storybook/nextjs-vite';
 import { Toggle } from './Toggle';
 
 const meta: Meta<typeof Toggle> = {
-  title: 'shared/ui/Toggle',
+  title: 'Shared/UI/Toggle',
   component: Toggle,
   tags: ['autodocs'],
   args: {

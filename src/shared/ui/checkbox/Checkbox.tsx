@@ -4,10 +4,7 @@ import { forwardRef } from 'react';
 import type { InputHTMLAttributes, ChangeEvent } from 'react';
 import { SurfIcon } from '../icon/SurfIcon';
 
-export type ControlCheckboxProps = Omit<
-  InputHTMLAttributes<HTMLInputElement>,
-  'type' | 'children'
-> & {
+export type CheckboxProps = Omit<InputHTMLAttributes<HTMLInputElement>, 'type' | 'children'> & {
   id: string; // input과 label 연결용 고유 ID
   label?: string; // 체크박스 옆 텍스트
   isChecked?: boolean; // Controlled 방식
@@ -16,7 +13,7 @@ export type ControlCheckboxProps = Omit<
   onChange?: (e: ChangeEvent<HTMLInputElement>) => void;
 };
 
-export const ControlCheckbox = forwardRef<HTMLInputElement, ControlCheckboxProps>(
+export const Checkbox = forwardRef<HTMLInputElement, CheckboxProps>(
   ({ id, label, isChecked, isDefaultChecked, isDisabled = false, onChange, ...rest }, ref) => {
     return (
       <label
@@ -47,4 +44,4 @@ export const ControlCheckbox = forwardRef<HTMLInputElement, ControlCheckboxProps
   },
 );
 
-ControlCheckbox.displayName = 'ControlCheckbox';
+Checkbox.displayName = 'Checkbox';

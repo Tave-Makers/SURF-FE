@@ -1,10 +1,10 @@
 import type { Meta, StoryObj } from '@storybook/nextjs-vite';
 import { useState } from 'react';
-import { ControlCheckbox } from './ControlCheckbox';
+import { Checkbox } from './Checkbox';
 
-const meta: Meta<typeof ControlCheckbox> = {
-  title: 'shared/ui/control/ControlCheckbox',
-  component: ControlCheckbox,
+const meta: Meta<typeof Checkbox> = {
+  title: 'Shared/UI/Checkbox',
+  component: Checkbox,
   tags: ['autodocs'],
   args: {
     id: 'checkbox',
@@ -13,7 +13,7 @@ const meta: Meta<typeof ControlCheckbox> = {
 };
 
 export default meta;
-type Story = StoryObj<typeof ControlCheckbox>;
+type Story = StoryObj<typeof Checkbox>;
 
 export const Uncontrolled: Story = {
   args: {
@@ -27,11 +27,7 @@ export const Controlled: Story = {
 
     return (
       <div className="space-y-2">
-        <ControlCheckbox
-          {...args}
-          isChecked={checked}
-          onChange={(e) => setChecked(e.target.checked)}
-        />
+        <Checkbox {...args} isChecked={checked} onChange={(e) => setChecked(e.target.checked)} />
         <p className="text-sm">현재 상태: {checked ? '✅ 체크됨' : '❌ 체크 안 됨'}</p>
       </div>
     );

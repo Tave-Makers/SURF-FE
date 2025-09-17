@@ -16,7 +16,7 @@
   },
   "lint-staged": {
     "*.{js,jsx,ts,tsx}": [
-      "pnpm exec eslint --max-warnings=0 --fix",
+      "pnpm exec eslint --max-warnings=0 --fix --no-warn-ignored",
       "pnpm exec prettier --write"
     ],
     "*.{json,md,css,scss,html}": "pnpm exec prettier --write"

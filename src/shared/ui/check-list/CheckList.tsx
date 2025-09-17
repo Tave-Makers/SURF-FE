@@ -9,7 +9,7 @@ type CheckListProps = {
   onClickItem?: (id: number) => void; // 클릭 시 어떤 아이템인지 부모에 전달
 };
 
-export function CheckList({
+export default function CheckList({
   id,
   title = 'Title',
   isChecked = false,
@@ -30,7 +30,7 @@ export function CheckList({
           }
         />
       </button>
-      {/* 제목 및 오른쪽 아이콘 버튼*/}
+      {/* 제목 및 우측 버튼*/}
       <button className="flex w-full cursor-pointer" onClick={() => onClickItem?.(id)}>
         <div className="text-[color: var(--color-foreground-secondary-darker)] text-body-14-600--1-24 flex shrink-0 grow basis-0">
           {title}

@@ -18,7 +18,7 @@ export const Checkbox = forwardRef<HTMLInputElement, CheckboxProps>(
     return (
       <label
         htmlFor={id}
-        className={`inline-flex cursor-pointer items-center gap-[0.625rem] ${
+        className={`inline-flex cursor-pointer items-center gap-[0.62rem] ${
           isDisabled ? 'cursor-not-allowed opacity-50' : ''
         }`}
       >
@@ -31,7 +31,7 @@ export const Checkbox = forwardRef<HTMLInputElement, CheckboxProps>(
             disabled={isDisabled}
             onChange={onChange}
             ref={ref}
-            className="peer bg-background-normal checked:bg-background-primary border-border-normal h-full w-full cursor-pointer appearance-none rounded-[0.125rem] border checked:border-none disabled:cursor-not-allowed"
+            className="peer bg-background-normal checked:bg-background-primary border-border-normal h-full w-full cursor-pointer appearance-none rounded-[0.12rem] border checked:border-none disabled:cursor-not-allowed"
             {...rest}
           />
           <span className="text-foreground-accent pointer-events-none absolute top-1/2 left-1/2 flex h-full w-full -translate-x-1/2 -translate-y-1/2 items-center justify-center opacity-0 peer-checked:opacity-100">

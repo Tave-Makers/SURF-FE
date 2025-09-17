@@ -10,7 +10,7 @@ type CheckListProps = {
   onClickItem?: (id: number) => void; // 클릭 시 어떤 아이템인지 부모에 전달
 };
 
-export default function CheckList({
+export function CheckList({
   id,
   title = 'Title',
   isChecked = false,

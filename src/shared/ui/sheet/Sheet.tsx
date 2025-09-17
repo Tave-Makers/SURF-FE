@@ -1,6 +1,6 @@
 import React from 'react';
-import SolidButton from '../solid-button/SolidButton';
-import TextButton from '../text-button/TextButton';
+import { SolidButton } from '../solid-button/SolidButton';
+import { TextButton } from '../text-button/TextButton';
 
 type SheetProps = {
   title?: string; // 시트 제목
@@ -15,7 +15,7 @@ type SheetProps = {
   textBtnLabel?: string; // 텍스트 버튼
 };
 
-export default function Sheet({
+export function Sheet({
   title = 'Title',
   description = 'Description',
   children,

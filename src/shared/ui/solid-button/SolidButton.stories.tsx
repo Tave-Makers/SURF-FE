@@ -1,5 +1,5 @@
 import type { Meta, StoryObj } from '@storybook/nextjs-vite';
-import SolidButton from './SolidButton';
+import { SolidButton } from './SolidButton';
 
 const meta = {
   title: 'Shared/UI/SolidButton',

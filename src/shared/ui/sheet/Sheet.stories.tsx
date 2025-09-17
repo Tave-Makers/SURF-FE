@@ -1,7 +1,7 @@
 // Sheet.stories.tsx
 import type { Meta, StoryObj } from '@storybook/nextjs-vite';
-import Sheet from './Sheet';
-import CheckList from '../check-list/CheckList';
+import { Sheet } from './Sheet';
+import { CheckList } from '../check-list/CheckList';
 import { useState } from 'react';
 import { Sheet as ModalSheet } from 'react-modal-sheet';
 

@@ -1,6 +1,6 @@
 import type { Meta, StoryObj } from '@storybook/nextjs-vite';
 import { useState } from 'react';
-import CheckList from './CheckList';
+import { CheckList } from './CheckList';
 
 const meta: Meta<typeof CheckList> = {
   title: 'Shared/UI/CheckList',

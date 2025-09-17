@@ -22,7 +22,7 @@ export const Radio = forwardRef<HTMLInputElement, RadioProps>(
     return (
       <label
         htmlFor={id}
-        className={`inline-flex cursor-pointer items-center gap-[0.625rem] ${
+        className={`inline-flex cursor-pointer items-center gap-[0.62rem] ${
           isDisabled ? 'cursor-not-allowed opacity-50' : ''
         }`}
       >

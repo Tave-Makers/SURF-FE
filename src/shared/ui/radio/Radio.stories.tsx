@@ -3,7 +3,7 @@ import { Radio } from './Radio';
 
 // 반드시 default export 필요
 const meta: Meta<typeof Radio> = {
-  title: 'shared/ui/Radio', // 좌측 네비게이션 경로
+  title: 'shared/ui/radio/Radio', // 좌측 네비게이션 경로
   component: Radio,
   tags: ['autodocs'], // Docs 탭 자동 생성
 };

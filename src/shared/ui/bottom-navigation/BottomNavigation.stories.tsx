@@ -1,5 +1,5 @@
 import type { Meta, StoryObj } from '@storybook/nextjs-vite';
-import BottomNavigation from './BottomNavigation';
+import { BottomNavigation } from './BottomNavigation';
 
 const meta: Meta<typeof BottomNavigation> = {
   title: 'Shared/UI/BottomNav',

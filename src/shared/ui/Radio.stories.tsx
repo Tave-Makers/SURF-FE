@@ -1,16 +1,16 @@
 import type { Meta, StoryObj } from '@storybook/nextjs-vite';
-import { ControlRadio } from './ControlRadio';
+import { Radio } from './Radio';
 
 // 반드시 default export 필요
-const meta: Meta<typeof ControlRadio> = {
-  title: 'shared/ui/control/ControlRadio', // 좌측 네비게이션 경로
-  component: ControlRadio,
+const meta: Meta<typeof Radio> = {
+  title: 'shared/ui/Radio', // 좌측 네비게이션 경로
+  component: Radio,
   tags: ['autodocs'], // Docs 탭 자동 생성
 };
 
 export default meta;
 
-type Story = StoryObj<typeof ControlRadio>;
+type Story = StoryObj<typeof Radio>;
 
 // named export로 스토리 정의
 export const Default: Story = {

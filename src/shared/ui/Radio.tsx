@@ -3,7 +3,7 @@
 import { forwardRef } from 'react';
 import type { InputHTMLAttributes, ChangeEvent } from 'react';
 
-export type ControlRadioProps = Omit<InputHTMLAttributes<HTMLInputElement>, 'type' | 'children'> & {
+export type RadioProps = Omit<InputHTMLAttributes<HTMLInputElement>, 'type' | 'children'> & {
   id: string; // input과 label 연결용 고유 ID
   name: string; // 라디오 그룹 이름
   value: string; // 선택 시 전달되는 값
@@ -14,7 +14,7 @@ export type ControlRadioProps = Omit<InputHTMLAttributes<HTMLInputElement>, 'typ
   onChange?: (e: ChangeEvent<HTMLInputElement>) => void;
 };
 
-export const ControlRadio = forwardRef<HTMLInputElement, ControlRadioProps>(
+export const Radio = forwardRef<HTMLInputElement, RadioProps>(
   (
     { id, name, value, label, isChecked, isDefaultChecked, isDisabled = false, onChange, ...rest },
     ref,
@@ -45,4 +45,4 @@ export const ControlRadio = forwardRef<HTMLInputElement, ControlRadioProps>(
   },
 );
 
-ControlRadio.displayName = 'ControlRadio';
+Radio.displayName = 'Radio';

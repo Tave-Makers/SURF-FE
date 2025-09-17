@@ -57,6 +57,7 @@ export const TextInput = forwardRef<HTMLInputElement, TextInputProps>((props, re
         ref={internalRef}
         className="placeholder-body-14-600--1-24 text-body-14-400--2-22 text-[color:var(--color-foreground-normal)] placeholder:[color:var(--color-background-quaternary)]"
         placeholder={placeholder}
+        aria-label={mode === 'SearchField' ? '검색어 입력' : '댓글 입력'}
         onKeyDown={(e) => {
           if (e.key === 'Enter') {
             e.preventDefault();
@@ -69,7 +70,7 @@ export const TextInput = forwardRef<HTMLInputElement, TextInputProps>((props, re
 
       {/* SearchField: hasIcon이 true일 경우 아이콘 표시*/}
       {mode === 'SearchField' && (props.hasIcon ?? DEFAULTS.SearchField.hasIcon) && (
-        <button type="button" onClick={handleSearch}>
+        <button type="button" aria-label="검색" onClick={handleSearch}>
           <SurfIcon
             name="Search"
             size="l"
@@ -80,7 +81,15 @@ export const TextInput = forwardRef<HTMLInputElement, TextInputProps>((props, re
 
       {/* TextField: isActive 여부에 따라 다른 아이콘 표시 */}
       {mode === 'TextField' && (props.hasIcon ?? DEFAULTS.TextField.hasIcon) && (
-        <button type="button" onClick={props.onClick}>
+        <button
+          type="button"
+          aria-label={
+            (props.isActive ?? DEFAULTS.TextField.isActive)
+              ? '이모지 패널 닫기'
+              : '이모지 패널 열기'
+          }
+          onClick={props.onClick}
+        >
           {(props.isActive ?? DEFAULTS.TextField.isActive) ? (
             <SurfIcon
               name="SmileCircleSolid"

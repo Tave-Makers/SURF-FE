@@ -22,12 +22,17 @@ export const Uncontrolled: Story = {
 };
 
 export const Controlled: Story = {
-  render: (args) => {
+  render: () => {
     const [checked, setChecked] = useState(false);
 
     return (
       <div className="space-y-2">
-        <Checkbox {...args} isChecked={checked} onChange={(e) => setChecked(e.target.checked)} />
+        <Checkbox
+          id="checkbox-controlled"
+          label="체크박스 라벨"
+          isChecked={checked}
+          onChange={(e) => setChecked(e.target.checked)}
+        />
         <p className="text-sm">현재 상태: {checked ? '✅ 체크됨' : '❌ 체크 안 됨'}</p>
       </div>
     );

@@ -4,14 +4,32 @@ import { forwardRef } from 'react';
 import type { InputHTMLAttributes, ChangeEvent } from 'react';
 import { SurfIcon } from '../icon/SurfIcon';
 
-export type CheckboxProps = Omit<InputHTMLAttributes<HTMLInputElement>, 'type' | 'children'> & {
-  id: string; // input과 label 연결용 고유 ID
+// 공통 속성
+type BaseProps = Omit<
+  InputHTMLAttributes<HTMLInputElement>,
+  'type' | 'children' | 'checked' | 'defaultChecked' | 'disabled' | 'onChange' | 'className'
+> & {
+  id: string; // 고유 ID
   label?: string; // 체크박스 옆 텍스트
-  isChecked?: boolean; // Controlled 방식
-  isDefaultChecked?: boolean; // Uncontrolled 초기값
-  isDisabled?: boolean; // 비활성화 여부
-  onChange?: (e: ChangeEvent<HTMLInputElement>) => void;
+  isDisabled?: boolean;
 };
+
+// Controlled 전용
+type ControlledProps = {
+  isChecked: boolean;
+  onChange: (e: ChangeEvent<HTMLInputElement>) => void;
+  isDefaultChecked?: never;
+};
+
+// Uncontrolled 전용
+type UncontrolledProps = {
+  isDefaultChecked?: boolean;
+  onChange?: (e: ChangeEvent<HTMLInputElement>) => void;
+  isChecked?: never;
+};
+
+// 최종 Props
+export type CheckboxProps = BaseProps & (ControlledProps | UncontrolledProps);
 
 export const Checkbox = forwardRef<HTMLInputElement, CheckboxProps>(
   ({ id, label, isChecked, isDefaultChecked, isDisabled = false, onChange, ...rest }, ref) => {

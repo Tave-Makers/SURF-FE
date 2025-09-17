@@ -1,7 +1,7 @@
 'use client';
 
-import SolidButton, { SolidButtonProps } from '../solid-button/SolidButton';
-import TextButton, { TextButtonProps } from '../text-button/TextButton';
+import { SolidButton, SolidButtonProps } from '../solid-button/SolidButton';
+import { TextButton, TextButtonProps } from '../text-button/TextButton';
 
 type AlertState = 'default' | 'error';
 
@@ -19,7 +19,7 @@ type AlertProps = {
   onLeftBtnClick?: () => void;
 };
 
-export default function Alert({
+export const Alert = ({
   state = 'default',
   title,
   infoText,
@@ -31,7 +31,7 @@ export default function Alert({
   textButtonVariant,
   onRightBtnClick,
   onLeftBtnClick,
-}: AlertProps) {
+}: AlertProps) => {
   const isError = state === 'error';
   const showTwo = !isError && hasTwoBtn;
 
@@ -86,4 +86,6 @@ export default function Alert({
       </div>
     </section>
   );
-}
+};
+
+Alert.displayName = 'Alert';

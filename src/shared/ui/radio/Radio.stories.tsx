@@ -16,27 +16,26 @@ type Story = StoryObj<typeof Radio>;
 export const Default: Story = {
   args: {
     id: 'radio-default',
-    name: 'example',
+    name: 'example-default',
     value: 'one',
     label: 'Option One',
-    isChecked: false,
   },
 };
 
 export const Checked: Story = {
   args: {
     id: 'radio-checked',
-    name: 'example',
+    name: 'example-checked',
     value: 'two',
     label: 'Option Two',
-    isChecked: true,
+    isDefaultChecked: true,
   },
 };
 
 export const Disabled: Story = {
   args: {
     id: 'radio-disabled',
-    name: 'example',
+    name: 'example-disabled',
     value: 'three',
     label: 'Option Three',
     isDisabled: true,

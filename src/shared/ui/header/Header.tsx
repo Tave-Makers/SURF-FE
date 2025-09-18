@@ -6,7 +6,6 @@ type SurfIconName = ComponentProps<typeof SurfIcon>['name'];
 
 type BaseHeaderProps = {
   hasLeftIcon?: boolean;
-  hasTitle?: boolean;
   title?: string;
   onBack?: () => void;
 };
@@ -44,8 +43,9 @@ const renderLeftIcon = (hasLeftIcon?: boolean, onBack?: () => void) =>
     </button>
   );
 
-const renderTitle = (hasTitle?: boolean, title?: string) =>
-  hasTitle && <h1 className="text-head-18-700--1 flex-1 !leading-[18px]">{title}</h1>;
+const renderTitle = (title?: string) => (
+  <h1 className="text-head-18-700--1 flex-1 !leading-[18px]">{title}</h1>
+);
 
 const renderRightIcons = (icons: MaxThree<HeaderIcon> = []) => (
   <div className="ml-auto flex">
@@ -65,13 +65,7 @@ const renderRightIcons = (icons: MaxThree<HeaderIcon> = []) => (
   </div>
 );
 
-export function Header({
-  hasLeftIcon = true,
-  hasTitle = false,
-  title = '',
-  onBack,
-  ...props
-}: HeaderProps) {
+export function Header({ hasLeftIcon = true, title = '', onBack, ...props }: HeaderProps) {
   const { type } = props;
 
   return (
@@ -79,7 +73,7 @@ export function Header({
       {type === 'Default' && (
         <>
           {renderLeftIcon(hasLeftIcon, onBack)}
-          {renderTitle(hasTitle, title)}
+          {renderTitle(title)}
           {props.icons && renderRightIcons(props.icons)}
         </>
       )}
@@ -106,7 +100,7 @@ export function Header({
       {type === 'TextBtn' && (
         <>
           {renderLeftIcon(hasLeftIcon, onBack)}
-          {renderTitle(hasTitle, title)}
+          {renderTitle(title)}
           <button
             className={`text-body-14-600--1-20 ml-auto cursor-pointer p-[0.5rem] ${
               props.isActive

@@ -41,7 +41,6 @@ export const DefaultHeader: Story = {
     type: 'Default',
     hasLeftIcon: true,
     onBack: () => alert('뒤로가기 클릭'),
-    hasTitle: true,
     title: '홈',
     icons: [
       { label: 'Search', onClick: () => alert('검색 클릭') },
@@ -65,7 +64,6 @@ export const LogoHeader: Story = {
   argTypes: {
     hasLeftIcon: { table: { disable: true } },
     title: { table: { disable: true } },
-    hasTitle: { table: { disable: true } },
   },
 };
 
@@ -79,7 +77,6 @@ export const TextBtnHeader: Story = {
     type: 'TextBtn',
     hasLeftIcon: true,
     onBack: () => alert('뒤로가기 클릭'),
-    hasTitle: true,
     title: '글쓰기',
     text: '완료',
     isActive: true,
@@ -109,6 +106,5 @@ export const SearchBarHeader: Story = {
   argTypes: {
     hasLeftIcon: { control: 'boolean' },
     title: { table: { disable: true } },
-    hasTitle: { table: { disable: true } },
   },
 };

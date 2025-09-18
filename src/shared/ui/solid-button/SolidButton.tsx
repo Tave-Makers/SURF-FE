@@ -1,6 +1,6 @@
 'use client';
 
-import type { ComponentProps, ButtonHTMLAttributes } from 'react';
+import type { ComponentProps, ButtonHTMLAttributes, ReactNode } from 'react';
 import { forwardRef } from 'react';
 import { SurfIcon } from '@/shared/ui/icon/SurfIcon';
 
@@ -15,7 +15,7 @@ export type SolidButtonProps = Omit<ButtonHTMLAttributes<HTMLButtonElement>, 'di
   isDisabled?: boolean;
   leftIconName?: SurfIconName | null;
   rightIconName?: SurfIconName | null;
-  children: React.ReactNode;
+  children: ReactNode;
   type?: 'button' | 'submit' | 'reset';
   onClick?: (e: React.MouseEvent<HTMLButtonElement>) => void;
 };
@@ -23,8 +23,8 @@ export type SolidButtonProps = Omit<ButtonHTMLAttributes<HTMLButtonElement>, 'di
 export const SolidButton = forwardRef<HTMLButtonElement, SolidButtonProps>(
   (
     {
-      size,
-      variant,
+      size = 'm',
+      variant = 'primary',
       isDisabled = false,
       leftIconName,
       rightIconName,

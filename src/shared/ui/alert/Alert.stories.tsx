@@ -89,7 +89,7 @@ export const OneButton: Story = {
   },
 };
 
-export const Error: Story = {
+export const ErrorState: Story = {
   name: 'ErrorState/One Button',
   args: {
     state: 'error',

@@ -9,7 +9,7 @@ const meta = {
   args: {
     size: 'm',
     variant: 'primary',
-    disabled: false,
+    isDisabled: false,
     leftIconName: null,
     rightIconName: null,
     children: '버튼',
@@ -26,7 +26,7 @@ const meta = {
       options: ['primary', 'secondary', 'danger', 'warning'],
     },
     children: { control: 'text' },
-    disabled: { control: 'boolean' },
+    isDisabled: { control: 'boolean' },
     leftIconName: { control: false },
     rightIconName: { control: false },
   },
@@ -94,7 +94,7 @@ export const BothIcons: Story = {
 
 export const Disabled: Story = {
   args: {
-    disabled: true,
+    isDisabled: true,
     children: '비활성화',
     leftIconName: 'Plus',
     rightIconName: 'ChevronRight',

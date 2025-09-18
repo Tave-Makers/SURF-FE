@@ -9,20 +9,23 @@ type SurfIconName = ComponentProps<typeof SurfIcon>['name'];
 type ButtonSize = 's' | 'm' | 'l';
 type ButtonVariant = 'primary' | 'secondary' | 'warning';
 
-export type TextButtonProps = ButtonHTMLAttributes<HTMLButtonElement> & {
+export type TextButtonProps = Omit<ButtonHTMLAttributes<HTMLButtonElement>, 'disabled'> & {
   size: ButtonSize;
   variant: ButtonVariant;
+  isDisabled?: boolean;
   leftIconName?: SurfIconName | null;
   rightIconName?: SurfIconName | null;
+  children: React.ReactNode;
+  type?: 'button' | 'submit' | 'reset';
   onClick?: (e: React.MouseEvent<HTMLButtonElement>) => void;
 };
 
 export const TextButton = forwardRef<HTMLButtonElement, TextButtonProps>(
   (
     {
-      size = 'm',
-      variant = 'primary',
-      disabled = false,
+      size,
+      variant,
+      isDisabled = false,
       leftIconName,
       rightIconName,
       children,
@@ -57,18 +60,21 @@ export const TextButton = forwardRef<HTMLButtonElement, TextButtonProps>(
       warning: 'text-foreground-danger cursor-not-allowed opacity-30',
     };
 
+    const baseClass =
+      'inline-flex w-full items-center justify-center overflow-hidden px-[0.75rem] py-[0.62rem]';
+
     return (
       <button
         ref={ref}
         type={type}
-        disabled={disabled}
+        disabled={isDisabled}
         onClick={onClick}
         {...rest}
         className={[
-          'inline-flex w-full items-center justify-center overflow-hidden px-[0.75rem] py-[0.62rem]',
+          baseClass,
           sizeHeightMap[size],
           sizeTextMap[size],
-          disabled ? disabledMap[variant] : `${variantMap[variant]} cursor-pointer`,
+          isDisabled ? disabledMap[variant] : `${variantMap[variant]} cursor-pointer`,
           className,
         ].join(' ')}
       >

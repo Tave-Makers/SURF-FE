@@ -9,20 +9,23 @@ type SurfIconName = ComponentProps<typeof SurfIcon>['name'];
 type ButtonSize = 's' | 'm' | 'l';
 type ButtonVariant = 'primary' | 'secondary' | 'danger' | 'warning';
 
-export type SolidButtonProps = ButtonHTMLAttributes<HTMLButtonElement> & {
+export type SolidButtonProps = Omit<ButtonHTMLAttributes<HTMLButtonElement>, 'disabled'> & {
   size: ButtonSize;
   variant: ButtonVariant;
+  isDisabled?: boolean;
   leftIconName?: SurfIconName | null;
   rightIconName?: SurfIconName | null;
+  children: React.ReactNode;
+  type?: 'button' | 'submit' | 'reset';
   onClick?: (e: React.MouseEvent<HTMLButtonElement>) => void;
 };
 
 export const SolidButton = forwardRef<HTMLButtonElement, SolidButtonProps>(
   (
     {
-      size = 'm',
-      variant = 'primary',
-      disabled = false,
+      size,
+      variant,
+      isDisabled = false,
       leftIconName,
       rightIconName,
       children,
@@ -55,18 +58,21 @@ export const SolidButton = forwardRef<HTMLButtonElement, SolidButtonProps>(
     const disabledClass =
       'bg-background-tertiary text-foreground-accent cursor-not-allowed opacity-50';
 
+    const baseClass =
+      'inline-flex w-full items-center justify-center overflow-hidden rounded px-[0.75rem] py-[0.62rem]';
+
     return (
       <button
         ref={ref}
         type={type}
-        disabled={disabled}
+        disabled={isDisabled}
         onClick={onClick}
         {...rest}
         className={[
-          'inline-flex w-full items-center justify-center overflow-hidden rounded px-[0.75rem] py-[0.62rem]',
+          baseClass,
           sizeHeightMap[size],
           sizeTextMap[size],
-          disabled ? disabledClass : `${variantMap[variant]} cursor-pointer`,
+          isDisabled ? disabledClass : `${variantMap[variant]} cursor-pointer`,
           className,
         ].join(' ')}
       >

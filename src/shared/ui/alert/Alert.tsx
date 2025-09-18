@@ -4,41 +4,40 @@ import { useId } from 'react';
 import { SolidButton, SolidButtonProps } from '../solid-button/SolidButton';
 import { TextButton, TextButtonProps } from '../text-button/TextButton';
 
+type BaseAction = {
+  label: string;
+  onClick: () => void;
+  isDisabled?: boolean;
+  className?: string;
+  testId?: string;
+};
+
+type SolidAction = BaseAction & {
+  type: 'solid';
+  variant?: SolidButtonProps['variant'];
+};
+
+type TextAction = BaseAction & {
+  type: 'text';
+  variant?: TextButtonProps['variant'];
+};
+
+type AlertAction = SolidAction | TextAction;
 type AlertState = 'default' | 'error';
 
 type AlertProps = {
   state: AlertState;
   title: string;
   infoText?: string;
-  hasTwoBtn: boolean;
-  rightBtnText: string;
-  leftBtnText?: string;
-  rightSolidButtonVariant?: SolidButtonProps['variant'];
-  leftSolidButtonVariant?: SolidButtonProps['variant'];
-  textButtonVariant?: TextButtonProps['variant'];
-  onRightBtnClick: () => void;
-  onLeftBtnClick?: () => void;
+  actions: AlertAction[];
 };
 
-export const Alert = ({
-  state = 'default',
-  title,
-  infoText,
-  hasTwoBtn = true,
-  rightBtnText = '확인',
-  leftBtnText = '취소',
-  rightSolidButtonVariant,
-  leftSolidButtonVariant,
-  textButtonVariant,
-  onRightBtnClick,
-  onLeftBtnClick,
-}: AlertProps) => {
+export const Alert = ({ state = 'default', title, infoText, actions }: AlertProps) => {
   const uid = useId();
   const titleId = `${uid}-title`;
   const descId = infoText ? `${uid}-desc` : undefined;
 
   const isError = state === 'error';
-  const showTwo = !isError && hasTwoBtn;
 
   return (
     <section
@@ -59,35 +58,37 @@ export const Alert = ({
       </div>
 
       <div className="flex flex-row justify-end gap-2">
-        {isError ? (
-          <TextButton
-            size="m"
-            variant={textButtonVariant ?? 'primary'}
-            onClick={onRightBtnClick}
-            className="ml-auto !inline-flex !w-auto"
-          >
-            {rightBtnText}
-          </TextButton>
-        ) : (
-          <>
-            {showTwo && (
-              <SolidButton
+        {actions.map((action, idx) => {
+          if (action.type === 'text') {
+            return (
+              <TextButton
+                key={idx}
                 size="m"
-                variant={leftSolidButtonVariant ?? 'secondary'}
-                onClick={onLeftBtnClick ?? undefined}
+                variant={action.variant ?? 'primary'}
+                isDisabled={action.isDisabled}
+                onClick={action.onClick}
+                className={action.className ?? 'ml-auto !inline-flex !w-auto'}
+                data-testid={action.testId}
               >
-                {leftBtnText}
-              </SolidButton>
-            )}
+                {action.label}
+              </TextButton>
+            );
+          }
+
+          // type === 'solid'
+          return (
             <SolidButton
+              key={idx}
               size="m"
-              variant={rightSolidButtonVariant ?? 'primary'}
-              onClick={onRightBtnClick}
+              variant={action.variant ?? 'primary'}
+              isDisabled={action.isDisabled}
+              onClick={action.onClick}
+              data-testid={action.testId}
             >
-              {rightBtnText}
+              {action.label}
             </SolidButton>
-          </>
-        )}
+          );
+        })}
       </div>
     </section>
   );

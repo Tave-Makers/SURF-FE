@@ -4,6 +4,7 @@ import { useState } from 'react';
 
 const meta: Meta<HeaderProps> = {
   title: 'Components/Header',
+  tags: ['autodocs'],
   component: Header,
   argTypes: {
     type: {
@@ -28,7 +29,7 @@ export default meta;
 type Story = StoryObj<HeaderProps>;
 
 const Wrapper = ({ children }: { children: React.ReactNode }) => (
-  <div className="relative w-[20rem]">{children}</div>
+  <div className="relative h-[20rem] w-[20rem] bg-stone-100">{children}</div>
 );
 
 export const DefaultHeader: Story = {
@@ -38,7 +39,7 @@ export const DefaultHeader: Story = {
     </Wrapper>
   ),
   args: {
-    type: 'Default',
+    type: 'default',
     hasLeftIcon: true,
     onBack: () => alert('뒤로가기 클릭'),
     title: '홈',
@@ -57,8 +58,8 @@ export const LogoHeader: Story = {
     </Wrapper>
   ),
   args: {
-    type: 'Logo',
-    logo: <div className="flex h-full w-[8rem] items-center bg-gray-300">로고</div>,
+    type: 'logo',
+    logo: <div className="flex h-full w-[8rem] items-center bg-gray-300" />,
     icons: [{ label: 'DotsVertical', onClick: () => alert('메뉴 열기') }],
   },
   argTypes: {
@@ -74,7 +75,7 @@ export const TextBtnHeader: Story = {
     </Wrapper>
   ),
   args: {
-    type: 'TextBtn',
+    type: 'textBtn',
     hasLeftIcon: true,
     onBack: () => alert('뒤로가기 클릭'),
     title: '글쓰기',
@@ -91,7 +92,7 @@ export const SearchBarHeader: Story = {
       <Wrapper>
         <Header
           {...args} // ← Controls 반영
-          type="SearchBar"
+          type="searchBar"
           value={query}
           onChange={setQuery}
           onSubmit={(val) => alert(`검색어 제출됨: ${val}`)}

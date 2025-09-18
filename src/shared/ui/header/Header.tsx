@@ -22,11 +22,11 @@ type IconGroupProps = {
 };
 
 export type HeaderProps =
-  | (BaseHeaderProps & { type: 'Default' } & IconGroupProps)
-  | (BaseHeaderProps & { type: 'Logo'; logo: React.ReactNode } & IconGroupProps)
-  | (BaseHeaderProps & { type: 'TextBtn'; text: string; isActive?: boolean; onClick?: () => void })
+  | (BaseHeaderProps & { type: 'default' } & IconGroupProps)
+  | (BaseHeaderProps & { type: 'logo'; logo: React.ReactNode } & IconGroupProps)
+  | (BaseHeaderProps & { type: 'textBtn'; text: string; isActive?: boolean; onClick?: () => void })
   | (BaseHeaderProps & {
-      type: 'SearchBar';
+      type: 'searchBar';
       value: string;
       onChange: (value: string) => void;
       onSubmit: (value: string) => void;
@@ -39,7 +39,7 @@ const renderLeftIcon = (hasLeftIcon?: boolean, onBack?: () => void) =>
       onClick={onBack}
       type="button"
     >
-      <SurfIcon name="ChevronLeft" size="l" />
+      <SurfIcon name="ChevronLeft" size="l" className="text-[color:var(--color-logo-normal)]" />
     </button>
   );
 
@@ -58,7 +58,11 @@ const renderRightIcons = (icons: MaxThree<HeaderIcon> = []) => (
             onClick={icon.onClick}
             type="button"
           >
-            <SurfIcon name={icon.label} size="l" />
+            <SurfIcon
+              name={icon.label}
+              size="l"
+              className="text-[color:var(--color-logo-normal)]"
+            />
           </button>
         ),
     )}
@@ -69,8 +73,8 @@ export function Header({ hasLeftIcon = true, title = '', onBack, ...props }: Hea
   const { type } = props;
 
   return (
-    <header className="absolute top-0 flex h-[3rem] w-full items-center justify-between px-[0.5rem] py-[0.25rem]">
-      {type === 'Default' && (
+    <header className="absolute top-0 flex h-[3rem] w-full items-center justify-between bg-[color:var(--color-background-normal-lighter)] px-[0.5rem] py-[0.25rem]">
+      {type === 'default' && (
         <>
           {renderLeftIcon(hasLeftIcon, onBack)}
           {renderTitle(title)}
@@ -78,14 +82,14 @@ export function Header({ hasLeftIcon = true, title = '', onBack, ...props }: Hea
         </>
       )}
 
-      {type === 'Logo' && (
+      {type === 'logo' && (
         <>
           <div className="h-full flex-1">{props.logo}</div>
           {props.icons && renderRightIcons(props.icons)}
         </>
       )}
 
-      {type === 'SearchBar' && (
+      {type === 'searchBar' && (
         <>
           {renderLeftIcon(hasLeftIcon, onBack)}
           <TextInput
@@ -97,7 +101,7 @@ export function Header({ hasLeftIcon = true, title = '', onBack, ...props }: Hea
         </>
       )}
 
-      {type === 'TextBtn' && (
+      {type === 'textBtn' && (
         <>
           {renderLeftIcon(hasLeftIcon, onBack)}
           {renderTitle(title)}

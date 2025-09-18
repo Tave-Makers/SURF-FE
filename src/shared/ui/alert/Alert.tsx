@@ -1,4 +1,5 @@
 'use client';
+import { useId } from 'react';
 
 import { SolidButton, SolidButtonProps } from '../solid-button/SolidButton';
 import { TextButton, TextButtonProps } from '../text-button/TextButton';
@@ -32,6 +33,10 @@ export const Alert = ({
   onRightBtnClick,
   onLeftBtnClick,
 }: AlertProps) => {
+  const uid = useId();
+  const titleId = `${uid}-title`;
+  const descId = infoText ? `${uid}-desc` : undefined;
+
   const isError = state === 'error';
   const showTwo = !isError && hasTwoBtn;
 
@@ -39,15 +44,15 @@ export const Alert = ({
     <section
       className="bg-background-normal flex w-[17.18rem] flex-col gap-[1rem] overflow-hidden rounded-[0.5rem] px-[1.25rem] pt-[1.25rem] pb-[1rem]"
       role={isError ? 'alert' : undefined}
-      aria-labelledby="alert-title"
-      aria-describedby={infoText ? 'alert-desc' : undefined}
+      aria-labelledby={titleId}
+      aria-describedby={descId}
     >
       <div className="flex flex-col gap-[0.25rem]">
-        <span id="alert-title" className="text-foreground-normal text-body-16-600--1">
+        <span id={titleId} className="text-foreground-normal text-body-16-600--1">
           {title}
         </span>
         {infoText && (
-          <span id="alert-desc" className="text-foreground-normal-darker text-body-14-400--2-22">
+          <span id={descId} className="text-foreground-normal-darker text-body-14-400--2-22">
             {infoText}
           </span>
         )}

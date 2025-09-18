@@ -42,6 +42,12 @@ export const SolidButton = forwardRef<HTMLButtonElement, SolidButtonProps>(
       l: 'h-[3rem]',
     };
 
+    const sizePaddingMap: Record<ButtonSize, string> = {
+      s: 'px-[0.25rem] py-[0.38rem]',
+      m: 'px-[0.5rem] py-[0.56rem]',
+      l: 'px-[0.75rem] py-[0.75rem]',
+    };
+
     const sizeTextMap: Record<ButtonSize, string> = {
       s: 'text-body-14-600--1-20',
       m: 'text-body-16-600--1',
@@ -58,8 +64,7 @@ export const SolidButton = forwardRef<HTMLButtonElement, SolidButtonProps>(
     const disabledClass =
       'bg-background-tertiary text-foreground-accent cursor-not-allowed opacity-50';
 
-    const baseClass =
-      'inline-flex w-full items-center justify-center overflow-hidden rounded px-[0.75rem] py-[0.62rem]';
+    const baseClass = 'inline-flex w-full items-center justify-center overflow-hidden rounded';
 
     return (
       <button
@@ -70,6 +75,7 @@ export const SolidButton = forwardRef<HTMLButtonElement, SolidButtonProps>(
         {...rest}
         className={[
           baseClass,
+          sizePaddingMap[size],
           sizeHeightMap[size],
           sizeTextMap[size],
           isDisabled ? disabledClass : `${variantMap[variant]} cursor-pointer`,

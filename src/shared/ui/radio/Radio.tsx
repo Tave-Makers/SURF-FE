@@ -7,7 +7,7 @@ type BaseProps = Omit<
   InputHTMLAttributes<HTMLInputElement>,
   'type' | 'children' | 'className' | 'checked' | 'defaultChecked' | 'disabled' | 'onChange'
 > & {
-  id: string; // 고유 ID (label과 연결)
+  id?: string; // 고유 ID (label과 연결)
   name: string; // 라디오 그룹 이름
   value: string; // 선택 시 전달되는 값
   label?: string; // 라디오 버튼 옆 텍스트

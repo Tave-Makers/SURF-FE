@@ -9,7 +9,7 @@ type BaseProps = Omit<
   InputHTMLAttributes<HTMLInputElement>,
   'type' | 'children' | 'checked' | 'defaultChecked' | 'disabled' | 'onChange' | 'className'
 > & {
-  id: string; // 고유 ID
+  id?: string; // 고유 ID
   label?: string; // 체크박스 옆 텍스트
   isDisabled?: boolean;
 };

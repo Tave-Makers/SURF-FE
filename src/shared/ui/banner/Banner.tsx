@@ -12,7 +12,7 @@ type BannerProps = {
   onClickMore: () => void;
 };
 
-export const Banner = ({ part, score, onClickMore }: BannerProps) => {
+export const Banner = ({ part, score = 100, onClickMore }: BannerProps) => {
   const iconMap: Record<BannerProps['part'], FC<SVGProps<SVGSVGElement>>> = {
     frontend: FrontendIcon,
     backend: BackendIcon,

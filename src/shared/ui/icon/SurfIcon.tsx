@@ -41,6 +41,7 @@ export const SurfIcon = ({
     <IconComponent
       size={sizeMap[size]}
       color={color}
+      aria-hidden
       className={`inline-block transition-colors duration-200 ${className}`}
       {...(!isSolid && { stroke: strokeMap[size] })}
     />

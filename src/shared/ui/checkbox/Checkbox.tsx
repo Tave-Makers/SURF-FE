@@ -31,7 +31,7 @@ type UncontrolledProps = {
 // 최종 Props
 export type CheckboxProps = BaseProps & (ControlledProps | UncontrolledProps);
 
-const Checkbox = forwardRef<HTMLInputElement, CheckboxProps>(
+export const Checkbox = forwardRef<HTMLInputElement, CheckboxProps>(
   ({ id, label, isChecked, isDefaultChecked, isDisabled = false, onChange, ...rest }, ref) => {
     const autoId = useId();
     const inputId = id ?? autoId;
@@ -66,5 +66,3 @@ const Checkbox = forwardRef<HTMLInputElement, CheckboxProps>(
 );
 
 Checkbox.displayName = 'Checkbox';
-
-export default Checkbox;

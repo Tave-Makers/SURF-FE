@@ -31,7 +31,7 @@ type UncontrolledProps = {
 // 최종 RadioProps
 export type RadioProps = BaseProps & (ControlledProps | UncontrolledProps);
 
-const Radio = forwardRef<HTMLInputElement, RadioProps>(
+export const Radio = forwardRef<HTMLInputElement, RadioProps>(
   (
     { id, name, value, label, isChecked, isDefaultChecked, isDisabled = false, onChange, ...rest },
     ref,
@@ -66,5 +66,3 @@ const Radio = forwardRef<HTMLInputElement, RadioProps>(
 );
 
 Radio.displayName = 'Radio';
-
-export default Radio;

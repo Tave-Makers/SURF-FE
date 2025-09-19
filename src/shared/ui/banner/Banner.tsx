@@ -1,3 +1,4 @@
+import { FC, SVGProps } from 'react';
 import BgCommon from '@/shared/assets/icons/banner/banner-background.svg';
 import FrontendIcon from '@/shared/assets/icons/banner/banner-frontend.svg';
 import BackendIcon from '@/shared/assets/icons/banner/banner-backend.svg';
@@ -12,7 +13,7 @@ type BannerProps = {
 };
 
 export const Banner = ({ part, score, onClickMore }: BannerProps) => {
-  const iconMap: Record<BannerProps['part'], React.FC<React.SVGProps<SVGSVGElement>>> = {
+  const iconMap: Record<BannerProps['part'], FC<SVGProps<SVGSVGElement>>> = {
     frontend: FrontendIcon,
     backend: BackendIcon,
     design: DesignIcon,

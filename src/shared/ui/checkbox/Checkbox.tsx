@@ -39,7 +39,7 @@ const Checkbox = forwardRef<HTMLInputElement, CheckboxProps>(
     return (
       <label
         htmlFor={inputId}
-        className={`inline-flex cursor-pointer items-center gap-[0.62rem] px-[0.25rem] py-[0.37em] ${
+        className={`inline-flex w-fit cursor-pointer items-center gap-[0.62rem] px-[0.25rem] py-[0.37em] ${
           isDisabled ? 'cursor-not-allowed opacity-50' : ''
         }`}
       >

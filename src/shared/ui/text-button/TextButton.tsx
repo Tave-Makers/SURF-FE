@@ -9,7 +9,10 @@ type SurfIconName = ComponentProps<typeof SurfIcon>['name'];
 type ButtonSize = 's' | 'm' | 'l';
 type ButtonVariant = 'primary' | 'secondary' | 'warning';
 
-export type TextButtonProps = Omit<ButtonHTMLAttributes<HTMLButtonElement>, 'disabled'> & {
+export type TextButtonProps = Omit<
+  ButtonHTMLAttributes<HTMLButtonElement>,
+  'disabled' | 'className'
+> & {
   size: ButtonSize;
   variant: ButtonVariant;
   isDisabled?: boolean;
@@ -31,7 +34,6 @@ export const TextButton = forwardRef<HTMLButtonElement, TextButtonProps>(
       children,
       type = 'button',
       onClick,
-      className,
       ...rest
     },
     ref,
@@ -81,7 +83,6 @@ export const TextButton = forwardRef<HTMLButtonElement, TextButtonProps>(
           sizeHeightMap[size],
           sizeTextMap[size],
           isDisabled ? disabledMap[variant] : `${variantMap[variant]} cursor-pointer`,
-          className,
         ].join(' ')}
       >
         {leftIconName && (

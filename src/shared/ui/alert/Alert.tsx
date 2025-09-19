@@ -14,12 +14,12 @@ type BaseAction = {
 
 type SolidAction = BaseAction & {
   type: 'solid';
-  variant?: SolidButtonProps['variant'];
+  variant?: SolidButtonProps['variant']; // primary | secondary | danger | warning
 };
 
 type TextAction = BaseAction & {
   type: 'text';
-  variant?: TextButtonProps['variant'];
+  variant?: TextButtonProps['variant']; // primary | secondary | warning
 };
 
 type AlertAction = SolidAction | TextAction;
@@ -57,21 +57,25 @@ export const Alert = ({ state = 'default', title, infoText, actions }: AlertProp
         )}
       </div>
 
-      <div className="flex flex-row justify-end gap-2">
+      <div className="flex flex-row gap-2">
         {actions.map((action, idx) => {
+          const isBtnSingle = actions.length === 1;
+          const wrapperClass =
+            action.type === 'text' && isBtnSingle ? 'ml-auto inline-flex w-auto' : 'flex-1';
+
           if (action.type === 'text') {
             return (
-              <TextButton
-                key={idx}
-                size="m"
-                variant={action.variant ?? 'primary'}
-                isDisabled={action.isDisabled}
-                onClick={action.onClick}
-                className={action.className ?? 'ml-auto !inline-flex !w-auto'}
-                data-testid={action.testId}
-              >
-                {action.label}
-              </TextButton>
+              <div key={idx} className={wrapperClass}>
+                <TextButton
+                  size="m"
+                  variant={action.variant ?? 'primary'}
+                  isDisabled={action.isDisabled}
+                  onClick={action.onClick}
+                  data-testid={action.testId}
+                >
+                  {action.label}
+                </TextButton>
+              </div>
             );
           }
 

@@ -1,6 +1,6 @@
 'use client';
 
-import { forwardRef } from 'react';
+import { forwardRef, useId } from 'react';
 import type { InputHTMLAttributes, ChangeEvent } from 'react';
 import { SurfIcon } from '../icon/SurfIcon';
 
@@ -31,19 +31,22 @@ type UncontrolledProps = {
 // 최종 Props
 export type CheckboxProps = BaseProps & (ControlledProps | UncontrolledProps);
 
-export const Checkbox = forwardRef<HTMLInputElement, CheckboxProps>(
+const Checkbox = forwardRef<HTMLInputElement, CheckboxProps>(
   ({ id, label, isChecked, isDefaultChecked, isDisabled = false, onChange, ...rest }, ref) => {
+    const autoId = useId();
+    const inputId = id ?? autoId;
+
     return (
       <label
-        htmlFor={id}
-        className={`inline-flex cursor-pointer items-center gap-[0.62rem] ${
+        htmlFor={inputId}
+        className={`inline-flex cursor-pointer items-center gap-[0.62rem] px-[0.25rem] py-[0.37em] ${
           isDisabled ? 'cursor-not-allowed opacity-50' : ''
         }`}
       >
         <div className="relative h-[1.25rem] w-[1.25rem]">
           <input
             type="checkbox"
-            id={id}
+            id={inputId}
             checked={isChecked}
             defaultChecked={isDefaultChecked}
             disabled={isDisabled}
@@ -63,3 +66,5 @@ export const Checkbox = forwardRef<HTMLInputElement, CheckboxProps>(
 );
 
 Checkbox.displayName = 'Checkbox';
+
+export default Checkbox;

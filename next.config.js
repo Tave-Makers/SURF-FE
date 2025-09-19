@@ -11,26 +11,32 @@ const nextConfig = {
   },
 
   webpack(config) {
-    const fileLoaderRule = config.module.rules.find((rule) =>
-      rule.test?.test?.('.svg'),
+    const fileLoaderRule = config.module.rules.find(
+      (rule) => rule.test?.test?.('.svg')
     );
-
-    config.module.rules.push(
-      {
-        ...fileLoaderRule,
+    
+    // fileLoaderRule이 없으면 안전 가드 처리
+    if (!fileLoaderRule) {
+      // 1) *.svg?url → 그냥 자산으로 처리
+      config.module.rules.push({
         test: /\.svg$/i,
-        resourceQuery: /url/, // *.svg?url → file-loader
-      },
-      {
+        resourceQuery: /url/,
+        type: 'asset/resource',
+      });
+    
+      // 2) 나머지 → SVGR 컴포넌트로 처리
+      config.module.rules.push({
         test: /\.svg$/i,
-        issuer: fileLoaderRule.issuer,
+        issuer: /\.[jt]sx?$/,
         resourceQuery: { not: [/url/] },
-        use: ['@svgr/webpack'], // 나머지 svg는 svgr로
-      },
-    );
-
+        use: ['@svgr/webpack'],
+      });
+    
+      return config;
+    }
+    
+    // 정상적으로 fileLoaderRule을 찾은 경우 원래 방식 수행
     fileLoaderRule.exclude = /\.svg$/i;
-
     return config;
   },
 };

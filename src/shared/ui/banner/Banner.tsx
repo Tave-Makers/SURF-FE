@@ -34,7 +34,7 @@ export const Banner = ({ part, score, onClickMore }: BannerProps) => {
 
       {/* 3. 텍스트/UI */}
       <div className="text-foreground-accent z-10 flex flex-col gap-[1.25rem]">
-        <div className="flex items-center justify-between">
+        <div className="text-body-14-600--1-20 flex items-center justify-between">
           <span>현재 내 활동점수는?</span>
           <button onClick={onClickMore} className="z-10 cursor-pointer">
             더보기

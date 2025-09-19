@@ -1,13 +1,13 @@
 'use client';
 
-import { forwardRef, InputHTMLAttributes, ChangeEvent } from 'react';
+import { forwardRef, InputHTMLAttributes, ChangeEvent, useId } from 'react';
 
 // 공통 속성
 type BaseProps = Omit<
   InputHTMLAttributes<HTMLInputElement>,
   'type' | 'children' | 'checked' | 'defaultChecked' | 'disabled' | 'onChange' | 'className'
 > & {
-  id: string; // 고유 ID
+  id?: string; // 고유 ID
   label?: string; // 옆에 표시할 텍스트
   isDisabled?: boolean;
   className?: string; // wrapper 확장용 (필요 없으면 제거)
@@ -32,15 +32,18 @@ export type ToggleProps = BaseProps & (ControlledProps | UncontrolledProps);
 
 export const Toggle = forwardRef<HTMLInputElement, ToggleProps>(
   ({ id, label, isChecked, isDefaultChecked, isDisabled, name, value, ...rest }, ref) => {
+    const autoId = useId();
+    const inputId = id ?? autoId;
+
     return (
       <label
-        htmlFor={id}
-        className={`inline-flex items-center gap-[0.62rem] ${
+        htmlFor={inputId}
+        className={`inline-flex w-fit items-center gap-[0.62rem] ${
           isDisabled ? '!cursor-not-allowed' : 'cursor-pointer'
         }`}
       >
         <input
-          id={id}
+          id={inputId}
           type="checkbox"
           ref={ref}
           name={name}

@@ -99,6 +99,19 @@ export default [
     },
   },
 
-  // 8. Prettier (포맷팅 규칙을 끄는 역할이므로, 모든 규칙 적용 후 위치)
+  // 8. scripts: 디자인 토큰 변환 스크립트라 any 허용
+  {
+    files: ['scripts/**/*.{ts,js}'],
+    rules: {
+      '@typescript-eslint/no-unsafe-assignment': 'off',
+      '@typescript-eslint/no-unsafe-return': 'off',
+      '@typescript-eslint/no-unsafe-member-access': 'off',
+      '@typescript-eslint/no-unsafe-call': 'off',
+      '@typescript-eslint/no-unsafe-argument': 'off',
+      '@typescript-eslint/no-explicit-any': 'off',
+    },
+  },
+
+  // 9. Prettier (포맷팅 규칙을 끄는 역할이므로, 모든 규칙 적용 후 위치)
   configPrettier,
 ];

@@ -94,7 +94,7 @@ export function Wheel(props: {
             top: '50%',
             left: 0,
             width: '100%',
-            height: '24px',
+            height: '25px',
             backgroundColor: '#dfdfdf',
             borderRadius: '4px',
             transform: 'translateY(-50%)',

@@ -21,7 +21,6 @@ body {
   transform: translateX(-10px);
   -webkit-transform: translateX(-10px);
 }
-
 .wheel__inner {
   display: flex;
   align-items: center;
@@ -31,13 +30,11 @@ body {
   height: 16%;
   width: 100%;
 }
-
 .wheel__slides {
   height: 100%;
   position: relative;
   width: 100%;
 }
-
 .wheel__shadow-top,
 .wheel__shadow-bottom {
   background: linear-gradient(to bottom, rgba(251, 250, 255, 1) 0%, rgba(0, 0, 0, 0) 55%);
@@ -48,13 +45,11 @@ body {
   margin-top: -2px;
   z-index: 5;
 }
-
 .wheel__shadow-bottom {
   background: linear-gradient(to bottom, rgba(0, 0, 0, 0) 45%, rgba(251, 250, 255, 1) 100%);
   margin-top: 2px;
   border-bottom: none;
 }
-
 .wheel__label {
   font-weight: 600;
   font-size: 18px;

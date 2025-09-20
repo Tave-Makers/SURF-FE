@@ -1,8 +1,8 @@
 import React from 'react';
-import { Wheel } from './Wheel';
+import { Wheel } from '@/shared/ui/spinner/Wheel';
 import './styles.css';
 
-const parts = ['데이터분석', '디자인', '딥러닝', '백엔드', '앱 프론트엔드', '웹 프론트엔드'];
+const parts = ['데이터 분석', '디자인', '딥러닝', '백엔드', '앱 프론트엔드', '웹 프론트엔드'];
 const periods = [
   '1기',
   '2기',

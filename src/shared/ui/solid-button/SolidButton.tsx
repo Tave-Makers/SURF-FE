@@ -17,7 +17,7 @@ type SolidButtonProps = ButtonHTMLAttributes<HTMLButtonElement> & {
   onClick?: (e: React.MouseEvent<HTMLButtonElement>) => void;
 };
 
-export const SolidButton = forwardRef<HTMLButtonElement, SolidButtonProps>(function SolidButton({
+export default forwardRef<HTMLButtonElement, SolidButtonProps>(function SolidButton({
   size = 'm',
   variant = 'primary',
   disabled = false,

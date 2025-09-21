@@ -1,5 +1,5 @@
 import React from 'react';
-import { SolidButton } from '../solid-button/SolidButton';
+import SolidButton from '../solid-button/SolidButton';
 import TextButton from '../text-button/TextButton';
 
 type SheetProps = {

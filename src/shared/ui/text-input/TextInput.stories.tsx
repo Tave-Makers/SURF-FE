@@ -7,14 +7,14 @@ const meta: Meta<typeof TextInput> = {
   component: TextInput,
   argTypes: {
     placeholder: { control: 'text' },
-    hasIcon: { control: 'boolean' },
+    iconName: { control: 'text' },
   },
 };
 export default meta;
 
 type Story = StoryObj<typeof TextInput>;
 
-/* SearchField (검색창) */
+/* 검색창 */
 export const SearchField: Story = {
   render: (args) => {
     const [search, setSearch] = useState('');
@@ -22,40 +22,40 @@ export const SearchField: Story = {
       <div className="w-[19.56rem]">
         <TextInput
           {...args}
-          mode="SearchField"
           value={search}
           onChange={setSearch}
-          onSubmit={(val: string) => alert(`검색: ${val}`)}
+          iconName="Search"
+          onIconClick={() => alert(`검색 버튼 클릭: ${search}`)}
+          onEnter={(val) => alert(`검색 엔터 입력: ${val}`)}
         />
       </div>
     );
   },
   args: {
-    hasIcon: true,
     placeholder: '검색어를 입력하세요',
   },
 };
 
-/* TextField (댓글 입력창) */
+/* 댓글 입력창 */
 export const TextField: Story = {
   render: (args) => {
     const [comment, setComment] = useState('');
+    const [isEmojiActive, setIsEmojiActive] = useState(false);
     return (
       <div className="w-[19.56rem]">
         <TextInput
           {...args}
-          mode="TextField"
           value={comment}
           onChange={setComment}
-          onClick={() => alert('아이콘 클릭됨')}
+          iconName={isEmojiActive ? 'SmileCircleSolid' : 'SmileCircle'}
+          onIconClick={() => setIsEmojiActive((prev) => !prev)}
+          onEnter={(val) => alert(`댓글 엔터 입력: ${val}`)}
         />
       </div>
     );
   },
   args: {
-    hasIcon: true,
     placeholder: '댓글을 입력하세요',
-    isActive: false,
   },
 };
 
@@ -64,26 +64,24 @@ export const WithRef: Story = {
   render: (args) => {
     const inputRef = useRef<HTMLInputElement>(null);
     const [comment, setComment] = useState('');
-    const [isActive, setIsActive] = useState(false);
+    const [isEmojiActive, setIsEmojiActive] = useState(false);
 
     return (
       <div className="flex w-[20rem] flex-col gap-4">
         <TextInput
           {...args}
           ref={inputRef}
-          mode="TextField"
           value={comment}
           onChange={setComment}
-          isActive={isActive}
-          onClick={() => setIsActive((prev) => !prev)}
+          iconName={isEmojiActive ? 'SmileCircleSolid' : 'SmileCircle'}
+          onIconClick={() => setIsEmojiActive((prev) => !prev)}
+          onEnter={(val) => alert(`withRef 엔터 입력: ${val}`)}
         />
         <button onClick={() => inputRef.current?.focus()}>포커스</button>
       </div>
     );
   },
   args: {
-    hasIcon: true,
     placeholder: 'ref 테스트',
-    isActive: false,
   },
 };

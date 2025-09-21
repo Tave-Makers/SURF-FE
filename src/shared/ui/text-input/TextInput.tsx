@@ -1,106 +1,54 @@
-import { forwardRef, useRef, useImperativeHandle } from 'react';
+import { forwardRef, useRef, useImperativeHandle, ComponentProps } from 'react';
 import { SurfIcon } from '../icon/SurfIcon';
 
-type TextInputProps =
-  | {
-      mode: 'SearchField'; // 검색창
-      value: string; // 현재 입력된 값
-      onChange: (val: string) => void; // 입력값 변경 시 부모로 전달
-      placeholder?: string; // placeholder
-      hasIcon?: boolean; // 아이콘 표시
-      onSubmit: (value: string) => void; // 아이콘 클릭 시, 부모에 입력된 검색어 전달
-    }
-  | {
-      mode: 'TextField'; // 댓글 입력창
-      value: string; // 현재 입력된 댓글
-      onChange: (val: string) => void; // 댓글 입력 변경 시 부모로 전달
-      placeholder?: string; // placeholder
-      hasIcon?: boolean; // 아이콘 표시
-      isActive?: boolean; // 아이콘 활성화
-      onClick: () => void; // 아이콘 클릭 시, 부모에 이벤트 전달
-    };
+type SurfIconName = ComponentProps<typeof SurfIcon>['name'];
 
-/* placeholder 기본값 */
-const PLACEHOLDERS = {
-  SearchField: '글, 제목, 내용을 입력해주세요.',
-  TextField: '댓글을 입력해주세요.',
-} as const;
+type TextInputProps = {
+  value: string;
+  onChange: (val: string) => void;
+  placeholder?: string;
+  iconName?: SurfIconName; // 아이콘 이름
+  onIconClick?: () => void; // 아이콘 클릭 이벤트
+  onEnter?: (val: string) => void; // Enter 입력 이벤트
+};
 
-/* mode별 props 기본값 */
-const DEFAULTS = {
-  SearchField: { hasIcon: true },
-  TextField: { hasIcon: true, isActive: false },
-} as const;
+export const TextInput = forwardRef<HTMLInputElement, TextInputProps>(
+  ({ value, onChange, placeholder, iconName, onIconClick, onEnter }, ref) => {
+    const internalRef = useRef<HTMLInputElement>(null);
 
-export const TextInput = forwardRef<HTMLInputElement, TextInputProps>((props, ref) => {
-  const { mode, value, onChange } = props;
-  const internalRef = useRef<HTMLInputElement>(null);
+    /* 외부에서 ref를 넘겨주면 내부 input DOM을 직접 제어할 수 있게 노출 */
+    useImperativeHandle(ref, () => internalRef.current as HTMLInputElement);
 
-  /* 외부에서 ref를 넘겨주면 내부 input DOM을 직접 제어할 수 있게 노출 */
-  useImperativeHandle(ref, () => internalRef.current as HTMLInputElement);
-
-  const placeholder = props.placeholder ?? PLACEHOLDERS[mode];
-
-  /* 입력된 값을 onSubmit 콜백에 전달 */
-  const handleSearch = () => {
-    if (!value.trim()) return;
-    if (mode === 'SearchField') {
-      props.onSubmit(value);
-    }
-  };
-
-  return (
-    <div className="bg-background-tertiary flex h-[2.25rem] w-full shrink-0 items-center justify-between rounded-[62.43rem] py-[0.37rem] pr-[0.5rem] pl-[0.75rem]">
-      <input
-        value={value}
-        onChange={(e) => onChange(e.target.value)}
-        ref={internalRef}
-        className="text-body-14-400--2-22 text-foreground-normal placeholder-background-quaternary flex-1"
-        placeholder={placeholder}
-        aria-label={mode === 'SearchField' ? '검색어 입력' : '댓글 입력'}
-        onKeyDown={(e) => {
-          if (e.key === 'Enter') {
-            e.preventDefault();
-            if (mode === 'SearchField') {
-              handleSearch();
+    return (
+      <div className="bg-background-tertiary flex h-[2.25rem] w-full shrink-0 items-center justify-between rounded-[62.43rem] py-[0.37rem] pr-[0.5rem] pl-[0.75rem]">
+        <input
+          value={value}
+          onChange={(e) => onChange(e.target.value)}
+          ref={internalRef}
+          className="text-body-14-400--2-22 text-foreground-normal placeholder-background-quaternary flex-1"
+          placeholder={placeholder}
+          aria-label="텍스트 입력"
+          onKeyDown={(e) => {
+            if (e.key === 'Enter') {
+              e.preventDefault();
+              onEnter?.(value); // 현재 input의 value를 onEnter 콜백에 전달
             }
-          }
-        }}
-      />
+          }}
+        />
 
-      {/* SearchField: hasIcon이 true일 경우 아이콘 표시*/}
-      {mode === 'SearchField' && (props.hasIcon ?? DEFAULTS.SearchField.hasIcon) && (
-        <button
-          type="button"
-          aria-label="검색"
-          onClick={handleSearch}
-          className="flex cursor-pointer items-center justify-center"
-        >
-          <SurfIcon name="Search" size="l" className="text-border-normal" />
-        </button>
-      )}
-
-      {/* TextField: isActive 여부에 따라 다른 아이콘 표시 */}
-      {mode === 'TextField' && (props.hasIcon ?? DEFAULTS.TextField.hasIcon) && (
-        <button
-          type="button"
-          aria-label={
-            (props.isActive ?? DEFAULTS.TextField.isActive)
-              ? '이모지 패널 닫기'
-              : '이모지 패널 열기'
-          }
-          onClick={props.onClick}
-          className="flex cursor-pointer items-center justify-center"
-        >
-          {(props.isActive ?? DEFAULTS.TextField.isActive) ? (
-            <SurfIcon name="SmileCircleSolid" size="l" className="text-border-normal" />
-          ) : (
-            <SurfIcon name="SmileCircle" size="l" className="text-border-normal" />
-          )}
-        </button>
-      )}
-    </div>
-  );
-});
+        {iconName && (
+          <button
+            type="button"
+            aria-label="아이콘 버튼"
+            onClick={onIconClick}
+            className="flex cursor-pointer items-center justify-center"
+          >
+            <SurfIcon name={iconName} size="l" className="text-border-normal" />
+          </button>
+        )}
+      </div>
+    );
+  },
+);
 
 TextInput.displayName = 'TextInput';

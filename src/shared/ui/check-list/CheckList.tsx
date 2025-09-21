@@ -3,11 +3,11 @@ import React from 'react';
 import { SurfIcon } from '../icon/SurfIcon';
 
 type CheckListProps = {
-  id: number; // 체크리스트 아이템 id
+  id: string; // 체크리스트 아이템 id
   title: string; // 체크리스트 아이템 제목
   isChecked: boolean; // 체크 여부
-  onChange: (checked: boolean, id: number) => void; // 체크 여부 변경 시 부모에 전달
-  onClickItem?: (id: number) => void; // 클릭 시 어떤 아이템인지 부모에 전달
+  onChange: (checked: boolean, id: string) => void; // 체크 여부 변경 시 부모에 전달
+  onClickItem?: (id: string) => void; // 클릭 시 어떤 아이템인지 부모에 전달
 };
 
 export function CheckList({

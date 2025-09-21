@@ -27,7 +27,7 @@ export const Default: Story = {
       <div className="w-[20rem]">
         <CheckList
           {...args}
-          id={1}
+          id={'1'}
           isChecked={checked}
           onChange={(next, id) => {
             setChecked(next);

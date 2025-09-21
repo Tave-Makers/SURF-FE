@@ -23,19 +23,19 @@ type Story = StoryObj<typeof Sheet>;
 export const WithCheckList: Story = {
   render: (args) => {
     // 체크 여부 상태 관리
-    const [checkedItems, setCheckedItems] = useState<{ [key: number]: boolean }>({
+    const [checkedItems, setCheckedItems] = useState<{ [key: string]: boolean }>({
       1: false,
       2: false,
       3: false,
     });
 
     const items = [
-      { id: 1, title: '1번 약관입니다.' },
-      { id: 2, title: '2번 약관입니다.' },
-      { id: 3, title: '3번 약관입니다.' },
+      { id: '1', title: '1번 약관입니다.' },
+      { id: '2', title: '2번 약관입니다.' },
+      { id: '3', title: '3번 약관입니다.' },
     ];
 
-    const handleToggle = (next: boolean, id: number) => {
+    const handleToggle = (next: boolean, id: string) => {
       setCheckedItems((prev) => ({
         ...prev,
         [id]: next,
@@ -105,7 +105,7 @@ export const InModalSheetLib: Story = {
             <ModalSheet.Content>
               <Sheet {...args}>
                 <CheckList
-                  id={1}
+                  id={'1'}
                   title="약관에 동의합니다."
                   isChecked={checked}
                   onChange={(next) => setChecked(next)}

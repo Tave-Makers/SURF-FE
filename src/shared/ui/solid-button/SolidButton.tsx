@@ -1,6 +1,6 @@
 'use client';
 
-import type { ComponentProps, ButtonHTMLAttributes } from 'react';
+import type { ComponentProps, ButtonHTMLAttributes, ReactNode } from 'react';
 import { forwardRef } from 'react';
 import { SurfIcon } from '@/shared/ui/icon/SurfIcon';
 
@@ -9,63 +9,91 @@ type SurfIconName = ComponentProps<typeof SurfIcon>['name'];
 type ButtonSize = 's' | 'm' | 'l';
 type ButtonVariant = 'primary' | 'secondary' | 'danger' | 'warning';
 
-type SolidButtonProps = ButtonHTMLAttributes<HTMLButtonElement> & {
+export type SolidButtonProps = Omit<ButtonHTMLAttributes<HTMLButtonElement>, 'disabled'> & {
   size: ButtonSize;
   variant: ButtonVariant;
+  isDisabled?: boolean;
   leftIconName?: SurfIconName | null;
   rightIconName?: SurfIconName | null;
+  children: ReactNode;
+  type?: 'button' | 'submit' | 'reset';
   onClick?: (e: React.MouseEvent<HTMLButtonElement>) => void;
 };
 
-export default forwardRef<HTMLButtonElement, SolidButtonProps>(function SolidButton({
-  size = 'm',
-  variant = 'primary',
-  disabled = false,
-  leftIconName,
-  rightIconName,
-  children,
-  type = 'button',
-  onClick,
-  ...rest
-}: SolidButtonProps) {
-  const sizeHeightMap: Record<ButtonSize, string> = {
-    s: 'h-[2rem]',
-    m: 'h-[2.5rem]',
-    l: 'h-[3rem]',
-  };
+export const SolidButton = forwardRef<HTMLButtonElement, SolidButtonProps>(
+  (
+    {
+      size = 'm',
+      variant = 'primary',
+      isDisabled = false,
+      leftIconName,
+      rightIconName,
+      children,
+      type = 'button',
+      onClick,
+      className,
+      ...rest
+    },
+    ref,
+  ) => {
+    const sizeHeightMap: Record<ButtonSize, string> = {
+      s: 'h-[2rem]',
+      m: 'h-[2.5rem]',
+      l: 'h-[3rem]',
+    };
 
-  const sizeTextMap: Record<ButtonSize, string> = {
-    s: 'text-body-14-600--1-20',
-    m: 'text-body-16-600--1',
-    l: 'text-body-16-600--1',
-  };
+    const sizePaddingMap: Record<ButtonSize, string> = {
+      s: 'px-[0.25rem] py-[0.38rem]',
+      m: 'px-[0.5rem] py-[0.56rem]',
+      l: 'px-[0.75rem] py-[0.75rem]',
+    };
 
-  const variantMap: Record<ButtonVariant, string> = {
-    primary: 'text-foreground-accent bg-background-primary hover:bg-foreground-primary',
-    secondary: 'text-foreground-normal bg-background-tertiary hover:bg-background-quaternary',
-    danger: 'text-foreground-accent bg-foreground-danger hover:bg-foreground-danger-darker',
-    warning: 'text-foreground-danger bg-background-tertiary hover:bg-background-quaternary',
-  };
+    const sizeTextMap: Record<ButtonSize, string> = {
+      s: 'text-body-14-600--1-20',
+      m: 'text-body-16-600--1',
+      l: 'text-body-16-600--1',
+    };
 
-  const disabledClass =
-    'bg-background-tertiary text-foreground-accent cursor-not-allowed opacity-50';
+    const variantMap: Record<ButtonVariant, string> = {
+      primary: 'text-foreground-accent bg-background-primary hover:bg-foreground-primary',
+      secondary: 'text-foreground-normal bg-background-tertiary hover:bg-background-quaternary',
+      danger: 'text-foreground-accent bg-foreground-danger hover:bg-foreground-danger-darker',
+      warning: 'text-foreground-danger bg-background-tertiary hover:bg-background-quaternary',
+    };
 
-  return (
-    <button
-      type={type}
-      disabled={disabled}
-      onClick={onClick}
-      {...rest}
-      className={[
-        'inline-flex w-full items-center justify-center gap-[0.62rem] rounded px-[0.75rem] py-[0.62rem]',
-        sizeHeightMap[size],
-        sizeTextMap[size],
-        disabled ? disabledClass : variantMap[variant],
-      ].join(' ')}
-    >
-      {leftIconName && <SurfIcon name={leftIconName} size={size} />}
-      {children && <span>{children}</span>}
-      {rightIconName && <SurfIcon name={rightIconName} size={size} />}
-    </button>
-  );
-});
+    const disabledClass =
+      'bg-background-tertiary text-foreground-accent cursor-not-allowed opacity-50';
+
+    const baseClass = 'inline-flex w-full items-center justify-center overflow-hidden rounded';
+
+    return (
+      <button
+        ref={ref}
+        type={type}
+        disabled={isDisabled}
+        onClick={onClick}
+        {...rest}
+        className={[
+          baseClass,
+          sizePaddingMap[size],
+          sizeHeightMap[size],
+          sizeTextMap[size],
+          isDisabled ? disabledClass : `${variantMap[variant]} cursor-pointer`,
+          className,
+        ].join(' ')}
+      >
+        {leftIconName && (
+          <SurfIcon name={leftIconName} size={size} className="h-[1.5rem] w-[1.5rem]" />
+        )}
+        <div className="h-[1.5rem] w-[0.25rem]"></div>
+        {children && <span>{children}</span>}
+        <div className="h-[1.5rem] w-[0.25rem]"></div>
+        {rightIconName && (
+          <SurfIcon name={rightIconName} size={size} className="h-[1.5rem] w-[1.5rem]" />
+        )}
+      </button>
+    );
+  },
+);
+
+SolidButton.displayName = 'SolidButton';

@@ -1,4 +1,10 @@
-import { forwardRef, useRef, useImperativeHandle, ComponentProps } from 'react';
+import {
+  forwardRef,
+  useRef,
+  useImperativeHandle,
+  ComponentProps,
+  InputHTMLAttributes,
+} from 'react';
 import { SurfIcon } from '../icon/SurfIcon';
 
 type SurfIconName = ComponentProps<typeof SurfIcon>['name'];
@@ -10,10 +16,10 @@ type TextInputProps = {
   iconName?: SurfIconName; // 아이콘 이름
   onIconClick?: () => void; // 아이콘 클릭 이벤트
   onEnter?: (val: string) => void; // Enter 입력 이벤트
-};
+} & Omit<InputHTMLAttributes<HTMLInputElement>, 'value' | 'onChange' | 'className' | 'onKeyDown'>;
 
 export const TextInput = forwardRef<HTMLInputElement, TextInputProps>(
-  ({ value, onChange, placeholder, iconName, onIconClick, onEnter }, ref) => {
+  ({ value, onChange, placeholder, iconName, onIconClick, onEnter, ...rest }, ref) => {
     const internalRef = useRef<HTMLInputElement>(null);
 
     /* 외부에서 ref를 넘겨주면 내부 input DOM을 직접 제어할 수 있게 노출 */
@@ -25,9 +31,10 @@ export const TextInput = forwardRef<HTMLInputElement, TextInputProps>(
           value={value}
           onChange={(e) => onChange(e.target.value)}
           ref={internalRef}
-          className="text-body-14-400--2-22 text-foreground-normal placeholder-background-quaternary flex-1"
+          className="text-body-14-400--2-22 text-foreground-normal placeholder-background-quaternary flex-1 outline-none"
           placeholder={placeholder}
-          aria-label="텍스트 입력"
+          {...rest}
+          aria-label={rest['aria-label'] ?? '텍스트 입력'}
           onKeyDown={(e) => {
             if (e.key === 'Enter') {
               e.preventDefault();

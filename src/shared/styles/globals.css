@@ -7,11 +7,6 @@ body {
   font-family: Pretendard, sans-serif;
 }
 
-input,
-textarea {
-  outline: none;
-}
-
 .placeholder-body-14-600--1-24::placeholder {
   font-family: Pretendard, sans-serif;
   font-weight: 600;

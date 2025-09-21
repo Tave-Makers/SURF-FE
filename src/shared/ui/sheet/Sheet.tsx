@@ -1,7 +1,7 @@
 'use client';
 import React from 'react';
-import SolidButton from '../solid-button/SolidButton';
-import TextButton from '../text-button/TextButton';
+import { SolidButton } from '../solid-button/SolidButton';
+import { TextButton } from '../text-button/TextButton';
 
 type SheetButton = {
   label: string;

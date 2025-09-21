@@ -1,5 +1,5 @@
 'use client';
-import React, { useState } from 'react';
+import React from 'react';
 import { SurfIcon } from '../icon/SurfIcon';
 
 const navItems = [
@@ -8,39 +8,34 @@ const navItems = [
   { id: 'mypage', label: '마이페이지', activeIcon: 'SmileCircleSolid', defaultIcon: 'SmileCircle' },
 ] as const;
 
-export function BottomNavigation() {
-  const [active, setActive] = useState('home');
+type BottomNavigationProps = {
+  activeId: string;
+  onNavigate: (id: string) => void; // 클릭 시 id만 전달
+};
 
+export function BottomNavigation({ activeId, onNavigate }: BottomNavigationProps) {
   return (
     <nav
       role="navigation"
       aria-label="하단 네비게이션"
-      className="absolute bottom-0 left-0 flex h-[4.5rem] w-full justify-around rounded-t-[0.625rem] bg-[var(--color-background-normal)] pb-[0.75rem] shadow-[0_2px_30px_0_rgba(0,0,0,0.10)]"
+      className="bg-background-normal absolute bottom-0 left-0 flex h-[4.5rem] w-full justify-around rounded-t-[0.625rem] pb-[0.75rem] shadow-[0_2px_30px_0_rgba(0,0,0,0.10)]"
     >
       {navItems.map((item) => (
         <button
           key={item.id}
-          onClick={() => setActive(item.id)}
+          onClick={() => onNavigate(item.id)}
           className="flex flex-1 cursor-pointer flex-col items-center gap-[0.31rem] py-[0.62rem]"
         >
-          {active === item.id ? (
-            <SurfIcon
-              name={item.activeIcon}
-              size="l"
-              className="text-[color:var(--color-foreground-primary)]"
-            />
-          ) : (
-            <SurfIcon
-              name={item.defaultIcon}
-              size="l"
-              className="text-[color:var(--color-foreground-hint)]"
-            />
-          )}
+          <SurfIcon
+            name={activeId === item.id ? item.activeIcon : item.defaultIcon}
+            size="l"
+            className={activeId === item.id ? 'text-foreground-primary' : 'text-foreground-hint'}
+          />
           <span
             className={
-              active === item.id
-                ? 'text-caption-10-400--1 text-[color:var(--color-foreground-primary)]'
-                : 'text-caption-10-400--1 text-[color:var(--color-foreground-hint)]'
+              activeId === item.id
+                ? 'text-caption-10-400--1 text-foreground-primary'
+                : 'text-caption-10-400--1 text-foreground-hint'
             }
           >
             {item.label}

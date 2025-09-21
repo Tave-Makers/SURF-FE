@@ -16,7 +16,7 @@
   },
   "lint-staged": {
     "*.{js,jsx,ts,tsx}": [
-      "pnpm exec eslint --max-warnings=0 --fix",
+      "pnpm exec eslint --max-warnings=0 --fix --no-warn-ignored",
       "pnpm exec prettier --write"
     ],
     "*.{json,md,css,scss,html}": "pnpm exec prettier --write"
@@ -39,6 +39,7 @@
     "@storybook/addon-docs": "9.1.5",
     "@storybook/addon-vitest": "9.1.5",
     "@storybook/nextjs-vite": "^9.1.5",
+    "@svgr/webpack": "^8.1.0",
     "@tailwindcss/postcss": "^4",
     "@types/eslint-plugin-jsx-a11y": "^6.10.0",
     "@types/node": "^20",

@@ -1,5 +1,5 @@
 import type { Meta, StoryObj } from '@storybook/nextjs-vite';
-import { TextButton } from './TextButton';
+import TextButton from './TextButton';
 
 const meta = {
   title: 'Shared/UI/TextButton',

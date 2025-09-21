@@ -17,7 +17,7 @@ type TextButtonProps = ButtonHTMLAttributes<HTMLButtonElement> & {
   onClick?: (e: React.MouseEvent<HTMLButtonElement>) => void;
 };
 
-export const TextButton = forwardRef<HTMLButtonElement, TextButtonProps>(function TextButton({
+export default forwardRef<HTMLButtonElement, TextButtonProps>(function TextButton({
   size = 'm',
   variant = 'primary',
   disabled = false,

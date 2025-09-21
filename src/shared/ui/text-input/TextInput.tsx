@@ -31,7 +31,10 @@ export const TextInput = forwardRef<HTMLInputElement, TextInputProps>(
           onKeyDown={(e) => {
             if (e.key === 'Enter') {
               e.preventDefault();
-              onEnter?.(value); // 현재 input의 value를 onEnter 콜백에 전달
+              const trimmed = value.trim();
+              if (!trimmed) return;
+              // 현재 input의 value를 앞뒤 공백 제거해 onEnter 콜백에 전달
+              onEnter?.(trimmed);
             }
           }}
         />

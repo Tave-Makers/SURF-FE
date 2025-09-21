@@ -1,23 +1,29 @@
+'use client';
 import React from 'react';
 import SolidButton from '../solid-button/SolidButton';
 import TextButton from '../text-button/TextButton';
+
+type SheetButton = {
+  label: string;
+  onClick?: () => void;
+};
 
 type SheetProps = {
   title?: string; // 시트 제목
   description?: string; // 시트 설명
   children: React.ReactNode; // 시트 내용
-  primaryBtnLabel?: string; // 기본 솔리드 버튼
-  secondaryBtnLabel?: string; // 두 번째 솔리드 버튼
-  textBtnLabel?: string; // 텍스트 버튼
+  primaryBtn?: SheetButton; // 기본 솔리드 버튼
+  secondaryBtn?: SheetButton; // 두 번째 솔리드 버튼
+  textBtn?: SheetButton; // 텍스트 버튼
 };
 
 export function Sheet({
   title,
   description,
   children,
-  primaryBtnLabel,
-  secondaryBtnLabel,
-  textBtnLabel,
+  primaryBtn,
+  secondaryBtn,
+  textBtn,
 }: SheetProps) {
   const renderTitleSection = () => (
     <div className="flex w-full flex-col gap-[0.25rem]">
@@ -29,28 +35,33 @@ export function Sheet({
   );
 
   const renderButtons = () => {
-    const hasBtn = primaryBtnLabel || secondaryBtnLabel || textBtnLabel;
+    const hasBtn = primaryBtn || secondaryBtn || textBtn;
     if (!hasBtn) return null;
 
     return (
       <div className="flex w-full flex-col gap-[0.62rem]">
-        {(primaryBtnLabel || secondaryBtnLabel) && (
+        {(primaryBtn || secondaryBtn) && (
           <div className="flex w-full gap-[0.5rem]">
-            {secondaryBtnLabel && (
-              <SolidButton size="l" variant="secondary">
-                {secondaryBtnLabel}
+            {secondaryBtn && (
+              <SolidButton
+                type="button"
+                size="l"
+                variant="secondary"
+                onClick={secondaryBtn.onClick}
+              >
+                {secondaryBtn.label}
               </SolidButton>
             )}
-            {primaryBtnLabel && (
-              <SolidButton size="l" variant="primary">
-                {primaryBtnLabel}
+            {primaryBtn && (
+              <SolidButton type="button" size="l" variant="primary" onClick={primaryBtn.onClick}>
+                {primaryBtn.label}
               </SolidButton>
             )}
           </div>
         )}
-        {textBtnLabel && (
-          <TextButton size="m" variant="secondary">
-            {textBtnLabel}
+        {textBtn && (
+          <TextButton type="button" size="m" variant="secondary" onClick={textBtn.onClick}>
+            {textBtn.label}
           </TextButton>
         )}
       </div>

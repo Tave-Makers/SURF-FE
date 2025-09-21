@@ -22,7 +22,6 @@ type Story = StoryObj<typeof Sheet>;
 /* children이 체크리스트인 경우 */
 export const WithCheckList: Story = {
   render: (args) => {
-    // 체크 여부 상태 관리
     const [checkedItems, setCheckedItems] = useState<{ [key: string]: boolean }>({
       1: false,
       2: false,
@@ -64,9 +63,9 @@ export const WithCheckList: Story = {
   args: {
     title: '약관 동의',
     description: '약관 확인 후 동의해주세요.',
-    primaryBtnLabel: '선택하기',
-    secondaryBtnLabel: '취소하기',
-    textBtnLabel: '자세히보기',
+    primaryBtn: { label: '선택하기', onClick: () => alert('선택 클릭') },
+    secondaryBtn: { label: '취소하기', onClick: () => alert('취소 클릭') },
+    textBtn: { label: '자세히보기', onClick: () => alert('자세히보기 클릭') },
   },
 };
 
@@ -84,6 +83,7 @@ export const WithBox: Story = {
   args: {
     title: '박스 예제',
     description: '임의의 콘텐츠를 넣을 수 있습니다',
+    primaryBtn: { label: '확인', onClick: () => alert('확인 클릭') },
   },
 };
 
@@ -122,8 +122,8 @@ export const InModalSheetLib: Story = {
   args: {
     title: '모달 시트',
     description: 'react-modal-sheet 안에서 사용 예시',
-    primaryBtnLabel: '선택하기',
-    secondaryBtnLabel: '취소하기',
-    textBtnLabel: '자세히보기',
+    primaryBtn: { label: '선택하기', onClick: () => alert('선택 클릭') },
+    secondaryBtn: { label: '취소하기', onClick: () => alert('취소 클릭') },
+    textBtn: { label: '자세히보기', onClick: () => alert('자세히보기 클릭') },
   },
 };

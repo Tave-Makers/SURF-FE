@@ -50,12 +50,12 @@ export const TextInput = forwardRef<HTMLInputElement, TextInputProps>((props, re
   };
 
   return (
-    <div className="flex h-[2.25rem] w-full shrink-0 items-center justify-between rounded-[62.43rem] bg-[var(--color-background-tertiary)] py-[0.37rem] pr-[0.5rem] pl-[0.75rem]">
+    <div className="bg-background-tertiary flex h-[2.25rem] w-full shrink-0 items-center justify-between rounded-[62.43rem] py-[0.37rem] pr-[0.5rem] pl-[0.75rem]">
       <input
         value={value}
         onChange={(e) => onChange(e.target.value)}
         ref={internalRef}
-        className="placeholder-body-14-600--1-24 text-body-14-400--2-22 text-[color:var(--color-foreground-normal)] placeholder:[color:var(--color-background-quaternary)]"
+        className="text-body-14-400--2-22 text-foreground-normal placeholder-background-quaternary flex-1"
         placeholder={placeholder}
         aria-label={mode === 'SearchField' ? '검색어 입력' : '댓글 입력'}
         onKeyDown={(e) => {
@@ -70,12 +70,13 @@ export const TextInput = forwardRef<HTMLInputElement, TextInputProps>((props, re
 
       {/* SearchField: hasIcon이 true일 경우 아이콘 표시*/}
       {mode === 'SearchField' && (props.hasIcon ?? DEFAULTS.SearchField.hasIcon) && (
-        <button type="button" aria-label="검색" onClick={handleSearch}>
-          <SurfIcon
-            name="Search"
-            size="l"
-            className="cursor-pointer text-[color:var(--color-border-normal)]"
-          />
+        <button
+          type="button"
+          aria-label="검색"
+          onClick={handleSearch}
+          className="flex cursor-pointer items-center justify-center"
+        >
+          <SurfIcon name="Search" size="l" className="text-border-normal" />
         </button>
       )}
 
@@ -89,19 +90,12 @@ export const TextInput = forwardRef<HTMLInputElement, TextInputProps>((props, re
               : '이모지 패널 열기'
           }
           onClick={props.onClick}
+          className="flex cursor-pointer items-center justify-center"
         >
           {(props.isActive ?? DEFAULTS.TextField.isActive) ? (
-            <SurfIcon
-              name="SmileCircleSolid"
-              size="l"
-              className="cursor-pointer text-[color:var(--color-border-normal)]"
-            />
+            <SurfIcon name="SmileCircleSolid" size="l" className="text-border-normal" />
           ) : (
-            <SurfIcon
-              name="SmileCircle"
-              size="l"
-              className="cursor-pointer text-[color:var(--color-border-normal)]"
-            />
+            <SurfIcon name="SmileCircle" size="l" className="text-border-normal" />
           )}
         </button>
       )}

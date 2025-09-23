@@ -7,6 +7,11 @@ body {
   font-family: Pretendard, sans-serif;
 }
 
-input {
-  outline: none;
+.react-modal-sheet-header {
+  padding: 0.65rem 0 !important;
+  height: auto !important;
+}
+
+.react-modal-sheet-container {
+  height: auto !important;
 }

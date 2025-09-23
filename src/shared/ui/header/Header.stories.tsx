@@ -1,5 +1,5 @@
 import type { Meta, StoryObj } from '@storybook/nextjs-vite';
-import { Header, HeaderProps } from './Header';
+import { Header, HeaderMode, HeaderProps } from './Header';
 import { useState } from 'react';
 
 const meta: Meta<HeaderProps> = {
@@ -7,10 +7,10 @@ const meta: Meta<HeaderProps> = {
   tags: ['autodocs'],
   component: Header,
   argTypes: {
-    type: {
+    mode: {
       table: { disable: true },
     },
-    onBack: {
+    onClickBack: {
       table: { disable: true },
     },
     onClick: {
@@ -39,14 +39,14 @@ export const DefaultHeader: Story = {
     </Wrapper>
   ),
   args: {
-    type: 'default',
+    mode: HeaderMode.Default,
     hasLeftIcon: true,
-    onBack: () => alert('뒤로가기 클릭'),
+    onClickBack: () => alert('뒤로가기 클릭'),
     title: '홈',
     icons: [
-      { label: 'Search', onClick: () => alert('검색 클릭') },
-      { label: 'Share', onClick: () => alert('공유하기') },
-      { label: 'DotsVertical', onClick: () => alert('메뉴 열기') },
+      { label: 'Search', onClickIcon: () => alert('검색 클릭') },
+      { label: 'Share', onClickIcon: () => alert('공유하기') },
+      { label: 'DotsVertical', onClickIcon: () => alert('메뉴 열기') },
     ],
   },
 };
@@ -58,9 +58,9 @@ export const LogoHeader: Story = {
     </Wrapper>
   ),
   args: {
-    type: 'logo',
+    mode: HeaderMode.Logo,
     logo: <div className="flex h-full w-[8rem] items-center bg-gray-300" />,
-    icons: [{ label: 'DotsVertical', onClick: () => alert('메뉴 열기') }],
+    icons: [{ label: 'DotsVertical', onClickIcon: () => alert('메뉴 열기') }],
   },
   argTypes: {
     hasLeftIcon: { table: { disable: true } },
@@ -75,9 +75,9 @@ export const TextBtnHeader: Story = {
     </Wrapper>
   ),
   args: {
-    type: 'textBtn',
+    mode: HeaderMode.TextBtn,
     hasLeftIcon: true,
-    onBack: () => alert('뒤로가기 클릭'),
+    onClickBack: () => alert('뒤로가기 클릭'),
     title: '글쓰기',
     text: '완료',
     isActive: true,
@@ -92,7 +92,7 @@ export const SearchBarHeader: Story = {
       <Wrapper>
         <Header
           {...args} // ← Controls 반영
-          type="searchBar"
+          mode={HeaderMode.SearchBar}
           value={query}
           onChange={setQuery}
           onSubmit={(val) => alert(`검색어 제출됨: ${val}`)}
@@ -102,7 +102,7 @@ export const SearchBarHeader: Story = {
   },
   args: {
     hasLeftIcon: true,
-    onBack: () => alert('뒤로가기 클릭'),
+    onClickBack: () => alert('뒤로가기 클릭'),
   },
   argTypes: {
     hasLeftIcon: { control: 'boolean' },

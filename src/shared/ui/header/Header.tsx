@@ -4,15 +4,24 @@ import { TextInput } from '../text-input/TextInput';
 
 type SurfIconName = ComponentProps<typeof SurfIcon>['name'];
 
+// Header Mode
+export enum HeaderMode {
+  Default = 'default',
+  Logo = 'logo',
+  TextBtn = 'textBtn',
+  SearchBar = 'searchBar',
+}
+
+// 공통 props
 type BaseHeaderProps = {
   hasLeftIcon?: boolean;
   title?: string;
-  onBack?: () => void;
+  onClickBack?: () => void;
 };
 
 type HeaderIcon = {
   label?: SurfIconName; // 아이콘 이름
-  onClick?: () => void; // 아이콘 클릭 시 이벤트
+  onClickIcon?: () => void; // 아이콘 클릭 시 이벤트
 };
 
 type MaxThree<T> = [] | [T] | [T, T] | [T, T, T];
@@ -21,25 +30,44 @@ type IconGroupProps = {
   icons?: MaxThree<HeaderIcon>; // 최대 3개까지 아이콘 표시 가능
 };
 
-export type HeaderProps =
-  | (BaseHeaderProps & { type: 'default' } & IconGroupProps)
-  | (BaseHeaderProps & { type: 'logo'; logo: React.ReactNode } & IconGroupProps)
-  | (BaseHeaderProps & { type: 'textBtn'; text: string; isActive?: boolean; onClick?: () => void })
-  | (BaseHeaderProps & {
-      type: 'searchBar';
-      value: string;
-      onChange: (value: string) => void;
-      onSubmit: (value: string) => void;
-    });
+// Header 타입별 Props
+type DefaultHeaderProps = BaseHeaderProps & {
+  mode: HeaderMode.Default;
+} & IconGroupProps;
 
-const renderLeftIcon = (hasLeftIcon?: boolean, onBack?: () => void) =>
+type LogoHeaderProps = BaseHeaderProps & {
+  mode: HeaderMode.Logo;
+  logo: React.ReactNode;
+} & IconGroupProps;
+
+type TextBtnHeaderProps = BaseHeaderProps & {
+  mode: HeaderMode.TextBtn;
+  text: string;
+  isActive?: boolean;
+  onClick?: () => void;
+};
+
+type SearchBarHeaderProps = BaseHeaderProps & {
+  mode: HeaderMode.SearchBar;
+  value: string;
+  onChange: (value: string) => void;
+  onSubmit: (value: string) => void;
+};
+
+export type HeaderProps =
+  | DefaultHeaderProps
+  | LogoHeaderProps
+  | TextBtnHeaderProps
+  | SearchBarHeaderProps;
+
+const renderLeftIcon = (hasLeftIcon?: boolean, onClickBack?: () => void) =>
   hasLeftIcon && (
     <button
       className="cursor-pointer border-none bg-transparent p-[0.5rem]"
-      onClick={onBack}
+      onClick={onClickBack}
       type="button"
     >
-      <SurfIcon name="ChevronLeft" size="l" className="text-[color:var(--color-logo-normal)]" />
+      <SurfIcon name="ChevronLeft" size="l" className="text-logo-normal" />
     </button>
   );
 
@@ -55,43 +83,43 @@ const renderRightIcons = (icons: MaxThree<HeaderIcon> = []) => (
           <button
             key={idx}
             className="cursor-pointer border-none bg-transparent p-[0.5rem]"
-            onClick={icon.onClick}
+            onClick={icon.onClickIcon}
             type="button"
           >
-            <SurfIcon
-              name={icon.label}
-              size="l"
-              className="text-[color:var(--color-logo-normal)]"
-            />
+            <SurfIcon name={icon.label} size="l" className="text-logo-normal" />
           </button>
         ),
     )}
   </div>
 );
 
-export function Header({ hasLeftIcon = true, title = '', onBack, ...props }: HeaderProps) {
-  const { type } = props;
+export function Header({ hasLeftIcon = true, title = '', onClickBack, ...props }: HeaderProps) {
+  let content: React.ReactNode;
 
-  return (
-    <header className="absolute top-0 flex h-[3rem] w-full items-center justify-between bg-[color:var(--color-background-normal-lighter)] px-[0.5rem] py-[0.25rem]">
-      {type === 'default' && (
+  switch (props.mode) {
+    case HeaderMode.Default:
+      content = (
         <>
-          {renderLeftIcon(hasLeftIcon, onBack)}
+          {renderLeftIcon(hasLeftIcon, onClickBack)}
           {renderTitle(title)}
-          {props.icons && renderRightIcons(props.icons)}
+          {renderRightIcons(props.icons)}
         </>
-      )}
+      );
+      break;
 
-      {type === 'logo' && (
+    case HeaderMode.Logo:
+      content = (
         <>
           <div className="h-full flex-1">{props.logo}</div>
-          {props.icons && renderRightIcons(props.icons)}
+          {renderRightIcons(props.icons)}
         </>
-      )}
+      );
+      break;
 
-      {type === 'searchBar' && (
+    case HeaderMode.SearchBar:
+      content = (
         <>
-          {renderLeftIcon(hasLeftIcon, onBack)}
+          {renderLeftIcon(hasLeftIcon, onClickBack)}
           <TextInput
             value={props.value}
             onChange={props.onChange}
@@ -101,24 +129,35 @@ export function Header({ hasLeftIcon = true, title = '', onBack, ...props }: Hea
             onIconClick={() => props.onSubmit(props.value)}
           />
         </>
-      )}
+      );
+      break;
 
-      {type === 'textBtn' && (
+    case HeaderMode.TextBtn:
+      content = (
         <>
-          {renderLeftIcon(hasLeftIcon, onBack)}
+          {renderLeftIcon(hasLeftIcon, onClickBack)}
           {renderTitle(title)}
           <button
             className={`text-body-14-600--1-20 ml-auto cursor-pointer p-[0.5rem] ${
               props.isActive
                 ? 'text-[color:var(--color-foreground-normal)]'
                 : 'text-[color:var(--color-background-quaternary)]'
-            } `}
+            }`}
             onClick={props.onClick}
           >
             {props.text}
           </button>
         </>
-      )}
+      );
+      break;
+
+    default:
+      content = null;
+  }
+
+  return (
+    <header className="bg-background-normal-lighter absolute top-0 flex h-[3rem] w-full items-center justify-between px-[0.5rem] py-[0.25rem]">
+      {content}
     </header>
   );
 }

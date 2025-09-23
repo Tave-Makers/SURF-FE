@@ -13,11 +13,11 @@ export enum HeaderMode {
 }
 
 // 공통 props
-type BaseHeaderProps = {
-  hasLeftIcon?: boolean;
-  title?: string;
-  onClickBack?: () => void;
-};
+// type BaseHeaderProps = {
+//   hasLeftIcon: boolean;
+//   onClickBack: () => void;
+//   title?: string;
+// };
 
 type HeaderIcon = {
   label?: SurfIconName; // 아이콘 이름
@@ -31,24 +31,32 @@ type IconGroupProps = {
 };
 
 // Header 타입별 Props
-type DefaultHeaderProps = BaseHeaderProps & {
+export type DefaultHeaderProps = {
   mode: HeaderMode.Default;
+  hasLeftIcon?: boolean;
+  onClickBack?: () => void;
+  title?: string;
 } & IconGroupProps;
 
-type LogoHeaderProps = BaseHeaderProps & {
+export type LogoHeaderProps = {
   mode: HeaderMode.Logo;
   logo: React.ReactNode;
 } & IconGroupProps;
 
-type TextBtnHeaderProps = BaseHeaderProps & {
+export type TextBtnHeaderProps = {
   mode: HeaderMode.TextBtn;
+  hasLeftIcon?: boolean;
+  onClickBack?: () => void;
+  title?: string;
   text: string;
   isActive?: boolean;
-  onClick?: () => void;
+  onClickTextBtn?: () => void;
 };
 
-type SearchBarHeaderProps = BaseHeaderProps & {
+export type SearchBarHeaderProps = {
   mode: HeaderMode.SearchBar;
+  hasLeftIcon?: boolean;
+  onClickBack?: () => void;
   value: string;
   onChange: (value: string) => void;
   onSubmit: (value: string) => void;
@@ -71,9 +79,8 @@ const renderLeftIcon = (hasLeftIcon?: boolean, onClickBack?: () => void) =>
     </button>
   );
 
-const renderTitle = (title?: string) => (
-  <h1 className="text-head-18-700--1 flex-1 !leading-[18px]">{title}</h1>
-);
+const renderTitle = (title?: string) =>
+  title ? <div className="text-head-18-700--1 flex-1 !leading-[18px]">{title}</div> : null;
 
 const renderRightIcons = (icons: MaxThree<HeaderIcon> = []) => (
   <div className="ml-auto flex">
@@ -93,63 +100,76 @@ const renderRightIcons = (icons: MaxThree<HeaderIcon> = []) => (
   </div>
 );
 
-export function Header({ hasLeftIcon = true, title = '', onClickBack, ...props }: HeaderProps) {
+export function Header(props: HeaderProps) {
   let content: React.ReactNode;
 
   switch (props.mode) {
-    case HeaderMode.Default:
+    case HeaderMode.Default: {
+      const { hasLeftIcon = false, onClickBack, title = '', icons } = props;
       content = (
         <>
           {renderLeftIcon(hasLeftIcon, onClickBack)}
           {renderTitle(title)}
-          {renderRightIcons(props.icons)}
+          {renderRightIcons(icons ?? [])}
         </>
       );
       break;
+    }
 
-    case HeaderMode.Logo:
+    case HeaderMode.Logo: {
+      const { logo, icons } = props;
       content = (
         <>
-          <div className="h-full flex-1">{props.logo}</div>
-          {renderRightIcons(props.icons)}
+          <div className="h-full flex-1">{logo}</div>
+          {renderRightIcons(icons ?? [])}
         </>
       );
       break;
+    }
 
-    case HeaderMode.SearchBar:
+    case HeaderMode.SearchBar: {
+      const { hasLeftIcon = false, onClickBack, value, onChange, onSubmit } = props;
       content = (
         <>
           {renderLeftIcon(hasLeftIcon, onClickBack)}
           <TextInput
-            value={props.value}
-            onChange={props.onChange}
-            onEnter={props.onSubmit}
+            value={value}
+            onChange={onChange}
+            onEnter={onSubmit}
             placeholder="검색어를 입력하세요"
             iconName="Search"
-            onIconClick={() => props.onSubmit(props.value)}
+            onIconClick={() => onSubmit(value)}
           />
         </>
       );
       break;
+    }
 
-    case HeaderMode.TextBtn:
+    case HeaderMode.TextBtn: {
+      const {
+        hasLeftIcon = false,
+        onClickBack,
+        title = '',
+        text,
+        isActive,
+        onClickTextBtn,
+      } = props;
       content = (
         <>
           {renderLeftIcon(hasLeftIcon, onClickBack)}
           {renderTitle(title)}
           <button
             className={`text-body-14-600--1-20 ml-auto cursor-pointer p-[0.5rem] ${
-              props.isActive
-                ? 'text-[color:var(--color-foreground-normal)]'
-                : 'text-[color:var(--color-background-quaternary)]'
+              isActive ? 'text-foreground-normal' : 'text-background-quaternary'
             }`}
-            onClick={props.onClick}
+            onClick={onClickTextBtn}
           >
-            {props.text}
+            {text}
           </button>
         </>
       );
       break;
+    }
 
     default:
       content = null;

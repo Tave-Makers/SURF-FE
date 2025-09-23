@@ -1,5 +1,13 @@
 import type { Meta, StoryObj } from '@storybook/nextjs-vite';
-import { Header, HeaderMode, HeaderProps } from './Header';
+import {
+  DefaultHeaderProps,
+  Header,
+  HeaderMode,
+  HeaderProps,
+  LogoHeaderProps,
+  SearchBarHeaderProps,
+  TextBtnHeaderProps,
+} from './Header';
 import { useState } from 'react';
 
 const meta: Meta<HeaderProps> = {
@@ -13,7 +21,7 @@ const meta: Meta<HeaderProps> = {
     onClickBack: {
       table: { disable: true },
     },
-    onClick: {
+    onClickTextBtn: {
       table: { disable: true },
     },
     onChange: {
@@ -26,14 +34,13 @@ const meta: Meta<HeaderProps> = {
 };
 
 export default meta;
-type Story = StoryObj<HeaderProps>;
 
 const Wrapper = ({ children }: { children: React.ReactNode }) => (
   <div className="relative h-[20rem] w-[20rem] bg-stone-100">{children}</div>
 );
 
-export const DefaultHeader: Story = {
-  render: (args: HeaderProps) => (
+export const DefaultHeader: StoryObj<DefaultHeaderProps> = {
+  render: (args) => (
     <Wrapper>
       <Header {...args} />
     </Wrapper>
@@ -51,8 +58,8 @@ export const DefaultHeader: Story = {
   },
 };
 
-export const LogoHeader: Story = {
-  render: (args: HeaderProps) => (
+export const LogoHeader: StoryObj<LogoHeaderProps> = {
+  render: (args) => (
     <Wrapper>
       <Header {...args} />
     </Wrapper>
@@ -62,14 +69,10 @@ export const LogoHeader: Story = {
     logo: <div className="flex h-full w-[8rem] items-center bg-gray-300" />,
     icons: [{ label: 'DotsVertical', onClickIcon: () => alert('메뉴 열기') }],
   },
-  argTypes: {
-    hasLeftIcon: { table: { disable: true } },
-    title: { table: { disable: true } },
-  },
 };
 
-export const TextBtnHeader: Story = {
-  render: (args: HeaderProps) => (
+export const TextBtnHeader: StoryObj<TextBtnHeaderProps> = {
+  render: (args) => (
     <Wrapper>
       <Header {...args} />
     </Wrapper>
@@ -81,17 +84,17 @@ export const TextBtnHeader: Story = {
     title: '글쓰기',
     text: '완료',
     isActive: true,
-    onClick: () => alert('완료 버튼 클릭'),
+    onClickTextBtn: () => alert('완료 버튼 클릭'),
   },
 };
 
-export const SearchBarHeader: Story = {
-  render: (args: HeaderProps) => {
+export const SearchBarHeader: StoryObj<SearchBarHeaderProps> = {
+  render: (args) => {
     const [query, setQuery] = useState('');
     return (
       <Wrapper>
         <Header
-          {...args} // ← Controls 반영
+          {...args}
           mode={HeaderMode.SearchBar}
           value={query}
           onChange={setQuery}
@@ -106,6 +109,5 @@ export const SearchBarHeader: Story = {
   },
   argTypes: {
     hasLeftIcon: { control: 'boolean' },
-    title: { table: { disable: true } },
   },
 };

@@ -3,7 +3,7 @@ import { Header, HeaderProps } from './Header';
 import { useState } from 'react';
 
 const meta: Meta<HeaderProps> = {
-  title: 'Components/Header',
+  title: 'Shared/UI/Header',
   tags: ['autodocs'],
   component: Header,
   argTypes: {

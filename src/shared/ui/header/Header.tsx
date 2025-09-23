@@ -93,10 +93,12 @@ export function Header({ hasLeftIcon = true, title = '', onBack, ...props }: Hea
         <>
           {renderLeftIcon(hasLeftIcon, onBack)}
           <TextInput
-            mode="SearchField"
             value={props.value}
             onChange={props.onChange}
-            onSubmit={props.onSubmit}
+            onEnter={props.onSubmit}
+            placeholder="검색어를 입력하세요"
+            iconName="Search"
+            onIconClick={() => props.onSubmit(props.value)}
           />
         </>
       )}

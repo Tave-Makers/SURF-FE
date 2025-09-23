@@ -1,10 +1,13 @@
 'use client';
 
 import { useState } from 'react';
-import { SettingsItem } from './SettingsItem';
+import { useRouter } from 'next/navigation';
+import { SettingsItem } from '../../../entities/settings/ui/SettingsItem';
 import { Alert } from '@/shared/ui/alert/Alert';
 
 export const SettingsList = () => {
+  const router = useRouter();
+
   const [isLogoutOpen, setLogoutOpen] = useState(false);
   const [isWithdrawOpen, setWithdrawOpen] = useState(false);
 
@@ -14,7 +17,7 @@ export const SettingsList = () => {
         leftIconName="Bookmark"
         rightIconName="ChevronRight"
         isDisabled={false}
-        onClick={() => alert('클릭됨')}
+        onClick={() => router.push('/mypage/scraps')}
       >
         내가 스크랩한 게시글
       </SettingsItem>
@@ -22,7 +25,7 @@ export const SettingsList = () => {
         leftIconName="Edit"
         rightIconName="ChevronRight"
         isDisabled={false}
-        onClick={() => alert('클릭됨')}
+        onClick={() => router.push('/mypage/my-posts')}
       >
         내가 작성한 게시글
       </SettingsItem>
@@ -30,7 +33,8 @@ export const SettingsList = () => {
         leftIconName="File"
         rightIconName="ChevronRight"
         isDisabled={false}
-        onClick={() => alert('클릭됨')}
+        // 현재 FAQ 화면이 없어 라우터는 작성하지 않음
+        onClick={() => router.push('')}
       >
         FAQ
       </SettingsItem>
@@ -38,7 +42,7 @@ export const SettingsList = () => {
         leftIconName="ChatDots"
         rightIconName="ChevronRight"
         isDisabled={false}
-        onClick={() => alert('클릭됨')}
+        onClick={() => router.push('/mypage/feedback')}
       >
         피드백 보내기
       </SettingsItem>
@@ -46,7 +50,7 @@ export const SettingsList = () => {
         leftIconName="InfoCircle"
         rightIconName="ChevronRight"
         isDisabled={false}
-        onClick={() => alert('클릭됨')}
+        onClick={() => router.push('/mypage/policy')}
       >
         이용약관
       </SettingsItem>
@@ -81,6 +85,7 @@ export const SettingsList = () => {
           {
             type: 'solid',
             label: '로그아웃',
+            // 클릭 이벤트 함수 변경 필요
             onClick: () => console.log('로그아웃'),
             variant: 'primary',
           },
@@ -99,7 +104,13 @@ export const SettingsList = () => {
             onClick: () => setWithdrawOpen(false),
             variant: 'secondary',
           },
-          { type: 'solid', label: '탈퇴하기', onClick: () => {}, variant: 'danger' },
+          {
+            type: 'solid',
+            label: '탈퇴하기',
+            // 클릭 이벤트 함수 변경 필요
+            onClick: () => {},
+            variant: 'danger',
+          },
         ]}
         isOpen={isWithdrawOpen}
         onClose={() => setWithdrawOpen(false)}

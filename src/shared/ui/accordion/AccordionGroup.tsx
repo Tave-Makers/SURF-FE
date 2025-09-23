@@ -9,9 +9,10 @@ export const AccordionGroup = ({ accordions }: AccordionGroupProps) => {
           key={idx}
           index={idx + 1}
           title={accordion.title}
-          items={accordion.items}
           isDisabled={accordion.isDisabled}
-        />
+        >
+          {accordion.children}
+        </Accordion>
       ))}
     </div>
   );

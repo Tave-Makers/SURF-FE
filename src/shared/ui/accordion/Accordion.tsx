@@ -2,15 +2,14 @@
 
 import { useEffect, useRef, useState } from 'react';
 import { SurfIcon } from '../icon/SurfIcon';
-import { AccordionTextItem } from './AccordionTextItem';
 import { AccordionProps } from './types';
 
 export function Accordion({
   index,
   title,
-  items,
   defaultOpen = false,
   isDisabled = false,
+  children,
 }: AccordionProps) {
   const [isOpen, setIsOpen] = useState(defaultOpen);
   const [maxHeight, setMaxHeight] = useState('0px');
@@ -45,9 +44,7 @@ export function Accordion({
         className="overflow-hidden transition-all duration-300 ease-in-out"
       >
         <div className="bg-background-tertiary mx-[1rem] my-[1.25rem] space-y-[1.5rem] rounded-[0.62rem] px-[1rem] py-[1.25rem]">
-          {items.map((item, idx) => (
-            <AccordionTextItem key={idx} index={idx + 1} {...item} />
-          ))}
+          {children}
         </div>
       </div>
     </div>

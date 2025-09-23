@@ -10,6 +10,7 @@ export const AccordionGroup = ({ accordions }: AccordionGroupProps) => {
           index={idx + 1}
           title={accordion.title}
           isDisabled={accordion.isDisabled}
+          renderTitle={accordion.renderTitle}
         >
           {accordion.children}
         </Accordion>

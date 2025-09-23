@@ -3,18 +3,12 @@ export type AccordionGroupData = {
   title: string;
   isDisabled?: boolean;
   children: React.ReactNode;
+  renderTitle?: (index: number, title: string) => React.ReactNode;
 };
 
 // 아코디언 그룹 컴포넌트가 받을 props
 export type AccordionGroupProps = {
   accordions: AccordionGroupData[];
-};
-
-// 아코디언 안에 들어가는 개별 아이템
-export type AccordionItemData = {
-  title: string;
-  scoreChange: string;
-  descriptions?: string[];
 };
 
 // 아코디언 컴포넌트가 받을 props
@@ -24,12 +18,5 @@ export type AccordionProps = {
   defaultOpen?: boolean;
   isDisabled?: boolean;
   children: React.ReactNode;
-};
-
-// 아코디언 안에 들어가는 개별 아이템 컴포넌트가 받을 props
-export type AccordionTextItemProps = {
-  index: number;
-  title: string;
-  scoreChange: string;
-  descriptions?: string[];
+  renderTitle?: (index: number, title: string) => React.ReactNode;
 };

@@ -5,12 +5,14 @@ export const AccordionTextItem = ({
   title,
   scoreChange,
   descriptions,
+  showIndex = true,
 }: AccordionTextItemProps) => {
   return (
     <div className="flex flex-col gap-[0.5rem]">
       <div className="flex justify-between">
         <p className="text-foreground-normal text-body-12-600">
-          {index}) {title}
+          {showIndex ? `${index}) ` : ''}
+          {title}
         </p>
         <p className="text-border-primary text-body-12-600">{scoreChange}</p>
       </div>

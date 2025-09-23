@@ -10,6 +10,7 @@ export function Accordion({
   defaultOpen = false,
   isDisabled = false,
   children,
+  renderTitle,
 }: AccordionProps) {
   const [isOpen, setIsOpen] = useState(defaultOpen);
   const [maxHeight, setMaxHeight] = useState('0px');
@@ -30,9 +31,7 @@ export function Accordion({
         onClick={() => setIsOpen(!isOpen)}
         className="disabled:bg-background-quaternary text-foreground-normal text-body-16-600--1 flex w-full cursor-pointer items-center justify-between p-[1rem] disabled:cursor-not-allowed"
       >
-        <span>
-          {index}. {title}
-        </span>
+        <span>{renderTitle ? renderTitle(index, title) : `${index}. ${title}`}</span>
         <span className={`transition-transform duration-300 ${isOpen ? 'rotate-180' : ''}`}>
           <SurfIcon name="ChevronDown" size="l" />
         </span>
@@ -43,9 +42,7 @@ export function Accordion({
         style={{ maxHeight }}
         className="overflow-hidden transition-all duration-300 ease-in-out"
       >
-        <div className="bg-background-tertiary mx-[1rem] my-[1.25rem] space-y-[1.5rem] rounded-[0.62rem] px-[1rem] py-[1.25rem]">
-          {children}
-        </div>
+        <div className="px-[1rem] py-[1.25rem]">{children}</div>
       </div>
     </div>
   );

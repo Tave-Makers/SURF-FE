@@ -26,7 +26,7 @@ export const TextInput = forwardRef<HTMLInputElement, TextInputProps>(
     useImperativeHandle(ref, () => internalRef.current as HTMLInputElement);
 
     return (
-      <div className="bg-background-tertiary flex h-[2.25rem] w-full shrink-0 items-center justify-between rounded-[62.43rem] py-[0.37rem] pr-[0.5rem] pl-[0.75rem]">
+      <div className="bg-background-tertiary flex h-[2.25rem] w-full flex-1 items-center justify-between rounded-[62.43rem] py-[0.37rem] pr-[0.5rem] pl-[0.75rem]">
         <input
           value={value}
           onChange={(e) => onChange(e.target.value)}

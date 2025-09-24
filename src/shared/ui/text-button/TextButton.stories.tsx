@@ -1,5 +1,5 @@
 import type { Meta, StoryObj } from '@storybook/nextjs-vite';
-import TextButton from './TextButton';
+import { TextButton } from './TextButton';
 
 const meta = {
   title: 'Shared/UI/TextButton',
@@ -8,7 +8,7 @@ const meta = {
   args: {
     size: 'm',
     variant: 'primary',
-    disabled: false,
+    isDisabled: false,
     leftIconName: null,
     rightIconName: null,
     children: '버튼',
@@ -25,7 +25,7 @@ const meta = {
       options: ['primary', 'secondary', 'warning'],
     },
     children: { control: 'text' },
-    disabled: { control: 'boolean' },
+    isDisabled: { control: 'boolean' },
     leftIconName: { control: 'text' },
     rightIconName: { control: 'text' },
   },
@@ -92,7 +92,7 @@ export const BothIcons: Story = {
 
 export const Disabled: Story = {
   args: {
-    disabled: true,
+    isDisabled: true,
     children: '비활성화',
     leftIconName: 'Plus',
     rightIconName: 'ChevronRight',

@@ -2,7 +2,7 @@
 
 // import { useRouter } from 'next/navigation';
 import { useOnboardingStore } from '@/entities/user/model/onboardingStore';
-import { ProfileImageUploader } from '@/features/user/upload-profile-image/ProfileImageUploader';
+import { ProfileImageUploader } from '@/features/user/upload-profile-image/ui/ProfileImageUploader';
 import { SolidButton } from '@/shared/ui/solid-button/SolidButton';
 
 export const ProfileForm = () => {

@@ -1,13 +1,16 @@
+'use client';
+
 import React, { useRef } from 'react';
 import { KeenSliderOptions, TrackDetails, useKeenSlider } from 'keen-slider/react';
+import '@/shared/styles/globals.css';
 
 export function Wheel(props: {
   initIdx?: number;
-  label?: string;
   length: number;
   loop?: boolean;
   perspective?: 'left' | 'right' | 'center';
   setValue?: (relative: number, absolute: number) => string;
+  onChange?: (val: string) => void;
   width: React.CSSProperties['width'];
 }) {
   const perspective = props.perspective || 'center';
@@ -46,7 +49,6 @@ export function Wheel(props: {
   });
 
   const [sliderRef, slider] = useKeenSlider<HTMLDivElement>(options.current);
-
   const [radius, setRadius] = React.useState(0);
 
   React.useEffect(() => {
@@ -57,7 +59,8 @@ export function Wheel(props: {
     if (!sliderState) return [];
     const offset = props.loop ? 1 / 2 - 1 / slidesPerView / 2 : 0;
     const activeIndex = sliderState.rel;
-    const values = [];
+    const values: { style: React.CSSProperties; value: string }[] = [];
+
     for (let i = 0; i < slides; i++) {
       const distance = (sliderState.slides[i].distance - offset) * slidesPerView;
       const rotate = Math.abs(distance) > wheelSize / 2 ? 180 : distance * (360 / wheelSize) * -1;
@@ -71,8 +74,14 @@ export function Wheel(props: {
         fontWeight: 600,
       };
 
-      const value = props.setValue ? props.setValue(i, sliderState.abs + Math.round(distance)) : i;
+      const value = props.setValue
+        ? props.setValue(i, sliderState.abs + Math.round(distance))
+        : String(i);
       values.push({ style, value });
+
+      if (isActive && props.onChange) {
+        props.onChange(value);
+      }
     }
     return values;
   }

@@ -1,6 +1,6 @@
 'use client';
 
-import { useRef } from 'react';
+import { useRef, useEffect, useState } from 'react';
 import { useOnboardingStore } from '@/entities/user/model/onboardingStore';
 
 export const ProfileImageUploader = () => {
@@ -19,9 +19,16 @@ export const ProfileImageUploader = () => {
   };
 
   // 선택된 이미지 파일로 미리보기 URL 생성
-  const previewUrl = data.profileImage
-    ? URL.createObjectURL(data.profileImage)
-    : '/default-profile.png'; // 기본 이미지 경로
+  const [previewUrl, setPreviewUrl] = useState('/default-profile.png');
+  useEffect(() => {
+    if (!data.profileImage) {
+      setPreviewUrl('/default-profile.png');
+      return;
+    }
+    const url = URL.createObjectURL(data.profileImage);
+    setPreviewUrl(url);
+    return () => URL.revokeObjectURL(url);
+  }, [data.profileImage]);
 
   return (
     <div>

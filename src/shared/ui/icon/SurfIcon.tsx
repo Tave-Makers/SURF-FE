@@ -2,7 +2,7 @@ import * as Icons from '@mynaui/icons-react';
 import { ComponentType } from 'react';
 
 type IconSize = 's' | 'm' | 'l';
-type IconName = Extract<keyof typeof Icons, string>;
+export type IconName = Extract<keyof typeof Icons, string>;
 
 type BaseIconProps = {
   size?: number;

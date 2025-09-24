@@ -31,7 +31,13 @@ export function Accordion({
         onClick={() => setIsOpen(!isOpen)}
         className="disabled:bg-background-quaternary text-foreground-normal text-body-16-600--1 flex w-full cursor-pointer items-center justify-between p-[1rem] disabled:cursor-not-allowed"
       >
-        <span>{renderTitle ? renderTitle(index, title) : `${index}. ${title}`}</span>
+        <span>
+          {renderTitle
+            ? renderTitle(index, title)
+            : index !== undefined
+              ? `${index}. ${title}`
+              : title}
+        </span>
         <span className={`transition-transform duration-300 ${isOpen ? 'rotate-180' : ''}`}>
           <SurfIcon name="ChevronDown" size="l" />
         </span>

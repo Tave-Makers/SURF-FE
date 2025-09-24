@@ -4,10 +4,7 @@
 
 html,
 body {
-  font-family:
-    NanumSquare Neo,
-    Pretendard,
-    sans-serif;
+  font-family: NanumSquareNeo, Pretendard, sans-serif;
 }
 
 .react-modal-sheet-header {

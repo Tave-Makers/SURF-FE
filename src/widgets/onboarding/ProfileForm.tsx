@@ -40,12 +40,18 @@ export const ProfileForm = () => {
           {/* Input 공통 컴포넌트 필요할듯? */}
           <div className="flex flex-col items-start justify-center gap-[0.25rem] self-stretch">
             <input
+              id="name"
+              name="name"
+              required
+              aria-required="true"
+              aria-describedby="name-help"
+              autoComplete="name"
               placeholder="이름을 입력해주세요."
               value={data.name || ''}
               onChange={(e) => updateData({ name: e.target.value })}
               className="text-foreground-hint bg-background-normal-darker flex flex-col items-start gap-[0.37rem] self-stretch rounded-[0.25rem] p-[0.62rem] focus:outline-none"
             />
-            <span className="text-caption-10-400--1 text-foreground-normal">
+            <span id="name-help" className="text-caption-10-400--1 text-foreground-normal">
               정확한 서비스 이용을 위해 실명을 기입해주세요
             </span>
           </div>

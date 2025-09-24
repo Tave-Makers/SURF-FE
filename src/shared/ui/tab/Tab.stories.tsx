@@ -15,10 +15,10 @@ export const Uncontrolled: Story = {
   render: () => (
     <div className="p-4">
       <Tab
-        defaultValue="photos"
+        defaultValue="profile"
         items={[
-          { value: 'donation', label: '후원하기' },
-          { value: 'photos', label: '사진첩' },
+          { value: 'profile', label: '프로필' },
+          { value: 'badges', label: '활동뱃지' },
         ]}
       />
     </div>
@@ -28,18 +28,18 @@ export const Uncontrolled: Story = {
 export const Controlled: Story = {
   render: () => {
     const ControlledWrapper = () => {
-      const [tab, setTab] = useState('donation');
+      const [tab, setTab] = useState('profile');
       return (
         <div className="p-4">
           <Tab
             value={tab}
             onValueChange={setTab}
             items={[
-              { value: 'donation', label: '후원하기' },
-              { value: 'photos', label: '사진첩' },
+              { value: 'profile', label: '프로필' },
+              { value: 'badges', label: '활동뱃지' },
             ]}
           />
-          <div className="mt-4">{tab === 'donation' ? '후원 탭' : '사진첩 탭'}</div>
+          <div className="mt-4">{tab === 'profile' ? '프로필 탭' : '활동뱃지 탭'}</div>
         </div>
       );
     };

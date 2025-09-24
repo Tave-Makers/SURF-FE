@@ -28,7 +28,7 @@ export function Tab({ items, value, defaultValue, onValueChange }: TabProps) {
 
   return (
     <div className="flex w-full px-[1.25rem]">
-      <div className="border-border-secondary flex w-full border-b">
+      <div className="border-border-secondary flex w-full border-b-[1px]">
         {items.map((item) => {
           const isActive = item.value === activeValue;
           return (
@@ -36,7 +36,7 @@ export function Tab({ items, value, defaultValue, onValueChange }: TabProps) {
               key={item.value}
               onClick={() => handleChange(item.value)}
               className={[
-                'text-body-14-600--1-20 flex-1 transition-colors',
+                'text-body-14-600--1-20 flex-1 p-[0.625rem] transition-colors',
                 isActive
                   ? 'border-foreground-normal text-foreground-normal border-b-[2px]'
                   : 'text-foreground-hint',

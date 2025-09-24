@@ -6,7 +6,7 @@ import { AccordionItemData } from '../model/types';
 export type AccordionTextItemProps = {
   index: number; // UI에서만 쓰이는 번호
   title: string;
-  scoreChange: string;
+  scoreChange?: string;
   descriptions?: string[];
   showIndex?: boolean; // 배열 길이 >= 2일 때만 true
 };

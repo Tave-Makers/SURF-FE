@@ -3,6 +3,6 @@
 
 export type AccordionItemData = {
   title: string;
-  scoreChange: string;
+  scoreChange?: string;
   descriptions?: string[];
 };

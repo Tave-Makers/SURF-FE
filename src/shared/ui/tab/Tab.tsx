@@ -27,8 +27,8 @@ export function Tab({ items, value, defaultValue, onValueChange }: TabProps) {
   };
 
   return (
-    <div className="flex w-full px-[1.25rem]">
-      <div className="border-border-secondary flex w-full border-b-[1px]">
+    <div className="flex w-full shadow-[inset_0_-1px_0_0_var(--color-border-secondary)]">
+      <div className="flex w-full px-[1.25rem]">
         {items.map((item) => {
           const isActive = item.value === activeValue;
           return (
@@ -38,7 +38,7 @@ export function Tab({ items, value, defaultValue, onValueChange }: TabProps) {
               className={[
                 'text-body-14-600--1-20 flex-1 p-[0.625rem] transition-colors',
                 isActive
-                  ? 'border-foreground-normal text-foreground-normal border-b-[2px]'
+                  ? 'text-foreground-normal after:bg-foreground-normal relative after:absolute after:bottom-0 after:left-0 after:h-[2px] after:w-full'
                   : 'text-foreground-hint',
               ].join(' ')}
             >

@@ -1,5 +1,5 @@
 // import { Header } from '@/shared/ui/Header';
-import { ProfileForm } from '@/widgets/onbarding/ProfileForm';
+import { ProfileForm } from '@/widgets/onboarding/ProfileForm';
 
 export default function CreateProfilePage() {
   return (

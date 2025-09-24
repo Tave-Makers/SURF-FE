@@ -31,7 +31,7 @@ export const ProfileImageUploader = () => {
         ref={inputRef}
         onChange={handleImageChange}
         style={{ display: 'none' }}
-        className="bg-background-tag-purple"
+        className="bg-background-tag-purple focus:outline-none"
       />
 
       <button onClick={handleImageClick}>
@@ -39,7 +39,7 @@ export const ProfileImageUploader = () => {
           src={previewUrl}
           alt="프로필 이미지 선택"
           // alt는 프로필 컴포넌트로 바꿔야 함
-          className="aspect-square h-[6rem] w-[6rem] object-cover"
+          className="aspect-square h-[6rem] w-[6rem] object-cover focus:outline-none"
         />
       </button>
     </div>

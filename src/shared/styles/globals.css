@@ -18,3 +18,10 @@ body {
 .react-modal-sheet-container {
   height: auto !important;
 }
+
+@layer base {
+  button,
+  a {
+    @apply cursor-pointer;
+  }
+}

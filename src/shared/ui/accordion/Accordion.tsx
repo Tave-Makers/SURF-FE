@@ -4,6 +4,13 @@ import { useEffect, useRef, useState } from 'react';
 import { SurfIcon } from '../icon/SurfIcon';
 import { AccordionProps } from './types';
 
+/**
+ * 단일 아코디언 컴포넌트.
+ * - index를 넘기면 "1. 제목"처럼 넘버링된 UI를 표시
+ * - index를 생략하면 제목만 표시
+ * - renderTitle을 사용하면 타이틀 렌더링을 원하는 대로 커스터마이징 가능
+ */
+
 export function Accordion({
   index,
   title,

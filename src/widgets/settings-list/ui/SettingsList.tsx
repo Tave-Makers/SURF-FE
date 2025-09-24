@@ -1,119 +1,87 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useCallback } from 'react';
 import { useRouter } from 'next/navigation';
-import { SettingsItem } from '../../../entities/settings/ui/SettingsItem';
+import { SettingsItem } from '@/entities/settings/ui/SettingsItem';
 import { Alert } from '@/shared/ui/alert/Alert';
+import { SETTINGS_ITEMS } from '../model/constants';
+import type { IconName } from '@/shared/ui/icon/SurfIcon';
+
+type AlertType = 'logout' | 'withdraw' | null;
 
 export const SettingsList = () => {
   const router = useRouter();
+  const [activeAlert, setActiveAlert] = useState<AlertType>(null);
 
-  const [isLogoutOpen, setLogoutOpen] = useState(false);
-  const [isWithdrawOpen, setWithdrawOpen] = useState(false);
+  const handleItemClick = useCallback(
+    (item: (typeof SETTINGS_ITEMS)[0]) => {
+      const { type, payload } = item.action;
+
+      switch (type) {
+        case 'NAVIGATE':
+          if (payload) router.push(payload);
+          break;
+        case 'OPEN_ALERT':
+          setActiveAlert(payload as AlertType);
+          break;
+        default:
+          break;
+      }
+    },
+    [router],
+  );
+
+  // TODO: 로그아웃 및 회원탈퇴 훅 features 레이어에서 import 필요. 아래는 임시 코드
+  const handleLogout = () => {
+    console.log('로그아웃 처리');
+    setActiveAlert(null);
+  };
+
+  const handleWithdraw = () => {
+    console.log('회원탈퇴 처리');
+    setActiveAlert(null);
+  };
+  // -------------------------------------
+
+  const closeAlert = () => {
+    setActiveAlert(null);
+  };
 
   return (
     <div className="flex w-full flex-col items-start self-stretch pt-[0.62rem]">
-      <SettingsItem
-        leftIconName="Bookmark"
-        rightIconName="ChevronRight"
-        isDisabled={false}
-        onClick={() => router.push('/mypage/scraps')}
-      >
-        내가 스크랩한 게시글
-      </SettingsItem>
-      <SettingsItem
-        leftIconName="Edit"
-        rightIconName="ChevronRight"
-        isDisabled={false}
-        onClick={() => router.push('/mypage/my-posts')}
-      >
-        내가 작성한 게시글
-      </SettingsItem>
-      <SettingsItem
-        leftIconName="File"
-        rightIconName="ChevronRight"
-        isDisabled={false}
-        // 현재 FAQ 화면이 없어 라우터는 작성하지 않음
-        onClick={() => router.push('')}
-      >
-        FAQ
-      </SettingsItem>
-      <SettingsItem
-        leftIconName="ChatDots"
-        rightIconName="ChevronRight"
-        isDisabled={false}
-        onClick={() => router.push('/mypage/feedback')}
-      >
-        피드백 보내기
-      </SettingsItem>
-      <SettingsItem
-        leftIconName="InfoCircle"
-        rightIconName="ChevronRight"
-        isDisabled={false}
-        onClick={() => router.push('/mypage/policy')}
-      >
-        이용약관
-      </SettingsItem>
-      <SettingsItem
-        leftIconName="Logout"
-        rightIconName="ChevronRight"
-        isDisabled={false}
-        onClick={() => setLogoutOpen(true)}
-      >
-        로그아웃
-      </SettingsItem>
-      <SettingsItem
-        leftIconName="XCircle"
-        rightIconName="ChevronRight"
-        isDisabled={false}
-        onClick={() => setWithdrawOpen(true)}
-      >
-        회원탈퇴
-      </SettingsItem>
+      {SETTINGS_ITEMS.map((item) => (
+        <SettingsItem
+          key={item.id}
+          leftIconName={item.leftIconName as IconName}
+          rightIconName="ChevronRight"
+          isDisabled={false}
+          onClick={() => handleItemClick(item)}
+        >
+          {item.text}
+        </SettingsItem>
+      ))}
 
-      {/* Alert Modal */}
+      {/* Alert Modals */}
       <Alert
         state="default"
         title="정말 로그아웃 하시겠습니까?"
         actions={[
-          {
-            type: 'solid',
-            label: '취소',
-            onClick: () => setLogoutOpen(false),
-            variant: 'secondary',
-          },
-          {
-            type: 'solid',
-            label: '로그아웃',
-            // 클릭 이벤트 함수 변경 필요
-            onClick: () => console.log('로그아웃'),
-            variant: 'primary',
-          },
+          { type: 'solid', label: '취소', onClick: closeAlert, variant: 'secondary' },
+          { type: 'solid', label: '로그아웃', onClick: handleLogout, variant: 'primary' },
         ]}
-        isOpen={isLogoutOpen}
-        onClose={() => setLogoutOpen(false)}
+        isOpen={activeAlert === 'logout'}
+        onClose={closeAlert}
       />
       <Alert
         state="default"
         title="정말 탈퇴하시겠습니까?"
         infoText={`탈퇴한 후에는 서비스 이용 기록이 삭제되며,\n복구가 불가능합니다.`}
         actions={[
-          {
-            type: 'solid',
-            label: '취소',
-            onClick: () => setWithdrawOpen(false),
-            variant: 'secondary',
-          },
-          {
-            type: 'solid',
-            label: '탈퇴하기',
-            // 클릭 이벤트 함수 변경 필요
-            onClick: () => {},
-            variant: 'danger',
-          },
+          { type: 'solid', label: '취소', onClick: closeAlert, variant: 'secondary' },
+          { type: 'solid', label: '탈퇴하기', onClick: handleWithdraw, variant: 'danger' },
         ]}
-        isOpen={isWithdrawOpen}
-        onClose={() => setWithdrawOpen(false)}
+        isOpen={activeAlert === 'withdraw'}
+        onClose={closeAlert}
       />
     </div>
   );

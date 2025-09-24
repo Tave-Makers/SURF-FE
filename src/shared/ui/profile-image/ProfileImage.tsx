@@ -2,7 +2,6 @@
 
 import Image from 'next/image';
 import { useState, type ReactNode } from 'react';
-import defaultProfileImage from '@/shared/assets/images/profile/profile-default.png';
 
 type ProfileImageSize = 's' | 'm' | 'l' | 'xl';
 
@@ -17,7 +16,6 @@ const pxMap: Record<ProfileImageSize, number> = { s: 36, m: 40, l: 72, xl: 96 };
 
 export type ProfileImageProps = {
   src?: string;
-  alt: string;
   size?: ProfileImageSize;
   className?: string;
   priority?: boolean;
@@ -26,13 +24,13 @@ export type ProfileImageProps = {
 
 export function ProfileImage({
   src,
-  alt,
   size = 'l',
   className,
   priority,
   fallback,
 }: ProfileImageProps) {
   const [error, setError] = useState(false);
+  const [loading, setLoading] = useState(!!src);
 
   const base = `relative flex items-center justify-center flex-shrink-0 aspect-square 
      rounded-[0.5rem] overflow-hidden bg-black/5 ${boxSizeClass[size]}`;
@@ -40,20 +38,31 @@ export function ProfileImage({
   return (
     <div className={className ? `${base} ${className}` : base}>
       {src && !error ? (
-        <Image
-          src={src}
-          alt={alt}
-          fill
-          sizes={`${pxMap[size]}px`}
-          className="object-cover"
-          onError={() => setError(true)}
-          priority={priority}
-        />
+        <>
+          {loading &&
+            (fallback ?? (
+              <div
+                className={`${boxSizeClass[size]} bg-background-quaternary animate-pulse`}
+                role="status"
+                aria-label="프로필 이미지 로딩 중"
+              />
+            ))}
+          <Image
+            src={src}
+            alt="프로필 이미지"
+            fill
+            sizes={`${pxMap[size]}px`}
+            className={`object-cover transition-opacity duration-100 ${loading ? 'opacity-0' : 'opacity-100'}`}
+            onError={() => setError(true)}
+            onLoadingComplete={() => setLoading(false)}
+            priority={priority}
+          />
+        </>
       ) : (
         (fallback ?? (
           <Image
-            src={defaultProfileImage}
-            alt={alt}
+            src="/images/profile-default.svg"
+            alt="프로필 이미지"
             fill
             sizes={`${pxMap[size]}px`}
             className="object-cover"

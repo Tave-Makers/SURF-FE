@@ -33,7 +33,6 @@ export default function ActivityScoreCard({ score, records, tab }: ActivityScore
                 key={item.activityType}
                 id={item.activityType}
                 icon={meta.Icon}
-                label={meta.label}
                 count={item.count}
                 tooltip={
                   <ActivityStatTooltip activities={[{ label: meta.label, count: item.count }]} />
@@ -46,7 +45,6 @@ export default function ActivityScoreCard({ score, records, tab }: ActivityScore
           <ActivityStatItem
             id="blogs"
             icon={groupMetaMap.blogs.Icon}
-            label={groupMetaMap.blogs.label}
             count={records.rewards.blogs.totalCount}
             tooltip={
               <ActivityStatTooltip
@@ -72,7 +70,6 @@ export default function ActivityScoreCard({ score, records, tab }: ActivityScore
                 key={groupId}
                 id={groupId}
                 icon={meta.Icon}
-                label={meta.label}
                 count={group.totalCount}
                 tooltip={
                   <ActivityStatTooltip

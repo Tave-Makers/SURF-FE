@@ -6,7 +6,6 @@ import { FC, ReactNode } from 'react';
 type Props = {
   id: string;
   icon: React.FC<React.SVGProps<SVGSVGElement>>;
-  label: string;
   count: number;
   tooltip?: ReactNode;
 };

@@ -1,7 +1,7 @@
 'use client';
 
 import Image from 'next/image';
-import { useState, type ReactNode } from 'react';
+import { useEffect, useState, type ReactNode } from 'react';
 
 type ProfileImageSize = 's' | 'm' | 'l' | 'xl';
 
@@ -32,6 +32,11 @@ export function ProfileImage({
   const [error, setError] = useState(false);
   const [loading, setLoading] = useState(!!src);
 
+  useEffect(() => {
+    setError(false);
+    setLoading(!!src);
+  }, [src]);
+
   const base = `relative flex items-center justify-center flex-shrink-0 aspect-square 
      rounded-[0.5rem] overflow-hidden bg-black/5 ${boxSizeClass[size]}`;
 
@@ -52,7 +57,9 @@ export function ProfileImage({
             alt="프로필 이미지"
             fill
             sizes={`${pxMap[size]}px`}
-            className={`object-cover transition-opacity duration-100 ${loading ? 'opacity-0' : 'opacity-100'}`}
+            className={`object-cover transition-opacity duration-100 ${
+              loading ? 'opacity-0' : 'opacity-100'
+            }`}
             onError={() => setError(true)}
             onLoadingComplete={() => setLoading(false)}
             priority={priority}

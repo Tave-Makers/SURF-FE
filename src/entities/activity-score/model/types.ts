@@ -1,6 +1,8 @@
+import { activityMetaMap } from './meta';
+
 // 단일 활동 - 인스타 스토리, 기술 세미나 참석, 얼리버드
 export type SingleActivity = {
-  activityType: string;
+  activityType: keyof typeof activityMetaMap;
   count: number;
 };
 
@@ -10,10 +12,22 @@ export type GroupActivity = {
   list: SingleActivity[];
 };
 
+// 상점
+export type Rewards = {
+  taveActivities: SingleActivity[];
+  blogs: GroupActivity;
+};
+
+// 벌점
+export type Penalties = {
+  late: GroupActivity;
+  absence: GroupActivity;
+};
+
 // 전체 응답
 export type ActivityRecords = {
-  singleList: SingleActivity[];
-  group: GroupActivity;
+  rewards: Rewards;
+  penalties: Penalties;
 };
 
 // API 응답 DTO

@@ -1,8 +1,8 @@
-import { activityMetaMap } from './meta';
+import { ActivityType } from './meta';
 
 // 단일 활동 - 인스타 스토리, 기술 세미나 참석, 얼리버드
 export type SingleActivity = {
-  activityType: keyof typeof activityMetaMap;
+  activityType: ActivityType;
   count: number;
 };
 

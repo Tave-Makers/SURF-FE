@@ -1,7 +1,7 @@
 import InstagramIcon from '@/entities/activity-score/ui/icons/instastory.svg';
 import SeminarIcon from '@/entities/activity-score/ui/icons/seminar.svg';
 import BlogIcon from '@/entities/activity-score/ui/icons/blog.svg';
-import EarlyBirdIcon from '@/entities/activity-score/ui/icons/earybird.svg';
+import EarlyBirdIcon from '@/entities/activity-score/ui/icons/earlybird.svg';
 import LateIcon from '@/entities/activity-score/ui/icons/late.svg';
 import AbsenceIcon from '@/entities/activity-score/ui/icons/absent.svg';
 

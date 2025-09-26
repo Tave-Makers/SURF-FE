@@ -19,7 +19,20 @@ export function AppHeader() {
     return { ...header, onClickBack: back };
   }
 
-  const headerProps = getHeaderProps(currentRoute.header, () => router.back());
+  // 뒤로가기 동작 정의
+  const handleBack = () => {
+    const { backPath } = currentRoute;
+
+    if (typeof backPath === 'string') {
+      // backPath가 지정된 경우 - 항상 해당 경로로 이동
+      router.push(backPath);
+    } else {
+      // backPath가 없는 경우 - 브라우저 히스토리 기반 이동
+      router.back();
+    }
+  };
+
+  const headerProps = getHeaderProps(currentRoute.header, handleBack);
 
   return <Header {...headerProps} />;
 }

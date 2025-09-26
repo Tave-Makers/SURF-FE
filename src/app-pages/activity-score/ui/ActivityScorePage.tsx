@@ -1,11 +1,16 @@
 'use client';
 
-import { ActivityRecords } from '@/entities/activity-score/model/types';
+import {
+  ActivitySummaryRecords,
+  ScoreMode,
+  ActivityHistory,
+} from '@/entities/activity-score/model/types';
 import { useState } from 'react';
 import ActivityScoreCard from '@/widgets/activity-score/ActivityScoreCard';
+import { ActivityHistoryList } from '@/entities/activity-score/ui/ActivityHistoryList';
 
 // TODO: API 응답으로 변경
-const mockData: ActivityRecords = {
+const mockData: ActivitySummaryRecords = {
   rewards: {
     taveActivities: [
       { activityType: 'UPLOAD_INSTAGRAM_STORY', count: 7 },
@@ -38,33 +43,48 @@ const mockData: ActivityRecords = {
   },
 };
 
+export const mockRewardRecords: ActivityHistory[] = [
+  { memberId: 1, date: '26.09.06', category: '얼리버드', delta: 10, total: 136 },
+  { memberId: 2, date: '26.09.05', category: '기술 블로그', delta: 20, total: 126 },
+];
+
+export const mockPenaltyRecords: ActivityHistory[] = [
+  { memberId: 3, date: '26.09.04', category: '지각', delta: -3, total: 123 },
+  { memberId: 4, date: '26.09.03', category: '결석', delta: -5, total: 118 },
+];
+
 export default function ActivityScorePage() {
-  const [tab, setTab] = useState<'rewards' | 'penalties'>('rewards');
+  const [mode, setMode] = useState<ScoreMode>('REWARD');
+
+  const records = mode === 'REWARD' ? mockRewardRecords : mockPenaltyRecords;
 
   return (
-    <div className="flex flex-col items-center gap-6 p-6">
+    <div className="flex w-[375px] flex-col items-center gap-6 p-6">
+      {/* 활동 점수 카드 */}
+      <ActivityScoreCard score={156} records={mockData} mode={mode} />
+
       {/* 탭 버튼 */}
       <div className="flex gap-4">
         <button
           className={`cursor-pointer rounded px-4 py-2 ${
-            tab === 'rewards' ? 'bg-blue-500 text-white' : 'bg-gray-200 text-gray-700'
+            mode === 'REWARD' ? 'bg-blue-500 text-white' : 'bg-gray-200 text-gray-700'
           }`}
-          onClick={() => setTab('rewards')}
+          onClick={() => setMode('REWARD')}
         >
           상점
         </button>
         <button
           className={`cursor-pointer rounded px-4 py-2 ${
-            tab === 'penalties' ? 'bg-red-500 text-white' : 'bg-gray-200 text-gray-700'
+            mode === 'PENALTY' ? 'bg-red-500 text-white' : 'bg-gray-200 text-gray-700'
           }`}
-          onClick={() => setTab('penalties')}
+          onClick={() => setMode('PENALTY')}
         >
           벌점
         </button>
       </div>
 
-      {/* 활동 점수 카드 */}
-      <ActivityScoreCard score={156} records={mockData} tab={tab} />
+      {/* 활동 점수 리스트 */}
+      <ActivityHistoryList records={records} />
     </div>
   );
 }

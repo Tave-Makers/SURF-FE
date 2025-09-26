@@ -59,9 +59,11 @@ export default function ActivityScorePage() {
   const records = mode === 'REWARD' ? mockRewardRecords : mockPenaltyRecords;
 
   return (
-    <div className="flex w-[375px] flex-col items-center gap-6 p-6">
+    <div className="flex flex-col items-center">
       {/* 활동 점수 카드 */}
-      <ActivityScoreCard score={156} records={mockData} mode={mode} />
+      <div className="pt-[1.88rem] pb-[2.5rem]">
+        <ActivityScoreCard score={156} records={mockData} mode={mode} />
+      </div>
 
       {/* 탭 버튼 */}
       <div className="flex gap-4">
@@ -84,7 +86,9 @@ export default function ActivityScorePage() {
       </div>
 
       {/* 활동 점수 리스트 */}
-      <ActivityHistoryList records={records} />
+      <div className="flex w-full px-[1rem] pt-[1.88rem]">
+        <ActivityHistoryList records={records} />
+      </div>
     </div>
   );
 }

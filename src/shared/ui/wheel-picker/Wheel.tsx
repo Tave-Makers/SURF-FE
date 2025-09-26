@@ -2,7 +2,6 @@
 
 import React, { useRef } from 'react';
 import { KeenSliderOptions, TrackDetails, useKeenSlider } from 'keen-slider/react';
-import '@/shared/styles/globals.css';
 
 export function Wheel(props: {
   initIdx?: number;

@@ -64,14 +64,6 @@ body {
   margin-top: 2px;
   border-bottom: none;
 }
-.wheel__label {
-  font-weight: 400;
-  font-size: 18px;
-  line-height: 24;
-  margin-top: 1px;
-  margin-left: 5px;
-}
-
 .wheel__slide {
   align-items: center;
   backface-visibility: hidden;

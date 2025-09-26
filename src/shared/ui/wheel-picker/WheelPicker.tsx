@@ -18,7 +18,9 @@ export const WheelPicker = ({ onChange }: WheelPickerProps) => {
 
   function format<T extends keyof typeof dataMap>(type: T) {
     return (_relative: number, absolute: number): string => {
-      return dataMap[type][absolute];
+      const arr = dataMap[type];
+      const safeIndex = ((absolute % arr.length) + arr.length) % arr.length;
+      return arr[safeIndex];
     };
   }
 

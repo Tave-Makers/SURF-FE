@@ -3,7 +3,7 @@
 import React, { useRef } from 'react';
 import { KeenSliderOptions, TrackDetails, useKeenSlider } from 'keen-slider/react';
 
-export function Wheel(props: {
+type WheelProps = {
   initIdx?: number;
   length: number;
   loop?: boolean;
@@ -11,23 +11,34 @@ export function Wheel(props: {
   setValue?: (relative: number, absolute: number) => string;
   onChange?: (val: string) => void;
   width: React.CSSProperties['width'];
-}) {
-  const perspective = props.perspective || 'center';
+};
+
+export function Wheel({
+  initIdx,
+  length,
+  loop,
+  perspective = 'center',
+  setValue,
+  onChange,
+  width,
+}: WheelProps) {
   const wheelSize = 20;
-  const slides = props.length;
+  const slides = length;
   const slideDegree = 360 / wheelSize;
-  const slidesPerView = props.loop ? 9 : 1;
+  const slidesPerView = loop ? 9 : 1;
+
   const [sliderState, setSliderState] = React.useState<TrackDetails | null>(null);
   const size = useRef(0);
+
   const options = useRef<KeenSliderOptions>({
     slides: {
       number: slides,
-      origin: props.loop ? 'center' : 'auto',
+      origin: loop ? 'center' : 'auto',
       perView: slidesPerView,
     },
     vertical: true,
-    initial: props.initIdx || 0,
-    loop: props.loop,
+    initial: initIdx || 0,
+    loop,
     dragSpeed: (val) => {
       const height = size.current;
       return (
@@ -43,7 +54,7 @@ export function Wheel(props: {
     detailsChanged: (s) => {
       setSliderState(s.track.details);
     },
-    rubberband: !props.loop,
+    rubberband: !loop,
     mode: 'free-snap',
   });
 
@@ -56,14 +67,13 @@ export function Wheel(props: {
 
   function slideValues() {
     if (!sliderState) return [];
-    const offset = props.loop ? 1 / 2 - 1 / slidesPerView / 2 : 0;
+    const offset = loop ? 1 / 2 - 1 / slidesPerView / 2 : 0;
     const activeIndex = sliderState.rel;
     const values: { style: React.CSSProperties; value: string }[] = [];
 
     for (let i = 0; i < slides; i++) {
       const distance = (sliderState.slides[i].distance - offset) * slidesPerView;
       const rotate = Math.abs(distance) > wheelSize / 2 ? 180 : distance * (360 / wheelSize) * -1;
-
       const isActive = i === activeIndex;
 
       const style = {
@@ -73,20 +83,23 @@ export function Wheel(props: {
         fontWeight: 600,
       };
 
-      const value = props.setValue
-        ? props.setValue(i, sliderState.abs + Math.round(distance))
-        : String(i);
-      values.push({ style, value });
+      const value = setValue ? setValue(i, sliderState.abs + Math.round(distance)) : String(i);
 
-      if (isActive && props.onChange) {
-        props.onChange(value);
-      }
+      values.push({ style, value });
     }
     return values;
   }
 
+  React.useEffect(() => {
+    if (!sliderState || !onChange) return;
+    const activeIndex = sliderState.rel;
+    const activeValue = setValue ? setValue(activeIndex, sliderState.abs) : String(activeIndex);
+
+    onChange(activeValue);
+  }, [sliderState, onChange, setValue]);
+
   return (
-    <div className={'wheel keen-slider wheel--perspective-' + perspective} ref={sliderRef}>
+    <div className={`wheel keen-slider wheel--perspective-${perspective}`} ref={sliderRef}>
       <div
         className="wheel__shadow-top"
         style={{
@@ -109,7 +122,7 @@ export function Wheel(props: {
             zIndex: 1,
           }}
         />
-        <div className="wheel__slides" style={{ width: props.width + 'px' }}>
+        <div className="wheel__slides" style={{ width: width + 'px' }}>
           {slideValues().map(({ style, value }, idx) => (
             <div className="wheel__slide" style={{ ...style, zIndex: 2 }} key={idx}>
               <span>{value}</span>

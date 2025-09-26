@@ -1,5 +1,5 @@
 import type { Meta, StoryObj } from '@storybook/nextjs-vite';
-import { useState } from 'react';
+import { useState, useId } from 'react';
 import { SelectField } from './SelectField';
 
 const meta: Meta<typeof SelectField> = {
@@ -11,15 +11,9 @@ const meta: Meta<typeof SelectField> = {
       control: { type: 'radio' },
       options: ['m', 'l'],
     },
-    selectedValue: {
-      control: 'text',
-    },
-    placeholder: {
-      control: 'text',
-    },
-    isDisabled: {
-      control: 'boolean',
-    },
+    selectedValue: { control: 'text' },
+    placeholder: { control: 'text' },
+    isDisabled: { control: 'boolean' },
     onClick: { action: 'clicked' },
   },
   args: {
@@ -59,7 +53,8 @@ export const Sizes: Story = {
 export const WithBottomSheet: Story = {
   render: () => {
     const [selectedValue, setSelectedValue] = useState('');
-    const [isSelected, setIsSelected] = useState(false);
+    const [isOpen, setIsOpen] = useState(false);
+    const listId = useId();
 
     const options = ['1기 - 데이터 분석', '2기 - 디자인', '3기 - 백엔드', '4기 - 프론트엔드'];
 
@@ -69,18 +64,27 @@ export const WithBottomSheet: Story = {
           size="m"
           placeholder="기수 및 파트를 선택해주세요"
           selectedValue={selectedValue}
-          onClick={() => setIsSelected((prev) => !prev)}
+          onClick={() => setIsOpen((prev) => !prev)}
+          aria-expanded={isOpen}
+          aria-haspopup="listbox"
+          aria-controls={listId}
         />
 
-        {isSelected && (
-          <div className="absolute top-full z-10 mt-2 w-full rounded border bg-white shadow-lg">
+        {isOpen && (
+          <div
+            id={listId}
+            role="listbox"
+            className="absolute top-full z-10 mt-2 w-full rounded border bg-white shadow-lg"
+          >
             {options.map((opt) => (
               <button
                 key={opt}
+                aria-selected={selectedValue === opt}
+                role="option"
                 className="block w-full px-4 py-2 text-left hover:bg-gray-100"
                 onClick={() => {
                   setSelectedValue(opt);
-                  setIsSelected(false);
+                  setIsOpen(false);
                 }}
               >
                 {opt}

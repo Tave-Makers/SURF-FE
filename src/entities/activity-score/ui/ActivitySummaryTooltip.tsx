@@ -2,11 +2,11 @@
 
 import { FC } from 'react';
 
-type Props = {
+type ActivitySummaryTooltipProps = {
   activities: { label: string; count: number }[];
 };
 
-export const ActivityStatTooltip: FC<Props> = ({ activities }) => {
+export const ActivitySummaryTooltip: FC<ActivitySummaryTooltipProps> = ({ activities }) => {
   return (
     <div className="bg-background-normal flex w-full flex-col items-start rounded-[0.25rem] px-[0.62rem] py-[0.37rem] shadow-[0_0_10px_0_rgba(0,0,0,0.08)]">
       {activities.map((a, i) => (

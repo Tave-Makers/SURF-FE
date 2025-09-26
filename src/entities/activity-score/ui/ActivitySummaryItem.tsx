@@ -3,14 +3,19 @@
 import { useTooltipStore } from '@/entities/activity-score/model/tooltipStore';
 import { FC, ReactNode } from 'react';
 
-type Props = {
+type ActivitySummaryItemProps = {
   id: string;
   icon: React.FC<React.SVGProps<SVGSVGElement>>;
   count: number;
   tooltip?: ReactNode;
 };
 
-export const ActivityStatItem: FC<Props> = ({ id, icon: Icon, count, tooltip }) => {
+export const ActivitySummaryItem: FC<ActivitySummaryItemProps> = ({
+  id,
+  icon: Icon,
+  count,
+  tooltip,
+}) => {
   const { activeId, show } = useTooltipStore();
   const showTooltip = activeId === id;
 

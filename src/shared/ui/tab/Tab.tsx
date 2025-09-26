@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 
 type TabItem = {
   value: string;
@@ -15,16 +15,27 @@ type TabProps = {
 };
 
 export function Tab({ items, value, defaultValue, onValueChange }: TabProps) {
-  const [internalValue, setInternalValue] = useState(defaultValue ?? items[0]?.value);
-  const activeValue = value ?? internalValue;
+  const isControlled = value !== undefined;
+
+  const [internalValue, setInternalValue] = useState(() => {
+    const candidate = defaultValue ?? items[0]?.value;
+    return items.some((i) => i.value === candidate) ? candidate : items[0]?.value;
+  });
+
+  const activeValue = isControlled ? value : internalValue;
 
   const handleChange = (v: string) => {
-    if (onValueChange) {
-      onValueChange(v);
-    } else {
+    onValueChange?.(v);
+    if (!isControlled) {
       setInternalValue(v);
     }
   };
+
+  useEffect(() => {
+    if (!isControlled && !items.some((i) => i.value === internalValue)) {
+      setInternalValue(items[0]?.value);
+    }
+  }, [items, isControlled, internalValue]);
 
   return (
     <div className="flex w-full shadow-[inset_0_-1px_0_0_var(--color-border-secondary)]">

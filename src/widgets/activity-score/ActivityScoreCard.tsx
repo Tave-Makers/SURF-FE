@@ -1,17 +1,22 @@
 'use client';
 
-import { ActivityStatItem } from '@/entities/activity-score/ui/ActivityStatItem';
-import { ActivityStatTooltip } from '@/entities/activity-score/ui/ActivityStatTooltip';
+import { ActivitySummaryItem } from '@/entities/activity-score/ui/ActivitySummaryItem';
+import { ActivitySummaryTooltip } from '@/entities/activity-score/ui/ActivitySummaryTooltip';
 import { activityMetaMap, groupMetaMap } from '@/entities/activity-score/model/meta';
-import { ActivityRecords, SingleActivity, Penalties } from '@/entities/activity-score/model/types';
+import {
+  ActivitySummaryRecords,
+  SingleActivitySummary,
+  ScoreMode,
+  PenaltySummary,
+} from '@/entities/activity-score/model/types';
 
 type ActivityScoreCardProps = {
   score: number;
-  records: ActivityRecords;
-  tab: 'rewards' | 'penalties'; // 탭 상태
+  records: ActivitySummaryRecords;
+  mode: ScoreMode; // 탭 상태
 };
 
-export default function ActivityScoreCard({ score, records, tab }: ActivityScoreCardProps) {
+export default function ActivityScoreCard({ score, records, mode }: ActivityScoreCardProps) {
   return (
     <div className="flex flex-col gap-[2.5rem]">
       {/* 점수 표시 */}
@@ -21,34 +26,34 @@ export default function ActivityScoreCard({ score, records, tab }: ActivityScore
       </div>
 
       {/* 활동 아이콘 + 툴팁 */}
-      {tab === 'rewards' && (
+      {mode === 'REWARD' && (
         <div className="flex justify-center gap-[1.5rem]">
           {/** 상점: 단일 활동 */}
-          {records.rewards.taveActivities.map((item: SingleActivity) => {
+          {records.rewards.taveActivities.map((item: SingleActivitySummary) => {
             const meta = activityMetaMap[item.activityType];
             if (!meta?.Icon) return null;
 
             return (
-              <ActivityStatItem
+              <ActivitySummaryItem
                 key={item.activityType}
                 id={item.activityType}
                 icon={meta.Icon}
                 count={item.count}
                 tooltip={
-                  <ActivityStatTooltip activities={[{ label: meta.label, count: item.count }]} />
+                  <ActivitySummaryTooltip activities={[{ label: meta.label, count: item.count }]} />
                 }
               />
             );
           })}
 
           {/** 상점: 블로그 그룹 */}
-          <ActivityStatItem
+          <ActivitySummaryItem
             id="blogs"
             icon={groupMetaMap.blogs.Icon}
             count={records.rewards.blogs.totalCount}
             tooltip={
-              <ActivityStatTooltip
-                activities={records.rewards.blogs.list.map((c: SingleActivity) => ({
+              <ActivitySummaryTooltip
+                activities={records.rewards.blogs.list.map((c: SingleActivitySummary) => ({
                   label: activityMetaMap[c.activityType]?.label ?? c.activityType,
                   count: c.count,
                 }))}
@@ -58,22 +63,22 @@ export default function ActivityScoreCard({ score, records, tab }: ActivityScore
         </div>
       )}
 
-      {tab === 'penalties' && (
+      {mode === 'PENALTY' && (
         <div className="flex justify-center gap-[1.88rem]">
           {/** 벌점: 지각/결석 그룹 */}
-          {(Object.keys(records.penalties) as (keyof Penalties)[]).map((groupId) => {
+          {(Object.keys(records.penalties) as (keyof PenaltySummary)[]).map((groupId) => {
             const group = records.penalties[groupId];
             const meta = groupMetaMap[groupId];
 
             return (
-              <ActivityStatItem
+              <ActivitySummaryItem
                 key={groupId}
                 id={groupId}
                 icon={meta.Icon}
                 count={group.totalCount}
                 tooltip={
-                  <ActivityStatTooltip
-                    activities={group.list.map((c: SingleActivity) => ({
+                  <ActivitySummaryTooltip
+                    activities={group.list.map((c: SingleActivitySummary) => ({
                       label: activityMetaMap[c.activityType]?.label ?? c.activityType,
                       count: c.count,
                     }))}

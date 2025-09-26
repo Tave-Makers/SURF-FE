@@ -69,7 +69,7 @@ export const WithBottomSheet: Story = {
           size="m"
           placeholder="기수 및 파트를 선택해주세요"
           selectedValue={selectedValue}
-          onClick={() => setIsSelected(true)}
+          onClick={() => setIsSelected((prev) => !prev)}
         />
 
         {isSelected && (

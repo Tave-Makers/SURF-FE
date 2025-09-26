@@ -4,7 +4,7 @@ import { DummyLogo } from '@/shared/ui/logo/DummyLogo';
 export type RouteConfig = {
   id: string;
   path: string;
-  backPath?: string | null;
+  backPath?: string;
   header: HeaderProps;
 };
 

@@ -2,6 +2,7 @@
 
 import Image, { type StaticImageData } from 'next/image';
 import { forwardRef, type HTMLAttributes } from 'react';
+import DefaultCircleUrl from '@/shared/assets/icons/profile/default-circle.svg?url';
 
 type ActivityBadgeProps = HTMLAttributes<HTMLDivElement> & {
   imageSrc?: string | StaticImageData;
@@ -10,8 +11,6 @@ type ActivityBadgeProps = HTMLAttributes<HTMLDivElement> & {
   timestamp?: string;
   loading?: boolean;
 };
-
-const DEFAULT_BADGE = '/icons/default-circle.svg';
 
 export const ActivityBadge = forwardRef<HTMLDivElement, ActivityBadgeProps>(
   (
@@ -37,7 +36,7 @@ export const ActivityBadge = forwardRef<HTMLDivElement, ActivityBadgeProps>(
             <div className="bg-background-quaternary h-full w-full animate-pulse" />
           ) : (
             <Image
-              src={imageSrc || DEFAULT_BADGE}
+              src={imageSrc || DefaultCircleUrl}
               alt={imageAlt || badgeName}
               fill
               sizes="4.06rem"
@@ -56,9 +55,11 @@ export const ActivityBadge = forwardRef<HTMLDivElement, ActivityBadgeProps>(
             </>
           ) : (
             <>
-              <div className="text-body-14-600--1-20 truncate text-black">{badgeName}</div>
+              <div className="text-body-14-600--1-20 text-border-contrast truncate">
+                {badgeName}
+              </div>
               {timestamp && (
-                <time className="text-caption-12-400 text-black/70" dateTime={timestamp}>
+                <time className="text-caption-12-400 text-border-normal" dateTime={timestamp}>
                   {timestamp}
                 </time>
               )}

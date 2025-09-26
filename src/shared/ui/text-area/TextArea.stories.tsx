@@ -13,7 +13,7 @@ const meta: Meta<typeof TextArea> = {
     isDisabled: { control: 'boolean' },
     isOneLine: { control: 'boolean' },
     errorMessage: { control: 'text' },
-    height: { control: 'number' },
+    guideMessage: { control: 'text' },
   },
 };
 export default meta;
@@ -32,7 +32,7 @@ export const WithLimit: Story = {
     isOneLine: false,
     textLimit: 100,
     errorMessage: '',
-    height: 3.81,
+    guideMessage: '',
   },
 };
 
@@ -43,7 +43,7 @@ export const OneLine: Story = {
   },
   args: {
     placeholder: '한 줄만 입력 가능',
-    height: 3.81,
+    guideMessage: '한 줄만 입력 가능',
   },
 };
 
@@ -55,6 +55,5 @@ export const WithError: Story = {
   args: {
     placeholder: '내용 입력',
     errorMessage: '필수 입력 항목입니다.',
-    height: 3.81,
   },
 };

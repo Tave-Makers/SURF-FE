@@ -12,12 +12,12 @@ import {
 export type TextAreaProps = Omit<TextareaHTMLAttributes<HTMLTextAreaElement>, 'onChange'> & {
   value: string;
   onChange: (value: string) => void;
+  guideMessage?: string;
   errorMessage?: string;
   textLimit?: number;
   isDisabled?: boolean;
   placeholder?: string;
   isOneLine?: boolean;
-  height: number;
 };
 
 export const TextArea = forwardRef<HTMLTextAreaElement, TextAreaProps>(
@@ -25,12 +25,12 @@ export const TextArea = forwardRef<HTMLTextAreaElement, TextAreaProps>(
     {
       value,
       onChange,
+      guideMessage,
       errorMessage,
       placeholder = '내용을 입력하세요',
       isDisabled = false,
       isOneLine = false,
       textLimit,
-      height = 3.81,
       className = '',
       ...props
     },
@@ -51,7 +51,6 @@ export const TextArea = forwardRef<HTMLTextAreaElement, TextAreaProps>(
       const el = textareaRef.current;
       if (el) {
         el.style.height = 'auto';
-        el.style.height = `${height * 16}px`;
 
         if (el.scrollHeight > el.clientHeight) {
           el.style.overflowY = 'auto';
@@ -59,7 +58,7 @@ export const TextArea = forwardRef<HTMLTextAreaElement, TextAreaProps>(
           el.style.overflowY = 'hidden';
         }
       }
-    }, [value, height]);
+    }, [value]);
 
     const handleFocus = () => setIsFocused(true);
     const handleBlur = () => setIsFocused(false);
@@ -68,7 +67,7 @@ export const TextArea = forwardRef<HTMLTextAreaElement, TextAreaProps>(
       <div className={`flex flex-col gap-[0.25rem] ${disabledOpacity} ${className}`}>
         <div
           className={`bg-background-normal-darker box-border flex flex-col gap-[0.37rem] rounded-[0.25rem] p-[0.62rem] ${borderColor}`}
-          style={{ height: `${height}rem`, overflow: 'hidden' }}
+          style={{ height: '100%', overflow: 'hidden' }}
         >
           <textarea
             ref={(node) => {
@@ -108,10 +107,14 @@ export const TextArea = forwardRef<HTMLTextAreaElement, TextAreaProps>(
             </div>
           )}
         </div>
-
         {errorMessage && (
           <div className="text-caption-10-400--1 text-foreground-warning px-[0.625rem]">
             {errorMessage}
+          </div>
+        )}
+        {guideMessage && !errorMessage && (
+          <div className="text-caption-10-400--1 text-foreground-normal px-[0.625rem]">
+            {guideMessage}
           </div>
         )}
       </div>

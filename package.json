@@ -16,7 +16,7 @@
   },
   "lint-staged": {
     "*.{js,jsx,ts,tsx}": [
-      "pnpm exec eslint --max-warnings=0 --fix",
+      "pnpm exec eslint --max-warnings=0 --fix --no-warn-ignored",
       "pnpm exec prettier --write"
     ],
     "*.{json,md,css,scss,html}": "pnpm exec prettier --write"
@@ -25,7 +25,8 @@
     "@mynaui/icons-react": "^0.3.9",
     "next": "15.5.2",
     "react": "19.1.0",
-    "react-dom": "19.1.0"
+    "react-dom": "19.1.0",
+    "react-modal-sheet": "^5.1.2"
   },
   "devDependencies": {
     "@chromatic-com/storybook": "4.1.1",
@@ -38,6 +39,7 @@
     "@storybook/addon-docs": "9.1.5",
     "@storybook/addon-vitest": "9.1.5",
     "@storybook/nextjs-vite": "^9.1.5",
+    "@svgr/webpack": "^8.1.0",
     "@tailwindcss/postcss": "^4",
     "@types/eslint-plugin-jsx-a11y": "^6.10.0",
     "@types/node": "^20",

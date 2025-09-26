@@ -64,7 +64,7 @@ export const WheelPicker = ({ onChange, initPeriodIdx = 0, initPartIdx = 0 }: Wh
         <Wheel
           initIdx={initPeriodIdx}
           length={periods.length}
-          width="150px"
+          width={150}
           loop={false}
           setValue={format('periods')}
           onChange={handlePeriodChange}
@@ -75,7 +75,7 @@ export const WheelPicker = ({ onChange, initPeriodIdx = 0, initPartIdx = 0 }: Wh
         <Wheel
           initIdx={initPartIdx}
           length={parts.length}
-          width="150px"
+          width={150}
           loop={false}
           perspective="left"
           setValue={format('parts')}

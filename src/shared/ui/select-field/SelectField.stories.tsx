@@ -1,5 +1,5 @@
-import React, { useState } from 'react';
-import { Meta, StoryObj } from '@storybook/nextjs-vite';
+import type { Meta, StoryObj } from '@storybook/nextjs-vite';
+import { useState } from 'react';
 import { SelectField } from './SelectField';
 
 const meta: Meta<typeof SelectField> = {
@@ -8,40 +8,87 @@ const meta: Meta<typeof SelectField> = {
   tags: ['autodocs'],
   argTypes: {
     size: {
-      control: { type: 'radio', options: ['m', 'l'] },
+      control: { type: 'radio' },
+      options: ['m', 'l'],
     },
-    label: {
+    selectedValue: {
+      control: 'text',
+    },
+    placeholder: {
       control: 'text',
     },
     isDisabled: {
       control: 'boolean',
     },
-  },
-};
-export default meta;
-
-type Story = StoryObj<typeof SelectField>;
-
-export const Size: Story = {
-  render: (args) => {
-    const [isOpen, setIsOpen] = useState(false);
-
-    return (
-      <>
-        <SelectField {...args} isOpen={isOpen} onClick={() => setIsOpen(true)} />
-        {isOpen && (
-          <div className="mt-2 rounded-md bg-gray-100 p-4">
-            <p>여기에 바텀시트 내용 또는 옵션을 표시할 수 있습니다.</p>
-            <button onClick={() => setIsOpen(false)}>닫기</button>
-          </div>
-        )}
-      </>
-    );
+    onClick: { action: 'clicked' },
   },
   args: {
     size: 'm',
-    label: '옵션을 선택하세요',
+    placeholder: '기수 및 파트를 선택해주세요',
+    selectedValue: '',
     isDisabled: false,
-    isOpen: false,
+  },
+};
+
+export default meta;
+type Story = StoryObj<typeof SelectField>;
+
+export const Placeholder: Story = {};
+
+export const Selected: Story = {
+  args: {
+    selectedValue: '5기 - 디자인',
+  },
+};
+
+export const Disabled: Story = {
+  args: {
+    isDisabled: true,
+  },
+};
+
+export const Sizes: Story = {
+  render: () => (
+    <div className="flex w-[250px] flex-col gap-4">
+      <SelectField size="m" placeholder="선택해주세요" selectedValue="" />
+      <SelectField size="l" placeholder="선택해주세요" selectedValue="백엔드" />
+    </div>
+  ),
+};
+
+export const WithBottomSheet: Story = {
+  render: () => {
+    const [selectedValue, setSelectedValue] = useState('');
+    const [isSelected, setIsSelected] = useState(false);
+
+    const options = ['1기 - 데이터 분석', '2기 - 디자인', '3기 - 백엔드', '4기 - 프론트엔드'];
+
+    return (
+      <div className="relative w-[250px]">
+        <SelectField
+          size="m"
+          placeholder="기수 및 파트를 선택해주세요"
+          selectedValue={selectedValue}
+          onClick={() => setIsSelected(true)}
+        />
+
+        {isSelected && (
+          <div className="absolute top-full z-10 mt-2 w-full rounded border bg-white shadow-lg">
+            {options.map((opt) => (
+              <button
+                key={opt}
+                className="block w-full px-4 py-2 text-left hover:bg-gray-100"
+                onClick={() => {
+                  setSelectedValue(opt);
+                  setIsSelected(false);
+                }}
+              >
+                {opt}
+              </button>
+            ))}
+          </div>
+        )}
+      </div>
+    );
   },
 };

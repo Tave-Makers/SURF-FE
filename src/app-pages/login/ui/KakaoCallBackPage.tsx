@@ -19,7 +19,7 @@ export function KakaoCallBackPage() {
     const fetchLogin = async () => {
       try {
         const redirectPath = await handleKakaoLoginCallback(code);
-        router.push(redirectPath);
+        router.replace(redirectPath);
       } catch (err) {
         alert((err as Error).message);
         router.push('/login');

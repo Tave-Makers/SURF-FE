@@ -18,7 +18,7 @@ export function Wheel({
   perspective?: 'left' | 'right' | 'center';
   setValue?: (relative: number, absolute: number) => string;
   onChange?: (val: string) => void;
-  width: React.CSSProperties['width'];
+  width: number;
 }) {
   const wheelSize = 20;
   const slideDegree = 360 / wheelSize;

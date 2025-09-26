@@ -18,7 +18,7 @@ export const ActivityBadge = forwardRef<HTMLDivElement, ActivityBadgeProps>(
     { imageSrc, imageAlt = '', badgeName, timestamp, loading = false, className = '', ...rest },
     ref,
   ) => {
-    const box = 'relative w-[4.06rem] h-[4.06rem] rounded-full overflow-hidden';
+    const badgeBox = 'relative w-[4.06rem] h-[4.06rem] rounded-full overflow-hidden';
 
     return (
       <div
@@ -32,7 +32,7 @@ export const ActivityBadge = forwardRef<HTMLDivElement, ActivityBadgeProps>(
         }
         {...rest}
       >
-        <div className={box}>
+        <div className={badgeBox}>
           {loading ? (
             <div className="bg-background-quaternary h-full w-full animate-pulse" />
           ) : (
@@ -40,7 +40,7 @@ export const ActivityBadge = forwardRef<HTMLDivElement, ActivityBadgeProps>(
               src={imageSrc || DEFAULT_BADGE}
               alt={imageAlt || badgeName}
               fill
-              sizes=" 4.06rem"
+              sizes="4.06rem"
               className="object-cover"
               placeholder="empty"
               priority={false}

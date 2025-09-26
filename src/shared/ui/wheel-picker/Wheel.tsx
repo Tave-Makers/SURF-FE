@@ -1,9 +1,17 @@
 'use client';
 
-import React, { useRef } from 'react';
+import React, { useRef, useMemo, useState, useEffect } from 'react';
 import { KeenSliderOptions, TrackDetails, useKeenSlider } from 'keen-slider/react';
 
-type WheelProps = {
+export function Wheel({
+  initIdx = 0,
+  length,
+  loop = false,
+  perspective = 'center',
+  setValue,
+  onChange,
+  width,
+}: {
   initIdx?: number;
   length: number;
   loop?: boolean;
@@ -11,59 +19,57 @@ type WheelProps = {
   setValue?: (relative: number, absolute: number) => string;
   onChange?: (val: string) => void;
   width: React.CSSProperties['width'];
-};
-
-export function Wheel({
-  initIdx,
-  length,
-  loop,
-  perspective = 'center',
-  setValue,
-  onChange,
-  width,
-}: WheelProps) {
+}) {
   const wheelSize = 20;
-  const slides = length;
   const slideDegree = 360 / wheelSize;
   const slidesPerView = loop ? 9 : 1;
 
-  const [sliderState, setSliderState] = React.useState<TrackDetails | null>(null);
   const size = useRef(0);
+  const [sliderState, setSliderState] = useState<TrackDetails | null>(null);
+  const [radius, setRadius] = useState(0);
 
-  const options = useRef<KeenSliderOptions>({
-    slides: {
-      number: slides,
-      origin: loop ? 'center' : 'auto',
-      perView: slidesPerView,
-    },
-    vertical: true,
-    initial: initIdx || 0,
-    loop,
-    dragSpeed: (val) => {
-      const height = size.current;
-      return (
-        val * (height / ((height / 2) * Math.tan(slideDegree * (Math.PI / 180))) / slidesPerView)
-      );
-    },
-    created: (s) => {
-      size.current = s.size;
-    },
-    updated: (s) => {
-      size.current = s.size;
-    },
-    detailsChanged: (s) => {
-      setSliderState(s.track.details);
-    },
-    rubberband: !loop,
-    mode: 'free-snap',
-  });
+  const options = useMemo<KeenSliderOptions>(
+    () => ({
+      slides: {
+        number: length,
+        origin: loop ? 'center' : 'auto',
+        perView: slidesPerView,
+      },
+      vertical: true,
+      initial: initIdx,
+      loop,
+      dragSpeed: (val) => {
+        const height = size.current;
+        return (
+          val * (height / ((height / 2) * Math.tan(slideDegree * (Math.PI / 180))) / slidesPerView)
+        );
+      },
+      created: (s) => {
+        size.current = s.size;
+        setRadius(s.size / 2);
+      },
+      updated: (s) => {
+        size.current = s.size;
+        setRadius(s.size / 2);
+      },
+      detailsChanged: (s) => {
+        setSliderState(s.track.details);
+      },
+      rubberband: !loop,
+      mode: 'free-snap',
+    }),
+    [length, loop, initIdx, slideDegree, slidesPerView],
+  );
 
-  const [sliderRef, slider] = useKeenSlider<HTMLDivElement>(options.current);
-  const [radius, setRadius] = React.useState(0);
+  const [sliderRef] = useKeenSlider<HTMLDivElement>(options);
 
-  React.useEffect(() => {
-    if (slider.current) setRadius(slider.current.size / 2);
-  }, [slider]);
+  useEffect(() => {
+    if (!sliderState || !onChange) return;
+    const activeIndex = sliderState.rel;
+    const activeValue = setValue ? setValue(activeIndex, sliderState.abs) : String(activeIndex);
+
+    onChange(activeValue);
+  }, [sliderState, setValue, onChange]);
 
   function slideValues() {
     if (!sliderState) return [];
@@ -71,7 +77,7 @@ export function Wheel({
     const activeIndex = sliderState.rel;
     const values: { style: React.CSSProperties; value: string }[] = [];
 
-    for (let i = 0; i < slides; i++) {
+    for (let i = 0; i < length; i++) {
       const distance = (sliderState.slides[i].distance - offset) * slidesPerView;
       const rotate = Math.abs(distance) > wheelSize / 2 ? 180 : distance * (360 / wheelSize) * -1;
       const isActive = i === activeIndex;
@@ -80,7 +86,6 @@ export function Wheel({
         transform: `rotateX(${rotate}deg) translateZ(${radius}px)`,
         WebkitTransform: `rotateX(${rotate}deg) translateZ(${radius}px)`,
         color: isActive ? '#222' : '#828282',
-        fontWeight: 600,
       };
 
       const value = setValue ? setValue(i, sliderState.abs + Math.round(distance)) : String(i);
@@ -90,23 +95,9 @@ export function Wheel({
     return values;
   }
 
-  React.useEffect(() => {
-    if (!sliderState || !onChange) return;
-    const activeIndex = sliderState.rel;
-    const activeValue = setValue ? setValue(activeIndex, sliderState.abs) : String(activeIndex);
-
-    onChange(activeValue);
-  }, [sliderState, onChange, setValue]);
-
   return (
-    <div className={`wheel keen-slider wheel--perspective-${perspective}`} ref={sliderRef}>
-      <div
-        className="wheel__shadow-top"
-        style={{
-          transform: `translateZ(${radius}px)`,
-          WebkitTransform: `translateZ(${radius}px)`,
-        }}
-      />
+    <div className={'wheel keen-slider wheel--perspective-' + perspective} ref={sliderRef}>
+      <div className="wheel__shadow-top" style={{ transform: `translateZ(${radius}px)` }} />
       <div className="wheel__inner" style={{ position: 'relative' }}>
         <div
           className="wheel__highlight"
@@ -130,13 +121,7 @@ export function Wheel({
           ))}
         </div>
       </div>
-      <div
-        className="wheel__shadow-bottom"
-        style={{
-          transform: `translateZ(${radius}px)`,
-          WebkitTransform: `translateZ(${radius}px)`,
-        }}
-      />
+      <div className="wheel__shadow-bottom" style={{ transform: `translateZ(${radius}px)` }} />
     </div>
   );
 }

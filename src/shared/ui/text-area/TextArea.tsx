@@ -32,7 +32,9 @@ export const TextArea = forwardRef<HTMLTextAreaElement, TextAreaProps>(
       isOneLine = false,
       textLimit,
       className = '',
-      ...props
+      onFocus: onFocusProp,
+      onBlur: onBlurProp,
+      ...rest
     },
     ref,
   ) => {
@@ -40,28 +42,28 @@ export const TextArea = forwardRef<HTMLTextAreaElement, TextAreaProps>(
     const [isFocused, setIsFocused] = useState(false);
 
     const textColor = isFocused ? 'text-foreground-normal' : 'text-foreground-hint';
-
     const borderColor = isFocused
       ? 'border border-[color:var(--color-border-primary)]'
       : 'border border-transparent';
-
     const disabledOpacity = isDisabled ? 'opacity-[var(--opacity-50,0.5)]' : '';
 
     useEffect(() => {
       const el = textareaRef.current;
-      if (el) {
-        el.style.height = 'auto';
+      if (!el) return;
+      el.style.height = 'auto';
+      el.style.height = `${el.scrollHeight}px`;
+      el.style.overflowY = el.scrollHeight > el.clientHeight ? 'auto' : 'hidden';
+    }, [value, isOneLine]);
 
-        if (el.scrollHeight > el.clientHeight) {
-          el.style.overflowY = 'auto';
-        } else {
-          el.style.overflowY = 'hidden';
-        }
-      }
-    }, [value]);
+    const handleFocus = (e: React.FocusEvent<HTMLTextAreaElement>) => {
+      setIsFocused(true);
+      onFocusProp?.(e);
+    };
 
-    const handleFocus = () => setIsFocused(true);
-    const handleBlur = () => setIsFocused(false);
+    const handleBlur = (e: React.FocusEvent<HTMLTextAreaElement>) => {
+      setIsFocused(false);
+      onBlurProp?.(e);
+    };
 
     return (
       <div className={`flex flex-col gap-[0.25rem] ${disabledOpacity} ${className}`}>
@@ -84,11 +86,8 @@ export const TextArea = forwardRef<HTMLTextAreaElement, TextAreaProps>(
             onFocus={handleFocus}
             onBlur={handleBlur}
             onChange={(e) => {
-              let newValue = e.target.value;
-
-              if (isOneLine) {
-                newValue = newValue.replace(/\n/g, ' ');
-              }
+              const rawValue = e.target.value;
+              const newValue = isOneLine ? rawValue.replace(/\n/g, ' ') : rawValue;
 
               if (!textLimit || newValue.length <= textLimit) {
                 onChange(newValue);
@@ -98,7 +97,7 @@ export const TextArea = forwardRef<HTMLTextAreaElement, TextAreaProps>(
               isOneLine ? 'overflow-hidden text-ellipsis whitespace-nowrap' : ''
             }`}
             rows={isOneLine ? 1 : undefined}
-            {...props}
+            {...rest}
           />
 
           {textLimit !== undefined && (
@@ -107,16 +106,16 @@ export const TextArea = forwardRef<HTMLTextAreaElement, TextAreaProps>(
             </div>
           )}
         </div>
-        {errorMessage && (
+
+        {errorMessage ? (
           <div className="text-caption-10-400--1 text-foreground-warning px-[0.625rem]">
             {errorMessage}
           </div>
-        )}
-        {guideMessage && !errorMessage && (
+        ) : guideMessage ? (
           <div className="text-caption-10-400--1 text-foreground-normal px-[0.625rem]">
             {guideMessage}
           </div>
-        )}
+        ) : null}
       </div>
     );
   },

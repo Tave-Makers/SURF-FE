@@ -2,7 +2,7 @@ import { create } from 'zustand';
 
 type TooltipStore = {
   activeId: string | null;
-  timerId: NodeJS.Timeout | null;
+  timerId: ReturnType<typeof setTimeout> | null;
   show: (id: string, duration?: number) => void;
   hide: () => void;
 };

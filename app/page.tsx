@@ -1,15 +1,6 @@
-'use client';
-
-import { useRouter } from 'next/navigation';
-import { useEffect } from 'react';
+import { redirect } from 'next/navigation';
 
 export default function RootPage() {
-  const router = useRouter();
-
-  useEffect(() => {
-    router.replace('/home');
-  }, [router]);
-
-  // 추후 로딩 페이지로 대체
-  return <div>초기화 중...</div>;
+  // 추후 로그인 로직 반영 예정
+  redirect('/home');
 }

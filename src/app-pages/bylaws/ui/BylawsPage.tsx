@@ -6,7 +6,7 @@ import GroupActivityTable from '@/features/bylaws/ui/group-activity-table.svg';
 
 export default function BylawsPage() {
   return (
-    <div className="flex w-[375px] flex-col">
+    <div className="flex flex-col pt-[1.25rem]">
       <AccordionGroup
         accordions={[
           {

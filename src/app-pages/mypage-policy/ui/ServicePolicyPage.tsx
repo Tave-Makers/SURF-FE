@@ -1,9 +1,11 @@
 'use client';
 
-export default function ServicePolciyPage() {
+import { PolicyDetailItem } from '@/entities/policy/ui/PolicyDetailItem';
+
+export default function ServicePolicyPage() {
   return (
-    <>
-      <div>ServicePolciyPage</div>
-    </>
+    <div className="pb-[3.31rem]">
+      <PolicyDetailItem policyId="ServicePolicy" />
+    </div>
   );
 }

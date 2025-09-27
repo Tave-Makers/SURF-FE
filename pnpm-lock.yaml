@@ -11,9 +11,6 @@ importers:
       '@mynaui/icons-react':
         specifier: ^0.3.9
         version: 0.3.9(react@19.1.0)
-      '@tanstack/react-query':
-        specifier: ^5.90.2
-        version: 5.90.2(react@19.1.0)
       axios:
         specifier: ^1.12.2
         version: 1.12.2

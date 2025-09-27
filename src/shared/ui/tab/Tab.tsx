@@ -39,7 +39,7 @@ export function Tab({ items, value, defaultValue, onValueChange }: TabProps) {
 
   return (
     <div className="flex w-full shadow-[inset_0_-1px_0_0_var(--color-border-secondary)]">
-      <div className="flex w-full px-[1.25rem]">
+      <div className="flex w-full px-[1rem]">
         {items.map((item) => {
           const isActive = item.value === activeValue;
           return (

@@ -1,6 +1,7 @@
 import React, { ComponentProps } from 'react';
 import { SurfIcon } from '../icon/SurfIcon';
 import { TextInput } from '../text-input/TextInput';
+import { TextButton } from '../text-button/TextButton';
 
 type SurfIconName = ComponentProps<typeof SurfIcon>['name'];
 
@@ -158,14 +159,16 @@ export function Header(props: HeaderProps) {
         <>
           {renderLeftIcon(hasLeftIcon, onClickBack)}
           {renderTitle(title)}
-          <button
-            className={`text-body-14-600--1-20 ml-auto cursor-pointer p-[0.5rem] ${
-              isActive ? 'text-foreground-normal' : 'text-background-quaternary'
-            }`}
-            onClick={onClickTextBtn}
-          >
-            {text}
-          </button>
+          <div className="ml-auto flex justify-center">
+            <TextButton
+              size="s"
+              variant="secondary"
+              isDisabled={!isActive}
+              onClick={onClickTextBtn}
+            >
+              {text}
+            </TextButton>
+          </div>
         </>
       );
       break;

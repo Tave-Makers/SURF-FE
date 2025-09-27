@@ -29,7 +29,7 @@ export const bylawsData: AccordionGroupProps['accordions'] = [
                 '기준 시간의 5분 이상 늦을 경우 지각으로 처리한다.',
                 '병결의 경우 진료 진단서 제출시에만 인정하는 것으로 한다. (단 기수 당 1회 제한)',
                 '기사 자격증, 코딩테스트 등 외부 시험의 경우 증빙서류 제출 시에만 출석으로 인정한다.',
-                'cs관련 자격증, 채용 면접만 가능하며 외부 해커톤의 경우 인정하지 않는다. (증빙서류는 스터디/프로젝트 담당 운영진 혹은 기술 처장에게 제출)',
+                'CS 관련 자격증, 채용 면접만 가능하며 외부 해커톤의 경우 인정하지 않는다. (증빙서류는 스터디/프로젝트 담당 운영진 혹은 기술 처장에게 제출)',
                 '경조사의 경우 당사자 제외 스터디/프로젝트에 허용한다. (해당 팀원 활동점수만 감점, 팀 점수에는 영향 없음)',
               ],
             },
@@ -37,7 +37,10 @@ export const bylawsData: AccordionGroupProps['accordions'] = [
         />
         {/* 유의사항 박스 */}
         <div className="text-foreground-normal text-body-12-400--2 flex flex-col gap-[0.75rem] pt-[1.5rem]">
-          <p>* &apos;인정기준&apos;의 b, c, d, e는 사전에 공지 시에만 인정</p>
+          <p>
+            * &apos;인정기준&apos;은 &apos;기준 시간의 5분 이상 늦을 경우 지각으로 처리한다.&apos;
+            제외 사전에 공지 시에만 인정
+          </p>
           <p>
             * OT, 전반기 만남의 장, 후반기 만남의 장 불참 시 YB는 탈퇴처리, OB는 해당 기수의 OB 활동
             참여 불가
@@ -55,7 +58,7 @@ export const bylawsData: AccordionGroupProps['accordions'] = [
           {
             title: '얼리버드',
             scoreChange: '+5',
-            descriptions: ['정규 세션 시작 20~10분 전 출석', '사적 후 5분까지 참작 가능'],
+            descriptions: ['정규 세션 시작 20~10분 전 출석'],
           },
           {
             title: '뒤풀이',
@@ -64,7 +67,10 @@ export const bylawsData: AccordionGroupProps['accordions'] = [
           {
             title: '번개',
             scoreChange: '+5 / +10',
-            descriptions: ['YB가 개설할 경우, 운영진 1인에게 사진 제출'],
+            descriptions: [
+              'YB가 개설할 경우, 운영진 1인에게 사진 제출',
+              '생성 시 +10 / 참여 시 +5',
+            ],
           },
           {
             title: '아지트 정보 공유',
@@ -122,10 +128,10 @@ export const bylawsData: AccordionGroupProps['accordions'] = [
         items={[
           {
             title: '조별 활동 지각',
-            scoreChange: '-5 to -10',
+            scoreChange: '-5 to -15',
             descriptions: [
-              '10분당 감점처리 되며 최대 30분까지 지각처리',
-              '사적 후 5분까지 참작 가능',
+              '10분당 감점 처리되며 최대 30분까지 지각 처리',
+              '시작 후 5분까지 참작 가능',
             ],
           },
           {
@@ -136,12 +142,15 @@ export const bylawsData: AccordionGroupProps['accordions'] = [
           {
             title: '정규 세션 지각',
             scoreChange: '-10 to -30',
-            descriptions: ['30분 이상 지각 또는 결석'],
+            descriptions: ['10분당 감점 처리 (최대 30분)'],
           },
           {
             title: '정규 세션 결석',
             scoreChange: '-30 / -100',
-            descriptions: ['30분 이상 지각 또는 결석', '사전 공유 시 -30 / 무단 결석 시 -100'],
+            descriptions: [
+              '필수 정규세션 결석 시 탈퇴 처리 (OT, 전반기 만남의 장, 후반기 만남의 장)',
+              '사전 공유 시 -30 / 무단 결석 시 -100',
+            ],
           },
           {
             title: '투표 미참여',

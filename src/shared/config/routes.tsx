@@ -61,6 +61,7 @@ export const ROUTE_CONFIG: RouteConfig[] = [
   {
     id: 'create-profile',
     path: '/onboarding/create-profile',
+    backPath: '/onboarding',
     header: {
       mode: HeaderMode.Default,
       hasLeftIcon: true,

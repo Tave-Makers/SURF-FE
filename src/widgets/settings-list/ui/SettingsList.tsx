@@ -48,7 +48,7 @@ export const SettingsList = () => {
   };
 
   return (
-    <div className="flex w-full flex-col items-start self-stretch pt-[0.62rem]">
+    <div className="flex w-full flex-col items-start self-stretch px-[1rem] pt-[0.62rem]">
       {SETTINGS_ITEMS.map((item) => (
         <SettingsItem
           key={item.id}

@@ -18,11 +18,11 @@ export const ProfileForm = () => {
 
   return (
     <div className="flex flex-col">
-      <div className="flex flex-col items-start self-stretch px-[1rem] pb-[21.72rem]">
+      <div className="flex flex-col items-start self-stretch pb-[21.72rem]">
         <div className="flex flex-col items-start gap-[0.25rem] self-stretch">
           {/* 아래 태그들 글자색 바꿔야 함 */}
-          <div className="text-head-18-700--1 self-stretch text-black">프로필을 만들어봐요</div>
-          <div className="text-body-14-400--2-24 text-black">
+          <div className="text-head-18-700--1 self-stretch text-[#202020]">프로필을 만들어봐요</div>
+          <div className="text-body-14-400--2-24 text-[#202020]">
             성함과 프로필 사진을 등록해주세요.
           </div>
         </div>
@@ -37,7 +37,7 @@ export const ProfileForm = () => {
             <span className="text-body-16-600--1 text-foreground-danger">*</span>
           </div>
 
-          {/* Input 공통 컴포넌트 필요할듯? */}
+          {/* 셀렉트 필드 공통 컴포넌트 들어갈자리 */}
           <div className="flex flex-col items-start justify-center gap-[0.25rem] self-stretch">
             <input
               id="name"
@@ -49,7 +49,7 @@ export const ProfileForm = () => {
               placeholder="이름을 입력해주세요."
               value={data.name || ''}
               onChange={(e) => updateData({ name: e.target.value })}
-              className="text-foreground-hint bg-background-normal-darker flex flex-col items-start gap-[0.37rem] self-stretch rounded-[0.25rem] p-[0.62rem] focus:outline-none"
+              className="placeholder:text-foreground-hint text-foreground-normal bg-background-normal-darker flex flex-col items-start gap-[0.37rem] self-stretch rounded-[0.25rem] p-[0.62rem] focus:outline-none"
             />
             <span id="name-help" className="text-caption-10-400--1 text-foreground-normal">
               정확한 서비스 이용을 위해 실명을 기입해주세요
@@ -58,7 +58,7 @@ export const ProfileForm = () => {
         </div>
       </div>
 
-      <div className="items-start gap-[0.62rem] px-[1rem] pt-[1rem] pb-[1.25rem]">
+      <div className="items-start gap-[0.62rem] pt-[1rem] pb-[1.25rem]">
         <SolidButton
           size="l"
           variant="primary"

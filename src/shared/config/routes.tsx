@@ -47,7 +47,7 @@ export const ROUTE_CONFIG: RouteConfig[] = [
     },
   },
   {
-    id: 'settings',
+    id: 'mypage-settings',
     path: '/mypage/settings',
     header: {
       mode: HeaderMode.Default,
@@ -55,6 +55,82 @@ export const ROUTE_CONFIG: RouteConfig[] = [
       hasLeftIcon: true,
     },
   },
+  {
+    id: 'mypage-scraps',
+    path: '/mypage/scraps',
+    header: {
+      mode: HeaderMode.Default,
+      title: '내가 스크랩한 게시글',
+      hasLeftIcon: true,
+    },
+  },
+  {
+    id: 'mypage-my-posts',
+    path: '/mypage/my-posts',
+    header: {
+      mode: HeaderMode.Default,
+      title: '내가 작성한 게시글',
+      hasLeftIcon: true,
+    },
+  },
+  {
+    id: 'mypage-faq',
+    path: '/mypage/faq',
+    header: {
+      mode: HeaderMode.Default,
+      title: 'FAQ',
+      hasLeftIcon: true,
+    },
+  },
+  {
+    id: 'mypage-feedback',
+    path: '/mypage/feedback',
+    header: {
+      mode: HeaderMode.Default,
+      title: '피드백 보내기',
+      hasLeftIcon: true,
+    },
+  },
+  {
+    id: 'mypage-policy',
+    path: '/mypage/policy',
+    header: {
+      mode: HeaderMode.Default,
+      title: '이용약관',
+      hasLeftIcon: true,
+    },
+  },
+
+  // 약관 상세 페이지
+  {
+    id: 'mypage-policy',
+    path: '/mypage/policy',
+    header: {
+      mode: HeaderMode.Default,
+      title: '이용약관',
+      hasLeftIcon: true,
+    },
+  },
+  {
+    id: 'mypage-policy',
+    path: '/mypage/policy',
+    header: {
+      mode: HeaderMode.Default,
+      title: '이용약관',
+      hasLeftIcon: true,
+    },
+  },
+  {
+    id: 'mypage-policy',
+    path: '/mypage/policy',
+    header: {
+      mode: HeaderMode.Default,
+      title: '이용약관',
+      hasLeftIcon: true,
+    },
+  },
+
+  // onboarding 관련
   {
     id: 'onboarding',
     path: '/onboarding',

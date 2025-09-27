@@ -17,7 +17,7 @@ export const SETTINGS_ITEMS: SettingsItemType[] = [
     id: 'faq',
     leftIconName: 'File',
     text: 'FAQ',
-    action: { type: 'NAVIGATE', payload: '' },
+    action: { type: 'NAVIGATE', payload: '/mypage/faq' },
   },
   {
     id: 'feedback',

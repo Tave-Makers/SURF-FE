@@ -19,10 +19,10 @@ export const ProfileImageUploader = () => {
   };
 
   // 선택된 이미지 파일로 미리보기 URL 생성
-  const [previewUrl, setPreviewUrl] = useState('/default-profile.png');
+  const [previewUrl, setPreviewUrl] = useState('');
   useEffect(() => {
     if (!data.profileImage) {
-      setPreviewUrl('/default-profile.png');
+      setPreviewUrl('');
       return;
     }
     const url = URL.createObjectURL(data.profileImage);
@@ -38,7 +38,7 @@ export const ProfileImageUploader = () => {
         ref={inputRef}
         onChange={handleImageChange}
         style={{ display: 'none' }}
-        className="bg-background-tag-purple focus:outline-none"
+        className="focus:outline-none"
       />
 
       <button onClick={handleImageClick}>

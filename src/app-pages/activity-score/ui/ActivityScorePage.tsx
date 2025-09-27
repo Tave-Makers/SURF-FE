@@ -8,6 +8,7 @@ import {
 import { useState } from 'react';
 import ActivityScoreCard from '@/widgets/activity-score/ActivityScoreCard';
 import { ActivityHistoryList } from '@/entities/activity-score/ui/ActivityHistoryList';
+import { Tab } from '@/shared/ui/tab/Tab';
 
 // TODO: API 응답으로 변경
 const mockData: ActivitySummaryRecords = {
@@ -66,23 +67,15 @@ export default function ActivityScorePage() {
       </div>
 
       {/* 탭 버튼 */}
-      <div className="flex gap-4">
-        <button
-          className={`cursor-pointer rounded px-4 py-2 ${
-            mode === 'REWARD' ? 'bg-blue-500 text-white' : 'bg-gray-200 text-gray-700'
-          }`}
-          onClick={() => setMode('REWARD')}
-        >
-          상점
-        </button>
-        <button
-          className={`cursor-pointer rounded px-4 py-2 ${
-            mode === 'PENALTY' ? 'bg-red-500 text-white' : 'bg-gray-200 text-gray-700'
-          }`}
-          onClick={() => setMode('PENALTY')}
-        >
-          벌점
-        </button>
+      <div className="w-full max-w-[400px]">
+        <Tab
+          items={[
+            { value: 'REWARD', label: '상점' },
+            { value: 'PENALTY', label: '벌점' },
+          ]}
+          value={mode}
+          onValueChange={(v) => setMode(v as ScoreMode)}
+        />
       </div>
 
       {/* 활동 점수 리스트 */}

@@ -47,6 +47,15 @@ export const ROUTE_CONFIG: RouteConfig[] = [
     },
   },
   {
+    id: 'settings',
+    path: '/mypage/settings',
+    header: {
+      mode: HeaderMode.Default,
+      title: '설정 및 도움',
+      hasLeftIcon: true,
+    },
+  },
+  {
     id: 'onboarding',
     path: '/onboarding',
     header: {

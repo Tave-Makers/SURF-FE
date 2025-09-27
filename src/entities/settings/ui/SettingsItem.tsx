@@ -28,7 +28,7 @@ export const SettingsItem = forwardRef<HTMLButtonElement, SettingsItemProps>(
     ref,
   ) => {
     const baseClass =
-      'flex flex-1 w-full self-stretch items-center justify-between px-[1rem] py-[0.87rem] bg-background-normal';
+      'flex flex-1 w-full self-stretch items-center justify-between py-[0.87rem] bg-background-normal';
 
     return (
       <button

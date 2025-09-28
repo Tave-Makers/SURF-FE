@@ -11,7 +11,7 @@ export const getPosts = {
     };
 
     const response = await axiosInstance.get<PostApiResponse>(
-      `/v1/posts/me?pageable=${encodeURIComponent(JSON.stringify(pageable))}`,
+      `/v1/user/posts/me?pageable=${encodeURIComponent(JSON.stringify(pageable))}`,
     );
     return response.data;
   },
@@ -25,7 +25,7 @@ export const getPosts = {
     };
 
     const response = await axiosInstance.get<PostApiResponse>(
-      `/v1/scraps/me?pageable=${encodeURIComponent(JSON.stringify(pageable))}`,
+      `/v1/user/scraps/me?pageable=${encodeURIComponent(JSON.stringify(pageable))}`,
     );
     return response.data;
   },

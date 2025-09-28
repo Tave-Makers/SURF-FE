@@ -8,6 +8,6 @@ import {
 export const postFeedBack = async (
   content: SubmitFeedBackApiRequest,
 ): Promise<SubmitFeedBackApiResponse> => {
-  const response = await axiosInstance.post<SubmitFeedBackApiResponse>(`/v1/feedback`, content);
+  const response = await axiosInstance.post<SubmitFeedBackApiResponse>(`/v1/feedbacks`, content);
   return response.data;
 };

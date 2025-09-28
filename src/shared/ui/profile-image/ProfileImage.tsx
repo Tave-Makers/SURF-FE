@@ -2,6 +2,7 @@
 
 import Image from 'next/image';
 import { useEffect, useState } from 'react';
+import DEFAULT_PROFILE_IMAGE from '@/shared/assets/icons/profile/profile-default.png';
 
 export type ProfileImageSize = 's' | 'm' | 'l' | 'xl';
 
@@ -40,7 +41,7 @@ export function ProfileImage({
 
   const fallback = (
     <Image
-      src="/images/profile-default.svg"
+      src={DEFAULT_PROFILE_IMAGE}
       alt={alt}
       fill
       sizes={`${sizes[size].px}px`}

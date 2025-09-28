@@ -1,5 +1,3 @@
-'use client';
-
 import { POLICY_ITEMS } from '../model/constants';
 
 interface PolicyDetailItemProps {

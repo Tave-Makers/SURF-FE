@@ -35,12 +35,18 @@ export const PostList = ({ type, page = 0, size = 10 }: PostListProps) => {
   }
 
   // 로딩 화면
-  if (isLoadingMyPosts || isLoadingScraps) {
-    return <div>게시글을 불러오는 중...</div>;
+  const isLoading = type === 'my-posts' ? isLoadingMyPosts : isLoadingScraps;
+  if (isLoading) {
+    return (
+      <div role="status" aria-live="polite">
+        게시글을 불러오는 중...
+      </div>
+    );
   }
 
   //에러 발생 화면
-  if (myPostsError || scrapsError) {
+  const error = type === 'my-posts' ? myPostsError : scrapsError;
+  if (error) {
     const error = myPostsError || scrapsError;
     return (
       <div>

@@ -1,6 +1,6 @@
 'use client';
 
-import { PostList } from '@/widgets/post-list';
+import { PostList } from '@/widgets/post-list/ui/PostList';
 // import { useState } from 'react';
 
 export default function ScrapsPage() {

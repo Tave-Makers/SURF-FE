@@ -14,6 +14,7 @@ export const PostCard = ({ post, onClick }: PostCardProps) => {
 
   return (
     <button
+      type="button"
       className="border-border-secondary flex w-full flex-row items-center gap-[1.25rem] self-stretch border-b border-solid py-[1rem]"
       onClick={onClick}
     >

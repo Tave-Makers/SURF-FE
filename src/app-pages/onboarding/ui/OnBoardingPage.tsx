@@ -1,6 +1,6 @@
 import { SolidButton } from '@/shared/ui/solid-button/SolidButton';
 
-export default function SignUpPage() {
+export default function OnBoardingPage() {
   return (
     <>
       <div className="w-hull flex h-[20rem] flex-col px-[1rem]">

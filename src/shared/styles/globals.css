@@ -32,4 +32,10 @@ body {
   a {
     @apply cursor-pointer;
   }
+
+  button:disabled,
+  a[aria-disabled='true'],
+  a.disabled {
+    @apply cursor-not-allowed;
+  }
 }

@@ -59,6 +59,7 @@ export const ROUTE_CONFIG: RouteConfig[] = [
       title: '활동점수',
       hasLeftIcon: true,
       text: '회칙',
+      btnVariant: 'secondary',
       onClickTextBtn: () => alert('회칙 페이지로 이동'),
     },
   },

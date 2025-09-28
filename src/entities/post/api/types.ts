@@ -42,6 +42,13 @@ export type PostApiResponse = {
   empty: boolean;
 };
 
+// 전체 API 응답을 위한 래퍼 타입
+export type FullApiResponse = {
+  code: number;
+  message: string;
+  data: PostApiResponse;
+};
+
 // 게시물 API 요청 타입
 export type PostApiRequest = {
   page: number;

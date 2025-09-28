@@ -21,7 +21,7 @@ export type PostContent = {
   title: string;
   content: string;
   pinned: boolean;
-  postedAt: Date;
+  postedAt: string;
   boardId: number;
   scrappedByMe: boolean;
   scrapCount: number;

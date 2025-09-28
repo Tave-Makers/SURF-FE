@@ -43,10 +43,9 @@ export const useScraps = (
   const router = useRouter();
 
   useEffect(() => {
-    if (!accessToken) {
-      // 인증토큰 없으면 로그인 페이지로 이동
-      router.push('/login');
-    }
+    // persist rehydrate 이후에만 가드 실행
+    if (!useAuthStore.persist?.hasHydrated?.()) return;
+    if (!accessToken) router.replace('/login');
   }, [accessToken, router]);
 
   return useQuery<PostApiResponse>({

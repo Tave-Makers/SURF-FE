@@ -10,7 +10,7 @@ export type PolicyItemProps = Omit<ButtonHTMLAttributes<HTMLButtonElement>, 'dis
   rightIconName?: SurfIconName | null;
   isDisabled?: boolean;
   children: ReactNode;
-  className: string;
+  className?: string;
   onClick?: (e: MouseEvent<HTMLButtonElement>) => void;
 };
 

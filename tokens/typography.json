@@ -2,7 +2,7 @@
   "": {
     "fontFamilies": {
       "nanumsquare-neo": {
-        "value": "NanumSquare Neo",
+        "value": "NanumSquareNeo",
         "type": "fontFamilies"
       },
       "pretendard": {
@@ -458,7 +458,7 @@
       "14_600_-1_20": {
         "value": {
           "fontFamily": "{fontFamilies.pretendard}",
-          "fontWeight": "{fontWeights.pretendard-3}",
+          "fontWeight": "{fontWeights.pretendard-2}",
           "lineHeight": "{lineHeights.7}",
           "fontSize": "{fontSize.7}",
           "letterSpacing": "{letterSpacing.1}",

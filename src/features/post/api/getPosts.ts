@@ -1,5 +1,5 @@
 import { axiosInstance } from '@/shared/lib/axiosInstance';
-import { PostApiResponse, PostApiRequest } from '@/entities/post/api/types';
+import { FullApiResponse, PostApiResponse, PostApiRequest } from '@/entities/post/api/types';
 
 export const getPosts = {
   // 내가 작성한 게시글 조회 요청
@@ -10,10 +10,10 @@ export const getPosts = {
       sort: params?.sort || [],
     };
 
-    const response = await axiosInstance.get<PostApiResponse>(
+    const response = await axiosInstance.get<FullApiResponse>(
       `/v1/user/posts/me?pageable=${encodeURIComponent(JSON.stringify(pageable))}`,
     );
-    return response.data;
+    return response.data.data;
   },
 
   // 스크랩한 게시글 조회 요청
@@ -24,9 +24,9 @@ export const getPosts = {
       sort: params?.sort || [],
     };
 
-    const response = await axiosInstance.get<PostApiResponse>(
+    const response = await axiosInstance.get<FullApiResponse>(
       `/v1/user/scraps/me?pageable=${encodeURIComponent(JSON.stringify(pageable))}`,
     );
-    return response.data;
+    return response.data.data;
   },
 };

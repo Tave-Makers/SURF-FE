@@ -3,21 +3,24 @@
 import {
   forwardRef,
   useRef,
-  useEffect,
+  useLayoutEffect,
   useState,
   type RefObject,
   type TextareaHTMLAttributes,
 } from 'react';
 
-export type TextAreaProps = Omit<TextareaHTMLAttributes<HTMLTextAreaElement>, 'onChange'> & {
+export type TextAreaProps = Omit<
+  TextareaHTMLAttributes<HTMLTextAreaElement>,
+  'onChange' | 'value'
+> & {
   value: string;
+  mode?: 'oneLine' | 'multiLine';
   onChange: (value: string) => void;
   guideMessage?: string;
   errorMessage?: string;
   textLimit?: number;
   isDisabled?: boolean;
   placeholder?: string;
-  isOneLine?: boolean;
 };
 
 export const TextArea = forwardRef<HTMLTextAreaElement, TextAreaProps>(
@@ -25,11 +28,11 @@ export const TextArea = forwardRef<HTMLTextAreaElement, TextAreaProps>(
     {
       value,
       onChange,
+      mode = 'oneLine',
       guideMessage,
       errorMessage,
       placeholder = '내용을 입력하세요',
       isDisabled = false,
-      isOneLine = false,
       textLimit,
       className = '',
       onFocus: onFocusProp,
@@ -41,19 +44,26 @@ export const TextArea = forwardRef<HTMLTextAreaElement, TextAreaProps>(
     const textareaRef = useRef<HTMLTextAreaElement>(null);
     const [isFocused, setIsFocused] = useState(false);
 
-    const textColor = isFocused ? 'text-foreground-normal' : 'text-foreground-hint';
-    const borderColor = isFocused
-      ? 'border border-[color:var(--color-border-primary)]'
-      : 'border border-transparent';
+    const hasValue = value.trim().length > 0;
+
+    const textColor = hasValue ? 'text-foreground-normal' : 'text-foreground-hint';
+    const borderColor = isFocused ? 'border border-border-primary' : 'border border-transparent';
     const disabledOpacity = isDisabled ? 'opacity-[var(--opacity-50,0.5)]' : '';
 
-    useEffect(() => {
+    useLayoutEffect(() => {
+      if (!textareaRef.current || mode === 'oneLine') return;
       const el = textareaRef.current;
-      if (!el) return;
       el.style.height = 'auto';
       el.style.height = `${el.scrollHeight}px`;
       el.style.overflowY = el.scrollHeight > el.clientHeight ? 'auto' : 'hidden';
-    }, [value, isOneLine]);
+    }, [value, mode]);
+
+    useLayoutEffect(() => {
+      if (mode !== 'oneLine' || !textareaRef.current) return;
+      const el = textareaRef.current;
+      el.style.height = '24px';
+      el.style.overflow = 'hidden';
+    }, [mode]);
 
     const handleFocus = (e: React.FocusEvent<HTMLTextAreaElement>) => {
       setIsFocused(true);
@@ -68,17 +78,19 @@ export const TextArea = forwardRef<HTMLTextAreaElement, TextAreaProps>(
     return (
       <div className={`flex flex-col gap-[0.25rem] ${disabledOpacity} ${className}`}>
         <div
-          className={`bg-background-normal-darker box-border flex flex-col gap-[0.37rem] rounded-[0.25rem] p-[0.62rem] ${borderColor}`}
+          className={[
+            'bg-background-normal-darker',
+            'box-border flex flex-col gap-[0.37rem] rounded-[0.25rem] p-[0.625rem]',
+            borderColor,
+          ].join(' ')}
           style={{ height: '100%', overflow: 'hidden' }}
         >
           <textarea
             ref={(node) => {
               textareaRef.current = node;
-              if (typeof ref === 'function') {
-                ref(node);
-              } else if (ref && 'current' in ref) {
+              if (typeof ref === 'function') ref(node);
+              else if (ref && 'current' in ref)
                 (ref as RefObject<HTMLTextAreaElement>).current = node as HTMLTextAreaElement;
-              }
             }}
             value={value}
             placeholder={placeholder}
@@ -86,21 +98,30 @@ export const TextArea = forwardRef<HTMLTextAreaElement, TextAreaProps>(
             onFocus={handleFocus}
             onBlur={handleBlur}
             onChange={(e) => {
-              const rawValue = e.target.value;
-              const newValue = isOneLine ? rawValue.replace(/\n/g, ' ') : rawValue;
-
-              if (!textLimit || newValue.length <= textLimit) {
-                onChange(newValue);
-              }
+              const raw = e.target.value;
+              const next = mode === 'oneLine' ? raw.replace(/\n/g, ' ') : raw;
+              if (!textLimit || next.length <= textLimit) onChange(next);
             }}
-            className={`text-body-14-400--2-24 w-full resize-none bg-transparent outline-none ${textColor} ${
-              isOneLine ? 'overflow-hidden text-ellipsis whitespace-nowrap' : ''
-            }`}
-            rows={isOneLine ? 1 : undefined}
+            maxLength={typeof textLimit === 'number' ? textLimit : undefined}
+            className={[
+              'text-body-14-400--2-24',
+              'w-full resize-none bg-transparent outline-none',
+              'box-content min-h-0 appearance-none border-0 p-0',
+              'placeholder:text-foreground-hint',
+              textColor,
+              mode === 'oneLine'
+                ? 'h-[1.5rem] overflow-hidden leading-[1.5rem] text-ellipsis whitespace-nowrap'
+                : '',
+            ].join(' ')}
+            rows={mode === 'oneLine' ? 1 : undefined}
+            aria-invalid={!!errorMessage}
+            aria-describedby={
+              errorMessage ? 'textarea-error' : guideMessage ? 'textarea-guide' : undefined
+            }
             {...rest}
           />
 
-          {textLimit !== undefined && (
+          {typeof textLimit === 'number' && (
             <div className="text-caption-10-400--1 text-background-hint flex justify-end">
               {value.length} / {textLimit}
             </div>
@@ -108,11 +129,17 @@ export const TextArea = forwardRef<HTMLTextAreaElement, TextAreaProps>(
         </div>
 
         {errorMessage ? (
-          <div className="text-caption-10-400--1 text-foreground-warning px-[0.625rem]">
+          <div
+            id="textarea-error"
+            className="text-caption-10-400--1 text-foreground-warning px-[0.625rem]"
+          >
             {errorMessage}
           </div>
         ) : guideMessage ? (
-          <div className="text-caption-10-400--1 text-foreground-normal px-[0.625rem]">
+          <div
+            id="textarea-guide"
+            className="text-caption-10-400--1 text-foreground-normal px-[0.625rem]"
+          >
             {guideMessage}
           </div>
         ) : null}

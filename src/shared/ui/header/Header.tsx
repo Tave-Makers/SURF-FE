@@ -1,7 +1,7 @@
 import React, { ComponentProps } from 'react';
 import { SurfIcon } from '../icon/SurfIcon';
 import { TextInput } from '../text-input/TextInput';
-import { TextButton } from '../text-button/TextButton';
+import { ButtonVariant, TextButton } from '../text-button/TextButton';
 
 type SurfIconName = ComponentProps<typeof SurfIcon>['name'];
 
@@ -50,7 +50,8 @@ export type TextBtnHeaderProps = {
   onClickBack?: () => void;
   title?: string;
   text: string;
-  isActive?: boolean;
+  isDisabled?: boolean;
+  btnVariant?: ButtonVariant;
   onClickTextBtn?: () => void;
 };
 
@@ -152,7 +153,8 @@ export function Header(props: HeaderProps) {
         onClickBack,
         title = '',
         text,
-        isActive,
+        isDisabled,
+        btnVariant = 'secondary',
         onClickTextBtn,
       } = props;
       content = (
@@ -162,8 +164,8 @@ export function Header(props: HeaderProps) {
           <div className="ml-auto flex justify-center">
             <TextButton
               size="s"
-              variant="secondary"
-              isDisabled={!isActive}
+              variant={btnVariant}
+              isDisabled={isDisabled}
               onClick={onClickTextBtn}
             >
               {text}

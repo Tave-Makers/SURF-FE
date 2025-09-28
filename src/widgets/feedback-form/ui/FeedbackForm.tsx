@@ -2,7 +2,7 @@
 
 import { useState } from 'react';
 import { SolidButton } from '@/shared/ui/solid-button/SolidButton';
-import { useSubmitFeedback } from '../api/useSubmitFeedback';
+import { useSubmitFeedback } from '../../../features/submit-feedback/api/useSubmitFeedback';
 
 const MAX_LENGTH = 500;
 

@@ -15,19 +15,21 @@ interface PostListProps {
 export const PostList = ({ type, page = 0, size = 10 }: PostListProps) => {
   const { accessToken } = useAuthStore();
 
+  const isMyPosts = type === 'my-posts';
+
   // 내가 작성한 게시글 조회
   const {
     data: myPostsData,
     isLoading: isLoadingMyPosts,
     error: myPostsError,
-  } = useMyPosts(page, size);
+  } = useMyPosts(page, size, [], { enabled: !!accessToken && isMyPosts });
 
   // 스크랩한 게시글 조회
   const {
     data: scrapsData,
     isLoading: isLoadingScraps,
     error: scrapsError,
-  } = useScraps(page, size);
+  } = useScraps(page, size, [], { enabled: !!accessToken && !isMyPosts });
 
   // 인증되지 않은 경우 화면
   if (!accessToken) {

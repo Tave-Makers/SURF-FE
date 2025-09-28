@@ -8,7 +8,12 @@ import { useRouter } from 'next/navigation';
 import { useEffect } from 'react';
 
 // 내 게시글 조회 훅
-export const useMyPosts = (page: number = 0, size: number = 10, sort: string[] = []) => {
+export const useMyPosts = (
+  page: number = 0,
+  size: number = 10,
+  sort: string[] = [],
+  opts?: { enabled?: boolean },
+) => {
   const { accessToken } = useAuthStore();
   const router = useRouter();
 
@@ -21,14 +26,19 @@ export const useMyPosts = (page: number = 0, size: number = 10, sort: string[] =
   return useQuery<PostApiResponse>({
     queryKey: ['posts', 'my-posts', page, size, sort],
     queryFn: () => getPosts.getMyPosts({ page, size, sort }),
-    enabled: !!accessToken, // 토큰이 있을 때만 쿼리 실행
+    enabled: !!accessToken && (opts?.enabled ?? true), // 조건부 실행
     staleTime: 5 * 60 * 1000, // 데이터 신선도 5분
     gcTime: 10 * 60 * 1000, // 캐시된 데이터 유지 시간 10분
   });
 };
 
 // 스크랩한 게시글 조회 훅
-export const useScraps = (page: number = 0, size: number = 10, sort: string[] = []) => {
+export const useScraps = (
+  page: number = 0,
+  size: number = 10,
+  sort: string[] = [],
+  opts?: { enabled?: boolean },
+) => {
   const { accessToken } = useAuthStore();
   const router = useRouter();
 
@@ -42,7 +52,7 @@ export const useScraps = (page: number = 0, size: number = 10, sort: string[] = 
   return useQuery<PostApiResponse>({
     queryKey: ['posts', 'scraps', page, size, sort],
     queryFn: () => getPosts.getScraps({ page, size, sort }),
-    enabled: !!accessToken, // 토큰이 있을 때만 쿼리 실행
+    enabled: !!accessToken && (opts?.enabled ?? true), // 조건부 실행
     staleTime: 5 * 60 * 1000, // 데이터 신선도 5분
     gcTime: 10 * 60 * 1000, // 캐시된 데이터 유지 시간 10분
   });

@@ -41,7 +41,7 @@ export const TextArea = forwardRef<HTMLTextAreaElement, TextAreaProps>(
     const textareaRef = useRef<HTMLTextAreaElement>(null);
     const [isFocused, setIsFocused] = useState(false);
 
-    const textColor = isFocused ? 'text-foreground-normal' : 'text-foreground-hint';
+    const textColor = 'placeholder:text-foreground-hint text-foreground-normal';
     const borderColor = isFocused
       ? 'border border-[color:var(--color-border-primary)]'
       : 'border border-transparent';

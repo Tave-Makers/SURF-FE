@@ -61,8 +61,8 @@ export const ROUTE_CONFIG: RouteConfig[] = [
   },
   {
     id: 'mypage-scraps',
-    path: '/mypage/scraps',
-    backPath: '/mypage',
+    path: '/mypage/settings/scraps',
+    backPath: '/mypage/settings',
     header: {
       mode: HeaderMode.Default,
       title: '내가 스크랩한 게시글',
@@ -71,8 +71,8 @@ export const ROUTE_CONFIG: RouteConfig[] = [
   },
   {
     id: 'mypage-my-posts',
-    path: '/mypage/my-posts',
-    backPath: '/mypage',
+    path: '/mypage/settings/my-posts',
+    backPath: '/mypage/settings',
     header: {
       mode: HeaderMode.Default,
       title: '내가 작성한 게시글',
@@ -81,8 +81,8 @@ export const ROUTE_CONFIG: RouteConfig[] = [
   },
   {
     id: 'mypage-faq',
-    path: '/mypage/faq',
-    backPath: '/mypage',
+    path: '/mypage/settings/faq',
+    backPath: '/mypage/settings',
     header: {
       mode: HeaderMode.Default,
       title: 'FAQ',
@@ -91,8 +91,8 @@ export const ROUTE_CONFIG: RouteConfig[] = [
   },
   {
     id: 'mypage-feedback',
-    path: '/mypage/feedback',
-    backPath: '/mypage',
+    path: '/mypage/settings/feedback',
+    backPath: '/mypage/settings',
     header: {
       mode: HeaderMode.Default,
       title: '피드백 보내기',
@@ -101,8 +101,8 @@ export const ROUTE_CONFIG: RouteConfig[] = [
   },
   {
     id: 'mypage-policy',
-    path: '/mypage/policy',
-    backPath: '/mypage',
+    path: '/mypage/settings/policy',
+    backPath: '/mypage/settings',
     header: {
       mode: HeaderMode.Default,
       title: '이용약관',
@@ -113,8 +113,8 @@ export const ROUTE_CONFIG: RouteConfig[] = [
   // 약관 상세 페이지
   {
     id: 'mypage-policy-service-policy',
-    path: '/mypage/policy/service-policy',
-    backPath: '/mypage/policy',
+    path: '/mypage/settings/policy/service-policy',
+    backPath: '/mypage/settings/policy',
     header: {
       mode: HeaderMode.Default,
       title: '이용약관',
@@ -123,8 +123,8 @@ export const ROUTE_CONFIG: RouteConfig[] = [
   },
   {
     id: 'mypage-policy-personal-info-policy',
-    path: '/mypage/policy/personal-info-policy',
-    backPath: '/mypage/policy',
+    path: '/mypage/settings/policy/personal-info-policy',
+    backPath: '/mypage/settings/policy',
     header: {
       mode: HeaderMode.Default,
       title: '이용약관',
@@ -133,8 +133,8 @@ export const ROUTE_CONFIG: RouteConfig[] = [
   },
   {
     id: 'mypage-policy-marketing-info-policy',
-    path: '/mypage/policy/marketing-info-policy',
-    backPath: '/mypage/policy',
+    path: '/mypage/settings/policy/marketing-info-policy',
+    backPath: '/mypage/settings/policy',
     header: {
       mode: HeaderMode.Default,
       title: '이용약관',

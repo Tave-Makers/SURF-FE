@@ -10,11 +10,15 @@ export type PolicyItemProps = Omit<ButtonHTMLAttributes<HTMLButtonElement>, 'dis
   rightIconName?: SurfIconName | null;
   isDisabled?: boolean;
   children: ReactNode;
+  className: string;
   onClick?: (e: MouseEvent<HTMLButtonElement>) => void;
 };
 
 export const PolicyItem = forwardRef<HTMLButtonElement, PolicyItemProps>(
-  ({ rightIconName, isDisabled = false, children, type = 'button', onClick, ...rest }, ref) => {
+  (
+    { rightIconName, isDisabled = false, children, type = 'button', onClick, className, ...rest },
+    ref,
+  ) => {
     const baseClass =
       'flex flex-1 w-full self-stretch items-center justify-between py-[0.87rem] bg-background-normal';
 
@@ -25,7 +29,7 @@ export const PolicyItem = forwardRef<HTMLButtonElement, PolicyItemProps>(
         disabled={isDisabled}
         onClick={onClick}
         {...rest}
-        className={baseClass}
+        className={[baseClass, className].filter(Boolean).join(' ')}
       >
         <div className="flex w-full items-center gap-[1rem]">
           {children && (

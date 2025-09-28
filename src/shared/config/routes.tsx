@@ -117,7 +117,7 @@ export const ROUTE_CONFIG: RouteConfig[] = [
     backPath: '/mypage/settings/policy',
     header: {
       mode: HeaderMode.Default,
-      title: '이용약관',
+      title: 'SURF 서비스 이용약관',
       hasLeftIcon: true,
     },
   },
@@ -127,7 +127,7 @@ export const ROUTE_CONFIG: RouteConfig[] = [
     backPath: '/mypage/settings/policy',
     header: {
       mode: HeaderMode.Default,
-      title: '이용약관',
+      title: '개인정보 수집·이용 동의서',
       hasLeftIcon: true,
     },
   },
@@ -137,7 +137,7 @@ export const ROUTE_CONFIG: RouteConfig[] = [
     backPath: '/mypage/settings/policy',
     header: {
       mode: HeaderMode.Default,
-      title: '이용약관',
+      title: '[선택] 마케팅 정보 수신 동의',
       hasLeftIcon: true,
     },
   },

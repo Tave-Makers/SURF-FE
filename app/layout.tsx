@@ -1,5 +1,7 @@
 import type { ReactNode } from 'react';
 import '@/shared/styles/globals.css';
+import { AuthProvider } from '@/app/providers/AuthProvider';
+import { QueryProvider } from '@/app/providers/QueryProvider';
 
 export default function RootLayout({ children }: { children: ReactNode }) {
   return (
@@ -17,7 +19,11 @@ export default function RootLayout({ children }: { children: ReactNode }) {
         />
       </head>
       <body className="flex min-h-screen items-center justify-center bg-gray-100">
-        <main className="bg-background-normal h-dvh w-dvw sm:w-[360px]">{children}</main>
+        <QueryProvider>
+          <AuthProvider>
+            <main className="bg-background-normal h-dvh w-dvw sm:w-[360px]">{children}</main>
+          </AuthProvider>
+        </QueryProvider>
       </body>
     </html>
   );

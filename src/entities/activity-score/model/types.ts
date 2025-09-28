@@ -1,3 +1,9 @@
+export type CommonResponse<T> = {
+  code: number;
+  message: string;
+  data: T;
+};
+
 // =====================
 // 카드용 타입 (Summary)
 // =====================
@@ -28,14 +34,10 @@ export type ActivitySummaryRecords = {
   penalties: PenaltySummary;
 };
 
-export type ActivitySummaryResponse = {
-  code: number;
-  message: string;
-  data: {
-    score: number;
-    records: ActivitySummaryRecords;
-  };
-};
+export type ActivitySummaryResponse = CommonResponse<{
+  score: number;
+  records: ActivitySummaryRecords;
+}>;
 
 // =====================
 // 리스트용 타입 (History)
@@ -61,14 +63,10 @@ export type ActivityHistory = {
   total: number;
 };
 
-export type ActivityHistoryResponse = {
-  code: number;
-  message: string;
-  data: {
-    content: ActivityHistoryRaw[];
-    pageNumber: number;
-    pageSize: number;
-    numberOfElements: number;
-    isLast: boolean;
-  };
-};
+export type ActivityHistoryResponse = CommonResponse<{
+  content: ActivityHistoryRaw[];
+  pageNumber: number;
+  pageSize: number;
+  numberOfElements: number;
+  isLast: boolean;
+}>;

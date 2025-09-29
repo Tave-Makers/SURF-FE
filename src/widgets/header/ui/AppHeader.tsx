@@ -9,9 +9,7 @@ export function AppHeader() {
   const router = useRouter();
 
   // 현재 경로에 맞는 route 설정 찾기
-  const currentRoute = ROUTE_CONFIG.find(
-    (item) => pathname === item.path || pathname.startsWith(`${item.path}/`),
-  );
+  const currentRoute = ROUTE_CONFIG.find((item) => pathname === item.path);
 
   // 추후 404 페이지로 대체
   if (!currentRoute) return null;

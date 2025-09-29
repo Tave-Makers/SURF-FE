@@ -3,8 +3,7 @@
 import { useState } from 'react';
 import { SolidButton } from '@/shared/ui/solid-button/SolidButton';
 import { useSubmitFeedback } from '../../../features/submit-feedback/api/useSubmitFeedback';
-
-const MAX_LENGTH = 500;
+import { TextArea } from '@/shared/ui/text-area/TextArea';
 
 export const FeedbackForm = () => {
   const [content, setContent] = useState('');
@@ -16,7 +15,6 @@ export const FeedbackForm = () => {
   };
 
   const isContentValid = content.trim().length > 0;
-  const remainingChars = MAX_LENGTH - content.length;
 
   return (
     <div className="flex flex-col px-[1rem]">
@@ -28,20 +26,14 @@ export const FeedbackForm = () => {
           </span>
         </div>
 
-        {/* 아래 textarea 섹션 추후 수정 */}
+        {/* Textarea 섹션 */}
         <div className="flex flex-col gap-2">
-          <textarea
+          <TextArea
             value={content}
-            onChange={(e) => setContent(e.target.value)}
-            maxLength={MAX_LENGTH}
-            placeholder="SURF 서비스에 대한 의견이나 개선사항을 자유롭게 작성해주세요..."
-            className="w-full resize-none rounded-lg border border-gray-300 bg-white p-4 text-sm placeholder-gray-500 focus:border-blue-500 focus:ring-2 focus:ring-blue-200 focus:outline-none"
+            mode="multiLine"
+            onChange={(content) => setContent(content)}
+            textLimit={500}
           />
-          <div className="flex justify-end">
-            <span className={`text-xs ${remainingChars < 50 ? 'text-red-500' : 'text-gray-500'}`}>
-              {content.length}/{MAX_LENGTH}
-            </span>
-          </div>
         </div>
       </div>
 

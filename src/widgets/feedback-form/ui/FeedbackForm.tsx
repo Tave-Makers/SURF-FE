@@ -20,7 +20,8 @@ export const FeedbackForm = () => {
 
   return (
     <div className="flex flex-col px-[1rem]">
-      <div className="flex flex-col gap-[0.62rem] pb-[27.31rem]">
+      <div className="flex flex-col gap-[0.62rem] pt-[1.25rem] pb-[32.81rem]">
+        {/* 타이틀 섹션 */}
         <div className="items-start self-stretch">
           <span className="text-body-16-600--1 text-foreground-normal">
             SURF를 위한 메시지를 남겨주세요!

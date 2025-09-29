@@ -8,9 +8,9 @@ type ActivityHistoryListProps = {
 export const ActivityHistoryList = ({ records }: ActivityHistoryListProps) => {
   return (
     <div className="flex w-full flex-col gap-[2.25rem]">
-      {records.map((record) => (
+      {records.map((record, idx) => (
         <ActivityHistoryItem
-          key={`${record.memberId}-${record.date}-${record.category}-${record.activity}`}
+          key={`${record.memberId}-${record.date}-${record.category}-${record.activity}-${idx}`}
           date={record.date}
           category={record.category}
           activity={record.activity}

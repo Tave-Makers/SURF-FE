@@ -1,65 +1,54 @@
 'use client';
 
-import { ScoreMode, ActivityHistory } from '@/entities/activity-score/model/types';
-import { useState } from 'react';
+import { ScoreMode } from '@/entities/activity-score/model/types';
+import { useEffect, useRef, useState } from 'react';
 import ActivityScoreCard from '@/widgets/activity-score/ActivityScoreCard';
 import { ActivityHistoryList } from '@/entities/activity-score/ui/ActivityHistoryList';
 import { Tab } from '@/shared/ui/tab/Tab';
 import { useActivitySummary } from '@/entities/activity-score/model/useActivitySummary';
-
-// TODO: API 응답으로 변경
-// const mockData: ActivitySummaryRecords = {
-//   rewards: {
-//     taveActivities: [
-//       { activityType: 'UPLOAD_INSTAGRAM_STORY', count: 7 },
-//       { activityType: 'ENGAGE_TECH_SEMINAR', count: 0 },
-//       { activityType: 'EARLY_BIRD', count: 4 },
-//     ],
-//     blogs: {
-//       totalCount: 2,
-//       list: [
-//         { activityType: 'WRITE_WIL', count: 1 },
-//         { activityType: 'UPLOAD_TAVE_REVIEW', count: 1 },
-//       ],
-//     },
-//   },
-//   penalties: {
-//     late: {
-//       totalCount: 9,
-//       list: [
-//         { activityType: 'SESSION_LATE', count: 3 },
-//         { activityType: 'TEAM_LATE', count: 6 },
-//       ],
-//     },
-//     absence: {
-//       totalCount: 4,
-//       list: [
-//         { activityType: 'SESSION_ABSENCE', count: 2 },
-//         { activityType: 'TEAM_ABSENCE', count: 2 },
-//       ],
-//     },
-//   },
-// };
-
-export const mockRewardRecords: ActivityHistory[] = [
-  { memberId: 1, date: '26.09.06', category: '얼리버드', delta: 10, total: 136 },
-  { memberId: 2, date: '26.09.05', category: '기술 블로그', delta: 20, total: 126 },
-];
-
-export const mockPenaltyRecords: ActivityHistory[] = [
-  { memberId: 3, date: '26.09.04', category: '지각', delta: -3, total: 123 },
-  { memberId: 4, date: '26.09.03', category: '결석', delta: -5, total: 118 },
-];
+import { useInfiniteActivityHistory } from '@/entities/activity-score/model/useActivityHistory';
 
 export default function ActivityScorePage() {
+  // 탭 상태
   const [mode, setMode] = useState<ScoreMode>('REWARD');
+
+  // 활동 요약 데이터
   const {
     data: summary,
     isLoading: isSummaryLoading,
     isError: isSummaryError,
   } = useActivitySummary();
 
-  const records = mode === 'REWARD' ? mockRewardRecords : mockPenaltyRecords;
+  // 활동 히스토리 (무한스크롤)
+  const {
+    data: historyRaw,
+    isLoading: isHistoryLoading,
+    isError: isHistoryError,
+    fetchNextPage,
+    hasNextPage,
+    isFetchingNextPage,
+  } = useInfiniteActivityHistory(mode, 5);
+
+  const history = historyRaw?.pages.flatMap((page) => page.content) ?? [];
+
+  // 무한스크롤 sentinel 역할 (리스트 맨 아래 DOM)
+  const loadMoreRef = useRef<HTMLDivElement | null>(null);
+
+  // IntersectionObserver로 sentinel 감시
+  useEffect(() => {
+    if (!loadMoreRef.current || !hasNextPage) return;
+
+    const observer = new IntersectionObserver((entries) => {
+      if (entries[0].isIntersecting) {
+        fetchNextPage().catch((err) => {
+          console.error('fetchNextPage error:', err);
+        });
+      }
+    });
+
+    observer.observe(loadMoreRef.current);
+    return () => observer.disconnect();
+  }, [hasNextPage, fetchNextPage]);
 
   return (
     <div className="flex flex-col items-center">
@@ -86,7 +75,21 @@ export default function ActivityScorePage() {
 
       {/* 활동 점수 리스트 */}
       <div className="flex w-full px-[1rem] pt-[1.88rem]">
-        <ActivityHistoryList records={records} />
+        {isHistoryLoading && <div>불러오는 중...</div>}
+        {isHistoryError && <div>데이터를 불러오는 중 오류가 발생했습니다.</div>}
+        {history && <ActivityHistoryList records={history} />}
+      </div>
+
+      {/* 무한스크롤 sentinel*/}
+      <div
+        ref={loadMoreRef}
+        className="text-body-14-600--1-20 text-foreground-hint flex items-center justify-center py-[1rem]"
+      >
+        {isFetchingNextPage
+          ? '로딩 중...'
+          : hasNextPage
+            ? '스크롤 내려서 더 불러오기'
+            : '마지막 페이지'}
       </div>
     </div>
   );

@@ -57,7 +57,7 @@ export default function ActivityScorePage() {
     data: summary,
     isLoading: isSummaryLoading,
     isError: isSummaryError,
-  } = useActivitySummary(1); // TODO: memberId 실제 값으로 교체
+  } = useActivitySummary();
 
   const records = mode === 'REWARD' ? mockRewardRecords : mockPenaltyRecords;
 

@@ -15,8 +15,11 @@ type WheelPickerProps = {
 };
 
 export const WheelPicker = ({ onChange, initPeriodIdx = 0, initPartIdx = 0 }: WheelPickerProps) => {
-  const [selectedPeriod, setSelectedPeriod] = useState('');
-  const [selectedPart, setSelectedPart] = useState('');
+  const [selectedPeriod, setSelectedPeriod] = useState(periods[initPeriodIdx] ?? '');
+  const [selectedPart, setSelectedPart] = useState(parts[initPartIdx] ?? '');
+
+  const [selectedPeriodIdx, setSelectedPeriodIdx] = useState(initPeriodIdx);
+  const [selectedPartIdx, setSelectedPartIdx] = useState(initPartIdx);
 
   function format<T extends keyof typeof dataMap>(type: T) {
     return (_relative: number, absolute: number): string => {
@@ -28,26 +31,24 @@ export const WheelPicker = ({ onChange, initPeriodIdx = 0, initPartIdx = 0 }: Wh
   }
 
   const handlePeriodChange = (val: string) => {
-    const newValues = { period: val, part: selectedPart };
+    const idx = periods.indexOf(val);
+    if (idx === -1) return;
+    setSelectedPeriodIdx(idx);
     setSelectedPeriod(val);
-    onChange?.(newValues);
+    onChange?.({ period: val, part: selectedPart });
   };
 
   const handlePartChange = (val: string) => {
-    const newValues = { period: selectedPeriod, part: val };
+    const idx = parts.indexOf(val);
+    if (idx === -1) return;
+    setSelectedPartIdx(idx);
     setSelectedPart(val);
-    onChange?.(newValues);
+    onChange?.({ period: selectedPeriod, part: val });
   };
 
   useEffect(() => {
-    if (periods.length > 0 && parts.length > 0) {
-      const initialPeriod = periods[initPeriodIdx] ?? '';
-      const initialPart = parts[initPartIdx] ?? '';
-      setSelectedPeriod(initialPeriod);
-      setSelectedPart(initialPart);
-      onChange?.({ period: initialPeriod, part: initialPart });
-    }
-  }, [initPeriodIdx, initPartIdx, onChange]);
+    onChange?.({ period: selectedPeriod, part: selectedPart });
+  }, [onChange, selectedPeriod, selectedPart]);
 
   return (
     <div
@@ -57,29 +58,48 @@ export const WheelPicker = ({ onChange, initPeriodIdx = 0, initPartIdx = 0 }: Wh
         display: 'flex',
         justifyContent: 'center',
         alignItems: 'center',
-        background: 'transparent',
+        position: 'relative',
       }}
     >
-      <div style={{ width: 155, height: 160 }}>
+      {/* 선택된 값 Highlight */}
+      <div
+        style={{
+          position: 'absolute',
+          top: '50%',
+          left: 0,
+          width: '100%',
+          height: '25px',
+          backgroundColor: '#dfdfdf',
+          borderRadius: '4px',
+          transform: 'translateY(-50%)',
+          zIndex: 1,
+        }}
+      />
+
+      {/* Period Wheel */}
+      <div style={{ width: 155, height: 160, zIndex: 2 }}>
         <Wheel
-          initIdx={initPeriodIdx}
+          value={selectedPeriodIdx}
           length={periods.length}
           width={150}
           loop={false}
           setValue={format('periods')}
-          onChange={handlePeriodChange}
+          onChange={(idx) => handlePeriodChange(periods[idx])}
+          disableHighlight
         />
       </div>
 
-      <div style={{ width: 155, height: 160 }}>
+      {/* Part Wheel */}
+      <div style={{ width: 155, height: 160, zIndex: 2 }}>
         <Wheel
-          initIdx={initPartIdx}
+          value={selectedPartIdx}
           length={parts.length}
           width={150}
           loop={false}
           perspective="left"
           setValue={format('parts')}
-          onChange={handlePartChange}
+          onChange={(idx) => handlePartChange(parts[idx])}
+          disableHighlight
         />
       </div>
     </div>

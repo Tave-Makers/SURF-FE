@@ -1,31 +1,32 @@
 'use client';
 
-import React, { useRef, useMemo, useState, useEffect } from 'react';
-import { KeenSliderOptions, TrackDetails, useKeenSlider } from 'keen-slider/react';
+import React, { useRef, useMemo, useState } from 'react';
+import { KeenSliderOptions, useKeenSlider } from 'keen-slider/react';
 
 export function Wheel({
-  initIdx = 0,
+  value,
+  onChange,
   length,
   loop = false,
   perspective = 'center',
   setValue,
-  onChange,
   width,
+  disableHighlight = false,
 }: {
-  initIdx?: number;
+  value: number;
+  onChange: (val: number) => void;
   length: number;
   loop?: boolean;
   perspective?: 'left' | 'right' | 'center';
   setValue?: (relative: number, absolute: number) => string;
-  onChange?: (val: string) => void;
   width: number;
+  disableHighlight?: boolean;
 }) {
   const wheelSize = 20;
   const slideDegree = 360 / wheelSize;
   const slidesPerView = loop ? 9 : 1;
 
   const size = useRef(0);
-  const [sliderState, setSliderState] = useState<TrackDetails | null>(null);
   const [radius, setRadius] = useState(0);
 
   const options = useMemo<KeenSliderOptions>(
@@ -36,7 +37,7 @@ export function Wheel({
         perView: slidesPerView,
       },
       vertical: true,
-      initial: initIdx,
+      initial: value,
       loop,
       dragSpeed: (val) => {
         const height = size.current;
@@ -53,44 +54,35 @@ export function Wheel({
         setRadius(s.size / 2);
       },
       detailsChanged: (s) => {
-        setSliderState(s.track.details);
+        const activeIndex = s.track.details.rel;
+        onChange(activeIndex);
       },
       rubberband: !loop,
       mode: 'free-snap',
     }),
-    [length, loop, initIdx, slideDegree, slidesPerView],
+    [length, loop, value, slideDegree, slidesPerView, onChange],
   );
 
   const [sliderRef] = useKeenSlider<HTMLDivElement>(options);
 
-  useEffect(() => {
-    if (!sliderState || !onChange) return;
-    const activeIndex = sliderState.rel;
-    const activeValue = setValue ? setValue(activeIndex, sliderState.abs) : String(activeIndex);
-
-    onChange(activeValue);
-  }, [sliderState, setValue, onChange]);
-
   function slideValues() {
-    if (!sliderState) return [];
-    const offset = loop ? 1 / 2 - 1 / slidesPerView / 2 : 0;
-    const activeIndex = sliderState.rel;
+    const activeIndex = value;
     const values: { style: React.CSSProperties; value: string }[] = [];
 
     for (let i = 0; i < length; i++) {
-      const distance = (sliderState.slides[i].distance - offset) * slidesPerView;
+      const distance = i - activeIndex;
       const rotate = Math.abs(distance) > wheelSize / 2 ? 180 : distance * (360 / wheelSize) * -1;
       const isActive = i === activeIndex;
 
       const style = {
         transform: `rotateX(${rotate}deg) translateZ(${radius}px)`,
         WebkitTransform: `rotateX(${rotate}deg) translateZ(${radius}px)`,
-        color: isActive ? '#222' : '#828282',
+        color: isActive ? '#222' : '#c4c4c4',
       };
 
-      const value = setValue ? setValue(i, sliderState.abs + Math.round(distance)) : String(i);
+      const valueLabel = setValue ? setValue(i, i) : String(i);
 
-      values.push({ style, value });
+      values.push({ style, value: valueLabel });
     }
     return values;
   }
@@ -99,20 +91,22 @@ export function Wheel({
     <div className={'wheel keen-slider wheel--perspective-' + perspective} ref={sliderRef}>
       <div className="wheel__shadow-top" style={{ transform: `translateZ(${radius}px)` }} />
       <div className="wheel__inner" style={{ position: 'relative' }}>
-        <div
-          className="wheel__highlight"
-          style={{
-            position: 'absolute',
-            top: '50%',
-            left: 0,
-            width: '100%',
-            height: '25px',
-            backgroundColor: '#dfdfdf',
-            borderRadius: '4px',
-            transform: 'translateY(-50%)',
-            zIndex: 1,
-          }}
-        />
+        {!disableHighlight && (
+          <div
+            className="wheel__highlight"
+            style={{
+              position: 'absolute',
+              top: '50%',
+              left: 0,
+              width: '100%',
+              height: '25px',
+              backgroundColor: '#dfdfdf',
+              borderRadius: '4px',
+              transform: 'translateY(-50%)',
+              zIndex: 1,
+            }}
+          />
+        )}
         <div className="wheel__slides" style={{ width: width + 'px' }}>
           {slideValues().map(({ style, value }, idx) => (
             <div className="wheel__slide" style={{ ...style, zIndex: 2 }} key={idx}>

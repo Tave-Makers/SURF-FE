@@ -2,6 +2,7 @@ import type { ReactNode } from 'react';
 import '@/shared/styles/globals.css';
 import { AuthProvider } from '@/app/providers/AuthProvider';
 import { QueryProvider } from '@/app/providers/QueryProvider';
+import { ReactQueryDevtools } from '@tanstack/react-query-devtools';
 
 export default function RootLayout({ children }: { children: ReactNode }) {
   return (
@@ -22,6 +23,7 @@ export default function RootLayout({ children }: { children: ReactNode }) {
         <QueryProvider>
           <AuthProvider>
             <main className="bg-background-normal h-dvh w-dvw sm:w-[360px]">{children}</main>
+            <ReactQueryDevtools initialIsOpen={false} />
           </AuthProvider>
         </QueryProvider>
       </body>

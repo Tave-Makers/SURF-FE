@@ -83,7 +83,7 @@ export const TextBtnHeader: StoryObj<TextBtnHeaderProps> = {
     onClickBack: () => alert('뒤로가기 클릭'),
     title: '글쓰기',
     text: '완료',
-    isActive: true,
+    isDisabled: false,
     onClickTextBtn: () => alert('완료 버튼 클릭'),
   },
 };

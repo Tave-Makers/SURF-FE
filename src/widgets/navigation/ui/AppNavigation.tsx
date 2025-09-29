@@ -9,8 +9,10 @@ export function AppNavigation() {
   const pathname = usePathname();
 
   // 현재 활성화된 메뉴 ID 계산
-  // 추후 not found page 추가 예정
-  const activeId = ROUTE_CONFIG.find((item) => pathname === item.path)?.id ?? 'home';
+  // 추후 not found page 추가
+  const activeId =
+    ROUTE_CONFIG.find((item) => pathname === item.path || pathname.startsWith(`${item.path}/`))
+      ?.id ?? 'home';
 
   const handleNavigate = (id: string) => {
     const target = ROUTE_CONFIG.find((item) => item.id === id);

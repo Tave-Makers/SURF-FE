@@ -7,7 +7,7 @@ import { SurfIcon } from '@/shared/ui/icon/SurfIcon';
 type SurfIconName = ComponentProps<typeof SurfIcon>['name'];
 
 type ButtonSize = 's' | 'm' | 'l';
-type ButtonVariant = 'primary' | 'secondary' | 'warning';
+export type ButtonVariant = 'primary' | 'secondary' | 'warning';
 
 export type TextButtonProps = Omit<
   ButtonHTMLAttributes<HTMLButtonElement>,

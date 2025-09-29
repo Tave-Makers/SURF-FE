@@ -4,6 +4,7 @@
 
 html,
 body {
+  font-family: Pretendard, NanumSquareNeo, sans-serif;
   font-family: Pretendard, sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
@@ -27,6 +28,19 @@ body {
 
 .react-modal-sheet-container {
   height: auto !important;
+}
+
+@layer base {
+  button,
+  a {
+    @apply cursor-pointer;
+  }
+
+  button:disabled,
+  a[aria-disabled='true'],
+  a.disabled {
+    @apply cursor-not-allowed;
+  }
 }
 
 .wheel.keen-slider {

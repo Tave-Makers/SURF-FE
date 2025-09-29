@@ -9,7 +9,9 @@ export function AppHeader() {
   const router = useRouter();
 
   // 현재 경로에 맞는 route 설정 찾기
-  const currentRoute = ROUTE_CONFIG.find((item) => pathname === item.path);
+  const currentRoute = ROUTE_CONFIG.find(
+    (item) => pathname === item.path || pathname.startsWith(`${item.path}/`),
+  );
 
   // 추후 404 페이지로 대체
   if (!currentRoute) return null;
@@ -19,16 +21,12 @@ export function AppHeader() {
     return { ...header, onClickBack: back };
   }
 
-  // 뒤로가기 동작 정의
+  // 뒤로가기 동작
   const handleBack = () => {
-    const { backPath } = currentRoute;
-
-    if (typeof backPath === 'string') {
-      // backPath가 지정된 경우 - 항상 해당 경로로 이동
-      router.push(backPath);
-    } else {
-      // backPath가 없는 경우 - 브라우저 히스토리 기반 이동
+    if (window.history.length > 1) {
       router.back();
+    } else {
+      router.push(currentRoute.backPath);
     }
   };
 

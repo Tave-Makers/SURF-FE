@@ -1,6 +1,1 @@
-import { redirect } from 'next/navigation';
-
-export default function RootPage() {
-  // 추후 로그인 로직 반영 예정
-  redirect('/home');
-}
+export { HomePage as default } from '@/app-pages/home/ui/HomePage';

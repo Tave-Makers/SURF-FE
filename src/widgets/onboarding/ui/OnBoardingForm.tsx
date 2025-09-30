@@ -5,10 +5,15 @@ import { OnBoardingFormData } from '@/features/onboarding/model/types';
 import { ProfileStep } from '@/features/onboarding/ui/ProfileStep';
 import { TrackUnivStep } from '@/features/onboarding/ui/TrackUnivStep';
 import { EmailPhoneStep } from '@/features/onboarding/ui/EmailPhoneStep';
+import { submitOnBoarding } from '@/features/onboarding/api/submitOnBoarding';
+import { useRouter } from 'next/navigation';
+import axios from 'axios';
+import { DefaultError } from '@/shared/lib/handleApiError';
 
 export default function OnBoardingForm() {
   const [step, setStep] = useState(0);
   const methods = useFormContext<OnBoardingFormData>();
+  const router = useRouter();
   type StepConfig = {
     component: React.FC;
     title: string;
@@ -27,7 +32,7 @@ export default function OnBoardingForm() {
       component: TrackUnivStep,
       title: '필수 정보를 입력해주세요.',
       description: '기존 TAVE 활동 정보를 입력해주세요.',
-      fields: ['tracks', 'university', 'gradSchool'],
+      fields: ['tracks', 'university', 'graduateSchool'],
     },
     {
       component: EmailPhoneStep,
@@ -40,21 +45,40 @@ export default function OnBoardingForm() {
 
   async function handleNext() {
     const isValid = await methods.trigger(steps[step].fields);
-
     if (!isValid) return;
 
     if (step < steps.length - 1) {
-      setStep(step + 1);
+      setStep((prev) => prev + 1);
     } else {
       // 전체 값 제출
-      await methods.handleSubmit((data) => {
-        // 여기서 최종 데이터 확인 가능
-        console.log('최종 온보딩 데이터:', data);
-        alert(JSON.stringify(data, null, 2)); // 확인용
+      await methods.handleSubmit(async (data) => {
+        try {
+          await submitOnBoarding(data);
+          router.push('/home');
+        } catch (error) {
+          if (axios.isAxiosError(error) && error.response) {
+            const status = error.response.status;
+            const data = error.response.data as DefaultError;
+
+            switch (status) {
+              case 400:
+                alert(data.message || '입력한 정보가 올바르지 않습니다.');
+                router.push('/onboarding');
+                break;
+              case 409:
+                alert(data.message || '이미 존재하는 회원입니다. 로그인 페이지로 이동합니다.');
+                router.push('/login');
+                break;
+              default:
+                alert(data.message || '알 수 없는 오류가 발생했습니다.');
+            }
+          } else {
+            alert('네트워크 오류가 발생했습니다. 다시 시도해주세요.');
+          }
+        }
       })();
     }
   }
-
   return (
     <OnBoardingLayout
       step={step}

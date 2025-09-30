@@ -16,7 +16,7 @@ export default function OnBoardingPage() {
       profileImageUrl: '',
       tracks: [{ generation: null, part: null }],
       university: '',
-      gradSchool: '',
+      graduateSchool: '',
       email: '',
       phoneNumber: '',
     },

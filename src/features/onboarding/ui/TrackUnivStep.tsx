@@ -100,7 +100,7 @@ export function TrackUnivStep() {
           />
           {isGraduateStudent && (
             <Controller
-              name="gradSchool"
+              name="graduateSchool"
               control={control}
               //   rules={{ required: '대학원은 필수 입력값입니다.' }}
               render={({ field, fieldState }) => (
@@ -120,7 +120,7 @@ export function TrackUnivStep() {
           onChange={(e) => {
             const checked = e.target.checked;
             setIsGraduateStudent(checked);
-            if (!checked) setValue('gradSchool', '');
+            if (!checked) setValue('graduateSchool', '');
           }}
           isChecked={isGraduateStudent}
         />

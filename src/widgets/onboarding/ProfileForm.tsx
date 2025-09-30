@@ -4,6 +4,7 @@ import { useRouter } from 'next/navigation';
 import { useOnboardingStore } from '@/entities/user/model/onboardingStore';
 import { ProfileImageUploader } from '@/features/user/upload-profile-image/ui/ProfileImageUploader';
 import { SolidButton } from '@/shared/ui/solid-button/SolidButton';
+import { TextArea } from '@/shared/ui/text-area/TextArea';
 
 export const ProfileForm = () => {
   const router = useRouter();
@@ -36,32 +37,24 @@ export const ProfileForm = () => {
             <span className="text-body-16-600--1 text-foreground-danger">*</span>
           </div>
 
-          {/* 공통 컴포넌트 사용? */}
           <div className="flex flex-col items-start justify-center gap-[0.25rem] self-stretch">
-            <input
-              id="name"
-              name="name"
-              required
-              aria-required="true"
-              aria-describedby="name-help"
-              autoComplete="name"
-              placeholder="이름을 입력해주세요."
+            <TextArea
               value={data.name || ''}
-              onChange={(e) => updateData({ name: e.target.value })}
-              className="placeholder:text-foreground-hint text-foreground-normal bg-background-normal-darker flex flex-col items-start gap-[0.37rem] self-stretch rounded-[0.25rem] p-[0.62rem] focus:outline-none"
+              mode="oneLine"
+              onChange={(value) => updateData({ name: value })}
+              guideMessage="정확한 서비스 이용을 위해 실명을 기입해주세요"
+              placeholder="이름을 입력해주세요."
+              className="w-full"
             />
-            <span id="name-help" className="text-caption-10-400--1 text-foreground-normal">
-              정확한 서비스 이용을 위해 실명을 기입해주세요
-            </span>
           </div>
         </div>
       </div>
 
-      <div className="items-start gap-[0.62rem] pt-[1rem] pb-[1.25rem]">
+      <footer className="sticky right-0 bottom-0 left-0 items-start gap-[0.62rem] pt-[1rem] pb-[calc(env(safe-area-inset-bottom,0px)+1.25rem)]">
         <SolidButton size="l" variant="primary" onClick={handleNext} isDisabled={isNextDisabled}>
           다음
         </SolidButton>
-      </div>
+      </footer>
     </div>
   );
 };

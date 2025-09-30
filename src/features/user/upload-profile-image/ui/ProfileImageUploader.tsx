@@ -2,6 +2,7 @@
 
 import { useRef, useEffect, useState } from 'react';
 import { useOnboardingStore } from '@/entities/user/model/onboardingStore';
+import { ProfileImage } from '@/shared/ui/profile-image/ProfileImage';
 
 export const ProfileImageUploader = () => {
   const { data, updateData } = useOnboardingStore();
@@ -42,12 +43,15 @@ export const ProfileImageUploader = () => {
       />
 
       <button onClick={handleImageClick}>
-        <img
-          src={previewUrl}
-          alt="프로필 이미지 선택"
-          // alt는 프로필 컴포넌트로 바꿔야 함
-          className="aspect-square h-[6rem] w-[6rem] object-cover focus:outline-none"
-        />
+        {previewUrl ? (
+          <img
+            src={previewUrl}
+            alt="선택한 프로필 이미지"
+            className="aspect-square h-[6rem] w-[6rem] rounded-[0.5rem] object-cover focus:outline-none"
+          />
+        ) : (
+          <ProfileImage size="xl" />
+        )}
       </button>
     </div>
   );

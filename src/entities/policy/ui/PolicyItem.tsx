@@ -33,7 +33,7 @@ export const PolicyItem = forwardRef<HTMLButtonElement, PolicyItemProps>(
       >
         <div className="flex w-full items-center gap-[1rem]">
           {children && (
-            <span className="font-body-14-400--2-22 text-foreground-normal">{children}</span>
+            <span className="text-body-14-400--2-22 text-foreground-normal">{children}</span>
           )}
         </div>
         {rightIconName && (

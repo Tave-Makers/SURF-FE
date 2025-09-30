@@ -4,7 +4,11 @@
 
 html,
 body {
-  font-family: NanumSquareNeo, Pretendard, sans-serif;
+  font-family: Pretendard, NanumSquareNeo, sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  height: 100%;
+  overflow: hidden;
 }
 
 .placeholder-body-14-600--1-24::placeholder {
@@ -16,6 +20,16 @@ body {
   text-indent: 0px;
   text-transform: none;
   text-decoration: none;
+}
+
+.react-modal-sheet-root {
+  margin-left: auto;
+  margin-right: auto;
+
+  @media (min-width: 640px) {
+    /* main width 변경에 따라 동일하게 변경 필요 */
+    width: 360px !important;
+  }
 }
 
 .react-modal-sheet-header {
@@ -38,4 +52,63 @@ body {
   a.disabled {
     @apply cursor-not-allowed;
   }
+}
+
+.wheel.keen-slider {
+  display: block;
+  color: #828282;
+  height: 100%;
+  overflow: visible;
+  width: 100%;
+}
+.wheel--perspective-right .wheel__inner {
+  perspective-origin: calc(50% + 100px) 50%;
+  transform: translateX(10px);
+  -webkit-transform: translateX(10px);
+}
+.wheel--perspective-left .wheel__inner {
+  perspective-origin: calc(50% - 100px) 50%;
+  transform: translateX(-10px);
+  -webkit-transform: translateX(-10px);
+}
+.wheel__inner {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  perspective: 1000px;
+  transform-style: preserve-3d;
+  height: 20%;
+  width: 100%;
+}
+.wheel__slides {
+  height: 100%;
+  position: relative;
+  width: 100%;
+}
+.wheel__shadow-top,
+.wheel__shadow-bottom {
+  background: linear-gradient(to bottom, rgba(251, 250, 255, 1) 0%, rgba(0, 0, 0, 0) 15%);
+  left: 0;
+  height: calc(42% - 2px);
+  width: 100%;
+  position: relative;
+  margin-top: -2px;
+  z-index: 5;
+}
+.wheel__shadow-bottom {
+  background: linear-gradient(to bottom, rgba(0, 0, 0, 0) 85%, rgba(251, 250, 255, 1) 100%);
+  margin-top: 2px;
+  border-bottom: none;
+}
+.wheel__slide {
+  align-items: center;
+  backface-visibility: hidden;
+  -webkit-backface-visibility: hidden;
+  display: flex;
+  font-size: 18px;
+  font-weight: 500;
+  height: 100%;
+  width: 100%;
+  position: absolute;
+  justify-content: center;
 }

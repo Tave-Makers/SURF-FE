@@ -4,7 +4,7 @@ import { usePathname, useRouter } from 'next/navigation';
 import { Header, HeaderMode, HeaderProps } from '@/shared/ui/header/Header';
 import { ROUTE_CONFIG } from '@/shared/config/routes';
 
-export function AppHeader() {
+export function AppHeader({ customBack }: { customBack?: () => void }) {
   const pathname = usePathname();
   const router = useRouter();
 
@@ -21,6 +21,11 @@ export function AppHeader() {
 
   // 뒤로가기 동작
   const handleBack = () => {
+    if (customBack) {
+      customBack();
+      return;
+    }
+
     if (window.history.length > 1) {
       router.back();
     } else {

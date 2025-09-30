@@ -10,8 +10,8 @@ import {
 } from 'react';
 
 export type TextAreaProps = Omit<TextareaHTMLAttributes<HTMLTextAreaElement>, 'onChange'> & {
-  value: string;
-  onChange: (value: string) => void;
+  value?: string;
+  onChange?: (value: string) => void;
   guideMessage?: string;
   errorMessage?: string;
   textLimit?: number;
@@ -90,7 +90,7 @@ export const TextArea = forwardRef<HTMLTextAreaElement, TextAreaProps>(
               const newValue = isOneLine ? rawValue.replace(/\n/g, ' ') : rawValue;
 
               if (!textLimit || newValue.length <= textLimit) {
-                onChange(newValue);
+                onChange?.(newValue);
               }
             }}
             className={`text-body-14-400--2-24 w-full resize-none bg-transparent outline-none ${textColor} ${
@@ -102,7 +102,7 @@ export const TextArea = forwardRef<HTMLTextAreaElement, TextAreaProps>(
 
           {textLimit !== undefined && (
             <div className="text-caption-10-400--1 text-background-hint flex justify-end">
-              {value.length} / {textLimit}
+              {value?.length} / {textLimit}
             </div>
           )}
         </div>

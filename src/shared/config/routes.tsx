@@ -4,7 +4,7 @@ import { DummyLogo } from '@/shared/ui/logo/DummyLogo';
 export type RouteConfig = {
   id: string;
   path: string;
-  backPath?: string;
+  backPath: string;
   header: HeaderProps;
 };
 
@@ -12,6 +12,7 @@ export const ROUTE_CONFIG: RouteConfig[] = [
   {
     id: 'home',
     path: '/home',
+    backPath: '/home',
     header: {
       mode: HeaderMode.Default,
       title: '홈',
@@ -26,6 +27,7 @@ export const ROUTE_CONFIG: RouteConfig[] = [
   {
     id: 'chat',
     path: '/chat',
+    backPath: '/home',
     header: {
       mode: HeaderMode.Default,
       title: '채팅',
@@ -40,6 +42,7 @@ export const ROUTE_CONFIG: RouteConfig[] = [
   {
     id: 'mypage',
     path: '/mypage',
+    backPath: '/home',
     header: {
       mode: HeaderMode.Logo,
       logo: <DummyLogo />,
@@ -58,6 +61,7 @@ export const ROUTE_CONFIG: RouteConfig[] = [
   {
     id: 'onboarding',
     path: '/onboarding',
+    backPath: '/login',
     header: {
       mode: HeaderMode.Default,
       hasLeftIcon: true,

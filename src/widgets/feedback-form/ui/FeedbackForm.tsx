@@ -37,7 +37,7 @@ export const FeedbackForm = () => {
         </div>
       </div>
 
-      <div className="pt-[1rem] pb-[1.25rem]">
+      <footer className="sticky right-0 bottom-0 left-0 pt-[1rem] pb-[calc(env(safe-area-inset-bottom,0px)+1.25rem)]">
         <SolidButton
           size="l"
           variant="primary"
@@ -46,7 +46,7 @@ export const FeedbackForm = () => {
         >
           {isPending ? '보내는 중...' : '보내기'}
         </SolidButton>
-      </div>
+      </footer>
     </div>
   );
 };

@@ -5,6 +5,17 @@ import { Tab } from '@/shared/ui/tab/Tab';
 import { FieldGroup } from '@/shared/ui/field-group/FieldGroup';
 import { TextArea } from '@/shared/ui/text-area/TextArea';
 import { ActivityBadge } from '@/shared/ui/activity-badge/ActivityBadge';
+import { CareerCard } from '@/entities/user/ui/career-card/CareerCard';
+import type { CareerDTO } from '@/entities/user/model/types';
+
+const userInfo: CareerDTO = {
+  careerId: 3,
+  companyName: '서프 컴퍼니',
+  position: '주니어 개발자',
+  startDate: '2023-01',
+  endDate: '',
+  isWorking: true,
+};
 
 export function ProfileTabs() {
   const [tab, setTab] = useState('profile');
@@ -33,7 +44,7 @@ export function ProfileTabs() {
               <TextArea value="테이브대학교 대학원" onChange={() => {}} readOnly />
             </FieldGroup>
             <FieldGroup title="경력" isRequired>
-              <TextArea value="테이브 개발자" onChange={() => {}} readOnly />
+              <CareerCard userInfo={userInfo} />
             </FieldGroup>
           </div>
         ) : (

@@ -50,12 +50,10 @@ export const ProfileForm = () => {
         </div>
       </div>
 
-      <div>
-        <footer className="sticky right-0 bottom-0 left-0 items-start gap-[0.62rem] pt-[1rem] pb-[calc(env(safe-area-inset-bottom,0px)+1.25rem)]">
-          <SolidButton size="l" variant="primary" onClick={handleNext} isDisabled={isNextDisabled}>
-            다음
-          </SolidButton>
-        </footer>
+      <div className="items-start gap-[0.62rem] pt-[1rem] pb-[1.25rem]">
+        <SolidButton size="l" variant="primary" onClick={handleNext} isDisabled={isNextDisabled}>
+          다음
+        </SolidButton>
       </div>
     </div>
   );

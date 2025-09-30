@@ -58,4 +58,25 @@ export const ROUTE_CONFIG: RouteConfig[] = [
       hasLeftIcon: true,
     },
   },
+  {
+    id: 'profile',
+    path: '/profile',
+    backPath: '/mypage', // 임시
+    header: {
+      mode: HeaderMode.Default,
+      hasLeftIcon: true,
+    },
+  },
+  {
+    id: 'mypage-edit',
+    path: '/mypage/edit',
+    backPath: '/mypage', // 임시
+    header: {
+      mode: HeaderMode.TextBtn,
+      title: '프로필 수정',
+      text: '저장',
+      btnVariant: 'primary',
+      onClickTextBtn: () => alert('저장'),
+    },
+  },
 ];

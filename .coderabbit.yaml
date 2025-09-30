@@ -43,11 +43,11 @@ reviews:
         8. 리뷰 포인트는 문제점, 대안, 장단점을 논리적으로 제시하고, 필요 시 예시 코드도 포함
         9. 리뷰는 꼭 필요한 부분에 집중하되, 전체 맥락 이해를 돕기 위해 추가 설명은 캡션이나 요약으로 제공
         10. FSD 레이어 배치를 점검하고, 잘못된 위치일 경우 원인과 권장 위치를 함께 제시
-          - entities: "도메인 상태/타입/모델/UI"
-          - features: "도메인 기능/액션 단위"
-          - widgets: "여러 features/entities를 조립한 UI 블록"
+          - shared: 전역 공용 모듈 (비즈니스 무관)
+          - entities: 도메인 엔터티 (상태/타입/모델/UI - 비즈니스 객체 단위)
+          - features: 사용자 기능 단위 (액션/인터랙션 - 비즈니스 시나리오 단위)
+          - widgets: 기능 조합 UI 블록 (features + entities 조립)
           - app-pages: "페이지 단위 화면 조립"
-          - shared: "전역 공용 모듈"
 
   auto_review:
     enabled: true # PR 생성 시 자동 리뷰

@@ -5,7 +5,7 @@ import { FieldGroup } from './FieldGroup';
 import { TextArea } from '@/shared/ui/text-area/TextArea';
 
 const meta: Meta<typeof FieldGroup> = {
-  title: 'Widgets/UI/FieldGroup',
+  title: 'Shared/UI/FieldGroup',
   component: FieldGroup,
   tags: ['autodocs'],
   argTypes: {

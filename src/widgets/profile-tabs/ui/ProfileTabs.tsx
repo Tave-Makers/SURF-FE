@@ -23,17 +23,17 @@ export function ProfileTabs() {
         {tab === 'profile' ? (
           <div className="flex flex-col gap-[1.5rem] px-[1rem] py-[1.25rem]">
             <FieldGroup title="전화번호" isRequired>
-              <TextArea value="010-1234-5678" onChange={() => {}} />
+              <TextArea value="010-1234-5678" onChange={() => {}} readOnly />
             </FieldGroup>
             <FieldGroup title="이메일" isRequired>
-              <TextArea value="test@test.com" onChange={() => {}} />
+              <TextArea value="test@test.com" onChange={() => {}} readOnly />
             </FieldGroup>
             <FieldGroup title="학교" isRequired>
-              <TextArea value="테이브대학교" onChange={() => {}} />
-              <TextArea value="테이브대학교 대학원" onChange={() => {}} />
+              <TextArea value="테이브대학교" onChange={() => {}} readOnly />
+              <TextArea value="테이브대학교 대학원" onChange={() => {}} readOnly />
             </FieldGroup>
             <FieldGroup title="경력" isRequired>
-              <TextArea value="테이브 개발자" onChange={() => {}} />
+              <TextArea value="테이브 개발자" onChange={() => {}} readOnly />
             </FieldGroup>
           </div>
         ) : (

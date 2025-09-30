@@ -11,7 +11,8 @@ import { TextArea } from '@/shared/ui/text-area/TextArea';
 import { FieldGroup } from '@/widgets/field-group/ui/FieldGroup';
 import { SolidButton } from '@/shared/ui/solid-button/SolidButton';
 import { useState } from 'react';
-import { OnBoardingFormData } from '@/features/onboarding/model/types';
+import { OnBoardingFormData, TrackPart } from '@/features/onboarding/model/types';
+import { formatTrackLabel, mapToApiTrack } from '../lib/trackMapper';
 
 export function TrackUnivStep() {
   const { control, setValue } = useFormContext<OnBoardingFormData>();
@@ -22,7 +23,7 @@ export function TrackUnivStep() {
 
   const [isSheetOpen, setIsSheetOpen] = useState(false);
   const [editingIndex, setEditingIndex] = useState<number | null>(null);
-  const [tempTrack, setTempTrack] = useState<{ period: string; part: string } | null>(null);
+  const [tempTrack, setTempTrack] = useState<{ generation: number; part: TrackPart } | null>(null);
 
   const [isGraduateStudent, setIsGraduateStudent] = useState(false);
 
@@ -49,13 +50,16 @@ export function TrackUnivStep() {
                 size="l"
                 placeholder="기수 및 파트를 선택해주세요"
                 selectedValue={
-                  field.period && field.part ? `${field.period} ${field.part}` : undefined
+                  field.generation && field.part
+                    ? formatTrackLabel(field.generation, field.part)
+                    : undefined
                 }
                 onClick={() => {
                   setEditingIndex(idx);
                   setIsSheetOpen(true);
                 }}
               />
+
               {fields.length > 1 && (
                 <button onClick={() => remove(idx)} className="p-[0.6rem]">
                   <SurfIcon size="l" name="TrashOne" />
@@ -65,11 +69,11 @@ export function TrackUnivStep() {
           ))}
         </FieldGroup>
         {/* 추가 버튼 */}
-        {fields.every((t) => t.period && t.part) && (
+        {fields.every((t) => t.generation && t.part) && (
           <SolidButton
             size="s"
             variant="secondary"
-            onClick={() => append({ period: '', part: '' })}
+            onClick={() => append({ generation: null, part: null })}
             className="my-[0.625rem]"
           >
             추가하기
@@ -132,12 +136,17 @@ export function TrackUnivStep() {
                 initPeriodIdx={0}
                 initPartIdx={0}
                 onChange={({ period, part }) => {
-                  setTempTrack((prev) => {
-                    if (prev?.period === period && prev?.part === part) {
-                      return prev;
-                    }
-                    return { period, part };
-                  });
+                  try {
+                    const track = mapToApiTrack(period, part);
+                    setTempTrack((prev) => {
+                      if (prev?.generation === track.generation && prev?.part === track.part) {
+                        return prev;
+                      }
+                      return track;
+                    });
+                  } catch (err) {
+                    console.error(err);
+                  }
                 }}
               />
             </Sheet>

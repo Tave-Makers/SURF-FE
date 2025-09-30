@@ -21,7 +21,7 @@ export default function OnBoardingForm() {
       component: ProfileStep,
       title: '프로필을 만들어봐요',
       description: '성함과 프로필 사진을 등록해주세요.',
-      fields: ['name'], // 우선 이름만
+      fields: ['name', 'profileImageUrl'],
     },
     {
       component: TrackUnivStep,
@@ -46,11 +46,15 @@ export default function OnBoardingForm() {
     if (step < steps.length - 1) {
       setStep(step + 1);
     } else {
+      // 전체 값 제출
       await methods.handleSubmit((data) => {
-        console.log(data);
+        // 여기서 최종 데이터 확인 가능
+        console.log('최종 온보딩 데이터:', data);
+        alert(JSON.stringify(data, null, 2)); // 확인용
       })();
     }
   }
+
   return (
     <OnBoardingLayout
       step={step}

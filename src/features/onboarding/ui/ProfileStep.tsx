@@ -1,50 +1,49 @@
-import { useFormContext } from 'react-hook-form';
+import { Controller, useFormContext } from 'react-hook-form';
 import { OnBoardingFormData } from '@/features/onboarding/model/types';
+import { ProfileImageUploader } from '@/features/user/upload-profile-image/ui/ProfileImageUploader';
+import { TextArea } from '@/shared/ui/text-area/TextArea';
+import { FieldGroup } from '@/widgets/field-group/ui/FieldGroup';
 
 export function ProfileStep() {
-  const { register } = useFormContext<OnBoardingFormData>();
+  const { control } = useFormContext<OnBoardingFormData>();
 
   return (
-    <div className="flex flex-col gap-4">
-      <label>
-        이름
-        <input
-          {...register('name', { required: '이름을 입력해주세요' })}
-          className="border p-2"
-          placeholder="이름을 입력하세요"
+    <>
+      {/* 프로필 이미지 업로더 */}
+      <div className="flex items-center justify-center gap-[0.62rem] self-stretch pt-[2.5rem] pb-[0.62rem]">
+        <Controller
+          name="profileImageUrl"
+          control={control}
+          render={({ field }) => (
+            <ProfileImageUploader value={field.value} onChange={field.onChange} />
+          )}
         />
-      </label>
-    </div>
-    // <>
-    //    <div className="flex items-center justify-center gap-[0.62rem] self-stretch pt-[2.5rem] pb-[0.62rem]">
-    //       <ProfileImageUploader />
-    //     </div>
+      </div>
 
-    //     <div className="flex flex-col items-start gap-[0.62rem] self-stretch">
-    //       <div className="flex flex-row">
-    //         <span className="text-body-16-600--1 text-foreground-normal">이름</span>
-    //         <span className="text-body-16-600--1 text-foreground-danger">*</span>
-    //       </div>
-
-    //       {/* 공통 컴포넌트 사용? */}
-    //       <div className="flex flex-col items-start justify-center gap-[0.25rem] self-stretch">
-    //         <input
-    //           id="name"
-    //           name="name"
-    //           required
-    //           aria-required="true"
-    //           aria-describedby="name-help"
-    //           autoComplete="name"
-    //           placeholder="이름을 입력해주세요."
-    //           value={data.name || ''}
-    //           onChange={(e) => updateData({ name: e.target.value })}
-    //           className="placeholder:text-foreground-hint text-foreground-normal bg-background-normal-darker flex flex-col items-start gap-[0.37rem] self-stretch rounded-[0.25rem] p-[0.62rem] focus:outline-none"
-    //         />
-    //         <span id="name-help" className="text-caption-10-400--1 text-foreground-normal">
-    //           정확한 서비스 이용을 위해 실명을 기입해주세요
-    //         </span>
-    //       </div>
-    //     </div>
-    //   </div></>
+      {/* 이름 입력 */}
+      <div className="flex w-full flex-col items-start gap-[0.62rem] self-stretch">
+        <FieldGroup title="이름" isRequired className="w-full">
+          <Controller
+            name="name"
+            control={control}
+            rules={{
+              required: '이름은 필수 입력값입니다.',
+              minLength: { value: 2, message: '이름은 최소 2자 이상이어야 합니다.' },
+            }}
+            render={({ field, fieldState }) => (
+              <TextArea
+                {...field}
+                value={field.value || ''}
+                placeholder="이름을 입력해주세요."
+                autoComplete="name"
+                guideMessage="정확한 서비스 이용을 위해 실명을 기입해주세요"
+                errorMessage={fieldState.error?.message}
+                isOneLine
+              />
+            )}
+          />
+        </FieldGroup>
+      </div>
+    </>
   );
 }

@@ -37,7 +37,10 @@ export function ProfileTabs() {
             </FieldGroup>
           </div>
         ) : (
-          <div className="justify-space-between flex flex-col items-start gap-[3rem] p-[2.5rem]">
+          <div className="grid grid-cols-3 gap-[3rem] p-[2.5rem]">
+            <ActivityBadge badgeName="출석왕" timestamp="2025-09-18" />
+            <ActivityBadge badgeName="출석왕" timestamp="2025-09-18" />
+            <ActivityBadge badgeName="출석왕" timestamp="2025-09-18" />
             <ActivityBadge badgeName="출석왕" timestamp="2025-09-18" />
           </div>
         )}

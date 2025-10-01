@@ -1,11 +1,6 @@
-import type { ComponentProps } from 'react';
-import type { SurfIcon } from '@/shared/ui/icon/SurfIcon';
-
-type SurfIconName = ComponentProps<typeof SurfIcon>['name'];
-
 export type SettingsItemType = {
   id: string;
-  leftIconName: SurfIconName;
+  leftIconName: string;
   text: string;
   action:
     | { type: 'NAVIGATE'; payload: string /* 페이지 이동 */ }

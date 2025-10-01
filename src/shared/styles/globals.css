@@ -7,8 +7,6 @@ body {
   font-family: Pretendard, NanumSquareNeo, sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-  height: 100% !important;
-  overflow: hidden;
 }
 
 .placeholder-body-14-600--1-24::placeholder {
@@ -20,16 +18,6 @@ body {
   text-indent: 0px;
   text-transform: none;
   text-decoration: none;
-}
-
-.react-modal-sheet-root {
-  margin-left: auto;
-  margin-right: auto;
-
-  @media (min-width: 640px) {
-    /* main width 변경에 따라 동일하게 변경 필요 */
-    width: 360px !important;
-  }
 }
 
 .react-modal-sheet-header {
@@ -87,7 +75,6 @@ body {
 }
 .wheel__shadow-top,
 .wheel__shadow-bottom {
-  background: linear-gradient(to bottom, rgba(251, 250, 255, 1) 0%, rgba(0, 0, 0, 0) 15%);
   left: 0;
   height: calc(42% - 2px);
   width: 100%;
@@ -96,7 +83,6 @@ body {
   z-index: 5;
 }
 .wheel__shadow-bottom {
-  background: linear-gradient(to bottom, rgba(0, 0, 0, 0) 85%, rgba(251, 250, 255, 1) 100%);
   margin-top: 2px;
   border-bottom: none;
 }
@@ -106,7 +92,7 @@ body {
   -webkit-backface-visibility: hidden;
   display: flex;
   font-size: 18px;
-  font-weight: 500;
+  font-weight: 400;
   height: 100%;
   width: 100%;
   position: absolute;

@@ -1,5 +1,6 @@
 import type { ReactNode } from 'react';
 import '@/shared/styles/globals.css';
+import 'keen-slider/keen-slider.min.css';
 
 export default function RootLayout({ children }: { children: ReactNode }) {
   return (

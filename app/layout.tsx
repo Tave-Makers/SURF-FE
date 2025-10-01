@@ -18,10 +18,12 @@ export default function RootLayout({ children }: { children: ReactNode }) {
           rel="stylesheet"
         />
       </head>
-      <body className="flex min-h-screen items-center justify-center bg-gray-100">
+      <body className="flex items-center justify-center bg-gray-100">
         <QueryProvider>
           <AuthProvider>
-            <main className="bg-background-normal h-dvh w-dvw sm:w-[360px]">{children}</main>
+            <main className="bg-background-normal box-content flex h-full w-dvw sm:w-[360px]">
+              {children}
+            </main>
           </AuthProvider>
         </QueryProvider>
       </body>

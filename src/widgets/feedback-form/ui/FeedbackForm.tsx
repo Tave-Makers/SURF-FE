@@ -17,8 +17,8 @@ export const FeedbackForm = () => {
   const isContentValid = content.trim().length > 0;
 
   return (
-    <div className="flex flex-col px-[1rem]">
-      <div className="flex flex-col gap-[0.62rem] pt-[1.25rem] pb-[32.81rem]">
+    <div className="flex h-full flex-col px-[1rem]">
+      <div className="flex flex-1 flex-col gap-[0.62rem] pt-[1.25rem]">
         {/* 타이틀 섹션 */}
         <div className="items-start self-stretch">
           <span className="text-body-16-600--1 text-foreground-normal">

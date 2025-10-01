@@ -1,3 +1,5 @@
+'use client';
+
 import { SolidButton } from '@/shared/ui/solid-button/SolidButton';
 import { AppHeader } from '@/widgets/header/ui/AppHeader';
 import React from 'react';

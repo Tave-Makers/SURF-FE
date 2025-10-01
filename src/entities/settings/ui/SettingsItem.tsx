@@ -7,8 +7,8 @@ import { SurfIcon } from '@/shared/ui/icon/SurfIcon';
 type SurfIconName = ComponentProps<typeof SurfIcon>['name'];
 
 export type SettingsItemProps = Omit<ButtonHTMLAttributes<HTMLButtonElement>, 'disabled'> & {
-  leftIconName?: SurfIconName | null;
-  rightIconName?: SurfIconName | null;
+  leftIconName?: SurfIconName;
+  rightIconName?: SurfIconName;
   isDisabled?: boolean;
   children: ReactNode;
   onClick?: (e: MouseEvent<HTMLButtonElement>) => void;

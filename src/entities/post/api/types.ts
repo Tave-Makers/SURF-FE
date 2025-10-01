@@ -25,6 +25,10 @@ export type PostContent = {
   boardId: number;
   scrappedByMe: boolean;
   scrapCount: number;
+  likeByMe: boolean;
+  likeCount: number;
+  commentCount: number;
+  nickname: string;
 };
 
 // 게시물 관련 API 응답 전체 타입

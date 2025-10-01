@@ -1,12 +1,12 @@
 export type Post = {
   id: number;
-  state?: 'default' | 'reserved';
   title: string;
   content: string;
   writer: string;
   date: string;
   likes: number;
   comments: number;
+  state?: 'default' | 'reserved';
   thumbnailUrl?: string;
 };
 

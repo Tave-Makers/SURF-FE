@@ -69,10 +69,16 @@ export function Sheet({
   };
 
   return (
-    <div className="flex w-full flex-col items-start gap-[1.25rem] rounded-t-[0.5rem] bg-white px-[1.25rem] pt-[0.75rem] pb-[1.25rem]">
-      <div className="flex w-full flex-col items-start gap-[0.5rem] py-[0.625rem]">
+    <div className="flex w-full flex-col items-start gap-[1.25rem] rounded-t-[0.5rem] bg-white px-[1.25rem] pb-[1.25rem]">
+      <div className={`flex w-full flex-col items-start ${title ? 'gap-[0.5rem]' : ''}`}>
         {renderTitleSection()}
-        <div className="w-full">{children}</div>
+        <div
+          className="w-full"
+          onPointerDown={(e) => e.stopPropagation()}
+          onPointerMove={(e) => e.stopPropagation()}
+        >
+          {children}
+        </div>
       </div>
       {renderButtons()}
     </div>

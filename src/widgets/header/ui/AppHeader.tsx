@@ -4,14 +4,12 @@ import { usePathname, useRouter } from 'next/navigation';
 import { Header, HeaderMode, HeaderProps } from '@/shared/ui/header/Header';
 import { ROUTE_CONFIG } from '@/shared/config/routes';
 
-export function AppHeader() {
+export function AppHeader({ customBack }: { customBack?: () => void }) {
   const pathname = usePathname();
   const router = useRouter();
 
   // 현재 경로에 맞는 route 설정 찾기
-  const currentRoute = ROUTE_CONFIG.find(
-    (item) => pathname === item.path || pathname.startsWith(`${item.path}/`),
-  );
+  const currentRoute = ROUTE_CONFIG.find((item) => pathname === item.path);
 
   // 추후 404 페이지로 대체
   if (!currentRoute) return null;
@@ -23,6 +21,11 @@ export function AppHeader() {
 
   // 뒤로가기 동작
   const handleBack = () => {
+    if (customBack) {
+      customBack();
+      return;
+    }
+
     if (window.history.length > 1) {
       router.back();
     } else {

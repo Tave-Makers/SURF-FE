@@ -17,8 +17,10 @@ export default function RootLayout({ children }: { children: ReactNode }) {
           rel="stylesheet"
         />
       </head>
-      <body className="flex min-h-screen items-center justify-center bg-gray-100">
-        <main className="bg-background-normal min-h-screen w-dvw sm:w-[360px]">{children}</main>
+      <body className="flex items-center justify-center bg-gray-100">
+        <main className="bg-background-normal box-content flex h-full w-dvw sm:w-[360px]">
+          {children}
+        </main>
       </body>
     </html>
   );

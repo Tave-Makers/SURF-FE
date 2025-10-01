@@ -8,7 +8,6 @@ import { FormProvider, useForm } from 'react-hook-form';
 
 export default function OnBoardingPage() {
   const profileImageUrl = useAuthStore((state) => state.profileImageUrl);
-  console.log('zustand에서 읽은 프로필 URL:', profileImageUrl);
 
   const methods = useForm<OnBoardingFormData>({
     defaultValues: {

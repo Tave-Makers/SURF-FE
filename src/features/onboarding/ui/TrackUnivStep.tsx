@@ -94,7 +94,6 @@ export function TrackUnivStep() {
                 value={field.value || ''}
                 errorMessage={fieldState.error?.message}
                 placeholder="대학교를 입력해주세요."
-                isOneLine
               />
             )}
           />
@@ -109,7 +108,6 @@ export function TrackUnivStep() {
                   value={field.value || ''}
                   errorMessage={fieldState.error?.message}
                   placeholder="대학원을 입력해주세요."
-                  isOneLine
                 />
               )}
             />

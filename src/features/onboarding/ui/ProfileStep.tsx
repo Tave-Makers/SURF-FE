@@ -38,7 +38,6 @@ export function ProfileStep() {
                 autoComplete="name"
                 guideMessage="정확한 서비스 이용을 위해 실명을 기입해주세요"
                 errorMessage={fieldState.error?.message}
-                isOneLine
               />
             )}
           />

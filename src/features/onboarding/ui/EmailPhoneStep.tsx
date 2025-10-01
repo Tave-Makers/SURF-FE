@@ -26,7 +26,6 @@ export function EmailPhoneStep() {
               errorMessage={fieldState.error?.message}
               placeholder="이메일을 입력해주세요."
               guideMessage="정확한 이메일을 입력해주세요."
-              isOneLine
             />
           )}
         />
@@ -49,7 +48,6 @@ export function EmailPhoneStep() {
               errorMessage={fieldState.error?.message}
               placeholder="전화번호를 입력해주세요."
               guideMessage="정확한 전화번호를 입력해주세요."
-              isOneLine
             />
           )}
         />

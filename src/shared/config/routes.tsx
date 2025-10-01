@@ -50,8 +50,7 @@ export const ROUTE_CONFIG: RouteConfig[] = [
     },
   },
   {
-    // TODO: text 속성에 대한 커스텀 스타일 필요
-    id: 'activity-score',
+    id: 'mypage-activity-score',
     path: '/mypage/activity-score',
     backPath: '/mypage',
     header: {
@@ -61,6 +60,16 @@ export const ROUTE_CONFIG: RouteConfig[] = [
       text: '회칙',
       btnVariant: 'secondary',
       onClickTextBtn: () => alert('회칙 페이지로 이동'),
+    },
+  },
+  {
+    id: 'mypage-activity-score-bylaws',
+    path: '/mypage/activity-score/bylaws',
+    backPath: '/mypage/activity-score',
+    header: {
+      mode: HeaderMode.Default,
+      title: 'TAVE 회칙',
+      hasLeftIcon: true,
     },
   },
   {

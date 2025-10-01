@@ -46,7 +46,7 @@ export const ROUTE_CONFIG: RouteConfig[] = [
     header: {
       mode: HeaderMode.Logo,
       logo: <DummyLogo />,
-      icons: [{ label: 'Cog', onClickIcon: () => alert('설정') }],
+      icons: [{ label: 'Cog', onClickIcon: () => alert('설정') }], // 임시
     },
   },
   {

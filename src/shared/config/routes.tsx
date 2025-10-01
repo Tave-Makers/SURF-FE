@@ -50,6 +50,18 @@ export const ROUTE_CONFIG: RouteConfig[] = [
     },
   },
   {
+    id: 'mypage-activity-score',
+    path: '/mypage/activity-score',
+    backPath: '/mypage',
+    header: {
+      mode: HeaderMode.TextBtn,
+      title: '활동점수',
+      hasLeftIcon: true,
+      text: '회칙',
+      onClickTextBtn: () => alert('회칙 페이지로 이동'),
+    },
+  },
+  {
     id: 'mypage-activity-score-bylaws',
     path: '/mypage/activity-score/bylaws',
     backPath: '/mypage/activity-score',

@@ -26,8 +26,8 @@ export default function OnBoardingLayout({
       <AppHeader
         customBack={() => {
           if (step === 0) {
-            // 첫 스텝 → 로그인으로 이동
-            window.location.href = '/login'; // or router.push('/login')
+            // 로그인으로 이동
+            window.location.href = '/login';
           } else {
             // 이전 스텝으로
             setStep((prev) => prev - 1);

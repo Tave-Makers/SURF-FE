@@ -50,6 +50,16 @@ export const ROUTE_CONFIG: RouteConfig[] = [
     },
   },
   {
+    id: 'mypage-activity-score-bylaws',
+    path: '/mypage/activity-score/bylaws',
+    backPath: '/mypage/activity-score',
+    header: {
+      mode: HeaderMode.Default,
+      title: 'TAVE 회칙',
+      hasLeftIcon: true,
+    },
+  },
+  {
     id: 'onboarding',
     path: '/onboarding',
     backPath: '/login',

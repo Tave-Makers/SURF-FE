@@ -1,59 +1,94 @@
-import { Meta, StoryObj } from '@storybook/nextjs-vite';
+import type { Meta, StoryObj } from '@storybook/nextjs-vite';
 import { useState } from 'react';
-import { TextArea } from './TextArea';
+import { TextArea, type TextAreaProps } from './TextArea';
 
-const meta: Meta<typeof TextArea> = {
+function ControlledTextArea(
+  props: Omit<TextAreaProps, 'value' | 'onChange'> & { initialValue?: string },
+) {
+  const [val, setVal] = useState(props.initialValue ?? '');
+  return <TextArea {...props} value={val} onChange={setVal} />;
+}
+
+const meta = {
   title: 'Shared/UI/TextArea',
-  component: TextArea,
+  component: ControlledTextArea,
   tags: ['autodocs'],
+
   argTypes: {
-    value: { control: 'text' },
-    placeholder: { control: 'text' },
-    textLimit: { control: 'number' },
-    isDisabled: { control: 'boolean' },
-    isOneLine: { control: 'boolean' },
-    errorMessage: { control: 'text' },
-    guideMessage: { control: 'text' },
+    mode: {
+      control: { type: 'radio' },
+      options: ['oneLine', 'multiLine'],
+      description: '입력 모드',
+    },
+    placeholder: {
+      control: 'text',
+      description: 'Placeholder 문구',
+    },
+    isDisabled: {
+      control: 'boolean',
+      description: '비활성화 여부',
+    },
+    textLimit: {
+      control: { type: 'number', min: 0, step: 1 },
+      description: '최대 글자 수 (미설정 시 무제한)',
+    },
+    guideMessage: {
+      control: 'text',
+      description: '가이드 메시지',
+    },
+    errorMessage: {
+      control: 'text',
+      description: '에러 메시지',
+    },
   },
-};
+} satisfies Meta<typeof ControlledTextArea>;
+
 export default meta;
+type Story = StoryObj<typeof meta>;
 
-type Story = StoryObj<typeof TextArea>;
-
-export const WithLimit: Story = {
-  render: (args) => {
-    const [value, setValue] = useState('');
-
-    return <TextArea {...args} value={value} onChange={(val) => setValue(val)} />;
-  },
+export const GuideMessage: Story = {
   args: {
+    mode: 'multiLine',
     placeholder: '내용을 입력하세요',
     isDisabled: false,
-    isOneLine: false,
-    textLimit: 100,
+    textLimit: undefined,
+    guideMessage: '가이드 메시지를 표시할 수 있어요.',
     errorMessage: '',
-    guideMessage: '',
   },
 };
 
 export const OneLine: Story = {
-  render: (args) => {
-    const [value, setValue] = useState('');
-    return <TextArea {...args} isOneLine value={value} onChange={(val) => setValue(val)} />;
-  },
+  name: 'One line',
   args: {
-    placeholder: '한 줄만 입력 가능',
-    guideMessage: '한 줄만 입력 가능',
+    mode: 'oneLine',
+    placeholder: '한 줄로 입력됩니다',
+    textLimit: 40,
   },
 };
 
-export const WithError: Story = {
-  render: (args) => {
-    const [value, setValue] = useState('텍스트');
-    return <TextArea {...args} value={value} onChange={(val) => setValue(val)} />;
-  },
+export const MultiLine: Story = {
+  name: 'Multi line',
   args: {
-    placeholder: '내용 입력',
-    errorMessage: '필수 입력 항목입니다.',
+    mode: 'multiLine',
+    placeholder: '여러 줄로 입력됩니다',
+    textLimit: 200,
+  },
+};
+
+export const WithLimit: Story = {
+  name: 'With text limit',
+  args: {
+    mode: 'multiLine',
+    placeholder: '최대 글자 수를 초과하지 않도록 제한',
+    textLimit: 20,
+  },
+};
+
+export const Disabled: Story = {
+  args: {
+    mode: 'multiLine',
+    placeholder: '비활성화 상태',
+    isDisabled: true,
+    initialValue: '수정할 수 없습니다',
   },
 };

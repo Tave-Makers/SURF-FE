@@ -2,7 +2,7 @@ import { Controller, useFormContext } from 'react-hook-form';
 import { OnBoardingFormData } from '@/features/onboarding/model/types';
 import { ProfileImageUploader } from '@/features/user/upload-profile-image/ui/ProfileImageUploader';
 import { TextArea } from '@/shared/ui/text-area/TextArea';
-import { FieldGroup } from '@/widgets/field-group/ui/FieldGroup';
+import { FieldGroup } from '@/shared/ui/field-group/FieldGroup';
 
 export function ProfileStep() {
   const { control } = useFormContext<OnBoardingFormData>();

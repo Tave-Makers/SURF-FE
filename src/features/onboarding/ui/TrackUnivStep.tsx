@@ -8,7 +8,7 @@ import { Checkbox } from '@/shared/ui/checkbox/Checkbox';
 import { SurfIcon } from '@/shared/ui/icon/SurfIcon';
 import { SelectField } from '@/shared/ui/select-field/SelectField';
 import { TextArea } from '@/shared/ui/text-area/TextArea';
-import { FieldGroup } from '@/widgets/field-group/ui/FieldGroup';
+import { FieldGroup } from '@/shared/ui/field-group/FieldGroup';
 import { SolidButton } from '@/shared/ui/solid-button/SolidButton';
 import { useState } from 'react';
 import { OnBoardingFormData, TrackPart } from '@/features/onboarding/model/types';

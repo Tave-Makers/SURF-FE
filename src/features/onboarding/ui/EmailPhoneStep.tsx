@@ -1,7 +1,7 @@
 // features/onboarding/ui/EmailPhoneStep.tsx
 import { Controller, useFormContext } from 'react-hook-form';
 import { OnBoardingFormData } from '@/features/onboarding/model/types';
-import { FieldGroup } from '@/widgets/field-group/ui/FieldGroup';
+import { FieldGroup } from '@/shared/ui/field-group/FieldGroup';
 import { TextArea } from '@/shared/ui/text-area/TextArea';
 
 export function EmailPhoneStep() {

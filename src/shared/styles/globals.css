@@ -4,7 +4,11 @@
 
 html,
 body {
-  font-family: NanumSquareNeo, Pretendard, sans-serif;
+  font-family: Pretendard, NanumSquareNeo, sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  height: 100% !important;
+  overflow: hidden;
 }
 
 .placeholder-body-14-600--1-24::placeholder {

@@ -7,7 +7,7 @@ export default function MainLayout({ children }: { children: React.ReactNode }) 
     <AuthProvider>
       <div className="flex h-full w-full flex-col">
         <AppHeader />
-        <section className="flex-1">{children}</section>
+        <section className="flex-1 overflow-auto">{children}</section>
         <AppNavigation />
       </div>
     </AuthProvider>

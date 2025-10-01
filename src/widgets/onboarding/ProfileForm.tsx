@@ -18,8 +18,8 @@ export const ProfileForm = () => {
   };
 
   return (
-    <div className="flex flex-col px-[1rem]">
-      <div className="flex flex-col items-start self-stretch pb-[21.72rem]">
+    <div className="flex h-full flex-col px-[1rem]">
+      <div className="flex flex-1 flex-col items-start self-stretch pb-[21.72rem]">
         <div className="flex flex-col items-start gap-[0.25rem] self-stretch">
           <div className="text-head-18-700--1 self-stretch text-[#202020]">프로필을 만들어봐요</div>
           <div className="text-body-14-400--2-24 text-[#202020]">

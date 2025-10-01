@@ -1,5 +1,6 @@
 import { HeaderMode, HeaderProps } from '@/shared/ui/header/Header';
 import { DummyLogo } from '@/shared/ui/logo/DummyLogo';
+import { AppRouterInstance } from 'next/dist/shared/lib/app-router-context.shared-runtime';
 
 export type RouteConfig = {
   id: string;
@@ -8,7 +9,7 @@ export type RouteConfig = {
   header: HeaderProps;
 };
 
-export const ROUTE_CONFIG: RouteConfig[] = [
+export const createRouteConfig = (router: AppRouterInstance): RouteConfig[] => [
   {
     id: 'home',
     path: '/home',
@@ -58,7 +59,10 @@ export const ROUTE_CONFIG: RouteConfig[] = [
       title: '활동점수',
       hasLeftIcon: true,
       text: '회칙',
-      onClickTextBtn: () => alert('회칙 페이지로 이동'),
+      btnVariant: 'secondary',
+      onClickTextBtn: () => {
+        router.push('/mypage/activity-score/bylaws');
+      },
     },
   },
   {

@@ -1,21 +1,31 @@
-import { UserLevel } from '@/features/profile/model/userLevel';
+'use client';
+
 import { MyPageActions } from '@/widgets/mypage-actions/ui/MyPageActions';
 import { ProfileTabs } from '@/widgets/profile-tabs/ui/ProfileTabs';
 import { ProfileHeader } from '@/widgets/profile-header/ui/ProfileHeader';
+import { useMyProfileQuery } from '@/entities/user/model/profile-queries';
 
-type MyPageProps = {
-  name: string;
-  level: UserLevel;
-  chips: string[];
-  isActiveMember: boolean;
-};
+export function MyPage() {
+  const { data: profile, isLoading, isError } = useMyProfileQuery();
 
-export function MyPage({ name, level, chips, isActiveMember }: MyPageProps) {
+  if (isLoading) return <div className="p-4">로딩...</div>; // 추후 수정 필요
+  if (isError || !profile) return <div className="p-4">프로필을 불러오지 못했어요.</div>; // 추후 수정 필요
+
   return (
     <div className="flex flex-col">
-      <ProfileHeader name={name} level={level} chips={chips} />
-      <MyPageActions isActiveMember={isActiveMember} />
-      <ProfileTabs />
+      <ProfileHeader name={profile.name} level={profile.level} chips={profile.chips} />
+      <MyPageActions
+        isActive={profile.isActive}
+        bannerPart={profile.bannerPart}
+        bannerScore={profile.activityScore}
+      />
+      <ProfileTabs
+        phoneNumber={profile.phoneNumber ?? ''}
+        email={profile.email ?? ''}
+        university={profile.university ?? ''}
+        graduateSchool={profile.graduateSchool ?? ''}
+        careers={profile.careers ?? []}
+      />
     </div>
   );
 }

@@ -1,4 +1,4 @@
-export type PolicyItemType = {
+export type PolicyDetailItemType = {
   id: string;
   text: string;
 };

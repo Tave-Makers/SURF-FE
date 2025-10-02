@@ -1,43 +1,26 @@
 'use client';
 
-import { useMyPosts, useScraps } from '@/features/post/model/usePosts';
 import { PostCard } from '@/entities/post/ui/PostCard';
-import { PostType } from '@/entities/post/model/types';
-import { transformApiResponseToPosts } from '@/entities/post/api/mappers';
-import { useAuthStore } from '@/features/auth/model/useAuthStore';
+import { Post } from '@/entities/post/model/types';
 
-interface PostListProps {
-  type: PostType;
-  page?: number;
-  size?: number;
-}
+type PostListProps = {
+  posts: Post[];
+  isLoading?: boolean;
+  isFetchingNextPage?: boolean;
+  hasNextPage?: boolean;
+  onPostClick?: (post: Post) => void;
+  loadMoreRef?: React.RefObject<HTMLDivElement | null>;
+};
 
-export const PostList = ({ type, page = 0, size = 10 }: PostListProps) => {
-  const { accessToken } = useAuthStore();
-
-  const isMyPosts = type === 'my-posts';
-
-  // 내가 작성한 게시글 조회
-  const {
-    data: myPostsData,
-    isLoading: isLoadingMyPosts,
-    error: myPostsError,
-  } = useMyPosts(page, size, [], { enabled: !!accessToken && isMyPosts });
-
-  // 스크랩한 게시글 조회
-  const {
-    data: scrapsData,
-    isLoading: isLoadingScraps,
-    error: scrapsError,
-  } = useScraps(page, size, [], { enabled: !!accessToken && !isMyPosts });
-
-  // 인증되지 않은 경우 화면
-  if (!accessToken) {
-    return <div>로그인이 필요합니다. 로그인 페이지로 이동합니다...</div>;
-  }
-
+export const PostList = ({
+  posts,
+  isLoading = false,
+  isFetchingNextPage = false,
+  hasNextPage = false,
+  onPostClick,
+  loadMoreRef,
+}: PostListProps) => {
   // 로딩 화면
-  const isLoading = type === 'my-posts' ? isLoadingMyPosts : isLoadingScraps;
   if (isLoading) {
     return (
       <div role="status" aria-live="polite">
@@ -46,55 +29,32 @@ export const PostList = ({ type, page = 0, size = 10 }: PostListProps) => {
     );
   }
 
-  //에러 발생 화면
-  const error = type === 'my-posts' ? myPostsError : scrapsError;
-  if (error) {
-    const error = myPostsError || scrapsError;
-    return (
-      <div>
-        <div>에러가 발생했습니다: {error instanceof Error ? error.message : '알 수 없는 에러'}</div>
-        <div>
-          {error instanceof Error && error.message.includes('403')
-            ? '인증이 필요합니다. 다시 로그인해주세요.'
-            : '잠시 후 다시 시도해주세요.'}
-        </div>
-      </div>
-    );
-  }
-
-  const currentData = type === 'my-posts' ? myPostsData : scrapsData;
-
   // 게시글이 없을 때의 화면
-  if (!currentData) {
+  if (posts.length === 0) {
     return (
       <div>
-        <div>
-          {type === 'my-posts' ? '작성한 게시글이 없습니다.' : '스크랩한 게시글이 없습니다.'}
-        </div>
+        <div>게시글이 없습니다.</div>
       </div>
     );
   }
-
-  // 불러온 데이터 매핑 (추후 백엔드랑 타입 맞춰야 함)
-  const posts = transformApiResponseToPosts(currentData);
 
   return (
     <div className="flex flex-col gap-4 px-[1rem]">
-      {posts.length > 0 ? (
-        posts.map((post) => (
-          <PostCard
-            key={post.id}
-            post={post}
-            onClick={() => console.log(`Post ${post.id} clicked`)}
-          />
-        ))
-      ) : (
-        <div>
-          <div>
-            {type === 'my-posts' ? '작성한 게시글이 없습니다.' : '스크랩한 게시글이 없습니다.'}
-          </div>
-        </div>
-      )}
+      {posts.map((post) => (
+        <PostCard key={post.id} post={post} onClick={() => onPostClick?.(post)} />
+      ))}
+
+      {/* 무한스크롤 sentinel */}
+      <div
+        ref={loadMoreRef}
+        className="text-body-14-600--1-20 text-foreground-hint flex items-center justify-center py-[1rem]"
+      >
+        {isFetchingNextPage
+          ? '더 많은 게시글을 불러오는 중...'
+          : hasNextPage
+            ? '더 불러오기'
+            : '모든 게시글을 불러왔습니다.'}
+      </div>
     </div>
   );
 };

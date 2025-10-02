@@ -1,13 +1,13 @@
 'use client';
 
-import { useQuery } from '@tanstack/react-query';
+import { useQuery, useInfiniteQuery } from '@tanstack/react-query';
 import { getPosts } from '@/features/post/api/getPosts';
 import { PostApiResponse } from '@/entities/post/api/types';
 import { useAuthStore } from '@/features/auth/model/useAuthStore';
 import { useRouter } from 'next/navigation';
 import { useEffect } from 'react';
 
-// 내 게시글 조회 훅
+// 내 게시글 조회 훅 (단일 페이지) - 현재 MVP2에서는 필요 없음
 export const useMyPosts = (
   page: number = 0,
   size: number = 10,
@@ -27,14 +27,11 @@ export const useMyPosts = (
     queryKey: ['posts', 'my-posts', page, size, sort],
     queryFn: () => getPosts.getMyPosts({ page, size, sort }),
     enabled: !!accessToken && (opts?.enabled ?? true), // 조건부 실행
-    staleTime: 5 * 60 * 1000, // 데이터 신선도 5분
-    gcTime: 10 * 60 * 1000, // 캐시된 데이터 유지 시간 10분
   });
 };
 
-// 스크랩한 게시글 조회 훅
-export const useScraps = (
-  page: number = 0,
+// 내 게시글 무한 스크롤 훅
+export const useInfiniteMyPosts = (
   size: number = 10,
   sort: string[] = [],
   opts?: { enabled?: boolean },
@@ -48,11 +45,14 @@ export const useScraps = (
     if (!accessToken) router.replace('/login');
   }, [accessToken, router]);
 
-  return useQuery<PostApiResponse>({
-    queryKey: ['posts', 'scraps', page, size, sort],
-    queryFn: () => getPosts.getScraps({ page, size, sort }),
-    enabled: !!accessToken && (opts?.enabled ?? true), // 조건부 실행
-    staleTime: 5 * 60 * 1000, // 데이터 신선도 5분
-    gcTime: 10 * 60 * 1000, // 캐시된 데이터 유지 시간 10분
+  return useInfiniteQuery<PostApiResponse>({
+    queryKey: ['posts', 'my-posts', 'infinite', size, sort],
+    queryFn: ({ pageParam }) => getPosts.getMyPosts({ page: pageParam as number, size, sort }),
+    getNextPageParam: (lastPage) => {
+      // 마지막 페이지가 아니면 다음 페이지 번호 반환
+      return lastPage.last ? undefined : lastPage.number + 1;
+    },
+    initialPageParam: 0,
+    enabled: !!accessToken && (opts?.enabled ?? true),
   });
 };

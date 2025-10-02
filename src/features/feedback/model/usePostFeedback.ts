@@ -1,6 +1,6 @@
 import { useMutation } from '@tanstack/react-query';
 import { useRouter } from 'next/navigation';
-import { postFeedBack } from '../api/postFeedback';
+import { postFeedback } from '../api/postFeedback';
 
 interface ApiError {
   response?: {
@@ -15,7 +15,7 @@ export const usePostFeedback = () => {
   const router = useRouter();
 
   return useMutation({
-    mutationFn: postFeedBack,
+    mutationFn: postFeedback,
     onSuccess: () => {
       // 피드백 보내기 성공 시 로직
       alert('소중한 피드백 감사합니다.');

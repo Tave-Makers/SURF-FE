@@ -18,7 +18,6 @@ export const getActivityHistory = async (
         },
       },
     );
-    console.log(response.data);
     return response.data.data;
   } catch (error) {
     console.error('Error fetching activity history:', error);

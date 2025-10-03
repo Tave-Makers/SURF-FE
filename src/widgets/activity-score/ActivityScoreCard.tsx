@@ -93,6 +93,7 @@ export default function ActivityScoreCard({ score, records, mode }: ActivityScor
                   id={groupId}
                   icon={meta.Icon}
                   count={group.totalCount}
+                  label={meta.label}
                   tooltip={
                     <ActivitySummaryTooltip
                       activities={group.list.map((c: SingleActivitySummary) => ({

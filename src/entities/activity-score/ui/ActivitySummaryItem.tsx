@@ -7,6 +7,7 @@ type ActivitySummaryItemProps = {
   id: string;
   icon: React.FC<React.SVGProps<SVGSVGElement>>;
   count: number;
+  label?: string;
   tooltip?: ReactNode;
 };
 
@@ -14,6 +15,7 @@ export const ActivitySummaryItem: FC<ActivitySummaryItemProps> = ({
   id,
   icon: Icon,
   count,
+  label,
   tooltip,
 }) => {
   const { activeId, show, hide } = useTooltipStore();
@@ -28,7 +30,7 @@ export const ActivitySummaryItem: FC<ActivitySummaryItemProps> = ({
   return (
     <button
       type="button"
-      aria-label={`${count}회 활동 상세보기`}
+      aria-label={`${label ?? ''} ${count}회 활동 상세보기`}
       aria-expanded={showTooltip}
       aria-describedby={showTooltip ? `tooltip-${id}` : undefined}
       className="relative flex cursor-pointer items-center gap-[0.5rem]"

@@ -6,7 +6,7 @@ import { ActivityHistoryList } from '@/entities/activity-score/ui/ActivityHistor
 import { Tab } from '@/shared/ui/tab/Tab';
 import { useActivitySummary } from '@/entities/activity-score/model/useActivitySummary';
 import { useInfiniteActivityHistory } from '@/entities/activity-score/model/useActivityHistory';
-import { useState } from 'react';
+import { useState, useRef, useEffect } from 'react';
 
 export default function ActivityScorePage() {
   // 탭 상태
@@ -17,6 +17,7 @@ export default function ActivityScorePage() {
     data: summary,
     isLoading: isSummaryLoading,
     isError: isSummaryError,
+    refetch: refetchSummary,
   } = useActivitySummary();
 
   // 활동 히스토리 (무한스크롤)
@@ -25,9 +26,28 @@ export default function ActivityScorePage() {
     fetchNextPage,
     hasNextPage,
     isFetchingNextPage,
+    isError: isHistoryError,
+    isLoading: isHistoryLoading,
+    refetch: refetchHistory,
   } = useInfiniteActivityHistory(mode, 5);
 
   const history = historyRaw?.pages.flatMap((page) => page.content) ?? [];
+
+  // sentinel ref
+  const loadMoreRef = useRef<HTMLDivElement | null>(null);
+
+  useEffect(() => {
+    if (!loadMoreRef.current || !hasNextPage) return;
+
+    const observer = new IntersectionObserver((entries) => {
+      if (entries[0].isIntersecting && !isFetchingNextPage) {
+        void fetchNextPage().catch(console.error);
+      }
+    });
+
+    observer.observe(loadMoreRef.current);
+    return () => observer.disconnect();
+  }, [hasNextPage, isFetchingNextPage, fetchNextPage]);
 
   return (
     <div className="flex flex-col items-center">
@@ -40,7 +60,18 @@ export default function ActivityScorePage() {
             불러오는 중...
           </div>
         )}
-        {isSummaryError && <div role="alert">데이터를 불러오는 중 오류가 발생했습니다.</div>}
+        {isSummaryError && (
+          <div role="alert" className="flex flex-col items-center gap-2">
+            <p>데이터를 불러오는 중 오류가 발생했습니다.</p>
+            <button
+              type="button"
+              onClick={() => void refetchSummary()}
+              className="bg-primary rounded px-4 py-2 text-white"
+            >
+              다시 시도
+            </button>
+          </div>
+        )}
         {summary && (
           <ActivityScoreCard score={summary.score} records={summary.records} mode={mode} />
         )}
@@ -59,12 +90,44 @@ export default function ActivityScorePage() {
       </div>
 
       {/* 활동 점수 리스트 */}
-      <ActivityHistoryList
-        records={history}
-        hasNextPage={hasNextPage ?? false}
-        isFetchingNextPage={isFetchingNextPage}
-        onLoadMore={() => void fetchNextPage().catch(console.error)}
-      />
+      <div className="flex w-full flex-col gap-[2.25rem] px-[1rem] py-[1.88rem]">
+        {isHistoryLoading && (
+          <div aria-live="polite" aria-busy="true">
+            불러오는 중...
+          </div>
+        )}
+
+        {isHistoryError && (
+          <div role="alert" className="flex flex-col items-center gap-2">
+            <p>히스토리를 불러오는 중 오류가 발생했습니다.</p>
+            <button
+              type="button"
+              onClick={() => void refetchHistory()}
+              className="bg-primary rounded px-4 py-2 text-white"
+            >
+              다시 시도
+            </button>
+          </div>
+        )}
+
+        {!isHistoryLoading && !isHistoryError && history.length === 0 && (
+          <div className="text-body-14-600--1-20 text-foreground-hint py-[1rem] text-center">
+            활동 내역이 없습니다.
+          </div>
+        )}
+
+        {history.length > 0 && <ActivityHistoryList records={history} />}
+
+        {/* sentinel */}
+        {hasNextPage && (
+          <div
+            ref={loadMoreRef}
+            className="text-body-14-600--1-20 text-foreground-hint flex items-center justify-center py-[1rem]"
+          >
+            {isFetchingNextPage ? '로딩 중...' : '스크롤 내려서 더 불러오기'}
+          </div>
+        )}
+      </div>
     </div>
   );
 }

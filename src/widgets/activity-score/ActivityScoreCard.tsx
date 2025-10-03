@@ -20,17 +20,13 @@ export default function ActivityScoreCard({ score, records, mode }: ActivityScor
   return (
     <section aria-labelledby="activity-score-title" className="flex flex-col gap-[2.5rem]">
       {/* 점수 표시 */}
-      <div
-        className="flex h-[3.37rem] items-center justify-center gap-[0.25rem]"
-        role="heading"
-        aria-level={2}
-      >
+      <h2 className="flex h-[3.37rem] items-center justify-center gap-[0.25rem]">
         <span id="activity-score-title" className="sr-only">
           현재 활동 점수
         </span>
         <span className="text-head-48-700--2 text-foreground-normal">{score}</span>
         <span className="text-head-26-700--1 text-foreground-normal pt-[1.25rem]">점</span>
-      </div>
+      </h2>
 
       {/* 활동 아이콘 + 툴팁 */}
       {mode === 'REWARD' && (

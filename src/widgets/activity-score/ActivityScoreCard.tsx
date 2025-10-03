@@ -42,6 +42,7 @@ export default function ActivityScoreCard({ score, records, mode }: ActivityScor
                   id={item.activityType}
                   icon={meta.Icon}
                   count={item.count}
+                  label={meta.label}
                   tooltip={
                     <ActivitySummaryTooltip
                       activities={[{ label: meta.label, count: item.count }]}
@@ -58,6 +59,7 @@ export default function ActivityScoreCard({ score, records, mode }: ActivityScor
               id="blogs"
               icon={groupMetaMap.blogs.Icon}
               count={records.rewards.blogs.totalCount}
+              label={groupMetaMap.blogs.label}
               tooltip={
                 <ActivitySummaryTooltip
                   activities={records.rewards.blogs.list.map((c: SingleActivitySummary) => ({

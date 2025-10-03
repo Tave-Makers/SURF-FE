@@ -1,8 +1,4 @@
-export type CommonResponse<T> = {
-  code: number;
-  message: string;
-  data: T;
-};
+import { CommonResponse } from '@/shared/api/types';
 
 // =====================
 // 카드용 타입 (Summary)

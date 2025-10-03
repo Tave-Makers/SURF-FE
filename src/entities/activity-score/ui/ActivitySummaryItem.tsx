@@ -1,7 +1,7 @@
 'use client';
 
 import { useTooltipStore } from '@/entities/activity-score/model/tooltipStore';
-import { FC, ReactNode } from 'react';
+import { FC, ReactNode, useEffect } from 'react';
 
 type ActivitySummaryItemProps = {
   id: string;
@@ -18,6 +18,12 @@ export const ActivitySummaryItem: FC<ActivitySummaryItemProps> = ({
 }) => {
   const { activeId, show, hide } = useTooltipStore();
   const showTooltip = activeId === id;
+
+  useEffect(() => {
+    return () => {
+      hide(); // 언마운트 시 타이머 정리
+    };
+  }, [hide]);
 
   return (
     <button

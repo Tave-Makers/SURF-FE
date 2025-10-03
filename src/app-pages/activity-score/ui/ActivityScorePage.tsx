@@ -123,6 +123,8 @@ export default function ActivityScorePage() {
           <div
             ref={loadMoreRef}
             className="text-body-14-600--1-20 text-foreground-hint flex items-center justify-center py-[1rem]"
+            aria-live="polite"
+            aria-atomic="true"
           >
             {isFetchingNextPage ? '로딩 중...' : '스크롤 내려서 더 불러오기'}
           </div>

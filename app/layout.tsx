@@ -1,7 +1,8 @@
 import type { ReactNode } from 'react';
 import '@/shared/styles/globals.css';
-import { AuthProvider } from '@/app/providers/AuthProvider';
 import { QueryProvider } from '@/app/providers/QueryProvider';
+import { AuthProvider } from '@/app/providers/AuthProvider';
+import 'keen-slider/keen-slider.min.css';
 import { ReactQueryDevtools } from '@tanstack/react-query-devtools';
 
 export default function RootLayout({ children }: { children: ReactNode }) {
@@ -22,7 +23,9 @@ export default function RootLayout({ children }: { children: ReactNode }) {
       <body className="flex min-h-screen items-center justify-center bg-gray-100">
         <QueryProvider>
           <AuthProvider>
-            <main className="bg-background-normal h-dvh w-dvw sm:w-[360px]">{children}</main>
+            <main className="bg-background-normal box-content flex h-full w-dvw sm:w-[360px]">
+              {children}
+            </main>
             <ReactQueryDevtools initialIsOpen={false} />
           </AuthProvider>
         </QueryProvider>

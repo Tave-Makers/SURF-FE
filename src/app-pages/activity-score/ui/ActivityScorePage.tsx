@@ -7,40 +7,6 @@ import { ActivityHistoryList } from '@/entities/activity-score/ui/ActivityHistor
 import { Tab } from '@/shared/ui/tab/Tab';
 import { useActivitySummary } from '@/entities/activity-score/model/useActivitySummary';
 
-// TODO: API 응답으로 변경
-// const mockData: ActivitySummaryRecords = {
-//   rewards: {
-//     taveActivities: [
-//       { activityType: 'UPLOAD_INSTAGRAM_STORY', count: 7 },
-//       { activityType: 'ENGAGE_TECH_SEMINAR', count: 0 },
-//       { activityType: 'EARLY_BIRD', count: 4 },
-//     ],
-//     blogs: {
-//       totalCount: 2,
-//       list: [
-//         { activityType: 'WRITE_WIL', count: 1 },
-//         { activityType: 'UPLOAD_TAVE_REVIEW', count: 1 },
-//       ],
-//     },
-//   },
-//   penalties: {
-//     late: {
-//       totalCount: 9,
-//       list: [
-//         { activityType: 'SESSION_LATE', count: 3 },
-//         { activityType: 'TEAM_LATE', count: 6 },
-//       ],
-//     },
-//     absence: {
-//       totalCount: 4,
-//       list: [
-//         { activityType: 'SESSION_ABSENCE', count: 2 },
-//         { activityType: 'TEAM_ABSENCE', count: 2 },
-//       ],
-//     },
-//   },
-// };
-
 export const mockRewardRecords: ActivityHistory[] = [
   { memberId: 1, date: '26.09.06', category: '얼리버드', delta: 10, total: 136 },
   { memberId: 2, date: '26.09.05', category: '기술 블로그', delta: 20, total: 126 },

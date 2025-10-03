@@ -1,41 +1,74 @@
+// =====================
+// 카드용 타입 (Summary)
+// =====================
 import { ActivityType } from './meta';
 
-// 단일 활동 - 인스타 스토리, 기술 세미나 참석, 얼리버드
-export type SingleActivity = {
+export type SingleActivitySummary = {
   activityType: ActivityType;
   count: number;
 };
 
-// 그룹 활동 - 기술 블로그 작성, 활동 후기 작성
-export type GroupActivity = {
+export type GroupActivitySummary = {
   totalCount: number;
-  list: SingleActivity[];
+  list: SingleActivitySummary[];
 };
 
-// 상점
-export type Rewards = {
-  taveActivities: SingleActivity[];
-  blogs: GroupActivity;
+export type RewardSummary = {
+  taveActivities: SingleActivitySummary[];
+  blogs: GroupActivitySummary;
 };
 
-// 벌점
-export type Penalties = {
-  late: GroupActivity;
-  absence: GroupActivity;
+export type PenaltySummary = {
+  late: GroupActivitySummary;
+  absence: GroupActivitySummary;
 };
 
-// 전체 응답
-export type ActivityRecords = {
-  rewards: Rewards;
-  penalties: Penalties;
+export type ActivitySummaryRecords = {
+  rewards: RewardSummary;
+  penalties: PenaltySummary;
 };
 
-// API 응답 DTO
-export type ActivityResponse = {
+export type ActivitySummaryResponse = {
   code: number;
   message: string;
   data: {
     score: number;
-    records: ActivityRecords;
+    records: ActivitySummaryRecords;
+  };
+};
+
+// =====================
+// 리스트용 타입 (History)
+// =====================
+export type ScoreMode = 'REWARD' | 'PENALTY';
+
+export type ActivityHistoryRaw = {
+  memberId: number;
+  categoryName: string;
+  activityName: string | null;
+  scoreType: ScoreMode;
+  activityDate: string; // ex: "25.09.19"
+  prefixSum: number; // 누적 점수
+  appliedScore: number; // 변동 점수 (+5 / -3)
+};
+
+export type ActivityHistory = {
+  memberId: number;
+  date: string;
+  category: string; // 대주제
+  activity?: string; // 소주제(옵션)
+  delta: number;
+  total: number;
+};
+
+export type ActivityHistoryResponse = {
+  code: number;
+  message: string;
+  data: {
+    content: ActivityHistoryRaw[];
+    pageNumber: number;
+    pageSize: number;
+    numberOfElements: number;
+    isLast: boolean;
   };
 };

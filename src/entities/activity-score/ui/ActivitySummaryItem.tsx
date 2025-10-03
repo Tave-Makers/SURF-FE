@@ -16,21 +16,24 @@ export const ActivitySummaryItem: FC<ActivitySummaryItemProps> = ({
   count,
   tooltip,
 }) => {
-  const { activeId, show } = useTooltipStore();
+  const { activeId, show, hide } = useTooltipStore();
   const showTooltip = activeId === id;
 
   return (
     <button
-      type="button"
       className="relative flex cursor-pointer items-center gap-[0.5rem]"
-      aria-describedby={tooltip && showTooltip ? `${id}-tooltip` : undefined}
       onClick={() => show(id, 1500)}
+      onFocus={() => show(id, 1500)}
+      onBlur={() => hide()}
+      onMouseEnter={() => show(id, 1500)}
+      onMouseLeave={() => hide()}
+      aria-describedby={showTooltip ? `tooltip-${id}` : undefined}
     >
       <Icon width="1.5rem" height="1.5rem" />
       <span className="text-body-14-400--2-22 text-foreground-normal">{count}회</span>
       {tooltip && showTooltip && (
         <div
-          id={`${id}-tooltip`}
+          id={`tooltip-${id}`}
           role="tooltip"
           className="absolute bottom-full mb-[0.25rem] w-max"
         >

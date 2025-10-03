@@ -6,7 +6,6 @@ export const getActivitySummary = async (): Promise<ActivitySummaryResponse['dat
     const response = await axiosInstance.get<ActivitySummaryResponse>(
       `/v1/user/members/personal-score/pinned5`,
     );
-    console.log(response.data);
     return response.data.data;
   } catch (error) {
     console.error('Error fetching activity summary:', error);

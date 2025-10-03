@@ -52,17 +52,23 @@ export default function ActivityScorePage() {
 
   return (
     <div className="flex flex-col items-center">
+      <h1 className="sr-only">활동 점수</h1>
+
       {/* 활동 점수 카드 */}
       <div className="pt-[1.88rem] pb-[2.5rem]">
-        {isSummaryLoading && <div>불러오는 중...</div>}
-        {isSummaryError && <div>데이터를 불러오는 중 오류가 발생했습니다.</div>}
+        {isSummaryLoading && (
+          <div aria-live="polite" aria-busy="true">
+            불러오는 중...
+          </div>
+        )}
+        {isSummaryError && <div role="alert">데이터를 불러오는 중 오류가 발생했습니다.</div>}
         {summary && (
           <ActivityScoreCard score={summary.score} records={summary.records} mode={mode} />
         )}
       </div>
 
       {/* 탭 버튼 */}
-      <div className="w-full max-w-[400px]">
+      <div className="w-full max-w-[400px]" role="tablist" aria-label="활동 유형">
         <Tab
           items={[
             { value: 'REWARD', label: '상점' },
@@ -75,8 +81,12 @@ export default function ActivityScorePage() {
 
       {/* 활동 점수 리스트 */}
       <div className="flex w-full px-[1rem] pt-[1.88rem]">
-        {isHistoryLoading && <div>불러오는 중...</div>}
-        {isHistoryError && <div>데이터를 불러오는 중 오류가 발생했습니다.</div>}
+        {isHistoryLoading && (
+          <div aria-live="polite" aria-busy="true">
+            불러오는 중...
+          </div>
+        )}
+        {isHistoryError && <div role="alert">데이터를 불러오는 중 오류가 발생했습니다.</div>}
         {history && <ActivityHistoryList records={history} />}
       </div>
 
@@ -84,6 +94,8 @@ export default function ActivityScorePage() {
       <div
         ref={loadMoreRef}
         className="text-body-14-600--1-20 text-foreground-hint flex items-center justify-center py-[1rem]"
+        aria-live="polite"
+        aria-atomic="true"
       >
         {isFetchingNextPage
           ? '로딩 중...'

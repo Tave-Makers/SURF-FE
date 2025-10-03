@@ -21,13 +21,16 @@ export const ActivitySummaryItem: FC<ActivitySummaryItemProps> = ({
 
   return (
     <button
+      type="button"
+      aria-label={`${count}회 활동 상세보기`}
+      aria-expanded={showTooltip}
+      aria-describedby={showTooltip ? `tooltip-${id}` : undefined}
       className="relative flex cursor-pointer items-center gap-[0.5rem]"
       onClick={() => show(id, 1500)}
       onFocus={() => show(id, 1500)}
       onBlur={() => hide()}
       onMouseEnter={() => show(id, 1500)}
       onMouseLeave={() => hide()}
-      aria-describedby={showTooltip ? `tooltip-${id}` : undefined}
     >
       <Icon width="1.5rem" height="1.5rem" />
       <span className="text-body-14-400--2-22 text-foreground-normal">{count}회</span>

@@ -5,7 +5,6 @@ import { useRouter } from 'next/navigation';
 import { SettingsItem } from '@/entities/settings/ui/SettingsItem';
 import { Alert } from '@/shared/ui/alert/Alert';
 import { SETTINGS_ITEMS } from '../model/constants';
-import type { IconName } from '@/shared/ui/icon/SurfIcon';
 import type { AlertType } from '../model/types';
 
 export const SettingsList = () => {
@@ -51,7 +50,7 @@ export const SettingsList = () => {
       {SETTINGS_ITEMS.map((item) => (
         <SettingsItem
           key={item.id}
-          leftIconName={item.leftIconName as IconName}
+          leftIconName={item.leftIconName}
           rightIconName="ChevronRight"
           isDisabled={false}
           onClick={() => handleItemClick(item)}

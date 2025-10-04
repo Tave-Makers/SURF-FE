@@ -11,7 +11,14 @@ export const FeedbackForm = () => {
 
   const handleSubmit = () => {
     if (!content.trim() || isPending) return;
-    submit({ content });
+    submit(
+      { content },
+      {
+        onSuccess: () => {
+          setContent('');
+        },
+      },
+    );
   };
 
   const isContentValid = content.trim().length > 0;

@@ -1,5 +1,5 @@
 import { axiosInstance } from '@/shared/lib/axiosInstance';
-import type { UserProfileApiResponse, BadgePageDTO } from './types';
+import type { UserProfileApiResponse, BadgeApiResponse } from './types';
 import type { UpdateProfileRequestDTO } from '@/entities/user/model/types';
 
 export async function getMyProfile() {
@@ -15,16 +15,16 @@ export async function updateMyProfile(payload: UpdateProfileRequestDTO): Promise
 export async function getMemberBadges(params: {
   memberId?: number;
   pageNum: number; // 페이지 번호
-  pageSize?: number; // 한 번에 받는 뱃지 갯수 (현재 9개 고정)
-}): Promise<BadgePageDTO> {
+  pageSize?: number; // 한 페이지에서 받는 뱃지 갯수 (현재 9개 고정)
+}): Promise<BadgeApiResponse> {
   const { memberId, pageNum, pageSize = 9 } = params;
   const queryParams: Record<string, number> = { pageSize, pageNum };
   if (memberId) {
     queryParams.memberId = memberId;
   }
 
-  const res = await axiosInstance.get<{ data: BadgePageDTO }>('/v1/user/members/badges', {
+  const res = await axiosInstance.get<BadgeApiResponse>('/v1/user/members/badges', {
     params: queryParams,
   });
-  return res.data.data;
+  return res.data;
 }

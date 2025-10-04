@@ -1,27 +1,25 @@
+import type { CommonResponse } from '@/shared/api/types';
+
 // 프로필 API response 원본
-export type UserProfileApiResponse = {
-  code: number;
-  message: string;
-  data: {
-    username: string;
-    phoneNumber: string;
-    email: string;
-    university: string | null;
-    graduateSchool: string | null;
-    role: 'SUPER_MANAGER' | 'EXECUTIVE_MANAGER' | 'MANAGER' | 'MEMBER';
-    activityScore: number;
-    isActive: boolean;
-    trackList: Array<{ generation: number; part: string }>;
-    careerList: Array<{
-      careerId: number;
-      companyName: string;
-      position: string;
-      startDate: string;
-      endDate: string | null;
-      isWorking: boolean;
-    }>;
-  };
-};
+export type UserProfileApiResponse = CommonResponse<{
+  username: string;
+  phoneNumber: string;
+  email: string;
+  university: string | null;
+  graduateSchool: string | null;
+  role: 'SUPER_MANAGER' | 'EXECUTIVE_MANAGER' | 'MANAGER' | 'MEMBER';
+  activityScore: number;
+  isActive: boolean;
+  trackList: Array<{ generation: number; part: string }>;
+  careerList: Array<{
+    careerId: number;
+    companyName: string;
+    position: string;
+    startDate: string;
+    endDate: string | null;
+    isWorking: boolean;
+  }>;
+}>;
 
 // 활동뱃지
 export type BadgeItemDTO = {
@@ -37,3 +35,5 @@ export type BadgePageDTO = {
   numberOfElements: number;
   isLast: boolean;
 };
+
+export type BadgeApiResponse = CommonResponse<BadgePageDTO>;

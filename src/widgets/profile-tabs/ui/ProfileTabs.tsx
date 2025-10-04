@@ -28,8 +28,10 @@ export function ProfileTabs({
 }: Props) {
   const [tab, setTab] = useState<'profile' | 'badges'>('profile');
 
-  const { data, isFetchingNextPage, fetchNextPage, hasNextPage, refetch, status } =
-    useBadgesInfiniteQuery(memberId, 9);
+  const { data, isFetchingNextPage, fetchNextPage, hasNextPage, refetch } = useBadgesInfiniteQuery(
+    memberId,
+    9,
+  );
 
   useEffect(() => {
     if (tab === 'badges') {
@@ -70,22 +72,22 @@ export function ProfileTabs({
       <div className="flex flex-col">
         {tab === 'profile' ? (
           <div className="flex flex-col gap-[1.5rem] px-[1rem] py-[1.25rem]">
-            <FieldGroup title="전화번호" isRequired>
+            <FieldGroup title="전화번호">
               <TextArea value={phoneNumber ?? ''} onChange={() => {}} readOnly />
             </FieldGroup>
 
-            <FieldGroup title="이메일" isRequired>
+            <FieldGroup title="이메일">
               <TextArea value={email ?? ''} onChange={() => {}} readOnly />
             </FieldGroup>
 
-            <FieldGroup title="학교" isRequired>
+            <FieldGroup title="학교">
               <TextArea value={university ?? ''} onChange={() => {}} readOnly />
               {graduateSchool ? (
                 <TextArea value={graduateSchool ?? ''} onChange={() => {}} readOnly />
               ) : null}
             </FieldGroup>
 
-            <FieldGroup title="경력" isRequired>
+            <FieldGroup title="경력">
               {Array.isArray(careers) && careers.length > 0 ? (
                 <ul className="flex flex-col gap-[0.5rem]">
                   {careers.map((c) => (
@@ -112,7 +114,6 @@ export function ProfileTabs({
             <div ref={loadMoreRef} className="h-8" />
 
             {isFetchingNextPage && <div className="mt-2">더 불러오는 중...</div>}
-            {!hasNextPage && status === 'success' && null}
           </div>
         )}
       </div>

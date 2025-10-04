@@ -12,12 +12,14 @@ export function useBadgesInfiniteQuery(memberId?: number, pageSize = 9) {
   return useInfiniteQuery({
     queryKey: memberId ? badgeKeys.all(memberId) : badgeKeys.my(),
     initialPageParam: 0,
-    queryFn: ({ pageParam }) =>
-      getMemberBadges({
+    queryFn: async ({ pageParam }) => {
+      const response = await getMemberBadges({
         ...(memberId && { memberId }),
         pageNum: pageParam,
         pageSize,
-      }),
+      });
+      return response.data;
+    },
     getNextPageParam: (last) => (last.isLast ? undefined : last.pageNumber + 1),
   });
 }

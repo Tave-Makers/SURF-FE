@@ -1,12 +1,12 @@
 import axios from 'axios';
 
-type DefaultError = {
-  status: number;
+export type DefaultError = {
+  code: number;
   message: string;
   errorCode: string;
 };
 
-type LoginCallBackError = {
+export type LoginCallBackError = {
   timestamp: string;
   path: string;
   status: number;
@@ -32,7 +32,7 @@ export function handleApiError(
           // DefaultError
           message = data.message || defaultMessage;
           console.error(
-            `[Backend Error] ${data.message} (code=${data.errorCode}, status=${data.status})`,
+            `[Backend Error] ${data.message} (code=${data.errorCode}, status=${data.code})`,
           );
         } else if ('requestId' in data) {
           // LoginCallBackError

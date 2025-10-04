@@ -13,7 +13,7 @@ const meta: Meta<typeof FieldGroup> = {
     isRequired: { control: 'boolean' },
   },
   args: {
-    title: '필드 그룹 제목',
+    title: '필드그룹 제목',
     isRequired: false,
   },
 };

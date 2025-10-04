@@ -9,8 +9,8 @@ export function QueryProvider({ children }: { children: ReactNode }) {
       new QueryClient({
         defaultOptions: {
           queries: {
-            staleTime: 1 * 60 * 1000, // 1분
-            gcTime: 5 * 60 * 1000, // 5분 (이전 cacheTime)
+            staleTime: 5 * 60 * 1000, // 5분
+            gcTime: 10 * 60 * 1000, // 10분 (이전 cacheTime)
             retry: 1, // 실패 시 1번만 재시도
             refetchOnWindowFocus: false, // 윈도우 포커스 시 자동 refetch 비활성화
           },

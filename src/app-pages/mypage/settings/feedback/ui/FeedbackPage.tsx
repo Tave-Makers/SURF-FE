@@ -1,6 +1,6 @@
 'use client';
 
-import { FeedbackForm } from '@/widgets/feedback-form/ui/FeedbackForm';
+import { FeedbackForm } from '@/features/feedback/ui/FeedbackForm';
 
 export default function FeedbackPage() {
   return (

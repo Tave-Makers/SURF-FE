@@ -1,4 +1,4 @@
-import ServicePolicyPage from '@/app-pages/mypage-policy/ui/ServicePolicyPage';
+import ServicePolicyPage from '@/app-pages/mypage/settings/policy/ui/ServicePolicyPage';
 
 export default function Page() {
   return <ServicePolicyPage />;

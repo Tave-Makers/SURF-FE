@@ -1,4 +1,4 @@
-import MyPostsPage from '@/app-pages/mypage-my-posts/ui/MyPostsPage';
+import MyPostsPage from '@/app-pages/mypage/settings/my-posts/ui/MyPostsPage';
 
 export default function Page() {
   return <MyPostsPage />;

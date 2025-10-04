@@ -109,10 +109,8 @@ export function ProfileTabs({
               ))}
             </div>
 
-            {/* 관찰 대상(무한스크롤 트리거) */}
             <div ref={loadMoreRef} className="h-8" />
 
-            {/* 바닥 상태 */}
             {isFetchingNextPage && <div className="mt-2">더 불러오는 중...</div>}
             {!hasNextPage && status === 'success' && null}
           </div>

@@ -30,10 +30,7 @@ export function PostListPage({ useInfiniteQueryHook }: PostListPageProps) {
     useInfiniteQueryHook(size, sort);
 
   // 모든 페이지의 게시글을 하나의 배열로 합치기
-  const allPosts =
-    data?.pages.flatMap((page) =>
-      transformApiResponseToPosts(page as { content: PostContent[] }),
-    ) ?? [];
+  const allPosts = data?.pages.flatMap((page) => transformApiResponseToPosts(page)) ?? [];
 
   // IntersectionObserver로 sentinel 감시
   useEffect(() => {

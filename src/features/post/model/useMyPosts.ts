@@ -3,48 +3,17 @@
 import { useQuery, useInfiniteQuery } from '@tanstack/react-query';
 import { getPosts } from '@/features/post/api/getPosts';
 import { PostApiResponse } from '@/entities/post/api/types';
-import { useAuthStore } from '@/features/auth/model/useAuthStore';
-import { useRouter } from 'next/navigation';
-import { useEffect } from 'react';
 
 // 내 게시글 조회 훅 (단일 페이지) - 현재 MVP2에서는 필요 없음
-export const useMyPosts = (
-  page: number = 0,
-  size: number = 10,
-  sort: string[] = [],
-  opts?: { enabled?: boolean },
-) => {
-  const { accessToken } = useAuthStore();
-  const router = useRouter();
-
-  useEffect(() => {
-    // persist rehydrate 이후에만 가드 실행
-    if (!useAuthStore.persist?.hasHydrated?.()) return;
-    if (!accessToken) router.replace('/login');
-  }, [accessToken, router]);
-
+export const useMyPosts = (page: number = 0, size: number = 10, sort: string[] = []) => {
   return useQuery<PostApiResponse>({
     queryKey: ['posts', 'my-posts', page, size, sort],
     queryFn: () => getPosts.getMyPosts({ page, size, sort }),
-    enabled: !!accessToken && (opts?.enabled ?? true), // 조건부 실행
   });
 };
 
-// 내 게시글 무한 스크롤 훅
-export const useInfiniteMyPosts = (
-  size: number = 10,
-  sort: string[] = [],
-  opts?: { enabled?: boolean },
-) => {
-  const { accessToken } = useAuthStore();
-  const router = useRouter();
-
-  useEffect(() => {
-    // persist rehydrate 이후에만 가드 실행
-    if (!useAuthStore.persist?.hasHydrated?.()) return;
-    if (!accessToken) router.replace('/login');
-  }, [accessToken, router]);
-
+// 내 게시글 조회 무한 스크롤 훅
+export const useInfiniteMyPosts = (size: number = 10, sort: string[] = []) => {
   return useInfiniteQuery<PostApiResponse>({
     queryKey: ['posts', 'my-posts', 'infinite', size, sort],
     queryFn: ({ pageParam }) => getPosts.getMyPosts({ page: pageParam as number, size, sort }),
@@ -53,6 +22,5 @@ export const useInfiniteMyPosts = (
       return lastPage.last ? undefined : lastPage.number + 1;
     },
     initialPageParam: 0,
-    enabled: !!accessToken && (opts?.enabled ?? true),
   });
 };

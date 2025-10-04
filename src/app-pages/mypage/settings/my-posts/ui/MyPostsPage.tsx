@@ -3,12 +3,10 @@
 import { useInfiniteMyPosts } from '@/features/post/model/useMyPosts';
 import { transformApiResponseToPosts } from '@/entities/post/api/mappers';
 import { PostContent } from '@/entities/post/api/types';
-import { useAuthStore } from '@/features/auth/model/useAuthStore';
 import { useEffect, useRef } from 'react';
 import { PostList } from '@/widgets/post-list/ui/PostList';
 
 export default function MyPostsPage() {
-  const { accessToken } = useAuthStore();
   // 화면 하단 DOM 요소 참조
   const loadMoreRef = useRef<HTMLDivElement | null>(null);
   const size = 10;
@@ -22,7 +20,7 @@ export default function MyPostsPage() {
     fetchNextPage,
     hasNextPage,
     isFetchingNextPage,
-  } = useInfiniteMyPosts(size, [], { enabled: !!accessToken });
+  } = useInfiniteMyPosts(size, []);
 
   // 모든 페이지의 게시글을 하나의 배열로 합치기
   const allPosts =
@@ -46,11 +44,6 @@ export default function MyPostsPage() {
     observer.observe(loadMoreRef.current);
     return () => observer.disconnect();
   }, [hasNextPage, fetchNextPage]);
-
-  // 인증되지 않은 경우 화면
-  if (!accessToken) {
-    return <div>로그인이 필요합니다. 로그인 페이지로 이동합니다...</div>;
-  }
 
   // 에러 발생 화면
   if (error) {

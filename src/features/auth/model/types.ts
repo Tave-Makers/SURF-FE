@@ -14,7 +14,7 @@ export type AuthState = AuthData & {
  *  이벤트 이름
  */
 export const AUTH_EVENTS = {
-  LOGIN_KAKAO_CLICK: 'login_kakao_click',
+  LOGIN_KAKAO_CLICK: 'login_kakao',
   // LOGIN_SUCCESS: 'login_success',
   // LOGIN_FAIL: 'login_fail',
 } as const;

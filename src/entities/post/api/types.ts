@@ -1,3 +1,6 @@
+// API 공통 응답 형식
+import { CommonResponse } from '@/shared/api/types';
+
 // 응답 Sort
 export type PostSort = {
   empty: boolean;
@@ -46,12 +49,8 @@ export type PostApiResponse = {
   empty: boolean;
 };
 
-// 전체 API 응답을 위한 래퍼 타입
-export type FullApiResponse = {
-  code: number;
-  message: string;
-  data: PostApiResponse;
-};
+// 게시물 관련 API 응답 전체 타입
+export type FullApiResponse = CommonResponse<PostApiResponse>;
 
 // 게시물 API 요청 타입
 export type PostApiRequest = {

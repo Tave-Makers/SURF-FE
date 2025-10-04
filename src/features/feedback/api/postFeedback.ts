@@ -5,9 +5,14 @@ import { SubmitFeedbackApiRequest, SubmitFeedbackApiResponse } from './types';
 export const postFeedback = async (
   content: SubmitFeedbackApiRequest,
 ): Promise<SubmitFeedbackApiResponse> => {
-  const response = await axiosInstance.post<SubmitFeedbackApiResponse>(
-    `/v1/user/feedbacks`,
-    content,
-  );
-  return response.data;
+  try {
+    const response = await axiosInstance.post<SubmitFeedbackApiResponse>(
+      `/v1/user/feedbacks`,
+      content,
+    );
+    return response.data;
+  } catch (error) {
+    console.error('[피드백 보내기 요청 실패]:', error);
+    throw error;
+  }
 };

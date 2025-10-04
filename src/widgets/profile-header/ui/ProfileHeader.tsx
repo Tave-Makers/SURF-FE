@@ -22,8 +22,8 @@ export function ProfileHeader({ name, level, chips }: Props) {
           <BadgeIcon width={20} height={20} />
         </div>
         <div className="flex flex-row flex-wrap gap-[0.25rem]">
-          {chips.map((chip, i) => (
-            <Chip key={i}>{chip}</Chip>
+          {chips.map((chip) => (
+            <Chip key={chip}>{chip}</Chip>
           ))}
         </div>
       </div>

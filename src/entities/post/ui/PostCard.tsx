@@ -46,7 +46,6 @@ export const PostCard = ({ post, onClick }: PostCardProps) => {
             <SurfIcon size="s" name="Heart" />
             <span className="text-caption-12-400">{likes}</span>
           </div>
-          <div className="font-pretendard text-[0.75rem] leading-none font-medium">|</div>
           <div className="flex items-center gap-[0.12rem]">
             <SurfIcon size="s" name="Chat" />
             <span className="text-caption-12-400">{comments}</span>

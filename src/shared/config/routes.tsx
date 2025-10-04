@@ -1,5 +1,8 @@
 import { HeaderMode, HeaderProps } from '@/shared/ui/header/Header';
 import { DummyLogo } from '@/shared/ui/logo/DummyLogo';
+import { useRouter } from 'next/navigation';
+
+type RouterInstance = ReturnType<typeof useRouter>;
 
 export type RouteConfig = {
   id: string;
@@ -8,7 +11,7 @@ export type RouteConfig = {
   header: HeaderProps;
 };
 
-export const ROUTE_CONFIG: RouteConfig[] = [
+export const createRouteConfig = (router: RouterInstance): RouteConfig[] => [
   {
     id: 'home',
     path: '/home',
@@ -47,6 +50,31 @@ export const ROUTE_CONFIG: RouteConfig[] = [
       mode: HeaderMode.Logo,
       logo: <DummyLogo />,
       icons: [{ label: 'Cog', onClickIcon: () => alert('설정') }],
+    },
+  },
+  {
+    id: 'mypage-activity-score',
+    path: '/mypage/activity-score',
+    backPath: '/mypage',
+    header: {
+      mode: HeaderMode.TextBtn,
+      title: '활동점수',
+      hasLeftIcon: true,
+      text: '회칙',
+      btnVariant: 'secondary',
+      onClickTextBtn: () => {
+        router.push('/mypage/activity-score/bylaws');
+      },
+    },
+  },
+  {
+    id: 'mypage-activity-score-bylaws',
+    path: '/mypage/activity-score/bylaws',
+    backPath: '/mypage/activity-score',
+    header: {
+      mode: HeaderMode.Default,
+      title: 'TAVE 회칙',
+      hasLeftIcon: true,
     },
   },
   {

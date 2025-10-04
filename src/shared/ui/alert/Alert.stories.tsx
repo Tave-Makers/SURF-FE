@@ -7,6 +7,9 @@ const meta = {
   tags: ['autodocs'],
   parameters: {
     layout: 'centered',
+    docs: {
+      story: { inline: false, height: '300px' },
+    },
   },
   argTypes: {
     state: {
@@ -16,7 +19,7 @@ const meta = {
     },
     title: { control: 'text', description: '제목' },
     infoText: { control: 'text', description: '설명 텍스트' },
-    actions: { table: { disable: true } }, // 배열 + 함수 포함 → 컨트롤 비활성화
+    actions: { table: { disable: true } },
   },
 } satisfies Meta<typeof Alert>;
 
@@ -33,6 +36,8 @@ export const DefaultTwoButtons: Story = {
       { type: 'solid', label: '취소', variant: 'secondary', onClick: () => console.log('cancel') },
       { type: 'solid', label: '로그아웃', variant: 'primary', onClick: () => alert('confirm') },
     ],
+    isOpen: true,
+    onClose: () => alert('모달 닫기'),
   },
 };
 
@@ -43,6 +48,8 @@ export const OneButton: Story = {
     title: '설정이 저장되었습니다',
     infoText: '변경 사항이 정상적으로 반영되었어요.',
     actions: [{ type: 'solid', label: '확인', variant: 'primary', onClick: () => alert('ok') }],
+    isOpen: true,
+    onClose: () => alert('모달 닫기'),
   },
 };
 
@@ -53,6 +60,8 @@ export const ErrorState: Story = {
     title: '문제가 발생했어요',
     infoText: '네트워크 상태를 확인한 뒤 다시 시도해 주세요.',
     actions: [{ type: 'text', label: '확인', variant: 'primary', onClick: () => alert('ack') }],
+    isOpen: true,
+    onClose: () => alert('모달 닫기'),
   },
 };
 
@@ -66,6 +75,8 @@ export const CustomSolidVariants: Story = {
       { type: 'solid', label: '취소', variant: 'secondary', onClick: () => console.log('cancel') },
       { type: 'solid', label: '삭제', variant: 'danger', onClick: () => alert('delete') },
     ],
+    isOpen: true,
+    onClose: () => alert('모달 닫기'),
   },
 };
 
@@ -80,5 +91,7 @@ export const LongText: Story = {
       { type: 'solid', label: '취소', variant: 'secondary', onClick: () => console.log('cancel') },
       { type: 'solid', label: '진행', variant: 'primary', onClick: () => alert('proceed') },
     ],
+    isOpen: true,
+    onClose: () => alert('모달 닫기'),
   },
 };

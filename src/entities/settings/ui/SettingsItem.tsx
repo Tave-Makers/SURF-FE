@@ -45,7 +45,7 @@ export const SettingsItem = forwardRef<HTMLButtonElement, SettingsItemProps>(
               name={leftIconName}
               size={'m'}
               aria-hidden
-              className="text-logo-normal h-[1.25rem] w-[1.25rem] opacity-100"
+              className="text-logo-normal h-[1.25rem] w-[1.25rem]"
             />
           )}
           {children && (

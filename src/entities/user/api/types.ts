@@ -1,4 +1,4 @@
-// 프로필 API reaponse 원본
+// 프로필 API response 원본
 export type UserProfileApiResponse = {
   code: number;
   message: string;

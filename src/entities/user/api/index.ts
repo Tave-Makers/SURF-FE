@@ -14,8 +14,8 @@ export async function updateMyProfile(payload: UpdateProfileRequestDTO): Promise
 
 export async function getMemberBadges(params: {
   memberId?: number;
-  pageNum: number;
-  pageSize?: number; // 9개 고정, 추후 변경 가능
+  pageNum: number; // 페이지 번호
+  pageSize?: number; // 한 번에 받는 뱃지 갯수 (현재 9개 고정)
 }): Promise<BadgePageDTO> {
   const { memberId, pageNum, pageSize = 9 } = params;
   const queryParams: Record<string, number> = { pageSize, pageNum };

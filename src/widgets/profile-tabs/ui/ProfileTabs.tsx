@@ -26,6 +26,7 @@ export function ProfileTabs({
   careers,
   memberId,
 }: Props) {
+  const noop = () => {};
   const [tab, setTab] = useState<'profile' | 'badges'>('profile');
 
   const { data, isFetchingNextPage, fetchNextPage, hasNextPage, refetch } = useBadgesInfiniteQuery(
@@ -73,17 +74,17 @@ export function ProfileTabs({
         {tab === 'profile' ? (
           <div className="flex flex-col gap-[1.5rem] px-[1rem] py-[1.25rem]">
             <FieldGroup title="전화번호">
-              <TextArea value={phoneNumber ?? ''} onChange={() => {}} readOnly />
+              <TextArea value={phoneNumber ?? ''} onChange={noop} readOnly />
             </FieldGroup>
 
             <FieldGroup title="이메일">
-              <TextArea value={email ?? ''} onChange={() => {}} readOnly />
+              <TextArea value={email ?? ''} onChange={noop} readOnly />
             </FieldGroup>
 
             <FieldGroup title="학교">
-              <TextArea value={university ?? ''} onChange={() => {}} readOnly />
+              <TextArea value={university ?? ''} onChange={noop} readOnly />
               {graduateSchool ? (
-                <TextArea value={graduateSchool ?? ''} onChange={() => {}} readOnly />
+                <TextArea value={graduateSchool ?? ''} onChange={noop} readOnly />
               ) : null}
             </FieldGroup>
 

@@ -6,23 +6,22 @@ import { SettingsItem } from '@/entities/settings/ui/SettingsItem';
 import { Alert } from '@/shared/ui/alert/Alert';
 import { SETTINGS_ITEMS } from '../model/constants';
 import type { IconName } from '@/shared/ui/icon/SurfIcon';
-
-type AlertType = 'logout' | 'withdraw' | null;
+import type { AlertType } from '../model/types';
 
 export const SettingsList = () => {
   const router = useRouter();
   const [activeAlert, setActiveAlert] = useState<AlertType>(null);
 
   const handleItemClick = useCallback(
-    (item: (typeof SETTINGS_ITEMS)[0]) => {
+    (item: (typeof SETTINGS_ITEMS)[number]) => {
       const { type, payload } = item.action;
 
       switch (type) {
         case 'NAVIGATE':
-          if (payload) router.push(payload);
+          if (payload) router.push(payload); // payload : string
           break;
         case 'OPEN_ALERT':
-          setActiveAlert(payload as AlertType);
+          setActiveAlert(payload); // payload : AlertType
           break;
         default:
           break;

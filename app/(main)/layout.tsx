@@ -5,7 +5,7 @@ export default function MainLayout({ children }: { children: React.ReactNode }) 
   return (
     <div className="flex h-full w-full flex-col">
       <AppHeader />
-      <section className="flex-1 overflow-auto">{children}</section>
+      <section className="flex-1">{children}</section>
       <AppNavigation />
     </div>
   );

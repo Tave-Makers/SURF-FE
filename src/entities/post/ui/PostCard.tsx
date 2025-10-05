@@ -23,9 +23,7 @@ export const PostCard = ({ post, onClick }: PostCardProps) => {
           <div className="text-caption-10-600--1 bg-border-normal text-foreground-accent flex h-fit w-fit items-center justify-center gap-[0.62rem] rounded-[62.43rem] px-[0.5rem] py-[0.125rem]">
             예약중
           </div>
-        ) : (
-          <></>
-        )}
+        ) : null}
         {/* title, content 영역 */}
         <div className="flex flex-col items-start gap-[0.12rem] self-stretch">
           <div className="text-body-14-600--1-20 text-foreground-normal line-clamp-1 overflow-hidden text-ellipsis">

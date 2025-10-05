@@ -78,6 +78,99 @@ export const createRouteConfig = (router: RouterInstance): RouteConfig[] => [
     },
   },
   {
+    id: 'mypage-settings',
+    path: '/mypage/settings',
+    backPath: '/mypage',
+    header: {
+      mode: HeaderMode.Default,
+      title: '설정 및 도움',
+      hasLeftIcon: true,
+    },
+  },
+  {
+    id: 'mypage-scraps',
+    path: '/mypage/settings/scraps',
+    backPath: '/mypage/settings',
+    header: {
+      mode: HeaderMode.Default,
+      title: '내가 스크랩한 게시글',
+      hasLeftIcon: true,
+    },
+  },
+  {
+    id: 'mypage-my-posts',
+    path: '/mypage/settings/my-posts',
+    backPath: '/mypage/settings',
+    header: {
+      mode: HeaderMode.Default,
+      title: '내가 작성한 게시글',
+      hasLeftIcon: true,
+    },
+  },
+  {
+    id: 'mypage-faq',
+    path: '/mypage/settings/faq',
+    backPath: '/mypage/settings',
+    header: {
+      mode: HeaderMode.Default,
+      title: 'FAQ',
+      hasLeftIcon: true,
+    },
+  },
+  {
+    id: 'mypage-feedback',
+    path: '/mypage/settings/feedback',
+    backPath: '/mypage/settings',
+    header: {
+      mode: HeaderMode.Default,
+      title: '피드백 보내기',
+      hasLeftIcon: true,
+    },
+  },
+  {
+    id: 'mypage-policy',
+    path: '/mypage/settings/policy',
+    backPath: '/mypage/settings',
+    header: {
+      mode: HeaderMode.Default,
+      title: '이용약관',
+      hasLeftIcon: true,
+    },
+  },
+
+  // 약관 상세 페이지
+  {
+    id: 'mypage-policy-service-policy',
+    path: '/mypage/settings/policy/service-policy',
+    backPath: '/mypage/settings/policy',
+    header: {
+      mode: HeaderMode.Default,
+      title: 'SURF 서비스 이용약관',
+      hasLeftIcon: true,
+    },
+  },
+  {
+    id: 'mypage-policy-personal-info-policy',
+    path: '/mypage/settings/policy/personal-info-policy',
+    backPath: '/mypage/settings/policy',
+    header: {
+      mode: HeaderMode.Default,
+      title: '개인정보 수집·이용 동의서',
+      hasLeftIcon: true,
+    },
+  },
+  {
+    id: 'mypage-policy-marketing-info-policy',
+    path: '/mypage/settings/policy/marketing-info-policy',
+    backPath: '/mypage/settings/policy',
+    header: {
+      mode: HeaderMode.Default,
+      title: '[선택] 마케팅 정보 수신 동의',
+      hasLeftIcon: true,
+    },
+  },
+
+  {
     id: 'onboarding',
     path: '/onboarding',
     backPath: '/login',

@@ -1,7 +1,7 @@
 'use client';
 
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
-import { getMyProfile, updateMyProfile } from '@/entities/user/api';
+import { getMyProfile, updateMyProfile } from '@/entities/user/api/profile';
 import { mapUserProfile } from './mappers';
 import type { UpdateProfileRequestDTO } from './types';
 import { handleApiError } from '@/shared/lib/handleApiError';

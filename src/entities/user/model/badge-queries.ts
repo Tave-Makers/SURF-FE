@@ -1,7 +1,7 @@
 'use client';
 
 import { useInfiniteQuery } from '@tanstack/react-query';
-import { getMemberBadges } from '@/entities/user/api';
+import { getMemberBadges } from '@/entities/user/api/badge';
 import { handleApiError } from '@/shared/lib/handleApiError';
 
 export const badgeKeys = {

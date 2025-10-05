@@ -141,7 +141,7 @@ export const createRouteConfig = (router: RouterInstance): RouteConfig[] => [
   // 약관 상세 페이지
   {
     id: 'mypage-policy-service-policy',
-    path: '/mypage/settings/policy/service-policy',
+    path: '/mypage/settings/policy/service',
     backPath: '/mypage/settings/policy',
     header: {
       mode: HeaderMode.Default,
@@ -151,7 +151,7 @@ export const createRouteConfig = (router: RouterInstance): RouteConfig[] => [
   },
   {
     id: 'mypage-policy-personal-info-policy',
-    path: '/mypage/settings/policy/personal-info-policy',
+    path: '/mypage/settings/policy/personal-info',
     backPath: '/mypage/settings/policy',
     header: {
       mode: HeaderMode.Default,
@@ -161,7 +161,7 @@ export const createRouteConfig = (router: RouterInstance): RouteConfig[] => [
   },
   {
     id: 'mypage-policy-marketing-info-policy',
-    path: '/mypage/settings/policy/marketing-info-policy',
+    path: '/mypage/settings/policy/marketing-info',
     backPath: '/mypage/settings/policy',
     header: {
       mode: HeaderMode.Default,

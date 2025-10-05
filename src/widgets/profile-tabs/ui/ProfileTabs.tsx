@@ -70,7 +70,7 @@ export function ProfileTabs({
         onValueChange={(v) => setTab(v as 'profile' | 'badges')}
       />
 
-      <div className="flex flex-col">
+      <div className="flex flex-col overflow-y-auto">
         {tab === 'profile' ? (
           <div className="flex flex-col gap-[1.5rem] px-[1rem] py-[1.25rem]">
             <FieldGroup title="전화번호">

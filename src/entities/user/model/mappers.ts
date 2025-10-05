@@ -35,7 +35,9 @@ export function mapUserLevel(role: UserProfileApiResponse['data']['role']): User
 export function mapPartToBanner(partKo: string): BannerPart | null {
   const norm = partKo.replace(/\s+/g, '');
   switch (norm) {
-    case '프론트엔드':
+    case '웹 프론트엔드':
+      return 'frontend';
+    case '앱 프론트엔드':
       return 'frontend';
     case '백엔드':
       return 'backend';

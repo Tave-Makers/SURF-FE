@@ -11,6 +11,9 @@ type Props = {
   bannerScore: number;
 };
 
+const ROUTE_MYPAGE_ACTIVITY_SCORE = '/mypage/activity-score';
+const ROUTE_MYPAGE_EDIT = '/mypage/edit';
+
 export function MyPageActions({ isActive, bannerPart, bannerScore }: Props) {
   const router = useRouter();
 
@@ -20,10 +23,10 @@ export function MyPageActions({ isActive, bannerPart, bannerScore }: Props) {
         <Banner
           part={bannerPart}
           score={bannerScore}
-          onClickMore={() => router.push('/mypage/activity-score')}
+          onClickMore={() => router.push(ROUTE_MYPAGE_ACTIVITY_SCORE)}
         />
       )}
-      <SolidButton size="s" variant="secondary" onClick={() => router.push('/mypage/edit')}>
+      <SolidButton size="s" variant="secondary" onClick={() => router.push(ROUTE_MYPAGE_EDIT)}>
         프로필 편집
       </SolidButton>
     </section>

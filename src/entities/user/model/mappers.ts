@@ -34,22 +34,15 @@ export function mapUserLevel(role: UserProfileApiResponse['data']['role']): User
 
 export function mapPartToBanner(partKo: string): BannerPart | null {
   const norm = partKo.replace(/\s+/g, '');
-  switch (norm) {
-    case '웹 프론트엔드':
-      return 'frontend';
-    case '앱 프론트엔드':
-      return 'frontend';
-    case '백엔드':
-      return 'backend';
-    case '디자인':
-      return 'design';
-    case '데이터분석':
-      return 'data-analysis';
-    case '딥러닝':
-      return 'deep-learning';
-    default:
-      return null;
-  }
+  const partMap: Record<string, BannerPart> = {
+    웹프론트엔드: 'frontend',
+    앱프론트엔드: 'frontend',
+    백엔드: 'backend',
+    디자인: 'design',
+    데이터분석: 'data-analysis',
+    딥러닝: 'deep-learning',
+  };
+  return partMap[norm] ?? null;
 }
 
 export function mapUserProfile(dto: UserProfileApiResponse['data']): UserProfile {

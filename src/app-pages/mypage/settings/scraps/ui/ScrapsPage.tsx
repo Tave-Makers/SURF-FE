@@ -1,9 +1,8 @@
 'use client';
 
+import { useInfiniteScraps } from '@/features/post/model/useScraps';
+import { PostListPage } from '@/widgets/post-list/ui/PostListPage';
+
 export default function ScrapsPage() {
-  return (
-    <>
-      <div>ScrapsPage</div>
-    </>
-  );
+  return <PostListPage useInfiniteQueryHook={useInfiniteScraps} />;
 }

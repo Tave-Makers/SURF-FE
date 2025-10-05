@@ -1,5 +1,4 @@
 import type { IconName } from '@/shared/ui/icon/SurfIcon';
-
 // Alert 종류 정의
 export type AlertType = 'logout' | 'withdraw' | null;
 

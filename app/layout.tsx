@@ -3,6 +3,7 @@ import '@/shared/styles/globals.css';
 import { QueryProvider } from '@/app/providers/QueryProvider';
 import { AuthProvider } from '@/app/providers/AuthProvider';
 import 'keen-slider/keen-slider.min.css';
+import { ReactQueryDevtools } from '@tanstack/react-query-devtools';
 
 export default function RootLayout({ children }: { children: ReactNode }) {
   return (
@@ -25,6 +26,7 @@ export default function RootLayout({ children }: { children: ReactNode }) {
             <main className="bg-background-normal box-content flex h-full w-dvw sm:w-[360px]">
               {children}
             </main>
+            <ReactQueryDevtools initialIsOpen={false} />
           </AuthProvider>
         </QueryProvider>
       </body>

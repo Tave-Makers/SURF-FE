@@ -48,6 +48,7 @@
     "@storybook/nextjs-vite": "^9.1.5",
     "@svgr/webpack": "^8.1.0",
     "@tailwindcss/postcss": "^4",
+    "@tanstack/react-query-devtools": "^5.90.2",
     "@types/eslint-plugin-jsx-a11y": "^6.10.0",
     "@types/node": "^20",
     "@types/react": "^19",

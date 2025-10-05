@@ -17,10 +17,10 @@ export const activityMetaMap = {
   UPLOAD_TAVE_REVIEW: { label: '활동 후기 작성', Icon: null },
 
   // 벌점 그룹 하위 (툴팁 전용)
-  SESSION_LATE: { label: '세션 지각', Icon: null },
-  TEAM_LATE: { label: '팀 지각', Icon: null },
-  SESSION_ABSENCE: { label: '세션 결석', Icon: null },
-  TEAM_ABSENCE: { label: '팀 결석', Icon: null },
+  SESSION_LATE: { label: '정규세션 지각', Icon: null },
+  TEAM_LATE: { label: '스터디/프로젝트 지각', Icon: null },
+  SESSION_ABSENCE: { label: '정규세션 결석', Icon: null },
+  TEAM_ABSENCE: { label: '스터디/프로젝트 결석', Icon: null },
 } as const;
 
 // 그룹 대표 (아이콘 O)

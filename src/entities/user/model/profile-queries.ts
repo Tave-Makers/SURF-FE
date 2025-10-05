@@ -23,8 +23,6 @@ export function useMyProfileQuery() {
         throw handleApiError(e, '프로필 조회에 실패했습니다.');
       }
     },
-    staleTime: 60_000, // 1분 동안 fresh
-    refetchOnWindowFocus: false, // 포커스 돌아와도 리페치 X
     refetchOnMount: false, // 마운트해도 리페치 X
     refetchOnReconnect: false, // 네트워크 재연결 시 리페치 X
   });

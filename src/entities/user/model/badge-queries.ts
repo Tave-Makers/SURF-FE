@@ -26,8 +26,5 @@ export function useBadgesInfiniteQuery(memberId?: number, pageSize = 9) {
       }
     },
     getNextPageParam: (last) => (last.isLast ? undefined : last.pageNumber + 1),
-    staleTime: 5 * 60 * 1000, // 5분
-    retry: 1, // 실패 시 1회만 재시도
-    refetchOnWindowFocus: false, // 스크롤 UI를 위해 off
   });
 }

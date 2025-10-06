@@ -82,7 +82,9 @@ const renderLeftIcon = (hasLeftIcon?: boolean, onClickBack?: () => void) =>
   );
 
 const renderTitle = (title?: string) =>
-  title ? <div className="text-head-18-700--1 flex-1 !leading-[18px]">{title}</div> : null;
+  title ? (
+    <div className="text-head-18-700--1 text-border-contrast flex-1 !leading-[18px]">{title}</div>
+  ) : null;
 
 const renderRightIcons = (icons: MaxThree<HeaderIcon> = []) => (
   <div className="ml-auto flex">

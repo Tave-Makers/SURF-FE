@@ -8,6 +8,9 @@ importers:
 
   .:
     dependencies:
+      '@amplitude/analytics-browser':
+        specifier: ^2.25.2
+        version: 2.25.2
       '@mynaui/icons-react':
         specifier: ^0.3.9
         version: 0.3.9(react@19.1.0)
@@ -174,6 +177,36 @@ packages:
   '@alloc/quick-lru@5.2.0':
     resolution: {integrity: sha512-UrcABB+4bUrFABwbluTIBErXwvbsU/V7TZWfmbgJfbkwiBuziS9gxdODUyuiecfdGQ85jglMW6juS3+z5TsKLw==}
     engines: {node: '>=10'}
+
+  '@amplitude/analytics-browser@2.25.2':
+    resolution: {integrity: sha512-9CXKoB1oip+fcYTrDVt/WcYXPugazsEjfZxzyS2P7A7tHD6icPnY1C1o4ziqBvkHn7mnhF//UG7OB7EphQg/nA==}
+
+  '@amplitude/analytics-client-common@2.4.3':
+    resolution: {integrity: sha512-B3PistL7I8TzC2FEP7BO8KBxIYzwCPiagrG3H7petZvp9y3LvNQwtviKF5JxGslDM7DDUQMVLVKcKKxhIMBPiw==}
+
+  '@amplitude/analytics-connector@1.6.4':
+    resolution: {integrity: sha512-SpIv0IQMNIq6SH3UqFGiaZyGSc7PBZwRdq7lvP0pBxW8i4Ny+8zwI0pV+VMfMHQwWY3wdIbWw5WQphNjpdq1/Q==}
+
+  '@amplitude/analytics-core@2.26.2':
+    resolution: {integrity: sha512-XIOzNiUCxzJwKuoK+N8rVjl0OlrfTszM+C9GyFxOYwn1zgZZEYCq0AqX1OIpy+vl+Bx3mLKZbRzxTl3eX46hLQ==}
+
+  '@amplitude/analytics-remote-config@0.4.1':
+    resolution: {integrity: sha512-BYl6kQ9qjztrCACsugpxO+foLaQIC0aSEzoXEAb/gwOzInmqkyyI+Ub+aWTBih4xgB/lhWlOcidWHAmNiTJTNw==}
+
+  '@amplitude/analytics-types@2.10.0':
+    resolution: {integrity: sha512-WP8eEbJh10MmFVnxkHjg92i5DBxBFsRvSZxjDQPXEGL8ZP+i7rSsleiH2K3VrwoKksYfZ/1eAqrZvevAmjSlig==}
+
+  '@amplitude/plugin-autocapture-browser@1.14.3':
+    resolution: {integrity: sha512-awpDTXhbbfRjR3ru5Y1FbwqPjsxZCpNpb5H9hu/O+ZpGJ5CJxT1DcgDh0Qan0r8RasXCUh8D8k6/GKiNsuyMNw==}
+
+  '@amplitude/plugin-network-capture-browser@1.6.5':
+    resolution: {integrity: sha512-8Dmikf4gdW+3aqiXNzmj08tkGmD66JsnHFz4TsEA3RcShp47OWEd3x3CW3wnHJG+ep2sXXnL8Cqjl1bio7E2GQ==}
+
+  '@amplitude/plugin-page-view-tracking-browser@2.4.3':
+    resolution: {integrity: sha512-bxZojtBudwnpj/e9+YXe2IawFcf7LsBthtq1UgKDCrYtgcpuwlm4ld2yP7QC3p1G+iptomHxfV70oLXWaBeJdw==}
+
+  '@amplitude/plugin-web-vitals-browser@0.1.0-frustrationanalytics.0':
+    resolution: {integrity: sha512-xv4sje6/D8r+SgNFTA22FJ5PhtdhN+VSydvs63Frll+qWlyQwaZ1IgDbPyqjzryEkldHRPD7GUaQual+geoIYg==}
 
   '@ampproject/remapping@2.3.0':
     resolution: {integrity: sha512-30iZtAPgz+LTIYoeivqYo853f02jBYSd5uGnGpkFV0M3xOt9aN73erkgYAmZU43x4VfqcnLxW9Kpg3R5LC4YYw==}
@@ -4139,6 +4172,9 @@ packages:
   run-parallel@1.2.0:
     resolution: {integrity: sha512-5l4VyZR86LZ/lDxZTR6jqL8AFE2S0IFLMP26AbjsLVADxHdhB/c0GUsH+y39UfCi3dzz8OlQuPmnaJOMoDHQBA==}
 
+  rxjs@7.8.2:
+    resolution: {integrity: sha512-dhKf903U/PQZY6boNNtAGdWbG85WAbjT/1xYoZIC7FAY0yWapOBQVsVrDl58W86//e1VpMNBtRV4MaXfdMySFA==}
+
   safe-array-concat@1.1.3:
     resolution: {integrity: sha512-AURm5f0jYEOydBj7VQlVvDrjeFgthDdEF5H1dP+6mNpoXOMo1quQqJ4wvJDyRZ9+pO3kGWoOdmV08cSv2aJV6Q==}
     engines: {node: '>=0.4'}
@@ -4694,6 +4730,9 @@ packages:
       jsdom:
         optional: true
 
+  web-vitals@5.1.0:
+    resolution: {integrity: sha512-ArI3kx5jI0atlTtmV0fWU3fjpLmq/nD3Zr1iFFlJLaqa5wLBkUSzINwBPySCX/8jRyjlmy1Volw1kz1g9XE4Jg==}
+
   webpack-virtual-modules@0.6.2:
     resolution: {integrity: sha512-66/V2i5hQanC51vBQKPH4aI8NMAcBW59FVBs+rC7eGHupMyfn34q7rZIE+ETlJ+XTevqfUhVVBgSUNSW2flEUQ==}
 
@@ -4813,6 +4852,64 @@ snapshots:
   '@adobe/css-tools@4.4.4': {}
 
   '@alloc/quick-lru@5.2.0': {}
+
+  '@amplitude/analytics-browser@2.25.2':
+    dependencies:
+      '@amplitude/analytics-core': 2.26.2
+      '@amplitude/analytics-remote-config': 0.4.1
+      '@amplitude/plugin-autocapture-browser': 1.14.3
+      '@amplitude/plugin-network-capture-browser': 1.6.5
+      '@amplitude/plugin-page-view-tracking-browser': 2.4.3
+      '@amplitude/plugin-web-vitals-browser': 0.1.0-frustrationanalytics.0
+      tslib: 2.8.1
+
+  '@amplitude/analytics-client-common@2.4.3':
+    dependencies:
+      '@amplitude/analytics-connector': 1.6.4
+      '@amplitude/analytics-core': 2.26.2
+      '@amplitude/analytics-types': 2.10.0
+      tslib: 2.8.1
+
+  '@amplitude/analytics-connector@1.6.4': {}
+
+  '@amplitude/analytics-core@2.26.2':
+    dependencies:
+      '@amplitude/analytics-connector': 1.6.4
+      tslib: 2.8.1
+
+  '@amplitude/analytics-remote-config@0.4.1':
+    dependencies:
+      '@amplitude/analytics-client-common': 2.4.3
+      '@amplitude/analytics-core': 2.26.2
+      '@amplitude/analytics-types': 2.10.0
+      tslib: 2.8.1
+
+  '@amplitude/analytics-types@2.10.0': {}
+
+  '@amplitude/plugin-autocapture-browser@1.14.3':
+    dependencies:
+      '@amplitude/analytics-core': 2.26.2
+      rxjs: 7.8.2
+      tslib: 2.8.1
+
+  '@amplitude/plugin-network-capture-browser@1.6.5':
+    dependencies:
+      '@amplitude/analytics-core': 2.26.2
+      rxjs: 7.8.2
+      tslib: 2.8.1
+
+  '@amplitude/plugin-page-view-tracking-browser@2.4.3':
+    dependencies:
+      '@amplitude/analytics-client-common': 2.4.3
+      '@amplitude/analytics-types': 2.10.0
+      tslib: 2.8.1
+
+  '@amplitude/plugin-web-vitals-browser@0.1.0-frustrationanalytics.0':
+    dependencies:
+      '@amplitude/analytics-core': 2.26.2
+      rxjs: 7.8.2
+      tslib: 2.8.1
+      web-vitals: 5.1.0
 
   '@ampproject/remapping@2.3.0':
     dependencies:
@@ -9230,6 +9327,10 @@ snapshots:
     dependencies:
       queue-microtask: 1.2.3
 
+  rxjs@7.8.2:
+    dependencies:
+      tslib: 2.8.1
+
   safe-array-concat@1.1.3:
     dependencies:
       call-bind: 1.0.8
@@ -9934,6 +10035,8 @@ snapshots:
       - terser
       - tsx
       - yaml
+
+  web-vitals@5.1.0: {}
 
   webpack-virtual-modules@0.6.2: {}
 

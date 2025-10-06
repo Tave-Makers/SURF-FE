@@ -4,6 +4,7 @@ import { QueryProvider } from '@/app/providers/QueryProvider';
 import { AuthProvider } from '@/app/providers/AuthProvider';
 import 'keen-slider/keen-slider.min.css';
 import { ReactQueryDevtools } from '@tanstack/react-query-devtools';
+import { AnalyticsProvider } from '@/app/providers/AnalyticsProvider';
 
 export default function RootLayout({ children }: { children: ReactNode }) {
   return (
@@ -21,6 +22,7 @@ export default function RootLayout({ children }: { children: ReactNode }) {
         />
       </head>
       <body className="flex min-h-screen items-center justify-center bg-gray-100">
+        <AnalyticsProvider />
         <QueryProvider>
           <AuthProvider>
             <main className="bg-background-normal box-content flex h-full w-dvw sm:w-[360px]">

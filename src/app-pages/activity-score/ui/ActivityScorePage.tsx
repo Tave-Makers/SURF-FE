@@ -7,10 +7,13 @@ import { Tab } from '@/shared/ui/tab/Tab';
 import { useActivitySummary } from '@/entities/activity-score/model/useActivitySummary';
 import { useInfiniteActivityHistory } from '@/entities/activity-score/model/useActivityHistory';
 import { useState, useRef, useEffect } from 'react';
+import { trackActivityScoreEvent } from '@/features/activity-score/lib/trackActivityScoreEvent';
 
 export default function ActivityScorePage() {
   // 탭 상태
   const [mode, setMode] = useState<ScoreMode>('REWARD');
+  // sentinel ref
+  const loadMoreRef = useRef<HTMLDivElement | null>(null);
 
   // 활동 요약 데이터
   const {
@@ -19,6 +22,17 @@ export default function ActivityScorePage() {
     isError: isSummaryError,
     refetch: refetchSummary,
   } = useActivitySummary();
+
+  // 이벤트 전송 여부를 확인하기 위한 ref
+  const trackedRef = useRef(false);
+
+  // 페이지 진입 시점에 이벤트 전송
+  useEffect(() => {
+    if (summary && !trackedRef.current) {
+      trackActivityScoreEvent('personal_score_view', { total_score: summary.score });
+      trackedRef.current = true;
+    }
+  }, [summary]);
 
   // 활동 히스토리 (무한스크롤)
   const {
@@ -32,9 +46,6 @@ export default function ActivityScorePage() {
   } = useInfiniteActivityHistory(mode, 5);
 
   const history = historyRaw?.pages.flatMap((page) => page.content) ?? [];
-
-  // sentinel ref
-  const loadMoreRef = useRef<HTMLDivElement | null>(null);
 
   useEffect(() => {
     if (!loadMoreRef.current || !hasNextPage) return;

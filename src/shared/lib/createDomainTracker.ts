@@ -8,8 +8,11 @@ export function createDomainTracker<const M extends Record<string, Record<string
 >(
   eventName: K,
   eventProps: M[K],
-) => void {
-  return function <K extends keyof M>(eventName: K, eventProps: M[K]): void {
+) => ReturnType<typeof trackEvent> {
+  return function <K extends keyof M>(
+    eventName: K,
+    eventProps: M[K],
+  ): ReturnType<typeof trackEvent> {
     return trackEvent<M, K>(eventName, eventProps);
   };
 }

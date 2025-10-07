@@ -1,34 +1,16 @@
 import type { UserProfileApiResponse } from '@/entities/user/api/types';
-import type { YearMonth, CareerDTO } from './types';
+import type { YearMonth, CareerDTO, UserProfile, BannerPart } from './types';
 
-export type BannerPart = 'frontend' | 'backend' | 'design' | 'data-analysis' | 'deep-learning';
-export type UserLevel = 'superManager' | 'executiveManager' | 'manager' | 'member';
-
-export type UserProfile = {
-  name: string;
-  phoneNumber: string;
-  email: string;
-  university: string | null;
-  graduateSchool: string | null;
-  level: UserLevel;
-  activityScore: number;
-
-  isActive: boolean;
-  bannerPart: BannerPart | null;
-  chips: string[];
-  careers: CareerDTO[];
-};
-
-export function mapUserLevel(role: UserProfileApiResponse['data']['role']): UserLevel {
+export function mapUserLevel(role: UserProfileApiResponse['data']['role']) {
   switch (role) {
     case 'SUPER_MANAGER':
-      return 'superManager';
+      return 'superManager' as const;
     case 'EXECUTIVE_MANAGER':
-      return 'executiveManager';
+      return 'executiveManager' as const;
     case 'MANAGER':
-      return 'manager';
+      return 'manager' as const;
     default:
-      return 'member';
+      return 'member' as const;
   }
 }
 
@@ -49,6 +31,15 @@ export function mapUserProfile(dto: UserProfileApiResponse['data']): UserProfile
   const primaryTrack = dto.trackList?.[0];
   const bannerPart = primaryTrack?.part ? mapPartToBanner(primaryTrack.part) : null;
 
+  const careers: CareerDTO[] = dto.careerList.map((c) => ({
+    careerId: c.careerId,
+    companyName: c.companyName,
+    position: c.position,
+    startDate: c.startDate as YearMonth,
+    endDate: (c.endDate ?? null) as YearMonth | null,
+    isWorking: c.isWorking,
+  }));
+
   return {
     name: dto.username,
     phoneNumber: dto.phoneNumber,
@@ -60,13 +51,6 @@ export function mapUserProfile(dto: UserProfileApiResponse['data']): UserProfile
     isActive: dto.isActive,
     bannerPart,
     chips: dto.trackList.map((t) => `${t.generation}기 ${t.part}`),
-    careers: dto.careerList.map((c) => ({
-      careerId: c.careerId,
-      companyName: c.companyName,
-      position: c.position,
-      startDate: c.startDate as YearMonth,
-      endDate: (c.endDate ?? null) as YearMonth | null,
-      isWorking: c.isWorking,
-    })),
+    careers,
   };
 }

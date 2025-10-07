@@ -5,7 +5,7 @@ import { getMyProfile, updateMyProfile } from '@/entities/user/api/profile';
 import { mapUserProfile } from './mappers';
 import type { UpdateProfileRequestDTO } from './types';
 import { handleApiError } from '@/shared/lib/handleApiError';
-import type { UserProfile } from './mappers';
+import type { UserProfile } from './types';
 
 export const userKeys = {
   all: ['user'] as const,

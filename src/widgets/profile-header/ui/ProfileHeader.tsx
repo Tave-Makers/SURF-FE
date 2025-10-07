@@ -2,7 +2,8 @@
 
 import { ProfileImage } from '@/shared/ui/profile-image/ProfileImage';
 import { Chip } from '@/shared/ui/chip/Chip';
-import { USER_LEVEL_BADGE, UserLevel } from '@/features/profile/model/userLevel';
+import type { UserLevel } from '@/entities/user/model/types';
+import { USER_LEVEL_BADGE } from '@/entities/user/ui/user-level/UserLevelBadges';
 
 type Props = {
   name: string;

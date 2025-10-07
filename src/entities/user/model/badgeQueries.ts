@@ -10,6 +10,7 @@ export const badgeKeys = {
 };
 
 export function useBadgesInfiniteQuery(memberId?: number, pageSize = 9) {
+  // 임시 고정
   return useInfiniteQuery({
     queryKey: memberId ? badgeKeys.all(memberId, pageSize) : badgeKeys.my(pageSize),
     initialPageParam: 0,

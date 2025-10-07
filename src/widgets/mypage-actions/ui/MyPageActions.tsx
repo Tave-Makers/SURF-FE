@@ -3,7 +3,7 @@
 import { Banner } from '@/shared/ui/banner/Banner';
 import { SolidButton } from '@/shared/ui/solid-button/SolidButton';
 import { useRouter } from 'next/navigation';
-import type { BannerPart } from '@/entities/user/model/mappers';
+import type { BannerPart } from '@/entities/user/model/types';
 
 type Props = {
   isActive: boolean;

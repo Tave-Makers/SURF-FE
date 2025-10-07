@@ -11,7 +11,7 @@ export default function PolicyPage() {
       <PolicyItem
         rightIconName="ChevronRight"
         onClick={() => {
-          router.push('/mypage/settings/policy/service-policy');
+          router.push('/mypage/settings/policy/service');
         }}
       >
         [필수] SURF 이용약관
@@ -19,7 +19,7 @@ export default function PolicyPage() {
       <PolicyItem
         rightIconName="ChevronRight"
         onClick={() => {
-          router.push('/mypage/settings/policy/personal-info-policy');
+          router.push('/mypage/settings/policy/personal-info');
         }}
       >
         [필수] 개인정보 수집·이용 동의서
@@ -27,7 +27,7 @@ export default function PolicyPage() {
       <PolicyItem
         rightIconName="ChevronRight"
         onClick={() => {
-          router.push('/mypage/settings/policy/marketing-info-policy');
+          router.push('/mypage/settings/policy/marketing-info');
         }}
       >
         [선택] 마케팅 정보 수신 동의

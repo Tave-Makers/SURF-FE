@@ -97,7 +97,15 @@ export function ProfileTabs({
                     </li>
                   ))}
                 </ul>
-              ) : null}
+              ) : (
+                <p
+                  className="text-fg-tertiary text-[0.875rem] leading-[1.25rem]"
+                  role="status"
+                  aria-live="polite"
+                >
+                  경력이 없습니다
+                </p> // 임시
+              )}
             </FieldGroup>
           </div>
         ) : (
@@ -114,6 +122,7 @@ export function ProfileTabs({
 
             <div ref={loadMoreRef} className="h-8" />
 
+            {/* 임시 */}
             {isFetchingNextPage && <div className="mt-2">더 불러오는 중...</div>}
           </div>
         )}

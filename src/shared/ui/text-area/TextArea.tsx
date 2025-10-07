@@ -1,13 +1,6 @@
 'use client';
 
-import {
-  forwardRef,
-  useRef,
-  useLayoutEffect,
-  useState,
-  type RefObject,
-  type TextareaHTMLAttributes,
-} from 'react';
+import { forwardRef, useRef, useLayoutEffect, useState, type TextareaHTMLAttributes } from 'react';
 
 export type TextAreaProps = Omit<
   TextareaHTMLAttributes<HTMLTextAreaElement>,
@@ -21,6 +14,7 @@ export type TextAreaProps = Omit<
   textLimit?: number;
   isDisabled?: boolean;
   placeholder?: string;
+  readOnly?: boolean;
 };
 
 export const TextArea = forwardRef<HTMLTextAreaElement, TextAreaProps>(
@@ -33,6 +27,7 @@ export const TextArea = forwardRef<HTMLTextAreaElement, TextAreaProps>(
       errorMessage,
       placeholder = '내용을 입력하세요',
       isDisabled = false,
+      readOnly = false,
       textLimit,
       className = '',
       onFocus: onFocusProp,
@@ -45,9 +40,12 @@ export const TextArea = forwardRef<HTMLTextAreaElement, TextAreaProps>(
     const [isFocused, setIsFocused] = useState(false);
 
     const hasValue = value.trim().length > 0;
+    const isInteractive = !(isDisabled || readOnly);
 
     const textColor = hasValue ? 'text-foreground-normal' : 'text-foreground-hint';
-    const borderColor = isFocused ? 'border border-border-primary' : 'border border-transparent';
+    const borderColor =
+      isInteractive && isFocused ? 'border border-border-primary' : 'border border-transparent';
+
     const disabledOpacity = isDisabled ? 'opacity-[var(--opacity-50,0.5)]' : '';
 
     useLayoutEffect(() => {
@@ -66,17 +64,23 @@ export const TextArea = forwardRef<HTMLTextAreaElement, TextAreaProps>(
     }, [mode]);
 
     const handleFocus = (e: React.FocusEvent<HTMLTextAreaElement>) => {
+      if (!isInteractive) return;
       setIsFocused(true);
       onFocusProp?.(e);
     };
 
     const handleBlur = (e: React.FocusEvent<HTMLTextAreaElement>) => {
+      if (!isInteractive) return;
       setIsFocused(false);
       onBlurProp?.(e);
     };
 
     return (
-      <div className={`flex flex-col gap-[0.25rem] ${disabledOpacity} ${className}`}>
+      <div
+        className={`flex flex-col gap-[0.25rem] ${disabledOpacity} ${className}`}
+        data-readonly={readOnly || undefined}
+        data-disabled={isDisabled || undefined}
+      >
         <div
           className={[
             'bg-background-normal-darker',
@@ -90,13 +94,17 @@ export const TextArea = forwardRef<HTMLTextAreaElement, TextAreaProps>(
               textareaRef.current = node;
               if (typeof ref === 'function') ref(node);
               else if (ref && 'current' in ref)
-                (ref as RefObject<HTMLTextAreaElement>).current = node as HTMLTextAreaElement;
+                (ref as React.RefObject<HTMLTextAreaElement>).current = node as HTMLTextAreaElement;
             }}
             value={value}
             placeholder={placeholder}
             disabled={isDisabled}
+            readOnly={readOnly}
             onFocus={handleFocus}
             onBlur={handleBlur}
+            onMouseDown={(e) => {
+              if (readOnly) e.preventDefault();
+            }}
             onChange={(e) => {
               const raw = e.target.value;
               const next = mode === 'oneLine' ? raw.replace(/\n/g, ' ') : raw;
@@ -109,15 +117,18 @@ export const TextArea = forwardRef<HTMLTextAreaElement, TextAreaProps>(
               'box-content min-h-0 appearance-none border-0 p-0',
               'placeholder:text-foreground-hint',
               textColor,
+              readOnly ? 'cursor-default select-text' : '',
               mode === 'oneLine'
                 ? 'h-[1.5rem] overflow-hidden leading-[1.5rem] text-ellipsis whitespace-nowrap'
                 : '',
             ].join(' ')}
             rows={mode === 'oneLine' ? 1 : undefined}
             aria-invalid={!!errorMessage}
+            aria-readonly={readOnly || undefined}
             aria-describedby={
               errorMessage ? 'textarea-error' : guideMessage ? 'textarea-guide' : undefined
             }
+            tabIndex={readOnly ? -1 : undefined}
             {...rest}
           />
 

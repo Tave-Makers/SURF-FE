@@ -5,7 +5,7 @@ import { FieldGroup } from './FieldGroup';
 import { TextArea } from '@/shared/ui/text-area/TextArea';
 
 const meta: Meta<typeof FieldGroup> = {
-  title: 'Widgets/UI/FieldGroup',
+  title: 'Shared/UI/FieldGroup',
   component: FieldGroup,
   tags: ['autodocs'],
   argTypes: {
@@ -13,7 +13,7 @@ const meta: Meta<typeof FieldGroup> = {
     isRequired: { control: 'boolean' },
   },
   args: {
-    title: '필드 그룹 제목',
+    title: '필드그룹 제목',
     isRequired: false,
   },
 };

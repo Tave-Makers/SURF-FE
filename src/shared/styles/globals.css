@@ -2,15 +2,27 @@
 @import './font-tokens.css';
 @import './color-tokens.css';
 
+/* 뷰포트 높이 전파 */
+html,
+body,
+#__next {
+  height: 100%;
+}
+
 html,
 body {
   font-family: Pretendard, NanumSquareNeo, sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-  height: 100% !important;
   overflow: hidden;
 }
 
+/* iOS 관성 스크롤 보강용 유틸 */
+.scroll-touch {
+  -webkit-overflow-scrolling: touch;
+}
+
+/* placeholder */
 .placeholder-body-14-600--1-24::placeholder {
   font-family: Pretendard, sans-serif;
   font-weight: 600;
@@ -22,11 +34,11 @@ body {
   text-decoration: none;
 }
 
+/* react-modal-sheet */
 .react-modal-sheet-header {
   padding: 0.65rem 0 !important;
   height: auto !important;
 }
-
 .react-modal-sheet-container {
   height: auto !important;
 }
@@ -44,6 +56,7 @@ body {
   }
 }
 
+/* wheel picker */
 .wheel.keen-slider {
   display: block;
   color: #828282;

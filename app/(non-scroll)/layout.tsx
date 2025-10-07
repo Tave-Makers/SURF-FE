@@ -3,7 +3,7 @@ import { AppNavigation } from '@/widgets/navigation/ui/AppNavigation';
 
 export default function NonScrollLayout({ children }: { children: React.ReactNode }) {
   return (
-    <div className="flex h-dvh w-dvw flex-col">
+    <div className="flex h-dvh w-full flex-col">
       <AppHeader />
       <section className="flex min-h-0 flex-1 flex-col overflow-hidden">{children}</section>
       <AppNavigation />

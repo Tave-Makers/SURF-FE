@@ -7,7 +7,7 @@ import { TextArea } from '@/shared/ui/text-area/TextArea';
 import { ActivityBadge } from '@/shared/ui/activity-badge/ActivityBadge';
 import { CareerCard } from '@/entities/user/ui/career-card/CareerCard';
 import type { CareerDTO } from '@/entities/user/model/types';
-import { useBadgesInfiniteQuery } from '@/entities/user/model/badge-queries';
+import { useBadgesInfiniteQuery } from '@/entities/user/model/badgeQueries';
 
 type Props = {
   phoneNumber: string;
@@ -99,10 +99,7 @@ export function ProfileTabs({
         />
       </div>
 
-      <div
-        ref={contentRef}
-        className="scroll-touch min-h-0 flex-1 overflow-y-auto pb-[calc(var(--bottom-nav-h,72px)]"
-      >
+      <div ref={contentRef} className="scroll-touch min-h-0 flex-1 overflow-y-auto">
         {tab === 'profile' ? (
           <div className="flex flex-col gap-[1.5rem] px-[1rem] py-[1.25rem]">
             <FieldGroup title="전화번호">

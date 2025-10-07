@@ -12,7 +12,7 @@ export function MyPage() {
   if (isError || !profile) return <div className="p-4">프로필을 불러오지 못했어요.</div>; // 추후 수정 필요
 
   return (
-    <div className="flex flex-col">
+    <div className="flex h-full flex-col">
       <ProfileHeader name={profile.name} level={profile.level} chips={profile.chips} />
       <MyPageActions
         isActive={profile.isActive}

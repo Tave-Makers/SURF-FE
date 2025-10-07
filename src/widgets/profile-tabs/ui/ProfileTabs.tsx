@@ -29,48 +29,80 @@ export function ProfileTabs({
   const noop = () => {};
   const [tab, setTab] = useState<'profile' | 'badges'>('profile');
 
-  const { data, isFetchingNextPage, fetchNextPage, hasNextPage, refetch } = useBadgesInfiniteQuery(
-    memberId,
-    9,
-  );
+  const { data, isLoading, isFetchingNextPage, fetchNextPage, hasNextPage, refetch } =
+    useBadgesInfiniteQuery(memberId, 9);
 
+  // 탭 컨텐츠 스크롤 컨테이너 & 센티넬
+  const contentRef = useRef<HTMLDivElement | null>(null);
+  const loadMoreRef = useRef<HTMLDivElement | null>(null);
+
+  // 뱃지 탭 진입 시 최신화
   useEffect(() => {
-    if (tab === 'badges') {
-      void refetch();
-    }
+    if (tab === 'badges') void refetch();
   }, [tab, refetch]);
 
   // 무한스크롤 옵저버
-  const loadMoreRef = useRef<HTMLDivElement | null>(null);
   useEffect(() => {
-    if (tab !== 'badges') return;
-    if (!loadMoreRef.current) return;
+    if (tab !== 'badges' || !loadMoreRef.current || !hasNextPage) return;
+    const rootEl = contentRef.current;
+    if (!rootEl) return;
 
-    const io = new IntersectionObserver((entries) => {
-      const first = entries[0];
-      if (first.isIntersecting && hasNextPage && !isFetchingNextPage) {
-        void fetchNextPage();
-      }
-    });
+    const io = new IntersectionObserver(
+      (entries) => {
+        const first = entries[0];
+        if (first.isIntersecting && hasNextPage && !isFetchingNextPage) {
+          void fetchNextPage();
+        }
+      },
+      {
+        root: rootEl, // 탭 아래 스크롤 컨테이너 기준
+        rootMargin: '200px',
+        threshold: 0.01,
+      },
+    );
 
     io.observe(loadMoreRef.current);
     return () => io.disconnect();
   }, [tab, hasNextPage, isFetchingNextPage, fetchNextPage]);
 
-  const badges = useMemo(() => data?.pages.flatMap((p) => p.content) ?? [], [data]);
+  // 뱃지 중복 제거 + 최신순 정렬
+  const badges = useMemo(() => {
+    const list = data?.pages.flatMap((p) => p.content) ?? [];
+    const seen = new Set<string>();
+    const deduped: typeof list = [];
+    for (const b of list) {
+      const sig = `${b.badgeName ?? ''}|${b.generation ?? ''}|${b.awardedAt ?? ''}`;
+      if (!seen.has(sig)) {
+        seen.add(sig);
+        deduped.push(b);
+      }
+    }
+    deduped.sort((a, b) => (b.awardedAt ?? '').localeCompare(a.awardedAt ?? ''));
+    return deduped;
+  }, [data]);
+
+  const badgeKey = (
+    b: { badgeName?: string; generation?: string | number; awardedAt?: string },
+    i: number,
+  ) => `${b.badgeName ?? 'noname'}-${b.generation ?? 'gen'}-${b.awardedAt ?? 'na'}-${i}`;
 
   return (
-    <>
-      <Tab
-        items={[
-          { value: 'profile', label: '프로필' },
-          { value: 'badges', label: '활동뱃지' },
-        ]}
-        value={tab}
-        onValueChange={(v) => setTab(v as 'profile' | 'badges')}
-      />
+    <div className="flex h-full min-h-0 flex-col">
+      <div className="sticky top-0 z-10">
+        <Tab
+          items={[
+            { value: 'profile', label: '프로필' },
+            { value: 'badges', label: '활동뱃지' },
+          ]}
+          value={tab}
+          onValueChange={(v) => setTab(v as 'profile' | 'badges')}
+        />
+      </div>
 
-      <div className="flex flex-col overflow-y-auto">
+      <div
+        ref={contentRef}
+        className="scroll-touch min-h-0 flex-1 overflow-y-auto pb-[calc(var(--bottom-nav-h,72px)]"
+      >
         {tab === 'profile' ? (
           <div className="flex flex-col gap-[1.5rem] px-[1rem] py-[1.25rem]">
             <FieldGroup title="전화번호">
@@ -99,34 +131,53 @@ export function ProfileTabs({
                 </ul>
               ) : (
                 <p
-                  className="text-fg-tertiary text-[0.875rem] leading-[1.25rem]"
+                  className="text-foreground-hint text-[0.875rem] leading-[1.25rem]"
                   role="status"
                   aria-live="polite"
                 >
                   경력이 없습니다
-                </p> // 임시
+                </p>
               )}
             </FieldGroup>
           </div>
         ) : (
           <div className="flex h-full w-full flex-col">
-            <div className="grid grid-cols-3 gap-[3rem] p-[2.5rem]">
-              {badges.map((b, i) => (
-                <ActivityBadge
-                  key={`${b.badgeName}-${b.generation}-${b.awardedAt}-${i}`}
-                  badgeName={b.badgeName}
-                  timestamp={b.awardedAt}
-                />
-              ))}
-            </div>
+            {!isLoading && (
+              <>
+                {Array.isArray(badges) && badges.length > 0 ? (
+                  <div className="grid grid-cols-3 gap-[3rem] p-[2.5rem]">
+                    {badges.map((b, i) => (
+                      <ActivityBadge
+                        key={badgeKey(b, i)}
+                        badgeName={b.badgeName}
+                        timestamp={b.awardedAt}
+                      />
+                    ))}
+                  </div>
+                ) : (
+                  <p
+                    className="text-foreground-hint text-[0.875rem] leading-[1.25rem]"
+                    role="status"
+                    aria-live="polite"
+                  >
+                    활동뱃지가 없습니다
+                  </p>
+                )}
 
-            <div ref={loadMoreRef} className="h-8" />
+                {/* 다음 페이지 있을 때만 센티넬 렌더 */}
+                {hasNextPage ? <div ref={loadMoreRef} className="h-8" /> : null}
 
-            {/* 임시 */}
-            {isFetchingNextPage && <div className="mt-2">더 불러오는 중...</div>}
+                {/* 추가 로딩 표시 */}
+                {isFetchingNextPage && (
+                  <div className="mt-2 px-[2.5rem]" role="status" aria-live="polite">
+                    더 불러오는 중...
+                  </div>
+                )}
+              </>
+            )}
           </div>
         )}
       </div>
-    </>
+    </div>
   );
 }

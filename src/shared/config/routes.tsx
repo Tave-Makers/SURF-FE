@@ -47,9 +47,29 @@ export const createRouteConfig = (router: RouterInstance): RouteConfig[] => [
     path: '/mypage',
     backPath: '/home',
     header: {
-      mode: HeaderMode.Logo,
+      icons: [
+        {
+          label: 'Cog',
+          onClickIcon: () => {
+            router.push('/mypage/settings');
+          },
+        },
+      ],
       logo: <DummyLogo />,
-      icons: [{ label: 'Cog', onClickIcon: () => alert('설정') }], // 임시
+      mode: HeaderMode.Logo,
+    },
+  },
+  {
+    id: 'mypage-edit',
+    path: '/mypage/edit',
+    backPath: '/mypage', // 임시
+    header: {
+      mode: HeaderMode.TextBtn,
+      title: '프로필 수정',
+      hasLeftIcon: true,
+      text: '저장',
+      btnVariant: 'secondary',
+      onClickTextBtn: () => alert('저장'),
     },
   },
   {
@@ -174,6 +194,15 @@ export const createRouteConfig = (router: RouterInstance): RouteConfig[] => [
     id: 'onboarding',
     path: '/onboarding',
     backPath: '/login',
+    header: {
+      mode: HeaderMode.Default,
+      hasLeftIcon: true,
+    },
+  },
+  {
+    id: 'profile',
+    path: '/profile',
+    backPath: '/mypage', // 임시
     header: {
       mode: HeaderMode.Default,
       hasLeftIcon: true,

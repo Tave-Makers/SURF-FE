@@ -15,11 +15,12 @@ export function AuthProvider({ children }: { children: ReactNode }) {
 
   const redirectTo = useCallback(
     (path: string) => {
+      if (pathname === path) return;
       if (isRedirecting.current) return;
       isRedirecting.current = true;
       router.replace(path);
     },
-    [router],
+    [router, pathname],
   );
 
   // 경로가 바뀌면 리다이렉트 가드 초기화
@@ -77,7 +78,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     };
 
     void checkAuth();
-  }, [hydrated, accessToken, pathname, router, setAuth, clearAuth, redirectTo]);
+  }, [hydrated, accessToken, router, setAuth, clearAuth, redirectTo]);
 
   if (!hydrated) {
     return <div>로딩중...</div>;

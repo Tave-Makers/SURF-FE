@@ -8,6 +8,7 @@ import { useActivitySummary } from '@/entities/activity-score/model/useActivityS
 import { useInfiniteActivityHistory } from '@/entities/activity-score/model/useActivityHistory';
 import { useState, useRef, useEffect } from 'react';
 import { trackActivityScoreEvent } from '@/features/activity-score/lib/trackActivityScoreEvent';
+import { ACTIVITY_SCORE_EVENTS } from '@/features/activity-score/model/types';
 
 export default function ActivityScorePage() {
   // 탭 상태
@@ -29,7 +30,12 @@ export default function ActivityScorePage() {
   // 페이지 진입 시점에 이벤트 전송
   useEffect(() => {
     if (summary && !trackedRef.current) {
-      trackActivityScoreEvent('personal_score_view', { total_score: summary.score });
+      trackActivityScoreEvent(ACTIVITY_SCORE_EVENTS.ACTIVITY_VIEW, {
+        member_id: 4,
+      });
+      trackActivityScoreEvent(ACTIVITY_SCORE_EVENTS.PERSONAL_SCORE_VIEW, {
+        total_score: summary.score,
+      });
       trackedRef.current = true;
     }
   }, [summary]);

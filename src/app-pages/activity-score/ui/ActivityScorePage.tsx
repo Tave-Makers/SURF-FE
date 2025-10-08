@@ -61,7 +61,7 @@ export default function ActivityScorePage() {
   }, [hasNextPage, isFetchingNextPage, fetchNextPage]);
 
   return (
-    <div className="flex flex-col items-center">
+    <div className="flex h-full flex-col items-center">
       <h1 className="sr-only">활동 점수</h1>
 
       {/* 활동 점수 카드 */}
@@ -101,7 +101,7 @@ export default function ActivityScorePage() {
       </div>
 
       {/* 활동 점수 리스트 */}
-      <div className="flex w-full flex-col gap-[2.25rem] px-[1rem] py-[1.88rem]">
+      <div className="flex w-full flex-1 flex-col gap-[2.25rem] overflow-y-auto px-[1rem] pt-[1.88rem]">
         {isHistoryLoading && (
           <div aria-live="polite" aria-busy="true">
             불러오는 중...
@@ -122,7 +122,7 @@ export default function ActivityScorePage() {
         )}
 
         {!isHistoryLoading && !isHistoryError && history.length === 0 && (
-          <div className="text-body-14-600--1-20 text-foreground-hint py-[1rem] text-center">
+          <div className="text-body-14-600--1-20 text-foreground-hint text-center">
             활동 내역이 없습니다.
           </div>
         )}

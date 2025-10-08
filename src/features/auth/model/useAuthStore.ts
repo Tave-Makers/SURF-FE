@@ -7,13 +7,14 @@ const initialState: AuthData = {
   nickname: null,
   email: null,
   profileImageUrl: null,
+  memberId: null,
 };
 
 export const useAuthStore = create<AuthState>()(
   persist(
     (set) => ({
       ...initialState,
-      setAuth: (auth) => set(auth),
+      setAuth: (auth) => set((state) => ({ ...state, ...auth })),
       clearAuth: () => set(initialState),
     }),
     {

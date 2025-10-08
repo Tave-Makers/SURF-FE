@@ -40,6 +40,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
 
   useEffect(() => {
     if (!hydrated) return;
+    let isCancelled = false;
 
     const checkAuth = async () => {
       // 1. 토큰이 없으면 로그인 페이지로 이동
@@ -51,6 +52,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       try {
         // 2. 유효성 검사 API 호출
         const res = await getValidStatus();
+        if (isCancelled) return;
         const { memberId, needOnboarding, memberStatus } = res.data;
         setAuth({ memberId });
 
@@ -64,6 +66,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
         const target = redirectRules[memberStatus]?.(pathname);
         if (target && pathname !== target) redirectRef.current(target);
       } catch (err) {
+        if (isCancelled) return;
         console.error('[AuthProvider] auth check failed:', err);
         clearAuth();
         if (pathname !== '/login') redirectRef.current('/login');
@@ -71,6 +74,9 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     };
 
     void checkAuth();
+    return () => {
+      isCancelled = true;
+    };
   }, [hydrated, accessToken, pathname, router, setAuth, clearAuth, redirectRules]);
 
   if (!hydrated) return <div>로딩중...</div>;

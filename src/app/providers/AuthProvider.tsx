@@ -22,6 +22,11 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     [router],
   );
 
+  // 경로가 바뀌면 리다이렉트 가드 초기화
+  useEffect(() => {
+    isRedirecting.current = false;
+  }, [pathname]);
+
   useEffect(() => {
     if (!hydrated) return;
 

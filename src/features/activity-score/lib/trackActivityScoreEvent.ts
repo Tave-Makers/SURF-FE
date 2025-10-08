@@ -1,9 +1,4 @@
-import { trackEvent } from '@/shared/lib/trackEvent';
+import { createDomainTracker } from '@/shared/lib/createDomainTracker';
 import { ActivityScoreEventPropsMap } from '../model/types';
 
-export function trackActivityScoreEvent<K extends keyof ActivityScoreEventPropsMap>(
-  eventName: K,
-  eventProps: ActivityScoreEventPropsMap[K],
-) {
-  trackEvent<ActivityScoreEventPropsMap, K>(eventName, eventProps);
-}
+export const trackActivityScoreEvent = createDomainTracker<ActivityScoreEventPropsMap>();

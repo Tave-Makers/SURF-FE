@@ -56,7 +56,6 @@ export function AuthProvider({ children }: { children: ReactNode }) {
             break;
           case 'APPROVED':
             // 승인된 경우엔 현재 페이지 그대로 렌더링
-            redirectTo('/home');
             break;
           case 'REJECTED':
             redirectTo('/login');

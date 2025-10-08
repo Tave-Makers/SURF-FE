@@ -12,7 +12,6 @@ export default function BylawsPage() {
   useEffect(() => {
     if (trackRef.current) return;
     trackRef.current = true;
-    console.log('📄 페이지 진입 트래킹 전송');
     trackBylawsEvent(BYLAWS_EVENTS.VIEW_RULES_MAIN, { page_name: '회칙 메인' });
   }, []);
 
@@ -30,7 +29,6 @@ export default function BylawsPage() {
     const fire = (t: number) => {
       if (!sent.has(t)) {
         sent.add(t);
-        console.log(`🔥 ${t}% 트래킹 이벤트 전송`);
         trackBylawsEvent(BYLAWS_EVENTS.SCROLL_RULES_PAGE, { percent: t });
       }
     };
@@ -63,7 +61,6 @@ export default function BylawsPage() {
     const interval = setInterval(() => {
       const cur = el.scrollHeight;
       if (cur !== prevScrollHeight) {
-        console.log('📏 scrollHeight 변경 감지 → baseline 재설정');
         prevScrollHeight = cur;
         const p = getPercent();
         sent = new Set(THRESHOLDS.filter((t) => t <= p));

@@ -58,6 +58,7 @@ export default function BylawsPage() {
     el.addEventListener('scroll', onScroll, { passive: true });
 
     // scrollHeight 변화 감시 (아코디언 열림 등)
+    // Note: 페이지 높이 변경 시 sent를 재설정하여, 새로운 높이 기준으로 임계치를 다시 트래킹
     const interval = setInterval(() => {
       const cur = el.scrollHeight;
       if (cur !== prevScrollHeight) {
@@ -74,8 +75,13 @@ export default function BylawsPage() {
   }, []);
 
   return (
-    <div ref={scrollerRef} className="h-full overflow-y-auto pt-[1.25rem]">
+    <main
+      ref={scrollerRef}
+      className="h-full overflow-y-auto pt-[1.25rem]"
+      role="main"
+      aria-label="회칙 목록"
+    >
       <BylawsAccordionGroup accordions={bylawsData} />
-    </div>
+    </main>
   );
 }

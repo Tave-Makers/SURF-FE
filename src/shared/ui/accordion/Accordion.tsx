@@ -41,6 +41,7 @@ export function Accordion({
   return (
     <div className={`${isOpen ? '' : 'border-border-normal border-b'}`}>
       <button
+        type="button"
         disabled={isDisabled}
         onClick={handleToggle}
         className="disabled:bg-background-quaternary text-foreground-normal text-body-16-600--1 flex w-full cursor-pointer items-center justify-between p-[1rem] disabled:cursor-not-allowed"

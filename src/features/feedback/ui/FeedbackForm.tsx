@@ -4,8 +4,8 @@ import { useState } from 'react';
 import { SolidButton } from '@/shared/ui/solid-button/SolidButton';
 import { usePostFeedback } from '@/features/feedback/model/usePostFeedback';
 import { TextArea } from '@/shared/ui/text-area/TextArea';
-import { FEEDBACK_EVENTS } from '../model/types';
-import { trackFeedbackEvent } from '../lib/trackFeedbackEvent';
+import { FEEDBACK_EVENTS } from '@/features/feedback/model/types';
+import { trackFeedbackEvent } from '@/features/feedback/lib/trackFeedbackEvent';
 
 export const FeedbackForm = () => {
   const [content, setContent] = useState('');
@@ -18,7 +18,7 @@ export const FeedbackForm = () => {
     const textLength = trimmed.length;
 
     submit(
-      { content },
+      { content: trimmed },
       {
         onSuccess: () => {
           trackFeedbackEvent(FEEDBACK_EVENTS.SUBMIT_FEEDBACK_RESULT, { success: true });

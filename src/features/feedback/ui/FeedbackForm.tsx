@@ -21,7 +21,6 @@ export const FeedbackForm = () => {
       { content: trimmed },
       {
         onSuccess: () => {
-          trackFeedbackEvent(FEEDBACK_EVENTS.SUBMIT_FEEDBACK_RESULT, { success: true });
           trackFeedbackEvent(FEEDBACK_EVENTS.SUBMITTED_FEEDBACK_TEXT_LENGTH, {
             text_length: textLength,
           });

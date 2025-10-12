@@ -25,7 +25,6 @@ export function PostListPage({ useInfiniteQueryHook }: PostListPageProps) {
   const size = 10;
   const sort: string[] = []; // 추후 정렬 기능 구현 시 동적으로 변경
 
-  // Prop으로 전달받은 훅 사용
   const { data, isLoading, error, fetchNextPage, hasNextPage, isFetchingNextPage } =
     useInfiniteQueryHook(size, sort);
 

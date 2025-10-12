@@ -8,6 +8,8 @@ import { ActivityBadge } from '@/shared/ui/activity-badge/ActivityBadge';
 import { CareerCard } from '@/entities/user/ui/career-card/CareerCard';
 import type { CareerDTO } from '@/entities/user/model/types';
 import { useBadgesInfiniteQuery } from '@/entities/user/model/badgeQueries';
+import * as amplitude from '@amplitude/analytics-browser';
+import { useAuthStore } from '@/features/auth/model/useAuthStore';
 
 type Props = {
   phoneNumber: string;
@@ -28,6 +30,29 @@ export function ProfileTabs({
 }: Props) {
   const noop = () => {};
   const [tab, setTab] = useState<'profile' | 'badges'>('profile');
+
+  const myMemberId = useAuthStore((s) => s.memberId);
+  const effectiveMemberId = useMemo(() => memberId ?? myMemberId ?? null, [memberId, myMemberId]);
+
+  const prevTabRef = useRef<'profile' | 'badges'>('profile');
+
+  useEffect(() => {
+    const prev = prevTabRef.current;
+
+    if (prev !== 'badges' && tab === 'badges') {
+      amplitude.track('badge_view', {
+        member_id: effectiveMemberId != null ? String(effectiveMemberId) : 'anonymous',
+      });
+    }
+
+    if (prev === 'badges' && tab === 'profile') {
+      amplitude.track('profile_view', {
+        member_id: effectiveMemberId != null ? String(effectiveMemberId) : 'anonymous',
+      });
+    }
+
+    prevTabRef.current = tab;
+  }, [tab, effectiveMemberId]);
 
   const { data, isLoading, isFetchingNextPage, fetchNextPage, hasNextPage, refetch } =
     useBadgesInfiniteQuery(memberId, 9);

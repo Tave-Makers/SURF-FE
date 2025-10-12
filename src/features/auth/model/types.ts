@@ -3,10 +3,11 @@ export type AuthData = {
   nickname: string | null;
   email: string | null;
   profileImageUrl: string | null;
+  memberId: number | null;
 };
 
 export type AuthState = AuthData & {
-  setAuth: (auth: AuthData) => void;
+  setAuth: (auth: Partial<AuthData>) => void;
   clearAuth: () => void;
 };
 

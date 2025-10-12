@@ -1,4 +1,3 @@
-import { getValidStatus } from '../api/getValidStatus';
 import { getKakaoLoginCallback } from '../api/getKakaoLoginCallback';
 
 import { useAuthStore } from './useAuthStore';
@@ -9,17 +8,18 @@ import { ErrorResponse } from '@/shared/lib/handleApiError';
 
 export async function handleKakaoLoginCallback(code: string): Promise<string> {
   const setAuth = useAuthStore.getState().setAuth;
+  const memberId = useAuthStore.getState().memberId;
 
   // 콜백 이벤트 트래킹
   trackAuthEvent(AUTH_EVENTS.LOGIN_CALLBACK, { code_length: code.length });
 
   try {
-    // 1. 카카오 로그인 콜백
+    // 카카오 로그인 콜백
     const res = await getKakaoLoginCallback(code);
 
     // 로그인 성공 이벤트 트래킹
     trackAuthEvent(AUTH_EVENTS.LOGIN_SUCCESS, {
-      user_id: res.data.email ?? 'unknown',
+      user_id: String(memberId ?? 'unknown'),
     });
 
     setAuth({
@@ -29,9 +29,7 @@ export async function handleKakaoLoginCallback(code: string): Promise<string> {
       profileImageUrl: res.data.profileImageUrl,
     });
 
-    // 2. 온보딩 여부 확인
-    const validStatus = await getValidStatus();
-    return validStatus.data ? '/onboarding' : '/home';
+    return '/home';
   } catch (error) {
     if (axios.isAxiosError<ErrorResponse>(error)) {
       // axios 에러인 경우

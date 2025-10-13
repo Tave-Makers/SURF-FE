@@ -5,6 +5,9 @@ import type { InfiniteData, UseInfiniteQueryResult } from '@tanstack/react-query
 import { transformApiResponseToPosts } from '@/entities/post/api/mappers';
 import type { PostContent } from '@/entities/post/api/types';
 import { PostList } from '@/widgets/post-list/ui/PostList';
+import { MY_POSTS_EVENTS } from '@/features/post/model/types';
+import { trackMyPostsEvent } from '@/features/post/lib/trackMyPostsEvent';
+import { Post } from '@/entities/post/model/types';
 
 // 서버 응답 data 페이지 당 타입
 type ApiPage = {
@@ -63,6 +66,11 @@ export function PostListPage({ useInfiniteQueryHook }: PostListPageProps) {
     );
   }
 
+  const handlePostClick = (post: Post) => {
+    console.log(`Post ${post.id} clicked`);
+    trackMyPostsEvent(MY_POSTS_EVENTS.CLICK_POST_CARD, { post_id: `${post.id}` });
+  };
+
   // 게시글 목록 렌더링
   return (
     <PostList
@@ -70,7 +78,7 @@ export function PostListPage({ useInfiniteQueryHook }: PostListPageProps) {
       isLoading={isLoading}
       isFetchingNextPage={isFetchingNextPage}
       hasNextPage={hasNextPage}
-      onPostClick={(post) => console.log(`Post ${post.id} clicked`)}
+      onPostClick={handlePostClick}
       loadMoreRef={loadMoreRef}
     />
   );

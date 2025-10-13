@@ -7,7 +7,7 @@ import { trackFeedbackEvent } from '@/features/feedback/lib/trackFeedbackEvent';
 
 export default function FeedbackPage() {
   useEffect(() => {
-    trackFeedbackEvent(FEEDBACK_EVENTS.VIEW_FEEDBACK_PAGE, { page_name: window.location.href });
+    trackFeedbackEvent(FEEDBACK_EVENTS.VIEW_FEEDBACK_PAGE, { page_name: 'feedback' });
   }, []);
 
   return (

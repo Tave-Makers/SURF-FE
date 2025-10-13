@@ -26,9 +26,7 @@ export const FeedbackForm = () => {
           });
           setContent('');
         },
-        onError: () => {
-          trackFeedbackEvent(FEEDBACK_EVENTS.SUBMIT_FEEDBACK_RESULT, { success: false });
-        },
+        onError: () => {},
       },
     );
   };

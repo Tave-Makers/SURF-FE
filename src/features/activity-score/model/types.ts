@@ -11,7 +11,7 @@ export const ACTIVITY_SCORE_EVENTS = {
  */
 export type ActivityScoreEventPropsMap = {
   [ACTIVITY_SCORE_EVENTS.ACTIVITY_VIEW]: {
-    member_id: number;
+    page_name: string;
   };
   [ACTIVITY_SCORE_EVENTS.PERSONAL_SCORE_VIEW]: {
     total_score: number;

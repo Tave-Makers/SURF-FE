@@ -31,7 +31,7 @@ export default function ActivityScorePage() {
   useEffect(() => {
     if (summary && !trackedRef.current) {
       trackActivityScoreEvent(ACTIVITY_SCORE_EVENTS.ACTIVITY_VIEW, {
-        member_id: 4,
+        page_name: 'activity_score',
       });
       trackActivityScoreEvent(ACTIVITY_SCORE_EVENTS.PERSONAL_SCORE_VIEW, {
         total_score: summary.score,

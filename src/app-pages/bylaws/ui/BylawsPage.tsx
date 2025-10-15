@@ -12,7 +12,7 @@ export default function BylawsPage() {
   useEffect(() => {
     if (trackRef.current) return;
     trackRef.current = true;
-    trackBylawsEvent(BYLAWS_EVENTS.VIEW_RULES_MAIN, { page_name: '회칙 메인' });
+    trackBylawsEvent(BYLAWS_EVENTS.VIEW_RULES_MAIN, { page_name: 'bylaws' });
   }, []);
 
   // 스크롤 퍼센트 트래킹

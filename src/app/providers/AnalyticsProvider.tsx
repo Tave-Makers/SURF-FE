@@ -2,11 +2,14 @@
 
 import { useEffect } from 'react';
 import * as amplitude from '@amplitude/analytics-browser';
+import { useAuthStore } from '@/features/auth/model/useAuthStore';
 const AMPLITUDE_API_KEY = process.env.NEXT_PUBLIC_AMPLITUDE_API_KEY ?? '';
 
 let amplitudeInitialized = false;
 
 export function AnalyticsProvider() {
+  const memberId = useAuthStore((s) => s.memberId);
+
   const initAmplitude = () => {
     if (!AMPLITUDE_API_KEY || amplitudeInitialized) return;
     try {
@@ -26,6 +29,16 @@ export function AnalyticsProvider() {
   useEffect(() => {
     initAmplitude();
   }, []);
+
+  // memberId 변경 시 Amplitude userId 업데이트
+  useEffect(() => {
+    if (!amplitudeInitialized) return;
+    if (memberId) {
+      amplitude.setUserId(`member-${memberId}`);
+    } else {
+      amplitude.setUserId(undefined);
+    }
+  }, [memberId]);
 
   // 페이지 이탈 시점에 안전하게 이벤트 전송
   useEffect(() => {

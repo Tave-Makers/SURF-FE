@@ -1,7 +1,7 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useFormContext } from 'react-hook-form';
 import OnBoardingLayout from './OnBoardingLayout';
-import { OnBoardingFormData } from '@/features/onboarding/model/types';
+import { ONBOARDING_EVENTS, OnBoardingFormData } from '@/features/onboarding/model/types';
 import { ProfileStep } from '@/features/onboarding/ui/ProfileStep';
 import { TrackUnivStep } from '@/features/onboarding/ui/TrackUnivStep';
 import { EmailPhoneStep } from '@/features/onboarding/ui/EmailPhoneStep';
@@ -9,6 +9,7 @@ import { submitOnBoarding } from '@/features/onboarding/api/submitOnBoarding';
 import { useRouter } from 'next/navigation';
 import axios from 'axios';
 import { DefaultError } from '@/shared/lib/handleApiError';
+import { trackOnBoardingEvent } from '@/features/onboarding/lib/trackOnBoardingEvent';
 
 export default function OnBoardingForm() {
   const [step, setStep] = useState(0);
@@ -43,6 +44,19 @@ export default function OnBoardingForm() {
   ];
   const StepComponent = steps[step].component;
 
+  // step이 바뀔 때마다 signup_page_view 트래킹
+  useEffect(() => {
+    const stepNames: Record<number, 'nickname' | 'track' | 'contact'> = {
+      0: 'nickname',
+      1: 'track',
+      2: 'contact',
+    };
+
+    trackOnBoardingEvent(ONBOARDING_EVENTS.SIGNUP_PAGE_VIEW, {
+      step: stepNames[step],
+    });
+  }, [step]);
+
   async function handleNext() {
     const isValid = await methods.trigger(steps[step].fields);
     if (!isValid) return;
@@ -53,6 +67,17 @@ export default function OnBoardingForm() {
       // 전체 값 제출
       await methods.handleSubmit(async (data) => {
         try {
+          // 온보딩 제출 signup_submit 트래킹
+          const filledCount = Object.values(data).filter(
+            (v) =>
+              v !== '' && //  빈 문자열이 아닌 경우는 제외
+              v !== null && //  null이 아닌 경우는 제외
+              !(Array.isArray(v) && v.length === 0), // 빈 배열([])인 경우는 제외
+          ).length;
+
+          trackOnBoardingEvent(ONBOARDING_EVENTS.SIGNUP_SUBMIT, {
+            input_count: filledCount,
+          });
           await submitOnBoarding(data);
           router.push('/home');
         } catch (error) {

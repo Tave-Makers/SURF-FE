@@ -43,3 +43,21 @@ export type OnBoardingResponse = {
     phoneNumber: string;
   };
 };
+
+/**
+ *  온보딩 이벤트 이름
+ */
+export const ONBOARDING_EVENTS = {
+  SIGNUP_PAGE_VIEW: 'signup_page_view',
+  SIGNUP_INPUT: 'signup_input',
+  SIGNUP_SUBMIT: 'signup_submit',
+} as const;
+
+/**
+ * 이벤트별 속성 타입 매핑
+ */
+export type OnBoardingEventPropsMap = {
+  [ONBOARDING_EVENTS.SIGNUP_PAGE_VIEW]: { step: string };
+  [ONBOARDING_EVENTS.SIGNUP_INPUT]: { field_name: string };
+  [ONBOARDING_EVENTS.SIGNUP_SUBMIT]: { input_count: number };
+};

@@ -1,5 +1,5 @@
 {
-  "surf": {
+  "surf font": {
     "family": {
       "family": {
         "value": "Wanted Sans Variable",
@@ -1323,7 +1323,7 @@
   "$themes": [],
   "$metadata": {
     "tokenSetOrder": [
-      "surf",
+      "surf font",
       "surf color",
       "Primitive/Light",
       "Primitive/Dark",

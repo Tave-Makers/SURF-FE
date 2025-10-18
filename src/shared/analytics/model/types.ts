@@ -9,6 +9,9 @@ export const COMMON_EVENTS = {
   // API 공통
   API_RESULT: 'api_result',
   API_ERROR: 'api_error',
+
+  // API + 페이지
+  REQUEST_TRACE: 'request_trace',
 } as const;
 
 /**
@@ -38,6 +41,12 @@ export type CommonEventPropsMap = {
     endpoint: string;
     method: string;
     error_message?: string;
+    request_id: string;
+  };
+
+  // API + 페이지
+  [COMMON_EVENTS.REQUEST_TRACE]: {
+    page_name: string;
     request_id: string;
   };
 };

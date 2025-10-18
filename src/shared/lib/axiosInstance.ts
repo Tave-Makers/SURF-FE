@@ -2,6 +2,8 @@ import axios, { AxiosResponse, InternalAxiosRequestConfig } from 'axios';
 import { API_BASE_URL } from '@/shared/config/env';
 import { useAuthStore } from '@/features/auth/model/useAuthStore';
 import { logApiResult, logApiError } from '@/shared/analytics/lib/logApiEvent';
+import { trackCommonEvent } from '@/shared/analytics/lib/trackCommentEvent';
+import { COMMON_EVENTS } from '@/shared/analytics/model/types';
 
 /**
  * ✅ 커스텀 Axios 설정 타입
@@ -42,8 +44,16 @@ axiosInstance.interceptors.request.use(
       delete config.headers.Authorization;
     }
 
-    // ✅ request_id 생성 (고유 식별자)
+    // request_id 생성 (고유 식별자)
     const requestId = `fe_${Date.now()}_${Math.random().toString(36).slice(2, 8)}`;
+
+    // request_trace 이벤트
+    const pathname = typeof window !== 'undefined' ? window.location.pathname : '(server)';
+    trackCommonEvent(COMMON_EVENTS.REQUEST_TRACE, {
+      request_id: requestId,
+      page_name: pathname,
+    });
+
     config.headers['X-Request-ID'] = requestId; // 백엔드로 전달 (미연동이어도 무방)
     // (2) 요청 시작 시각 (duration 계산용), request_id 저장
     config.metadata = {

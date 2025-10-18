@@ -11,6 +11,7 @@ import { logApiResult, logApiError } from '@/shared/analytics/lib/logApiEvent';
 interface RequestConfigWithMeta extends InternalAxiosRequestConfig {
   metadata?: {
     startTime: number; // 요청 시작 시간 (timestamp, ms 단위)
+    requestId: string; // 요청 고유 식별자
   };
 }
 
@@ -41,8 +42,14 @@ axiosInstance.interceptors.request.use(
       delete config.headers.Authorization;
     }
 
-    // (2) 요청 시작 시각 저장 (duration 계산용)
-    config.metadata = { startTime: Date.now() };
+    // ✅ request_id 생성 (고유 식별자)
+    const requestId = `fe_${Date.now()}_${Math.random().toString(36).slice(2, 8)}`;
+    config.headers['X-Request-ID'] = requestId; // 백엔드로 전달 (미연동이어도 무방)
+    // (2) 요청 시작 시각 (duration 계산용), request_id 저장
+    config.metadata = {
+      startTime: Date.now(),
+      requestId,
+    };
 
     return config;
   },
@@ -66,6 +73,8 @@ axiosInstance.interceptors.response.use(
     const startTime = config.metadata?.startTime;
     const duration = startTime ? Date.now() - startTime : undefined;
 
+    const requestId = config.metadata?.requestId;
+
     // Amplitude에 성공/실패 결과 로깅
     logApiResult({
       endpoint: config.url || '', // 호출된 엔드포인트
@@ -73,6 +82,7 @@ axiosInstance.interceptors.response.use(
       status_code: response.status, // HTTP 상태 코드
       duration_ms: duration, // 요청 → 응답까지 걸린 시간(ms)
       result: response.status >= 200 && response.status < 300 ? 'SUCCESS' : 'FAILURE',
+      request_id: requestId || '',
     });
 
     return response;
@@ -84,6 +94,7 @@ axiosInstance.interceptors.response.use(
       const config = error.config as RequestConfigWithMeta | undefined;
       const startTime = config?.metadata?.startTime;
       const duration = startTime ? Date.now() - startTime : undefined;
+      const requestId = config?.metadata?.requestId;
 
       if (error.response) {
         /**
@@ -96,6 +107,7 @@ axiosInstance.interceptors.response.use(
           status_code: error.response.status,
           duration_ms: duration,
           result: 'FAILURE',
+          request_id: requestId || '',
         });
       } else {
         /**
@@ -106,6 +118,7 @@ axiosInstance.interceptors.response.use(
           endpoint: config?.url || '',
           method: config?.method?.toUpperCase() || 'GET',
           error_message: error.message,
+          request_id: requestId || '',
         });
       }
     }

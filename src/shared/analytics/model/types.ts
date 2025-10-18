@@ -32,10 +32,12 @@ export type CommonEventPropsMap = {
     status_code: number;
     duration_ms?: number;
     result: 'SUCCESS' | 'FAILURE';
+    request_id: string;
   };
   [COMMON_EVENTS.API_ERROR]: {
     endpoint: string;
     method: string;
     error_message?: string;
+    request_id: string;
   };
 };

@@ -5,7 +5,7 @@ import { PostListPage } from '@/widgets/post-list/ui/PostListPage';
 import { SCRAPS_EVENTS } from '@/features/post/model/types';
 import { trackScrapsEvent } from '@/features/post/lib/trackScrapsEvent';
 import { useEffect } from 'react';
-import { useScrapsScrollAnalyticsRef } from '@/features/post/model/useScrapsScrollAnalyticsRef';
+import { useDynamicScrollTracking } from '@/shared/hooks/useDynamicScrollTracking';
 
 export default function ScrapsPage() {
   useEffect(() => {
@@ -14,7 +14,9 @@ export default function ScrapsPage() {
   }, []);
 
   // ref 콜백 기반 스크롤 트래킹 훅
-  const scrollRef = useScrapsScrollAnalyticsRef();
+  const scrollRef = useDynamicScrollTracking<HTMLDivElement>((percent) => {
+    trackScrapsEvent(SCRAPS_EVENTS.SCROLL_SCRAPS_PAGE, { percent });
+  });
 
   return (
     <div className="flex h-full">

@@ -8,8 +8,11 @@ import { ActivityBadge } from '@/shared/ui/activity-badge/ActivityBadge';
 import { CareerCard } from '@/entities/user/ui/career-card/CareerCard';
 import type { CareerDTO } from '@/entities/user/model/types';
 import { useBadgesInfiniteQuery } from '@/entities/user/model/badgeQueries';
-import * as amplitude from '@amplitude/analytics-browser';
 import { useAuthStore } from '@/features/auth/model/useAuthStore';
+import { PROFILE_EVENTS } from '@/features/profile/model/types';
+import { trackProfileEvent } from '@/features/profile/lib/trackProfileEvent';
+import { BADGE_EVENTS } from '@/features/activity-badges/model/types';
+import { trackBadgeEvent } from '@/features/activity-badges/lib/trackBadgeEvent';
 
 type Props = {
   phoneNumber: string;
@@ -40,13 +43,13 @@ export function ProfileTabs({
     const prev = prevTabRef.current;
 
     if (prev !== 'badges' && tab === 'badges') {
-      amplitude.track('badge_view', {
+      trackBadgeEvent(BADGE_EVENTS.VIEW_BADGE, {
         member_id: effectiveMemberId != null ? String(effectiveMemberId) : 'anonymous',
       });
     }
 
     if (prev === 'badges' && tab === 'profile') {
-      amplitude.track('profile_view', {
+      trackProfileEvent(PROFILE_EVENTS.VIEW_PROFILE, {
         member_id: effectiveMemberId != null ? String(effectiveMemberId) : 'anonymous',
       });
     }

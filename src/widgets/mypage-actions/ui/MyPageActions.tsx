@@ -1,6 +1,6 @@
 'use client';
 
-import { ActivityScoreBanner } from '@/shared/ui/activity-score-banner/ActivityScoreBanner';
+import { ActivityScoreBanner } from '@/shared/ui/banner/ActivityScoreBanner';
 import { SolidButton } from '@/shared/ui/solid-button/SolidButton';
 import { useRouter } from 'next/navigation';
 import type { BannerPart } from '@/entities/user/model/types';

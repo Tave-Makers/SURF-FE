@@ -9,6 +9,7 @@ import { useInfiniteActivityHistory } from '@/entities/activity-score/model/useA
 import { useState, useRef, useEffect } from 'react';
 import { trackActivityScoreEvent } from '@/features/activity-score/lib/trackActivityScoreEvent';
 import { ACTIVITY_SCORE_EVENTS } from '@/features/activity-score/model/types';
+import { usePageName } from '@/shared/analytics/lib/getPageName';
 
 export default function ActivityScorePage() {
   // 탭 상태
@@ -26,19 +27,20 @@ export default function ActivityScorePage() {
 
   // 이벤트 전송 여부를 확인하기 위한 ref
   const trackedRef = useRef(false);
+  const pageName = usePageName();
 
   // 페이지 진입 시점에 이벤트 전송
   useEffect(() => {
     if (summary && !trackedRef.current) {
       trackActivityScoreEvent(ACTIVITY_SCORE_EVENTS.ACTIVITY_VIEW, {
-        page_name: 'activity_score',
+        page_name: pageName,
       });
       trackActivityScoreEvent(ACTIVITY_SCORE_EVENTS.PERSONAL_SCORE_VIEW, {
         total_score: summary.score,
       });
       trackedRef.current = true;
     }
-  }, [summary]);
+  }, [summary, pageName]);
 
   // 활동 히스토리 (무한스크롤)
   const {

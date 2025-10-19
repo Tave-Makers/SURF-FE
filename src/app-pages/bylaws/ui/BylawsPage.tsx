@@ -6,6 +6,7 @@ import { useEffect, useRef } from 'react';
 import { trackBylawsEvent } from '@/features/bylaws/lib/trackBylawsEvent';
 import { BYLAWS_EVENTS } from '@/features/bylaws/model/types';
 import { useDynamicScrollTracking } from '@/shared/hooks/useDynamicScrollTracking';
+import { useCallback } from 'react';
 
 export default function BylawsPage() {
   // 페이지 진입 트래킹 (최초 1회)
@@ -17,9 +18,11 @@ export default function BylawsPage() {
   }, []);
 
   // 스크롤 퍼센트 트래킹
-  const scrollerRef = useDynamicScrollTracking<HTMLDivElement>((percent) => {
+  const handleScrollThreshold = useCallback((percent: number) => {
     trackBylawsEvent(BYLAWS_EVENTS.SCROLL_RULES_PAGE, { percent });
-  });
+  }, []);
+
+  const scrollerRef = useDynamicScrollTracking<HTMLDivElement>(handleScrollThreshold);
 
   return (
     <main

@@ -7,15 +7,18 @@ import { trackBylawsEvent } from '@/features/bylaws/lib/trackBylawsEvent';
 import { BYLAWS_EVENTS } from '@/features/bylaws/model/types';
 import { useDynamicScrollTracking } from '@/shared/hooks/useDynamicScrollTracking';
 import { useCallback } from 'react';
+import { usePageName } from '@/shared/analytics/lib/getPageName';
 
 export default function BylawsPage() {
   // 페이지 진입 트래킹 (최초 1회)
   const trackRef = useRef(false);
+  const pageName = usePageName();
+
   useEffect(() => {
     if (trackRef.current) return;
     trackRef.current = true;
-    trackBylawsEvent(BYLAWS_EVENTS.VIEW_RULES_MAIN, { page_name: 'bylaws' });
-  }, []);
+    trackBylawsEvent(BYLAWS_EVENTS.VIEW_RULES_MAIN, { page_name: pageName });
+  }, [pageName]);
 
   // 스크롤 퍼센트 트래킹
   const handleScrollThreshold = useCallback((percent: number) => {

@@ -63,15 +63,17 @@ function ensureNumberOrRaw(val: unknown) {
 }
 
 function ensureLetterSpacing(val: unknown) {
-  // 숫자면 px, 문자열이면 단위 보존
+  // normal | <length>; percentage는 미허용
+  if (val == null) return 'normal';
   if (typeof val === 'number' && Number.isFinite(val)) return `${val}px`;
   if (typeof val === 'string') {
-    const v = val.trim();
-    if (/^-?\d+(\.\d+)?(px|em|rem|%)$/.test(v)) return v;
+    const v = val.trim().toLowerCase();
+    if (v === 'normal') return 'normal';
+    if (/^-?\d+(\.\d+)?(px|em|rem)$/.test(v)) return v;
     const n = parseFloat(v);
-    return Number.isFinite(n) ? `${n}px` : '0px';
+    return Number.isFinite(n) ? `${n}px` : 'normal';
   }
-  return '0px';
+  return 'normal';
 }
 
 function makeClassName(group: string, key: string) {

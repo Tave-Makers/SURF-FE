@@ -27,7 +27,7 @@ function flattenTokens(obj: any, prefix = '', out: Record<string, FlatToken> = {
 }
 
 function toCSSVarName(key: string): string {
-  return key.replace(/\./g, '-');
+  return key.replace(/\./g, '-').toLowerCase();
 }
 
 // 시맨틱 토큰의 {ref}를 프리미티브 맵으로 해석

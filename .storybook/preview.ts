@@ -1,4 +1,6 @@
+import '@/shared/styles/globals.css';
 import type { Preview } from '@storybook/nextjs-vite';
+import 'keen-slider/keen-slider.min.css';
 
 const preview: Preview = {
   parameters: {

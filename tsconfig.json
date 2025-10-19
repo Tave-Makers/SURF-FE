@@ -24,7 +24,9 @@
     }
   },
   "include": [
+    "svgr.d.ts",
     "next-env.d.ts",
+    "vitest.shims.d.ts",
     "**/*.ts",
     "**/*.tsx",
     ".next/types/**/*.ts",

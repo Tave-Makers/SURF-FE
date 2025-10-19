@@ -1,3 +1,5 @@
-export default function HomePage() {
-  return <div>home</div>;
+'use client';
+
+export default function RootPage() {
+  return <div>로딩 중...</div>;
 }

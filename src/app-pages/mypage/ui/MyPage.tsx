@@ -1,24 +1,28 @@
 'use client';
 
 import { useEffect, useRef } from 'react';
-import * as amplitude from '@amplitude/analytics-browser';
 import { useMyProfileQuery } from '@/entities/user/model/profileQueries';
 import { useAuthStore } from '@/features/auth/model/useAuthStore';
 import { MyPageActions } from '@/widgets/mypage-actions/ui/MyPageActions';
 import { ProfileTabs } from '@/widgets/profile-tabs/ui/ProfileTabs';
 import { ProfileHeader } from '@/widgets/profile-header/ui/ProfileHeader';
+import { PROFILE_EVENTS } from '@/features/profile/model/types';
+import { trackProfileEvent } from '@/features/profile/lib/trackProfileEvent';
 
 export function MyPage() {
   const { data: profile, isLoading, isError } = useMyProfileQuery();
   const memberId = useAuthStore((s) => s.memberId);
 
+  // 중복 로그 방지
   const fired = useRef(false);
+
   useEffect(() => {
     if (fired.current) return;
     if (!profile) return;
+
     fired.current = true;
 
-    amplitude.track('profile_view', {
+    trackProfileEvent(PROFILE_EVENTS.VIEW_PROFILE, {
       member_id: memberId != null ? String(memberId) : 'anonymous',
     });
   }, [profile, memberId]);

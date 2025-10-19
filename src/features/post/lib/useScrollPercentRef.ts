@@ -1,3 +1,4 @@
+// 정적 페이지 스크롤 퍼센트 트래킹 훅
 'use client';
 
 import { useCallback, useEffect, useRef } from 'react';

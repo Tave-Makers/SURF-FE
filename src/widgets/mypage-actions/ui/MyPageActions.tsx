@@ -1,6 +1,6 @@
 'use client';
 
-import { Banner } from '@/shared/ui/banner/Banner';
+import { ActivityScoreBanner } from '@/shared/ui/activity-score-banner/ActivityScoreBanner';
 import { SolidButton } from '@/shared/ui/solid-button/SolidButton';
 import { useRouter } from 'next/navigation';
 import type { BannerPart } from '@/entities/user/model/types';
@@ -20,7 +20,7 @@ export function MyPageActions({ isActive, bannerPart, bannerScore }: Props) {
   return (
     <section className="flex flex-col gap-[1.25rem] px-[1rem] pb-[1.25rem]">
       {isActive && bannerPart && (
-        <Banner
+        <ActivityScoreBanner
           part={bannerPart}
           score={bannerScore}
           onClickMore={() => router.push(ROUTE_MYPAGE_ACTIVITY_SCORE)}

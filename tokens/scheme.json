@@ -298,9 +298,6 @@
   },
   "$themes": [],
   "$metadata": {
-    "tokenSetOrder": [
-      "",
-      "Scheme/Default"
-    ]
+    "tokenSetOrder": ["", "Scheme/Default"]
   }
 }

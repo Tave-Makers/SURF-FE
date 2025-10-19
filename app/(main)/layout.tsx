@@ -1,7 +1,7 @@
 import { AppHeader } from '@/widgets/header/ui/AppHeader';
 import { AppNavigation } from '@/widgets/navigation/ui/AppNavigation';
 
-export default function NonScrollLayout({ children }: { children: React.ReactNode }) {
+export default function MainLayout({ children }: { children: React.ReactNode }) {
   return (
     <div className="flex h-dvh w-full flex-col">
       <AppHeader />

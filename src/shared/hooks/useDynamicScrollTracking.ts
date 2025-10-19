@@ -26,7 +26,9 @@ export function useDynamicScrollTracking<T extends HTMLElement>(
     const fire = (t: number) => {
       if (!sent.has(t)) {
         sent.add(t);
-        console.log(`[scroll-tracking] fire → ${t}%`);
+        if (process.env.NODE_ENV === 'development') {
+          console.log(`[scroll-tracking] fire → ${t}%`);
+        }
         onThresholdReach(t);
       }
     };
@@ -59,7 +61,9 @@ export function useDynamicScrollTracking<T extends HTMLElement>(
     const interval = setInterval(() => {
       const cur = el.scrollHeight;
       if (cur !== prevScrollHeight) {
-        console.log(`[scroll-tracking] scrollHeight changed → ${prevScrollHeight} → ${cur}`);
+        if (process.env.NODE_ENV === 'development') {
+          console.log(`[scroll-tracking] scrollHeight changed → ${prevScrollHeight} → ${cur}`);
+        }
         prevScrollHeight = cur;
         const p = getPercent();
         sent = new Set(THRESHOLDS.filter((t) => t <= p));

@@ -4,7 +4,7 @@ import { useInfiniteScraps } from '@/features/post/model/useScraps';
 import { PostListPage } from '@/widgets/post-list/ui/PostListPage';
 import { SCRAPS_EVENTS } from '@/features/post/model/types';
 import { trackScrapsEvent } from '@/features/post/lib/trackScrapsEvent';
-import { useEffect } from 'react';
+import { useEffect, useCallback } from 'react';
 import { useDynamicScrollTracking } from '@/shared/hooks/useDynamicScrollTracking';
 
 export default function ScrapsPage() {
@@ -13,10 +13,11 @@ export default function ScrapsPage() {
     trackScrapsEvent(SCRAPS_EVENTS.VIEW_SCRAPS_PAGE, { page_name: 'scraps' });
   }, []);
 
-  // ref 콜백 기반 스크롤 트래킹 훅
-  const scrollRef = useDynamicScrollTracking<HTMLDivElement>((percent) => {
+  const handleScrollThreshold = useCallback((percent: number) => {
     trackScrapsEvent(SCRAPS_EVENTS.SCROLL_SCRAPS_PAGE, { percent });
-  });
+  }, []);
+
+  const scrollRef = useDynamicScrollTracking<HTMLDivElement>(handleScrollThreshold);
 
   return (
     <div className="flex h-full">

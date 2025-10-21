@@ -18,10 +18,17 @@ export function Accordion({
   isDisabled = false,
   children,
   renderTitle,
+  onToggle,
 }: AccordionProps) {
   const [isOpen, setIsOpen] = useState(defaultOpen);
   const [maxHeight, setMaxHeight] = useState('0px');
   const contentRef = useRef<HTMLDivElement>(null);
+
+  const handleToggle = () => {
+    const next = !isOpen;
+    setIsOpen(next);
+    onToggle?.(next); // 토글 상태 변화를 외부에 알림
+  };
 
   useEffect(() => {
     if (isOpen && contentRef.current) {
@@ -34,8 +41,9 @@ export function Accordion({
   return (
     <div className={`${isOpen ? '' : 'border-border-normal border-b'}`}>
       <button
+        type="button"
         disabled={isDisabled}
-        onClick={() => setIsOpen(!isOpen)}
+        onClick={handleToggle}
         className="disabled:bg-background-quaternary text-foreground-normal text-body-16-600--1 flex w-full cursor-pointer items-center justify-between p-[1rem] disabled:cursor-not-allowed"
       >
         <span>

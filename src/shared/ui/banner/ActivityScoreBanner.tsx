@@ -25,7 +25,7 @@ export const ActivityScoreBanner = ({ part, score, onClickMore }: ActivityScoreB
   const IconComponent = iconMap[part];
 
   return (
-    <div className="rounded-4 relative flex h-[8.12rem] w-full flex-col justify-center px-12 py-11 opacity-100">
+    <div className="rounded-4 relative flex h-[8.125rem] w-full flex-col justify-center px-12 py-11 opacity-100">
       {/* 1. 메인 배경 */}
       <img
         src="/icons/banner/banner-background.svg"

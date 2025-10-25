@@ -8,14 +8,16 @@ type BaseIconProps = {
   size?: number;
   stroke?: number;
   color?: string;
+  fill?: string;
   className?: string;
 };
 
 interface IconProps {
   name: IconName;
   size?: IconSize;
-  className?: string;
   color?: string;
+  fill?: string;
+  className?: string;
 }
 
 const sizeMap: Record<IconSize, number> = { s: 16, m: 20, l: 24 };
@@ -26,6 +28,7 @@ export const SurfIcon = ({
   size = 'm',
   className = '',
   color = 'currentColor',
+  fill,
 }: IconProps) => {
   const icons = Icons as unknown as Record<string, ComponentType<BaseIconProps>>;
   const IconComponent = icons[name];
@@ -43,6 +46,7 @@ export const SurfIcon = ({
       color={color}
       className={`inline-block transition-colors duration-200 ${className}`}
       {...(!isSolid && { stroke: strokeMap[size] })}
+      {...(fill ? { fill } : {})}
     />
   );
 };

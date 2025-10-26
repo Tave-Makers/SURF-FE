@@ -15,14 +15,14 @@ export type AuthState = AuthData & {
  *  Amplitude 로그인 이벤트 이름
  */
 export const AUTH_EVENTS = {
-  LOGIN_KAKAO_CLICK: 'login_kakao',
-  LOGIN_CALLBACK: 'login_callback',
+  CLICK_LOGIN_KAKAO: 'click_login_kakao',
+  VIEW_LOGIN_CALLBACK: 'view_login_callback',
 } as const;
 
 /**
  * Amplitude 이벤트별 속성 타입 매핑
  */
 export type AuthEventPropsMap = {
-  [AUTH_EVENTS.LOGIN_KAKAO_CLICK]: { login_method: string };
-  [AUTH_EVENTS.LOGIN_CALLBACK]: { code_length: number };
+  [AUTH_EVENTS.CLICK_LOGIN_KAKAO]: { login_method: string };
+  [AUTH_EVENTS.VIEW_LOGIN_CALLBACK]: { code_length: number };
 };

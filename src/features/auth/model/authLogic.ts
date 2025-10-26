@@ -7,18 +7,19 @@ import { handleApiError } from '@/shared/lib/handleApiError';
 export async function handleKakaoLoginCallback(code: string): Promise<string> {
   const setAuth = useAuthStore.getState().setAuth;
 
-  trackAuthEvent(AUTH_EVENTS.LOGIN_CALLBACK, {
+  trackAuthEvent(AUTH_EVENTS.VIEW_LOGIN_CALLBACK, {
     code_length: code.length,
   });
 
   try {
     const res = await getKakaoLoginCallback(code);
+    const payload = res.data;
 
     setAuth({
-      accessToken: res.data.accessToken,
-      nickname: res.data.nickname,
-      email: res.data.email,
-      profileImageUrl: res.data.profileImageUrl,
+      accessToken: payload.accessToken,
+      nickname: payload.nickname,
+      email: payload.email,
+      profileImageUrl: payload.profileImageUrl,
     });
 
     return '/home';

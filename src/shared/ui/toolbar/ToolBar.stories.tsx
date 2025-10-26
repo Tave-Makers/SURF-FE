@@ -6,7 +6,7 @@ import { ToolBar } from './ToolBar';
 import type { ToolBarItem } from './ToolBar';
 
 const SAMPLE_ITEMS: ToolBarItem[] = [
-  { key: 'camera', label: '홈', icon: 'CameraSolid' },
+  { key: 'camera', label: '사진', icon: 'CameraSolid' },
   { key: 'alarm', label: '예약', icon: 'AlarmSolid' },
   { key: 'calendar', label: '일정', icon: 'CalendarSolid' },
   { key: 'bold', label: '굵게', icon: 'LetterBSolid' },
@@ -15,14 +15,7 @@ const SAMPLE_ITEMS: ToolBarItem[] = [
 const meta: Meta<typeof ToolBar> = {
   title: 'Shared/UI/ToolBar',
   component: ToolBar,
-  parameters: {
-    docs: {
-      description: {
-        component:
-          '하단 내비게이션/툴바 컴포넌트. 여러 ToolBarItems를 가로로 배치하고, activeKey로 현재 활성화된 탭을 표시합니다.',
-      },
-    },
-  },
+  tags: ['autodocs'],
   argTypes: {
     className: {
       control: 'text',
@@ -42,14 +35,9 @@ export default meta;
 
 type Story = StoryObj<typeof ToolBar>;
 
-/**
- * 기본 스토리 (interactive)
- * - useState로 activeKey를 관리
- * - 실제로 버튼 눌러보면 activeKey 바뀌고 스타일도 변해
- */
 export const Default: Story = {
   render: (args) => {
-    const [activeKey, setActiveKey] = useState('home');
+    const [activeKey, setActiveKey] = useState('camera');
 
     return (
       <div>

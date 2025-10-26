@@ -27,7 +27,7 @@ const SearchHistoryItem = ({ keyword = '', onSelect, onDelete }: SearchHistoryIt
           onDelete?.();
         }}
         aria-label="검색 기록 삭제"
-        className="shrink-0"
+        className="itmes-center flex shrink-0"
       >
         <SurfIcon name="X" size="s" color="black" />
       </button>

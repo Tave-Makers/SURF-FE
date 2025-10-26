@@ -52,7 +52,7 @@ export default function OnBoardingForm() {
       2: 'contact',
     };
 
-    trackOnBoardingEvent(ONBOARDING_EVENTS.SIGNUP_PAGE_VIEW, {
+    trackOnBoardingEvent(ONBOARDING_EVENTS.VIEW_SIGNUP_PAGE, {
       step: stepNames[step],
     });
   }, [step]);
@@ -75,7 +75,7 @@ export default function OnBoardingForm() {
               !(Array.isArray(v) && v.length === 0), // 빈 배열([])인 경우는 제외
           ).length;
 
-          trackOnBoardingEvent(ONBOARDING_EVENTS.SIGNUP_SUBMIT, {
+          trackOnBoardingEvent(ONBOARDING_EVENTS.SUBMIT_SIGNUP_FORM, {
             input_count: filledCount,
           });
           await submitOnBoarding(data);

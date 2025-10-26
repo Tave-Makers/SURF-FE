@@ -24,7 +24,7 @@ export function EmailPhoneStep() {
             <TextArea
               {...field}
               onBlur={(_e) => {
-                trackOnBoardingEvent(ONBOARDING_EVENTS.SIGNUP_INPUT, {
+                trackOnBoardingEvent(ONBOARDING_EVENTS.INPUT_SIGNUP_FIELD, {
                   field_name: 'email',
                 });
                 field.onBlur();
@@ -52,7 +52,7 @@ export function EmailPhoneStep() {
             <TextArea
               {...field}
               onBlur={(_e) => {
-                trackOnBoardingEvent(ONBOARDING_EVENTS.SIGNUP_INPUT, {
+                trackOnBoardingEvent(ONBOARDING_EVENTS.INPUT_SIGNUP_FIELD, {
                   field_name: 'phone',
                 });
                 field.onBlur();

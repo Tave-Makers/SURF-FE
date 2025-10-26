@@ -97,7 +97,7 @@ export function TrackUnivStep() {
               <TextArea
                 {...field}
                 onBlur={(_e) => {
-                  trackOnBoardingEvent(ONBOARDING_EVENTS.SIGNUP_INPUT, {
+                  trackOnBoardingEvent(ONBOARDING_EVENTS.INPUT_SIGNUP_FIELD, {
                     field_name: 'university',
                   });
                   field.onBlur();

@@ -11,6 +11,12 @@ import axios from 'axios';
 import { DefaultError } from '@/shared/lib/handleApiError';
 import { trackOnBoardingEvent } from '@/features/onboarding/lib/trackOnBoardingEvent';
 
+const STEP_ANALYTICS_NAMES: Record<number, 'nickname' | 'track' | 'contact'> = {
+  0: 'nickname',
+  1: 'track',
+  2: 'contact',
+};
+
 export default function OnBoardingForm() {
   const [step, setStep] = useState(0);
   const methods = useFormContext<OnBoardingFormData>();
@@ -46,14 +52,8 @@ export default function OnBoardingForm() {
 
   // step이 바뀔 때마다 signup_page_view 트래킹
   useEffect(() => {
-    const stepNames: Record<number, 'nickname' | 'track' | 'contact'> = {
-      0: 'nickname',
-      1: 'track',
-      2: 'contact',
-    };
-
     trackOnBoardingEvent(ONBOARDING_EVENTS.VIEW_SIGNUP_PAGE, {
-      step: stepNames[step],
+      step: STEP_ANALYTICS_NAMES[step],
     });
   }, [step]);
 

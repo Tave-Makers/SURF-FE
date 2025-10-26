@@ -15,10 +15,14 @@ export function PageTrackingProvider({ children }: { children: React.ReactNode }
     // 페이지 이동 시점: 이전 페이지 dwell_time 기록
     if (prevPath.current && mountTime.current) {
       const dwell = Date.now() - mountTime.current;
-      trackCommonEvent(COMMON_EVENTS.DWELL_TIME, {
-        page_name: prevPath.current, // 이전 페이지 기준으로 기록
-        dwell_time_ms: dwell,
-      });
+      try {
+        trackCommonEvent(COMMON_EVENTS.DWELL_TIME, {
+          page_name: prevPath.current,
+          dwell_time_ms: dwell,
+        });
+      } catch (error) {
+        console.error('[PageTrackingProvider] DWELL_TIME 로깅 실패:', error);
+      }
     }
 
     // 새로운 페이지 진입 초기화
@@ -31,10 +35,14 @@ export function PageTrackingProvider({ children }: { children: React.ReactNode }
       if (!firstActionRecorded.current && mountTime.current) {
         firstActionRecorded.current = true;
         const diff = Date.now() - mountTime.current;
-        trackCommonEvent(COMMON_EVENTS.TIME_TO_FIRST_ACTION, {
-          page_name: pathname,
-          time_to_first_action_ms: diff,
-        });
+        try {
+          trackCommonEvent(COMMON_EVENTS.TIME_TO_FIRST_ACTION, {
+            page_name: pathname,
+            time_to_first_action_ms: diff,
+          });
+        } catch (error) {
+          console.error('[PageTrackingProvider] TIME_TO_FIRST_ACTION 로깅 실패:', error);
+        }
       }
     };
 

@@ -6,7 +6,7 @@ import { SCRAPS_EVENTS } from '@/features/post/model/types';
 import { trackScrapsEvent } from '@/features/post/lib/trackScrapsEvent';
 import { useEffect, useCallback } from 'react';
 import { useDynamicScrollTracking } from '@/shared/hooks/useDynamicScrollTracking';
-import { usePageName } from '@/shared/analytics/lib/getPagename';
+import { usePageName } from '@/shared/analytics/lib/getPageName';
 
 export default function ScrapsPage() {
   const pageName = usePageName();

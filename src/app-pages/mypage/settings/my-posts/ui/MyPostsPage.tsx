@@ -6,7 +6,7 @@ import { MY_POSTS_EVENTS } from '@/features/post/model/types';
 import { trackMyPostsEvent } from '@/features/post/lib/trackMyPostsEvent';
 import { useEffect, useCallback } from 'react';
 import { useDynamicScrollTracking } from '@/shared/hooks/useDynamicScrollTracking';
-import { usePageName } from '@/shared/analytics/lib/getPagename';
+import { usePageName } from '@/shared/analytics/lib/getPageName';
 
 export default function MyPostsPage() {
   const pageName = usePageName();

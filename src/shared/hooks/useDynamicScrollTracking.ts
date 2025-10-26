@@ -3,11 +3,9 @@
 import { useEffect, useRef } from 'react';
 
 /**
- * useScrollTrackingDynamic
- *
- * - 스크롤 퍼센트 기준 임계치(0/25/50/75/100%) 도달 시 콜백 실행
- * - scrollHeight 변화(아코디언 열림 등)에 따라 퍼센트 기준 자동 재계산
- * - 퍼센트 감소 및 재트래킹 정상 작동
+ * 스크롤 퍼센트 기준 임계치(0/25/50/75/100%) 도달 시 콜백 실행
+ * scrollHeight 변화(아코디언 열림 등)에 따라 퍼센트 기준 자동 재계산
+ * 퍼센트 감소 및 재트래킹 정상 작동
  */
 export function useDynamicScrollTracking<T extends HTMLElement>(
   onThresholdReach: (percent: number) => void,

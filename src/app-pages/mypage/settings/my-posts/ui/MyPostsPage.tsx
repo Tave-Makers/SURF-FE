@@ -6,12 +6,15 @@ import { MY_POSTS_EVENTS } from '@/features/post/model/types';
 import { trackMyPostsEvent } from '@/features/post/lib/trackMyPostsEvent';
 import { useEffect, useCallback } from 'react';
 import { useDynamicScrollTracking } from '@/shared/hooks/useDynamicScrollTracking';
+import { usePageName } from '@/shared/analytics/lib/getPagename';
 
 export default function MyPostsPage() {
+  const pageName = usePageName();
+
   useEffect(() => {
     // 페이지 진입 시 페이지 뷰 로그
-    trackMyPostsEvent(MY_POSTS_EVENTS.VIEW_MY_POSTS_PAGE, { page_name: 'my-posts' });
-  }, []);
+    trackMyPostsEvent(MY_POSTS_EVENTS.VIEW_MY_POSTS_PAGE, { page_name: pageName });
+  }, [pageName]);
 
   const handleScrollThreshold = useCallback((percent: number) => {
     trackMyPostsEvent(MY_POSTS_EVENTS.SCROLL_MY_POSTS_PAGE, { percent });

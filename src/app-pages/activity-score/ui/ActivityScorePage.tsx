@@ -32,10 +32,10 @@ export default function ActivityScorePage() {
   // 페이지 진입 시점에 이벤트 전송
   useEffect(() => {
     if (summary && !trackedRef.current) {
-      trackActivityScoreEvent(ACTIVITY_SCORE_EVENTS.ACTIVITY_VIEW, {
+      trackActivityScoreEvent(ACTIVITY_SCORE_EVENTS.VIEW_ACTIVITY, {
         page_name: pageName,
       });
-      trackActivityScoreEvent(ACTIVITY_SCORE_EVENTS.PERSONAL_SCORE_VIEW, {
+      trackActivityScoreEvent(ACTIVITY_SCORE_EVENTS.VIEW_PERSONAL_SCORE, {
         total_score: summary.score,
       });
       trackedRef.current = true;

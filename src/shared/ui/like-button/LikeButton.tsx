@@ -1,20 +1,20 @@
 import { SurfIcon } from '../icon/SurfIcon';
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 
 type LikeButtonProps = {
-  isLiked: boolean;
-  count: number;
+  isLiked?: boolean; // 좋아요 상태 초기값
+  count?: number; // 좋아요 개수 초기값
+  onToggle?: (newState: boolean) => void; // 클릭 시 실행되는 콜백 (외부에 상태 변경 알림)
 };
 
-const LikeButton = ({ isLiked = false, count = 0 }: LikeButtonProps) => {
+const LikeButton = ({ isLiked = false, count = 0, onToggle }: LikeButtonProps) => {
   const [liked, setLiked] = useState(isLiked);
 
-  useEffect(() => {
-    setLiked(isLiked);
-  }, [isLiked]);
-
+  // 버튼 클릭 시 내부 상태 갱신 및 콜백 실행
   const handleClick = () => {
-    setLiked(!liked);
+    const newState = !liked;
+    setLiked(newState);
+    onToggle?.(newState);
   };
 
   const baseStyle =

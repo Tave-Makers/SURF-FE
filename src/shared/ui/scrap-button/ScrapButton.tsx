@@ -1,20 +1,20 @@
 import { SurfIcon } from '../icon/SurfIcon';
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 
 type ScrapButtonProps = {
-  isScrapped: boolean;
-  count: number;
+  isScrapped?: boolean; // 스크랩 상태 초기값
+  count?: number; // 스크랩 개수 초기값
+  onToggle?: (newState: boolean) => void; // 클릭 시 실행되는 콜백 (외부에 상태 변경 알림)
 };
 
-const ScrapButton = ({ isScrapped = false, count = 0 }: ScrapButtonProps) => {
+const ScrapButton = ({ isScrapped = false, count = 0, onToggle }: ScrapButtonProps) => {
   const [scraped, setScraped] = useState(isScrapped);
 
-  useEffect(() => {
-    setScraped(isScrapped);
-  }, [isScrapped]);
-
+  // 버튼 클릭 시 내부 상태 갱신 및 콜백 실행
   const handleClick = () => {
-    setScraped(!scraped);
+    const newState = !scraped;
+    setScraped(newState);
+    onToggle?.(newState);
   };
 
   const baseStyle =

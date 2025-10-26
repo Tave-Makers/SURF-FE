@@ -7,31 +7,37 @@ type SearchHistoryItemProps = {
 };
 
 const SearchHistoryItem = ({ keyword = '', onSelect, onDelete }: SearchHistoryItemProps) => {
-  const baseStyle = 'flex items-center justify-center gap-7 h-[2rem] rounded-max border px-11 py-7';
+  const baseStyle =
+    'flex w-fit items-center justify-center gap-7 h-[2rem] rounded-max border px-11 py-7';
   const colorStyle = 'bg-background-background-normal-lighter border-border-border-normal';
   const interactionStyle =
     'hover:bg-background-background-secondary-darker hover:border-border-border-secondary active:bg-background-background-secondary-darker active:border-border-border-secondary';
 
   return (
-    <button
+    <div
       className={`${baseStyle} ${colorStyle} ${interactionStyle}`}
-      type="button"
+      role="group"
       aria-label={`${keyword} 검색 기록`}
-      onClick={() => onSelect?.(keyword)}
     >
-      <span className="text-body-body7 text-foreground-foreground-normal">{keyword}</span>
       <button
         type="button"
-        onClick={(e) => {
-          e.stopPropagation(); // 부모 버튼 클릭 이벤트 전파 방지
+        onClick={() => onSelect?.(keyword)}
+        className="text-body-body7 text-foreground-foreground-normal"
+        aria-label={`${keyword} 검색`}
+      >
+        {keyword}
+      </button>
+      <button
+        type="button"
+        onClick={() => {
           onDelete?.();
         }}
         aria-label="검색 기록 삭제"
-        className="itmes-center flex shrink-0"
+        className="flex shrink-0 items-center"
       >
         <SurfIcon name="X" size="s" color="black" />
       </button>
-    </button>
+    </div>
   );
 };
 

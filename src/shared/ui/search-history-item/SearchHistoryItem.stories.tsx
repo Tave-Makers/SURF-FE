@@ -1,5 +1,4 @@
 import type { Meta, StoryObj } from '@storybook/nextjs-vite';
-import { useState } from 'react';
 import SearchHistoryItem from './SearchHistoryItem';
 
 // ---------- Meta ----------
@@ -41,26 +40,17 @@ export const Default: Story = {
 // 🧪 Playground (검색어 직접 수정 가능)
 export const Playground: Story = {
   render: (args) => {
-    const [keyword] = useState(args.keyword);
-
     const handleSelect = (kw: string) => {
       alert(`🔍 "${kw}"로 검색`);
       args.onSelect?.(kw);
     };
 
     const handleDelete = () => {
-      alert(`🗑️ "${keyword}" 검색 기록 삭제`);
+      alert(`🗑️ "${args.keyword}" 검색 기록 삭제`);
       args.onDelete?.();
     };
 
-    return (
-      <SearchHistoryItem
-        {...args}
-        keyword={keyword}
-        onSelect={handleSelect}
-        onDelete={handleDelete}
-      />
-    );
+    return <SearchHistoryItem {...args} onSelect={handleSelect} onDelete={handleDelete} />;
   },
   args: {
     keyword: '테스트 검색어',

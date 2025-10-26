@@ -56,7 +56,7 @@ export const ActivityScoreBanner = ({ part, score, onClickMore }: ActivityScoreB
             더보기
           </button>
         </div>
-        <span className="flex h-full w-full items-end justify-end gap-[0.25rem]">
+        <span className="flex h-full w-full items-end justify-end gap-4">
           <span className="text-body-body1">{score}</span>
           <span className="text-body-body2 h-[2.1875rem]">점</span>
         </span>

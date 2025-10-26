@@ -71,7 +71,7 @@ export function Accordion({
         style={{ maxHeight }}
         className="overflow-hidden transition-all duration-300 ease-in-out"
       >
-        <div className="px-[1rem] py-[1.25rem]">{children}</div>
+        <div className="px-13 py-15">{children}</div>
       </div>
     </div>
   );

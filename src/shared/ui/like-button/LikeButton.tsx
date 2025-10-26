@@ -28,6 +28,8 @@ const LikeButton = ({ isLiked = false, count = 0, onToggle }: LikeButtonProps) =
       className={`${baseStyle} ${colorStyle} ${interactionStyle}`}
       type="button"
       onClick={handleClick}
+      aria-label={liked ? '좋아요 취소' : '좋아요'}
+      aria-pressed={liked}
     >
       <SurfIcon
         name="Heart"

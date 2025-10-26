@@ -16,6 +16,7 @@ const SearchHistoryItem = ({ keyword = '', onSelect, onDelete }: SearchHistoryIt
     <button
       className={`${baseStyle} ${colorStyle} ${interactionStyle}`}
       type="button"
+      aria-label={`${keyword} 검색 기록`}
       onClick={() => onSelect?.(keyword)}
     >
       <span className="text-body-body7 text-foreground-foreground-normal">{keyword}</span>
@@ -25,6 +26,7 @@ const SearchHistoryItem = ({ keyword = '', onSelect, onDelete }: SearchHistoryIt
           e.stopPropagation(); // 부모 버튼 클릭 이벤트 전파 방지
           onDelete?.();
         }}
+        aria-label="검색 기록 삭제"
         className="shrink-0"
       >
         <SurfIcon name="X" size="s" color="black" />

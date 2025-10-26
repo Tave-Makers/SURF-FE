@@ -28,6 +28,8 @@ const ScrapButton = ({ isScrapped = false, count = 0, onToggle }: ScrapButtonPro
       className={`${baseStyle} ${colorStyle} ${interactionStyle}`}
       type="button"
       onClick={handleClick}
+      aria-label={scraped ? '스크랩 취소' : '스크랩'}
+      aria-pressed={scraped}
     >
       <SurfIcon
         name="Bookmark"

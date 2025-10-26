@@ -17,8 +17,6 @@ export type AuthState = AuthData & {
 export const AUTH_EVENTS = {
   LOGIN_KAKAO_CLICK: 'login_kakao',
   LOGIN_CALLBACK: 'login_callback',
-  LOGIN_SUCCESS: 'login_success',
-  LOGIN_FAIL: 'login_fail',
 } as const;
 
 /**
@@ -27,6 +25,4 @@ export const AUTH_EVENTS = {
 export type AuthEventPropsMap = {
   [AUTH_EVENTS.LOGIN_KAKAO_CLICK]: { login_method: string };
   [AUTH_EVENTS.LOGIN_CALLBACK]: { code_length: number };
-  [AUTH_EVENTS.LOGIN_SUCCESS]: { user_id: string };
-  [AUTH_EVENTS.LOGIN_FAIL]: { error_code: number };
 };

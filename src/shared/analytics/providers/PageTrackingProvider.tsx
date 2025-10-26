@@ -2,7 +2,7 @@
 
 import { usePathname } from 'next/navigation';
 import { useEffect, useRef } from 'react';
-import { trackCommonEvent } from '@/shared/analytics/lib/trackCommentEvent';
+import { trackCommonEvent } from '@/shared/analytics/lib/trackCommonEvent';
 import { COMMON_EVENTS } from '@/shared/analytics/model/types';
 
 export function PageTrackingProvider({ children }: { children: React.ReactNode }) {

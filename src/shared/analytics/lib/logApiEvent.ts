@@ -1,4 +1,4 @@
-import { trackCommonEvent } from '@/shared/analytics/lib/trackCommentEvent';
+import { trackCommonEvent } from '@/shared/analytics/lib/trackCommonEvent';
 import { COMMON_EVENTS, type CommonEventPropsMap } from '@/shared/analytics/model/types';
 import { API_BASE_URL } from '@/shared/config/env';
 
@@ -8,6 +8,10 @@ import { API_BASE_URL } from '@/shared/config/env';
 export const logApiResult = (params: CommonEventPropsMap[typeof COMMON_EVENTS.API_RESULT]) => {
   const { endpoint, method, status_code, duration_ms, result, request_id } = params;
 
+  if (!API_BASE_URL && !endpoint.startsWith('http')) {
+    console.warn('[logApiResult] API_BASE_URL이 설정되지 않았습니다.');
+    return;
+  }
   const fullEndpoint = endpoint.startsWith('http') ? endpoint : `${API_BASE_URL}${endpoint}`;
 
   trackCommonEvent(COMMON_EVENTS.API_RESULT, {

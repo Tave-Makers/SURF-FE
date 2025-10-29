@@ -56,7 +56,7 @@ export const Checkbox = forwardRef<HTMLInputElement, CheckboxProps>(
             {...rest}
           />
           <span className="text-foreground-accent pointer-events-none absolute top-1/2 left-1/2 flex h-full w-full -translate-x-1/2 -translate-y-1/2 items-center justify-center opacity-0 peer-checked:opacity-100">
-            <SurfIcon name="Check" size="s" color="currentColor" />
+            <SurfIcon name="Check" size="s" />
           </span>
         </div>
         {label && <span className="text-caption-12-400 text-border-contrast">{label}</span>}

@@ -25,7 +25,13 @@ export default function ScrapsPage() {
   return (
     <div className="flex h-full">
       <div ref={scrollRef} className="flex-1 overflow-y-auto">
-        <PostListPage useInfiniteQueryHook={useInfiniteScraps} />
+        <PostListPage
+          useInfiniteQueryHook={useInfiniteScraps}
+          onPostClick={(post) =>
+            trackScrapsEvent(SCRAPS_EVENTS.CLICK_POST_CARD, { post_id: String(post.id) })
+          }
+          scrollRootRef={scrollRef}
+        />
       </div>
     </div>
   );

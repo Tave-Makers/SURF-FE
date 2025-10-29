@@ -1,12 +1,10 @@
 'use client';
 
-import { useEffect, useRef } from 'react';
+import { useEffect, useRef, useCallback } from 'react';
 import type { InfiniteData, UseInfiniteQueryResult } from '@tanstack/react-query';
 import { transformApiResponseToPosts } from '@/entities/post/api/mappers';
 import type { PostContent } from '@/entities/post/api/types';
 import { PostList } from '@/widgets/post-list/ui/PostList';
-import { MY_POSTS_EVENTS } from '@/features/post/model/types';
-import { trackMyPostsEvent } from '@/features/post/lib/trackMyPostsEvent';
 import { Post } from '@/entities/post/model/types';
 
 // 서버 응답 data 페이지 당 타입
@@ -15,14 +13,20 @@ type ApiPage = {
 };
 
 // 무한 스크롤 훅 응답 타입
-type UseInfinitePostsQueryResult = UseInfiniteQueryResult<InfiniteData<ApiPage, unknown>, Error>;
+type UseInfinitePostsQueryResult = UseInfiniteQueryResult<InfiniteData<ApiPage>, Error>;
 
 type PostListPageProps = {
   useInfiniteQueryHook: (size: number, sort: string[]) => UseInfinitePostsQueryResult;
+  onPostClick?: (post: Post) => void;
+  scrollRootRef?: React.RefObject<HTMLDivElement | null>;
   // 추후 MVP에서 단일 페이지 조회 훅도 추가 될 수 있음
 };
 
-export function PostListPage({ useInfiniteQueryHook }: PostListPageProps) {
+export function PostListPage({
+  useInfiniteQueryHook,
+  onPostClick,
+  scrollRootRef,
+}: PostListPageProps) {
   // 화면 하단 DOM 요소 참조
   const loadMoreRef = useRef<HTMLDivElement | null>(null);
   const size = 10;
@@ -38,19 +42,29 @@ export function PostListPage({ useInfiniteQueryHook }: PostListPageProps) {
   useEffect(() => {
     if (!loadMoreRef.current || !hasNextPage) return;
 
-    const observer = new IntersectionObserver((entries) => {
-      // sentinel 요소가 화면에 보이면 다음 페이지를 불러오기
-      if (entries[0].isIntersecting) {
-        fetchNextPage().catch((err) => {
-          console.error('fetchNextPage error:', err);
-        });
-      }
-    });
+    const observer = new IntersectionObserver(
+      (entries) => {
+        // sentinel 요소가 화면에 보이면 다음 페이지를 불러오기
+        if (entries[0].isIntersecting) {
+          fetchNextPage().catch((err) => {
+            console.error('fetchNextPage error:', err);
+          });
+        }
+      },
+      { root: scrollRootRef?.current ?? null, rootMargin: '0px 0px 200px 0px' },
+    );
 
     observer.observe(loadMoreRef.current);
 
     return () => observer.disconnect();
-  }, [hasNextPage, fetchNextPage]);
+  }, [hasNextPage, fetchNextPage, scrollRootRef]);
+
+  const handlePostClick = useCallback(
+    (post: Post) => {
+      onPostClick?.(post);
+    },
+    [onPostClick],
+  );
 
   // 에러 처리 화면
   if (error) {
@@ -65,11 +79,6 @@ export function PostListPage({ useInfiniteQueryHook }: PostListPageProps) {
       </div>
     );
   }
-
-  const handlePostClick = (post: Post) => {
-    console.log(`Post ${post.id} clicked`);
-    trackMyPostsEvent(MY_POSTS_EVENTS.CLICK_POST_CARD, { post_id: `${post.id}` });
-  };
 
   // 게시글 목록 렌더링
   return (

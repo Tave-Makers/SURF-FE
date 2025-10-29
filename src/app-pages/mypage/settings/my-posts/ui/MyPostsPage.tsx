@@ -25,7 +25,13 @@ export default function MyPostsPage() {
   return (
     <div className="flex h-full">
       <div ref={scrollRef} className="flex-1 overflow-y-auto">
-        <PostListPage useInfiniteQueryHook={useInfiniteMyPosts} />
+        <PostListPage
+          useInfiniteQueryHook={useInfiniteMyPosts}
+          onPostClick={(post) =>
+            trackMyPostsEvent(MY_POSTS_EVENTS.CLICK_POST_CARD, { post_id: String(post.id) })
+          }
+          scrollRootRef={scrollRef}
+        />
       </div>
     </div>
   );

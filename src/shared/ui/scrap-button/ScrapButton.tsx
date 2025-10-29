@@ -34,9 +34,11 @@ const ScrapButton = ({ isScrapped = false, count = 0, onToggle }: ScrapButtonPro
       <SurfIcon
         name="Bookmark"
         size="s"
-        color={scraped ? 'blue' : 'black'}
-        fill={scraped ? 'blue' : ''}
-        className="shrink-0"
+        className={`shrink-0 ${
+          scraped
+            ? 'text-background-background-primary fill-background-background-primary'
+            : 'text-foreground-foreground-normal'
+        }`}
       />
       <span className="text-body-body7 text-foreground-foreground-normal">{count}</span>
     </button>

@@ -34,9 +34,11 @@ const LikeButton = ({ isLiked = false, count = 0, onToggle }: LikeButtonProps) =
       <SurfIcon
         name="Heart"
         size="s"
-        color={liked ? 'red' : 'black'}
-        fill={liked ? 'red' : ''}
-        className="shrink-0"
+        className={`shrink-0 ${
+          liked
+            ? 'text-foreground-foreground-danger fill-foreground-foreground-danger'
+            : 'text-foreground-foreground-normal'
+        }`}
       />
       <span className="text-body-body7 text-foreground-foreground-normal">{count}</span>
     </button>

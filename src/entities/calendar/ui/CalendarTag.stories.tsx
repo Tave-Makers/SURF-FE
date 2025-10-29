@@ -11,7 +11,7 @@ const meta: Meta<typeof CalendarTag> = {
   argTypes: {
     variation: {
       control: 'radio',
-      options: ['regular', 'meeting', 'etc'],
+      options: ['official', 'operation', 'other'],
       description: '일정의 유형에 따라 색상과 스타일이 다르게 표시됩니다.',
     },
   },
@@ -28,7 +28,7 @@ export const Official: Story = {
   },
 };
 
-export const Operaton: Story = {
+export const Operation: Story = {
   args: {
     variation: 'operation',
   },

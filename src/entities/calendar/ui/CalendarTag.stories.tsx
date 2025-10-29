@@ -43,12 +43,12 @@ export const Etc: Story = {
 // ───────────────────────────────
 // 인터랙티브 상태
 // ───────────────────────────────
-export const Interactive: Story = {
-  render: (args) => (
+export const AllVariations: Story = {
+  render: () => (
     <div className="flex gap-8">
-      <CalendarTag {...args} variation="official" />
-      <CalendarTag {...args} variation="operation" />
-      <CalendarTag {...args} variation="other" />
+      <CalendarTag variation="official" />
+      <CalendarTag variation="operation" />
+      <CalendarTag variation="other" />
     </div>
   ),
 };

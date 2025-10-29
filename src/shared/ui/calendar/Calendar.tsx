@@ -7,7 +7,7 @@ import 'react-day-picker/style.css';
 
 import { MonthNavigator } from './MonthNavigator';
 import { CalendarDayButton } from './CalendarDayButton';
-import { SelectedEventsSection } from '@/shared/ui/calendar/SelectedEventsSection';
+import { SelectedDayEventsSection } from '@/shared/ui/calendar/SelectedDayEventsSection';
 import type { ActivityMap } from './types';
 import { ymd } from './utils';
 
@@ -98,7 +98,7 @@ export default function Calendar() {
       </div>
 
       <div className="px-13">
-        <SelectedEventsSection
+        <SelectedDayEventsSection
           date={selectedDay}
           items={selectedItems}
           renderItem={(_ev) => <></>} // EventCard 자리

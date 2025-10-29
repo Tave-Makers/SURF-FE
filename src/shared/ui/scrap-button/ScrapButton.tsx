@@ -9,7 +9,7 @@ import { SurfIcon } from '../icon/SurfIcon';
  * @param {ScrapButtonProps} props
  * @param {boolean} [props.isScrapped=false] - 현재 스크랩 상태 (부모에서 관리)
  * @param {number} [props.count=0] - 스크랩 개수 (부모에서 관리)
- * @param {(newState: boolean) => void} [props.onScrapToggle] - 상태 변경 시 호출되는 콜백. 미제공 시 버튼 클릭이 동작하지 않습니다.
+ * @param {(newState: boolean) => void} [props.onScrapToggle] - 상태 변경 시 호출되는 콜백
  *
  * @example
  * ```tsx
@@ -28,15 +28,15 @@ import { SurfIcon } from '../icon/SurfIcon';
  */
 
 export type ScrapButtonProps = {
-  isScrapped: boolean; // 스크랩 상태 초기값
-  count: number; // 스크랩 개수 초기값
-  onScrapToggle: (newState: boolean) => void; // 클릭 시 실행되는 콜백 (외부에 상태 변경 알림)
+  isScrapped: boolean;
+  count: number;
+  onScrapToggle: (newState: boolean) => void;
 };
 
 const ScrapButton = ({ isScrapped, count, onScrapToggle }: ScrapButtonProps) => {
   // 클릭 시 외부 콜백 실행
   const handleClick = () => {
-    onScrapToggle?.(!isScrapped);
+    onScrapToggle(!isScrapped);
   };
 
   const baseStyle =

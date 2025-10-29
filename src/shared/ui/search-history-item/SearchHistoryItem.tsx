@@ -31,9 +31,9 @@ import { SurfIcon } from '../icon/SurfIcon';
  */
 
 export type SearchHistoryItemProps = {
-  keyword?: string; // 검색 기록 키워드
-  onSelect?: (keyword: string) => void; // 클릭 시 실행되는 콜백 (상위에 키워드 전달)
-  onDelete?: () => void; // 삭제 버튼 클릭 시 실행되는 콜백
+  keyword?: string;
+  onSelect?: (keyword: string) => void;
+  onDelete?: () => void;
 };
 
 const SearchHistoryItem = ({ keyword = '', onSelect, onDelete }: SearchHistoryItemProps) => {

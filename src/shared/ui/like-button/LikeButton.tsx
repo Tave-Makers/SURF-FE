@@ -9,7 +9,7 @@ import { SurfIcon } from '../icon/SurfIcon';
  * @param {LikeButtonProps} props
  * @param {boolean} [props.isLiked=false] - 현재 좋아요 상태 (부모에서 관리)
  * @param {number} [props.count=0] - 좋아요 개수 (부모에서 관리)
- * @param {(newState: boolean) => void} [props.onLikeToggle] - 상태 변경 시 호출되는 콜백. 미제공 시 버튼 클릭이 동작하지 않습니다.
+ * @param {(newState: boolean) => void} [props.onLikeToggle] - 상태 변경 시 호출되는 콜백
  *
  * @example
  * ```tsx
@@ -28,15 +28,15 @@ import { SurfIcon } from '../icon/SurfIcon';
  */
 
 export type LikeButtonProps = {
-  isLiked: boolean; // 좋아요 상태 초기값
-  count: number; // 좋아요 개수 초기값
-  onLikeToggle: (newState: boolean) => void; // 클릭 시 실행되는 콜백 (외부에 상태 변경 알림)
+  isLiked: boolean;
+  count: number;
+  onLikeToggle: (newState: boolean) => void;
 };
 
 const LikeButton = ({ isLiked, count, onLikeToggle }: LikeButtonProps) => {
   // 버튼 클릭 시 내부 상태 갱신 및 콜백 실행
   const handleClick = () => {
-    onLikeToggle?.(!isLiked);
+    onLikeToggle(!isLiked);
   };
 
   const baseStyle =

@@ -1,5 +1,32 @@
 import { SurfIcon } from '../icon/SurfIcon';
 
+/**
+ * 좋아요 버튼 컴포넌트 (Controlled Component)
+ *
+ * 내부 상태를 관리하지 않으며, 부모 컴포넌트가 isLiked와 count를 관리해야 합니다.
+ * 클릭 시 onLikeToggle 콜백을 호출하여 새로운 상태를 부모에게 전달합니다.
+ *
+ * @param {LikeButtonProps} props
+ * @param {boolean} [props.isLiked=false] - 현재 좋아요 상태 (부모에서 관리)
+ * @param {number} [props.count=0] - 좋아요 개수 (부모에서 관리)
+ * @param {(newState: boolean) => void} [props.onLikeToggle] - 상태 변경 시 호출되는 콜백. 미제공 시 버튼 클릭이 동작하지 않습니다.
+ *
+ * @example
+ * ```tsx
+ * const [isLiked, setIsLiked] = useState(false);
+ * const [count, setCount] = useState(42);
+ *
+ * <LikeButton
+ *   isLiked={isLiked}
+ *   count={count}
+ *   onLikeToggle={(newState) => {
+ *     setIsLiked(newState);
+ *     setCount(prev => prev + (newState ? 1 : -1));
+ *   }}
+ * />
+ * ```
+ */
+
 type LikeButtonProps = {
   isLiked?: boolean; // 좋아요 상태 초기값
   count?: number; // 좋아요 개수 초기값

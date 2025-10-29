@@ -1,15 +1,42 @@
 import { SurfIcon } from '../icon/SurfIcon';
 
+/**
+ * 스크랩 버튼 컴포넌트 (Controlled Component)
+ *
+ * 내부 상태를 관리하지 않으며, 부모 컴포넌트가 isScrapped와 count를 관리해야 합니다.
+ * 클릭 시 onScrapToggle 콜백을 호출하여 새로운 상태를 부모에게 전달합니다.
+ *
+ * @param {ScrapButtonProps} props
+ * @param {boolean} [props.isScrapped=false] - 현재 스크랩 상태 (부모에서 관리)
+ * @param {number} [props.count=0] - 스크랩 개수 (부모에서 관리)
+ * @param {(newState: boolean) => void} [props.onScrapToggle] - 상태 변경 시 호출되는 콜백. 미제공 시 버튼 클릭이 동작하지 않습니다.
+ *
+ * @example
+ * ```tsx
+ * const [isScrapped, setIsScrapped] = useState(false);
+ * const [count, setCount] = useState(12);
+ *
+ * <ScrapButton
+ *   isScrapped={isScrapped}
+ *   count={count}
+ *   onScrapToggle={(newState) => {
+ *     setIsScrapped(newState);
+ *     setCount(prev => prev + (newState ? 1 : -1));
+ *   }}
+ * />
+ * ```
+ */
+
 type ScrapButtonProps = {
-  isScraped?: boolean; // 스크랩 상태 초기값
+  isScrapped?: boolean; // 스크랩 상태 초기값
   count?: number; // 스크랩 개수 초기값
   onScrapToggle?: (newState: boolean) => void; // 클릭 시 실행되는 콜백 (외부에 상태 변경 알림)
 };
 
-const ScrapButton = ({ isScraped = false, count = 0, onScrapToggle }: ScrapButtonProps) => {
-  // 버튼 클릭 시 내부 상태 갱신 및 콜백 실행
+const ScrapButton = ({ isScrapped = false, count = 0, onScrapToggle }: ScrapButtonProps) => {
+  // 클릭 시 외부 콜백 실행
   const handleClick = () => {
-    onScrapToggle?.(!isScraped);
+    onScrapToggle?.(!isScrapped);
   };
 
   const baseStyle =
@@ -23,14 +50,14 @@ const ScrapButton = ({ isScraped = false, count = 0, onScrapToggle }: ScrapButto
       className={`${baseStyle} ${colorStyle} ${interactionStyle}`}
       type="button"
       onClick={handleClick}
-      aria-label={isScraped ? '스크랩 취소' : '스크랩'}
-      aria-pressed={isScraped}
+      aria-label={isScrapped ? '스크랩 취소' : '스크랩'}
+      aria-pressed={isScrapped}
     >
       <SurfIcon
         name="Bookmark"
         size="s"
         className={`shrink-0 ${
-          isScraped
+          isScrapped
             ? 'text-background-background-primary fill-background-background-primary'
             : 'text-foreground-foreground-normal'
         }`}

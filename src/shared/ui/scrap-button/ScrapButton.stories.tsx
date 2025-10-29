@@ -8,7 +8,7 @@ const meta: Meta<typeof ScrapButton> = {
   component: ScrapButton,
   tags: ['autodocs'],
   argTypes: {
-    isScraped: {
+    isScrapped: {
       control: 'boolean',
       description: '스크랩 상태 여부',
     },
@@ -32,7 +32,7 @@ type Story = StoryObj<typeof ScrapButton>;
 // 🩶 기본 상태 (스크랩되지 않음)
 export const Default: Story = {
   args: {
-    isScraped: false,
+    isScrapped: false,
     count: 12,
   },
 };
@@ -40,7 +40,7 @@ export const Default: Story = {
 // 💙 스크랩된 상태
 export const Scrapped: Story = {
   args: {
-    isScraped: true,
+    isScrapped: true,
     count: 13,
   },
 };
@@ -48,24 +48,26 @@ export const Scrapped: Story = {
 // 🧪 인터랙티브 Playground (상태 변화 확인)
 export const Playground: Story = {
   render: (args) => {
-    const [scraped, setScraped] = useState(args.isScraped);
+    const [scrapped, setScrapped] = useState(args.isScrapped);
     const [count, setCount] = useState(args.count ?? 0);
 
     /**
      * 스크랩 상태 클릭 시:
-     * 1. 내부 scraped/count 상태 갱신
-     * 2. 외부(onToggle) 콜백 실행 → Storybook Actions 탭에 로그 출력
+     * 1. 내부 scrapped/count 상태 갱신
+     * 2. 외부(onScrapToggle) 콜백 실행 → Storybook Actions 탭에 로그 출력
      */
     const handleToggle = (newState: boolean) => {
-      setScraped(newState);
+      setScrapped(newState);
       setCount((prev) => prev + (newState ? 1 : -1));
       args.onScrapToggle?.(newState);
     };
 
-    return <ScrapButton {...args} isScraped={scraped} count={count} onScrapToggle={handleToggle} />;
+    return (
+      <ScrapButton {...args} isScrapped={scrapped} count={count} onScrapToggle={handleToggle} />
+    );
   },
   args: {
-    isScraped: false,
+    isScrapped: false,
     count: 0,
   },
 };

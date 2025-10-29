@@ -20,6 +20,9 @@ importers:
       axios:
         specifier: ^1.12.2
         version: 1.12.2
+      date-fns:
+        specifier: ^4.1.0
+        version: 4.1.0
       keen-slider:
         specifier: ^6.8.6
         version: 6.8.6

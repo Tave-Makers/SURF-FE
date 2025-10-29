@@ -27,13 +27,13 @@ import { SurfIcon } from '../icon/SurfIcon';
  * ```
  */
 
-type ScrapButtonProps = {
-  isScrapped?: boolean; // 스크랩 상태 초기값
-  count?: number; // 스크랩 개수 초기값
-  onScrapToggle?: (newState: boolean) => void; // 클릭 시 실행되는 콜백 (외부에 상태 변경 알림)
+export type ScrapButtonProps = {
+  isScrapped: boolean; // 스크랩 상태 초기값
+  count: number; // 스크랩 개수 초기값
+  onScrapToggle: (newState: boolean) => void; // 클릭 시 실행되는 콜백 (외부에 상태 변경 알림)
 };
 
-const ScrapButton = ({ isScrapped = false, count = 0, onScrapToggle }: ScrapButtonProps) => {
+const ScrapButton = ({ isScrapped, count, onScrapToggle }: ScrapButtonProps) => {
   // 클릭 시 외부 콜백 실행
   const handleClick = () => {
     onScrapToggle?.(!isScrapped);

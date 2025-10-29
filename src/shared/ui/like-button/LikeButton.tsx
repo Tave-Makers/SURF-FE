@@ -27,13 +27,13 @@ import { SurfIcon } from '../icon/SurfIcon';
  * ```
  */
 
-type LikeButtonProps = {
-  isLiked?: boolean; // 좋아요 상태 초기값
-  count?: number; // 좋아요 개수 초기값
-  onLikeToggle?: (newState: boolean) => void; // 클릭 시 실행되는 콜백 (외부에 상태 변경 알림)
+export type LikeButtonProps = {
+  isLiked: boolean; // 좋아요 상태 초기값
+  count: number; // 좋아요 개수 초기값
+  onLikeToggle: (newState: boolean) => void; // 클릭 시 실행되는 콜백 (외부에 상태 변경 알림)
 };
 
-const LikeButton = ({ isLiked = false, count = 0, onLikeToggle }: LikeButtonProps) => {
+const LikeButton = ({ isLiked, count, onLikeToggle }: LikeButtonProps) => {
   // 버튼 클릭 시 내부 상태 갱신 및 콜백 실행
   const handleClick = () => {
     onLikeToggle?.(!isLiked);

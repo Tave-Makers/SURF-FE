@@ -1,0 +1,54 @@
+'use client';
+import type { DayButtonProps } from 'react-day-picker';
+import { isSameMonth } from 'date-fns';
+import type { ActivityMap } from './types';
+import { DailyActivityTagList } from './DailyActivityTagList';
+import { ymd } from './utils';
+
+type Props = DayButtonProps & {
+  displayMonth: Date;
+  activityMap: ActivityMap;
+  onSelect?: (d: Date) => void;
+};
+
+export function CalendarDayButton({
+  day,
+  modifiers,
+  displayMonth,
+  activityMap,
+  onSelect,
+  ...btn
+}: Props) {
+  const date = day.date;
+
+  if (!(date instanceof Date) || Number.isNaN(date.getTime())) {
+    return <button {...btn} className="w-full" />;
+  }
+
+  const inThisMonth = isSameMonth(date, displayMonth);
+  const list = activityMap[ymd(date)] ?? [];
+  const isToday = modifiers?.today ?? false;
+
+  return (
+    <button
+      {...btn}
+      onClick={(e) => {
+        btn.onClick?.(e); // DayPicker 내부 선택 로직에 이벤트 전달
+        onSelect?.(date); // 우리 상태 업데이트
+      }}
+      className={[
+        'rounded-3 flex h-[full] w-[3.06rem] flex-1 flex-col items-start gap-2 self-stretch px-2 py-1',
+        isToday ? 'bg-background-background-secondary-lighter' : inThisMonth ? '' : 'bg-[#e5e7e8]',
+      ].join(' ')}
+    >
+      <div className="flex w-full flex-col p-3">
+        <div className="text-body-body8 text-foreground-foreground-secondary-lighter flex w-full items-center justify-center pb-2">
+          {date.getDate()}
+        </div>
+        <div>
+          <DailyActivityTagList items={list} maxVisible={2} />
+        </div>
+      </div>
+    </button>
+  );
+}

@@ -8,7 +8,7 @@ export function KakaoLoginButton() {
       onClick={kakaoLogin}
     >
       {/* 카카오 아이콘으로 변경 필요 */}
-      <SurfIcon name="ChatSolid" size="l" color="text-logo-normal" />
+      <SurfIcon name="ChatSolid" size="l" className="text-logo-normal" />
       <div className="text-logo-normal text-body-16-600--1">카카오로 로그인하기</div>
     </button>
   );

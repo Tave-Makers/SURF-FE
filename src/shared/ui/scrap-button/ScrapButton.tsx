@@ -1,20 +1,15 @@
 import { SurfIcon } from '../icon/SurfIcon';
-import { useState } from 'react';
 
 type ScrapButtonProps = {
-  isScrapped?: boolean; // 스크랩 상태 초기값
+  isScraped?: boolean; // 스크랩 상태 초기값
   count?: number; // 스크랩 개수 초기값
-  onToggle?: (newState: boolean) => void; // 클릭 시 실행되는 콜백 (외부에 상태 변경 알림)
+  onScrapToggle?: (newState: boolean) => void; // 클릭 시 실행되는 콜백 (외부에 상태 변경 알림)
 };
 
-const ScrapButton = ({ isScrapped = false, count = 0, onToggle }: ScrapButtonProps) => {
-  const [scraped, setScraped] = useState(isScrapped);
-
+const ScrapButton = ({ isScraped = false, count = 0, onScrapToggle }: ScrapButtonProps) => {
   // 버튼 클릭 시 내부 상태 갱신 및 콜백 실행
   const handleClick = () => {
-    const newState = !scraped;
-    setScraped(newState);
-    onToggle?.(newState);
+    onScrapToggle?.(!isScraped);
   };
 
   const baseStyle =
@@ -28,14 +23,14 @@ const ScrapButton = ({ isScrapped = false, count = 0, onToggle }: ScrapButtonPro
       className={`${baseStyle} ${colorStyle} ${interactionStyle}`}
       type="button"
       onClick={handleClick}
-      aria-label={scraped ? '스크랩 취소' : '스크랩'}
-      aria-pressed={scraped}
+      aria-label={isScraped ? '스크랩 취소' : '스크랩'}
+      aria-pressed={isScraped}
     >
       <SurfIcon
         name="Bookmark"
         size="s"
         className={`shrink-0 ${
-          scraped
+          isScraped
             ? 'text-background-background-primary fill-background-background-primary'
             : 'text-foreground-foreground-normal'
         }`}

@@ -16,7 +16,7 @@ const meta: Meta<typeof LikeButton> = {
       control: 'number',
       description: '좋아요 개수',
     },
-    onToggle: {
+    onLikeToggle: {
       action: 'toggled',
       description: '좋아요 클릭 콜백',
     },
@@ -58,10 +58,10 @@ export const Playground: Story = {
     const handleToggle = (newState: boolean) => {
       setLiked(newState);
       setCount((prev) => prev + (newState ? 1 : -1));
-      args.onToggle?.(newState);
+      args.onLikeToggle?.(newState);
     };
 
-    return <LikeButton {...args} isLiked={liked} count={count} onToggle={handleToggle} />;
+    return <LikeButton {...args} isLiked={liked} count={count} onLikeToggle={handleToggle} />;
   },
   args: {
     isLiked: true,

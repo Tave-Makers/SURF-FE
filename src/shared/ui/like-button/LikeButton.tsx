@@ -1,20 +1,15 @@
 import { SurfIcon } from '../icon/SurfIcon';
-import { useState } from 'react';
 
 type LikeButtonProps = {
   isLiked?: boolean; // 좋아요 상태 초기값
   count?: number; // 좋아요 개수 초기값
-  onToggle?: (newState: boolean) => void; // 클릭 시 실행되는 콜백 (외부에 상태 변경 알림)
+  onLikeToggle?: (newState: boolean) => void; // 클릭 시 실행되는 콜백 (외부에 상태 변경 알림)
 };
 
-const LikeButton = ({ isLiked = false, count = 0, onToggle }: LikeButtonProps) => {
-  const [liked, setLiked] = useState(isLiked);
-
+const LikeButton = ({ isLiked = false, count = 0, onLikeToggle }: LikeButtonProps) => {
   // 버튼 클릭 시 내부 상태 갱신 및 콜백 실행
   const handleClick = () => {
-    const newState = !liked;
-    setLiked(newState);
-    onToggle?.(newState);
+    onLikeToggle?.(!isLiked);
   };
 
   const baseStyle =
@@ -28,14 +23,14 @@ const LikeButton = ({ isLiked = false, count = 0, onToggle }: LikeButtonProps) =
       className={`${baseStyle} ${colorStyle} ${interactionStyle}`}
       type="button"
       onClick={handleClick}
-      aria-label={liked ? '좋아요 취소' : '좋아요'}
-      aria-pressed={liked}
+      aria-label={isLiked ? '좋아요 취소' : '좋아요'}
+      aria-pressed={isLiked}
     >
       <SurfIcon
         name="Heart"
         size="s"
         className={`shrink-0 ${
-          liked
+          isLiked
             ? 'text-foreground-foreground-danger fill-foreground-foreground-danger'
             : 'text-foreground-foreground-normal'
         }`}

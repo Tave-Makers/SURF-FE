@@ -11,15 +11,16 @@ export default function RootLayout({ children }: { children: ReactNode }) {
   return (
     <html lang="ko">
       <head>
+        <link rel="preconnect" href="https://cdn.jsdelivr.net" crossOrigin="anonymous" />
         <link
-          rel="stylesheet"
+          rel="preload"
           as="style"
           crossOrigin="anonymous"
-          href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.min.css"
+          href="https://cdn.jsdelivr.net/gh/wanteddev/wanted-sans@v1.0.3/packages/wanted-sans/fonts/webfonts/variable/split/WantedSansVariable.min.css"
         />
         <link
-          href="https://hangeul.pstatic.net/hangeul_static/css/nanum-square-neo.css"
           rel="stylesheet"
+          href="https://cdn.jsdelivr.net/gh/wanteddev/wanted-sans@v1.0.3/packages/wanted-sans/fonts/webfonts/variable/split/WantedSansVariable.min.css"
         />
       </head>
       <body className="flex min-h-screen items-center justify-center bg-gray-100">
@@ -27,10 +28,11 @@ export default function RootLayout({ children }: { children: ReactNode }) {
         <QueryProvider>
           <AuthProvider>
             <PageTrackingProvider>
-              <main className="bg-background-normal box-content flex h-full w-dvw sm:w-[360px]">
+              <main className="bg-background-background-tertiary box-content flex h-full w-dvw sm:w-[360px]">
                 {children}
               </main>
             </PageTrackingProvider>
+
             <ReactQueryDevtools initialIsOpen={false} />
           </AuthProvider>
         </QueryProvider>

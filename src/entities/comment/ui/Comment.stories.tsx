@@ -17,7 +17,15 @@ const meta: Meta<typeof Comment> = {
   argTypes: {
     onLikeToggle: {
       action: '좋아요 상태 변경됨',
-      description: '좋아요 버튼 클릭 시 호출되는 콜백',
+      description: '좋아요 버튼 클릭 시 호출되는 콜백 (newState: true=좋아요, false=취소)',
+    },
+    onReplyClick: {
+      action: '답글 클릭됨',
+      description: '답글 버튼 클릭 시 호출되는 콜백',
+    },
+    onMoreClick: {
+      action: '더보기 클릭됨',
+      description: '더보기 버튼 클릭 시 호출되는 콜백',
     },
   },
 };
@@ -25,10 +33,10 @@ export default meta;
 
 type Story = StoryObj<typeof Comment>;
 
-// 기본 스토리
+/** 기본 댓글 */
 export const Default: Story = {};
 
-// 좋아요 누른 상태
+/** 좋아요 누른 상태 */
 export const Liked: Story = {
   args: {
     isLiked: true,
@@ -36,7 +44,7 @@ export const Liked: Story = {
   },
 };
 
-// 긴 댓글 예시
+/** 긴 댓글 예시 */
 export const LongContent: Story = {
   args: {
     content:
@@ -44,7 +52,7 @@ export const LongContent: Story = {
   },
 };
 
-// 좋아요 클릭 이벤트 확인용
+/** 좋아요 클릭 이벤트 확인용 (상호작용 스토리) */
 export const InteractiveLike: Story = {
   render: (args) => {
     const [liked, setLiked] = useState(args.isLiked);
@@ -53,7 +61,7 @@ export const InteractiveLike: Story = {
     /**
      * 좋아요 상태 클릭 시:
      * 1. 내부 liked/count 상태 갱신
-     * 2. 외부(onToggle) 콜백 실행 → Storybook Actions 탭에 로그 출력
+     * 2. 외부(onLikeToggle) 콜백 실행 → Storybook Actions 탭에 로그 출력
      */
     const handleToggle = (newState: boolean) => {
       setLiked(newState);
@@ -61,6 +69,15 @@ export const InteractiveLike: Story = {
       args.onLikeToggle?.(newState);
     };
 
-    return <Comment {...args} isLiked={liked} likeCount={count} onLikeToggle={handleToggle} />;
+    return (
+      <Comment
+        {...args}
+        isLiked={liked}
+        likeCount={count}
+        onLikeToggle={handleToggle}
+        onReplyClick={args.onReplyClick}
+        onMoreClick={args.onMoreClick}
+      />
+    );
   },
 };

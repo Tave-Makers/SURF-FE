@@ -17,14 +17,21 @@ export const ActionBar = forwardRef<HTMLInputElement, ActionBarProps>(
 
     useImperativeHandle(ref, () => internalRef.current!, []);
 
-    const handleClick = () => {
+    const handleSend = () => {
       const inputValue = internalRef.current?.value.trim();
       if (!inputValue) return;
       onSend?.(inputValue);
     };
 
+    const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
+      if (e.key === 'Enter') {
+        e.preventDefault();
+        handleSend();
+      }
+    };
+
     return (
-      <div className="bg-background-background-normal-lighter flex w-full items-center gap-10 border-t px-13 pt-13 pb-15">
+      <div className="bg-background-background-normal-lighter flex w-full items-center gap-10 px-13 pt-13 pb-15">
         <TextInput
           ref={internalRef}
           type="text"
@@ -33,10 +40,11 @@ export const ActionBar = forwardRef<HTMLInputElement, ActionBarProps>(
           placeholder={placeholder}
           iconName={isEmojiActive ? 'SmileCircleSolid' : 'SmileCircle'}
           onIconClick={onIconClick}
+          onKeyDown={handleKeyDown}
         />
         <button
           type="button"
-          onClick={handleClick}
+          onClick={handleSend}
           className="bg-background-background-primary group hover:bg-background-background-primary-darker rounded-max flex h-[2rem] w-[2rem] shrink-0 items-center justify-center p-7"
         >
           <SurfIcon

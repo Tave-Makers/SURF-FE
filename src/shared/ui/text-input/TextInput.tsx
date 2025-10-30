@@ -19,10 +19,10 @@ type TextInputProps = {
   iconName?: SurfIconName; // 아이콘 이름
   onIconClick?: () => void; // 아이콘 클릭 이벤트
   onEnter?: (val: string) => void; // Enter 입력 이벤트
-} & Omit<InputHTMLAttributes<HTMLInputElement>, 'value' | 'onChange' | 'className' | 'onKeyDown'>;
+} & Omit<InputHTMLAttributes<HTMLInputElement>, 'value' | 'onChange' | 'className'>;
 
 export const TextInput = forwardRef<HTMLInputElement, TextInputProps>(
-  ({ value, onChange, placeholder, iconName, onIconClick, onEnter, ...rest }, ref) => {
+  ({ value, onChange, placeholder, iconName, onIconClick, ...rest }, ref) => {
     const internalRef = useRef<HTMLInputElement>(null);
     const [internalValue, setInternalValue] = useState(value ?? '');
 
@@ -49,15 +49,6 @@ export const TextInput = forwardRef<HTMLInputElement, TextInputProps>(
           placeholder={placeholder}
           {...rest}
           aria-label={rest['aria-label'] ?? '텍스트 입력'}
-          onKeyDown={(e) => {
-            if (e.key === 'Enter') {
-              e.preventDefault();
-              const trimmed = currentValue.trim();
-              if (!trimmed) return;
-              // 현재 input의 value를 앞뒤 공백 제거해 onEnter 콜백에 전달
-              onEnter?.(trimmed);
-            }
-          }}
         />
 
         {iconName && (

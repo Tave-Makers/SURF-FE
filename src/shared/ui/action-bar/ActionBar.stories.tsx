@@ -35,7 +35,7 @@ export const Controlled: Story = {
           value={message}
           onChange={setMessage}
           placeholder="메시지를 입력하세요"
-          onClick={handleSend}
+          onSend={handleSend}
           isEmojiActive={emojiActive}
           onIconClick={handleEmojiClick}
         />
@@ -71,7 +71,7 @@ export const Uncontrolled: Story = {
       <div className="w-[23.4rem] space-y-2">
         <ActionBar
           placeholder="댓글을 입력하세요"
-          onClick={handleSend}
+          onSend={handleSend}
           isEmojiActive={emojiActive}
           onIconClick={handleEmojiClick}
           ref={inputRef}

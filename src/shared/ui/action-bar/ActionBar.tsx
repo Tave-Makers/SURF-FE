@@ -6,13 +6,13 @@ type ActionBarProps = {
   value?: string;
   onChange?: (val: string) => void;
   placeholder?: string;
-  onClick?: (val: string) => void;
+  onSend?: (val: string) => void;
   onIconClick?: () => void;
   isEmojiActive?: boolean;
 };
 
 export const ActionBar = forwardRef<HTMLInputElement, ActionBarProps>(
-  ({ value, onChange, placeholder, onClick, onIconClick, isEmojiActive = false }, ref) => {
+  ({ value, onChange, placeholder, onSend, onIconClick, isEmojiActive = false }, ref) => {
     const internalRef = useRef<HTMLInputElement>(null);
 
     useImperativeHandle(ref, () => internalRef.current!, []);
@@ -20,7 +20,7 @@ export const ActionBar = forwardRef<HTMLInputElement, ActionBarProps>(
     const handleClick = () => {
       const inputValue = internalRef.current?.value.trim();
       if (!inputValue) return;
-      onClick?.(inputValue);
+      onSend?.(inputValue);
     };
 
     return (

@@ -24,7 +24,7 @@ export const ActionBar = forwardRef<HTMLInputElement, ActionBarProps>(
     };
 
     return (
-      <div className="bg-background-background-normal border-background-background-tertiary flex w-full items-center gap-10 border-t px-13 pt-13 pb-15">
+      <div className="bg-background-background-normal-lighter flex w-full items-center gap-10 border-t px-13 pt-13 pb-15">
         <TextInput
           ref={internalRef}
           type="text"

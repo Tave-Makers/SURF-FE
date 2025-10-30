@@ -1,6 +1,45 @@
 import { SurfIcon } from '../../../shared/ui/icon/SurfIcon';
 import { ProfileImage } from '../../../shared/ui/profile-image/ProfileImage';
 
+/**
+ * 댓글(Comment) 컴포넌트
+ *
+ * @description
+ * - 프로필, 작성자, 날짜/시간, 내용, 좋아요, 답글, 더보기 표시
+ * - 모든 사용자 액션(좋아요, 답글, 더보기)은 콜백을 통해 상위에서 처리
+ *
+ * @prop name 작성자 이름
+ * @prop date 작성 날짜 (예: 2026.10.16)
+ * @prop time 작성 시간 (예: 01:21)
+ * @prop content 댓글 내용
+ * @prop likeCount 좋아요 개수
+ * @prop isLiked 좋아요 여부
+ * @prop onLikeToggle 좋아요 클릭 콜백 (newState: true=좋아요, false=취소)
+ * @prop onReplyClick 답글 클릭 콜백
+ * @prop onMoreClick 더보기 클릭 콜백
+ *
+ * @example
+ * ```tsx
+ * const [isLiked, setIsLiked] = useState(false);
+ * const [count, setCount] = useState(42);
+ *
+ * <Comment
+ *   name="김테이브"
+ *   date="2026.10.16"
+ *   time="01:21"
+ *   content="좋은 글이네요! 😊"
+ *   likeCount={count}
+ *   isLiked={isLiked}
+ *   onLikeToggle={(newState) => {
+ *     setIsLiked(newState);
+ *     setCount((prev) => prev + (newState ? 1 : -1));
+ *   }}
+ *   onReplyClick={() => console.log('답글 클릭')}
+ *   onMoreClick={() => console.log('더보기 클릭')}
+ * />
+ * ```
+ */
+
 type CommentProps = {
   name: string;
   date: string;

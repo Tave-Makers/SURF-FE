@@ -6,10 +6,16 @@ type CommentProps = {
   date: string;
   time: string;
   content: string;
-  likes: number;
+  likeCount: number;
+  isLiked: boolean;
+  onLikeToggle?: (newState: boolean) => void;
 };
 
-const Comment = ({ name, date, time, content, likes }: CommentProps) => {
+const Comment = ({ name, date, time, content, likeCount, isLiked, onLikeToggle }: CommentProps) => {
+  const handleLikeToggle = () => {
+    onLikeToggle?.(!isLiked);
+  };
+
   return (
     <article className="flex flex-1 gap-11" aria-label={`${name}님의 댓글`}>
       <ProfileImage size="s" alt={`${name}님의 프로필 이미지`} />
@@ -47,10 +53,20 @@ const Comment = ({ name, date, time, content, likes }: CommentProps) => {
           <button
             type="button"
             className="text-caption-caption4 text-foreground-foreground-secondary-lighter flex items-center gap-5"
-            aria-label={`좋아요 ${likes}개`}
+            aria-label={`좋아요 ${likeCount}개`}
+            onClick={handleLikeToggle}
           >
-            <SurfIcon name="Heart" size="s" aria-hidden="true" />
-            <span aria-hidden="true">{likes}</span>
+            <SurfIcon
+              name="Heart"
+              size="s"
+              aria-hidden="true"
+              className={`shrink-0 ${
+                isLiked
+                  ? 'text-foreground-foreground-danger fill-foreground-foreground-danger'
+                  : 'text-foreground-foreground-normal'
+              }`}
+            />
+            <span aria-hidden="true">{likeCount}</span>
           </button>
 
           <button

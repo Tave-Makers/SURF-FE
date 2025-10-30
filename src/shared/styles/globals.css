@@ -1,6 +1,7 @@
 @import 'tailwindcss';
 @import './font-tokens.css';
 @import './color-tokens.css';
+@import './scheme-tokens.css';
 
 /* 뷰포트 높이 전파 */
 html,
@@ -11,7 +12,20 @@ body,
 
 html,
 body {
-  font-family: Pretendard, NanumSquareNeo, sans-serif;
+  font-family:
+    'Wanted Sans Variable',
+    'Wanted Sans',
+    -apple-system,
+    BlinkMacSystemFont,
+    system-ui,
+    'Segoe UI',
+    'Apple SD Gothic Neo',
+    'Noto Sans KR',
+    'Malgun Gothic',
+    'Apple Color Emoji',
+    'Segoe UI Emoji',
+    'Segoe UI Symbol',
+    sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   overflow: hidden;
@@ -24,7 +38,9 @@ body {
 
 /* placeholder */
 .placeholder-body-14-600--1-24::placeholder {
-  font-family: Pretendard, sans-serif;
+  font-family:
+    Wanted Sans Variable,
+    sans-serif;
   font-weight: 600;
   line-height: 24px;
   font-size: 14px;

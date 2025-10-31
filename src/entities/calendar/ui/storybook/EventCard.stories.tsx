@@ -1,5 +1,5 @@
 import type { Meta, StoryObj } from '@storybook/nextjs-vite';
-import { EventCard } from './EventCard';
+import { EventCard } from '../EventCard';
 
 const meta: Meta<typeof EventCard> = {
   title: 'Entities/UI/Calendar/EventCard',

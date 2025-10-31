@@ -1,6 +1,6 @@
 'use client';
-import type { DailyActivity } from './types';
-import { ActivityTagItem } from './ActivityTagItem';
+import type { DailyActivity } from '@/entities/calendar/model/types';
+import { ActivityTagItem } from '@/entities/calendar/ui/ActivityTagItem';
 
 type Props = {
   items: DailyActivity[];

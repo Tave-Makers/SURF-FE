@@ -5,12 +5,12 @@ import { DayPicker, type DayButtonProps, type NavProps, type MonthProps } from '
 import { ko } from 'react-day-picker/locale';
 import 'react-day-picker/style.css';
 
-import { MonthNavigator } from './MonthNavigator';
+import { MonthNavigator } from '@/entities/calendar/ui/MonthNavigator';
 import { CalendarDayButton } from './CalendarDayButton';
-import { EventDateCard } from '@/shared/ui/calendar/EventDateCard';
-import type { ActivityMap } from './types';
+import { EventDateCard } from '@/entities/calendar/ui/EventDateCard';
+import type { ActivityMap } from '@/entities/calendar/model/types';
 import { ymd } from './utils';
-import { EventCard } from '../../../entities/calendar/ui/EventCard';
+import { EventCard } from '@/entities/calendar/ui/EventCard';
 
 const calendarClassNames = {
   root: 'w-full',

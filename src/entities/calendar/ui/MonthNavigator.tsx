@@ -1,7 +1,7 @@
 'use client';
 import { addMonths, format } from 'date-fns';
 import { ko } from 'date-fns/locale';
-import { SurfIcon } from '../icon/SurfIcon';
+import { SurfIcon } from '../../../shared/ui/icon/SurfIcon';
 
 type Props = {
   month: Date;

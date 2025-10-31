@@ -7,15 +7,17 @@ import 'react-day-picker/style.css';
 
 import { MonthNavigator } from './MonthNavigator';
 import { CalendarDayButton } from './CalendarDayButton';
-import { SelectedDayEventsSection } from '@/shared/ui/calendar/SelectedDayEventsSection';
+import { EventDateCard } from '@/shared/ui/calendar/EventDateCard';
 import type { ActivityMap } from './types';
 import { ymd } from './utils';
+import { EventCard } from '../../../entities/calendar/ui/EventCard';
 
 const calendarClassNames = {
   root: 'w-full',
   months: 'w-full justify-center items-center',
   month: 'w-full px-3 pb-10',
-  month_grid: 'w-full',
+  month_grid:
+    'w-full rounded-5 bg-background-background-normal shadow-[0_0_30px_0_rgba(0,0,0,0.05)]',
   month_caption: 'hidden',
   tfoot: 'hidden',
   weekday:
@@ -25,16 +27,72 @@ const calendarClassNames = {
 // mock 데이터. API 연동 시 삭제 예정
 const mock: ActivityMap = {
   '2025-10-30': [
-    { id: 'x1', title: '후반기 만남의 장소', type: 'official' },
-    { id: 'x2', title: '회의', type: 'operation' },
-    { id: 'x3', title: '후반기 만남의 장소', type: 'official' },
+    {
+      id: 'x1',
+      title: '후반기 만남의 장소',
+      type: 'official',
+      startDate: new Date(),
+      endDate: new Date(),
+      place: '온라인',
+    },
+    {
+      id: 'x2',
+      title: '회의',
+      type: 'operation',
+      startDate: new Date(),
+      endDate: new Date(),
+      place: '오프라인',
+    },
+    {
+      id: 'x3',
+      title: '후반기 만남의 장소',
+      type: 'official',
+      startDate: new Date(),
+      endDate: new Date(),
+      place: '온라인',
+    },
   ],
   '2025-10-31': [
-    { id: 'x2', title: '회의', type: 'operation' },
-    { id: 'x4', title: 'OB 네트워킹 데이', type: 'other' },
-    { id: 'x5', title: 'OB 네트워킹 데이', type: 'other' },
-    { id: 'x6', title: 'OB 네트워킹 데이', type: 'other' },
-    { id: 'x7', title: 'OB 네트워킹 데이', type: 'other' },
+    {
+      id: 'x2',
+      title: '회의',
+      type: 'operation',
+      startDate: new Date(),
+      endDate: new Date(),
+      place: '오프라인',
+    },
+    {
+      id: 'x4',
+      title: 'OB 네트워킹 데이',
+      type: 'other',
+      startDate: new Date(),
+      endDate: new Date(),
+      place: '온라인',
+    },
+    {
+      id: 'x5',
+      title: 'OB 네트워킹 데이',
+      type: 'other',
+      startDate: new Date(),
+      endDate: new Date(),
+      place: '온라인',
+    },
+    {
+      id: 'x6',
+      title: 'OB 네트워킹 데이',
+      type: 'other',
+      startDate: new Date(),
+      endDate: new Date(),
+      place: '온라인',
+    },
+    {
+      id: 'x7',
+      title: 'OB 네트워킹 데이',
+      type: 'other',
+      startDate: new Date(),
+      endDate: new Date(),
+      place: '온라인',
+    },
   ],
 };
 
@@ -78,7 +136,7 @@ export default function Calendar() {
   const selectedItems = selectedDay ? (mock[ymd(selectedDay)] ?? []) : [];
 
   return (
-    <div className="flex flex-1 flex-col gap-10">
+    <div className="flex flex-1 flex-col gap-10 overflow-auto">
       <div className="flex flex-1 items-center justify-center px-10">
         <DayPicker
           mode="single"
@@ -98,10 +156,20 @@ export default function Calendar() {
       </div>
 
       <div className="px-13">
-        <SelectedDayEventsSection
+        <EventDateCard
           date={selectedDay}
           items={selectedItems}
-          renderItem={(_ev) => <></>} // EventCard 자리
+          renderItem={(_ev) => (
+            <>
+              <EventCard
+                title={_ev.title}
+                type={_ev.type}
+                startDate={new Date()}
+                endDate={new Date()}
+                place={'온라인'}
+              />
+            </>
+          )}
         />
       </div>
     </div>

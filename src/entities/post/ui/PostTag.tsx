@@ -1,6 +1,4 @@
-type PostTagProps = {
-  variation: 'event' | 'reservation';
-};
+import { PostTagProps } from '../model/types';
 
 const TAG_TEXT_MAP = {
   event: '행사',

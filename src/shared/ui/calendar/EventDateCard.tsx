@@ -12,7 +12,7 @@ type Props<T extends { id?: string }> = {
   headerAction?: ReactNode; // 섹션 헤더 오른쪽에 배치할 액션 영역
 };
 
-export function SelectedDayEventsSection<T extends { id?: string }>({
+export function EventDateCard<T extends { id?: string }>({
   date,
   items,
   isLoading,
@@ -22,7 +22,7 @@ export function SelectedDayEventsSection<T extends { id?: string }>({
   if (!date) return null;
 
   return (
-    <section className="flex w-full flex-col gap-6 pt-15">
+    <div className="flex w-full flex-col gap-6 pt-15">
       <header className="flex items-center justify-between">
         <div className="text-body-body7 text-foreground-foreground-normal">
           {format(date, 'yyyy년 M월 d일 (E)', { locale: ko })}
@@ -37,15 +37,10 @@ export function SelectedDayEventsSection<T extends { id?: string }>({
       ) : (
         <div className="flex flex-col gap-3">
           {items.map((ev, i) => (
-            <div key={ev?.id ?? i}>
-              {renderItem
-                ? renderItem(ev, i)
-                : // : <EventCard event={ev} />
-                  null}
-            </div>
+            <div key={ev?.id ?? i}>{renderItem ? renderItem(ev, i) : null}</div>
           ))}
         </div>
       )}
-    </section>
+    </div>
   );
 }

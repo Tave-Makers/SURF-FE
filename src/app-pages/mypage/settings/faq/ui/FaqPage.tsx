@@ -1,6 +1,6 @@
 'use client';
 
-import Calendar from '@/shared/ui/calendar/Calendar';
+import Calendar from '@/widgets/calendar/ui/Calendar';
 // import { EventCard } from '@/shared/ui/calendar/EventCard';
 
 export default function FaqPage() {

@@ -2,8 +2,8 @@
 import type { DayButtonProps } from 'react-day-picker';
 import { isSameMonth } from 'date-fns';
 import type { ActivityMap } from '@/entities/calendar/model/types';
-import { DailyActivityTagList } from '../../../entities/calendar/ui/DailyActivityTagList';
-import { ymd } from './utils';
+import { DailyActivityTagList } from '@/entities/calendar/ui/DailyActivityTagList';
+import { ymd } from '@/entities/calendar/lib/utils';
 
 type Props = DayButtonProps & {
   displayMonth: Date;

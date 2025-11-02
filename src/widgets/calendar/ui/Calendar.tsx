@@ -6,10 +6,10 @@ import { ko } from 'react-day-picker/locale';
 import 'react-day-picker/style.css';
 
 import { MonthNavigator } from '@/entities/calendar/ui/MonthNavigator';
-import { CalendarDayButton } from './CalendarDayButton';
+import { CalendarDayButton } from '../../../entities/calendar/ui/CalendarDayButton';
 import { EventDateCard } from '@/entities/calendar/ui/EventDateCard';
 import type { ActivityMap } from '@/entities/calendar/model/types';
-import { ymd } from './utils';
+import { ymd } from '@/entities/calendar/lib/utils';
 import { EventCard } from '@/entities/calendar/ui/EventCard';
 
 const calendarClassNames = {

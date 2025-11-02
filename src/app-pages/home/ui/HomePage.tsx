@@ -1,7 +1,7 @@
 'use client';
 
 import { SurfIcon } from '@/shared/ui/icon/SurfIcon';
-import { SolidButton } from '@/shared/ui/solid-button/SolidButton';
+import { SolidButton } from '@/shared/ui/button/solid-button/SolidButton';
 import * as amplitude from '@amplitude/analytics-browser';
 
 export const HomePage = () => {

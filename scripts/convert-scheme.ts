@@ -73,7 +73,8 @@ const radiusPx: Record<string, string> = {};
 for (const [k, v] of Object.entries(radiusTok)) radiusPx[k] = `${v}px`;
 
 const strokeVal: Record<string, string> = {};
-for (const [k, v] of Object.entries(strokeTok)) strokeVal[k] = String(v);
+for (const [k, v] of Object.entries(strokeTok)) strokeVal[k] = `${v}px`;
+
 
 const opacityVal: Record<string, string> = {};
 for (const [k, v] of Object.entries(opacityTok)) opacityVal[k] = (v / 100).toString();

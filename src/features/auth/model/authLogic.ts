@@ -1,21 +1,33 @@
-import { getValidStatus } from '../api/getValidStatus';
 import { getKakaoLoginCallback } from '../api/getKakaoLoginCallback';
-
 import { useAuthStore } from './useAuthStore';
+import { AUTH_EVENTS } from './types';
+import { trackAuthEvent } from '../lib/trackAuthEvent';
+import { handleApiError } from '@/shared/lib/handleApiError';
 
 export async function handleKakaoLoginCallback(code: string): Promise<string> {
   const setAuth = useAuthStore.getState().setAuth;
 
-  // 1. 카카오 로그인 콜백
-  const res = await getKakaoLoginCallback(code);
-  setAuth({
-    accessToken: res.data.accessToken,
-    nickname: res.data.nickname,
-    email: res.data.email,
-    profileImageUrl: res.data.profileImageUrl,
+  trackAuthEvent(AUTH_EVENTS.VIEW_LOGIN_CALLBACK, {
+    code_length: code.length,
   });
 
-  // 2. 온보딩 여부 확인
-  const validStatus = await getValidStatus();
-  return validStatus.data ? '/onboarding' : '/home';
+  try {
+    const res = await getKakaoLoginCallback(code);
+    const payload = res.data;
+
+    setAuth({
+      accessToken: payload.accessToken,
+      nickname: payload.nickname,
+      email: payload.email,
+      profileImageUrl: payload.profileImageUrl,
+    });
+
+    return '/home';
+  } catch (err) {
+    const loginError = handleApiError(
+      err,
+      '카카오 로그인에 실패했어요. 잠시 후 다시 시도해주세요.',
+    );
+    throw loginError;
+  }
 }

@@ -30,7 +30,7 @@ export default function BylawsPage() {
   return (
     <main
       ref={scrollerRef}
-      className="h-full overflow-y-auto pt-[1.25rem]"
+      className="h-full overflow-y-auto pt-15"
       role="main"
       aria-label="회칙 목록"
     >

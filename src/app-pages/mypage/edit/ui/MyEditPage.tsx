@@ -3,7 +3,7 @@
 //import { useState } from 'react';
 //import { ProfileEditHeader } from '@/widgets/profile-edit-header/ui/ProfileEditHeader';
 //import { ProfileEditForm } from '@/widgets/profile-edit-form/ui/ProfileEditForm';
-import { TextButton } from '@/shared/ui/text-button/TextButton';
+import { TextButton } from '@/shared/ui/button/text-button/TextButton';
 
 export function MyEditPage() {
   //const [memberName] = useState('김테이비');

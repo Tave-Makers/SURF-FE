@@ -5,6 +5,7 @@ import { AuthProvider } from '@/app/providers/AuthProvider';
 import 'keen-slider/keen-slider.min.css';
 import { ReactQueryDevtools } from '@tanstack/react-query-devtools';
 import { AnalyticsProvider } from '@/app/providers/AnalyticsProvider';
+import { PageTrackingProvider } from '@/shared/analytics/providers/PageTrackingProvider';
 
 export default function RootLayout({ children }: { children: ReactNode }) {
   return (
@@ -15,21 +16,22 @@ export default function RootLayout({ children }: { children: ReactNode }) {
           rel="preload"
           as="style"
           crossOrigin="anonymous"
-          href="https://cdn.jsdelivr.net/gh/wanteddev/wanted-sans@v1.0.3/packages/wanted-sans/fonts/webfonts/static/split/WantedSans.min.css"
+          href="https://cdn.jsdelivr.net/gh/wanteddev/wanted-sans@v1.0.3/packages/wanted-sans/fonts/webfonts/variable/split/WantedSansVariable.min.css"
         />
         <link
           rel="stylesheet"
-          crossOrigin="anonymous"
-          href="https://cdn.jsdelivr.net/gh/wanteddev/wanted-sans@v1.0.3/packages/wanted-sans/fonts/webfonts/static/split/WantedSans.min.css"
+          href="https://cdn.jsdelivr.net/gh/wanteddev/wanted-sans@v1.0.3/packages/wanted-sans/fonts/webfonts/variable/split/WantedSansVariable.min.css"
         />
       </head>
       <body className="flex min-h-screen items-center justify-center bg-gray-100">
         <AnalyticsProvider />
         <QueryProvider>
           <AuthProvider>
-            <main className="bg-background-background-tertiary box-content flex h-full w-dvw sm:w-[360px]">
-              {children}
-            </main>
+            <PageTrackingProvider>
+              <main className="bg-background-normal box-content flex h-full w-dvw sm:w-[360px]">
+                {children}
+              </main>
+            </PageTrackingProvider>
             <ReactQueryDevtools initialIsOpen={false} />
           </AuthProvider>
         </QueryProvider>

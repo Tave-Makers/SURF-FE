@@ -12,19 +12,17 @@ export type AuthState = AuthData & {
 };
 
 /**
- *  이벤트 이름
+ *  Amplitude 로그인 이벤트 이름
  */
 export const AUTH_EVENTS = {
-  LOGIN_KAKAO_CLICK: 'login_kakao',
-  // LOGIN_SUCCESS: 'login_success',
-  // LOGIN_FAIL: 'login_fail',
+  CLICK_LOGIN_KAKAO: 'click_login_kakao',
+  VIEW_LOGIN_CALLBACK: 'view_login_callback',
 } as const;
 
 /**
- * 이벤트별 속성 타입 매핑
+ * Amplitude 이벤트별 속성 타입 매핑
  */
 export type AuthEventPropsMap = {
-  [AUTH_EVENTS.LOGIN_KAKAO_CLICK]: { login_method: string };
-  // [AUTH_EVENTS.LOGIN_SUCCESS]: { member_id: string };
-  // [AUTH_EVENTS.LOGIN_FAIL]: { error_code: number };
+  [AUTH_EVENTS.CLICK_LOGIN_KAKAO]: { login_method: string };
+  [AUTH_EVENTS.VIEW_LOGIN_CALLBACK]: { code_length: number };
 };

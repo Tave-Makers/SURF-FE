@@ -19,7 +19,12 @@ export const ToggleAccordionSelect: Story = {
 
     return (
       <div>
-        <AccordionSelect title="열기/닫기 테스트" isOpen={isOpen} onClick={open} />
+        <AccordionSelect
+          title="열기/닫기 테스트"
+          isOpen={isOpen}
+          onClick={open}
+          controlsId={sheetId}
+        />
 
         <ModalSheet
           isOpen={isOpen}
@@ -30,7 +35,7 @@ export const ToggleAccordionSelect: Story = {
           <ModalSheet.Container>
             <ModalSheet.Header />
             <ModalSheet.Content>
-              <div className="flex flex-col gap-[0.25rem] p-15">
+              <div id={sheetId} className="flex flex-col gap-[0.25rem] p-15">
                 <p className="text-body-body6 text-foreground-foreground-normal">
                   이건 단순히 토글되는 시트입니다.
                 </p>
@@ -67,7 +72,7 @@ export const SelectAccordion: Story = {
           <ModalSheet.Container>
             <ModalSheet.Header />
             <ModalSheet.Content>
-              <div className="flex flex-col gap-[0.25rem] p-15">
+              <div id={sheetId} className="flex flex-col gap-[0.25rem] p-15">
                 {items.map((item) => (
                   <button
                     key={item}

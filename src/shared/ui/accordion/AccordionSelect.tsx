@@ -41,7 +41,7 @@ export function AccordionSelect({ title, isOpen, onClick, controlsId }: Accordio
       onClick={onClick}
       className="border-border-border-normal bg-background-background-normal flex w-full items-center justify-between border-b py-10"
       aria-expanded={isOpen}
-      aria-controls={controlsId ?? 'accordion-content'}
+      aria-controls={controlsId}
     >
       <span className="text-body-body7 text-foreground-foreground-normal">{title}</span>
       <span className={`transition-transform duration-300 ${isOpen ? 'rotate-180' : ''}`}>

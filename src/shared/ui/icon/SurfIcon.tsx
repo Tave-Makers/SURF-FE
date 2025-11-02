@@ -7,7 +7,6 @@ export type IconName = Extract<keyof typeof Icons, string>;
 type BaseIconProps = {
   size?: number;
   stroke?: number;
-  color?: string;
   className?: string;
 };
 
@@ -15,18 +14,12 @@ interface IconProps {
   name: IconName;
   size?: IconSize;
   className?: string;
-  color?: string;
 }
 
 const sizeMap: Record<IconSize, number> = { s: 16, m: 20, l: 24 };
 const strokeMap: Record<IconSize, number> = { s: 1.2, m: 1.5, l: 1.5 };
 
-export const SurfIcon = ({
-  name,
-  size = 'm',
-  className = '',
-  color = 'currentColor',
-}: IconProps) => {
+export const SurfIcon = ({ name, size = 'm', className = '' }: IconProps) => {
   const icons = Icons as unknown as Record<string, ComponentType<BaseIconProps>>;
   const IconComponent = icons[name];
 
@@ -40,7 +33,6 @@ export const SurfIcon = ({
   return (
     <IconComponent
       size={sizeMap[size]}
-      color={color}
       className={`inline-block transition-colors duration-200 ${className}`}
       {...(!isSolid && { stroke: strokeMap[size] })}
     />

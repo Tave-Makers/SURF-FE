@@ -7,10 +7,15 @@ import { Tab } from '@/shared/ui/tab/Tab';
 import { useActivitySummary } from '@/entities/activity-score/model/useActivitySummary';
 import { useInfiniteActivityHistory } from '@/entities/activity-score/model/useActivityHistory';
 import { useState, useRef, useEffect } from 'react';
+import { trackActivityScoreEvent } from '@/features/activity-score/lib/trackActivityScoreEvent';
+import { ACTIVITY_SCORE_EVENTS } from '@/features/activity-score/model/types';
+import { usePageName } from '@/shared/analytics/lib/getPageName';
 
 export default function ActivityScorePage() {
   // 탭 상태
   const [mode, setMode] = useState<ScoreMode>('REWARD');
+  // sentinel ref
+  const loadMoreRef = useRef<HTMLDivElement | null>(null);
 
   // 활동 요약 데이터
   const {
@@ -19,6 +24,23 @@ export default function ActivityScorePage() {
     isError: isSummaryError,
     refetch: refetchSummary,
   } = useActivitySummary();
+
+  // 이벤트 전송 여부를 확인하기 위한 ref
+  const trackedRef = useRef(false);
+  const pageName = usePageName();
+
+  // 페이지 진입 시점에 이벤트 전송
+  useEffect(() => {
+    if (summary && !trackedRef.current) {
+      trackActivityScoreEvent(ACTIVITY_SCORE_EVENTS.VIEW_ACTIVITY, {
+        page_name: pageName,
+      });
+      trackActivityScoreEvent(ACTIVITY_SCORE_EVENTS.VIEW_PERSONAL_SCORE, {
+        total_score: summary.score,
+      });
+      trackedRef.current = true;
+    }
+  }, [summary, pageName]);
 
   // 활동 히스토리 (무한스크롤)
   const {
@@ -32,9 +54,6 @@ export default function ActivityScorePage() {
   } = useInfiniteActivityHistory(mode, 5);
 
   const history = historyRaw?.pages.flatMap((page) => page.content) ?? [];
-
-  // sentinel ref
-  const loadMoreRef = useRef<HTMLDivElement | null>(null);
 
   useEffect(() => {
     if (!loadMoreRef.current || !hasNextPage) return;
@@ -54,19 +73,19 @@ export default function ActivityScorePage() {
       <h1 className="sr-only">활동 점수</h1>
 
       {/* 활동 점수 카드 */}
-      <div className="pt-[1.88rem] pb-[2.5rem]">
+      <div className="pt-17 pb-19">
         {isSummaryLoading && (
           <div aria-live="polite" aria-busy="true">
             불러오는 중...
           </div>
         )}
         {isSummaryError && (
-          <div role="alert" className="flex flex-col items-center gap-2">
+          <div role="alert" className="flex flex-col items-center gap-[0.5rem]">
             <p>데이터를 불러오는 중 오류가 발생했습니다.</p>
             <button
               type="button"
               onClick={() => void refetchSummary()}
-              className="bg-primary rounded px-4 py-2 text-white"
+              className="bg-background-background-primary rounded px-[1rem] py-[0.5rem] text-white"
             >
               다시 시도
             </button>
@@ -90,7 +109,7 @@ export default function ActivityScorePage() {
       </div>
 
       {/* 활동 점수 리스트 */}
-      <div className="flex w-full flex-1 flex-col gap-[2.25rem] overflow-y-auto px-[1rem] pt-[1.88rem]">
+      <div className="flex w-full flex-1 flex-col gap-18 overflow-y-auto px-13 pt-17">
         {isHistoryLoading && (
           <div aria-live="polite" aria-busy="true">
             불러오는 중...
@@ -98,12 +117,12 @@ export default function ActivityScorePage() {
         )}
 
         {isHistoryError && (
-          <div role="alert" className="flex flex-col items-center gap-2">
+          <div role="alert" className="flex flex-col items-center gap-[0.5rem]">
             <p>히스토리를 불러오는 중 오류가 발생했습니다.</p>
             <button
               type="button"
               onClick={() => void refetchHistory()}
-              className="bg-primary rounded px-4 py-2 text-white"
+              className="bg-background-background-primary rounded px-[1rem] py-[0.5rem] text-white"
             >
               다시 시도
             </button>
@@ -111,7 +130,7 @@ export default function ActivityScorePage() {
         )}
 
         {!isHistoryLoading && !isHistoryError && history.length === 0 && (
-          <div className="text-body-14-600--1-20 text-foreground-hint text-center">
+          <div className="text-body-body8 text-foreground-foreground-tertiary text-center">
             활동 내역이 없습니다.
           </div>
         )}
@@ -122,7 +141,7 @@ export default function ActivityScorePage() {
         {hasNextPage && (
           <div
             ref={loadMoreRef}
-            className="text-body-14-600--1-20 text-foreground-hint flex items-center justify-center py-[1rem]"
+            className="text-body-body8 text-foreground-foreground-tertiary flex items-center justify-center py-[1rem]"
             aria-live="polite"
             aria-atomic="true"
           >

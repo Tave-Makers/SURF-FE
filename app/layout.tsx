@@ -27,9 +27,11 @@ export default function RootLayout({ children }: { children: ReactNode }) {
         <AnalyticsProvider />
         <QueryProvider>
           <AuthProvider>
-            <main className="bg-background-background-tertiary box-content flex h-full w-dvw sm:w-[360px]">
-              {children}
-            </main>
+            <PageTrackingProvider>
+              <main className="bg-background-normal box-content flex h-full w-dvw sm:w-[360px]">
+                {children}
+              </main>
+            </PageTrackingProvider>
             <ReactQueryDevtools initialIsOpen={false} />
           </AuthProvider>
         </QueryProvider>

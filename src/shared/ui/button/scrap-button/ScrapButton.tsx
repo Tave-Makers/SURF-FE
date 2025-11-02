@@ -1,4 +1,4 @@
-import { SurfIcon } from '../icon/SurfIcon';
+import { SurfIcon } from '@/shared/ui/icon/SurfIcon';
 
 /**
  * 스크랩 버튼 컴포넌트 (Controlled Component)

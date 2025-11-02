@@ -15,8 +15,8 @@ export const PolicyDetailItem = ({ policyId }: PolicyDetailItemProps) => {
   const md = preprocessToMarkdown(policyItem.text, policyId ?? policyItem.id);
 
   return (
-    <div className="flex flex-1 flex-col overflow-y-auto px-[1rem] py-[0.62rem] pb-[3.5rem]">
-      <div className="text-body-12-400--2 text-[#000]">
+    <div className="flex flex-1 flex-col overflow-y-auto px-13 py-10 pb-[3.5rem]">
+      <div className="text-xs leading-16 font-normal text-[#000]">
         <Markdown>{md}</Markdown>
       </div>
     </div>

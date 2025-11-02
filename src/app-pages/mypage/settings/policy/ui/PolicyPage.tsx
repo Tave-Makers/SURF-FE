@@ -7,7 +7,7 @@ export default function PolicyPage() {
   const router = useRouter();
 
   return (
-    <div className="flex flex-col px-[1rem]">
+    <div className="flex flex-col">
       <PolicyItem
         rightIconName="ChevronRight"
         onClick={() => {

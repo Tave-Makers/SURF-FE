@@ -34,11 +34,11 @@ export const FeedbackForm = () => {
   const isContentValid = content.trim().length > 0;
 
   return (
-    <div className="flex h-full flex-col px-[1rem]">
-      <div className="flex flex-1 flex-col gap-[0.62rem] pt-[1.25rem]">
+    <div className="flex h-full flex-col">
+      <div className="flex flex-1 flex-col gap-10 px-13 pt-15">
         {/* 타이틀 섹션 */}
         <div className="items-start self-stretch">
-          <span className="text-body-16-600--1 text-foreground-normal">
+          <span className="text-title-title2 text-foreground-foreground-normal">
             SURF를 위한 메시지를 남겨주세요!
           </span>
         </div>
@@ -55,7 +55,7 @@ export const FeedbackForm = () => {
       </div>
 
       {/* 버튼 섹션 */}
-      <div className="pt-[1rem] pb-[1.25rem]">
+      <div className="px-13 pt-13 pb-15">
         <SolidButton
           size="l"
           variant="primary"

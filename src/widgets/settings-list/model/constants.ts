@@ -13,12 +13,12 @@ export const SETTINGS_ITEMS: SettingsItemType[] = [
     text: '내가 작성한 게시글',
     action: { type: 'NAVIGATE', payload: '/mypage/settings/my-posts' },
   },
-  {
-    id: 'faq',
-    leftIconName: 'File',
-    text: 'FAQ',
-    action: { type: 'NAVIGATE', payload: '/mypage/settings/faq' },
-  },
+  // {
+  //   id: 'faq',
+  //   leftIconName: 'File',
+  //   text: 'FAQ',
+  //   action: { type: 'NAVIGATE', payload: '/mypage/settings/faq' },
+  // },
   {
     id: 'feedback',
     leftIconName: 'ChatDots',

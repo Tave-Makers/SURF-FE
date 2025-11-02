@@ -39,7 +39,7 @@ export const Checkbox = forwardRef<HTMLInputElement, CheckboxProps>(
     return (
       <label
         htmlFor={inputId}
-        className={`inline-flex w-fit cursor-pointer items-center gap-[0.62rem] px-[0.25rem] py-[0.37em] ${
+        className={`inline-flex w-fit cursor-pointer items-center gap-10 px-5 py-7 ${
           isDisabled ? 'cursor-not-allowed opacity-50' : ''
         }`}
       >
@@ -52,14 +52,16 @@ export const Checkbox = forwardRef<HTMLInputElement, CheckboxProps>(
             disabled={isDisabled}
             onChange={onChange}
             ref={ref}
-            className="peer bg-background-normal checked:bg-background-primary border-border-normal h-full w-full cursor-pointer appearance-none rounded-[0.12rem] border checked:border-none disabled:cursor-not-allowed"
+            className="peer bg-background-background-normal checked:bg-background-background-primary border-background-background-quinary rounded-2 h-full w-full cursor-pointer appearance-none border checked:border-none disabled:cursor-not-allowed"
             {...rest}
           />
           <span className="text-foreground-accent pointer-events-none absolute top-1/2 left-1/2 flex h-full w-full -translate-x-1/2 -translate-y-1/2 items-center justify-center opacity-0 peer-checked:opacity-100">
             <SurfIcon name="Check" size="s" />
           </span>
         </div>
-        {label && <span className="text-caption-12-400 text-border-contrast">{label}</span>}
+        {label && (
+          <span className="text-body-body10 text-foreground-foreground-normal">{label}</span>
+        )}
       </label>
     );
   },

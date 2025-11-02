@@ -29,7 +29,7 @@ type Story = StoryObj<typeof ScrapButton>;
 
 // ---------- Story Variants ----------
 
-// 🩶 기본 상태 (스크랩되지 않음)
+// 기본 상태 (스크랩되지 않음)
 export const Default: Story = {
   args: {
     isScrapped: false,
@@ -37,7 +37,7 @@ export const Default: Story = {
   },
 };
 
-// 💙 스크랩된 상태
+// 스크랩된 상태
 export const Scrapped: Story = {
   args: {
     isScrapped: true,
@@ -45,7 +45,7 @@ export const Scrapped: Story = {
   },
 };
 
-// 🧪 인터랙티브 Playground (상태 변화 확인)
+// 인터랙티브 Playground (상태 변화 확인)
 export const Playground: Story = {
   render: (args) => {
     const [scrapped, setScrapped] = useState(args.isScrapped);

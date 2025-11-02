@@ -28,7 +28,7 @@ type Story = StoryObj<typeof LikeButton>;
 
 // ---------- Story Variants ----------
 
-// 💖 기본 (좋아요 안 누른 상태)
+// 기본 (좋아요 안 누른 상태)
 export const Default: Story = {
   args: {
     isLiked: false,
@@ -36,7 +36,7 @@ export const Default: Story = {
   },
 };
 
-// ❤️ 좋아요 상태
+// 좋아요 상태
 export const Liked: Story = {
   args: {
     isLiked: true,
@@ -44,7 +44,7 @@ export const Liked: Story = {
   },
 };
 
-// 🧪 인터랙티브 Playground (상태 변화 확인)
+// 인터랙티브 Playground (상태 변화 확인)
 export const Playground: Story = {
   render: (args) => {
     const [liked, setLiked] = useState(args.isLiked);

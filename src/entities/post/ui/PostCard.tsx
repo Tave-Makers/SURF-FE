@@ -41,8 +41,8 @@ export const PostCard = ({ post, onClick, onLikeToggle }: PostCardProps) => {
       <div className="flex flex-1 flex-col gap-8 self-stretch">
         {/* PostTag 영역 */}
         <div className="flex gap-5">
-          {tags?.map((tag, i) => (
-            <PostTag key={i} variation={tag.variation} />
+          {tags?.map((tag) => (
+            <PostTag key={tag.variation} variation={tag.variation} />
           ))}
         </div>
 

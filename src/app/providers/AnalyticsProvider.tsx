@@ -13,7 +13,6 @@ export function AnalyticsProvider() {
   const initAmplitude = () => {
     if (!AMPLITUDE_API_KEY || amplitudeInitialized) return;
     try {
-      // memberId 추가되면 undefined를 memberId로 변경 예정
       amplitude.init(AMPLITUDE_API_KEY, undefined, {
         defaultTracking: {
           pageViews: false,

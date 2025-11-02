@@ -5,6 +5,7 @@ import { AuthProvider } from '@/app/providers/AuthProvider';
 import 'keen-slider/keen-slider.min.css';
 import { ReactQueryDevtools } from '@tanstack/react-query-devtools';
 import { AnalyticsProvider } from '@/app/providers/AnalyticsProvider';
+import { PageTrackingProvider } from '@/shared/analytics/providers/PageTrackingProvider';
 
 export default function RootLayout({ children }: { children: ReactNode }) {
   return (
@@ -26,9 +27,11 @@ export default function RootLayout({ children }: { children: ReactNode }) {
         <AnalyticsProvider />
         <QueryProvider>
           <AuthProvider>
-            <main className="bg-background-background-tertiary box-content flex h-full w-dvw sm:w-[360px]">
-              {children}
-            </main>
+            <PageTrackingProvider>
+              <main className="bg-background-normal box-content flex h-full w-dvw sm:w-[360px]">
+                {children}
+              </main>
+            </PageTrackingProvider>
             <ReactQueryDevtools initialIsOpen={false} />
           </AuthProvider>
         </QueryProvider>

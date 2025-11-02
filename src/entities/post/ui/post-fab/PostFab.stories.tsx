@@ -1,9 +1,9 @@
 import type { Meta, StoryObj } from '@storybook/nextjs-vite';
-import { WriteButton } from './WriteButton';
+import { PostFab } from './PostFab';
 
 const meta = {
-  title: 'entity/UI/Post/WriteButton',
-  component: WriteButton,
+  title: 'Entities/UI/Post/PostFab',
+  component: PostFab,
   tags: ['autodocs'],
   parameters: {
     docs: {
@@ -20,7 +20,7 @@ const meta = {
       table: { category: 'Events' },
     },
   },
-} satisfies Meta<typeof WriteButton>;
+} satisfies Meta<typeof PostFab>;
 
 export default meta;
 type Story = StoryObj<typeof meta>;
@@ -33,7 +33,7 @@ export const WithClickAction: Story = {
   name: 'With click action',
   args: {
     onClick: () => {
-      alert('WriteButton 클릭!');
+      alert('PostFab 클릭!');
     },
   },
   parameters: {

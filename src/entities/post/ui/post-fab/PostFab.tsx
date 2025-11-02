@@ -1,10 +1,10 @@
 import { SurfIcon } from '@/shared/ui/icon/SurfIcon';
 
-type WriteButtonProps = {
+type PostFabProps = {
   onClick?: () => void;
 };
 
-export const WriteButton = ({ onClick }: WriteButtonProps) => {
+export const PostFab = ({ onClick }: PostFabProps) => {
   return (
     <button
       type="button"

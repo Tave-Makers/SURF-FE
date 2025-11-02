@@ -28,7 +28,7 @@ type Story = StoryObj<typeof SearchHistoryItem>;
 
 // ---------- Story Variants ----------
 
-// 🔍 기본 예시
+// 기본 예시
 export const Default: Story = {
   args: {
     keyword: '카페 추천',
@@ -37,7 +37,7 @@ export const Default: Story = {
   },
 };
 
-// 🧪 Playground (검색어 직접 수정 가능)
+// Playground (검색어 직접 수정 가능)
 export const Playground: Story = {
   render: (args) => {
     const handleSelect = (kw: string) => {

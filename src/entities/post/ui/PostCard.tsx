@@ -49,13 +49,13 @@ export const PostCard = ({ post, onClick, onLikeToggle }: PostCardProps) => {
         {/* title, content 영역 */}
         <div className="flex flex-col items-start gap-5 self-stretch">
           <h3
-            className="text-body-body5 text-foreground-foreground-normal line-clamp-1 overflow-hidden text-ellipsis"
+            className="text-body-body5 text-foreground-foreground-normal line-clamp-2 overflow-hidden"
             aria-label="게시글 제목"
           >
             {title}
           </h3>
           <p
-            className="text-body-body6 text-foreground-foreground-normal-lighter line-clamp-1 overflow-hidden text-ellipsis"
+            className="text-body-body6 text-foreground-foreground-normal-lighter line-clamp-1 overflow-hidden"
             aria-label="게시글 내용"
           >
             {content}

@@ -5,6 +5,7 @@ import { AuthProvider } from '@/app/providers/AuthProvider';
 import 'keen-slider/keen-slider.min.css';
 import { ReactQueryDevtools } from '@tanstack/react-query-devtools';
 import { AnalyticsProvider } from '@/app/providers/AnalyticsProvider';
+import { PageTrackingProvider } from '@/shared/analytics/providers/PageTrackingProvider';
 
 export default function RootLayout({ children }: { children: ReactNode }) {
   return (

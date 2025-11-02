@@ -4,6 +4,7 @@ export type AccordionGroupData = {
   isDisabled?: boolean;
   children: React.ReactNode;
   renderTitle?: (index: number | undefined, title: string) => React.ReactNode;
+  onToggle?: (isOpen: boolean) => void;
 };
 
 // 아코디언 그룹 컴포넌트가 받을 props
@@ -19,4 +20,5 @@ export type AccordionProps = {
   isDisabled?: boolean;
   children: React.ReactNode;
   renderTitle?: (index: number | undefined, title: string) => React.ReactNode;
+  onToggle?: (isOpen: boolean) => void;
 };

@@ -16,6 +16,7 @@ export const AccordionGroup = ({ accordions }: AccordionGroupProps) => {
           title={accordion.title}
           isDisabled={accordion.isDisabled}
           renderTitle={accordion.renderTitle}
+          onToggle={accordion.onToggle}
         >
           {accordion.children}
         </Accordion>

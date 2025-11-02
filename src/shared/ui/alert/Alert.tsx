@@ -1,8 +1,8 @@
 'use client';
 import { useId } from 'react';
 
-import { SolidButton, SolidButtonProps } from '../solid-button/SolidButton';
-import { TextButton, TextButtonProps } from '../text-button/TextButton';
+import { SolidButton, SolidButtonProps } from '../button/solid-button/SolidButton';
+import { TextButton, TextButtonProps } from '../button/text-button/TextButton';
 
 type BaseAction = {
   label: string;

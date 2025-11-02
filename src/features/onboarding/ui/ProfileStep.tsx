@@ -1,6 +1,6 @@
 import { Controller, useFormContext } from 'react-hook-form';
 import { OnBoardingFormData } from '@/features/onboarding/model/types';
-import { ProfileImageUploader } from '@/features/user/upload-profile-image/ui/ProfileImageUploader';
+import { ProfileImageUploader } from '@/features/profile/ui/upload-profile-image/ProfileImageUploader';
 import { TextArea } from '@/shared/ui/text-area/TextArea';
 import { FieldGroup } from '@/shared/ui/field-group/FieldGroup';
 

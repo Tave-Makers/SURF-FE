@@ -9,10 +9,15 @@ import { SurfIcon } from '@/shared/ui/icon/SurfIcon';
 import { SelectField } from '@/shared/ui/select-field/SelectField';
 import { TextArea } from '@/shared/ui/text-area/TextArea';
 import { FieldGroup } from '@/shared/ui/field-group/FieldGroup';
-import { SolidButton } from '@/shared/ui/solid-button/SolidButton';
+import { SolidButton } from '@/shared/ui/button/solid-button/SolidButton';
 import { useState } from 'react';
-import { OnBoardingFormData, TrackPart } from '@/features/onboarding/model/types';
+import {
+  ONBOARDING_EVENTS,
+  OnBoardingFormData,
+  TrackPart,
+} from '@/features/onboarding/model/types';
 import { formatTrackLabel, mapToApiTrack } from '../lib/trackMapper';
+import { trackOnBoardingEvent } from '../lib/trackOnBoardingEvent';
 
 export function TrackUnivStep() {
   const { control, setValue } = useFormContext<OnBoardingFormData>();
@@ -91,6 +96,12 @@ export function TrackUnivStep() {
             render={({ field, fieldState }) => (
               <TextArea
                 {...field}
+                onBlur={(_e) => {
+                  trackOnBoardingEvent(ONBOARDING_EVENTS.INPUT_SIGNUP_FIELD, {
+                    field_name: 'university',
+                  });
+                  field.onBlur();
+                }}
                 value={field.value || ''}
                 errorMessage={fieldState.error?.message}
                 placeholder="대학교를 입력해주세요."

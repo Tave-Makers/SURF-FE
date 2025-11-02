@@ -1,8 +1,9 @@
 // features/onboarding/ui/EmailPhoneStep.tsx
 import { Controller, useFormContext } from 'react-hook-form';
-import { OnBoardingFormData } from '@/features/onboarding/model/types';
+import { ONBOARDING_EVENTS, OnBoardingFormData } from '@/features/onboarding/model/types';
 import { FieldGroup } from '@/shared/ui/field-group/FieldGroup';
 import { TextArea } from '@/shared/ui/text-area/TextArea';
+import { trackOnBoardingEvent } from '../lib/trackOnBoardingEvent';
 
 export function EmailPhoneStep() {
   const { control } = useFormContext<OnBoardingFormData>();
@@ -22,6 +23,12 @@ export function EmailPhoneStep() {
           render={({ field, fieldState }) => (
             <TextArea
               {...field}
+              onBlur={(_e) => {
+                trackOnBoardingEvent(ONBOARDING_EVENTS.INPUT_SIGNUP_FIELD, {
+                  field_name: 'email',
+                });
+                field.onBlur();
+              }}
               value={field.value || ''}
               errorMessage={fieldState.error?.message}
               placeholder="이메일을 입력해주세요."
@@ -44,6 +51,12 @@ export function EmailPhoneStep() {
           render={({ field, fieldState }) => (
             <TextArea
               {...field}
+              onBlur={(_e) => {
+                trackOnBoardingEvent(ONBOARDING_EVENTS.INPUT_SIGNUP_FIELD, {
+                  field_name: 'phone',
+                });
+                field.onBlur();
+              }}
               value={field.value || ''}
               errorMessage={fieldState.error?.message}
               placeholder="전화번호를 입력해주세요."

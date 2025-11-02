@@ -9,7 +9,7 @@ import { SurfIcon } from '@/shared/ui/icon/SurfIcon';
 import { SelectField } from '@/shared/ui/select-field/SelectField';
 import { TextArea } from '@/shared/ui/text-area/TextArea';
 import { FieldGroup } from '@/shared/ui/field-group/FieldGroup';
-import { SolidButton } from '@/shared/ui/solid-button/SolidButton';
+import { SolidButton } from '@/shared/ui/button/solid-button/SolidButton';
 import { useState } from 'react';
 import {
   ONBOARDING_EVENTS,

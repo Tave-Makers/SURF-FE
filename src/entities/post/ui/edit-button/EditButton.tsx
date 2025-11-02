@@ -4,7 +4,7 @@ type EditButtonProps = {
   onClick?: () => void;
 };
 
-const EditButton = ({ onClick }: EditButtonProps) => {
+export const EditButton = ({ onClick }: EditButtonProps) => {
   return (
     <button
       type="button"
@@ -16,5 +16,3 @@ const EditButton = ({ onClick }: EditButtonProps) => {
     </button>
   );
 };
-
-export default EditButton;

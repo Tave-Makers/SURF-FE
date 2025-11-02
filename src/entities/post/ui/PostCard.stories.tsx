@@ -53,18 +53,6 @@ export const NoThumbnail: Story = {
 };
 
 // -------------------------------
-// 태그 여러 개
-// -------------------------------
-export const MultipleTags: Story = {
-  args: {
-    post: {
-      ...basePost,
-      tags: [{ variation: 'event' }, { variation: 'reservation' }, { variation: 'reservation' }],
-    },
-  },
-};
-
-// -------------------------------
 // 실제 상태 전환 테스트용 (좋아요 토글)
 // -------------------------------
 export const InteractiveLike: Story = {

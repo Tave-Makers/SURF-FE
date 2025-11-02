@@ -75,7 +75,8 @@ export const PostCard = ({ post, onClick, onLikeToggle }: PostCardProps) => {
             <button
               type="button"
               className="flex items-center gap-5"
-              aria-label={`좋아요 ${likeCount}개 ${isLiked ? '누른 상태' : '누르지 않음'}`}
+              aria-label={`좋아요 ${likeCount}개`}
+              aria-pressed={isLiked}
               onClick={handleLikeToggle}
             >
               <SurfIcon
@@ -92,11 +93,7 @@ export const PostCard = ({ post, onClick, onLikeToggle }: PostCardProps) => {
             </button>
 
             {/* 댓글 수 표시 */}
-            <div
-              className="flex items-center gap-5"
-              aria-label={`댓글 ${commentCount}개`}
-              role="group"
-            >
+            <div className="flex items-center gap-5" aria-label={`댓글 ${commentCount}개`}>
               <SurfIcon name="Chat" size="s" aria-hidden="true" />
               <span aria-hidden="true">{commentCount}</span>
             </div>

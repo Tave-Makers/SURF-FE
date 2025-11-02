@@ -11,7 +11,7 @@ export function PostHeader({ title, category, subCategory }: PostHeaderProps) {
   return (
     <>
       <div className="flex flex-col">
-        <div className="text-caption-caption4 item text-foreground-foreground-normal flex gap-3">
+        <div className="text-caption-caption4 text-foreground-foreground-normal flex gap-3">
           {category && (
             <>
               {/* 링크는 추후 연결 */}

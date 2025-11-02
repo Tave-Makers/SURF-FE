@@ -9,6 +9,7 @@ type EventCardProps = {
   startDate?: Date | null;
   endDate?: Date | null;
   place: string;
+  onClickCard?: () => void; // 카드 전체 클릭 (공지사항 바로가기)
 };
 
 // 날짜 포맷팅 함수
@@ -20,14 +21,24 @@ const formatEventDate = (date: Date | null | undefined) => {
   return format(date, 'MM월 dd일 (eee) HH:mm', { locale: ko });
 };
 
-export function EventCard({ title, type, startDate, endDate, place }: EventCardProps) {
+export function EventCard({ title, type, startDate, endDate, place, onClickCard }: EventCardProps) {
+  // 카드 전체 클릭 (공지사항 바로가기)
+  const handleCardClick = () => {
+    onClickCard?.();
+    console.log('EventCard clicked');
+  };
+
   return (
-    <div className="rounded-4 border-border-border-quinary bg-background-background-normal-lighter flex w-full flex-1 cursor-pointer flex-col items-start gap-8 self-stretch border-[1px] px-13 py-11">
+    <button
+      onClick={handleCardClick}
+      className="rounded-4 border-border-border-quinary bg-background-background-normal-lighter flex w-full flex-1 cursor-pointer flex-col items-start gap-8 self-stretch border-[1px] px-13 py-11"
+    >
       {/* Header 영역 */}
       <section className="flex items-start gap-8 self-stretch">
         <div className="flex flex-1 flex-col items-start gap-10">
           <CalendarTag variation={type} />
         </div>
+
         <div className="flex h-[1.18rem] flex-row items-center gap-3">
           <div className="text-caption-caption5 text-foreground-foreground-tertiary">
             공지사항 바로가기
@@ -37,7 +48,7 @@ export function EventCard({ title, type, startDate, endDate, place }: EventCardP
       </section>
 
       {/* Container 영역 */}
-      <section className="flex w-full flex-1 flex-col">
+      <section className="flex w-full flex-1 flex-col items-start">
         {/* 일정 제목 */}
         <div className="text-body-body3 text-foreground-foreground-normal">{title}</div>
 
@@ -56,6 +67,6 @@ export function EventCard({ title, type, startDate, endDate, place }: EventCardP
           </div>
         </div>
       </section>
-    </div>
+    </button>
   );
 }

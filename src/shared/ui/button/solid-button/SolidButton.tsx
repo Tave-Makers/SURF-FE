@@ -43,28 +43,32 @@ export const SolidButton = forwardRef<HTMLButtonElement, SolidButtonProps>(
     };
 
     const sizePaddingMap: Record<ButtonSize, string> = {
-      s: 'px-[0.25rem] py-[0.38rem]',
-      m: 'px-[0.5rem] py-[0.56rem]',
-      l: 'px-[0.75rem] py-[0.75rem]',
+      s: 'p-7',
+      m: 'p-9',
+      l: 'p-11',
     };
 
     const sizeTextMap: Record<ButtonSize, string> = {
-      s: 'text-body-14-600--1-20',
-      m: 'text-body-16-600--1',
-      l: 'text-body-16-600--1',
+      s: 'text-body-body7',
+      m: 'text-body-body5',
+      l: 'text-body-body5',
     };
 
     const variantMap: Record<ButtonVariant, string> = {
-      primary: 'text-foreground-accent bg-background-primary hover:bg-foreground-primary',
-      secondary: 'text-foreground-normal bg-background-tertiary hover:bg-background-quaternary',
-      danger: 'text-foreground-accent bg-foreground-danger hover:bg-foreground-danger-darker',
-      warning: 'text-foreground-danger bg-background-tertiary hover:bg-background-quaternary',
+      primary:
+        'text-foreground-foreground-accent bg-background-background-primary hover:bg-background-background-primary-darker',
+      secondary:
+        'text-foreground-foreground-normal bg-background-background-secondary hover:bg-background-background-secondary-darker',
+      danger:
+        'text-foreground-foreground-accent bg-foreground-foreground-danger hover:bg-foreground-foreground-danger-darker',
+      warning:
+        'text-foreground-danger bg-background-background-secondary hover:bg-background-background-secondary-darker hover:text-background-background-danger-darker',
     };
 
     const disabledClass =
-      'bg-background-tertiary text-foreground-accent cursor-not-allowed opacity-50';
+      'bg-background-background-secondary-darker text-foreground-foreground-accent cursor-not-allowed opacity-50';
 
-    const baseClass = 'inline-flex w-full items-center justify-center overflow-hidden rounded';
+    const baseClass = 'inline-flex w-full items-center justify-center overflow-hidden rounded-3';
 
     return (
       <button

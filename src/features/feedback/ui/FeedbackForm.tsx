@@ -1,7 +1,7 @@
 'use client';
 
 import { useState } from 'react';
-import { SolidButton } from '@/shared/ui/solid-button/SolidButton';
+import { SolidButton } from '@/shared/ui/button/solid-button/SolidButton';
 import { usePostFeedback } from '@/features/feedback/model/usePostFeedback';
 import { TextArea } from '@/shared/ui/text-area/TextArea';
 import { FEEDBACK_EVENTS } from '@/features/feedback/model/types';

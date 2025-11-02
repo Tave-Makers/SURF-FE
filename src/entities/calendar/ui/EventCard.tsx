@@ -3,6 +3,28 @@ import { ko } from 'date-fns/locale';
 import { SurfIcon } from '../../../shared/ui/icon/SurfIcon';
 import { CalendarTag } from '@/entities/calendar/ui/CalendarTag';
 
+/**
+ * 이벤트 카드 컴포넌트
+ * @param title - 이벤트 제목
+ * @param type - 이벤트 유형 ('official', 'operation', 'other' 중 하나)
+ * @param startDate - 이벤트 시작 날짜 (Date 객체 또는 null)
+ * @param endDate - 이벤트 종료 날짜 (Date 객체 또는 null)
+ * @param place - 이벤트 장소
+ * @param onClickCard - 카드 전체 클릭 시 호출되는 콜백 함수 (공지사항 바로가기)
+ *
+ * @methods formatEventDate - 날짜를 'MM월 dd일 (eee) HH:mm' 형식으로 포맷팅하는 함수
+ *
+ * @example
+ * <EventCard
+ *   title="후반기 만남의 장소"
+ *   type="official"
+ *   startDate={new Date('2025-11-20T10:00:00')}
+ *   endDate={new Date('2025-11-21T18:00:00')}
+ *   place="서울 강남구 어딘가"
+ *   onClickCard={() => console.log('Card clicked!')}
+ * />
+ */
+
 type EventCardProps = {
   title: string;
   type: 'official' | 'operation' | 'other';

@@ -20,6 +20,7 @@ export default function RootLayout({ children }: { children: ReactNode }) {
         />
         <link
           rel="stylesheet"
+          crossOrigin="anonymous"
           href="https://cdn.jsdelivr.net/gh/wanteddev/wanted-sans@v1.0.3/packages/wanted-sans/fonts/webfonts/variable/split/WantedSansVariable.min.css"
         />
       </head>
@@ -28,7 +29,7 @@ export default function RootLayout({ children }: { children: ReactNode }) {
         <QueryProvider>
           <AuthProvider>
             <PageTrackingProvider>
-              <main className="bg-background-background-normal box-content flex h-full w-dvw sm:w-[360px]">
+              <main className="bg-background-normal box-content flex h-full w-dvw sm:w-[360px]">
                 {children}
               </main>
             </PageTrackingProvider>

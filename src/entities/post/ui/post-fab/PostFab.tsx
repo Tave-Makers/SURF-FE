@@ -1,7 +1,8 @@
 import { SurfIcon } from '@/shared/ui/icon/SurfIcon';
+import type { MouseEventHandler } from 'react';
 
 type PostFabProps = {
-  onClick?: () => void;
+  onClick?: MouseEventHandler<HTMLButtonElement>;
 };
 
 export const PostFab = ({ onClick }: PostFabProps) => {

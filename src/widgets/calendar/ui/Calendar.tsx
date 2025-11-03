@@ -156,21 +156,21 @@ export default function Calendar() {
       </div>
 
       <div className="px-13">
-        <EventDateCard
-          date={selectedDay}
-          items={selectedItems}
-          renderItem={(_ev) => (
-            <>
+        {selectedDay && (
+          <EventDateCard
+            date={selectedDay}
+            items={selectedItems}
+            renderItem={(_ev) => (
               <EventCard
                 title={_ev.title}
                 type={_ev.type}
                 startDate={new Date()}
                 endDate={new Date()}
-                place={'온라인'}
+                place="온라인"
               />
-            </>
-          )}
-        />
+            )}
+          />
+        )}
       </div>
     </div>
   );

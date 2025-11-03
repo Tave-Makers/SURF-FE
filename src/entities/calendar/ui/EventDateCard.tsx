@@ -46,7 +46,9 @@ export function EventDateCard<T extends { id: string | number }>({
         <div className="text-[#8A8F98]">불러오는 중...</div>
       ) : items.length === 0 ? (
         // text 색상은 임시값
-        <div className="text-[#8A8F98]">등록된 일정이 없습니다.</div>
+        <div className="flex flex-1 items-center justify-center pt-[4.19rem]">
+          <div className="text-[#8A8F98]">등록된 일정이 없습니다.</div>
+        </div>
       ) : (
         <div className="flex flex-col gap-10">
           {items.map((ev, i) => (

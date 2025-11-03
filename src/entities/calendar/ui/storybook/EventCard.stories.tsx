@@ -8,7 +8,6 @@ const meta: Meta<typeof EventCard> = {
     layout: 'centered',
   },
   tags: ['autodocs'],
-  // 컴포넌트 props를 Storybook 컨트롤 패널에서 제어할 수 있도록 설정
   argTypes: {
     title: {
       control: 'text',
@@ -32,12 +31,10 @@ const meta: Meta<typeof EventCard> = {
       description: '이벤트 장소',
     },
   },
-  // 모든 스토리에 공통으로 적용될 기본 props
-  // EventCard 컴포넌트 내부의 기본값과 일치시켰습니다.
   args: {
     title: '후반기 만남의 장',
     type: 'official',
-    // 날짜 prop은 Date 객체여야 하므로 임의의 값을 넣어줍니다.
+    // 날짜 임시값
     startDate: new Date('2025-11-20T10:00:00'),
     endDate: new Date('2025-11-21T18:00:00'),
     place: '서울 강남구 어딘가',
@@ -51,16 +48,14 @@ type Story = StoryObj<typeof EventCard>;
 // ───────────────────────────────
 
 /**
- * 가장 기본적인 'official' 타입의 이벤트 카드입니다.
+ * 'official' 타입 이벤트 카드
  */
-export const Primary: Story = {
-  args: {
-    // meta.args에서 기본값을 상속받습니다.
-  },
+export const OfficialEvent: Story = {
+  args: {},
 };
 
 /**
- * 'operation' (운영) 타입의 이벤트 카드입니다.
+ * 'operation' 타입 이벤트 카드
  */
 export const OperationEvent: Story = {
   args: {
@@ -71,7 +66,7 @@ export const OperationEvent: Story = {
 };
 
 /**
- * 'other' (기타) 타입의 이벤트 카드입니다.
+ * 'other' 타입 이벤트 카드
  */
 export const OtherEvent: Story = {
   args: {
@@ -82,7 +77,7 @@ export const OtherEvent: Story = {
 };
 
 /**
- * 제목과 장소 텍스트가 길어질 경우를 테스트하는 카드입니다.
+ * 제목과 장소 텍스트가 길어질 경우 테스트 카드
  */
 export const LongText: Story = {
   args: {
@@ -91,16 +86,3 @@ export const LongText: Story = {
     place: '서울특별시 강남구 테헤란로 123, 위워크 빌딩 10층 컨퍼런스룸 A',
   },
 };
-
-// ───────────────────────────────
-// 인터랙티브 상태
-// ───────────────────────────────
-
-// (참고: hover, active 등 의사 상태(pseudo-state)를 테스트하려면
-// storybook-addon-pseudo-states 애드온이 필요할 수 있습니다.)
-//
-// export const Hovered: Story = {
-//   parameters: {
-//     pseudo: { hover: true },
-//   },
-// };

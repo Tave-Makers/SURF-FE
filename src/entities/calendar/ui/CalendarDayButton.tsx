@@ -2,7 +2,7 @@
 import type { DayButtonProps } from 'react-day-picker';
 import { isSameMonth } from 'date-fns';
 import type { ActivityMap } from '@/entities/calendar/model/types';
-import { DailyActivityTagList } from '@/entities/calendar/ui/DailyActivityTagList';
+import { DailyActivityBadgeList } from '@/entities/calendar/ui/DailyActivityBadgeList';
 import { ymd } from '@/entities/calendar/lib/utils';
 
 type Props = DayButtonProps & {
@@ -46,7 +46,7 @@ export function CalendarDayButton({
           {date.getDate()}
         </div>
         <div>
-          <DailyActivityTagList items={list} maxVisible={2} isCurrentMonth={inThisMonth} />
+          <DailyActivityBadgeList items={list} maxVisible={2} isCurrentMonth={inThisMonth} />
         </div>
       </div>
     </button>

@@ -8,7 +8,7 @@ type Props = {
   isCurrentMonth?: boolean;
 };
 
-export function DailyActivityTagList({ items, maxVisible = 2, isCurrentMonth = true }: Props) {
+export function DailyActivityBadgeList({ items, maxVisible = 2, isCurrentMonth = true }: Props) {
   if (!items?.length) return null;
 
   const visible = items.slice(0, maxVisible);

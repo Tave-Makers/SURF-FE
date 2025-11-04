@@ -13,7 +13,7 @@ export const activityMetaMap = {
   EARLY_BIRD: { label: '얼리버드', Icon: EarlyBirdIcon },
 
   // 상점 그룹 하위 (툴팁 전용)
-  WRITE_WIL: { label: '기술블로그 작성', Icon: null },
+  WRITE_WIL: { label: '기술블로그', Icon: null },
   UPLOAD_TAVE_REVIEW: { label: '활동 후기 작성', Icon: null },
 
   // 벌점 그룹 하위 (툴팁 전용)

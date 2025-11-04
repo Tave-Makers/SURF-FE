@@ -37,12 +37,12 @@ export function CalendarDayButton({
         onSelect?.(date); // 우리 상태 업데이트
       }}
       className={[
-        'rounded-3 flex h-[4.43rem] w-[3.06rem] flex-1 flex-col items-start gap-2 self-stretch px-2 py-1',
+        'rounded-3 flex h-[5rem] w-full flex-col items-start gap-2 overflow-hidden px-2 py-1',
         isToday ? 'bg-background-background-secondary-lighter' : inThisMonth ? '' : 'opacity-50',
       ].join(' ')}
     >
-      <div className="flex w-full flex-col p-3">
-        <div className="text-body-body8 text-foreground-foreground-secondary-lighter flex w-full items-center justify-center pb-2">
+      <div className="flex w-full min-w-0 flex-col">
+        <div className="text-body-body8 text-foreground-foreground-secondary-lighter flex w-full items-center justify-center py-3">
           {date.getDate()}
         </div>
         <div>

@@ -15,13 +15,17 @@ import { EventCard } from '@/entities/calendar/ui/EventCard';
 const calendarClassNames = {
   root: 'w-full',
   months: 'w-full justify-center items-center',
-  month: 'w-full px-3 pb-10',
+  month: 'grid grid-cols-7',
   month_grid:
-    'w-full rounded-5 bg-background-background-normal shadow-[0_0_30px_0_rgba(0,0,0,0.05)]',
+    'block flex flex-col w-full rounded-5 px-3 pb-10 bg-background-background-normal shadow-[0_0_30px_0_rgba(0,0,0,0.05)]',
+  week: 'grid grid-cols-7 px-3',
+  cell: 'min-w-0',
+  day: 'w-full min-w-0',
   month_caption: 'hidden',
   tfoot: 'hidden',
+  weekdays: 'flex flex-1 grid grid-cols-7',
   weekday:
-    'w-[3.06rem] p-10 text-center text-body-body8 text-foreground-foreground-secondary-lighter',
+    'flex-1 min-w-[3.12rem] p-10 text-center text-body-body8 text-foreground-foreground-secondary-lighter',
 } as const;
 
 // mock 데이터. API 연동 시 삭제 예정
@@ -100,6 +104,13 @@ export default function Calendar() {
   const [month, setMonth] = useState<Date>(new Date(2025, 10, 30));
   const [selectedDay, setSelectedDay] = useState<Date>();
 
+  const handleDaySelect = (date: Date | undefined) => {
+    setSelectedDay(date);
+    if (date) {
+      setMonth(date); // 선택된 날짜로 월(month) 상태도 업데이트
+    }
+  };
+
   const DayBtn = useMemo(() => {
     function DayButton(props: DayButtonProps) {
       return (
@@ -131,7 +142,7 @@ export default function Calendar() {
   );
 
   // 월 그리드 래퍼 컴포넌트
-  const MonthComponent = ({ children }: MonthProps) => <div>{children}</div>;
+  const MonthComponent = ({ children }: MonthProps) => <div className="w-full">{children}</div>;
 
   const selectedItems = selectedDay ? (mock[ymd(selectedDay)] ?? []) : [];
 
@@ -143,7 +154,7 @@ export default function Calendar() {
           month={month}
           onMonthChange={setMonth}
           selected={selectedDay}
-          onSelect={setSelectedDay}
+          onSelect={handleDaySelect}
           locale={ko}
           showOutsideDays
           classNames={calendarClassNames}

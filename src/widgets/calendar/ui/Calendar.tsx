@@ -6,7 +6,7 @@ import { ko } from 'react-day-picker/locale';
 import 'react-day-picker/style.css';
 
 import { MonthNavigator } from '@/entities/calendar/ui/MonthNavigator';
-import { CalendarDayButton } from '../../../entities/calendar/ui/CalendarDayButton';
+import { DayChipRadio } from '../../../entities/calendar/ui/DayChipRadio';
 import { EventDateCard } from '@/entities/calendar/ui/EventDateCard';
 import type { ActivityMap } from '@/entities/calendar/model/types';
 import { ymd } from '@/entities/calendar/lib/utils';
@@ -115,7 +115,7 @@ export default function Calendar() {
     function DayButton(props: DayButtonProps) {
       return (
         <div className="h-full w-full">
-          <CalendarDayButton
+          <DayChipRadio
             {...props}
             displayMonth={month}
             activityMap={mock}

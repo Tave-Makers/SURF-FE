@@ -11,7 +11,7 @@ type Props = DayButtonProps & {
   onSelect?: (d: Date) => void;
 };
 
-export function CalendarDayButton({
+export function DayChipRadio({
   day,
   modifiers,
   displayMonth,

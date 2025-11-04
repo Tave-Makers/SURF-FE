@@ -17,7 +17,46 @@ const resetTextInputHeight = (el?: HTMLTextAreaElement | null) => {
  *
  * 내부적으로 `TextInput`을 사용하며, Enter 입력 또는 전송 버튼 클릭 시 `onSend` 콜백이 호출됩니다.
  * Controlled / Uncontrolled 양쪽 모드 모두 지원합니다.
+ *
+ * ---
+ * ### 🧩 사용 예시
+ *
+ * **Controlled**
+ * ```tsx
+ * const [message, setMessage] = useState('');
+ * <ActionBar
+ *   value={message}
+ *   onChange={setMessage}
+ *   onSend={(msg) => console.log('전송됨:', msg)}
+ *   placeholder="메시지를 입력하세요"
+ * />
+ * ```
+ *
+ * **Uncontrolled**
+ * ```tsx
+ * <ActionBar
+ *   defaultValue="안녕하세요"
+ *   onSend={(msg) => console.log('전송됨:', msg)}
+ *   placeholder="메시지를 입력하세요"
+ * />
+ * ```
+ *
+ * ---
+ * ### ⚙️ Props
+ * @typedef {object} ActionBarProps
+ * @property {string} [value] - 입력값 (Controlled 모드)
+ * @property {(val: string) => void} [onChange] - 입력 변경 핸들러 (Controlled 모드)
+ * @property {string} [placeholder] - placeholder 텍스트
+ * @property {(val: string) => void} [onSend] - 메시지 전송 핸들러 (Enter 또는 버튼 클릭 시 호출)
+ * @property {() => void} [onIconClick] - 아이콘 클릭 시 호출되는 콜백
+ * @property {boolean} [isEmojiActive=false] - 이모지 버튼 활성화 여부 (true일 경우 Solid 아이콘 표시)
+ *
+ * ---
+ * ### 🧠 기타
+ * - 전송 후 입력값은 자동으로 초기화됩니다.
+ * - ref를 사용해 부모 컴포넌트에서 직접 포커스 제어가 가능합니다.
  */
+
 type ActionBarProps = {
   value?: string;
   onChange?: (val: string) => void;

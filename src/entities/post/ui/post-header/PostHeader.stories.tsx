@@ -2,7 +2,7 @@ import type { Meta, StoryObj } from '@storybook/nextjs-vite';
 import { PostHeader } from './PostHeader';
 
 const meta: Meta<typeof PostHeader> = {
-  title: 'Shared/UI/PostHeader',
+  title: 'ENTITIES/UI/PostHeader',
   component: PostHeader,
   tags: ['autodocs'],
   argTypes: {

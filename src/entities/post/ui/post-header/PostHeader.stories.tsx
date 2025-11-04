@@ -7,8 +7,8 @@ const meta: Meta<typeof PostHeader> = {
   tags: ['autodocs'],
   argTypes: {
     title: { control: 'text' },
-    category: { control: 'text' },
-    subCategory: { control: 'text' },
+    category: { control: 'object' },
+    subCategory: { control: 'object' },
   },
   args: {
     title: '제목',
@@ -20,14 +20,8 @@ const meta: Meta<typeof PostHeader> = {
 export default meta;
 type Story = StoryObj<typeof meta>;
 
-/* 검색창 */
 export const Default: Story = {
   render: (args) => {
     return <PostHeader {...args} />;
-  },
-  args: {
-    title: '제목',
-    category: { title: '공지사항', href: '/notice' },
-    subCategory: { title: '행사', href: '/event' },
   },
 };

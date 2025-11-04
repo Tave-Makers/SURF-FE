@@ -12,8 +12,8 @@ const meta: Meta<typeof PostHeader> = {
   },
   args: {
     title: '제목',
-    category: '공지사항',
-    subCategory: '행사',
+    category: { title: '공지사항', href: '/notice' },
+    subCategory: { title: '행사', href: '/event' },
   },
 };
 
@@ -27,7 +27,7 @@ export const Default: Story = {
   },
   args: {
     title: '제목',
-    category: '공지사항',
-    subCategory: '행사',
+    category: { title: '공지사항', href: '/notice' },
+    subCategory: { title: '행사', href: '/event' },
   },
 };

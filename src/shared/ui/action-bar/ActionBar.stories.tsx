@@ -56,7 +56,7 @@ export const Uncontrolled: Story = {
   render: () => {
     const [emojiActive, setEmojiActive] = useState(false);
 
-    const inputRef = useRef<HTMLInputElement>(null);
+    const inputRef = useRef<HTMLTextAreaElement>(null);
 
     const handleSend = (val: string) => {
       alert(`(Uncontrolled) 전송된 메시지: ${val}`);

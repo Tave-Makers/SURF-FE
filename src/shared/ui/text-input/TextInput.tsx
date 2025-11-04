@@ -5,8 +5,9 @@ import {
   useRef,
   useImperativeHandle,
   ComponentProps,
-  InputHTMLAttributes,
+  TextareaHTMLAttributes,
   useState,
+  useEffect,
 } from 'react';
 import { SurfIcon } from '../icon/SurfIcon';
 
@@ -15,7 +16,8 @@ type SurfIconName = ComponentProps<typeof SurfIcon>['name'];
 /**
  * 범용 텍스트 입력 컴포넌트
  *
- * Controlled / Uncontrolled 양쪽 모드 모두 지원합니다.
+ * Controlled / Uncontrolled 양쪽 모드 모두 지원하며,
+ * `mode`에 따라 입력 동작(줄바꿈 허용 여부 및 높이 자동 확장)이 달라집니다.
  *
  * ---
  * ### 🧩 사용 예시
@@ -23,17 +25,18 @@ type SurfIconName = ComponentProps<typeof SurfIcon>['name'];
  * **Controlled**
  * ```tsx
  * const [text, setText] = useState('');
- * <TextInput value={text} onChange={setText} placeholder="입력하세요" />
+ * <TextInput mode="chat" value={text} onChange={setText} placeholder="메시지를 입력하세요" />
  * ```
  *
  * **Uncontrolled**
  * ```tsx
- * <TextInput defaultValue="초기 메시지" placeholder="입력하세요" />
+ * <TextInput mode="search" defaultValue="기본 메시지" placeholder="검색어를 입력하세요" />
  * ```
  *
  * ---
  * ### ⚙️ Props
  * @typedef {object} TextInputProps
+ * @property {'search' | 'chat'} mode - 입력 모드 (줄바꿈 및 높이 자동 확장 여부 제어)
  * @property {string} [value] - 입력값 (Controlled 모드)
  * @property {(val: string) => void} [onChange] - 입력값 변경 핸들러 (Controlled 모드)
  * @property {string} [placeholder] - placeholder 텍스트
@@ -44,22 +47,23 @@ type SurfIconName = ComponentProps<typeof SurfIcon>['name'];
  * @property {string} [aria-label] - 접근성용 레이블 (기본값: `"텍스트 입력"`)
  */
 type TextInputProps = {
+  mode: 'search' | 'chat';
   value?: string;
   onChange?: (val: string) => void;
   placeholder?: string;
   iconName?: SurfIconName;
   onIconClick?: () => void;
   onEnter?: (val: string) => void;
-} & Omit<InputHTMLAttributes<HTMLInputElement>, 'value' | 'onChange' | 'className'>;
+} & Omit<TextareaHTMLAttributes<HTMLTextAreaElement>, 'value' | 'onChange' | 'className'>;
 
-export const TextInput = forwardRef<HTMLInputElement, TextInputProps>(
-  ({ value, onChange, placeholder, iconName, onIconClick, onEnter, ...rest }, ref) => {
-    const internalRef = useRef<HTMLInputElement>(null);
+export const TextInput = forwardRef<HTMLTextAreaElement, TextInputProps>(
+  ({ mode, value, onChange, placeholder, iconName, onIconClick, onEnter, ...rest }, ref) => {
+    const internalRef = useRef<HTMLTextAreaElement>(null);
+    const wrapperRef = useRef<HTMLDivElement>(null);
 
     const { onKeyDown, defaultValue, ['aria-label']: ariaLabel, ...inputProps } = rest;
 
     // uncontrolled 모드일 때 defaultValue를 문자열로 변환
-    // (HTMLInputElement의 defaultValue는 string | number | string[] 가능)
     const normalizedDefault =
       defaultValue === undefined
         ? ''
@@ -69,43 +73,65 @@ export const TextInput = forwardRef<HTMLInputElement, TextInputProps>(
 
     const [internalValue, setInternalValue] = useState(value ?? normalizedDefault);
 
-    useImperativeHandle(ref, () => internalRef.current as HTMLInputElement);
+    useImperativeHandle(ref, () => internalRef.current as HTMLTextAreaElement);
 
-    const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-      if (onChange) {
-        onChange(e.target.value); // controlled 모드
-      } else {
-        setInternalValue(e.target.value); // uncontrolled 모드
-      }
+    const handleChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
+      if (onChange) onChange(e.target.value);
+      else setInternalValue(e.target.value);
     };
 
     const currentValue = value !== undefined ? value : internalValue;
 
+    /** 높이 자동 확장 */
+    useEffect(() => {
+      if (!internalRef.current || !wrapperRef.current) return;
+
+      const textarea = internalRef.current;
+      const wrapper = wrapperRef.current;
+
+      // textarea 높이 초기화 후 scrollHeight 계산
+      textarea.style.height = 'auto';
+      const newHeight = Math.min(textarea.scrollHeight, 120); // 최대 높이 제한
+      textarea.style.height = `${newHeight}px`;
+      wrapper.style.height = `${newHeight + 12}px`;
+    }, [currentValue]);
+
+    /** Enter / Shift+Enter 제어 */
+    const handleKeyDown = (event: React.KeyboardEvent<HTMLTextAreaElement>) => {
+      onKeyDown?.(event);
+      if (event.defaultPrevented) return;
+
+      // chat + Shift+Enter → 줄바꿈 허용
+      if (event.key === 'Enter') {
+        if (mode === 'search' || (mode === 'chat' && !event.shiftKey)) {
+          event.preventDefault();
+          onEnter?.(event.currentTarget.value);
+        }
+      }
+    };
+
     return (
-      <div className="bg-background-background-quaternary flex h-[2.25rem] w-full flex-1 items-center justify-between rounded-[62.43rem] py-[0.37rem] pr-[0.5rem] pl-[0.75rem]">
-        <input
+      <div
+        ref={wrapperRef}
+        className="bg-background-background-quaternary rounded-6 flex min-h-[2.25rem] w-full flex-1 items-center justify-between py-7 pr-8 pl-11 transition-[height] duration-150 ease-in-out"
+      >
+        <textarea
+          ref={internalRef}
           value={currentValue}
           onChange={handleChange}
-          onKeyDown={(event) => {
-            onKeyDown?.(event);
-            if (event.defaultPrevented) return;
-            if (event.key === 'Enter') {
-              onEnter?.(event.currentTarget.value);
-            }
-          }}
-          ref={internalRef}
-          className="text-body-body7 text-foreground-foreground-normal placeholder-foreground-foreground-quaternary flex-1 outline-none"
+          onKeyDown={handleKeyDown}
+          rows={1}
+          className="text-body-body7 text-foreground-foreground-normal placeholder-foreground-foreground-quaternary flex-1 resize-none overflow-hidden bg-transparent leading-[1.25rem] outline-none"
           placeholder={placeholder}
           {...inputProps}
           aria-label={ariaLabel ?? '텍스트 입력'}
         />
-
         {iconName && (
           <button
             type="button"
             aria-label="아이콘 버튼"
             onClick={onIconClick}
-            className="flex cursor-pointer items-center justify-center"
+            className="flex cursor-pointer items-center justify-center self-end"
           >
             <SurfIcon name={iconName} size="l" className="text-foreground-foreground-quaternary" />
           </button>

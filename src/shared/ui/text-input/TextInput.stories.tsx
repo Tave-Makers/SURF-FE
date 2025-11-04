@@ -54,6 +54,7 @@ export const SearchField: Story = {
       <div className="w-[19.56rem]">
         <TextInput
           {...args}
+          mode="search"
           value={search}
           onChange={setSearch}
           iconName="Search"
@@ -84,6 +85,7 @@ export const TextField: Story = {
       <div className="w-[19.56rem]">
         <TextInput
           {...args}
+          mode="chat"
           value={comment}
           onChange={setComment}
           iconName={isEmojiActive ? 'SmileCircleSolid' : 'SmileCircle'}
@@ -108,7 +110,7 @@ export const TextField: Story = {
 /* ⚙️ Ref 제어 예시 */
 export const WithRef: Story = {
   render: (args) => {
-    const inputRef = useRef<HTMLInputElement>(null);
+    const internalRef = useRef<HTMLTextAreaElement>(null);
     const [comment, setComment] = useState('');
     const [isEmojiActive, setIsEmojiActive] = useState(false);
 
@@ -116,7 +118,8 @@ export const WithRef: Story = {
       <div className="flex w-[20rem] flex-col gap-4">
         <TextInput
           {...args}
-          ref={inputRef}
+          mode="chat"
+          ref={internalRef}
           value={comment}
           onChange={setComment}
           iconName={isEmojiActive ? 'SmileCircleSolid' : 'SmileCircle'}
@@ -124,7 +127,7 @@ export const WithRef: Story = {
           onEnter={(val) => alert(`withRef 엔터 입력: ${val}`)}
         />
         <button
-          onClick={() => inputRef.current?.focus()}
+          onClick={() => internalRef.current?.focus()}
           className="bg-background-background-primary hover:bg-background-background-primary-darker rounded px-3 py-1 text-white transition-colors"
         >
           포커스 주기

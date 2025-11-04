@@ -2,51 +2,22 @@ import { forwardRef, useRef, useImperativeHandle } from 'react';
 import { TextInput } from '../text-input/TextInput';
 import { SurfIcon } from '../icon/SurfIcon';
 
+/** textarea 높이 리셋 */
+const resetTextInputHeight = (el?: HTMLTextAreaElement | null) => {
+  if (!el) return;
+  const wrapper = el.parentElement;
+  requestAnimationFrame(() => {
+    el.style.height = '';
+    if (wrapper) wrapper.style.height = '';
+  });
+};
+
 /**
  * 범용 메시지 입력 및 전송 컴포넌트
  *
  * 내부적으로 `TextInput`을 사용하며, Enter 입력 또는 전송 버튼 클릭 시 `onSend` 콜백이 호출됩니다.
  * Controlled / Uncontrolled 양쪽 모드 모두 지원합니다.
- *
- * ---
- * ### 🧩 사용 예시
- *
- * **Controlled**
- * ```tsx
- * const [message, setMessage] = useState('');
- * <ActionBar
- *   value={message}
- *   onChange={setMessage}
- *   onSend={(msg) => console.log('전송됨:', msg)}
- *   placeholder="메시지를 입력하세요"
- * />
- * ```
- *
- * **Uncontrolled**
- * ```tsx
- * <ActionBar
- *   defaultValue="안녕하세요"
- *   onSend={(msg) => console.log('전송됨:', msg)}
- *   placeholder="메시지를 입력하세요"
- * />
- * ```
- *
- * ---
- * ### ⚙️ Props
- * @typedef {object} ActionBarProps
- * @property {string} [value] - 입력값 (Controlled 모드)
- * @property {(val: string) => void} [onChange] - 입력 변경 핸들러 (Controlled 모드)
- * @property {string} [placeholder] - placeholder 텍스트
- * @property {(val: string) => void} [onSend] - 메시지 전송 핸들러 (Enter 또는 버튼 클릭 시 호출)
- * @property {() => void} [onIconClick] - 아이콘 클릭 시 호출되는 콜백
- * @property {boolean} [isEmojiActive=false] - 이모지 버튼 활성화 여부 (true일 경우 Solid 아이콘 표시)
- *
- * ---
- * ### 🧠 기타
- * - 전송 후 입력값은 자동으로 초기화됩니다.
- * - ref를 사용해 부모 컴포넌트에서 직접 포커스 제어가 가능합니다.
  */
-
 type ActionBarProps = {
   value?: string;
   onChange?: (val: string) => void;
@@ -56,13 +27,12 @@ type ActionBarProps = {
   isEmojiActive?: boolean;
 };
 
-export const ActionBar = forwardRef<HTMLInputElement, ActionBarProps>(
+export const ActionBar = forwardRef<HTMLTextAreaElement, ActionBarProps>(
   ({ value, onChange, placeholder, onSend, onIconClick, isEmojiActive = false }, ref) => {
-    const internalRef = useRef<HTMLInputElement>(null);
+    const internalRef = useRef<HTMLTextAreaElement>(null);
+    useImperativeHandle(ref, () => internalRef.current as HTMLTextAreaElement);
 
-    useImperativeHandle(ref, () => internalRef.current as HTMLInputElement);
-
-    /** 메시지 전송 및 입력 초기화 처리 */
+    /** 메시지 전송 및 입력 초기화 */
     const handleSend = () => {
       const rawValue = internalRef.current?.value ?? '';
       const trimmedValue = rawValue.trim();
@@ -72,20 +42,22 @@ export const ActionBar = forwardRef<HTMLInputElement, ActionBarProps>(
 
       // 전송 후 입력 초기화
       if (value !== undefined) {
-        // controlled 모드 → 외부 상태 리셋
         onChange?.('');
+        resetTextInputHeight(internalRef.current);
       } else if (internalRef.current) {
-        // uncontrolled 모드 → 직접 DOM 조작 및 React 이벤트 발생
         internalRef.current.value = '';
         internalRef.current.dispatchEvent(new Event('input', { bubbles: true }));
+        resetTextInputHeight(internalRef.current);
       }
+
+      internalRef.current?.focus(); // 포커스 유지
     };
 
     return (
       <div className="bg-background-background-normal-lighter flex w-full items-center gap-10 px-13 pt-13 pb-15">
         <TextInput
+          mode="chat"
           ref={internalRef}
-          type="text"
           value={value}
           onChange={onChange}
           placeholder={placeholder}

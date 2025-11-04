@@ -39,12 +39,20 @@ export function Accordion({
   }, [isOpen]);
 
   return (
-    <div className={`${isOpen ? '' : 'border-border-normal border-b'}`}>
+    <div
+      className={`border-b ${
+        isDisabled
+          ? 'border-border-border-normal bg-background-background-quinary'
+          : isOpen
+            ? 'border-none'
+            : 'border-border-border-quaternary'
+      } `}
+    >
       <button
         type="button"
         disabled={isDisabled}
         onClick={handleToggle}
-        className="disabled:bg-background-quaternary text-foreground-normal text-body-16-600--1 flex w-full cursor-pointer items-center justify-between p-[1rem] disabled:cursor-not-allowed"
+        className="disabled:bg-background-background-quinary text-foreground-foreground-normal text-body-body5 flex w-full cursor-pointer items-center justify-between p-13 disabled:cursor-not-allowed"
       >
         <span>
           {renderTitle
@@ -63,7 +71,7 @@ export function Accordion({
         style={{ maxHeight }}
         className="overflow-hidden transition-all duration-300 ease-in-out"
       >
-        <div className="px-[1rem] py-[1.25rem]">{children}</div>
+        <div className="px-13 py-15">{children}</div>
       </div>
     </div>
   );

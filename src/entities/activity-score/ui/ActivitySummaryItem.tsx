@@ -33,7 +33,7 @@ export const ActivitySummaryItem: FC<ActivitySummaryItemProps> = ({
       aria-label={`${label ?? '활동'} ${count}회, 상세 정보 보기`}
       aria-expanded={showTooltip}
       aria-describedby={showTooltip ? `tooltip-${id}` : undefined}
-      className="relative flex cursor-pointer items-center gap-[0.5rem]"
+      className="relative flex cursor-pointer items-center gap-8"
       onClick={() => show(id, 1500)}
       onFocus={() => show(id, 1500)}
       onBlur={() => hide()}
@@ -41,7 +41,7 @@ export const ActivitySummaryItem: FC<ActivitySummaryItemProps> = ({
       onMouseLeave={() => hide()}
     >
       <Icon width="1.5rem" height="1.5rem" />
-      <span className="text-body-14-400--2-22 text-foreground-normal">{count}회</span>
+      <span className="text-body-body8 text-foreground-foreground-normal">{count}회</span>
       {tooltip && showTooltip && (
         <div
           id={`tooltip-${id}`}

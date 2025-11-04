@@ -2,7 +2,7 @@ import type { Meta, StoryObj } from '@storybook/nextjs-vite';
 import { PostProfile } from './PostProfile';
 
 const meta: Meta<typeof PostProfile> = {
-  title: 'Shared/UI/PostProfile',
+  title: 'ENTITIES/UI/PostProfile',
   component: PostProfile,
   tags: ['autodocs'],
   argTypes: {

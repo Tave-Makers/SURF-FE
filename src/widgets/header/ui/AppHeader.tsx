@@ -11,7 +11,14 @@ export function AppHeader({ customBack }: { customBack?: () => void }) {
   const routeConfig = useMemo(() => createRouteConfig(router), [router]);
 
   // 현재 경로에 맞는 route 설정 찾기
-  const currentRoute = routeConfig.find((item) => pathname === item.path);
+  const currentRoute = routeConfig.find((item) => {
+    if (pathname === item.path) return true;
+    if (item.path.includes('[id]')) {
+      const base = item.path.split('/[id]')[0];
+      return pathname.startsWith(base);
+    }
+    return false;
+  });
 
   // 추후 404 페이지로 대체
   if (!currentRoute) return null;

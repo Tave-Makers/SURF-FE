@@ -208,4 +208,19 @@ export const createRouteConfig = (router: RouterInstance): RouteConfig[] => [
       hasLeftIcon: true,
     },
   },
+  {
+    id: 'notice-detail',
+    path: '/notice/[id]',
+    backPath: '/notice',
+    header: {
+      mode: HeaderMode.Default,
+      title: '공지사항',
+      hasLeftIcon: true,
+      icons: [
+        { label: 'Search', onClickIcon: () => alert('검색') },
+        { label: 'Share', onClickIcon: () => alert('공유') },
+        { label: 'Dots', onClickIcon: () => alert('메뉴') },
+      ],
+    },
+  },
 ];

@@ -22,13 +22,13 @@ export function DailyActivityTagList({ items, maxVisible = 2, isCurrentMonth = t
       {remain > 0 && (
         <div
           className={[
-            'rounded-2 text-caption-caption5 flex max-w-full items-center justify-center truncate px-2 py-3',
+            'rounded-2 text-caption-caption5 flex max-w-full items-center justify-center px-2 py-3',
             isCurrentMonth
               ? 'text-foreground-foreground-secondary'
               : 'text-foreground-foreground-secondary-lighter opacity-50',
           ].join(' ')}
         >
-          {remain}개 더보기
+          <span className="truncate">{remain}개 더보기</span>
         </div>
       )}
     </div>

@@ -1,7 +1,8 @@
 'use client';
 
-import { useMemo, useState } from 'react';
-import { DayPicker, type DayButtonProps, type NavProps, type MonthProps } from 'react-day-picker';
+import { useEffect, useMemo, useState } from 'react';
+import { DayPicker } from 'react-day-picker';
+import type { DayButtonProps, NavProps, MonthProps } from 'react-day-picker';
 import { ko } from 'react-day-picker/locale';
 import 'react-day-picker/style.css';
 
@@ -101,8 +102,12 @@ const mock: ActivityMap = {
 };
 
 export default function Calendar() {
-  const [month, setMonth] = useState<Date>(new Date(2025, 10, 30));
+  const [month, setMonth] = useState<Date>(new Date());
   const [selectedDay, setSelectedDay] = useState<Date>();
+
+  useEffect(() => {
+    setMonth(new Date());
+  }, []);
 
   const handleDaySelect = (date: Date | undefined) => {
     setSelectedDay(date);

@@ -10,11 +10,10 @@ import { ko } from 'date-fns/locale';
  *
  * @example
  * <EventDateCard
- *   id="1"
  *   date={new Date('2025-11-20T00:00:00')}
  *   items={[{ id: '1', title: '후반기 만남의 장', type: 'official', startDate: new Date('2025-11-20T10:00:00'), endDate: new Date('2025-11-21T18:00:00'), place: '서울 강남구 어딘가' }]}
  *   isLoading={false}
- *   renderItem={(item, index) => <EventCard key={item.id ? item.id : index} {...item} />}
+ *   renderItem={(item, index) => <EventCard key={index} {...item} />}
  * />
  */
 
@@ -42,13 +41,9 @@ export function EventDateCard<T extends { id: string | number }>({
       </header>
 
       {isLoading ? (
-        // text 색상은 임시값
-        <div className="text-[#8A8F98]">불러오는 중...</div>
+        <div className="text-background-background-secondary-darker">불러오는 중...</div>
       ) : items.length === 0 ? (
-        // text 색상은 임시값
-        <div className="flex flex-1 items-center justify-center pt-[4.19rem]">
-          <div className="text-[#8A8F98]">등록된 일정이 없습니다.</div>
-        </div>
+        <div className="text-background-background-secondary-darker">등록된 일정이 없습니다.</div>
       ) : (
         <div className="flex flex-col gap-10">
           {items.map((ev, i) => (

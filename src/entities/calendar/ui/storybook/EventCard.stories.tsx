@@ -1,5 +1,6 @@
 import type { Meta, StoryObj } from '@storybook/nextjs-vite';
 import { EventCard } from '../EventCard';
+import type { ActivityType, EventCardType } from '../../model/types';
 
 const meta: Meta<typeof EventCard> = {
   title: 'Entities/UI/Calendar/EventCard',
@@ -15,8 +16,13 @@ const meta: Meta<typeof EventCard> = {
     },
     type: {
       control: 'radio',
-      options: ['official', 'operation', 'other'],
+      options: ['official', 'operation', 'other'] as ActivityType[],
       description: '이벤트 태그의 종류',
+    },
+    mode: {
+      control: 'radio',
+      options: ['closeBtn', 'varogaggi', 'normal'] as EventCardType[],
+      description: '이벤트 카드의 모드',
     },
     startDate: {
       control: 'date',
@@ -34,9 +40,10 @@ const meta: Meta<typeof EventCard> = {
   args: {
     title: '후반기 만남의 장',
     type: 'official',
+    mode: 'normal',
     // 날짜 임시값
-    startDate: new Date('2025-11-20T10:00:00'),
-    endDate: new Date('2025-11-21T18:00:00'),
+    startDate: new Date(),
+    endDate: new Date(),
     place: '서울 강남구 어딘가',
   },
 };

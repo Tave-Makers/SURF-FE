@@ -46,6 +46,10 @@ type SurfIconName = ComponentProps<typeof SurfIcon>['name'];
  * @property {string | number | string[]} [defaultValue] - uncontrolled 모드 초기값
  * @property {string} [aria-label] - 접근성용 레이블 (기본값: `"텍스트 입력"`)
  */
+
+const MAX_TEXTAREA_HEIGHT = 120; // 최대 높이 제한
+const WRAPPER_VERTICAL_PADDING = 12; // 패딩 보정값
+
 type TextInputProps = {
   mode: 'search' | 'chat';
   value?: string;
@@ -82,7 +86,10 @@ export const TextInput = forwardRef<HTMLTextAreaElement, TextInputProps>(
 
     const currentValue = value !== undefined ? value : internalValue;
 
-    /** 높이 자동 확장 */
+    /** 높이 자동 확장
+     * textarea 입력 내용에 따라 높이를 조절하고,
+     * wrapper는 상하 패딩(WRAPPER_VERTICAL_PADDING)을 포함하여 자연스러운 확장 유지
+     */
     useEffect(() => {
       if (!internalRef.current || !wrapperRef.current) return;
 
@@ -91,9 +98,9 @@ export const TextInput = forwardRef<HTMLTextAreaElement, TextInputProps>(
 
       // textarea 높이 초기화 후 scrollHeight 계산
       textarea.style.height = 'auto';
-      const newHeight = Math.min(textarea.scrollHeight, 120); // 최대 높이 제한
+      const newHeight = Math.min(textarea.scrollHeight, MAX_TEXTAREA_HEIGHT);
       textarea.style.height = `${newHeight}px`;
-      wrapper.style.height = `${newHeight + 12}px`;
+      wrapper.style.height = `${newHeight + WRAPPER_VERTICAL_PADDING}px`;
     }, [currentValue]);
 
     /** Enter / Shift+Enter 제어 */

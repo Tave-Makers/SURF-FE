@@ -83,7 +83,12 @@ export function EventCard({
         </div>
 
         {mode === 'closeBtn' && (
-          <button onClick={deleteSchedule}>
+          <button
+            onClick={(e) => {
+              e.stopPropagation();
+              deleteSchedule();
+            }}
+          >
             <SurfIcon size="m" name="X" className="text-foreground-foreground-normal-lighter" />
           </button>
         )}

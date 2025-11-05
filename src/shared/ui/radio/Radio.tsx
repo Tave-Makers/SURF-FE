@@ -42,7 +42,7 @@ export const Radio = forwardRef<HTMLInputElement, RadioProps>(
     return (
       <label
         htmlFor={inputId}
-        className={`inline-flex w-fit cursor-pointer items-center gap-[0.62rem] px-[0.25rem] py-[0.37em] ${
+        className={`inline-flex w-fit cursor-pointer items-center gap-10 px-5 py-7 ${
           isDisabled ? 'cursor-not-allowed opacity-50' : ''
         }`}
       >
@@ -56,10 +56,12 @@ export const Radio = forwardRef<HTMLInputElement, RadioProps>(
           disabled={isDisabled}
           onChange={onChange}
           ref={ref}
-          className="checked:border-background-primary border-border-normal checked:bg-background-primary h-[1.25rem] w-[1.25rem] cursor-pointer appearance-none rounded-full border p-[3.2px] checked:bg-clip-content disabled:cursor-not-allowed"
+          className="checked:border-background-background-primary border-background-background-quinary checked:bg-background-background-primary h-[1.25rem] w-[1.25rem] cursor-pointer appearance-none rounded-full border p-5 checked:bg-clip-content disabled:cursor-not-allowed"
           {...rest}
         />
-        {label && <span className="text-border-contrast text-caption-12-400">{label}</span>}
+        {label && (
+          <span className="text-foreground-foreground-normal text-body-body10">{label}</span>
+        )}
       </label>
     );
   },

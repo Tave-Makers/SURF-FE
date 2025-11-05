@@ -36,7 +36,7 @@ export const bylawsData: AccordionGroupProps['accordions'] = [
           ]}
         />
         {/* 유의사항 박스 */}
-        <div className="text-foreground-normal text-body-12-400--2 flex flex-col gap-[0.75rem] pt-[1.5rem]">
+        <div className="text-foreground-foreground-normal text-body-body10 flex flex-col gap-11 pt-16">
           <p>
             * &apos;인정기준&apos;은 &apos;기준 시간의 5분 이상 늦을 경우 지각으로 처리한다.&apos;
             제외 사전에 공지 시에만 인정

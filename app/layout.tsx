@@ -33,6 +33,7 @@ export default function RootLayout({ children }: { children: ReactNode }) {
                 {children}
               </main>
             </PageTrackingProvider>
+
             <ReactQueryDevtools initialIsOpen={false} />
           </AuthProvider>
         </QueryProvider>

@@ -35,6 +35,7 @@ type EventCardProps = {
   endDate?: Date | null;
   place: string;
   onClickCard?: () => void; // 카드 전체 클릭 (공지사항 바로가기)
+  onDeleteSchedule?: () => void; // 일정 삭제 클릭
 };
 
 // 날짜 포맷팅 함수
@@ -45,12 +46,6 @@ const formatEventDate = (date: Date | null | undefined) => {
   return format(date, 'MM월 dd일 (eee) HH:mm', { locale: ko });
 };
 
-const deleteSchedule = () => {
-  if (process.env.NODE_ENV === 'development') {
-    console.log('Delete schedule clicked');
-  }
-};
-
 export function EventCard({
   title,
   type,
@@ -59,6 +54,7 @@ export function EventCard({
   endDate,
   place,
   onClickCard,
+  onDeleteSchedule,
 }: EventCardProps) {
   const handleCardClick = () => {
     if (mode === 'varogaggi') {
@@ -67,6 +63,13 @@ export function EventCard({
       if (process.env.NODE_ENV === 'development') {
         console.log('EventCard clicked');
       }
+    }
+  };
+
+  const handleDeleteSchedule = () => {
+    onDeleteSchedule?.();
+    if (process.env.NODE_ENV === 'development') {
+      console.log('Delete schedule clicked');
     }
   };
 
@@ -86,7 +89,7 @@ export function EventCard({
           <button
             onClick={(e) => {
               e.stopPropagation();
-              deleteSchedule();
+              handleDeleteSchedule();
             }}
           >
             <SurfIcon size="m" name="X" className="text-foreground-foreground-normal-lighter" />

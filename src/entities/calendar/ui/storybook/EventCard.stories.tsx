@@ -1,5 +1,6 @@
 import type { Meta, StoryObj } from '@storybook/nextjs-vite';
 import { EventCard } from '../EventCard';
+import type { ActivityType, EventCardType } from '../../model/types';
 
 const meta: Meta<typeof EventCard> = {
   title: 'Entities/UI/Calendar/EventCard',
@@ -15,12 +16,12 @@ const meta: Meta<typeof EventCard> = {
     },
     type: {
       control: 'radio',
-      options: ['official', 'operation', 'other'],
+      options: ['official', 'operation', 'other'] as ActivityType[],
       description: '이벤트 태그의 종류',
     },
     mode: {
       control: 'radio',
-      options: ['closeBtn', 'varogaggi', 'normal'],
+      options: ['closeBtn', 'varogaggi', 'normal'] as EventCardType[],
       description: '이벤트 카드의 모드',
     },
     startDate: {

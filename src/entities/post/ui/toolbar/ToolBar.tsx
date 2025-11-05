@@ -21,7 +21,7 @@ export function ToolBar({ items, activeKey, onItemClick, className = '' }: ToolB
     <nav
       className={[
         'flex w-full items-center gap-15 px-13 py-8',
-        'rounded-1 border-border-border-tertiary border-t opacity-100',
+        'rounded-1 border-border-border-tertiary border-t-1 opacity-100',
         className,
       ].join(' ')}
     >

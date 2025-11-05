@@ -20,7 +20,7 @@ export const PolicyItem = forwardRef<HTMLButtonElement, PolicyItemProps>(
     ref,
   ) => {
     const baseClass =
-      'flex flex-1 w-full self-stretch items-center justify-between py-[0.87rem] bg-background-normal';
+      'flex flex-1 w-full self-stretch items-center justify-between py-12 px-13 bg-background-normal';
 
     return (
       <button
@@ -31,9 +31,9 @@ export const PolicyItem = forwardRef<HTMLButtonElement, PolicyItemProps>(
         {...rest}
         className={[baseClass, className].filter(Boolean).join(' ')}
       >
-        <div className="flex w-full items-center gap-[1rem]">
+        <div className="flex w-full items-center">
           {children && (
-            <span className="text-body-14-400--2-22 text-foreground-normal">{children}</span>
+            <span className="text-body-body8 text-foreground-foreground-normal">{children}</span>
           )}
         </div>
         {rightIconName && (
@@ -41,7 +41,7 @@ export const PolicyItem = forwardRef<HTMLButtonElement, PolicyItemProps>(
             name={rightIconName}
             size={'s'}
             aria-hidden
-            className="text-border-normal aspect-square opacity-100"
+            className="text-foreground-foreground-tertiary aspect-square opacity-100"
           />
         )}
       </button>

@@ -14,6 +14,7 @@ export const transformApiPostToPost = (apiPost: PostContent): Post => {
     thumbnailUrl: undefined, // 서버 응답에 없음(임시)
     /* 기본 프론트 Post 타입에 서버 응답으로 오는 
     pinned, boardId, likeByMe, scrappedByMe, scrapCount 도 추가 필요. */
+    boardId: apiPost.boardId,
     state: apiPost.pinned ? 'reserved' : 'default', // 일단 pinned 상태에 따라 state 상태 설정되도록 임시적으로 설정
   };
 };

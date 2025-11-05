@@ -10,19 +10,22 @@ type PostProfileProps = {
 
 export function PostProfile({ profileImgUrl, nickname, date, time, viewCount }: PostProfileProps) {
   return (
-    <div className="flex items-center gap-10">
+    <section className="flex items-center gap-10" aria-label={`${nickname}님의 작성 정보`}>
       <ProfileImage src={profileImgUrl} size="m" alt={`${nickname}의 프로필 이미지`} />
       <div className="flex flex-col items-start justify-center py-3">
-        <div className="text-body-body7 text-foreground-foreground-normal">{nickname}</div>
+        <strong className="text-body-body7 text-foreground-foreground-normal">{nickname}</strong>
+
         <div className="text-foreground-foreground-normal-lighter text-caption-caption4 flex items-center gap-7 pt-3">
-          <div>{date}</div>
-          <div>{time}</div>
-          <div className="flex gap-[0.125rem]">
-            <div>조회</div>
-            <div>{viewCount}</div>
+          <time dateTime={date} aria-label={`작성일 ${date}`}>
+            {date}
+          </time>
+          <time aria-label={`작성 시간 ${time}`}>{time}</time>
+          <div className="flex gap-[0.125rem]" aria-label={`조회수 ${viewCount}`}>
+            <span>조회</span>
+            <span>{viewCount}</span>
           </div>
         </div>
       </div>
-    </div>
+    </section>
   );
 }

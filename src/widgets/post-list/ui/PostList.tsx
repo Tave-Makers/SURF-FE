@@ -39,7 +39,7 @@ export const PostList = ({
   }
 
   return (
-    <div className="flex flex-1 flex-col gap-4 overflow-y-auto px-[1rem]">
+    <div className="flex flex-1 flex-col gap-4 overflow-y-auto px-13 pt-12">
       {posts.map((post) => (
         <PostCard key={post.id} post={post} onClick={() => onPostClick?.(post)} />
       ))}

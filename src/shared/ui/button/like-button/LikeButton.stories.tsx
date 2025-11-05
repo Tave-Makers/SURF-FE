@@ -4,7 +4,7 @@ import LikeButton from './LikeButton';
 
 // ---------- Meta ----------
 const meta: Meta<typeof LikeButton> = {
-  title: 'Shared/UI/LikeButton',
+  title: 'Shared/UI/Button/LikeButton',
   component: LikeButton,
   tags: ['autodocs'],
   argTypes: {

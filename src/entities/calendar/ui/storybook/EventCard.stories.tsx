@@ -18,6 +18,11 @@ const meta: Meta<typeof EventCard> = {
       options: ['official', 'operation', 'other'],
       description: '이벤트 태그의 종류',
     },
+    mode: {
+      control: 'radio',
+      options: ['closeBtn', 'varogaggi', 'normal'],
+      description: '이벤트 카드의 모드',
+    },
     startDate: {
       control: 'date',
       description: '이벤트 시작일 (참고: 현재 컴포넌트 UI는 "미정"으로 표시됩니다)',
@@ -34,9 +39,10 @@ const meta: Meta<typeof EventCard> = {
   args: {
     title: '후반기 만남의 장',
     type: 'official',
+    mode: 'normal',
     // 날짜 임시값
-    startDate: new Date('2025-11-20T10:00:00'),
-    endDate: new Date('2025-11-21T18:00:00'),
+    startDate: new Date(),
+    endDate: new Date(),
     place: '서울 강남구 어딘가',
   },
 };

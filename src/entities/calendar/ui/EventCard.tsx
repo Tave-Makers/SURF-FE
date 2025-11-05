@@ -2,13 +2,15 @@ import { format } from 'date-fns';
 import { ko } from 'date-fns/locale';
 import { SurfIcon } from '../../../shared/ui/icon/SurfIcon';
 import { CalendarTag } from '@/entities/calendar/ui/CalendarTag';
+import { ActivityType, EventCardType } from '../model/types';
 
 /**
  * 이벤트 카드 컴포넌트
  * @param title - 이벤트 제목
- * @param type - 이벤트 유형 ('official', 'operation', 'other' 중 하나)
- * @param startDate - 이벤트 시작 날짜 (Date 객체 또는 null)
- * @param endDate - 이벤트 종료 날짜 (Date 객체 또는 null)
+ * @param type - 이벤트 유형 (ActivityType: 'official', 'operation', 'other' 중 하나)
+ * @param mode - 이벤트 카드 모드 (EventCardType: 'closeBtn', 'normal', 'varogaggi' 중 하나)
+ * @param startDate - 이벤트 시작 날짜 (Date 객체)
+ * @param endDate - 이벤트 종료 날짜 (Date 객체)
  * @param place - 이벤트 장소
  * @param onClickCard - 카드 전체 클릭 시 호출되는 콜백 함수 (공지사항 바로가기)
  *
@@ -27,7 +29,8 @@ import { CalendarTag } from '@/entities/calendar/ui/CalendarTag';
 
 type EventCardProps = {
   title: string;
-  type: 'official' | 'operation' | 'other';
+  type: ActivityType;
+  mode: EventCardType;
   startDate?: Date | null;
   endDate?: Date | null;
   place: string;
@@ -36,19 +39,34 @@ type EventCardProps = {
 
 // 날짜 포맷팅 함수
 const formatEventDate = (date: Date | null | undefined) => {
-  // date가 null, undefined이거나 유효하지 않은 Date 객체인 경우 '미정' 반환
   if (!date || !(date instanceof Date) || isNaN(date.getTime())) {
     return '미정';
-  } // 'MM월 dd일 (eee) HH:mm' 형식으로 변환
+  }
   return format(date, 'MM월 dd일 (eee) HH:mm', { locale: ko });
 };
 
-export function EventCard({ title, type, startDate, endDate, place, onClickCard }: EventCardProps) {
-  // 카드 전체 클릭 (공지사항 바로가기)
+const deleteSchedule = () => {
+  if (process.env.NODE_ENV === 'development') {
+    console.log('Delete schedule clicked');
+  }
+};
+
+export function EventCard({
+  title,
+  type,
+  mode,
+  startDate,
+  endDate,
+  place,
+  onClickCard,
+}: EventCardProps) {
   const handleCardClick = () => {
-    onClickCard?.();
-    if (process.env.NODE_ENV === 'development') {
-      console.log('EventCard clicked');
+    if (mode === 'varogaggi') {
+      onClickCard?.();
+
+      if (process.env.NODE_ENV === 'development') {
+        console.log('EventCard clicked');
+      }
     }
   };
 
@@ -64,12 +82,24 @@ export function EventCard({ title, type, startDate, endDate, place, onClickCard 
           <CalendarTag variation={type} />
         </div>
 
-        <div className="flex h-[1.18rem] flex-row items-center gap-3">
-          <div className="text-caption-caption5 text-foreground-foreground-tertiary">
-            공지사항 바로가기
+        {mode === 'closeBtn' && (
+          <button onClick={deleteSchedule}>
+            <SurfIcon size="m" name="X" className="text-foreground-foreground-normal-lighter" />
+          </button>
+        )}
+
+        {mode === 'varogaggi' && (
+          <div className="flex h-[1.18rem] flex-row items-center gap-3">
+            <div className="text-caption-caption5 text-foreground-foreground-tertiary">
+              공지사항 바로가기
+            </div>
+            <SurfIcon
+              size="s"
+              name="ChevronRight"
+              className="text-foreground-foreground-tertiary"
+            />
           </div>
-          <SurfIcon size="s" name="ChevronRight" className="text-foreground-foreground-tertiary" />
-        </div>
+        )}
       </section>
 
       {/* Container 영역 */}

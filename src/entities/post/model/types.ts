@@ -1,4 +1,5 @@
 export type PostTagProps = {
+  id: number | string;
   variation: 'event' | 'reservation';
 };
 

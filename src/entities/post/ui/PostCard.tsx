@@ -42,7 +42,7 @@ export const PostCard = ({ post, onClick, onLikeToggle }: PostCardProps) => {
         {/* PostTag 영역 */}
         <div className="flex gap-5">
           {tags?.map((tag) => (
-            <PostTag key={tag.variation} variation={tag.variation} />
+            <PostTag key={tag.id} id={tag.id} variation={tag.variation} />
           ))}
         </div>
 

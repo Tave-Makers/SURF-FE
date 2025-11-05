@@ -27,7 +27,10 @@ const basePost: Post = {
   likeCount: 42,
   isLiked: false,
   commentCount: 8,
-  tags: [{ variation: 'event' }, { variation: 'reservation' }],
+  tags: [
+    { id: 1, variation: 'event' },
+    { id: 2, variation: 'reservation' },
+  ],
   thumbnailUrl: 'https://images.unsplash.com/photo-1507525428034-b723cf961d3e?w=400&h=400&fit=crop',
 };
 

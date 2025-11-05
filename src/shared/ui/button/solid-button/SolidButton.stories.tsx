@@ -3,7 +3,7 @@ import type { Meta, StoryObj } from '@storybook/nextjs-vite';
 import { SolidButton } from './SolidButton';
 
 const meta = {
-  title: 'Shared/UI/SolidButton',
+  title: 'Shared/UI/Button/SolidButton',
   component: SolidButton,
   tags: ['autodocs'],
   args: {

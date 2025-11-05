@@ -89,13 +89,13 @@ export const PostCard = ({ post, onClick, onLikeToggle }: PostCardProps) => {
                     : ''
                 }`}
               />
-              <span aria-hidden="true">{likeCount}</span>
+              <span aria-hidden="true">{likeCount > 99 ? '99+' : likeCount}</span>
             </button>
 
             {/* 댓글 수 표시 */}
             <div className="flex items-center gap-5" aria-label={`댓글 ${commentCount}개`}>
               <SurfIcon name="Chat" size="s" aria-hidden="true" />
-              <span aria-hidden="true">{commentCount}</span>
+              <span aria-hidden="true">{commentCount > 99 ? '99+' : commentCount}</span>
             </div>
           </footer>
         </div>

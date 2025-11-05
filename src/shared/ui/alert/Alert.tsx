@@ -1,8 +1,8 @@
 'use client';
 import { useId } from 'react';
 
-import { SolidButton, SolidButtonProps } from '../solid-button/SolidButton';
-import { TextButton, TextButtonProps } from '../text-button/TextButton';
+import { SolidButton, SolidButtonProps } from '../button/solid-button/SolidButton';
+import { TextButton, TextButtonProps } from '../button/text-button/TextButton';
 
 type BaseAction = {
   label: string;
@@ -54,23 +54,26 @@ export const Alert = ({
     <div className="absolute inset-0 z-50 flex items-center justify-center">
       <div className="absolute inset-0 w-full bg-black/60" onClick={onClose} aria-hidden />
       <section
-        className="bg-background-normal relative z-10 flex w-[17.18rem] flex-col gap-[1rem] overflow-hidden rounded-[0.5rem] px-[1.25rem] pt-[1.25rem] pb-[1rem]"
+        // 버튼이 1개일 때 && 버튼 종류가 textbutton일 때: px-15, pt-15, pb-14 로 설정
+        className={`bg-background-background-normal rounded-4 relative z-10 flex w-[17.18rem] flex-col gap-14 overflow-hidden ${
+          actions.length === 1 && actions[0].type === 'text' ? 'px-15 pt-15 pb-14' : 'p-15'
+        }`}
         role={isError ? 'alert' : undefined}
         aria-labelledby={titleId}
         aria-describedby={descId}
       >
-        <div className="flex flex-col gap-[0.25rem]">
-          <span id={titleId} className="text-foreground-normal text-body-16-600--1">
+        <div className="flex flex-col gap-5">
+          <span id={titleId} className="text-foreground-foreground-normal text-title-title2">
             {title}
           </span>
           {infoText && (
-            <span id={descId} className="text-foreground-normal-darker text-body-14-400--2-22">
+            <span id={descId} className="text-foreground-foreground-normal-lighter text-body-body8">
               {infoText}
             </span>
           )}
         </div>
 
-        <div className="flex flex-row gap-2">
+        <div className="flex flex-row gap-8">
           {actions.map((action, idx) => {
             const isBtnSingle = actions.length === 1;
             const wrapperClass =

@@ -1,5 +1,5 @@
-import { SurfIcon } from '../../../shared/ui/icon/SurfIcon';
-import { ProfileImage } from '../../../shared/ui/profile-image/ProfileImage';
+import { SurfIcon } from '@/shared/ui/icon/SurfIcon';
+import { ProfileImage } from '@/shared/ui/profile-image/ProfileImage';
 
 /**
  * 댓글(Comment) 컴포넌트

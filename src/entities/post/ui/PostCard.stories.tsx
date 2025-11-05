@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import type { Meta, StoryObj } from '@storybook/nextjs-vite';
 import { PostCard } from './PostCard';
 import type { Post } from '../model/types';
@@ -72,21 +72,27 @@ export const LongText: Story = {
 // -------------------------------
 export const InteractiveLike: Story = {
   render: (args) => {
-    const [liked, setLiked] = useState(args.post.isLiked);
-    const [count, setCount] = useState(args.post.likeCount);
+    const { post, onLikeToggle } = args;
+    const [liked, setLiked] = useState(post.isLiked);
+    const [count, setCount] = useState(post.likeCount);
+
+    useEffect(() => {
+      setLiked(post.isLiked);
+      setCount(post.likeCount);
+    }, [post.isLiked, post.likeCount]);
 
     /** 외부에서 상태 관리 + 내부 콜백 반영 */
     const handleToggle = (newState: boolean) => {
       setLiked(newState);
       setCount((prev) => prev + (newState ? 1 : -1));
-      args.onLikeToggle?.(newState);
+      onLikeToggle?.(newState);
     };
 
     return (
       <PostCard
         {...args}
         post={{
-          ...args.post,
+          ...post,
           isLiked: liked,
           likeCount: count,
         }}

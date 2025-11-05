@@ -14,16 +14,16 @@ export const ActivityHistoryItem = ({
   total,
 }: ActivityHistoryItemProps) => {
   return (
-    <div className="flex w-full gap-[0.62rem]">
-      <time className="text-foreground-normal text-body-14-600--1-20">{date}</time>
+    <div className="flex w-full gap-10">
+      <time className="text-foreground-foreground-normal text-body-body7">{date}</time>
       <div className="flex flex-1 flex-col">
-        <div className="text-foreground-normal text-body-16-600--1 flex">
+        <div className="text-foreground-foreground-normal text-body-body5 flex">
           <span className="flex-1">{category}</span>
           <span>{delta > 0 ? `+${delta}점` : `${delta}점`}</span>
         </div>
-        <div className="text-foreground-hint text-body-14-400--2-22 flex">
+        <div className="text-foreground-foreground-tertiary text-body-body8 flex">
           <span className="flex-1">{activity}</span>
-          <span>{total}점</span>
+          <span>{total}</span>
         </div>
       </div>
     </div>

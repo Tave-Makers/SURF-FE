@@ -1,5 +1,5 @@
 import type { Meta, StoryObj } from '@storybook/nextjs-vite';
-import { useSelectSheet } from '@/shared/ui/sheet/logic/useSelectSheet';
+import { usePicker } from '@/shared/hooks/usePicker';
 import { AccordionSelect } from './AccordionSelect';
 import { Sheet as ModalSheet } from 'react-modal-sheet';
 
@@ -14,7 +14,7 @@ type Story = StoryObj<typeof AccordionSelect>;
 /** 단순 시트 열기/닫기용 (토글형) */
 export const ToggleAccordionSelect: Story = {
   render: () => {
-    const { isOpen, open, close } = useSelectSheet(); // open/close만 사용
+    const { isOpen, open, close } = usePicker(); // open/close만 사용
     const sheetId = 'toggle-sheet';
 
     return (
@@ -55,13 +55,13 @@ export const ToggleAccordionSelect: Story = {
 /** 항목 선택형 (값 선택 후 시트 닫힘) */
 export const SelectAccordion: Story = {
   render: () => {
-    const { isOpen, open, close, selected, select } = useSelectSheet<string>();
+    const { isOpen, open, close, value, select } = usePicker<string>();
     const items = ['행사', '활동', '제휴', '릴리즈', '기타'];
     const sheetId = 'select-sheet';
 
     return (
       <div>
-        <AccordionSelect title={selected ?? '행사 종류 선택'} isOpen={isOpen} onClick={open} />
+        <AccordionSelect title={value ?? '행사 종류 선택'} isOpen={isOpen} onClick={open} />
 
         <ModalSheet
           isOpen={isOpen}
@@ -79,9 +79,7 @@ export const SelectAccordion: Story = {
                     type="button"
                     onClick={() => select(item)}
                     className={`rounded-md px-5 py-10 text-left transition-colors ${
-                      selected === item
-                        ? 'text-primary bg-gray-200 font-semibold'
-                        : 'hover:bg-gray-50'
+                      value === item ? 'text-primary bg-gray-200 font-semibold' : 'hover:bg-gray-50'
                     }`}
                   >
                     {item}

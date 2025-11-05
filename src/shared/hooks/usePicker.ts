@@ -48,25 +48,35 @@ export function usePicker<T = string>({
   onChange,
 }: PickerOptions<T> = {}) {
   const [isOpen, setOpen] = useState(defaultOpen);
-  const [value, setValue] = useState<T | null>(defaultValue);
+  const [value, setValueState] = useState<T | null>(defaultValue);
 
   const open = useCallback(() => setOpen(true), []);
   const close = useCallback(() => setOpen(false), []);
   const toggle = useCallback(() => setOpen((v) => !v), []);
 
-  const select = useCallback(
-    (next: T) => {
-      setValue(next);
+  /** 단일 진입점: 값 변경 + onChange 보장 + 닫힘 옵션 처리(override 가능) */
+  const setValue = useCallback(
+    (next: T | null, opts?: { close?: boolean }) => {
+      setValueState(next);
       onChange?.(next);
-      if (closeOnSelect) setOpen(false);
+
+      // close 여부 결정
+      // 옵션 없으면 "값이 null이 아닐 때 closeOnSelect 규칙"에 따라 결정
+      const shouldClose = opts?.close ?? (next !== null && closeOnSelect);
+      if (shouldClose) setOpen(false);
     },
-    [closeOnSelect, onChange],
+    [onChange, closeOnSelect],
   );
 
-  const clear = useCallback(() => {
-    setValue(null);
-    onChange?.(null);
-  }, [onChange]);
+  const select = useCallback(
+    (next: T) => setValue(next), // 선택 시: onChange 호출 + 기본 규칙으로 닫힘
+    [setValue],
+  );
+
+  const clear = useCallback(
+    () => setValue(null, { close: false }), // 초기화는 보통 닫지 않음
+    [setValue],
+  );
 
   return {
     // state
@@ -80,6 +90,6 @@ export function usePicker<T = string>({
     // value controls
     select,
     clear,
-    setValue, // 필요 시 직접 제어
+    setValue, // 외부에서도 사용 가능
   };
 }

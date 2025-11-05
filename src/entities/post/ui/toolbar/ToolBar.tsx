@@ -3,7 +3,7 @@
 import { ToolBarItems } from './ToolBarItems';
 import { IconName } from '@/shared/ui/icon/SurfIcon';
 
-export type ToolBarItem = {
+type ToolBarItem = {
   key: string;
   label: string;
   icon: IconName;

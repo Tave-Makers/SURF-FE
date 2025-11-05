@@ -3,7 +3,13 @@
 import { useState } from 'react';
 import type { Meta, StoryObj } from '@storybook/nextjs-vite';
 import { ToolBar } from './ToolBar';
-import type { ToolBarItem } from './ToolBar';
+import { IconName } from '@/shared/ui/icon/SurfIcon';
+
+type ToolBarItem = {
+  key: string;
+  label: string;
+  icon: IconName;
+};
 
 const SAMPLE_ITEMS: ToolBarItem[] = [
   { key: 'camera', label: '사진', icon: 'CameraSolid' },

@@ -1,8 +1,8 @@
-type CalendarTagProps = {
+type CalendarBadgeProps = {
   variation: 'official' | 'operation' | 'other';
 };
 
-const TAG_STYLE = {
+const BADGE_STYLE = {
   official: {
     text: '정규행사',
     color:
@@ -20,8 +20,8 @@ const TAG_STYLE = {
   },
 } as const;
 
-export const CalendarTag = ({ variation }: CalendarTagProps) => {
-  const { text, color } = TAG_STYLE[variation];
+export const CalendarBadge = ({ variation }: CalendarBadgeProps) => {
+  const { text, color } = BADGE_STYLE[variation];
   return (
     <span
       className={`rounded-3 text-caption-caption5 inline-flex items-center justify-center px-7 py-5 ${color}`}

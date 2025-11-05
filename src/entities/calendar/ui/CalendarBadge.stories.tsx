@@ -1,9 +1,9 @@
 import type { Meta, StoryObj } from '@storybook/nextjs-vite';
-import { CalendarTag } from './CalendarTag';
+import { CalendarBadge } from './CalendarBadge';
 
-const meta: Meta<typeof CalendarTag> = {
-  title: 'Entities/UI/Calendar/CalendarTag',
-  component: CalendarTag,
+const meta: Meta<typeof CalendarBadge> = {
+  title: 'Entities/UI/Calendar/CalendarBadge',
+  component: CalendarBadge,
   parameters: {
     layout: 'centered',
   },
@@ -17,7 +17,7 @@ const meta: Meta<typeof CalendarTag> = {
   },
 };
 export default meta;
-type Story = StoryObj<typeof CalendarTag>;
+type Story = StoryObj<typeof CalendarBadge>;
 
 // ───────────────────────────────
 // 기본 상태들
@@ -46,9 +46,9 @@ export const Etc: Story = {
 export const AllVariations: Story = {
   render: () => (
     <div className="flex gap-8">
-      <CalendarTag variation="official" />
-      <CalendarTag variation="operation" />
-      <CalendarTag variation="other" />
+      <CalendarBadge variation="official" />
+      <CalendarBadge variation="operation" />
+      <CalendarBadge variation="other" />
     </div>
   ),
 };

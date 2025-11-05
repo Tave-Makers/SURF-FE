@@ -28,7 +28,7 @@ export const SettingsItem = forwardRef<HTMLButtonElement, SettingsItemProps>(
     ref,
   ) => {
     const baseClass =
-      'flex flex-1 w-full self-stretch items-center justify-between py-[0.87rem] bg-background-normal';
+      'flex flex-1 w-full self-stretch items-center justify-between px-13 py-12 gap-1 bg-background-normal';
 
     return (
       <button
@@ -39,17 +39,17 @@ export const SettingsItem = forwardRef<HTMLButtonElement, SettingsItemProps>(
         {...rest}
         className={baseClass}
       >
-        <div className="flex w-full items-center gap-[1rem]">
+        <div className="flex w-full items-center gap-13">
           {leftIconName && (
             <SurfIcon
               name={leftIconName}
               size={'m'}
               aria-hidden
-              className="text-logo-normal h-[1.25rem] w-[1.25rem]"
+              className="text-foreground-foreground-normal"
             />
           )}
           {children && (
-            <span className="text-body-14-400--2-22 text-foreground-normal">{children}</span>
+            <span className="text-body-body8 text-foreground-foreground-normal">{children}</span>
           )}
         </div>
         {rightIconName && (
@@ -57,7 +57,7 @@ export const SettingsItem = forwardRef<HTMLButtonElement, SettingsItemProps>(
             name={rightIconName}
             size={'s'}
             aria-hidden
-            className="text-border-normal aspect-square opacity-100"
+            className="text-foreground-foreground-tertiary aspect-square opacity-100"
           />
         )}
       </button>

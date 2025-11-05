@@ -15,6 +15,7 @@ export const transformApiPostToPost = (apiPost: PostContent): Post => {
     thumbnailUrl: undefined, // 서버 응답에 없음(임시)
     /* 기본 프론트 Post 타입에 서버 응답으로 오는 
     pinned, boardId, likeByMe, scrappedByMe, scrapCount 도 추가 필요. */
+    boardId: apiPost.boardId,
     tags: undefined, // 일단 undefined
   };
 };

@@ -18,7 +18,7 @@ export type Pageable = {
   unpaged: boolean;
 };
 
-// 게시물 타입
+// 게시물 API 타입
 export type PostContent = {
   id: number;
   title: string;

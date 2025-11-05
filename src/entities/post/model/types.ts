@@ -1,4 +1,4 @@
-export type PostTagProps = {
+export type PostBadgeProps = {
   id: number | string;
   variation: 'event' | 'reservation';
 };
@@ -12,8 +12,9 @@ export type Post = {
   likeCount: number;
   isLiked: boolean;
   commentCount: number;
-  tags?: PostTagProps[];
+  tags?: PostBadgeProps[];
   thumbnailUrl?: string;
+  boardId?: number;
 };
 
 export type PostType = 'scraps' | 'my-posts';

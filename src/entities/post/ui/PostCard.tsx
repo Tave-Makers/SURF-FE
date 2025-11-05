@@ -3,7 +3,7 @@
 import type { MouseEvent, KeyboardEvent } from 'react';
 import { SurfIcon } from '@/shared/ui/icon/SurfIcon';
 import { Post } from '../model/types';
-import { PostTag } from './PostTag';
+import { PostBadge } from './PostBadge';
 
 export type PostCardProps = {
   post: Post;
@@ -39,10 +39,10 @@ export const PostCard = ({ post, onClick, onLikeToggle }: PostCardProps) => {
       aria-label={`게시글: ${title}`}
     >
       <div className="flex flex-1 flex-col gap-8 self-stretch">
-        {/* PostTag 영역 */}
+        {/* PostBadge 영역 */}
         <div className="flex gap-5">
           {tags?.map((tag) => (
-            <PostTag key={tag.id} id={tag.id} variation={tag.variation} />
+            <PostBadge key={tag.id} id={tag.id} variation={tag.variation} />
           ))}
         </div>
 

@@ -45,6 +45,7 @@ const resetTextInputHeight = (el?: HTMLTextAreaElement | null) => {
  * ### ⚙️ Props
  * @typedef {object} ActionBarProps
  * @property {string} [value] - 입력값 (Controlled 모드)
+ * @property {string} [defaultValue] - 초기값 (Uncontrolled 모드)
  * @property {(val: string) => void} [onChange] - 입력 변경 핸들러 (Controlled 모드)
  * @property {string} [placeholder] - placeholder 텍스트
  * @property {(val: string) => void} [onSend] - 메시지 전송 핸들러 (Enter 또는 버튼 클릭 시 호출)
@@ -59,6 +60,7 @@ const resetTextInputHeight = (el?: HTMLTextAreaElement | null) => {
 
 type ActionBarProps = {
   value?: string;
+  defaultValue?: string;
   onChange?: (val: string) => void;
   placeholder?: string;
   onSend?: (val: string) => void;
@@ -67,7 +69,10 @@ type ActionBarProps = {
 };
 
 export const ActionBar = forwardRef<HTMLTextAreaElement, ActionBarProps>(
-  ({ value, onChange, placeholder, onSend, onIconClick, isEmojiActive = false }, ref) => {
+  (
+    { value, defaultValue, onChange, placeholder, onSend, onIconClick, isEmojiActive = false },
+    ref,
+  ) => {
     const internalRef = useRef<HTMLTextAreaElement>(null);
     useImperativeHandle(ref, () => internalRef.current as HTMLTextAreaElement);
 
@@ -98,6 +103,7 @@ export const ActionBar = forwardRef<HTMLTextAreaElement, ActionBarProps>(
           mode="chat"
           ref={internalRef}
           value={value}
+          defaultValue={defaultValue}
           onChange={onChange}
           placeholder={placeholder}
           iconName={isEmojiActive ? 'SmileCircleSolid' : 'SmileCircle'}

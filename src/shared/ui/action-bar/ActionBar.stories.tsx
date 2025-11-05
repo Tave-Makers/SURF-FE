@@ -22,7 +22,6 @@ export const Controlled: Story = {
 
     const handleSend = (val: string) => {
       alert(`(Controlled) 전송된 메시지: ${val}`);
-      setMessage('');
     };
 
     const handleEmojiClick = () => {
@@ -60,7 +59,6 @@ export const Uncontrolled: Story = {
 
     const handleSend = (val: string) => {
       alert(`(Uncontrolled) 전송된 메시지: ${val}`);
-      inputRef.current!.value = '';
     };
 
     const handleEmojiClick = () => {
@@ -71,6 +69,42 @@ export const Uncontrolled: Story = {
       <div className="w-[23.4rem] space-y-2">
         <ActionBar
           placeholder="댓글을 입력하세요"
+          onSend={handleSend}
+          isEmojiActive={emojiActive}
+          onIconClick={handleEmojiClick}
+          ref={inputRef}
+        />
+        {emojiActive && (
+          <div className="text-foreground-foreground-normal text-caption-caption4">
+            🪄 이모지 패널이 열려 있습니다
+          </div>
+        )}
+      </div>
+    );
+  },
+};
+
+/* ----------------------------------------------- */
+/* Uncontrolled (내부 상태 기반, 기본값 포함 — 댓글 수정 예시) */
+/* ----------------------------------------------- */
+export const UncontrolledWithDefaultValue: Story = {
+  render: () => {
+    const [emojiActive, setEmojiActive] = useState(false);
+    const inputRef = useRef<HTMLTextAreaElement>(null);
+
+    const handleSend = (val: string) => {
+      alert(`(Uncontrolled with defaultValue) 수정된 댓글: ${val}`);
+    };
+
+    const handleEmojiClick = () => {
+      setEmojiActive((prev) => !prev);
+    };
+
+    return (
+      <div className="w-[23.4rem] space-y-2">
+        <ActionBar
+          defaultValue="기존 댓글 내용입니다 😊"
+          placeholder="댓글을 수정하세요"
           onSend={handleSend}
           isEmojiActive={emojiActive}
           onIconClick={handleEmojiClick}

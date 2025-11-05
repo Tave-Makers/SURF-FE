@@ -1,6 +1,8 @@
 import { PostTagProps } from '../model/types';
 
-const TAG_TEXT_MAP = {
+type Variation = 'event' | 'reservation';
+
+const TAG_TEXT_MAP: Record<Variation, string> = {
   event: '행사',
   reservation: '예약중',
 } as const;

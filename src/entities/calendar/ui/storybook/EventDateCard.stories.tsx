@@ -1,11 +1,13 @@
 import type { Meta, StoryObj } from '@storybook/nextjs-vite';
 import { EventCard } from '../EventCard';
 import { EventDateCard } from '../EventDateCard';
+import type { ActivityType, EventCardType } from '../../model/types';
 
 type EventItem = {
   id: string;
   title: string;
-  type: 'official' | 'operation' | 'other';
+  type: ActivityType;
+  mode?: EventCardType;
   startDate?: Date | null;
   endDate?: Date | null;
   place: string;
@@ -54,6 +56,7 @@ const meta = {
         id: '1',
         title: '후반기 만남의 장',
         type: 'official',
+        mode: 'normal',
         startDate: new Date('2025-11-20T10:00:00'),
         endDate: new Date('2025-11-21T18:00:00'),
         place: '서울 강남구 어딘가',
@@ -62,6 +65,7 @@ const meta = {
         id: '2',
         title: '운영진 정기 회의',
         type: 'operation',
+        mode: 'normal',
         startDate: new Date('2025-11-20T14:00:00'),
         endDate: new Date('2025-11-20T15:00:00'),
         place: '온라인 (Zoom)',
@@ -72,6 +76,7 @@ const meta = {
       <EventCard
         title={_ev.title}
         type={_ev.type}
+        mode={_ev.mode || 'normal'}
         startDate={_ev.startDate}
         endDate={_ev.endDate}
         place={_ev.place}

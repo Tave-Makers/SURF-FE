@@ -1,9 +1,9 @@
 import type { Meta, StoryObj } from '@storybook/nextjs-vite';
-import { PostTag } from './PostTag';
+import { PostBadge } from './PostBadge';
 
-const meta: Meta<typeof PostTag> = {
-  title: 'Entities/UI/Post/PostTag',
-  component: PostTag,
+const meta: Meta<typeof PostBadge> = {
+  title: 'Entities/UI/Post/PostBadge',
+  component: PostBadge,
   parameters: {
     layout: 'centered',
   },
@@ -12,13 +12,13 @@ const meta: Meta<typeof PostTag> = {
     variation: {
       control: 'radio',
       options: ['event', 'reservation'],
-      description: '태그의 종류 (행사 / 예약중)',
+      description: '뱃지의 종류 (행사 / 예약중)',
     },
   },
 };
 export default meta;
 
-type Story = StoryObj<typeof PostTag>;
+type Story = StoryObj<typeof PostBadge>;
 
 // ───────────────────────────────
 // 기본 상태들
@@ -36,13 +36,13 @@ export const Reservation: Story = {
 };
 
 // ───────────────────────────────
-// 여러 태그 비교용
+// 여러 배지 비교용
 // ───────────────────────────────
 export const AllVariations: Story = {
   render: () => (
     <div className="flex gap-8">
-      <PostTag variation="reservation" />
-      <PostTag variation="event" />
+      <PostBadge variation="reservation" />
+      <PostBadge variation="event" />
     </div>
   ),
 };

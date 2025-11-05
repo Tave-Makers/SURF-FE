@@ -1,15 +1,7 @@
-'use client';
-
 import { useState } from 'react';
 import type { Meta, StoryObj } from '@storybook/nextjs-vite';
 import { ToolBar } from './ToolBar';
-import { IconName } from '@/shared/ui/icon/SurfIcon';
-
-type ToolBarItem = {
-  key: string;
-  label: string;
-  icon: IconName;
-};
+import { ToolBarItem } from './ToolBar';
 
 const SAMPLE_ITEMS: ToolBarItem[] = [
   { key: 'camera', label: '사진', icon: 'CameraSolid' },

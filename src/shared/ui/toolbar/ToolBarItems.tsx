@@ -16,9 +16,8 @@ export function ToolBarItems({ label, icon, active = false, onClick }: ToolBarIt
       type="button"
       onClick={onClick}
       aria-pressed={active}
-      aria-label={`${label} 탭${active ? ' (선택됨)' : ''}`}
       className={
-        'focus-visible:ring-primary-normal text-foreground-foreground-normal inline-flex items-center gap-5 focus:outline-none'
+        'text-foreground-foreground-normal inline-flex items-center gap-5 focus:outline-none'
       }
     >
       <SurfIcon name={icon} size="m" />

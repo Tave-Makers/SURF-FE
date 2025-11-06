@@ -21,16 +21,16 @@ const meta: Meta<typeof EventCard> = {
     },
     mode: {
       control: 'radio',
-      options: ['closeBtn', 'varogaggi', 'normal'] as EventCardType[],
+      options: ['reservation', 'notice', 'calendar'] as EventCardType[],
       description: '이벤트 카드의 모드',
     },
     startDate: {
       control: 'date',
-      description: '이벤트 시작일 (참고: 현재 컴포넌트 UI는 "미정"으로 표시됩니다)',
+      description: '이벤트 시작일',
     },
     endDate: {
       control: 'date',
-      description: '이벤트 종료일 (참고: 현재 컴포넌트 UI는 "미정"으로 표시됩니다)',
+      description: '이벤트 종료일',
     },
     place: {
       control: 'text',
@@ -40,7 +40,7 @@ const meta: Meta<typeof EventCard> = {
   args: {
     title: '후반기 만남의 장',
     type: 'official',
-    mode: 'normal',
+    mode: 'notice',
     // 날짜 임시값
     startDate: new Date(),
     endDate: new Date(),

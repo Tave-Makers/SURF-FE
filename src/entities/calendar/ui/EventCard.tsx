@@ -1,6 +1,6 @@
 import { format } from 'date-fns';
 import { ko } from 'date-fns/locale';
-import { SurfIcon } from '../../../shared/ui/icon/SurfIcon';
+import { SurfIcon } from '@/shared/ui/icon/SurfIcon';
 import { CalendarTag } from '@/entities/calendar/ui/CalendarTag';
 import { ActivityType, EventCardType } from '../model/types';
 
@@ -8,7 +8,7 @@ import { ActivityType, EventCardType } from '../model/types';
  * 이벤트 카드 컴포넌트
  * @param title - 이벤트 제목
  * @param type - 이벤트 유형 (ActivityType: 'official', 'operation', 'other' 중 하나)
- * @param mode - 이벤트 카드 모드 (EventCardType: 'closeBtn', 'normal', 'varogaggi' 중 하나)
+ * @param mode - 이벤트 카드 모드 (EventCardType: 'reservation', 'notice', 'calendar' 중 하나)
  * @param startDate - 이벤트 시작 날짜 (Date 객체)
  * @param endDate - 이벤트 종료 날짜 (Date 객체)
  * @param place - 이벤트 장소
@@ -20,6 +20,7 @@ import { ActivityType, EventCardType } from '../model/types';
  * <EventCard
  *   title="후반기 만남의 장소"
  *   type="official"
+ *   mode="notice"
  *   startDate={new Date('2025-11-20T10:00:00')}
  *   endDate={new Date('2025-11-21T18:00:00')}
  *   place="서울 강남구 어딘가"
@@ -57,7 +58,7 @@ export function EventCard({
   onDeleteSchedule,
 }: EventCardProps) {
   const handleCardClick = () => {
-    if (mode === 'varogaggi') {
+    if (mode === 'calendar') {
       onClickCard?.();
 
       if (process.env.NODE_ENV === 'development') {
@@ -85,7 +86,7 @@ export function EventCard({
           <CalendarTag variation={type} />
         </div>
 
-        {mode === 'closeBtn' && (
+        {mode === 'reservation' && (
           <button
             onClick={(e) => {
               e.stopPropagation();
@@ -96,7 +97,7 @@ export function EventCard({
           </button>
         )}
 
-        {mode === 'varogaggi' && (
+        {mode === 'calendar' && (
           <div className="flex h-[1.18rem] flex-row items-center gap-3">
             <div className="text-caption-caption5 text-foreground-foreground-tertiary">
               공지사항 바로가기

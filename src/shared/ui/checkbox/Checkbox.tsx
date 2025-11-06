@@ -55,7 +55,7 @@ export const Checkbox = forwardRef<HTMLInputElement, CheckboxProps>(
             className="peer bg-background-background-normal checked:bg-background-background-primary border-background-background-quinary rounded-2 h-full w-full cursor-pointer appearance-none border checked:border-none disabled:cursor-not-allowed"
             {...rest}
           />
-          <span className="text-foreground-accent pointer-events-none absolute top-1/2 left-1/2 flex h-full w-full -translate-x-1/2 -translate-y-1/2 items-center justify-center opacity-0 peer-checked:opacity-100">
+          <span className="text-foreground-foreground-accent pointer-events-none absolute top-1/2 left-1/2 flex h-full w-full -translate-x-1/2 -translate-y-1/2 items-center justify-center opacity-0 peer-checked:opacity-100">
             <SurfIcon name="Check" size="s" />
           </span>
         </div>

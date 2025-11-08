@@ -178,11 +178,13 @@ export default function Calendar() {
             items={selectedItems}
             renderItem={(_ev) => (
               <EventCard
+                key={_ev.id}
                 title={_ev.title}
                 type={_ev.type}
-                startDate={new Date()}
-                endDate={new Date()}
-                place="온라인"
+                mode="calendar"
+                startDate={_ev.startDate}
+                endDate={_ev.endDate}
+                place={_ev.place || '미정'}
               />
             )}
           />

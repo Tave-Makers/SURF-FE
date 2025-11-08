@@ -1,6 +1,5 @@
-'use client';
 import type { DailyActivity } from '@/entities/calendar/model/types';
-import { ActivityBadge } from '@/entities/calendar/ui/ActivityBadge';
+import { ActivityBadge } from '@/entities/calendar/ui/ActivityBadge/ActivityBadge';
 
 type Props = {
   items: DailyActivity[];

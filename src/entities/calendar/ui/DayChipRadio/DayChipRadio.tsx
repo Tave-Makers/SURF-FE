@@ -1,8 +1,7 @@
-'use client';
 import type { DayButtonProps } from 'react-day-picker';
 import { isSameMonth } from 'date-fns';
 import type { ActivityMap } from '@/entities/calendar/model/types';
-import { DailyActivityBadgeList } from '@/entities/calendar/ui/DailyActivityBadgeList';
+import { DailyActivityBadgeList } from '@/entities/calendar/ui/DailyActivityBadgeList/DailyActivityBadgeList';
 import { ymd } from '@/entities/calendar/lib/utils';
 
 type Props = DayButtonProps & {

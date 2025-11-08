@@ -6,12 +6,12 @@ import type { DayButtonProps, NavProps, MonthProps } from 'react-day-picker';
 import { ko } from 'react-day-picker/locale';
 import 'react-day-picker/style.css';
 
-import { MonthNavigator } from '@/entities/calendar/ui/MonthNavigator';
-import { DayChipRadio } from '../../../entities/calendar/ui/DayChipRadio';
-import { EventDateCard } from '@/entities/calendar/ui/EventDateCard';
+import { MonthNavigator } from '@/entities/calendar/ui/MonthNavigator/MonthNavigator';
+import { DayChipRadio } from '../../../entities/calendar/ui/DayChipRadio/DayChipRadio';
+import { EventDateCard } from '@/entities/calendar/ui/EventDateCard/EventDateCard';
 import type { ActivityMap } from '@/entities/calendar/model/types';
 import { ymd } from '@/entities/calendar/lib/utils';
-import { EventCard } from '@/entities/calendar/ui/EventCard';
+import { EventCard } from '@/entities/calendar/ui/EventCard/EventCard';
 
 const calendarClassNames = {
   root: 'w-full',

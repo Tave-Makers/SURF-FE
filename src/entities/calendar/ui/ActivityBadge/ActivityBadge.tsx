@@ -1,5 +1,3 @@
-'use client';
-
 import type { DailyActivity } from '@/entities/calendar/model/types';
 
 type Props = { item: DailyActivity; isCurrentMonth?: boolean };

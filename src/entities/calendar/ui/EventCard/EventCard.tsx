@@ -1,8 +1,8 @@
 import { format } from 'date-fns';
 import { ko } from 'date-fns/locale';
 import { SurfIcon } from '@/shared/ui/icon/SurfIcon';
-import { CalendarBadge } from '@/entities/calendar/ui/CalendarBadge';
-import { ActivityType, EventCardType } from '../model/types';
+import { CalendarBadge } from '@/entities/calendar/ui/CalendarBadge/CalendarBadge';
+import { ActivityType, EventCardType } from '../../model/types';
 
 /**
  * 이벤트 카드 컴포넌트

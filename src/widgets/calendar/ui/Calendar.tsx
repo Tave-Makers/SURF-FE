@@ -103,12 +103,14 @@ const mock: ActivityMap = {
 
 export default function Calendar() {
   const [month, setMonth] = useState<Date>(new Date());
-  const [selectedDay, setSelectedDay] = useState<Date>();
+  const [selectedDay, setSelectedDay] = useState<Date>(new Date());
 
   const handleDaySelect = (date: Date | undefined) => {
+    if (date == undefined) return null;
+
     setSelectedDay(date);
     if (date) {
-      setMonth(date); // 선택된 날짜로 월(month) 상태도 업데이트
+      setMonth(date);
     }
   };
 
@@ -148,7 +150,7 @@ export default function Calendar() {
   const selectedItems = selectedDay ? (mock[ymd(selectedDay)] ?? []) : [];
 
   return (
-    <div className="flex flex-1 flex-col gap-10 overflow-auto">
+    <div className="flex flex-1 flex-col gap-10">
       <div className="flex flex-1 items-center justify-center px-10">
         <DayPicker
           mode="single"

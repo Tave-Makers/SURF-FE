@@ -40,7 +40,7 @@ type EventCardProps = {
   mode: EventCardType;
   startDate?: Date | null;
   endDate?: Date | null;
-  place: string;
+  place?: string;
   isAdmin?: boolean;
   hasNotice?: boolean;
   onClickCard?: () => void;

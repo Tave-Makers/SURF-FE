@@ -53,19 +53,17 @@ const meta = {
     date: new Date('2025-11-20T00:00:00'),
     items: [
       {
-        id: '1',
         title: '후반기 만남의 장',
         type: 'official',
-        mode: 'normal',
+        mode: 'calendar',
         startDate: new Date('2025-11-20T10:00:00'),
         endDate: new Date('2025-11-21T18:00:00'),
         place: '서울 강남구 어딘가',
       },
       {
-        id: '2',
         title: '운영진 정기 회의',
         type: 'operation',
-        mode: 'normal',
+        mode: 'calendar',
         startDate: new Date('2025-11-20T14:00:00'),
         endDate: new Date('2025-11-20T15:00:00'),
         place: '온라인 (Zoom)',
@@ -76,7 +74,7 @@ const meta = {
       <EventCard
         title={_ev.title}
         type={_ev.type}
-        mode={_ev.mode || 'normal'}
+        mode={_ev.mode || 'calendar'}
         startDate={_ev.startDate}
         endDate={_ev.endDate}
         place={_ev.place}

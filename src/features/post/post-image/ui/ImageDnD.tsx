@@ -10,6 +10,7 @@ import {
 } from '@dnd-kit/core';
 import { SortableContext, useSortable, verticalListSortingStrategy } from '@dnd-kit/sortable';
 import { CSS } from '@dnd-kit/utilities';
+import { restrictToParentElement } from '@dnd-kit/modifiers';
 import { ImageItem } from '@/entities/post/post-image/ui/ImageItem';
 
 type ImageDnDProps = {
@@ -66,17 +67,28 @@ export function ImageDnD({ images, onReorder, onRemove }: ImageDnDProps) {
  */
 function SortableImage({ id, file, onRemove }: { id: number; file: File; onRemove: () => void }) {
   // 이 이미지가 드래그 가능한 대상임을 선언
-  const { attributes, listeners, setNodeRef, transform, transition } = useSortable({ id });
+  const { attributes, listeners, setNodeRef, transform, transition, isDragging } = useSortable({
+    id,
+  });
 
   // 드래그 중일 때 위치 이동 애니메이션 적용
-  const style = {
+  const style: React.CSSProperties = {
     transform: CSS.Transform.toString(transform),
-    transition,
+    transition: isDragging ? undefined : transition,
+    willChange: 'transform',
+    zIndex: isDragging ? 9999 : 1, // 드래그 중이면 맨 위로
+    position: isDragging ? 'relative' : 'static', // zIndex가 적용되도록 position 지정
   };
 
   // ImageItem을 드래그 가능하게 감싸서 렌더링
   return (
-    <div ref={setNodeRef} style={style} {...attributes} {...listeners}>
+    <div
+      ref={setNodeRef}
+      style={style}
+      {...attributes}
+      {...listeners}
+      className={isDragging ? 'scale-105 cursor-grabbing' : 'cursor-grab'}
+    >
       <ImageItem file={file} onRemove={onRemove} />
     </div>
   );

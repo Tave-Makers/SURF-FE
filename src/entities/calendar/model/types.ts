@@ -1,5 +1,5 @@
 export type ActivityType = 'official' | 'operation' | 'other';
-export type EventCardType = 'reservation' | 'notice' | 'calendar';
+export type EventCardType = 'reservation' | 'calendar';
 
 export interface DailyActivity {
   id: string;

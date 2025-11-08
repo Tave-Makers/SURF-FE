@@ -8,6 +8,7 @@ export type Post = {
   comments: number;
   state?: 'default' | 'reserved';
   thumbnailUrl?: string;
+  boardId?: number;
 };
 
 export type PostType = 'scraps' | 'my-posts';

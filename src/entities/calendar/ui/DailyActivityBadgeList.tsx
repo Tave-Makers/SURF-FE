@@ -15,14 +15,14 @@ export function DailyActivityBadgeList({ items, maxVisible = 2, isCurrentMonth =
   const remain = Math.max(items.length - visible.length, 0);
 
   return (
-    <div className="flex h-full w-full min-w-0 flex-col items-center justify-center gap-3">
+    <div className="flex h-full w-full min-w-0 flex-col items-start justify-center gap-3">
       {visible.map((it) => (
         <ActivityBadge key={it.id} item={it} isCurrentMonth={isCurrentMonth} />
       ))}
       {remain > 0 && (
         <div
           className={[
-            'rounded-2 text-caption-caption5 flex max-w-full items-center justify-center px-2 py-3',
+            'rounded-2 text-caption-caption6 flex max-w-full items-center justify-center px-2 py-4',
             isCurrentMonth
               ? 'text-foreground-foreground-secondary'
               : 'text-foreground-foreground-secondary-lighter opacity-50',

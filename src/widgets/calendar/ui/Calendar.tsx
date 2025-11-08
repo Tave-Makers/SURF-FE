@@ -106,12 +106,10 @@ export default function Calendar() {
   const [selectedDay, setSelectedDay] = useState<Date>(new Date());
 
   const handleDaySelect = (date: Date | undefined) => {
-    if (date == undefined) return null;
+    if (!date) return;
 
     setSelectedDay(date);
-    if (date) {
-      setMonth(date);
-    }
+    setMonth(date);
   };
 
   const DayBtn = useMemo(() => {

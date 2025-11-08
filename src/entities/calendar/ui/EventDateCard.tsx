@@ -46,8 +46,8 @@ export function EventDateCard<T extends { id: string | number }>({
         <div className="text-background-background-secondary-darker">등록된 일정이 없습니다.</div>
       ) : (
         <div className="flex flex-col gap-10">
-          {items.map((ev, i) => (
-            <div key={ev?.id ? ev.id : i}>{renderItem ? renderItem(ev, i) : null}</div>
+          {items.map((item, index) => (
+            <div key={item.id}>{renderItem(item, index)}</div>
           ))}
         </div>
       )}

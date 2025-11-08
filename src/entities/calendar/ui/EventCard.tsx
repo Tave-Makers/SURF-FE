@@ -27,10 +27,10 @@ import { ActivityType, EventCardType } from '../model/types';
  *   startDate={new Date('2025-11-20T10:00:00')}
  *   endDate={new Date('2025-11-21T18:00:00')}
  *   place="서울 강남구 어딘가"
- *   isAdmin="true"
- *   hasNotice="true"
+ *   isAdmin=true
+ *   hasNotice=true
  *   onClickCard={() => console.log('Card clicked!')}
- *   onDeleteSchedule={() => console.log('Delete button clicked!)}
+ *   onDeleteSchedule={() => console.log('Delete button clicked!')}
  * />
  */
 

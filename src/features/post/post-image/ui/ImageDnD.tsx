@@ -41,7 +41,12 @@ export function ImageDnD({ images, onReorder, onRemove }: ImageDnDProps) {
   };
 
   return (
-    <DndContext sensors={sensors} collisionDetection={closestCenter} onDragEnd={handleDragEnd}>
+    <DndContext
+      sensors={sensors}
+      collisionDetection={closestCenter}
+      onDragEnd={handleDragEnd}
+      modifiers={[restrictToParentElement]}
+    >
       {/* 드래그 가능한 아이템 컨텍스트 */}
       <SortableContext items={images.map((_, i) => i)} strategy={verticalListSortingStrategy}>
         <div className="flex gap-3 overflow-x-auto py-2">

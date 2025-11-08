@@ -1,7 +1,7 @@
 import { format } from 'date-fns';
 import { ko } from 'date-fns/locale';
 import { SurfIcon } from '@/shared/ui/icon/SurfIcon';
-import { CalendarTag } from '@/entities/calendar/ui/CalendarTag';
+import { CalendarBadge } from '@/entities/calendar/ui/CalendarBadge';
 import { ActivityType, EventCardType } from '../model/types';
 
 /**
@@ -97,7 +97,7 @@ export function EventCard({
       {/* Header 영역 */}
       <section className="flex items-center gap-8 self-stretch">
         <div className="flex flex-1 flex-row items-center gap-10">
-          <CalendarTag variation={type} />
+          <CalendarBadge variation={type} />
           {showNoticeLink && (
             <div className="flex h-[1.18rem] cursor-pointer flex-row items-center gap-3">
               <span className="text-caption-caption5 text-foreground-foreground-tertiary">

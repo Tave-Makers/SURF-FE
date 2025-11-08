@@ -38,7 +38,7 @@ const meta: Meta<typeof DailyActivityBadgeList> = {
   },
   decorators: [
     (Story) => (
-      <div className="h-[4rem] min-w-[3.12rem] items-start overflow-hidden border border-gray-200 bg-white p-1">
+      <div className="h-[4rem] min-w-[3.12rem] items-start gap-3 overflow-hidden border border-gray-200 bg-white p-1">
         <Story />
       </div>
     ),

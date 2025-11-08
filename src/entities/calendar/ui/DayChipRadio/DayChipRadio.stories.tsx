@@ -32,8 +32,11 @@ const mockActivityMap: ActivityMap = {
     createActivity('2', 'operation', '오늘 운영 회의'),
     createActivity('3', 'other', '추가 일정 (더보기)'),
   ],
-  [toYmd(TOMORROW)]: [createActivity('4', 'official', '내일 일정 하나')],
-  [toYmd(PREV_MONTH_DAY)]: [createActivity('5', 'other', '지난달 일정')],
+  [toYmd(TOMORROW)]: [
+    createActivity('4', 'official', '내일 일정 하나'),
+    createActivity('5', 'official', '내일 일정 하나'),
+  ],
+  [toYmd(PREV_MONTH_DAY)]: [createActivity('6', 'other', '지난달 일정')],
 };
 
 type DayChipRadioProps = React.ComponentProps<typeof DayChipRadio>;
@@ -72,7 +75,8 @@ export const TodayWithActivities: Story = {
   args: {
     day: createMockDay(TODAY),
     modifiers: { today: true },
-    className: 'px-2 rounded-3 h-[5rem] w-[3.12rem] truncate border border-gray-200',
+    className:
+      'px-2 rounded-3 h-[5rem] w-[3.12rem] gap-3 inline-flex truncate border border-gray-200',
   },
 };
 
@@ -80,7 +84,8 @@ export const NormalDayWithActivity: Story = {
   args: {
     day: createMockDay(TOMORROW),
     modifiers: {},
-    className: 'px-2 rounded-3 h-[5rem] w-[3.12rem] truncate border border-gray-200',
+    className:
+      'px-2 rounded-3 h-[5rem] w-[3.12rem] gap-3 inline-flex truncate border border-gray-200',
   },
 };
 
@@ -88,7 +93,8 @@ export const NoActivityDay: Story = {
   args: {
     day: createMockDay(addDays(TODAY, 2)),
     modifiers: {},
-    className: 'px-2 rounded-3 h-[5rem] w-[3.12rem] truncate border border-gray-200',
+    className:
+      'px-2 rounded-3 h-[5rem] w-[3.12rem] gap-3 inline-flex truncate border border-gray-200',
   },
 };
 
@@ -100,7 +106,8 @@ export const OutsideMonthDay: Story = {
   args: {
     day: createMockDay(PREV_MONTH_DAY, TODAY),
     modifiers: { outside: true },
-    className: 'px-2 rounded-3 h-[5rem] w-[3.12rem] truncate border border-gray-200',
+    className:
+      'px-2 rounded-3 h-[5rem] w-[3.12rem] gap-3 inline-flex truncate border border-gray-200',
   },
 };
 
@@ -108,7 +115,8 @@ export const SelectedDay: Story = {
   args: {
     day: createMockDay(TOMORROW),
     modifiers: { selected: true },
-    className: 'px-2 rounded-3 h-[5rem] w-[3.12rem] truncate border border-gray-200',
+    className:
+      'px-2 rounded-3 h-[5rem] w-[3.12rem] gap-3 inline-flex truncate border border-gray-200',
   },
   parameters: {
     docs: {

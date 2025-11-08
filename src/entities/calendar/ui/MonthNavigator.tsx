@@ -14,7 +14,12 @@ export function MonthNavigator({ month, onChange }: Props) {
 
   return (
     <div className="flex items-center justify-center gap-10">
-      <button onClick={prev} className="text-foreground-foreground-normal">
+      <button
+        type="button"
+        onClick={prev}
+        aria-label="이전 달로 이동"
+        className="text-foreground-foreground-normal"
+      >
         <SurfIcon name="ChevronLeft" size="l" />
       </button>
 
@@ -22,7 +27,12 @@ export function MonthNavigator({ month, onChange }: Props) {
         {format(month, 'yyyy년 M월', { locale: ko })}
       </div>
 
-      <button onClick={next} className="text-foreground-foreground-normal">
+      <button
+        type="button"
+        onClick={next}
+        aria-label="다음 달로 이동"
+        className="text-foreground-foreground-normal"
+      >
         <SurfIcon name="ChevronRight" size="l" />
       </button>
     </div>

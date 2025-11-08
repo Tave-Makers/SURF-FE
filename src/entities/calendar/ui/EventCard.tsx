@@ -92,7 +92,7 @@ export function EventCard({
     <button
       type="button"
       onClick={handleCardClick}
-      className="rounded-4 border-border-border-quinary bg-background-background-normal-lighter flex w-full flex-1 cursor-pointer flex-col items-start gap-8 border-[1px] px-13 py-11"
+      className="rounded-4 border-border-border-quinary bg-background-background-normal-lighter flex w-full flex-1 cursor-pointer flex-col items-start gap-8 border px-13 py-11"
     >
       {/* Header 영역 */}
       <section className="flex items-center gap-8 self-stretch">

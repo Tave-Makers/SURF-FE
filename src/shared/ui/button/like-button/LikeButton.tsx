@@ -1,4 +1,4 @@
-import { SurfIcon } from '../icon/SurfIcon';
+import { SurfIcon } from '@/shared/ui/icon/SurfIcon';
 
 /**
  * 좋아요 버튼 컴포넌트 (Controlled Component)

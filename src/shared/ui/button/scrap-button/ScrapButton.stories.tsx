@@ -4,7 +4,7 @@ import ScrapButton from './ScrapButton';
 
 // ---------- Meta ----------
 const meta: Meta<typeof ScrapButton> = {
-  title: 'Shared/UI/ScrapButton',
+  title: 'Shared/UI/Button/ScrapButton',
   component: ScrapButton,
   tags: ['autodocs'],
   argTypes: {

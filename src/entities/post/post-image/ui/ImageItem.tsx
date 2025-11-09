@@ -22,8 +22,14 @@ export function ImageItem({ file, onRemove }: ImageItemProps) {
       {/* 삭제 버튼 */}
       <button
         type="button"
-        onClick={onRemove}
-        className="absolute top-1 right-1 flex h-5 w-5 items-center justify-center rounded-full bg-black/50 text-xs text-white"
+        onPointerDown={(e) => {
+          e.stopPropagation(); // DnDKit으로 이벤트 버블링 방지
+        }}
+        onClick={(e) => {
+          e.stopPropagation();
+          onRemove?.();
+        }}
+        className="absolute top-1 right-1 flex h-10 w-10 items-center justify-center rounded-full bg-black text-xs text-white"
       >
         ✕
       </button>

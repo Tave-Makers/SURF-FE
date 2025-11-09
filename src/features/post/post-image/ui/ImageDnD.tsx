@@ -54,7 +54,7 @@ export function ImageDnD({ images, onReorder, onRemove }: ImageDnDProps) {
     >
       {/* 드래그 가능한 아이템 컨텍스트 */}
       <SortableContext items={images.map((img) => img.id)} strategy={verticalListSortingStrategy}>
-        <div className="flex gap-3 overflow-x-auto py-2">
+        <div className="flex w-full gap-5 overflow-x-auto py-10">
           {images.map((image, index) => (
             <SortableImage
               key={image.id}

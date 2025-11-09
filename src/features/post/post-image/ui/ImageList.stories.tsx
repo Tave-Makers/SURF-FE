@@ -16,5 +16,9 @@ type Story = StoryObj<typeof ImageList>;
  * 실제 업로드 / 삭제 / 드래그 모두 가능한 스토리
  */
 export const Default: Story = {
-  render: () => <ImageList />,
+  render: () => (
+    <div className="w-[360px]">
+      <ImageList />
+    </div>
+  ),
 };

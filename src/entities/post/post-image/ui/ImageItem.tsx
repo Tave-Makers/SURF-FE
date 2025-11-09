@@ -15,9 +15,13 @@ type ImageItemProps = {
 
 export function ImageItem({ file, onRemove }: ImageItemProps) {
   return (
-    <div className="relative h-20 w-20 overflow-hidden rounded-md">
+    <div className="relative h-20 w-20 overflow-visible">
       {/* 파일을 즉시 미리보기로 표시 */}
-      <img src={URL.createObjectURL(file)} alt="preview" className="h-full w-full object-cover" />
+      <img
+        src={URL.createObjectURL(file)}
+        alt="preview"
+        className="h-full w-full rounded-md object-cover"
+      />
 
       {/* 삭제 버튼 */}
       <button
@@ -29,7 +33,7 @@ export function ImageItem({ file, onRemove }: ImageItemProps) {
           e.stopPropagation();
           onRemove?.();
         }}
-        className="absolute top-1 right-1 flex h-10 w-10 items-center justify-center rounded-full bg-black text-xs text-white"
+        className="absolute -top-1.5 -right-1.5 flex h-10 w-10 items-center justify-center rounded-full bg-black text-xs text-white"
       >
         ✕
       </button>

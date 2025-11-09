@@ -64,7 +64,7 @@ export function ImageDnD({ images, onReorder, onRemove }: ImageDnDProps) {
     >
       {/* 드래그 가능한 아이템 컨텍스트 */}
       <SortableContext items={images.map((img) => img.id)} strategy={horizontalListSortingStrategy}>
-        <div className="scrollbar-hide flex w-full gap-5 overflow-x-auto py-10">
+        <div className="scrollbar-hide flex w-full gap-11 overflow-x-auto px-13 py-10">
           {images.map((image, index) => (
             <SortableImage
               key={image.id}

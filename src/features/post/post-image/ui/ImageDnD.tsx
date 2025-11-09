@@ -12,9 +12,10 @@ import { SortableContext, useSortable, verticalListSortingStrategy } from '@dnd-
 import { CSS } from '@dnd-kit/utilities';
 import { restrictToParentElement } from '@dnd-kit/modifiers';
 import { ImageItem } from '@/entities/post/post-image/ui/ImageItem';
+import { ImageData } from '../model/types';
 
 type ImageDnDProps = {
-  images: File[]; // 현재 이미지 배열
+  images: ImageData[]; // 현재 이미지 배열
   onReorder: (from: number, to: number) => void; // 드래그 종료 시 순서 변경
   onRemove: (index: number) => void; // 이미지 삭제 핸들러
 };
@@ -38,7 +39,10 @@ export function ImageDnD({ images, onReorder, onRemove }: ImageDnDProps) {
   const handleDragEnd = (event: DragEndEvent) => {
     const { active, over } = event;
     if (!over || active.id === over.id) return;
-    onReorder(active.id as number, over.id as number);
+    onReorder(
+      images.findIndex((img) => img.id === active.id),
+      images.findIndex((img) => img.id === over.id),
+    );
   };
 
   return (
@@ -49,10 +53,15 @@ export function ImageDnD({ images, onReorder, onRemove }: ImageDnDProps) {
       modifiers={[restrictToParentElement]}
     >
       {/* 드래그 가능한 아이템 컨텍스트 */}
-      <SortableContext items={images.map((_, i) => i)} strategy={verticalListSortingStrategy}>
+      <SortableContext items={images.map((img) => img.id)} strategy={verticalListSortingStrategy}>
         <div className="flex gap-3 overflow-x-auto py-2">
-          {images.map((file, index) => (
-            <SortableImage key={index} id={index} file={file} onRemove={() => onRemove(index)} />
+          {images.map((image, index) => (
+            <SortableImage
+              key={image.id}
+              id={image.id}
+              file={image.file}
+              onRemove={() => onRemove(index)}
+            />
           ))}
         </div>
       </SortableContext>
@@ -65,7 +74,7 @@ export function ImageDnD({ images, onReorder, onRemove }: ImageDnDProps) {
  *
  * @param id 각 이미지의 고유 인덱스 (드래그 식별용)
  */
-function SortableImage({ id, file, onRemove }: { id: number; file: File; onRemove: () => void }) {
+function SortableImage({ id, file, onRemove }: { id: string; file: File; onRemove: () => void }) {
   // 이 이미지가 드래그 가능한 대상임을 선언
   const { attributes, listeners, setNodeRef, transform, transition, isDragging } = useSortable({
     id,

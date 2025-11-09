@@ -2,12 +2,17 @@ import { useState } from 'react';
 import { ImageDnD } from './ImageDnD';
 import { ImageUploader } from './ImageUploader';
 import { reorderArray } from '../lib/reorder';
+import { ImageData } from '../model/types';
 
 export function ImageList() {
-  const [images, setImages] = useState<File[]>([]);
+  const [images, setImages] = useState<ImageData[]>([]);
 
   const handleSelect = (files: File[]) => {
-    setImages((prev) => [...prev, ...files]);
+    const newImages = files.map((file) => ({
+      id: crypto.randomUUID(), // 브라우저 내장 UUID
+      file,
+    }));
+    setImages((prev) => [...prev, ...newImages]);
   };
 
   const handleRemove = (index: number) => {

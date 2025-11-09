@@ -1,4 +1,5 @@
 'use client';
+import DeleteIcon from '@/shared/assets/icons/post/post-image/x-circle-fill.svg';
 
 type ImageItemProps = {
   file: File; // 업로드된 이미지 파일 객체
@@ -33,9 +34,9 @@ export function ImageItem({ file, onRemove }: ImageItemProps) {
           e.stopPropagation();
           onRemove?.();
         }}
-        className="absolute -top-1.5 -right-1.5 flex h-10 w-10 items-center justify-center rounded-full bg-black text-xs text-white"
+        className="absolute -top-1.5 -right-1.5 flex items-center justify-center rounded-full bg-black text-xs text-white"
       >
-        ✕
+        <DeleteIcon />
       </button>
     </div>
   );

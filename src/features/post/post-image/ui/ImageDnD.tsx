@@ -7,12 +7,15 @@ import {
   useSensor,
   useSensors,
   DragEndEvent,
+  DragStartEvent,
+  DragOverlay,
 } from '@dnd-kit/core';
-import { SortableContext, useSortable, verticalListSortingStrategy } from '@dnd-kit/sortable';
+import { horizontalListSortingStrategy, SortableContext, useSortable } from '@dnd-kit/sortable';
 import { CSS } from '@dnd-kit/utilities';
 import { restrictToParentElement } from '@dnd-kit/modifiers';
 import { ImageItem } from '@/entities/post/post-image/ui/ImageItem';
 import { ImageData } from '../model/types';
+import { useState } from 'react';
 
 type ImageDnDProps = {
   images: ImageData[]; // 현재 이미지 배열
@@ -30,6 +33,11 @@ type ImageDnDProps = {
 export function ImageDnD({ images, onReorder, onRemove }: ImageDnDProps) {
   // 마우스 드래그 이벤트 인식 센서 등록
   const sensors = useSensors(useSensor(PointerSensor));
+  const [activeId, setActiveId] = useState<string | null>(null);
+
+  const handleDragStart = (event: DragStartEvent) => {
+    setActiveId(event.active.id as string);
+  };
 
   /**
    * 드래그 종료 시 실행되는 콜백
@@ -38,22 +46,24 @@ export function ImageDnD({ images, onReorder, onRemove }: ImageDnDProps) {
    */
   const handleDragEnd = (event: DragEndEvent) => {
     const { active, over } = event;
+    setActiveId(null);
     if (!over || active.id === over.id) return;
-    onReorder(
-      images.findIndex((img) => img.id === active.id),
-      images.findIndex((img) => img.id === over.id),
-    );
+
+    const oldIndex = images.findIndex((img) => img.id === active.id);
+    const newIndex = images.findIndex((img) => img.id === over.id);
+    onReorder(oldIndex, newIndex);
   };
 
   return (
     <DndContext
       sensors={sensors}
       collisionDetection={closestCenter}
+      onDragStart={handleDragStart}
       onDragEnd={handleDragEnd}
       modifiers={[restrictToParentElement]}
     >
       {/* 드래그 가능한 아이템 컨텍스트 */}
-      <SortableContext items={images.map((img) => img.id)} strategy={verticalListSortingStrategy}>
+      <SortableContext items={images.map((img) => img.id)} strategy={horizontalListSortingStrategy}>
         <div className="flex w-full gap-5 overflow-x-auto py-10">
           {images.map((image, index) => (
             <SortableImage
@@ -65,6 +75,18 @@ export function ImageDnD({ images, onReorder, onRemove }: ImageDnDProps) {
           ))}
         </div>
       </SortableContext>
+
+      {/**
+       * 드래그 시 재정렬된 복제본(시각적 피드백)을 표시하는 역할.
+       * 실제 데이터 변경은 onReorder에서 처리
+       */}
+      <DragOverlay>
+        {activeId ? (
+          <div className="scale-105 cursor-grabbing opacity-80">
+            <ImageItem file={images.find((img) => img.id === activeId)!.file} />
+          </div>
+        ) : null}
+      </DragOverlay>
     </DndContext>
   );
 }
@@ -83,21 +105,14 @@ function SortableImage({ id, file, onRemove }: { id: string; file: File; onRemov
   // 드래그 중일 때 위치 이동 애니메이션 적용
   const style: React.CSSProperties = {
     transform: CSS.Transform.toString(transform),
-    transition: isDragging ? undefined : transition,
+    transition: transition,
     willChange: 'transform',
-    zIndex: isDragging ? 9999 : 1, // 드래그 중이면 맨 위로
-    position: isDragging ? 'relative' : 'static', // zIndex가 적용되도록 position 지정
+    opacity: isDragging ? 0 : 1, // 드래그 중이면 투명 처리
   };
 
   // ImageItem을 드래그 가능하게 감싸서 렌더링
   return (
-    <div
-      ref={setNodeRef}
-      style={style}
-      {...attributes}
-      {...listeners}
-      className={isDragging ? 'scale-105 cursor-grabbing' : 'cursor-grab'}
-    >
+    <div ref={setNodeRef} style={style} {...attributes} {...listeners} className={'cursor-grab'}>
       <ImageItem file={file} onRemove={onRemove} />
     </div>
   );

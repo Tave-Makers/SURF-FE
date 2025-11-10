@@ -12,7 +12,10 @@
     "storybook": "storybook dev -p 6006",
     "build-storybook": "storybook build",
     "convert-typo": "node --loader ts-node/esm scripts/convert-typo.ts",
-    "convert-color": "node --loader ts-node/esm scripts/convert-color.ts"
+    "convert-color": "node --loader ts-node/esm scripts/convert-color.ts",
+    "test": "vitest",
+    "test:ui": "vitest --ui",
+    "test:run": "vitest run"
   },
   "lint-staged": {
     "*.{js,jsx,ts,tsx}": [

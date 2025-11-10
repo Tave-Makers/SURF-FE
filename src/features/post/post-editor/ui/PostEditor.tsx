@@ -11,8 +11,8 @@ export const PostEditor = ({ initialContent }: { initialContent?: string }) => {
   if (!editor) return null;
 
   return (
-    <div>
-      <div className={['px-13 py-8'].join(' ')}>
+    <div className="flex h-full w-full flex-col gap-10">
+      <div className="scrollbar-hide text-foreground-foreground-black text-body-body8 flex flex-1 overflow-y-auto px-13">
         <EditorContent editor={editor} />
       </div>
       <PostEditorToolbar editor={editor} />

@@ -6,6 +6,6 @@ export const POST_EDITOR_EXTENSIONS = [
   StarterKit,
   TextStyleExtension,
   Placeholder.configure({
-    placeholder: '게시글 내용을 입력하세요...',
+    placeholder: '글, 제목, 내용을 입력해주세요.',
   }),
 ];

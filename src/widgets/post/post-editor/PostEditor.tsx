@@ -1,13 +1,12 @@
 'use client';
 
-import './PostEditor.style.css';
+import '@/features/post/post-editor/ui/PostEditor.style.css';
+import { usePostEditor } from '@/features/post/post-editor/lib/usePostEditor';
+import { PostEditorToolbar } from '@/features/post/post-editor/ui/PostEditorToolbar';
 import { EditorContent } from '@tiptap/react';
-import { usePostEditor } from '../lib/usePostEditor';
-import { PostEditorToolbar } from './PostEditorToolbar';
 
 export const PostEditor = ({ initialContent }: { initialContent?: string }) => {
   const editor = usePostEditor(initialContent);
-
   if (!editor) return null;
 
   return (

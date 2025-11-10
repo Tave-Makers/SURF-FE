@@ -2,7 +2,7 @@ import type { Meta, StoryObj } from '@storybook/nextjs';
 import { PostEditor } from './PostEditor';
 
 const meta: Meta<typeof PostEditor> = {
-  title: 'Features/UI/Post/PostEditor/PostEditor',
+  title: 'Widgets/UI/Post/PostEditor/PostEditor',
   component: PostEditor,
   tags: ['autodocs'],
   parameters: {

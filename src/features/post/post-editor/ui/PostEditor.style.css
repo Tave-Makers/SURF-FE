@@ -1,7 +1,10 @@
+/* -------------------------------
+ * PostEditor 전용 스타일
+ * ------------------------------- */
+
 /* Placeholder 스타일 정의 */
 .ProseMirror p.is-editor-empty:first-child::before {
   content: attr(data-placeholder);
-  font: var(--font-body-body8);
   color: var(--color-foreground-foreground-tertiary-lighter);
   pointer-events: none;
 }

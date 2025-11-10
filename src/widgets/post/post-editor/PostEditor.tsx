@@ -20,7 +20,7 @@ export const PostEditor = ({ initialContent }: { initialContent?: string }) => {
           if (!editor.isFocused) editor.commands.focus('end');
         }}
         onKeyDown={(e) => {
-          if (e.key === 'Enter' || e.key === ' ') {
+          if (!editor.isFocused && (e.key === 'Enter' || e.key === ' ')) {
             e.preventDefault();
             if (!editor.isFocused) editor.commands.focus('end');
           }

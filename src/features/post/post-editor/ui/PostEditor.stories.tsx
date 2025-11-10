@@ -1,9 +1,9 @@
-import type { Meta, StoryObj } from '@storybook/nextjs-vite';
+import type { Meta, StoryObj } from '@storybook/nextjs';
 import { PostEditor } from './PostEditor';
 
 // Storybook 메타데이터 설정
 const meta: Meta<typeof PostEditor> = {
-  title: 'Features/UI/Post/PostEditor',
+  title: 'Features/UI/Post/PostEditor/PostEditor',
   component: PostEditor,
   tags: ['autodocs'],
   parameters: {

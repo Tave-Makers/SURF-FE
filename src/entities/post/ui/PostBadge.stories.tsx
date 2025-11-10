@@ -1,4 +1,4 @@
-import type { Meta, StoryObj } from '@storybook/nextjs-vite';
+import type { Meta, StoryObj } from '@storybook/nextjs';
 import { PostBadge } from './PostBadge';
 
 const meta: Meta<typeof PostBadge> = {
@@ -41,8 +41,8 @@ export const Reservation: Story = {
 export const AllVariations: Story = {
   render: () => (
     <div className="flex gap-8">
-      <PostBadge variation="reservation" />
-      <PostBadge variation="event" />
+      <PostBadge id={1} variation="reservation" />
+      <PostBadge id={2} variation="event" />
     </div>
   ),
 };

@@ -34,8 +34,6 @@ const config: StorybookConfig = {
       use: ['@svgr/webpack'],
     });
 
-    config.mode = 'development';
-
     return config;
   },
 };

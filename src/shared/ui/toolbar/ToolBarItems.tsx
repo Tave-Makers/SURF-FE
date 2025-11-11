@@ -7,15 +7,13 @@ type ToolBarItemsProps = {
   label: string;
   icon: IconName;
   onClick?: MouseEventHandler<HTMLButtonElement>;
-  active?: boolean;
 };
 
-export function ToolBarItems({ label, icon, active = false, onClick }: ToolBarItemsProps) {
+export function ToolBarItems({ label, icon, onClick }: ToolBarItemsProps) {
   return (
     <button
       type="button"
       onClick={onClick}
-      aria-pressed={active}
       className={
         'text-foreground-foreground-normal inline-flex items-center gap-5 focus:outline-none'
       }

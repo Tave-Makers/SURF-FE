@@ -30,7 +30,12 @@ export default function PostPage() {
         />
       </div>
 
-      <ModalSheet isOpen={isOpen} onClose={close} aria-labelledby={sheetId} className="flex w-full">
+      <ModalSheet
+        isOpen={isOpen}
+        onClose={close}
+        aria-labelledby={sheetId}
+        className="mx-auto flex w-full sm:w-[360px]"
+      >
         <ModalSheet.Container>
           <ModalSheet.Header />
           <ModalSheet.Content>

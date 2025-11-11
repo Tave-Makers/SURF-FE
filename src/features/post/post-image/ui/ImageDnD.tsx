@@ -112,7 +112,15 @@ function SortableImage({ id, file, onRemove }: { id: string; file: File; onRemov
 
   // ImageItem을 드래그 가능하게 감싸서 렌더링
   return (
-    <div ref={setNodeRef} style={style} {...attributes} {...listeners} className={'cursor-grab'}>
+    <div
+      ref={setNodeRef}
+      style={style}
+      {...attributes}
+      {...listeners}
+      className={'cursor-grab'}
+      role="button"
+      aria-label={`이미지 ${file.name}, 드래그하여 순서 변경`}
+    >
       <ImageItem file={file} onRemove={onRemove} />
     </div>
   );

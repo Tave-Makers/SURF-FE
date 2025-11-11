@@ -29,11 +29,16 @@ export function ImageItem({ file, onRemove }: ImageItemProps) {
   return (
     <div className="relative h-20 w-20 overflow-visible">
       {/* 파일을 즉시 미리보기로 표시 */}
-      <img src={previewUrl} alt="preview" className="h-full w-full rounded-md object-cover" />
+      <img
+        src={previewUrl}
+        alt={`${file.name} 미리보기`}
+        className="h-full w-full rounded-md object-cover"
+      />
 
       {/* 삭제 버튼 */}
       <button
         type="button"
+        aria-label="이미지 삭제"
         onPointerDown={(e) => {
           e.stopPropagation(); // DnDKit으로 이벤트 버블링 방지
         }}

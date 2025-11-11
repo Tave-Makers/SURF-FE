@@ -12,16 +12,17 @@ const items: ToolBarItem[] = [
 
 type Props = {
   editor: Editor;
+  onCameraClick: () => void; // 파일 탐색기 여는 콜백
 };
 
-export const PostEditorToolbar = ({ editor }: Props) => {
+export const PostEditorToolbar = ({ editor, onCameraClick }: Props) => {
   const handleItemClick = (key: string) => {
     switch (key) {
       case 'bold':
         editor.chain().focus().toggleBold().run();
         break;
       case 'camera':
-        console.log('사진 업로드 클릭');
+        onCameraClick();
         break;
       case 'alarm':
         console.log('예약 버튼 클릭');

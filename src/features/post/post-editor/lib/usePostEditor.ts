@@ -12,5 +12,6 @@ export const usePostEditor = (initialContent?: string) => {
         class: '',
       },
     },
+    immediatelyRender: false,
   });
 };

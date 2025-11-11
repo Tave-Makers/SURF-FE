@@ -46,7 +46,7 @@ export const SettingsList = () => {
   };
 
   return (
-    <div className="flex flex-1 flex-col items-start px-[1rem] pt-[0.62rem]">
+    <div className="flex flex-1 flex-col items-start gap-1 pt-10">
       {SETTINGS_ITEMS.map((item) => (
         <SettingsItem
           key={item.id}

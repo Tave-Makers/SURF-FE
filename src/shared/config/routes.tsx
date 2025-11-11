@@ -209,9 +209,9 @@ export const createRouteConfig = (router: RouterInstance): RouteConfig[] => [
     },
   },
   {
-    id: 'notice-detail',
-    path: '/notice/[id]',
-    backPath: '/notice',
+    id: 'post-detail',
+    path: '/board/[boardId]/post/[postId]',
+    backPath: '/board/[boardId]',
     header: {
       mode: HeaderMode.Default,
       title: '공지사항',

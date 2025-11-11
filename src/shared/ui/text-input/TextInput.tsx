@@ -16,39 +16,11 @@ type SurfIconName = ComponentProps<typeof SurfIcon>['name'];
 /**
  * 범용 텍스트 입력 컴포넌트
  *
- * Controlled / Uncontrolled 양쪽 모드 모두 지원하며,
- * `mode`에 따라 입력 동작(줄바꿈 허용 여부 및 높이 자동 확장)이 달라집니다.
- *
- * ---
- * ### 🧩 사용 예시
- *
- * **Controlled**
- * ```tsx
- * const [text, setText] = useState('');
- * <TextInput mode="chat" value={text} onChange={setText} placeholder="메시지를 입력하세요" />
- * ```
- *
- * **Uncontrolled**
- * ```tsx
- * <TextInput mode="search" defaultValue="기본 메시지" placeholder="검색어를 입력하세요" />
- * ```
- *
- * ---
- * ### ⚙️ Props
- * @typedef {object} TextInputProps
- * @property {'search' | 'chat'} mode - 입력 모드 (줄바꿈 및 높이 자동 확장 여부 제어)
- * @property {string} [value] - 입력값 (Controlled 모드)
- * @property {(val: string) => void} [onChange] - 입력값 변경 핸들러 (Controlled 모드)
- * @property {string} [placeholder] - placeholder 텍스트
- * @property {string} [iconName] - 우측 아이콘 이름
- * @property {() => void} [onIconClick] - 아이콘 클릭 시 호출되는 콜백
- * @property {(val: string) => void} [onEnter] - Enter 입력 시 호출되는 콜백
- * @property {string | number | string[]} [defaultValue] - uncontrolled 모드 초기값
- * @property {string} [aria-label] - 접근성용 레이블 (기본값: `"텍스트 입력"`)
+ * Controlled / Uncontrolled 양쪽 모드 모두 지원.
+ * `mode`에 따라 줄바꿈 허용 여부 및 높이 자동 확장 방식이 달라집니다.
  */
 
-const MAX_TEXTAREA_HEIGHT = 120; // 최대 높이 제한
-const WRAPPER_VERTICAL_PADDING = 12; // 패딩 보정값
+const MAX_TEXTAREA_HEIGHT = 100; // 최대 높이(px)
 
 type TextInputProps = {
   mode: 'search' | 'chat';
@@ -61,46 +33,46 @@ type TextInputProps = {
 } & Omit<TextareaHTMLAttributes<HTMLTextAreaElement>, 'value' | 'onChange' | 'className'>;
 
 export const TextInput = forwardRef<HTMLTextAreaElement, TextInputProps>(
-  ({ mode, value, onChange, placeholder, iconName, onIconClick, onEnter, ...rest }, ref) => {
+  (
+    {
+      mode,
+      value,
+      onChange,
+      placeholder,
+      iconName,
+      onIconClick,
+      onEnter,
+      defaultValue,
+      onKeyDown,
+      ['aria-label']: ariaLabel,
+      ...rest
+    },
+    ref,
+  ) => {
     const internalRef = useRef<HTMLTextAreaElement>(null);
-    const wrapperRef = useRef<HTMLDivElement>(null);
+    useImperativeHandle(ref, () => internalRef.current!);
 
-    const { onKeyDown, defaultValue, ['aria-label']: ariaLabel, ...inputProps } = rest;
-
-    // uncontrolled 모드일 때 defaultValue를 문자열로 변환
-    const normalizedDefault =
-      defaultValue === undefined
-        ? ''
-        : Array.isArray(defaultValue)
-          ? defaultValue.join('')
-          : String(defaultValue);
+    // Uncontrolled 기본값 처리
+    const normalizedDefault = Array.isArray(defaultValue)
+      ? defaultValue.join('')
+      : (defaultValue?.toString() ?? '');
 
     const [internalValue, setInternalValue] = useState(value ?? normalizedDefault);
+    const currentValue = value ?? internalValue;
 
-    useImperativeHandle(ref, () => internalRef.current as HTMLTextAreaElement);
-
+    /** 입력값 변경 핸들러 */
     const handleChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
-      if (onChange) onChange(e.target.value);
-      else setInternalValue(e.target.value);
+      const newValue = e.target.value;
+      if (onChange) onChange(newValue);
+      else setInternalValue(newValue);
     };
 
-    const currentValue = value !== undefined ? value : internalValue;
-
-    /** 높이 자동 확장
-     * textarea 입력 내용에 따라 높이를 조절하고,
-     * wrapper는 상하 패딩(WRAPPER_VERTICAL_PADDING)을 포함하여 자연스러운 확장 유지
-     */
+    /** 자동 높이 확장 */
     useEffect(() => {
-      if (!internalRef.current || !wrapperRef.current) return;
-
       const textarea = internalRef.current;
-      const wrapper = wrapperRef.current;
-
-      // textarea 높이 초기화 후 scrollHeight 계산
+      if (!textarea) return;
       textarea.style.height = 'auto';
-      const newHeight = Math.min(textarea.scrollHeight, MAX_TEXTAREA_HEIGHT);
-      textarea.style.height = `${newHeight}px`;
-      wrapper.style.height = `${newHeight + WRAPPER_VERTICAL_PADDING}px`;
+      textarea.style.height = `${Math.min(textarea.scrollHeight, MAX_TEXTAREA_HEIGHT)}px`;
     }, [currentValue]);
 
     /** Enter / Shift+Enter 제어 */
@@ -108,35 +80,37 @@ export const TextInput = forwardRef<HTMLTextAreaElement, TextInputProps>(
       onKeyDown?.(event);
       if (event.defaultPrevented) return;
 
-      // chat + Shift+Enter → 줄바꿈 허용
       if (event.key === 'Enter') {
-        if (mode === 'search' || (mode === 'chat' && !event.shiftKey)) {
+        const isSingleLine = mode === 'search' || (mode === 'chat' && !event.shiftKey);
+        if (isSingleLine) {
           event.preventDefault();
           onEnter?.(event.currentTarget.value);
+
+          // Uncontrolled 모드일 때 입력창 초기화
+          if (value === undefined) {
+            setInternalValue('');
+          }
         }
       }
     };
 
     return (
-      <div
-        ref={wrapperRef}
-        className="bg-background-background-quaternary rounded-6 flex min-h-[2.25rem] w-full flex-1 items-center justify-between py-7 pr-8 pl-11 transition-[height] duration-150 ease-in-out"
-      >
+      <div className="rounded-6 bg-background-background-quaternary flex min-h-[2.25rem] w-full flex-1 items-center justify-between py-7 pr-8 pl-11 transition-[height] duration-150 ease-in-out">
         <textarea
           ref={internalRef}
           value={currentValue}
           onChange={handleChange}
           onKeyDown={handleKeyDown}
           rows={1}
-          className="text-body-body7 text-foreground-foreground-normal placeholder-foreground-foreground-quaternary flex-1 resize-none overflow-hidden bg-transparent leading-[1.25rem] outline-none"
           placeholder={placeholder}
-          {...inputProps}
           aria-label={ariaLabel ?? '텍스트 입력'}
+          {...rest}
+          className="text-body-body7 text-foreground-foreground-normal placeholder-foreground-foreground-quaternary flex-1 resize-none overflow-y-auto bg-transparent outline-none [-ms-overflow-style:none] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden"
         />
         {iconName && (
           <button
             type="button"
-            aria-label="아이콘 버튼"
+            aria-label="입력창 아이콘 버튼"
             onClick={onIconClick}
             className="flex cursor-pointer items-center justify-center self-end"
           >

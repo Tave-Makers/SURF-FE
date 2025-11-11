@@ -1,6 +1,6 @@
 'use client';
 import DeleteIcon from '@/shared/assets/icons/post/post-image/x-circle-fill.svg';
-import { useEffect, useMemo } from 'react';
+import { useEffect, useState } from 'react';
 
 type ImageItemProps = {
   file: File; // 업로드된 이미지 파일 객체
@@ -8,23 +8,24 @@ type ImageItemProps = {
 };
 
 /**
- * 개별 이미지 썸네일 컴포넌트
+ * 개별 이미지 파일을 썸네일로 표시하고, 삭제 버튼을 통해 제거할 수 있는 컴포넌트
  *
- * 역할:
- * - 이미지 미리보기 표시
- * - 삭제 버튼 제공
+ * @param {File} props.file - 미리보기로 표시할 업로드된 이미지 파일 객체.
+ * @param {() => void} [props.onRemove] - 삭제 버튼 클릭 시 호출되는 콜백 함수 (선택적)
  */
 
 export function ImageItem({ file, onRemove }: ImageItemProps) {
-  // Object URL을 메모이제이션하여 불필요한 재생성 방지
-  const previewUrl = useMemo(() => URL.createObjectURL(file), [file]);
+  const [previewUrl, setPreviewUrl] = useState<string>();
 
-  // 컴포넌트 언마운트 또는 파일 변경 시 Object URL 정리
   useEffect(() => {
-    return () => {
-      URL.revokeObjectURL(previewUrl);
-    };
-  }, [previewUrl]);
+    const url = URL.createObjectURL(file);
+    setPreviewUrl(url);
+
+    // 언마운트될 때만 revoke (렌더 중복 방지)
+    return () => URL.revokeObjectURL(url);
+  }, [file]);
+
+  if (!previewUrl) return null;
 
   return (
     <div className="relative h-20 w-20 overflow-visible">
@@ -32,6 +33,7 @@ export function ImageItem({ file, onRemove }: ImageItemProps) {
       <img
         src={previewUrl}
         alt={`${file.name} 미리보기`}
+        draggable={false}
         className="h-full w-full rounded-md object-cover"
       />
 

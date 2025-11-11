@@ -1,3 +1,4 @@
+'use client';
 import { forwardRef, useRef, useImperativeHandle } from 'react';
 import { TextInput } from '../text-input/TextInput';
 import { SurfIcon } from '../icon/SurfIcon';
@@ -80,6 +81,7 @@ export const ActionBar = forwardRef<HTMLTextAreaElement, ActionBarProps>(
       } else if (internalRef.current) {
         internalRef.current.value = '';
         internalRef.current.dispatchEvent(new Event('input', { bubbles: true }));
+        internalRef.current.style.height = 'auto';
       }
 
       internalRef.current?.focus(); // 포커스 유지

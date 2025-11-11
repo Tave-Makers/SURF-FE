@@ -34,6 +34,7 @@ export function ImageDnD({ images, onReorder, onRemove }: ImageDnDProps) {
   // 마우스 드래그 이벤트 인식 센서 등록
   const sensors = useSensors(useSensor(PointerSensor));
   const [activeId, setActiveId] = useState<string | null>(null);
+  const activeImage = activeId ? images.find((img) => img.id === activeId) : null;
 
   const handleDragStart = (event: DragStartEvent) => {
     setActiveId(event.active.id as string);
@@ -81,9 +82,9 @@ export function ImageDnD({ images, onReorder, onRemove }: ImageDnDProps) {
        * 실제 데이터 변경은 onReorder에서 처리
        */}
       <DragOverlay>
-        {activeId ? (
+        {activeImage ? (
           <div className="scale-105 cursor-grabbing opacity-80">
-            <ImageItem file={images.find((img) => img.id === activeId)!.file} />
+            <ImageItem file={activeImage.file} />
           </div>
         ) : null}
       </DragOverlay>

@@ -23,8 +23,8 @@ export const Default: Story = {
 
     const handleSelect = (e: React.ChangeEvent<HTMLInputElement>) => {
       if (!e.target.files) return;
-      const files = Array.from(e.target.files);
-      setFiles(files);
+      const selectedFiles = Array.from(e.target.files);
+      setFiles(selectedFiles);
     };
 
     return (

@@ -37,7 +37,11 @@ export function ImageList({ files }: ImageListProps) {
 
   /** 이미지 삭제 */
   const handleRemove = (index: number) => {
-    setImages((prev) => prev.filter((_, i) => i !== index));
+    setImages((prev) => {
+      const target = prev[index];
+      if (target?.preview) URL.revokeObjectURL(target.preview); // 메모리 해제
+      return prev.filter((_, i) => i !== index);
+    });
   };
 
   /** 드래그 정렬 */

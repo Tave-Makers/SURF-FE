@@ -17,7 +17,7 @@ import { ComponentProps } from 'react';
  * @param {boolean} [props.isClicked=false] - 현재 클릭 상태 (부모에서 관리)
  * @param {number} [props.count=0] - 숫자 값 (부모에서 관리)
  * @param {(newState: boolean) => void} [props.onToggleIcon] - 아이콘 클릭 시 호출되는 콜백
- * @param {string} [props.activeColor='foreground-foreground-danger'] - 활성화 상태일 때 적용할 색상 클래스
+ * @param {ActiveColorVariant} [props.activeColor='red'] - 활성화 상태일 때 적용할 색상 클래스
  * @param {() => void} [props.onClickNumber] - 숫자 클릭 시 호출되는 콜백 (없으면 `onToggleIcon`이 기본 실행됨)
  *
  * @example
@@ -46,9 +46,11 @@ export type ChipToggleProps = {
   isClicked: boolean;
   count: number;
   onToggleIcon: (newState: boolean) => void;
-  activeColor: string;
+  activeColor: ActiveColorVariant;
   onClickNumber?: () => void;
 };
+
+export type ActiveColorVariant = 'red' | 'blue';
 
 export const ChipToggle = ({
   iconName,
@@ -63,6 +65,12 @@ export const ChipToggle = ({
   const colorStyle = 'bg-background-background-normal-lighter border-border-border-normal';
   const interactionStyle =
     'hover:bg-background-background-secondary-darker hover:border-border-border-secondary active:bg-background-background-secondary-darker active:border-border-border-secondary';
+
+  // 색상 매핑
+  const colorMap: Record<ActiveColorVariant, string> = {
+    red: 'text-foreground-foreground-danger fill-foreground-foreground-danger',
+    blue: 'text-background-background-primary fill-background-background-primary',
+  };
 
   const handleToggle = () => {
     onToggleIcon(!isClicked);
@@ -80,9 +88,7 @@ export const ChipToggle = ({
           name={iconName}
           size="s"
           className={`shrink-0 ${
-            isClicked
-              ? `text-${activeColor} fill-${activeColor}`
-              : 'text-foreground-foreground-normal'
+            isClicked ? colorMap[activeColor] : 'text-foreground-foreground-normal'
           }`}
         />
         <span className="text-body-body7 text-foreground-foreground-normal">{count}</span>

@@ -4,7 +4,7 @@ import { ChipToggle } from './ChipToggle';
 
 // ---------- Meta ----------
 const meta: Meta<typeof ChipToggle> = {
-  title: 'Shared/UI/Button/ChipToggle',
+  title: 'Shared/UI/ChipToggle',
   component: ChipToggle,
   tags: ['autodocs'],
   argTypes: {
@@ -24,7 +24,7 @@ const meta: Meta<typeof ChipToggle> = {
     activeColor: {
       control: 'text',
       description: '활성화 상태일 때 적용할 색상 클래스',
-      defaultValue: 'foreground-foreground-danger',
+      defaultValue: 'red',
     },
     onToggleIcon: {
       action: 'icon-toggled',
@@ -48,7 +48,7 @@ export const Default: Story = {
     iconName: 'Heart',
     isClicked: false,
     count: 23,
-    activeColor: 'foreground-foreground-danger',
+    activeColor: 'red',
   },
 };
 
@@ -58,7 +58,7 @@ export const Clicked: Story = {
     iconName: 'Heart',
     isClicked: true,
     count: 23,
-    activeColor: 'foreground-foreground-danger',
+    activeColor: 'red',
   },
 };
 
@@ -88,7 +88,7 @@ export const WithoutNumberClick: Story = {
     iconName: 'Heart',
     isClicked: false,
     count: 42,
-    activeColor: 'foreground-foreground-danger',
+    activeColor: 'red',
   },
 };
 
@@ -123,7 +123,7 @@ export const WithNumberClick: Story = {
     iconName: 'Heart',
     isClicked: false,
     count: 42,
-    activeColor: 'foreground-foreground-danger',
+    activeColor: 'red',
   },
 };
 
@@ -145,7 +145,7 @@ export const ScrapButton: Story = {
         isClicked={clicked}
         count={count}
         onToggleIcon={handleToggle}
-        activeColor="background-background-primary"
+        activeColor="blue"
       />
     );
   },

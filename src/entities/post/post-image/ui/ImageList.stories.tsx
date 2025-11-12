@@ -1,10 +1,12 @@
+'use client';
+
 import type { Meta, StoryObj } from '@storybook/nextjs';
-import { useRef, useState } from 'react';
 import { ImageList } from './ImageList';
-import { reorderArray } from '../lib/reorder';
+import { useImageUpload } from '@/shared/hooks/useImageUpload';
 
 const meta: Meta<typeof ImageList> = {
-  title: 'Entities/UI/PostImage/ImageList',
+  title: 'Entities/UI/Post/PostImage/ImageList',
+  component: ImageList,
   parameters: {
     layout: 'centered',
   },
@@ -18,25 +20,8 @@ type Story = StoryObj<typeof ImageList>;
  */
 export const Default: Story = {
   render: () => {
-    const inputRef = useRef<HTMLInputElement>(null);
-    const [files, setFiles] = useState<File[]>([]);
-
-    /** 파일 선택 */
-    const handleSelect = (e: React.ChangeEvent<HTMLInputElement>) => {
-      if (!e.target.files) return;
-      const selectedFiles = Array.from(e.target.files);
-      setFiles((prev) => [...prev, ...selectedFiles]);
-    };
-
-    /** 파일 삭제 */
-    const handleRemove = (index: number) => {
-      setFiles((prev) => prev.filter((_, i) => i !== index));
-    };
-
-    /** 드래그 순서 변경 */
-    const handleReorder = (from: number, to: number) => {
-      setFiles((prev) => reorderArray(prev, from, to));
-    };
+    const { inputRef, images, openPicker, handleSelect, handleRemove, handleReorder } =
+      useImageUpload();
 
     return (
       <div className="flex w-[360px] flex-col items-center gap-4 rounded-lg border border-gray-200 p-4">
@@ -44,7 +29,7 @@ export const Default: Story = {
         <button
           type="button"
           className="rounded bg-gray-200 px-3 py-2 hover:bg-gray-300"
-          onClick={() => inputRef.current?.click()}
+          onClick={openPicker}
         >
           이미지 추가
         </button>
@@ -59,8 +44,8 @@ export const Default: Story = {
           onChange={handleSelect}
         />
 
-        {/* 렌더링 전용 ImageList */}
-        <ImageList files={files} onRemove={handleRemove} onReorder={handleReorder} />
+        {/* 이미지 리스트 */}
+        <ImageList images={images} onRemove={handleRemove} onReorder={handleReorder} />
       </div>
     );
   },

@@ -14,7 +14,7 @@ import { horizontalListSortingStrategy, SortableContext, useSortable } from '@dn
 import { CSS } from '@dnd-kit/utilities';
 import { restrictToParentElement } from '@dnd-kit/modifiers';
 import { ImageItem } from '@/entities/post/post-image/ui/ImageItem';
-import { ImageData } from '../model/types';
+import { ImageData } from '@/shared/types/image';
 import { useState } from 'react';
 
 type ImageDnDProps = {
@@ -52,13 +52,14 @@ export function ImageDnD({ images, onReorder, onRemove }: ImageDnDProps) {
 
     const oldIndex = images.findIndex((img) => img.id === active.id);
     const newIndex = images.findIndex((img) => img.id === over.id);
-    onReorder(oldIndex, newIndex);
 
     // 유효하지 않은 인덱스 방어
     if (oldIndex === -1 || newIndex === -1) {
       console.warn('Invalid drag indices:', { oldIndex, newIndex });
       return;
     }
+
+    onReorder(oldIndex, newIndex);
   };
 
   return (

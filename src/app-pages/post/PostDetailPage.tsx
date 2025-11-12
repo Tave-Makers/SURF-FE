@@ -15,14 +15,14 @@ export default function PostDetailPage({ boardId, postId }: PostDetailPageProps)
     id: 39,
     title: '전반기 시상식 안내',
     content:
-      '안녕하세요, 최루문입니다.\n\n금주 진행되는 전반기 시상식 안내드립니다.\n\n🕒 일시: 10월 23일 (토) 14시\n📍 장소: 세종대학교 대양AI센터 B107호\n\n시상식 참석 필수이며, 발표 타임테이블은 추후 공지드리겠습니다.',
+      '안녕하세요, **테이비**입니다.\n\n금주 진행되는 전반기 시상식 안내드립니다.\n\n🕒 **일시**: 10월 23일 (토) 14시\n📍 **장소**: 세종대학교 대양AI센터 B107호\n\n시상식 참석 필수이며, 발표 타임테이블은 추후 공지드리겠습니다.',
     postedAt: '2025.11.01',
     boardId: 1,
     nickname: '홍길동',
     likeCount: 12,
     likedByMe: true,
     scrapCount: 12,
-    scrappedByMe: true,
+    scrappedByMe: false,
     hasSchedule: true,
     imageUrlList: [
       {

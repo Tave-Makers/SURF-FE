@@ -4,6 +4,7 @@ import { useState } from 'react';
 import { EventCard } from '@/entities/calendar/ui/EventCard';
 import { PostProfile } from '@/entities/post/ui/post-profile/PostProfile';
 import { ChipToggle } from '@/shared/ui/chip-toggle/ChipToggle';
+import ReactMarkdown from 'react-markdown';
 
 // 타입 정의 그대로 유지
 export type PostImage = {
@@ -65,7 +66,9 @@ export function PostBodySection({ post }: { post: PostBodyProps }) {
   return (
     <div className="flex flex-col gap-[1.5rem]">
       <PostProfile nickname={post.nickname} date={post.postedAt} time="01:21" viewCount={3} />
-      <div className="whitespace-pre-line">{post.content}</div>
+      <div className="whitespace-pre-line">
+        <ReactMarkdown>{post.content}</ReactMarkdown>
+      </div>
 
       {/* 이미지 목록 */}
       {post.imageUrlList && post.imageUrlList.length > 0 && (
@@ -98,14 +101,14 @@ export function PostBodySection({ post }: { post: PostBodyProps }) {
           count={likeCount}
           onToggleIcon={handleLikeToggle}
           iconName="Heart"
-          activeColor="foreground-foreground-danger"
+          activeColor="red"
           onClickNumber={() => alert('좋아요 누른 사람 목록')}
         />
         <ChipToggle
           isClicked={scrapped}
           count={scrapCount}
           onToggleIcon={handleScrapToggle}
-          activeColor="background-background-primary"
+          activeColor="blue"
           iconName="Bookmark"
         />
       </div>

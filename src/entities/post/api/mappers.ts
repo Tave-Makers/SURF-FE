@@ -1,25 +1,45 @@
 import { PostContent } from './types';
-import { Post } from '../model/types';
+import { Post, CategoryBadge } from '../model/types';
 
-export const transformApiPostToPost = (apiPost: PostContent): Post => {
+// API 응답에 실제로 존재하지만 타입 정의에 없는 필드를 포함한 확장 타입
+type ExtendedPostContent = PostContent & {
+  categoryId?: number;
+  thumbnailImageUrl?: string | null;
+};
+
+// categoryId를 CategoryBadge로 변환하는 함수
+// TODO: 실제 API와의 매핑 규칙 확인 필요
+const mapCategoryIdToBadge = (categoryId: number | undefined): CategoryBadge => {
+  if (!categoryId) return 'others';
+
+  const categoryMap: Record<number, CategoryBadge> = {
+    1: 'event',
+    2: 'activity',
+    3: 'partnership',
+    4: 'release',
+    5: 'others',
+  };
+  return categoryMap[categoryId] || 'others';
+};
+
+export const transformApiPostToPost = (apiPost: ExtendedPostContent): Post => {
   return {
     id: apiPost.id,
     title: apiPost.title,
     content: apiPost.content,
-    // pinned 작성 필요
     date: new Date(apiPost.postedAt).toLocaleDateString('ko-KR'), // 날짜 포맷팅
-    likes: apiPost.likeCount,
-    comments: apiPost.commentCount,
+    likeCount: apiPost.likeCount,
+    isLiked: apiPost.likeByMe,
+    commentCount: apiPost.commentCount,
     writer: apiPost.nickname,
-    thumbnailUrl: undefined, // 서버 응답에 없음(임시)
-    /* 기본 프론트 Post 타입에 서버 응답으로 오는 
-    pinned, boardId, likeByMe, scrappedByMe, scrapCount 도 추가 필요. */
+    thumbnailUrl: apiPost.thumbnailImageUrl || undefined,
     boardId: apiPost.boardId,
-    state: apiPost.pinned ? 'reserved' : 'default', // 일단 pinned 상태에 따라 state 상태 설정되도록 임시적으로 설정
+    category: mapCategoryIdToBadge(apiPost.categoryId),
+    isReserved: apiPost.pinned,
   };
 };
 
 // API 응답을 Post 배열로 변환
 export const transformApiResponseToPosts = (apiResponse: { content: PostContent[] }): Post[] => {
-  return apiResponse.content.map(transformApiPostToPost);
+  return apiResponse.content.map((post) => transformApiPostToPost(post as ExtendedPostContent));
 };

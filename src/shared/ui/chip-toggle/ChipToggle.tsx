@@ -64,6 +64,10 @@ export const ChipToggle = ({
   const interactionStyle =
     'hover:bg-background-background-secondary-darker hover:border-border-border-secondary active:bg-background-background-secondary-darker active:border-border-border-secondary';
 
+  const handleToggle = () => {
+    onToggleIcon(!isClicked);
+  };
+
   return (
     <div
       className={`${baseStyle} ${colorStyle} ${interactionStyle}`}
@@ -89,7 +93,7 @@ export const ChipToggle = ({
         type="button"
         aria-label={isClicked ? '토글 해제' : '토글'}
         aria-pressed={isClicked}
-        onClick={() => onToggleIcon(!isClicked)}
+        onClick={handleToggle}
         className="rounded-max absolute inset-y-0 left-0 w-1/2 cursor-pointer"
       />
 
@@ -100,7 +104,7 @@ export const ChipToggle = ({
           if (onClickNumber) {
             onClickNumber();
           } else {
-            onToggleIcon(!isClicked);
+            handleToggle();
           }
         }}
         className="rounded-max absolute inset-y-0 right-0 w-1/2 cursor-pointer"

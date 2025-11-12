@@ -3,8 +3,7 @@
 import { useState } from 'react';
 import { EventCard } from '@/entities/calendar/ui/EventCard';
 import { PostProfile } from '@/entities/post/ui/post-profile/PostProfile';
-import LikeButton from '@/shared/ui/button/like-button/LikeButton';
-import ScrapButton from '@/shared/ui/button/scrap-button/ScrapButton';
+import { ChipToggle } from '@/shared/ui/chip-toggle/ChipToggle';
 
 // 타입 정의 그대로 유지
 export type PostImage = {
@@ -87,8 +86,20 @@ export function PostBodySection({ post }: { post: PostBodyProps }) {
 
       {/* 좋아요 및 스크랩 */}
       <div className="flex justify-between">
-        <LikeButton isLiked={liked} count={likeCount} onLikeToggle={handleLikeToggle} />
-        <ScrapButton isScrapped={scrapped} count={scrapCount} onScrapToggle={handleScrapToggle} />
+        <ChipToggle
+          isClicked={liked}
+          count={likeCount}
+          onToggleIcon={handleLikeToggle}
+          iconName="Heart"
+          activeColor="foreground-foreground-danger"
+        />
+        <ChipToggle
+          isClicked={scrapped}
+          count={scrapCount}
+          onToggleIcon={handleScrapToggle}
+          iconName="Bookmark"
+          activeColor="background-background-primary"
+        />
       </div>
     </div>
   );

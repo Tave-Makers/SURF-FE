@@ -1,109 +1,73 @@
-import { useState, useEffect } from 'react';
+'use client';
+
 import type { Meta, StoryObj } from '@storybook/nextjs-vite';
 import { PostCard } from './PostCard';
 import type { Post } from '@/entities/post/model/types';
 
 const meta: Meta<typeof PostCard> = {
-  title: 'entities/UI/Post/PostCard',
+  title: 'Entities/Post/PostCard',
   component: PostCard,
+  tags: ['autodocs'],
   parameters: {
     layout: 'centered',
-  },
-  argTypes: {
-    onClick: { action: '카드 클릭됨' },
-    onLikeToggle: { action: '좋아요 토글됨' },
   },
 };
 
 export default meta;
 type Story = StoryObj<typeof PostCard>;
 
-const basePost: Post = {
+const mockPost: Post = {
   id: 1,
-  title: 'Surf 개발자 블로그 오픈 🎉',
-  content: 'Next.js 기반 Surf 프로젝트의 공식 블로그가 오픈되었습니다!',
-  writer: '김테이브',
-  date: '25.10.31',
+  title: '프론트엔드 스터디 모집합니다!',
+  content: 'React 19, Zustand, Tanstack Query 중심으로 학습해요 🚀',
+  writer: '보라',
+  date: '2025-11-12',
   likeCount: 42,
   isLiked: false,
   commentCount: 8,
-  tags: [
-    { id: 1, variation: 'event' },
-    { id: 2, variation: 'reservation' },
-  ],
-  thumbnailUrl: 'https://images.unsplash.com/photo-1507525428034-b723cf961d3e?w=400&h=400&fit=crop',
+  category: 'event',
+  isReserved: false,
+  thumbnailUrl: 'https://images.unsplash.com/photo-1522204507765-4b9e8f69e4f1?w=200&h=200&fit=crop',
 };
 
-// -------------------------------
-// 기본 상태
-// -------------------------------
 export const Default: Story = {
-  args: { post: basePost },
+  args: {
+    post: mockPost,
+    currentCategory: 'all',
+    userLevel: 'member',
+  },
 };
 
-// -------------------------------
-// 좋아요가 눌린 상태
-// -------------------------------
 export const Liked: Story = {
-  args: { post: { ...basePost, isLiked: true, likeCount: 43 } },
-};
-
-// -------------------------------
-// 썸네일 없는 게시물
-// -------------------------------
-export const NoThumbnail: Story = {
-  args: { post: { ...basePost, thumbnailUrl: undefined } },
-};
-
-// -------------------------------
-// 긴 제목과 내용
-// -------------------------------
-export const LongText: Story = {
   args: {
     post: {
-      ...basePost,
-      title:
-        'Surf 개발자 블로그 오픈 🎉 - Next.js 기반 Surf 프로젝트의 공식 블로그가 오픈되었습니다! 많은 관심 부탁드려요!',
-      content:
-        'Next.js 기반 Surf 프로젝트의 공식 블로그가 오픈되었습니다! 이 블로그에서는 최신 개발 소식, 기술 트렌드, 그리고 Surf 팀의 다양한 이야기들을 만나보실 수 있습니다. 앞으로도 많은 관심과 사랑 부탁드립니다. 감사합니다!',
+      ...mockPost,
+      isLiked: true,
+      likeCount: 99,
     },
+    currentCategory: 'all',
+    userLevel: 'member',
   },
 };
 
-// -------------------------------
-// 실제 상태 전환 테스트용 (좋아요 토글)
-// -------------------------------
-export const InteractiveLike: Story = {
-  render: (args) => {
-    const { post, onLikeToggle } = args;
-    const [liked, setLiked] = useState(post.isLiked);
-    const [count, setCount] = useState(post.likeCount);
-
-    useEffect(() => {
-      setLiked(post.isLiked);
-      setCount(post.likeCount);
-    }, [post.isLiked, post.likeCount]);
-
-    /** 외부에서 상태 관리 + 내부 콜백 반영 */
-    const handleToggle = (newState: boolean) => {
-      setLiked(newState);
-      setCount((prev) => prev + (newState ? 1 : -1));
-      onLikeToggle?.(newState);
-    };
-
-    return (
-      <PostCard
-        {...args}
-        post={{
-          ...post,
-          isLiked: liked,
-          likeCount: count,
-        }}
-        onLikeToggle={handleToggle}
-      />
-    );
-  },
+export const AdminView: Story = {
   args: {
-    post: basePost,
+    post: {
+      ...mockPost,
+      isReserved: true,
+    },
+    currentCategory: 'release',
+    userLevel: 'manager',
+  },
+};
+
+export const WithoutThumbnail: Story = {
+  args: {
+    post: {
+      ...mockPost,
+      thumbnailUrl: undefined,
+    },
+    currentCategory: 'all',
+    userLevel: 'member',
   },
 };

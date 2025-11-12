@@ -15,9 +15,9 @@ type Story = StoryObj<typeof PostEditor>;
 
 // 기본 예시 (기본 내용 포함)
 export const Default: Story = {
-  render: () => (
+  render: (args) => (
     <div className="mx-auto flex h-[300px] w-[360px] overflow-hidden border border-[#e0e0e0]">
-      <PostEditor />
+      <PostEditor {...args} />
     </div>
   ),
   args: {
@@ -32,7 +32,4 @@ export const Empty: Story = {
       <PostEditor />
     </div>
   ),
-  args: {
-    initialContent: '',
-  },
 };

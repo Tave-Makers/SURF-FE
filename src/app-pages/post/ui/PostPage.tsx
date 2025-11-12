@@ -4,12 +4,14 @@ import { usePicker } from '@/shared/hooks/usePicker';
 import { AccordionSelect } from '@/shared/ui/accordion/AccordionSelect';
 import { Header, HeaderMode } from '@/shared/ui/header/Header';
 import { PostEditor } from '@/widgets/post/post-editor/PostEditor';
+import { useState } from 'react';
 import { Sheet as ModalSheet } from 'react-modal-sheet';
 
 export default function PostPage() {
   const { isOpen, open, close, value, select } = usePicker<string>();
   const sheetId = 'post-category-sheet';
   const items = ['행사', '활동', '제휴', '릴리즈', '기타'];
+  const [title, setTitle] = useState('');
 
   return (
     <div className="flex h-full w-full flex-1 flex-col">
@@ -60,12 +62,19 @@ export default function PostPage() {
         <ModalSheet.Backdrop onTap={close} />
       </ModalSheet>
 
-      <h1 className="flex w-full px-13">
+      <div className="flex w-full px-13">
+        <label htmlFor="post-title" className="sr-only">
+          게시글 제목
+        </label>
         <input
+          id="post-title"
+          value={title}
+          onChange={(e) => setTitle(e.target.value)}
           placeholder="제목을 입력해주세요."
+          aria-required="true"
           className="text-foreground-foreground-normal placeholder:foreground-foreground-tertiary-lighter text-body-body3 flex flex-1 pt-10 pb-5 focus:outline-none"
         />
-      </h1>
+      </div>
 
       <div className="flex h-full flex-1 overflow-auto">
         <PostEditor />

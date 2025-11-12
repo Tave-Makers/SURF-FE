@@ -7,8 +7,12 @@ import { usePostEditor } from '@/features/post/post-editor/lib/usePostEditor';
 import { PostEditorToolbar } from '@/features/post/post-editor/ui/PostEditorToolbar';
 import { EditorContent } from '@tiptap/react';
 
-export const PostEditor = () => {
-  const editor = usePostEditor();
+export type PostEditorProps = {
+  initialContent?: string;
+};
+
+export const PostEditor = ({ initialContent }: PostEditorProps) => {
+  const editor = usePostEditor(initialContent);
   const { inputRef, files, openPicker, handleSelect } = useImageUpload();
 
   if (!editor) return null;

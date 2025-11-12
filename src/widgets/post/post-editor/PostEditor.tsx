@@ -2,10 +2,10 @@
 
 import '@/features/post/post-editor/ui/PostEditor.style.css';
 import { useImageUpload } from '@/shared/hooks/useImageUpload';
-import { ImageList } from '@/features/post/post-image/ui/ImageList';
-import { usePostEditor } from '@/features/post/post-editor/lib/usePostEditor';
 import { PostEditorToolbar } from '@/features/post/post-editor/ui/PostEditorToolbar';
+import { ImageList } from '@/entities/post/post-image/ui/ImageList';
 import { EditorContent } from '@tiptap/react';
+import { usePostEditor } from '@/features/post/post-editor/lib/usePostEditor';
 
 export type PostEditorProps = {
   initialContent?: string;
@@ -13,7 +13,8 @@ export type PostEditorProps = {
 
 export const PostEditor = ({ initialContent }: PostEditorProps) => {
   const editor = usePostEditor(initialContent);
-  const { inputRef, files, openPicker, handleSelect } = useImageUpload();
+  const { inputRef, files, handleSelect, handleRemove, handleReorder, openPicker } =
+    useImageUpload();
 
   if (!editor) return null;
 
@@ -40,12 +41,14 @@ export const PostEditor = ({ initialContent }: PostEditorProps) => {
         <EditorContent editor={editor} />
       </div>
 
-      {/* 이미지 업로드 */}
-      <div className="overflow-x-auto">
-        <ImageList files={files} />
-      </div>
+      {/* 이미지 리스트 */}
+      {files.length > 0 && (
+        <div className="overflow-x-auto">
+          <ImageList files={files} onRemove={handleRemove} onReorder={handleReorder} />
+        </div>
+      )}
 
-      {/* 파일 input */}
+      {/* 숨겨진 input */}
       <input
         ref={inputRef}
         type="file"

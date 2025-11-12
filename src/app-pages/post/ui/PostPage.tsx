@@ -11,6 +11,7 @@ export default function PostPage() {
   const { isOpen, open, close, value, select } = usePicker<string>();
   const sheetId = 'post-category-sheet';
   const items = ['행사', '활동', '제휴', '릴리즈', '기타'];
+
   const [title, setTitle] = useState('');
 
   return (
@@ -20,9 +21,10 @@ export default function PostPage() {
         title="공지사항"
         text="등록"
         hasLeftIcon={true}
-        isDisabled={true}
+        isDisabled={!title}
       />
 
+      {/* 카테고리 선택 */}
       <div className="px-13">
         <AccordionSelect
           title={value ?? '행사'}
@@ -32,6 +34,7 @@ export default function PostPage() {
         />
       </div>
 
+      {/* 카테고리 선택 시트 */}
       <ModalSheet
         isOpen={isOpen}
         onClose={close}
@@ -62,6 +65,7 @@ export default function PostPage() {
         <ModalSheet.Backdrop onTap={close} />
       </ModalSheet>
 
+      {/* 제목 입력 */}
       <div className="flex w-full px-13">
         <label htmlFor="post-title" className="sr-only">
           게시글 제목
@@ -76,6 +80,7 @@ export default function PostPage() {
         />
       </div>
 
+      {/* 본문 에디터 */}
       <div className="flex h-full flex-1 overflow-auto">
         <PostEditor />
       </div>

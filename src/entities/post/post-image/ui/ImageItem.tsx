@@ -34,7 +34,7 @@ export function ImageItem({ file, onRemove }: ImageItemProps) {
         src={previewUrl}
         alt={`${file.name} 미리보기`}
         draggable={false}
-        className="h-full w-full rounded-md object-cover"
+        className="rounded-2 h-full w-full object-cover"
       />
 
       {/* 삭제 버튼 */}

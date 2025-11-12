@@ -67,7 +67,7 @@ export default function PostPage() {
         />
       </h1>
 
-      <div className="flex h-full flex-1 overflow-y-auto">
+      <div className="flex h-full flex-1 overflow-auto">
         <PostEditor />
       </div>
     </div>

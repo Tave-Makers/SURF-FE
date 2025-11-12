@@ -14,7 +14,7 @@ export const PostEditor = () => {
   if (!editor) return null;
 
   return (
-    <div className="flex flex-col gap-10">
+    <div className="flex min-w-0 flex-col gap-10">
       {/* 에디터 본문 */}
       <div
         role="textbox"
@@ -37,7 +37,9 @@ export const PostEditor = () => {
       </div>
 
       {/* 이미지 업로드 */}
-      <ImageList files={files} />
+      <div className="overflow-x-auto">
+        <ImageList files={files} />
+      </div>
 
       {/* 파일 input */}
       <input

@@ -1,5 +1,5 @@
 import { SurfIcon } from '@/shared/ui/icon/SurfIcon';
-import { ProfileImage } from '@/shared/ui/profile-image/ProfileImage';
+import { Avatar } from '@/shared/ui/avatar/Avatar';
 
 /**
  * 댓글(Comment) 컴포넌트
@@ -71,7 +71,7 @@ const Comment = ({
 
   return (
     <article className="flex flex-1 gap-11" aria-label={`${name}님의 댓글`}>
-      <ProfileImage src={profileImageUrl} size="s" alt={`${name}님의 프로필 이미지`} />
+      <Avatar src={profileImageUrl} size="s" alt={`${name}님의 프로필 이미지`} />
 
       <div className="flex flex-1 flex-col gap-7">
         {/* 이름, 날짜, 시간, 더보기 */}

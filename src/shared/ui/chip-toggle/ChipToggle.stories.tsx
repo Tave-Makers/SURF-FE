@@ -4,7 +4,7 @@ import { ChipToggle } from './ChipToggle';
 
 // ---------- Meta ----------
 const meta: Meta<typeof ChipToggle> = {
-  title: 'Shared/UI/Button/ChipToggle',
+  title: 'Shared/UI/ChipToggle',
   component: ChipToggle,
   tags: ['autodocs'],
   argTypes: {

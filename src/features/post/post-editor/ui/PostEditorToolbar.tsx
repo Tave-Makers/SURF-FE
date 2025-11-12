@@ -3,7 +3,7 @@
 import { ToolBar, type ToolBarItem } from '@/shared/ui/toolbar/ToolBar';
 import { type Editor } from '@tiptap/react';
 
-const items: ToolBarItem[] = [
+const baseItems: ToolBarItem[] = [
   { key: 'camera', label: '사진', icon: 'CameraSolid' },
   { key: 'alarm', label: '예약', icon: 'AlarmSolid' },
   { key: 'calendar', label: '일정', icon: 'CalendarSolid' },
@@ -32,6 +32,11 @@ export const PostEditorToolbar = ({ editor, onCameraClick }: Props) => {
         break;
     }
   };
+
+  // bold만 active 상태 추가
+  const items: ToolBarItem[] = baseItems.map((item) =>
+    item.key === 'bold' ? { ...item, active: editor.isActive('bold') } : item,
+  );
 
   return <ToolBar items={items} onItemClick={handleItemClick} />;
 };

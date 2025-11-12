@@ -7,6 +7,7 @@ export type ToolBarItem = {
   key: string;
   label: string;
   icon: IconName;
+  active?: boolean;
 };
 
 type ToolBarProps = {

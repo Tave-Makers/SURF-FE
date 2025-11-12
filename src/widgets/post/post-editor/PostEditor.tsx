@@ -13,7 +13,7 @@ export type PostEditorProps = {
 
 export const PostEditor = ({ initialContent }: PostEditorProps) => {
   const editor = usePostEditor(initialContent);
-  const { inputRef, files, handleSelect, handleRemove, handleReorder, openPicker } =
+  const { inputRef, images, handleSelect, handleRemove, handleReorder, openPicker } =
     useImageUpload();
 
   if (!editor) return null;
@@ -42,9 +42,14 @@ export const PostEditor = ({ initialContent }: PostEditorProps) => {
       </div>
 
       {/* 이미지 리스트 */}
-      {files.length > 0 && (
+      {images.length > 0 && (
         <div className="overflow-x-auto">
-          <ImageList files={files} onRemove={handleRemove} onReorder={handleReorder} />
+          <ImageList
+            key="image-list"
+            images={images}
+            onRemove={handleRemove}
+            onReorder={handleReorder}
+          />
         </div>
       )}
 

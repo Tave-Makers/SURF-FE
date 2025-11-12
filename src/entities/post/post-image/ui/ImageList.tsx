@@ -1,18 +1,13 @@
 import { ImageDnD } from './ImageDnD';
+import type { ImageData } from '@/shared/types/image';
 
 type ImageListProps = {
-  files: File[];
+  images: ImageData[];
   onRemove: (index: number) => void;
   onReorder: (from: number, to: number) => void;
 };
 
-export function ImageList({ files, onRemove, onReorder }: ImageListProps) {
-  const images = files.map((file) => ({
-    id: crypto.randomUUID(),
-    file,
-    preview: URL.createObjectURL(file),
-  }));
-
+export function ImageList({ images, onRemove, onReorder }: ImageListProps) {
   return (
     <div className="flex w-full flex-col items-center gap-4">
       {images.length > 0 && <ImageDnD images={images} onReorder={onReorder} onRemove={onRemove} />}

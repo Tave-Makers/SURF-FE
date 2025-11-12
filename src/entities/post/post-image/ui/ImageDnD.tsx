@@ -14,7 +14,7 @@ import { horizontalListSortingStrategy, SortableContext, useSortable } from '@dn
 import { CSS } from '@dnd-kit/utilities';
 import { restrictToParentElement } from '@dnd-kit/modifiers';
 import { ImageItem } from '@/entities/post/post-image/ui/ImageItem';
-import { ImageData } from '../model/types';
+import { ImageData } from '@/shared/types/image';
 import { useState } from 'react';
 
 type ImageDnDProps = {

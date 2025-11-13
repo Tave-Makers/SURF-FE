@@ -27,7 +27,7 @@ export const PostEditor = ({ initialContent }: PostEditorProps) => {
         tabIndex={0}
         aria-label="게시글 편집기"
         aria-placeholder="글, 제목, 내용을 입력해주세요."
-        className="scrollbar-hide text-foreground-foreground-black text-body-body8 flex flex-1 cursor-text overflow-y-auto px-13 break-all"
+        className="text-foreground-foreground-black text-body-body8 flex flex-1 cursor-text overflow-y-auto px-13 break-all"
         onClick={() => {
           if (!editor.isFocused) editor.commands.focus('end');
         }}

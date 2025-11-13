@@ -1,7 +1,7 @@
 'use client';
 
 import '@/features/post/post-editor/ui/PostEditor.style.css';
-import { useImageUpload } from '@/shared/hooks/useImageUpload';
+import { useImageSelector } from '@/shared/hooks/useImageSelector';
 import { PostEditorToolbar } from '@/features/post/post-editor/ui/PostEditorToolbar';
 import { ImageList } from '@/entities/post/post-image/ui/ImageList';
 import { EditorContent } from '@tiptap/react';
@@ -14,7 +14,7 @@ export type PostEditorProps = {
 export const PostEditor = ({ initialContent }: PostEditorProps) => {
   const editor = usePostEditor(initialContent);
   const { inputRef, images, handleSelect, handleRemove, handleReorder, openPicker } =
-    useImageUpload();
+    useImageSelector();
 
   if (!editor) return null;
 

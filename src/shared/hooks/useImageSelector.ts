@@ -4,7 +4,7 @@ import { useRef, useState, useEffect } from 'react';
 import { reorderArray } from '../utils/reorder';
 import { ImageData } from '@/shared/types/image';
 
-export function useImageUpload() {
+export function useImageSelector() {
   const inputRef = useRef<HTMLInputElement>(null);
   const [images, setImages] = useState<ImageData[]>([]);
 

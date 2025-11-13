@@ -6,6 +6,7 @@ import { PostEditorToolbar } from '@/features/post/post-editor/ui/PostEditorTool
 import { ImageList } from '@/entities/post/post-image/ui/ImageList';
 import { EditorContent } from '@tiptap/react';
 import { usePostEditor } from '@/features/post/post-editor/lib/usePostEditor';
+import { useImageUploader } from '@/shared/hooks/useImageUploader';
 
 export type PostEditorProps = {
   initialContent?: string;
@@ -15,11 +16,18 @@ export const PostEditor = ({ initialContent }: PostEditorProps) => {
   const editor = usePostEditor(initialContent);
   const { inputRef, images, handleSelect, handleRemove, handleReorder, openPicker } =
     useImageSelector();
+  const { uploadImages } = useImageUploader();
 
   if (!editor) return null;
 
+  const handleUploadTest = async () => {
+    if (process.env.NODE_ENV === 'development') console.log('업로드 시작...');
+    const result = await uploadImages(images);
+    if (process.env.NODE_ENV === 'development') console.log('업로드 완료 결과:', result);
+  };
+
   return (
-    <div className="flex min-w-0 flex-col gap-10">
+    <div className="flex w-full min-w-0 flex-col gap-10">
       {/* 에디터 본문 */}
       <div
         role="textbox"
@@ -65,6 +73,9 @@ export const PostEditor = ({ initialContent }: PostEditorProps) => {
 
       {/* 툴바 */}
       <PostEditorToolbar editor={editor} onCameraClick={openPicker} />
+      <button className="bg-blue-500" onClick={() => void handleUploadTest()}>
+        이미지 업로드 테스트 버튼
+      </button>
     </div>
   );
 };

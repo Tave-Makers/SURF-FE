@@ -1,12 +1,12 @@
 'use client';
 
-import { useRef, useState, useEffect } from 'react';
+import { useRef, useState } from 'react';
 import { reorderArray } from '../utils/reorder';
-import { ImageData } from '@/shared/types/image';
+import { UploadImage } from '@/shared/types/image';
 
 export function useImageSelector() {
   const inputRef = useRef<HTMLInputElement>(null);
-  const [images, setImages] = useState<ImageData[]>([]);
+  const [images, setImages] = useState<UploadImage[]>([]);
 
   const openPicker = () => inputRef.current?.click();
 
@@ -16,6 +16,7 @@ export function useImageSelector() {
       id: crypto.randomUUID(),
       file,
       preview: URL.createObjectURL(file),
+      status: 'pending' as const,
     }));
     setImages((prev) => [...prev, ...selected]);
     e.target.value = '';
@@ -33,16 +34,10 @@ export function useImageSelector() {
     setImages((prev) => reorderArray(prev, from, to));
   };
 
-  // 전체 preview URL 정리 (unmount 시)
-  useEffect(() => {
-    return () => {
-      images.forEach((img) => URL.revokeObjectURL(img.preview));
-    };
-  }, [images]);
-
   return {
     inputRef,
     images,
+    setImages,
     openPicker,
     handleSelect,
     handleRemove,

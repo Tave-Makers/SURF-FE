@@ -1,8 +1,8 @@
 import { ImageDnD } from './ImageDnD';
-import type { ImageData } from '@/shared/types/image';
+import type { UploadImage } from '@/shared/types/image';
 
 type ImageListProps = {
-  images: ImageData[];
+  images: UploadImage[];
   onRemove: (index: number) => void;
   onReorder: (from: number, to: number) => void;
 };

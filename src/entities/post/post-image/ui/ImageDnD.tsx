@@ -14,11 +14,11 @@ import { horizontalListSortingStrategy, SortableContext, useSortable } from '@dn
 import { CSS } from '@dnd-kit/utilities';
 import { restrictToParentElement } from '@dnd-kit/modifiers';
 import { ImageItem } from '@/entities/post/post-image/ui/ImageItem';
-import { ImageData } from '@/shared/types/image';
+import { UploadImage } from '@/shared/types/image';
 import { useState } from 'react';
 
 type ImageDnDProps = {
-  images: ImageData[]; // 현재 이미지 배열
+  images: UploadImage[]; // 현재 이미지 배열
   onReorder: (from: number, to: number) => void; // 드래그 종료 시 순서 변경
   onRemove: (index: number) => void; // 이미지 삭제 핸들러
 };
@@ -77,7 +77,7 @@ export function ImageDnD({ images, onReorder, onRemove }: ImageDnDProps) {
             <SortableImage
               key={image.id}
               id={image.id}
-              file={image.file}
+              preview={image.preview}
               onRemove={() => onRemove(index)}
             />
           ))}
@@ -91,7 +91,7 @@ export function ImageDnD({ images, onReorder, onRemove }: ImageDnDProps) {
       <DragOverlay>
         {activeImage ? (
           <div className="scale-105 cursor-grabbing opacity-80">
-            <ImageItem file={activeImage.file} />
+            <img src={activeImage.preview} alt="" className="rounded-2 h-20 w-20 object-cover" />
           </div>
         ) : null}
       </DragOverlay>
@@ -104,32 +104,28 @@ export function ImageDnD({ images, onReorder, onRemove }: ImageDnDProps) {
  *
  * @param id 각 이미지의 고유 인덱스 (드래그 식별용)
  */
-function SortableImage({ id, file, onRemove }: { id: string; file: File; onRemove: () => void }) {
-  // 이 이미지가 드래그 가능한 대상임을 선언
+function SortableImage({
+  id,
+  preview,
+  onRemove,
+}: {
+  id: string;
+  preview: string;
+  onRemove: () => void;
+}) {
   const { attributes, listeners, setNodeRef, transform, transition, isDragging } = useSortable({
     id,
   });
 
-  // 드래그 중일 때 위치 이동 애니메이션 적용
   const style: React.CSSProperties = {
     transform: CSS.Transform.toString(transform),
-    transition: transition,
-    willChange: 'transform',
-    opacity: isDragging ? 0 : 1, // 드래그 중이면 투명 처리
+    transition,
+    opacity: isDragging ? 0 : 1,
   };
 
-  // ImageItem을 드래그 가능하게 감싸서 렌더링
   return (
-    <div
-      ref={setNodeRef}
-      style={style}
-      {...attributes}
-      {...listeners}
-      className={'cursor-grab'}
-      role="button"
-      aria-label={`이미지 ${file.name}, 드래그하여 순서 변경`}
-    >
-      <ImageItem file={file} onRemove={onRemove} />
+    <div ref={setNodeRef} style={style} {...attributes} {...listeners} className="cursor-grab">
+      <ImageItem preview={preview} onRemove={onRemove} />
     </div>
   );
 }

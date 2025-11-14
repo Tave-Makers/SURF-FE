@@ -24,6 +24,7 @@ export function useImageUploader() {
     images: UploadImage[],
     onProgress?: (updated: UploadImage[]) => void,
   ): Promise<UploadImage[]> => {
+    // Deep copy
     let updated = [...images];
 
     // 1) S3에 저장될 파일명 생성
@@ -35,35 +36,55 @@ export function useImageUploader() {
     // 3) 업로드 시작 상태로 업데이트
     updated = updated.map((img, idx) => ({
       ...img,
-      status: 'uploading',
+      status: 'uploading' as const,
       key: presignedItems[idx].key,
     }));
     onProgress?.(updated);
 
     const bucketUrl = process.env.NEXT_PUBLIC_S3_BUCKET_URL!;
+    if (!bucketUrl) {
+      throw new Error('NEXT_PUBLIC_S3_BUCKET_URL 환경 변수가 설정되지 않았습니다.');
+    }
 
     // 4) presigned URL로 PUT 업로드
-    for (let i = 0; i < updated.length; i++) {
-      const img = updated[i];
-      const { preSignedUrl, key } = presignedItems[i];
+    const uploadPromises = updated.map(async (img, idx) => {
+      const { preSignedUrl, key } = presignedItems[idx];
 
-      if (!img.file) continue;
+      if (!img.file) return img;
 
       try {
-        await fetch(preSignedUrl, { method: 'PUT', body: img.file });
+        // 타임아웃 + abort 제어
+        const controller = new AbortController();
+        const timeoutId = setTimeout(() => controller.abort(), 30000); // 30초
 
-        updated[i] = {
+        await fetch(preSignedUrl, {
+          method: 'PUT',
+          body: img.file,
+          headers: {
+            'Content-Type': img.file.type || 'application/octet-stream',
+          },
+          signal: controller.signal,
+        });
+
+        clearTimeout(timeoutId);
+
+        return {
           ...img,
-          status: 'uploaded',
-          file: null, // 메모리 해제
+          status: 'uploaded' as const,
+          file: null,
           uploadedUrl: `${bucketUrl}/${key}`,
         };
-      } catch {
-        updated[i] = { ...img, status: 'error' };
+      } catch (err) {
+        console.error(`S3 업로드 실패 (${img.id})`, err);
+        return {
+          ...img,
+          status: 'error' as const,
+        };
       }
+    });
 
-      onProgress?.(updated);
-    }
+    updated = await Promise.all(uploadPromises);
+    onProgress?.(updated);
 
     return updated;
   };

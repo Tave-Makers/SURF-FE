@@ -28,7 +28,7 @@ export default function PostPage() {
       {/* 카테고리 선택 */}
       <div className="px-13">
         <AccordionSelect
-          title={value ?? '행사'}
+          title={value ?? '카테고리를 선택하세요'}
           isOpen={isOpen}
           onClick={open}
           controlsId={sheetId}

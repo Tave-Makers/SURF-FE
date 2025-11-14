@@ -58,7 +58,6 @@
     "@next/eslint-plugin-next": "^15.5.2",
     "@storybook/addon-a11y": "9.1.16",
     "@storybook/addon-docs": "9.1.16",
-    "@storybook/addon-vitest": "9.1.16",
     "@storybook/builder-webpack5": "~9.1.16",
     "@storybook/nextjs": "~9.1.16",
     "@svgr/webpack": "^8.1.0",

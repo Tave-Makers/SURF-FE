@@ -78,6 +78,7 @@ export function ImageDnD({ images, onReorder, onRemove }: ImageDnDProps) {
               key={image.id}
               id={image.id}
               preview={image.preview}
+              uploadedUrl={image.uploadedUrl}
               onRemove={() => onRemove(index)}
             />
           ))}
@@ -91,7 +92,11 @@ export function ImageDnD({ images, onReorder, onRemove }: ImageDnDProps) {
       <DragOverlay>
         {activeImage ? (
           <div className="scale-105 cursor-grabbing opacity-80">
-            <img src={activeImage.preview} alt="" className="rounded-2 h-20 w-20 object-cover" />
+            <img
+              src={activeImage.uploadedUrl ?? activeImage.preview}
+              alt=""
+              className="rounded-2 h-20 w-20 object-cover"
+            />
           </div>
         ) : null}
       </DragOverlay>
@@ -107,10 +112,12 @@ export function ImageDnD({ images, onReorder, onRemove }: ImageDnDProps) {
 function SortableImage({
   id,
   preview,
+  uploadedUrl,
   onRemove,
 }: {
   id: string;
   preview: string;
+  uploadedUrl?: string;
   onRemove: () => void;
 }) {
   const { attributes, listeners, setNodeRef, transform, transition, isDragging } = useSortable({
@@ -125,7 +132,7 @@ function SortableImage({
 
   return (
     <div ref={setNodeRef} style={style} {...attributes} {...listeners} className="cursor-grab">
-      <ImageItem preview={preview} onRemove={onRemove} />
+      <ImageItem preview={preview} uploadedUrl={uploadedUrl} onRemove={onRemove} />
     </div>
   );
 }

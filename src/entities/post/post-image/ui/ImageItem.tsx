@@ -3,14 +3,17 @@ import DeleteIcon from '@/shared/assets/icons/post/post-image/x-circle-fill.svg'
 
 type ImageItemProps = {
   preview: string;
+  uploadedUrl?: string;
   onRemove?: () => void;
 };
 
-export function ImageItem({ preview, onRemove }: ImageItemProps) {
+export function ImageItem({ preview, uploadedUrl, onRemove }: ImageItemProps) {
+  const src = uploadedUrl ?? preview;
+
   return (
     <div className="relative h-20 w-20 overflow-visible">
       <img
-        src={preview}
+        src={src}
         alt="이미지 미리보기"
         draggable={false}
         className="rounded-2 h-full w-full object-cover"

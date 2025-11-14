@@ -20,7 +20,7 @@ export function useImageSelector() {
 
   /** 파일 선택 시 File 객체와 preview URL 생성 */
   const handleSelect = (e: React.ChangeEvent<HTMLInputElement>) => {
-    if (!e.target.files) return;
+    if (!e.target.files) return [];
 
     const selected = Array.from(e.target.files).map((file) => ({
       id: crypto.randomUUID(),
@@ -31,6 +31,8 @@ export function useImageSelector() {
 
     setImages((prev) => [...prev, ...selected]);
     e.target.value = '';
+
+    return selected;
   };
 
   /** 이미지 삭제 및 preview URL 정리 */

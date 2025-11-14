@@ -9,7 +9,7 @@ type ImageListProps = {
 
 export function ImageList({ images, onRemove, onReorder }: ImageListProps) {
   return (
-    <div className="flex w-full flex-col items-center gap-4">
+    <div className="flex w-full items-center gap-4">
       {images.length > 0 && <ImageDnD images={images} onReorder={onReorder} onRemove={onRemove} />}
     </div>
   );

@@ -4,13 +4,19 @@ import {
   DndContext,
   closestCenter,
   PointerSensor,
+  KeyboardSensor,
   useSensor,
   useSensors,
   DragEndEvent,
   DragStartEvent,
   DragOverlay,
 } from '@dnd-kit/core';
-import { horizontalListSortingStrategy, SortableContext, useSortable } from '@dnd-kit/sortable';
+import {
+  horizontalListSortingStrategy,
+  SortableContext,
+  useSortable,
+  sortableKeyboardCoordinates,
+} from '@dnd-kit/sortable';
 import { CSS } from '@dnd-kit/utilities';
 import { restrictToParentElement } from '@dnd-kit/modifiers';
 import { ImageItem } from '@/entities/post/post-image/ui/ImageItem';
@@ -32,7 +38,12 @@ type ImageDnDProps = {
  */
 export function ImageDnD({ images, onReorder, onRemove }: ImageDnDProps) {
   // 마우스 드래그 이벤트 인식 센서 등록
-  const sensors = useSensors(useSensor(PointerSensor));
+  const sensors = useSensors(
+    useSensor(PointerSensor),
+    useSensor(KeyboardSensor, {
+      coordinateGetter: sortableKeyboardCoordinates,
+    }),
+  );
   const [activeId, setActiveId] = useState<string | null>(null);
   const activeImage = activeId ? images.find((img) => img.id === activeId) : null;
 

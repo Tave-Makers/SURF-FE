@@ -27,7 +27,7 @@ export function Sheet({
   textBtn,
 }: SheetProps) {
   const renderTitleSection = () => (
-    <div className="flex w-full flex-col gap-5 border">
+    <div className="flex w-full flex-col gap-5">
       {title && <div className="text-foreground-foreground-normal text-title-title2">{title}</div>}
       {description && (
         <div className="text-body-body8 text-foreground-foreground-tertiary">{description}</div>
@@ -40,7 +40,7 @@ export function Sheet({
     if (!hasBtn) return null;
 
     return (
-      <div className="flex w-full flex-col gap-[0.62rem] border">
+      <div className="flex w-full flex-col gap-[0.62rem]">
         {(primaryBtn || secondaryBtn) && (
           <div className="flex w-full gap-10">
             {secondaryBtn && (
@@ -70,7 +70,7 @@ export function Sheet({
   };
 
   return (
-    <div className="rounded-t-4 flex w-full flex-col items-start gap-15 border bg-white px-15 pt-11 pb-15">
+    <div className="rounded-t-4 flex w-full flex-col items-start gap-15 bg-white px-15 pt-11 pb-15">
       <div className={`flex w-full flex-col items-start ${title ? 'gap-8' : ''}`}>
         {renderTitleSection()}
         <div

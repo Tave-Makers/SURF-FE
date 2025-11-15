@@ -1,6 +1,6 @@
 'use client';
 
-import { useRef, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { reorderArray } from '../utils/reorder';
 import { UploadImage } from '@/shared/types/image';
 
@@ -48,6 +48,15 @@ export function useImageSelector() {
   const handleReorder = (from: number, to: number) => {
     setImages((prev) => reorderArray(prev, from, to));
   };
+
+  useEffect(() => {
+    return () => {
+      // 언마운트 시 모든 preview URL revoke
+      images.forEach((img) => {
+        if (img.preview) URL.revokeObjectURL(img.preview);
+      });
+    };
+  }, [images]);
 
   return {
     inputRef,

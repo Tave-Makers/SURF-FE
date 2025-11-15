@@ -208,4 +208,18 @@ export const createRouteConfig = (router: RouterInstance): RouteConfig[] => [
       hasLeftIcon: true,
     },
   },
+
+  {
+    id: 'schedule/create',
+    path: '/calendar/schedule/create',
+    backPath: '/home', // 임시
+    header: {
+      mode: HeaderMode.TextBtn,
+      title: '일정',
+      hasLeftIcon: true,
+      text: '완료',
+      btnVariant: 'secondary',
+      onClickTextBtn: () => alert('일정 생성'),
+    },
+  },
 ];

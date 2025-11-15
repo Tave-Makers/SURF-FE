@@ -28,10 +28,31 @@ export function useImageUploader() {
     return `${crypto.randomUUID()}.${ext}`;
   };
 
-  /**
-   * 이미지 배열을 순차적으로 업로드하고
-   * 상태(uploading / uploaded / error)를 업데이트한다.
-   */
+  /** presigned URL로 S3 PUT 업로드 (timeout 포함) */
+  const uploadToS3 = async (file: File, preSignedUrl: string) => {
+    const controller = new AbortController();
+    const timeoutId = setTimeout(() => controller.abort(), 30000);
+
+    try {
+      const res = await fetch(preSignedUrl, {
+        method: 'PUT',
+        body: file,
+        headers: { 'Content-Type': file.type || 'application/octet-stream' },
+        signal: controller.signal,
+      });
+
+      clearTimeout(timeoutId);
+
+      if (!res.ok) {
+        throw new Error(`S3 업로드 실패: ${res.status}`);
+      }
+    } catch (err) {
+      clearTimeout(timeoutId);
+      throw err;
+    }
+  };
+
+  /** 이미지 업로드 메인 함수 */
   const uploadImages = async (
     images: UploadImage[],
     onProgress?: (updated: UploadImage[]) => void,
@@ -44,6 +65,10 @@ export function useImageUploader() {
 
     // 2) presigned URL 요청
     const presignedItems = await postPresignedUrl(fileNames);
+
+    if (presignedItems.length !== images.length) {
+      throw new Error('presigned URL 응답 개수가 일치하지 않습니다.');
+    }
 
     // 3) 업로드 시작 상태로 업데이트
     updated = updated.map((img, idx) => ({
@@ -58,39 +83,27 @@ export function useImageUploader() {
       throw new Error('NEXT_PUBLIC_S3_BUCKET_URL 환경 변수가 설정되지 않았습니다.');
     }
 
-    // 4) presigned URL로 PUT 업로드
+    // 4) presigned URL로 병렬 업로드
     const uploadPromises = updated.map(async (img, idx) => {
+      const file = img.file!;
       const { preSignedUrl, key } = presignedItems[idx];
 
-      if (!img.file) return img;
-
       try {
-        // 타임아웃 + abort 제어
-        const controller = new AbortController();
-        const timeoutId = setTimeout(() => controller.abort(), 30000); // 30초
-
-        await fetch(preSignedUrl, {
-          method: 'PUT',
-          body: img.file,
-          headers: {
-            'Content-Type': img.file.type || 'application/octet-stream',
-          },
-          signal: controller.signal,
-        });
-
-        clearTimeout(timeoutId);
+        await uploadToS3(file, preSignedUrl);
 
         return {
           ...img,
           status: 'uploaded' as const,
-          file: null,
+          file: null, // 메모리 최적화
           uploadedUrl: `${bucketUrl}/${key}`,
         };
       } catch (err) {
         console.error(`S3 업로드 실패 (${img.id})`, err);
+
         return {
           ...img,
           status: 'error' as const,
+          // file은 그대로 둬야 재시도 가능
         };
       }
     });

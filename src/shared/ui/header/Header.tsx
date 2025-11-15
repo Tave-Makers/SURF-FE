@@ -137,7 +137,6 @@ export function Header(props: HeaderProps) {
         <>
           {renderLeftIcon(hasLeftIcon, onClickBack)}
           <TextInput
-            mode="search"
             value={value}
             onChange={onChange}
             onEnter={onSubmit}

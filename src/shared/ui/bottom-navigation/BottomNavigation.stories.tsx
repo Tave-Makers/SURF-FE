@@ -1,4 +1,4 @@
-import type { Meta, StoryObj } from '@storybook/nextjs';
+import type { Meta, StoryObj } from '@storybook/nextjs-vite';
 import { BottomNavigation } from './BottomNavigation';
 import { useState } from 'react';
 

@@ -1,8 +1,8 @@
 import { format } from 'date-fns';
 import { ko } from 'date-fns/locale';
 import { SurfIcon } from '@/shared/ui/icon/SurfIcon';
-import { CalendarBadge } from '@/entities/calendar/ui/CalendarBadge';
-import { ActivityType, EventCardType } from '../model/types';
+import { CalendarBadge } from '@/entities/calendar/ui/CalendarBadge/CalendarBadge';
+import { ActivityType, EventCardType } from '../../model/types';
 
 /**
  * 이벤트 카드 컴포넌트
@@ -40,7 +40,7 @@ type EventCardProps = {
   mode: EventCardType;
   startDate?: Date | null;
   endDate?: Date | null;
-  place: string;
+  place?: string;
   isAdmin?: boolean;
   hasNotice?: boolean;
   onClickCard?: () => void;
@@ -103,11 +103,14 @@ export function EventCard({
               <span className="text-caption-caption5 text-foreground-foreground-tertiary">
                 공지사항 바로가기
               </span>
-              <SurfIcon
-                size="s"
-                name="ChevronRight"
-                className="text-foreground-foreground-tertiary"
-              />
+              <div className="relative flex items-center justify-center">
+                <SurfIcon
+                  size="s"
+                  name="ChevronRight"
+                  className="text-foreground-foreground-tertiary"
+                />
+                <span className="absolute -inset-4" />
+              </div>
             </div>
           )}
         </div>
@@ -121,8 +124,10 @@ export function EventCard({
                 e.stopPropagation();
                 handleDeleteSchedule();
               }}
+              className="relative flex items-center justify-center"
             >
               <SurfIcon size="m" name="X" className="text-foreground-foreground-normal-lighter" />
+              <span className="absolute -inset-4" />
             </button>
           )}
 
@@ -134,8 +139,10 @@ export function EventCard({
                 // TODO: 더보기 메뉴 오픈 로직
                 console.log('Open menu');
               }}
+              className="relative flex items-center justify-center"
             >
               <SurfIcon size="m" name="Dots" className="text-foreground-foreground-normal" />
+              <span className="absolute -inset-4" />
             </button>
           )}
         </div>

@@ -1,4 +1,4 @@
-import type { Meta, StoryObj } from '@storybook/nextjs';
+import type { Meta, StoryObj } from '@storybook/nextjs-vite';
 import { PostHeader } from './PostHeader';
 
 const meta: Meta<typeof PostHeader> = {

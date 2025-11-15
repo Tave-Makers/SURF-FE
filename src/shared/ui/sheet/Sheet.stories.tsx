@@ -1,5 +1,5 @@
 // Sheet.stories.tsx
-import type { Meta, StoryObj } from '@storybook/nextjs';
+import type { Meta, StoryObj } from '@storybook/nextjs-vite';
 import { Sheet } from './Sheet';
 import { CheckList } from '../check-list/CheckList';
 import { useState } from 'react';

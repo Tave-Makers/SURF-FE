@@ -1,4 +1,4 @@
-import type { Meta, StoryObj } from '@storybook/nextjs';
+import type { Meta, StoryObj } from '@storybook/nextjs-vite';
 import { WheelPicker } from './WheelPicker';
 
 const meta: Meta<typeof WheelPicker> = {

@@ -1,5 +1,5 @@
 // AccordionGroup.stories.tsx
-import type { Meta, StoryObj } from '@storybook/nextjs';
+import type { Meta, StoryObj } from '@storybook/nextjs-vite';
 import { AccordionGroup } from './AccordionGroup';
 
 const meta: Meta<typeof AccordionGroup> = {

@@ -1,6 +1,6 @@
 import '@/shared/styles/globals.css';
 import './preview-body.css';
-import type { Preview } from '@storybook/nextjs';
+import type { Preview } from '@storybook/nextjs-vite';
 import 'keen-slider/keen-slider.min.css';
 
 const preview: Preview = {

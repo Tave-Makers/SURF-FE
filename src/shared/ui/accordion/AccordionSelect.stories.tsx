@@ -1,4 +1,4 @@
-import type { Meta, StoryObj } from '@storybook/nextjs';
+import type { Meta, StoryObj } from '@storybook/nextjs-vite';
 import { usePicker } from '@/shared/hooks/usePicker';
 import { AccordionSelect } from './AccordionSelect';
 import { Sheet as ModalSheet } from 'react-modal-sheet';

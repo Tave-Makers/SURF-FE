@@ -1,4 +1,4 @@
-import type { Meta, StoryObj } from '@storybook/nextjs';
+import type { Meta, StoryObj } from '@storybook/nextjs-vite';
 import { Toggle } from './Toggle';
 
 const meta: Meta<typeof Toggle> = {

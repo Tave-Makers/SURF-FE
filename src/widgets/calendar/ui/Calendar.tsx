@@ -13,6 +13,12 @@ import type { ActivityMap } from '@/entities/calendar/model/types';
 import { ymd } from '@/entities/calendar/lib/utils';
 import { EventCard } from '@/entities/calendar/ui/EventCard/EventCard';
 
+type CalendarProps = {
+  month: Date;
+  onMonthChange: (date: Date) => void;
+  schedules: ActivityMap;
+};
+
 const calendarClassNames = {
   root: 'w-full',
   months: 'w-full justify-center items-center',
@@ -29,87 +35,13 @@ const calendarClassNames = {
     'flex-1 min-w-[3.12rem] p-10 text-center text-body-body8 text-foreground-foreground-secondary-lighter',
 } as const;
 
-// mock 데이터. API 연동 시 삭제 예정
-const mock: ActivityMap = {
-  '2025-10-30': [
-    {
-      id: 'x1',
-      title: '후반기 만남의 장소',
-      type: 'official',
-      startDate: new Date(),
-      endDate: new Date(),
-      place: '온라인',
-    },
-    {
-      id: 'x2',
-      title: '회의',
-      type: 'operation',
-      startDate: new Date(),
-      endDate: new Date(),
-      place: '오프라인',
-    },
-    {
-      id: 'x3',
-      title: '후반기 만남의 장소',
-      type: 'official',
-      startDate: new Date(),
-      endDate: new Date(),
-      place: '온라인',
-    },
-  ],
-  '2025-10-31': [
-    {
-      id: 'x2',
-      title: '회의',
-      type: 'operation',
-      startDate: new Date(),
-      endDate: new Date(),
-      place: '오프라인',
-    },
-    {
-      id: 'x4',
-      title: 'OB 네트워킹 데이',
-      type: 'other',
-      startDate: new Date(),
-      endDate: new Date(),
-      place: '온라인',
-    },
-    {
-      id: 'x5',
-      title: 'OB 네트워킹 데이',
-      type: 'other',
-      startDate: new Date(),
-      endDate: new Date(),
-      place: '온라인',
-    },
-    {
-      id: 'x6',
-      title: 'OB 네트워킹 데이',
-      type: 'other',
-      startDate: new Date(),
-      endDate: new Date(),
-      place: '온라인',
-    },
-    {
-      id: 'x7',
-      title: 'OB 네트워킹 데이',
-      type: 'other',
-      startDate: new Date(),
-      endDate: new Date(),
-      place: '온라인',
-    },
-  ],
-};
-
-export default function Calendar() {
-  const [month, setMonth] = useState<Date>(new Date());
+export default function Calendar({ month, onMonthChange, schedules }: CalendarProps) {
   const [selectedDay, setSelectedDay] = useState<Date>(new Date());
 
   const handleDaySelect = (date: Date | undefined) => {
     if (!date) return;
-
     setSelectedDay(date);
-    setMonth(date);
+    onMonthChange(date);
   };
 
   const DayBtn = useMemo(() => {
@@ -119,7 +51,7 @@ export default function Calendar() {
           <DayChipRadio
             {...props}
             displayMonth={month}
-            activityMap={mock}
+            activityMap={schedules}
             onSelect={(date) => {
               if (date instanceof Date) {
                 setSelectedDay(date);
@@ -130,7 +62,7 @@ export default function Calendar() {
       );
     }
     return DayButton;
-  }, [month]);
+  }, [month, schedules]);
 
   // 월 네비게이터 컴포넌트
   const NavigatorComponent = ({
@@ -138,22 +70,22 @@ export default function Calendar() {
     onNextClick: _nextClick,
   }: NavProps) => (
     <div className="pb-10">
-      <MonthNavigator month={month} onChange={setMonth} />
+      <MonthNavigator month={month} onChange={onMonthChange} />
     </div>
   );
 
   // 월 그리드 래퍼 컴포넌트
   const MonthComponent = ({ children }: MonthProps) => <div className="w-full">{children}</div>;
 
-  const selectedItems = selectedDay ? (mock[ymd(selectedDay)] ?? []) : [];
+  const selectedItems = selectedDay ? (schedules[ymd(selectedDay)] ?? []) : [];
 
   return (
-    <div className="flex flex-1 flex-col gap-10">
+    <div className="flex flex-1 flex-col gap-10 pt-10">
       <div className="flex flex-1 items-center justify-center px-10">
         <DayPicker
           mode="single"
           month={month}
-          onMonthChange={setMonth}
+          onMonthChange={onMonthChange}
           selected={selectedDay}
           onSelect={handleDaySelect}
           locale={ko}

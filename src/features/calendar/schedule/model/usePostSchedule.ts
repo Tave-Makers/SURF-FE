@@ -1,6 +1,6 @@
 import { ScheduleCreateRequest, ScheduleCreateResponse } from '@/entities/schedule/model/types';
 import { useMutation } from '@tanstack/react-query';
-import { postSchedule } from '@/features/schedule/api/postSchedule';
+import { postSchedule } from '@/features/calendar/schedule/api/postSchedule';
 
 export const usePostSchedule = () => {
   return useMutation<ScheduleCreateResponse, Error, ScheduleCreateRequest>({

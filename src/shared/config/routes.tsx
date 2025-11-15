@@ -208,4 +208,15 @@ export const createRouteConfig = (router: RouterInstance): RouteConfig[] => [
       hasLeftIcon: true,
     },
   },
+
+  {
+    id: 'home-calendar',
+    path: '/home/calendar',
+    backPath: '/home',
+    header: {
+      mode: HeaderMode.Default,
+      title: '일정',
+      hasLeftIcon: true,
+    },
+  },
 ];

@@ -10,9 +10,21 @@ import { postPresignedUrl } from '@/shared/api/image/postPresignedUrl';
  * 업로드 진행 상태를 반영해야 할 경우 onProgress 콜백으로 상위에서 UI 업데이트 가능.
  */
 export function useImageUploader() {
-  /** 파일 확장자 유지한 랜덤 파일명 생성 */
+  /** 안전한 확장자 기반 파일명 생성 */
   const createFileName = (file: File) => {
-    const ext = file.name.split('.').pop();
+    let ext = '';
+    const lastDot = file.name.lastIndexOf('.');
+
+    if (lastDot > 0) {
+      ext = file.name.slice(lastDot + 1).toLowerCase();
+    }
+
+    // 확장자가 없거나 이상한 경우 → MIME 타입 기반
+    if (!ext) {
+      const mimeExt = file.type.split('/')[1];
+      ext = mimeExt || 'jpg';
+    }
+
     return `${crypto.randomUUID()}.${ext}`;
   };
 

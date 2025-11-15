@@ -90,6 +90,7 @@ export function ImageDnD({ images, onReorder, onRemove }: ImageDnDProps) {
               id={image.id}
               preview={image.preview}
               uploadedUrl={image.uploadedUrl}
+              status={image.status}
               onRemove={() => onRemove(index)}
             />
           ))}
@@ -124,11 +125,13 @@ function SortableImage({
   id,
   preview,
   uploadedUrl,
+  status,
   onRemove,
 }: {
   id: string;
   preview: string;
   uploadedUrl?: string;
+  status: UploadImage['status'];
   onRemove: () => void;
 }) {
   const { attributes, listeners, setNodeRef, transform, transition, isDragging } = useSortable({
@@ -143,7 +146,7 @@ function SortableImage({
 
   return (
     <div ref={setNodeRef} style={style} {...attributes} {...listeners} className="cursor-grab">
-      <ImageItem preview={preview} uploadedUrl={uploadedUrl} onRemove={onRemove} />
+      <ImageItem preview={preview} uploadedUrl={uploadedUrl} status={status} onRemove={onRemove} />
     </div>
   );
 }

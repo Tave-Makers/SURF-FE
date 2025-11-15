@@ -6,7 +6,9 @@ import { useImageUploader } from './useImageUploader';
 import { useCallback } from 'react';
 
 /**
- * 이미지 선택 + 즉시 업로드까지 관리하는 통합 훅.
+ * 이미지 선택 + 업로드를 관리하는 통합 훅.
+ * UI 상태는 useImageSelector, 업로드는 useImageUploader,
+ * 전체 이미지 비즈니스 로직은 useImageManager에서 조율.
  */
 export function useImageManager() {
   const { inputRef, images, setImages, openPicker, handleSelect, handleRemove, handleReorder } =
@@ -14,45 +16,49 @@ export function useImageManager() {
 
   const { uploadImages } = useImageUploader();
 
-  /** 파일 선택 시 → 로컬 추가 후 → 자동 업로드 */
+  /**
+   * 업로드 결과를 현재 이미지 배열에 반영하는 공통 함수
+   * (progress + 완료에 모두 사용)
+   */
+  const applyUploadedState = useCallback(
+    (batch: UploadImage[]) => {
+      setImages((prev) =>
+        prev.map((img) => {
+          const updated = batch.find((u) => u.id === img.id);
+          // preview는 유지해야 하므로 preview 우선
+          return updated ? { ...img, ...updated, preview: img.preview } : img;
+        }),
+      );
+    },
+    [setImages],
+  );
+
+  /**
+   * 파일 선택 시 즉시 업로드 로직
+   */
   const handleSelectAndUpload = useCallback(
     async (e: React.ChangeEvent<HTMLInputElement>) => {
-      // 1) selector 로직으로 preview + pending 추가
-      const newlySelected: UploadImage[] = handleSelect(e);
+      const newlySelected = handleSelect(e);
       if (newlySelected.length === 0) return;
 
       if (process.env.NODE_ENV === 'development') {
-        console.log('[DEV] 선택한 파일:', newlySelected);
+        console.log('[DEV] 파일 선택됨:', newlySelected);
       }
 
-      // 2) 방금 추가된 이미지들만 업로드
       const uploadedChunk = await uploadImages(newlySelected, (progressChunk) => {
         if (process.env.NODE_ENV === 'development') {
           console.log('[DEV] 업로드 진행 중:', progressChunk);
         }
-
-        // progressChunk = 해당 batch의 이미지들만 업데이트됨
-        setImages((prev) =>
-          prev.map((img) => {
-            const updated = progressChunk.find((u) => u.id === img.id);
-            return updated ? { ...img, ...updated, preview: img.preview } : img;
-          }),
-        );
+        applyUploadedState(progressChunk);
       });
 
       if (process.env.NODE_ENV === 'development') {
         console.log('[DEV] 업로드 완료:', uploadedChunk);
       }
 
-      // 3) 업로드 완료 반영
-      setImages((prev) =>
-        prev.map((img) => {
-          const updated = uploadedChunk.find((u) => u.id === img.id);
-          return updated ? { ...img, ...updated, preview: img.preview } : img;
-        }),
-      );
+      applyUploadedState(uploadedChunk);
     },
-    [handleSelect, uploadImages, setImages],
+    [handleSelect, uploadImages, applyUploadedState],
   );
 
   return {

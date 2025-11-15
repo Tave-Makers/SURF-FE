@@ -1,13 +1,15 @@
 'use client';
 import DeleteIcon from '@/shared/assets/icons/post/post-image/x-circle-fill.svg';
+import { UploadImage } from '@/shared/types/image';
 
 type ImageItemProps = {
   preview: string;
   uploadedUrl?: string;
+  status: UploadImage['status'];
   onRemove?: () => void;
 };
 
-export function ImageItem({ preview, uploadedUrl, onRemove }: ImageItemProps) {
+export function ImageItem({ preview, uploadedUrl, status, onRemove }: ImageItemProps) {
   const src = uploadedUrl ?? preview;
 
   return (
@@ -18,6 +20,18 @@ export function ImageItem({ preview, uploadedUrl, onRemove }: ImageItemProps) {
         draggable={false}
         className="rounded-2 h-full w-full object-cover"
       />
+
+      {status === 'error' && (
+        <div className="rounded-2 absolute inset-0 flex items-center bg-black/40 text-center text-xs text-white">
+          Upload failed
+        </div>
+      )}
+
+      {status === 'uploading' && (
+        <div className="rounded-2 absolute inset-0 flex items-center justify-center bg-black/20 text-white">
+          <div className="h-12 w-12 animate-spin rounded-full border-2 border-white border-t-transparent"></div>
+        </div>
+      )}
 
       <button
         type="button"

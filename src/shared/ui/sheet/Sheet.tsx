@@ -26,10 +26,10 @@ export function Sheet({
   textBtn,
 }: SheetProps) {
   const renderTitleSection = () => (
-    <div className="flex w-full flex-col gap-[0.25rem]">
-      {title && <div className="text-foreground-normal text-body-16-600--1">{title}</div>}
+    <div className="flex w-full flex-col gap-5">
+      {title && <div className="text-foreground-foreground-normal text-title-title2">{title}</div>}
       {description && (
-        <div className="text-body-14-400--2-22 text-foreground-normal-darker">{description}</div>
+        <div className="text-body-body8 text-foreground-foreground-tertiary">{description}</div>
       )}
     </div>
   );
@@ -69,11 +69,11 @@ export function Sheet({
   };
 
   return (
-    <div className="flex w-full flex-col items-start gap-[1.25rem] rounded-t-[0.5rem] bg-white px-[1.25rem] pb-[1.25rem]">
-      <div className={`flex w-full flex-col items-start ${title ? 'gap-[0.5rem]' : ''}`}>
+    <div className="flex w-full flex-col items-start gap-15 rounded-t-[0.5rem] bg-white px-[1.25rem] pb-[1.25rem]">
+      <div className={`flex w-full flex-col items-start ${title ? 'gap-15' : ''}`}>
         {renderTitleSection()}
         <div
-          className="w-full"
+          className="max-h-[40vh] w-full overflow-y-auto [&::-webkit-scrollbar]:hidden"
           onPointerDown={(e) => e.stopPropagation()}
           onPointerMove={(e) => e.stopPropagation()}
         >

@@ -7,7 +7,7 @@ import { ko } from 'react-day-picker/locale';
 import 'react-day-picker/style.css';
 
 import { MonthNavigator } from '@/entities/calendar/ui/MonthNavigator/MonthNavigator';
-import { DayChipRadio } from '../../../entities/calendar/ui/DayChipRadio/DayChipRadio';
+import { DayChipRadio } from '@/entities/calendar/ui/DayChipRadio/DayChipRadio';
 import { EventDateCard } from '@/entities/calendar/ui/EventDateCard/EventDateCard';
 import type { ActivityMap } from '@/entities/calendar/model/types';
 import { EventCard } from '@/entities/calendar/ui/EventCard/EventCard';

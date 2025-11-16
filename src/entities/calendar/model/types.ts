@@ -5,8 +5,8 @@ export type DailyActivity = {
   id: number | string;
   category: ActivityCategory;
   title: string;
-  startDate?: Date | null;
-  endDate?: Date | null;
+  startDate: Date | null;
+  endDate: Date | null;
   location?: string;
   hasNotice?: boolean;
   postId?: number;

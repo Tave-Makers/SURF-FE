@@ -2,7 +2,7 @@
 
 import { useEffect, useRef, useCallback, useMemo } from 'react';
 import { useInfiniteScraps } from '@/features/post/model/useScraps';
-import { transformApiResponseToPosts } from '@/entities/post/api/mappers';
+import { transformApiResponseToPosts } from '@/entities/post/model/mappers';
 import { PostList } from '@/widgets/post-list/ui/PostList';
 import type { Post } from '@/entities/post/model/types';
 import { SCRAPS_EVENTS } from '@/features/post/model/types';

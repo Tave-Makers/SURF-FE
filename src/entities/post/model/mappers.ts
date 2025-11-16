@@ -1,12 +1,12 @@
-import { PostContent } from './types';
-import { Post, CategoryBadge } from '../model/types';
+import { PostContent } from '@/entities/post/api/types';
+import { Post, CategoryBadge } from './types';
 
 // API 응답에 실제로 존재하지만 타입 정의에 없는 필드를 포함한 확장 타입
 type ExtendedPostContent = PostContent & {
   categoryId?: number;
   thumbnailImageUrl?: string | null;
+  likeByMe?: boolean;
 };
-
 // categoryId를 CategoryBadge로 변환하는 함수
 // TODO: 실제 API와의 매핑 규칙 확인 필요
 const mapCategoryIdToBadge = (categoryId: number | undefined): CategoryBadge => {
@@ -29,7 +29,7 @@ export const transformApiPostToPost = (apiPost: ExtendedPostContent): Post => {
     content: apiPost.content,
     date: new Date(apiPost.postedAt).toLocaleDateString('ko-KR'), // 날짜 포맷팅
     likeCount: apiPost.likeCount,
-    isLiked: apiPost.likeByMe,
+    isLiked: apiPost.likeByMe ?? false,
     commentCount: apiPost.commentCount,
     writer: apiPost.nickname,
     thumbnailUrl: apiPost.thumbnailImageUrl || undefined,

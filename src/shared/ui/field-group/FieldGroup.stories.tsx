@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import type { Meta, StoryObj } from '@storybook/nextjs-vite';
+import type { Meta, StoryObj } from '@storybook/nextjs';
 
 import { FieldGroup } from './FieldGroup';
 import { TextArea } from '@/shared/ui/text-area/TextArea';

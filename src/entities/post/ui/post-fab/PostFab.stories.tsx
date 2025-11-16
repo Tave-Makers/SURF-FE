@@ -1,8 +1,8 @@
-import type { Meta, StoryObj } from '@storybook/nextjs-vite';
+import type { Meta, StoryObj } from '@storybook/nextjs';
 import { PostFab } from './PostFab';
 
 const meta = {
-  title: 'Entities/UI/Post/PostFab',
+  title: 'Entities/Post/UI/PostFab',
   component: PostFab,
   tags: ['autodocs'],
   parameters: {

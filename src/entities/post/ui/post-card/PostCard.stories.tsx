@@ -1,11 +1,9 @@
-'use client';
-
-import type { Meta, StoryObj } from '@storybook/nextjs-vite';
+import type { Meta, StoryObj } from '@storybook/nextjs';
 import { PostCard } from './PostCard';
 import type { Post } from '@/entities/post/model/types';
 
 const meta: Meta<typeof PostCard> = {
-  title: 'Entities/Post/PostCard',
+  title: 'Entities/Post/UI/PostCard',
   component: PostCard,
   tags: ['autodocs'],
   parameters: {

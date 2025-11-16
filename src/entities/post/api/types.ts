@@ -80,7 +80,7 @@ export type ImageItemResponse = ImageItem & {
   postId: number;
 };
 
-export type PostDetailResponse = {
+export type PostDetailData = {
   id: number;
   title: string;
   content: string;
@@ -96,3 +96,5 @@ export type PostDetailResponse = {
   imageUrlList: ImageItemResponse[];
   categoryId: number | null;
 };
+
+export type PostDetailResponse = CommonResponse<PostDetailData>;

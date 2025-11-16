@@ -1,4 +1,4 @@
-import type { Meta, StoryObj } from '@storybook/nextjs-vite';
+import type { Meta, StoryObj } from '@storybook/nextjs';
 import { MonthNavigator } from './MonthNavigator';
 import { useState } from 'react';
 import { format } from 'date-fns';

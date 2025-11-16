@@ -1,4 +1,4 @@
-import type { Meta, StoryObj } from '@storybook/nextjs-vite';
+import type { Meta, StoryObj } from '@storybook/nextjs';
 import { EventCard } from './EventCard';
 import type { ActivityCategory, EventCardType } from '../../model/types';
 

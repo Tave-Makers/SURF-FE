@@ -1,4 +1,4 @@
-import type { Meta, StoryObj } from '@storybook/nextjs-vite';
+import type { Meta, StoryObj } from '@storybook/nextjs';
 import { DayChipRadio } from './DayChipRadio';
 import { addDays, subMonths, format } from 'date-fns';
 import type { ActivityMap, DailyActivity } from '@/entities/calendar/model/types';

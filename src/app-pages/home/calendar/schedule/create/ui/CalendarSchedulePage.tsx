@@ -48,19 +48,26 @@ export default function CalendarSchedulePage() {
   const handleSubmit = (data: ScheduleFormData) => {
     if (!isFormValid) return;
 
-    console.log('1. 폼 제출 함수 호출됨');
-    console.log('2. 원본 폼 데이터:', data);
+    if (process.env.NODE_ENV === 'development') {
+      console.log('폼 제출 시도:', data);
+    }
 
     const requestData = mapScheduleFormToRequest(data);
-    console.log('3. 서버로 보낼 변환된 데이터:', requestData);
+    if (process.env.NODE_ENV === 'development') {
+      console.log('서버로 보낼 변환된 데이터:', requestData);
+    }
 
     createSchedule(requestData, {
       onSuccess: () => {
-        console.log('4. API 성공!');
+        if (process.env.NODE_ENV === 'development') {
+          console.log('일정 생성 요청 성공');
+        }
         alert('일정 생성 완료');
       },
       onError: (error) => {
-        console.error('4. API 실패 원인:', error);
+        if (process.env.NODE_ENV === 'development') {
+          console.error('일정 생성 요청 실패:', error);
+        }
       },
     });
   };

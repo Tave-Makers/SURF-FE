@@ -211,7 +211,7 @@ export const createRouteConfig = (router: RouterInstance): RouteConfig[] => [
 
   {
     id: 'schedule/create',
-    path: '/calendar/schedule/create',
+    path: '/home/calendar/schedule/create',
     backPath: '/home', // 임시
     header: {
       mode: HeaderMode.TextBtn,

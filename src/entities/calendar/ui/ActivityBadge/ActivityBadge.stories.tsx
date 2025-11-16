@@ -9,6 +9,8 @@ const createDummyItem = (
   id: 'dummy-id',
   category,
   title,
+  startDate: new Date(),
+  endDate: new Date(),
 });
 
 const meta: Meta<typeof ActivityBadge> = {

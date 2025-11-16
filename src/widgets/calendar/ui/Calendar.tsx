@@ -99,7 +99,7 @@ export default function Calendar({ month, onMonthChange, schedules }: CalendarPr
   const selectedItems = selectedDay ? (schedules[formatDate] ?? []) : [];
 
   return (
-    <div className="flex min-h-0 flex-1 flex-col gap-10 overflow-y-auto pt-10">
+    <div className="flex min-h-0 flex-1 flex-col gap-10 overflow-y-auto pt-10 pb-15">
       <div className="flex min-h-0 flex-1 items-center justify-center px-10">
         <DayPicker
           mode="single"

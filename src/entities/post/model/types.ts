@@ -1,8 +1,5 @@
 import type { ImageItem } from '@/entities/post/api/types';
-
-export type PostCategory = 'all' | 'event' | 'activity' | 'partnership' | 'patch' | 'etc';
-
-export type CategoryBadge = Exclude<PostCategory, 'all'>;
+import { PostCategoryLabel } from './constants';
 
 export type Post = {
   postId: number;
@@ -20,5 +17,5 @@ export type Post = {
   commentCount: number;
   thumbnailUrl?: string;
   images?: ImageItem[];
-  category: CategoryBadge;
+  categoryName: PostCategoryLabel;
 };

@@ -91,7 +91,6 @@ export default function ScrapsPage() {
       <div ref={scrollRef} className="flex-1 overflow-y-auto">
         <PostList
           posts={allPosts}
-          currentCategory="all"
           userLevel="member"
           isLoading={isLoading}
           isFetchingNextPage={isFetchingNextPage}

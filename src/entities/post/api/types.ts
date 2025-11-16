@@ -11,6 +11,7 @@ export type ImageItem = {
 // 게시글 목록
 export type PostListItemResponse = {
   id: number;
+  categoryId?: number;
   title: string;
   content: string;
   pinned: boolean;
@@ -89,4 +90,10 @@ export type Pageable = {
   pageNumber: number;
   pageSize: number;
   unpaged: boolean;
+};
+
+export type PostApiRequest = {
+  page: number;
+  size: number;
+  sort: string[];
 };

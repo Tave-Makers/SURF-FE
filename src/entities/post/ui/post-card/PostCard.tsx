@@ -2,16 +2,16 @@
 
 import { SurfIcon } from '@/shared/ui/icon/SurfIcon';
 import { PostBadge } from '@/entities/post/ui/post-badge/PostBadge';
-import type { Post, PostCategory } from '@/entities/post/model/types';
+import type { Post } from '@/entities/post/model/types';
 import type { UserLevel } from '@/entities/user/model/types';
+import type { TabCategoryLabel } from '@/entities/post/model/constants';
 
 type PostCardProps = {
   post: Post;
-  currentCategory: PostCategory;
+  currentCategory?: TabCategoryLabel;
   userLevel: UserLevel;
   onClick?: () => void;
   onLikeToggle?: (newState: boolean) => void;
-  showCategoryBadge?: boolean;
 };
 
 export const PostCard = ({
@@ -20,7 +20,6 @@ export const PostCard = ({
   userLevel,
   onClick,
   onLikeToggle,
-  showCategoryBadge,
 }: PostCardProps) => {
   const {
     title,
@@ -30,12 +29,15 @@ export const PostCard = ({
     likeCount,
     isLiked,
     commentCount,
-    category,
+    categoryName,
     isReserved,
     thumbnailUrl,
   } = post;
 
-  const shouldShowCategoryBadge = showCategoryBadge ?? currentCategory === 'all';
+  // 탭이 "전체"일 때만 카테고리 배지 표시
+  const shouldShowCategoryBadge = currentCategory === '전체';
+
+  // 예약중 배지는 member가 아닐 때만 표시
   const showReservationBadge = isReserved && userLevel !== 'member';
 
   const handleKeyDown = (e: React.KeyboardEvent<HTMLDivElement>) => {
@@ -51,13 +53,14 @@ export const PostCard = ({
       tabIndex={0}
       onClick={onClick}
       onKeyDown={handleKeyDown}
-      className="focus-visible:ring-primary flex w-full cursor-pointer flex-row items-center gap-15 self-stretch rounded-lg py-10 focus-visible:ring-2"
+      className="flex w-full cursor-pointer flex-row items-center gap-15 self-stretch py-10"
       aria-label={`게시글: ${title}`}
     >
       <div className="flex flex-1 flex-col gap-8 self-stretch">
         {/* 뱃지 */}
         <div className="flex gap-5">
-          {shouldShowCategoryBadge && <PostBadge type="category" category={category} />}
+          {shouldShowCategoryBadge && <PostBadge type="category" category={categoryName} />}
+
           {showReservationBadge && <PostBadge type="reservation" />}
         </div>
 

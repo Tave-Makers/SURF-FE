@@ -1,12 +1,13 @@
 'use client';
 
 import { PostCard } from '@/entities/post/ui/post-card/PostCard';
-import type { Post, PostCategory } from '@/entities/post/model/types';
+import type { Post } from '@/entities/post/model/types';
 import type { UserLevel } from '@/entities/user/model/types';
+import { TabCategoryLabel } from '@/entities/post/model/constants';
 
 type PostListProps = {
   posts: Post[];
-  currentCategory: PostCategory;
+  currentCategory?: TabCategoryLabel;
   userLevel: UserLevel;
   isLoading?: boolean;
   isFetchingNextPage?: boolean;
@@ -25,7 +26,6 @@ export const PostList = ({
   hasNextPage = false,
   onPostClick,
   loadMoreRef,
-  showCategoryBadge = false,
 }: PostListProps) => {
   if (isLoading) {
     return (
@@ -48,7 +48,6 @@ export const PostList = ({
           currentCategory={currentCategory}
           userLevel={userLevel}
           onClick={() => onPostClick?.(post)}
-          showCategoryBadge={showCategoryBadge}
         />
       ))}
 

@@ -3,18 +3,26 @@ import {
   PostDetailResponse,
   PostMutationResponse,
 } from '@/entities/post/api/types';
-import { Post, CategoryBadge } from '@/entities/post/model/types';
+import { Post } from '@/entities/post/model/types';
+import {
+  POST_CATEGORIES,
+  PostCategoryLabel,
+  TabCategoryId,
+  TAB_CATEGORIES,
+  TabCategoryLabel,
+} from './constants';
 
-// categoryId - CategoryBadge 변환
-const mapCategoryIdToBadge = (categoryId: number | null | undefined): CategoryBadge => {
-  const map: Record<number, CategoryBadge> = {
-    1: 'event',
-    2: 'activity',
-    3: 'partnership',
-    4: 'patch',
-    5: 'etc',
-  };
-  return categoryId ? (map[categoryId] ?? 'etc') : 'etc';
+// categoryId - Category Label 변환
+export const categoryIdToLabel = (id: number | string | null | undefined): PostCategoryLabel => {
+  if (id === 'all' || id == null) return '기타';
+
+  const found = POST_CATEGORIES.find((c) => c.id === id);
+  return found?.label ?? '기타';
+};
+
+export const tabCategoryToServerId = (label: TabCategoryLabel): TabCategoryId => {
+  const found = TAB_CATEGORIES.find((c) => c.label === label);
+  return found?.id ?? 'all';
 };
 
 // 목록 API 변환
@@ -35,7 +43,7 @@ export const transformListItemToPost = (item: PostListItemResponse): Post => {
     commentCount: item.commentCount,
     thumbnailUrl: item.thumbnailImageUrl ?? undefined,
     images: undefined,
-    category: 'event',
+    categoryName: categoryIdToLabel(item.categoryId ?? undefined),
   };
 };
 
@@ -57,7 +65,7 @@ export const transformDetailToPost = (item: PostDetailResponse): Post => {
     commentCount: item.commentCount,
     images: item.imageUrlList,
     thumbnailUrl: item.imageUrlList?.[0]?.originalUrl,
-    category: mapCategoryIdToBadge(item.categoryId),
+    categoryName: categoryIdToLabel(item.categoryId ?? undefined),
   };
 };
 
@@ -79,6 +87,6 @@ export const transformMutationToPost = (item: PostMutationResponse): Post => {
     commentCount: 0,
     images: undefined,
     thumbnailUrl: undefined,
-    category: mapCategoryIdToBadge(item.categoryId),
+    categoryName: categoryIdToLabel(item.categoryId ?? undefined),
   };
 };

@@ -2,13 +2,17 @@
 
 import { useState } from 'react';
 import { Tab } from '@/shared/ui/tab/Tab';
-import { POST_CATEGORY_LABEL_MAP } from '@/entities/post/model/postCategoryMap';
+import { TAB_CATEGORIES } from '@/entities/post/model/constants';
 import { PostList } from '@/widgets/post-list/ui/PostList';
-import type { Post, CategoryBadge, PostCategory } from '@/entities/post/model/types';
+import type { Post } from '@/entities/post/model/types';
+import type { TabCategoryLabel, PostCategoryLabel } from '@/entities/post/model/constants';
 
 export const BoardPage = () => {
-  const [currentCategory, setCurrentCategory] = useState<PostCategory>('all');
-  const categories: CategoryBadge[] = ['event', 'activity', 'partnership', 'patch', 'etc'];
+  // 🔥 탭 카테고리는 '전체' 포함
+  const [currentCategory, setCurrentCategory] = useState<TabCategoryLabel>('전체');
+
+  // 🔥 dummy posts (게시글 category는 "전체" 불가)
+  const realCategories = ['행사', '활동', '제휴', '패치', '기타'] as PostCategoryLabel[];
 
   const dummyPosts: Post[] = Array.from({ length: 10 }).map((_, i) => ({
     postId: i,
@@ -24,7 +28,10 @@ export const BoardPage = () => {
     scrappedByMe: false,
     scrapCount: 0,
     commentCount: Math.floor(Math.random() * 5),
-    category: categories[i % categories.length],
+
+    // 🔥 게시글은 실카테고리만 가짐
+    categoryName: realCategories[i % realCategories.length],
+
     thumbnailUrl: undefined,
     images: undefined,
   }));
@@ -32,13 +39,14 @@ export const BoardPage = () => {
   return (
     <div className="flex h-full w-full flex-col">
       <Tab
-        defaultValue="all"
-        items={Object.entries(POST_CATEGORY_LABEL_MAP).map(([value, label]) => ({
-          value,
-          label,
+        defaultValue="전체"
+        items={TAB_CATEGORIES.map((c) => ({
+          value: c.label, // "전체" | "행사" | ...
+          label: c.label,
         }))}
-        onValueChange={(value) => setCurrentCategory(value as PostCategory)}
+        onValueChange={(value) => setCurrentCategory(value as TabCategoryLabel)}
       />
+
       <div className="flex-1 overflow-y-auto">
         <PostList
           posts={dummyPosts}

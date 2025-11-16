@@ -1,16 +1,18 @@
 'use client';
 
 import { axiosInstance } from '@/shared/lib/axiosInstance';
-import { FullApiResponse, PostApiResponse, PostApiRequest } from '@/entities/post/api/types';
+import type {
+  PostListApiResponse,
+  FullPostListResponse,
+  PostApiRequest,
+} from '@/entities/post/api/types';
 
 export const getPosts = {
-  getMyPosts: async (params: Partial<PostApiRequest>): Promise<PostApiResponse> => {
-    const page = params.page;
-    const size = params.size;
-    const sort = params.sort;
+  getMyPosts: async (params: Partial<PostApiRequest>): Promise<PostListApiResponse> => {
+    const { page, size, sort } = params;
 
     try {
-      const response = await axiosInstance.get<FullApiResponse>('/v1/user/posts/me', {
+      const response = await axiosInstance.get<FullPostListResponse>('/v1/user/posts/me', {
         params: { page, size, sort },
       });
       return response.data.data;
@@ -20,13 +22,11 @@ export const getPosts = {
     }
   },
 
-  getScraps: async (params: Partial<PostApiRequest>): Promise<PostApiResponse> => {
-    const page = params.page;
-    const size = params.size;
-    const sort = params.sort;
+  getScraps: async (params: Partial<PostApiRequest>): Promise<PostListApiResponse> => {
+    const { page, size, sort } = params;
 
     try {
-      const response = await axiosInstance.get<FullApiResponse>('/v1/user/scraps/me', {
+      const response = await axiosInstance.get<FullPostListResponse>('/v1/user/scraps/me', {
         params: { page, size, sort },
       });
       return response.data.data;

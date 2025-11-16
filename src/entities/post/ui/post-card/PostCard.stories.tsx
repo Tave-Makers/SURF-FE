@@ -28,14 +28,14 @@ const mockPost: Post = {
   scrappedByMe: false,
   scrapCount: 0,
   commentCount: 8,
-  category: 'event',
+  categoryName: '행사',
   thumbnailUrl: 'https://images.unsplash.com/photo-1522204507765-4b9e8f69e4f1?w=200&h=200&fit=crop',
 };
 
 export const Default: Story = {
   args: {
     post: mockPost,
-    currentCategory: 'all',
+    currentCategory: '전체',
     userLevel: 'member',
   },
 };
@@ -47,7 +47,7 @@ export const Liked: Story = {
       isLiked: true,
       likeCount: 99,
     },
-    currentCategory: 'all',
+    currentCategory: '전체',
     userLevel: 'member',
   },
 };
@@ -58,7 +58,7 @@ export const AdminView: Story = {
       ...mockPost,
       isReserved: true,
     },
-    currentCategory: 'patch',
+    currentCategory: '행사',
     userLevel: 'manager',
   },
 };
@@ -69,7 +69,7 @@ export const WithoutThumbnail: Story = {
       ...mockPost,
       thumbnailUrl: undefined,
     },
-    currentCategory: 'all',
+    currentCategory: '패치',
     userLevel: 'member',
   },
 };

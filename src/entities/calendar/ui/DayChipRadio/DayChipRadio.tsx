@@ -32,8 +32,8 @@ export function DayChipRadio({
     <button
       {...btn}
       onClick={(e) => {
-        btn.onClick?.(e); // DayPicker 내부 선택 로직에 이벤트 전달
-        onSelect?.(date); // 우리 상태 업데이트
+        btn.onClick?.(e);
+        onSelect?.(date);
       }}
       className={[
         'rounded-3 flex h-[5rem] w-full flex-col items-start gap-2 overflow-hidden px-2 py-1',

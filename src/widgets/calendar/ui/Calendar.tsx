@@ -13,11 +13,21 @@ import type { ActivityMap } from '@/entities/calendar/model/types';
 import { EventCard } from '@/entities/calendar/ui/EventCard/EventCard';
 import { format } from 'date-fns';
 
-type CalendarProps = {
-  month: Date;
-  onMonthChange: (date: Date) => void;
-  schedules: ActivityMap;
-};
+/**
+ * calendarClassNames: DayPicker 컴포넌트의 클래스 네임 커스터마이징 객체
+ * 각 키는 DayPicker의 내부 요소에 대응하며, 값은 해당 요소에 적용할 클래스 네임입니다.
+ * root: 최상위 컨테이너
+ * months: 월들 컨테이너
+ * month: 개별 월 그리드
+ * month_grid: 월 그리드 컨테이너
+ * week: 주 그리드
+ * cell: 날짜 셀
+ * day: 날짜 버튼
+ * month_caption: 월 제목
+ * tfoot: 푸터 숨기기
+ * weekdays: 요일 행 그리드
+ * weekday: 요일 셀
+ */
 
 const calendarClassNames = {
   root: 'w-full',
@@ -35,15 +45,23 @@ const calendarClassNames = {
     'flex-1 min-w-[3.12rem] p-10 text-center text-body-body8 text-foreground-foreground-secondary-lighter',
 } as const;
 
+type CalendarProps = {
+  month: Date;
+  onMonthChange: (date: Date) => void;
+  schedules: ActivityMap;
+};
+
 export default function Calendar({ month, onMonthChange, schedules }: CalendarProps) {
   const [selectedDay, setSelectedDay] = useState<Date>(new Date());
 
+  // 날짜 선택 핸들러
   const handleDaySelect = (date: Date | undefined) => {
     if (!date) return;
     setSelectedDay(date);
     onMonthChange(date);
   };
 
+  // DayPicker의 DayButton 커스텀 컴포넌트
   const DayBtn = useMemo(() => {
     function DayButton(props: DayButtonProps) {
       return (

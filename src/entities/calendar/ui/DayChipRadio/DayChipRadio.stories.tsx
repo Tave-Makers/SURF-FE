@@ -20,6 +20,8 @@ const createActivity = (
   id,
   category: type,
   title,
+  startDate: new Date(),
+  endDate: new Date(),
 });
 
 const createMockDay = (date: Date, displayMonth: Date = TODAY): CalendarDay => {

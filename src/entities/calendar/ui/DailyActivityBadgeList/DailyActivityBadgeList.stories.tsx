@@ -8,6 +8,8 @@ const createDummyItems = (count: number): DailyActivity[] => {
     id: `dummy-${i}`,
     category: types[i % 3],
     title: `일정 제목 ${i + 1}`,
+    startDate: new Date(),
+    endDate: new Date(),
   }));
 };
 

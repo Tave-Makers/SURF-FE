@@ -1,12 +1,13 @@
 'use client';
 
 import { useMemo } from 'react';
-import { useForm } from 'react-hook-form';
-import { FormProvider } from 'react-hook-form';
+import { useForm, FormProvider } from 'react-hook-form';
 import ScheduleCreateForm from '@/widgets/schedule/ui/ScheduleCreateForm';
 import { ScheduleFormData } from '@/features/calendar/schedule/model/types';
 import { usePostSchedule } from '@/features/calendar/schedule/model/usePostSchedule';
 import { mapScheduleFormToRequest } from '@/features/calendar/schedule/api/mapper';
+import { AppHeader } from '@/widgets/header/ui/AppHeader';
+import { HeaderMode, HeaderProps } from '@/shared/ui/header/Header';
 
 export default function CalendarSchedulePage() {
   const { mutate: createSchedule } = usePostSchedule();
@@ -30,9 +31,8 @@ export default function CalendarSchedulePage() {
 
   // 버튼 활성화 조건 검증
   const isFormValid = useMemo(() => {
-    // 제목 검증: 공백 제외 2자 이상, 20자 이하
-    const trimmedTitle = title?.trim() || '';
-    const isTitleValid = trimmedTitle.length >= 2 && trimmedTitle.length <= 20;
+    // 제목 검증: 최소 2자 이상
+    const isTitleValid = title.trim().length >= 2;
 
     // 시작일/마감일 검증: 둘 다 선택되어 있고, 마감일이 시작일과 같거나 이후
     const isDateValid =
@@ -73,10 +73,24 @@ export default function CalendarSchedulePage() {
   };
 
   return (
-    <FormProvider {...methods}>
-      <div className="px-13">
-        <ScheduleCreateForm onSubmit={handleSubmit} />
-      </div>
-    </FormProvider>
+    <>
+      <AppHeader
+        overrideHeader={((): HeaderProps => ({
+          mode: HeaderMode.TextBtn,
+          title: '일정',
+          hasLeftIcon: true,
+          text: '완료',
+          btnVariant: 'secondary',
+          isDisabled: !isFormValid || methods.formState.isSubmitting,
+          onClickTextBtn: () => void methods.handleSubmit(handleSubmit)(),
+        }))()}
+      />
+
+      <FormProvider {...methods}>
+        <div className="px-13">
+          <ScheduleCreateForm onSubmit={handleSubmit} />
+        </div>
+      </FormProvider>
+    </>
   );
 }

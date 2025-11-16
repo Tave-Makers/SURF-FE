@@ -58,3 +58,41 @@ export type PostApiRequest = {
   size: number;
   sort: string[];
 };
+
+export type ImageItem = {
+  originalUrl: string;
+  sequence: number;
+};
+
+export type CreatePostRequest = {
+  boardId: number;
+  categoryId: number;
+  title: string;
+  content: string;
+  pinned: boolean;
+  reservedAt?: string;
+  imageUrlList?: ImageItem[];
+  reserved: boolean;
+};
+
+export type ImageItemResponse = ImageItem & {
+  imageId: number;
+  postId: number;
+};
+
+export type PostDetailResponse = {
+  id: number;
+  title: string;
+  content: string;
+  pinned: boolean;
+  postedAt: string;
+  boardId: number;
+  scrappedByMe: boolean;
+  scrapCount: number;
+  likedByMe: boolean;
+  likeCount: number;
+  commentCount: number;
+  nickname: string;
+  imageUrlList: ImageItemResponse[];
+  categoryId: number | null;
+};

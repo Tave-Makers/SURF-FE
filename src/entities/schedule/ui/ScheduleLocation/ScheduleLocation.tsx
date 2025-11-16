@@ -76,6 +76,7 @@ export function ScheduleLocation({
             onChange={handleChange}
             onBlur={handleBlur}
             onKeyDown={handleTextAreaKeyDown}
+            maxLength={13}
             className="text-foreground-foreground-quaternary text-caption-caption2 w-full resize-none border-none bg-transparent text-right outline-none"
             rows={1}
             style={{ overflow: 'hidden', height: 'auto' }}

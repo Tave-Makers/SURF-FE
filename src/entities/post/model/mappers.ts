@@ -11,16 +11,16 @@ const mapCategoryIdToBadge = (categoryId: number | null | undefined): CategoryBa
     1: 'event',
     2: 'activity',
     3: 'partnership',
-    4: 'release',
-    5: 'others',
+    4: 'patch',
+    5: 'etc',
   };
-  return categoryId ? (map[categoryId] ?? 'others') : 'others';
+  return categoryId ? (map[categoryId] ?? 'etc') : 'etc';
 };
 
 // 목록 API 변환
 export const transformListItemToPost = (item: PostListItemResponse): Post => {
   return {
-    id: item.id,
+    postId: item.id,
     title: item.title,
     content: item.content,
     writer: item.nickname,
@@ -35,15 +35,14 @@ export const transformListItemToPost = (item: PostListItemResponse): Post => {
     commentCount: item.commentCount,
     thumbnailUrl: item.thumbnailImageUrl ?? undefined,
     images: undefined,
-    category: 'others',
+    category: 'event',
   };
 };
 
 // 게시글 상세 API 변환
-
 export const transformDetailToPost = (item: PostDetailResponse): Post => {
   return {
-    id: item.id,
+    postId: item.id,
     title: item.title,
     content: item.content,
     writer: item.nickname,
@@ -63,10 +62,9 @@ export const transformDetailToPost = (item: PostDetailResponse): Post => {
 };
 
 // 게시글 생성/수정 API 변환
-
 export const transformMutationToPost = (item: PostMutationResponse): Post => {
   return {
-    id: item.id,
+    postId: item.id,
     title: item.title,
     content: item.content,
     writer: item.nickname,

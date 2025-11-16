@@ -43,7 +43,7 @@ export const PostList = ({
     <div className="flex flex-1 flex-col overflow-y-auto px-13 pt-12">
       {posts.map((post, index) => (
         <PostCard
-          key={`${post.id}-${index}`}
+          key={`${post.postId}-${index}`}
           post={post}
           currentCategory={currentCategory}
           userLevel={userLevel}

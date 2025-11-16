@@ -1,6 +1,6 @@
 import type { Meta, StoryObj } from '@storybook/nextjs';
 import { PostBadge } from './PostBadge';
-import type { PostCategory } from '@/entities/post/model/types';
+import type { CategoryBadge } from '@/entities/post/model/types';
 
 const meta: Meta<typeof PostBadge> = {
   title: 'Entities/Post/UI/PostBadge',
@@ -11,13 +11,7 @@ const meta: Meta<typeof PostBadge> = {
 export default meta;
 type Story = StoryObj<typeof PostBadge>;
 
-const categories: Exclude<PostCategory, 'all'>[] = [
-  'event',
-  'activity',
-  'partnership',
-  'release',
-  'others',
-];
+const categories: CategoryBadge[] = ['event', 'activity', 'partnership', 'patch', 'etc'];
 
 export const CategoryBadges: Story = {
   render: () => (

@@ -1,16 +1,16 @@
 import type { Meta, StoryObj } from '@storybook/nextjs-vite';
 import { EventCard } from '../EventCard/EventCard';
 import { EventDateCard } from './EventDateCard';
-import type { ActivityType, EventCardType } from '../../model/types';
+import type { ActivityCategory, EventCardType } from '../../model/types';
 
 type EventItem = {
   id: string;
   title: string;
-  type: ActivityType;
+  category: ActivityCategory;
   mode: EventCardType;
   startDate?: Date | null;
   endDate?: Date | null;
-  place: string;
+  location?: string;
   isAdmin?: boolean;
   hasNotice?: boolean;
 };
@@ -35,12 +35,13 @@ const meta: Meta<typeof EventDateCard<EventItem>> = {
     // 기본 renderItem 정의
     renderItem: (item) => (
       <EventCard
+        id={item.id}
         title={item.title}
-        type={item.type}
+        category={item.category}
         mode={item.mode}
-        startDate={item.startDate}
-        endDate={item.endDate}
-        place={item.place}
+        startDate={item.startDate || null}
+        endDate={item.endDate || null}
+        location={item.location}
         isAdmin={item.isAdmin}
         hasNotice={item.hasNotice}
         onClickCard={() => console.log(`Clicked card: ${item.id}`)}
@@ -50,21 +51,21 @@ const meta: Meta<typeof EventDateCard<EventItem>> = {
       {
         id: '1',
         title: '후반기 만남의 장',
-        type: 'official',
+        category: 'official',
         mode: 'calendar',
         startDate: new Date('2025-11-20T10:00:00'),
         endDate: new Date('2025-11-21T18:00:00'),
-        place: '서울 강남구 어딘가',
+        location: '서울 강남구 어딘가',
         hasNotice: true,
       },
       {
         id: '2',
         title: '운영진 정기 회의',
-        type: 'operation',
+        category: 'operation',
         mode: 'calendar',
         startDate: new Date('2025-11-20T14:00:00'),
         endDate: new Date('2025-11-20T15:00:00'),
-        place: '온라인 (Zoom)',
+        location: '온라인 (Zoom)',
         isAdmin: true,
       },
     ],
@@ -96,22 +97,22 @@ export const MixedCases: Story = {
       {
         id: '1',
         title: '일반 회원 보기 (공지 있음)',
-        type: 'official',
+        category: 'official',
         mode: 'calendar',
         startDate: new Date(),
         endDate: new Date(),
-        place: '장소 A',
+        location: '장소 A',
         hasNotice: true,
         isAdmin: false,
       },
       {
         id: '2',
         title: '운영진 보기 (메뉴 버튼)',
-        type: 'operation',
+        category: 'operation',
         mode: 'calendar',
         startDate: new Date(),
         endDate: new Date(),
-        place: '장소 B',
+        location: '장소 B',
         isAdmin: true,
       },
     ],

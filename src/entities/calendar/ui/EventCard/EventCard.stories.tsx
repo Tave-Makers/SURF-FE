@@ -1,6 +1,6 @@
 import type { Meta, StoryObj } from '@storybook/nextjs-vite';
 import { EventCard } from './EventCard';
-import type { ActivityType, EventCardType } from '../../model/types';
+import type { ActivityCategory, EventCardType } from '../../model/types';
 
 // 더미 데이터
 const SAMPLE_START_DATE = new Date('2025-11-08T14:00:00');
@@ -18,9 +18,9 @@ const meta: Meta<typeof EventCard> = {
       control: 'text',
       description: '이벤트 제목',
     },
-    type: {
+    category: {
       control: 'radio',
-      options: ['official', 'operation', 'other'] as ActivityType[],
+      options: ['official', 'operation', 'other'] as ActivityCategory[],
       description: '이벤트 태그의 종류',
     },
     mode: {
@@ -36,7 +36,7 @@ const meta: Meta<typeof EventCard> = {
       control: 'date',
       description: '이벤트 종료일',
     },
-    place: {
+    location: {
       control: 'text',
       description: '이벤트 장소',
     },
@@ -53,11 +53,11 @@ const meta: Meta<typeof EventCard> = {
   },
   args: {
     title: '후반기 만남의 장',
-    type: 'official',
+    category: 'official',
     mode: 'calendar',
     startDate: SAMPLE_START_DATE,
     endDate: SAMPLE_END_DATE,
-    place: '추후 공지',
+    location: '추후 공지',
     isAdmin: false,
     hasNotice: false,
   },
@@ -154,24 +154,24 @@ export const AdminNoNotice: Story = {
 
 export const OperationType: Story = {
   args: {
-    type: 'operation',
+    category: 'operation',
     title: '운영진 정기 회의',
-    place: '온라인 (Zoom)',
+    location: '온라인 (Zoom)',
   },
 };
 
 export const OtherType: Story = {
   args: {
-    type: 'other',
+    category: 'other',
     title: 'UX/UI 스터디 모임',
-    place: '성수동 카페',
+    location: '성수동 카페',
   },
 };
 
 export const LongText: Story = {
   args: {
     title: '11월 전체 정기 회의 및 하반기 활동 보고의 건입니다. 모두 참석해주세요.',
-    place: '서울특별시 강남구 테헤란로 123, 위워크 빌딩 10층 컨퍼런스룸 A',
+    location: '서울특별시 강남구 테헤란로 123, 위워크 빌딩 10층 컨퍼런스룸 A',
     hasNotice: true, // 긴 제목과 공지 링크가 함께 있을 때 레이아웃 확인용
   },
 };

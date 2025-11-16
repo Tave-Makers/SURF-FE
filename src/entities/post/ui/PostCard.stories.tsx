@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import type { Meta, StoryObj } from '@storybook/nextjs-vite';
+import type { Meta, StoryObj } from '@storybook/nextjs';
 import { PostCard } from './PostCard';
 import type { Post } from '../model/types';
 

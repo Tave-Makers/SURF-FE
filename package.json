@@ -12,7 +12,10 @@
     "storybook": "storybook dev -p 6006",
     "build-storybook": "storybook build",
     "convert-typo": "node --loader ts-node/esm scripts/convert-typo.ts",
-    "convert-color": "node --loader ts-node/esm scripts/convert-color.ts"
+    "convert-color": "node --loader ts-node/esm scripts/convert-color.ts",
+    "test": "vitest",
+    "test:ui": "vitest --ui",
+    "test:run": "vitest run"
   },
   "lint-staged": {
     "*.{js,jsx,ts,tsx}": [
@@ -45,10 +48,11 @@
     "@eslint/eslintrc": "^3",
     "@eslint/js": "^9.35.0",
     "@next/eslint-plugin-next": "^15.5.2",
-    "@storybook/addon-a11y": "9.1.5",
-    "@storybook/addon-docs": "9.1.5",
-    "@storybook/addon-vitest": "9.1.5",
-    "@storybook/nextjs-vite": "^9.1.5",
+    "@storybook/addon-a11y": "9.1.16",
+    "@storybook/addon-docs": "9.1.16",
+    "@storybook/addon-vitest": "9.1.16",
+    "@storybook/builder-webpack5": "~9.1.16",
+    "@storybook/nextjs": "~9.1.16",
     "@svgr/webpack": "^8.1.0",
     "@tailwindcss/postcss": "^4",
     "@tanstack/react-query-devtools": "^5.90.2",
@@ -56,6 +60,7 @@
     "@types/node": "^20",
     "@types/react": "^19",
     "@types/react-dom": "^19",
+    "@types/webpack": "^5.28.5",
     "@vitest/browser": "^3.2.4",
     "@vitest/coverage-v8": "^3.2.4",
     "eslint": "^9",
@@ -73,12 +78,13 @@
     "prettier": "^3.6.2",
     "prettier-plugin-tailwindcss": "^0.6.14",
     "sort-package-json": "^3.4.0",
-    "storybook": "9.1.5",
+    "storybook": "9.1.16",
     "tailwindcss": "^4",
     "ts-node": "^10.9.2",
     "typescript": "^5",
     "typescript-eslint": "^8.42.0",
-    "vitest": "^3.2.4"
+    "vitest": "^3.2.4",
+    "webpack": "^5.102.1"
   },
   "packageManager": "pnpm@10.15.1+sha512.34e538c329b5553014ca8e8f4535997f96180a1d0f614339357449935350d924e22f8614682191264ec33d1462ac21561aff97f6bb18065351c162c7e8f6de67"
 }

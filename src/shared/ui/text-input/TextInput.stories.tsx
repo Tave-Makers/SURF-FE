@@ -1,5 +1,5 @@
 import { useRef, useState } from 'react';
-import type { Meta, StoryObj } from '@storybook/nextjs-vite';
+import type { Meta, StoryObj } from '@storybook/nextjs';
 import { TextInput } from './TextInput';
 
 /**

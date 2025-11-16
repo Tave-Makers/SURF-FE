@@ -2,7 +2,7 @@
 
 import { useEffect, useRef, useCallback, useMemo } from 'react';
 import { useInfiniteScraps } from '@/features/post/model/useScraps';
-import { transformApiResponseToPosts } from '@/entities/post/model/mappers';
+import { transformListItemToPost } from '@/entities/post/model/mappers';
 import { PostList } from '@/widgets/post-list/ui/PostList';
 import type { Post } from '@/entities/post/model/types';
 import { SCRAPS_EVENTS } from '@/features/post/model/types';
@@ -25,7 +25,8 @@ export default function ScrapsPage() {
     useInfiniteScraps(size, sort);
 
   // 모든 페이지의 게시글을 하나의 배열로 합치기
-  const allPosts = data?.pages.flatMap((page) => transformApiResponseToPosts(page)) ?? [];
+  const allPosts =
+    data?.pages.flatMap((page) => page.content.map((item) => transformListItemToPost(item))) ?? [];
 
   // 페이지 진입 시 페이지 뷰 로그
   useEffect(() => {
@@ -61,7 +62,7 @@ export default function ScrapsPage() {
   }, [fetchNextPage, scrollRef, hasNextPage, isFetchingNextPage]);
 
   const handlePostClick = useCallback((post: Post) => {
-    trackScrapsEvent(SCRAPS_EVENTS.CLICK_POST_CARD, { post_id: String(post.id) });
+    trackScrapsEvent(SCRAPS_EVENTS.CLICK_POST_CARD, { post_id: String(post.postId) });
   }, []);
 
   // 에러 처리 화면

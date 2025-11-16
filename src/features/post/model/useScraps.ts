@@ -2,11 +2,11 @@
 
 import { useQuery, useInfiniteQuery } from '@tanstack/react-query';
 import { getPosts } from '@/features/post/api/getPosts';
-import { PostApiResponse } from '@/entities/post/api/types';
+import { PostListApiResponse } from '@/entities/post/api/types';
 
 /** 스크랩한 게시글 단일 페이지 조회 */
 export const useScraps = (page: number = 0, size: number = 10, sort: string[] = []) => {
-  return useQuery<PostApiResponse>({
+  return useQuery<PostListApiResponse>({
     queryKey: ['posts', 'scraps', page, size, sort.join(',')],
     queryFn: () => getPosts.getScraps({ page, size, sort }),
   });
@@ -14,7 +14,7 @@ export const useScraps = (page: number = 0, size: number = 10, sort: string[] = 
 
 /** 스크랩한 게시글 무한 스크롤 조회 */
 export const useInfiniteScraps = (size: number = 10, sort: string[] = []) => {
-  return useInfiniteQuery<PostApiResponse>({
+  return useInfiniteQuery<PostListApiResponse>({
     queryKey: ['posts', 'scraps', 'infinite', size, sort.join(',')],
     queryFn: ({ pageParam = 0 }) => {
       const page = pageParam as number;

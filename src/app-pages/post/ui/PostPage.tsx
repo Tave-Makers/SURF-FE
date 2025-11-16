@@ -9,7 +9,7 @@ import { useState } from 'react';
 import { Sheet as ModalSheet } from 'react-modal-sheet';
 
 export default function PostPage() {
-  const { isOpen, open, close, value, select } = usePicker<PostCategory>();
+  const { isOpen, open, close, value, select } = usePicker<PostCategory>({ defaultValue: '행사' });
   const sheetId = 'post-category-sheet';
   const items = POST_CATEGORIES;
 

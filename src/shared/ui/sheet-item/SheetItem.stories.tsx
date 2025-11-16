@@ -97,12 +97,13 @@ export const LikedUsersInSheet: Story = {
           <ModalSheet.Container>
             <ModalSheet.Header />
             <ModalSheet.Content>
-              <Sheet title="좋아요한 사람">
+              <Sheet title="좋아요를 누른 사람">
                 <div className="flex flex-col">
                   {users.map((user) => (
                     <SheetItem
                       key={user.id}
                       title={user.name}
+                      // 아바타 컴포넌트로 변경 예정
                       node={<ProfileImage size="s" />}
                       onClick={() => alert(`${user.name} 클릭`)}
                     />
@@ -141,7 +142,7 @@ export const LikedUsersLargeListInSheet: Story = {
           <ModalSheet.Container>
             <ModalSheet.Header />
             <ModalSheet.Content>
-              <Sheet title="좋아요한 사람">
+              <Sheet title="좋아요를 누른 사람">
                 {/* 리스트 영역 (스크롤 지원) */}
                 <div className="flex flex-col pr-2">
                   {manyUsers.map((user) => (

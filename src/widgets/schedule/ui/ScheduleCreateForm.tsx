@@ -147,7 +147,9 @@ export default function ScheduleCreateForm({ onSubmit }: SchedulCreateFormProps)
                         onClick: () => setIsStartDateOpen(false),
                       }}
                     >
-                      <DateTimePicker value={field.value} onChange={field.onChange} />
+                      <div>
+                        <DateTimePicker value={field.value} onChange={field.onChange} />
+                      </div>
                     </Sheet>
                   </ModalSheet.Content>
                 </ModalSheet.Container>

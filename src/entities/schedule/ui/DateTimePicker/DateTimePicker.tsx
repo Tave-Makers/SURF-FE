@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useEffect, useMemo, useCallback } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import { Wheel } from '@/shared/ui/wheel-picker/Wheel';
 import { isToday } from 'date-fns';
 
@@ -9,21 +9,22 @@ type DateTimePickerProps = {
   onChange: (date: Date) => void;
 };
 
-// 연도 생성 (현재 연도 기준 ±10년)
-const generateYears = () => {
-  const currentYear = new Date().getFullYear();
-  const years: number[] = [];
-  for (let i = currentYear - 10; i <= currentYear + 10; i++) {
-    years.push(i);
+const MINUTES = Array.from({ length: 60 }, (_, i) => i);
+const AM_PM_OPTIONS = ['오전', '오후'];
+
+// 연간 모든 날짜 생성 (월/일 조합)
+const generateAllDates = () => {
+  const dates: Array<{ month: number; day: number }> = [];
+  for (let month = 1; month <= 12; month++) {
+    const daysInMonth = new Date(new Date().getFullYear(), month, 0).getDate();
+    for (let day = 1; day <= daysInMonth; day++) {
+      dates.push({ month, day });
+    }
   }
-  return years;
+  return dates;
 };
 
-const YEARS = generateYears();
-const MONTHS = Array.from({ length: 12 }, (_, i) => i + 1);
-// const HOURS_24 = Array.from({ length: 24 }, (_, i) => i);
-const MINUTES = Array.from({ length: 60 }, (_, i) => i);
-const AM_PM_OPTIONS = ['오전', '오후']; // 오전/오후 옵션
+const ALL_DATES = generateAllDates();
 
 export function DateTimePicker({ value, onChange }: DateTimePickerProps) {
   // RHF에서 넘어온 value를 기준으로 내부 상태 초기화
@@ -41,96 +42,67 @@ export function DateTimePicker({ value, onChange }: DateTimePickerProps) {
   // 12시간제로 변환된 시간
   const selectedHour12 = selectedHour % 12 === 0 ? 12 : selectedHour % 12;
 
-  // 선택된 연도/월에 맞는 일수 계산
-  const getDaysInMonth = useCallback((year: number, month: number) => {
-    return new Date(year, month, 0).getDate();
+  // 날짜 Wheel 인덱스 계산
+  const getDateWheelIndex = useCallback((month: number, day: number) => {
+    return ALL_DATES.findIndex((d) => d.month === month && d.day === day);
   }, []);
 
-  const maxDays = getDaysInMonth(selectedYear, selectedMonth);
-  const availableDays = useMemo(() => Array.from({ length: maxDays }, (_, i) => i + 1), [maxDays]);
-
-  // Wheel 인덱스 계산 (초기값 및 업데이트 로직)
-  const getYearIndex = useCallback((year: number) => YEARS.indexOf(year), []);
-  const getMonthIndex = useCallback((month: number) => month - 1, []);
-  const getDayIndex = useCallback(
-    (day: number, maxDays: number) => Math.min(day - 1, maxDays - 1),
-    [],
+  // Wheel 인덱스 계산
+  const [dateWheelIdx, setDateWheelIdx] = useState(() =>
+    getDateWheelIndex(selectedMonth, selectedDay),
   );
-
-  const [yearIdx, setYearIdx] = useState(() => getYearIndex(selectedYear));
-  const [monthIdx, setMonthIdx] = useState(() => getMonthIndex(selectedMonth));
-  const [dayIdx, setDayIdx] = useState(() => getDayIndex(selectedDay, maxDays));
   const [amPmIdx, setAmPmIdx] = useState(selectedAmPmIdx);
-  const [hour12Idx, setHour12Idx] = useState(selectedHour12 === 12 ? 0 : selectedHour12); // 12시면 0으로 매핑
+  const [hour12Idx, setHour12Idx] = useState(selectedHour12 === 12 ? 0 : selectedHour12);
   const [minuteIdx, setMinuteIdx] = useState(selectedMinute);
 
   // value prop이 변경될 때 내부 상태 업데이트
   useEffect(() => {
     setCurrentDate(value);
-    setYearIdx(getYearIndex(value.getFullYear()));
-    setMonthIdx(getMonthIndex(value.getMonth() + 1));
-    const maxDays = getDaysInMonth(value.getFullYear(), value.getMonth() + 1);
-    setDayIdx(getDayIndex(value.getDate(), maxDays));
+    setDateWheelIdx(getDateWheelIndex(value.getMonth() + 1, value.getDate()));
     setAmPmIdx(value.getHours() < 12 ? 0 : 1);
     setHour12Idx(value.getHours() % 12 === 0 ? 0 : value.getHours() % 12);
     setMinuteIdx(value.getMinutes());
-  }, [value, getYearIndex, getMonthIndex, getDayIndex, getDaysInMonth]);
+  }, [value, getDateWheelIndex]);
 
   // Wheel 선택 변경 시, newDate를 만들고 onChange 호출
   useEffect(() => {
-    const hour24 =
-      amPmIdx === 0
-        ? hour12Idx === 0
-          ? 0
-          : hour12Idx // 오전: 12시 -> 0시, 그 외는 그대로
-        : hour12Idx === 0
-          ? 12
-          : hour12Idx + 12; // 오후: 12시 -> 12시, 그 외는 +12
+    const selectedDate = ALL_DATES[dateWheelIdx];
+    const month = selectedDate.month;
+    const day = selectedDate.day;
 
-    const newDate = new Date(
-      YEARS[yearIdx],
-      MONTHS[monthIdx] - 1,
-      availableDays[dayIdx],
-      hour24,
-      MINUTES[minuteIdx],
-    );
+    const hour24 =
+      amPmIdx === 0 ? (hour12Idx === 0 ? 0 : hour12Idx) : hour12Idx === 0 ? 12 : hour12Idx + 12;
+
+    const newDate = new Date(selectedYear, month - 1, day, hour24, MINUTES[minuteIdx]);
 
     // 무한 루프 방지: value와 다를 때만 onChange 호출
     if (newDate.getTime() !== value.getTime()) {
       onChange(newDate);
     }
-  }, [yearIdx, monthIdx, dayIdx, amPmIdx, hour12Idx, minuteIdx, onChange, value, availableDays]);
-
-  // 월 변경 시 일수 조정
-  useEffect(() => {
-    const newMaxDays = getDaysInMonth(YEARS[yearIdx], MONTHS[monthIdx]);
-    if (availableDays[dayIdx] > newMaxDays) {
-      setDayIdx(newMaxDays - 1);
-    }
-  }, [yearIdx, monthIdx, dayIdx, availableDays, getDaysInMonth]);
+  }, [dateWheelIdx, amPmIdx, hour12Idx, minuteIdx, onChange, value, selectedYear]);
 
   // 포매팅 함수들 (setValue에 전달)
-  const formatMonth = useCallback((_relative: number, absolute: number): string => {
-    const month = MONTHS[absolute % MONTHS.length];
-    return `${month}월`;
-  }, []);
-
-  const formatDay = useCallback(
+  const formatDate = useCallback(
     (_relative: number, absolute: number): string => {
-      const day = availableDays[absolute % availableDays.length];
-      const dateToCheck = new Date(selectedYear, selectedMonth - 1, day);
+      const dateItem = ALL_DATES[absolute % ALL_DATES.length];
+      const dateToCheck = new Date(selectedYear, dateItem.month - 1, dateItem.day);
 
       // '오늘' 처리
       if (isToday(dateToCheck)) {
-        return '오늘'; // 이미지와 같이 '오늘' 표시
+        return '오늘';
       }
-      return `${day}일`;
+
+      // 요일 배열
+      const dayOfWeek = ['일', '월', '화', '수', '목', '금', '토'];
+      const dayName = dayOfWeek[dateToCheck.getDay()];
+
+      return `${dateItem.month}월 ${dateItem.day}일 ${dayName}`;
     },
-    [availableDays, selectedYear, selectedMonth],
+    [selectedYear],
   );
 
   const formatHour12 = useCallback((_relative: number, absolute: number): string => {
-    const hour = [12, ...Array.from({ length: 11 }, (_, i) => i + 1)][absolute % 12]; // 12, 1, 2, ... 11
+    const hour = [12, ...Array.from({ length: 11 }, (_, i) => i + 1)][absolute % 12];
     return `${hour}`;
   }, []);
 
@@ -166,63 +138,52 @@ export function DateTimePicker({ value, onChange }: DateTimePickerProps) {
         }}
       />
 
-      {/* 월 Wheel */}
+      {/* 날짜 Wheel (하나로 표시: "10월 1일 수") */}
       <div style={{ zIndex: 2 }} className="flex h-full w-full">
         <Wheel
-          value={monthIdx}
-          length={MONTHS.length}
-          width={60}
+          value={dateWheelIdx}
+          length={ALL_DATES.length}
+          width={140}
           loop={false}
-          setValue={formatMonth}
-          onChange={(idx) => setMonthIdx(idx)}
+          setValue={formatDate}
+          onChange={(idx) => setDateWheelIdx(idx)}
           disableHighlight
         />
       </div>
 
-      {/* 일 Wheel */}
-      <div style={{ zIndex: 2 }} className="flex h-full w-full">
-        <Wheel
-          value={dayIdx}
-          length={availableDays.length}
-          width={60}
-          loop={false} // 날짜는 루프 안됨
-          setValue={formatDay}
-          onChange={(idx) => setDayIdx(idx)}
-          disableHighlight
-        />
-      </div>
-
-      {/* 오전/오후 Wheel (새로 추가) */}
+      {/* 오전/오후 Wheel */}
       <div style={{ zIndex: 2 }} className="flex h-full w-full">
         <Wheel
           value={amPmIdx}
           length={AM_PM_OPTIONS.length}
           width={50}
-          loop={false} // 오전/오후는 루프 안됨 (오전 -> 오후, 오후 -> 오전)
+          loop={false}
           setValue={(_relative, absolute) => AM_PM_OPTIONS[absolute % AM_PM_OPTIONS.length]}
           onChange={(idx) => setAmPmIdx(idx)}
           disableHighlight
         />
       </div>
 
-      {/* 시간 Wheel (12시간제) */}
-      <div style={{ zIndex: 2 }} className="flex h-full w-full gap-2">
+      {/* 시간 Wheel */}
+      <div style={{ zIndex: 2 }} className="flex h-full w-full">
         <Wheel
           value={hour12Idx}
-          length={12} // 12시간제 (12, 1, ..., 11)
-          width={30}
-          loop={true} // 시간은 루프 가능
+          length={12}
+          width={35}
+          loop={true}
           setValue={formatHour12}
           onChange={(idx) => setHour12Idx(idx)}
           disableHighlight
         />
+      </div>
 
-        {/* 분 Wheel */}
+      {/* 분 Wheel */}
+      <div style={{ zIndex: 2 }} className="flex h-full w-full">
         <Wheel
           value={minuteIdx}
           length={MINUTES.length}
-          width={30}
-          loop={true} // 분은 루프 가능
+          width={35}
+          loop={true}
           setValue={formatMinute}
           onChange={(idx) => setMinuteIdx(idx)}
           disableHighlight

@@ -71,7 +71,7 @@ export function Sheet({
 
   return (
     <div className="rounded-t-4 flex w-full flex-col items-start gap-15 bg-white px-15 pt-11 pb-15">
-      <div className={`flex w-full flex-col items-start ${title ? 'gap-8' : ''}`}>
+      <div className={`flex w-full flex-col items-start ${title ? 'gap-15' : ''}`}>
         {renderTitleSection()}
         <div
           className="w-full"

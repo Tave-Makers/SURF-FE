@@ -18,7 +18,6 @@ export type Pageable = {
   unpaged: boolean;
 };
 
-// 게시물 API 타입
 export type PostContent = {
   id: number;
   title: string;
@@ -58,3 +57,40 @@ export type PostApiRequest = {
   size: number;
   sort: string[];
 };
+
+/*****************
+게시글 상세 관련 타입
+******************/
+
+// 게시글 상세 이미지 타입
+export type ImageItem = {
+  originalUrl: string;
+  sequence: number;
+};
+
+// 게시글 상세 이미지 응답 타입
+export type ImageItemResponse = ImageItem & {
+  imageId: number;
+  postId: number;
+};
+
+// 게시글 상세 데이터 타입
+export type PostDetailData = {
+  id: number;
+  title: string;
+  content: string;
+  pinned: boolean;
+  postedAt: string;
+  boardId: number;
+  scrappedByMe: boolean;
+  scrapCount: number;
+  likedByMe: boolean;
+  likeCount: number;
+  commentCount: number;
+  nickname: string;
+  imageUrlList: ImageItemResponse[];
+  hasSchedule: boolean;
+};
+
+// 상세 API 응답 타입
+export type PostDetailResponse = CommonResponse<PostDetailData>;

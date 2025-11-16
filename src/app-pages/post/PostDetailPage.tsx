@@ -1,44 +1,35 @@
 'use client';
+
+import { usePostDetail } from '@/entities/post/model/usePostDetailQuery';
 import { PostHeader } from '@/entities/post/ui/post-header/PostHeader';
 import { ActionBar } from '@/shared/ui/action-bar/ActionBar';
-import { PostBodySection, PostDetail } from '@/widgets/post-detail/PostBodySection';
+import { PostBodySection } from '@/widgets/post-detail/PostBodySection';
 
 type PostDetailPageProps = {
   boardId: string;
   postId: string;
 };
 
-export default function PostDetailPage({ boardId, postId }: PostDetailPageProps) {
-  console.log('boardId:', boardId);
-  console.log('postId:', postId);
-  const dummyPost: PostDetail = {
-    id: 39,
-    title: '전반기 시상식 안내',
-    content:
-      '안녕하세요, **테이비**입니다.\n\n금주 진행되는 전반기 시상식 안내드립니다.\n\n🕒 **일시**: 10월 23일 (토) 14시\n📍 **장소**: 세종대학교 대양AI센터 B107호\n\n시상식 참석 필수이며, 발표 타임테이블은 추후 공지드리겠습니다.',
-    postedAt: '2025.11.01',
-    boardId: 1,
-    nickname: '홍길동',
-    likeCount: 12,
-    likedByMe: true,
-    scrapCount: 12,
-    scrappedByMe: false,
-    hasSchedule: true,
-    imageUrlList: [
-      {
-        imageId: 1,
-        originalUrl:
-          'https://jstyle07.jpg3.kr//RENEWAL/snapskin/main_banner/69084bb71baab_152911_4162.jpg',
-        sequence: 1,
-      },
-      {
-        imageId: 2,
-        originalUrl:
-          'https://jstyle07.jpg3.kr/RENEWAL/snapskin/main_promotion/690957263f93e_103014_4002.jpg',
-        sequence: 2,
-      },
-    ],
-  };
+export default function PostDetailPage({ postId }: PostDetailPageProps) {
+  const numericPostId = Number(postId);
+
+  const { data, isLoading, isError } = usePostDetail(numericPostId);
+
+  if (isLoading)
+    return (
+      <div className="flex h-full w-full items-center justify-center">
+        <span>불러오는 중...</span>
+      </div>
+    );
+
+  if (isError || !data)
+    return (
+      <div className="flex h-full w-full items-center justify-center">
+        <span>게시글을 불러오지 못했습니다.</span>
+      </div>
+    );
+
+  const post = data;
 
   return (
     <div className="relative flex h-full w-full flex-col">
@@ -46,11 +37,12 @@ export default function PostDetailPage({ boardId, postId }: PostDetailPageProps)
       <div className="flex-1 overflow-y-auto [-ms-overflow-style:none] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
         <main className="flex flex-col gap-[0.62rem] px-13 pt-13">
           <PostHeader
-            title={dummyPost.title}
-            category={{ title: '공지사항' }}
-            subCategory={{ title: '행사' }}
+            title={post.title}
+            category={{ title: '공지사항' }} // 서버에 category 필드가 없어서 그대로 유지
+            subCategory={{ title: '행사' }} // 서버에 없으므로 그대로 유지
           />
-          <PostBodySection post={dummyPost} />
+
+          <PostBodySection post={post} />
         </main>
       </div>
 

@@ -5,43 +5,9 @@ import { EventCard } from '@/entities/calendar/ui/EventCard';
 import { PostProfile } from '@/entities/post/ui/post-profile/PostProfile';
 import { ChipToggle } from '@/shared/ui/chip-toggle/ChipToggle';
 import ReactMarkdown from 'react-markdown';
+import { Post } from '@/entities/post/model/types';
 
-// 타입 정의 그대로 유지
-export type PostImage = {
-  imageId: number;
-  originalUrl: string;
-  sequence: number;
-};
-
-export type PostDetail = {
-  id: number;
-  title: string;
-  content: string;
-  postedAt: string;
-  boardId: number;
-  nickname: string;
-  likeCount: number;
-  likedByMe: boolean;
-  scrapCount: number;
-  scrappedByMe: boolean;
-  hasSchedule: boolean;
-  imageUrlList?: PostImage[];
-};
-
-type PostBodyProps = Pick<
-  PostDetail,
-  | 'nickname'
-  | 'postedAt'
-  | 'content'
-  | 'likeCount'
-  | 'likedByMe'
-  | 'scrapCount'
-  | 'scrappedByMe'
-  | 'imageUrlList'
-  | 'hasSchedule'
->;
-
-export function PostBodySection({ post }: { post: PostBodyProps }) {
+export function PostBodySection({ post }: { post: Post }) {
   // 좋아요 & 스크랩 상태 관리
   const [liked, setLiked] = useState(post.likedByMe);
   const [likeCount, setLikeCount] = useState(post.likeCount);
@@ -65,7 +31,7 @@ export function PostBodySection({ post }: { post: PostBodyProps }) {
 
   return (
     <div className="flex flex-col gap-[1.5rem]">
-      <PostProfile nickname={post.nickname} date={post.postedAt} time="01:21" viewCount={3} />
+      <PostProfile nickname={post.writer} date={post.date} time={post.time} viewCount={3} />
       <div className="whitespace-pre-line">
         <ReactMarkdown>{post.content}</ReactMarkdown>
       </div>

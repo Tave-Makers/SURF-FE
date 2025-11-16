@@ -18,7 +18,7 @@ export function CalendarPage() {
   return (
     <div className="bg-background-normal h-full w-full">
       <Calendar month={month} onMonthChange={setMonth} schedules={schedules} />
-      <div className="absolute right-[1.25rem] bottom-[1.25rem] z-10">
+      <div className="absolute right-15 bottom-15 z-10">
         <PostFab onClick={handleCreateSchedule} />
       </div>
     </div>

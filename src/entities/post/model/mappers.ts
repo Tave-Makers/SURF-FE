@@ -1,45 +1,86 @@
-import { PostContent } from '@/entities/post/api/types';
-import { Post, CategoryBadge } from './types';
+import {
+  PostListItemResponse,
+  PostDetailResponse,
+  PostMutationResponse,
+} from '@/entities/post/api/types';
+import { Post, CategoryBadge } from '@/entities/post/model/types';
 
-// API 응답에 실제로 존재하지만 타입 정의에 없는 필드를 포함한 확장 타입
-type ExtendedPostContent = PostContent & {
-  categoryId?: number;
-  thumbnailImageUrl?: string | null;
-  likeByMe?: boolean;
-};
-// categoryId를 CategoryBadge로 변환하는 함수
-// TODO: 실제 API와의 매핑 규칙 확인 필요
-const mapCategoryIdToBadge = (categoryId: number | undefined): CategoryBadge => {
-  if (!categoryId) return 'others';
-
-  const categoryMap: Record<number, CategoryBadge> = {
+// categoryId - CategoryBadge 변환
+const mapCategoryIdToBadge = (categoryId: number | null | undefined): CategoryBadge => {
+  const map: Record<number, CategoryBadge> = {
     1: 'event',
     2: 'activity',
     3: 'partnership',
     4: 'release',
     5: 'others',
   };
-  return categoryMap[categoryId] || 'others';
+  return categoryId ? (map[categoryId] ?? 'others') : 'others';
 };
 
-export const transformApiPostToPost = (apiPost: ExtendedPostContent): Post => {
+// 목록 API 변환
+export const transformListItemToPost = (item: PostListItemResponse): Post => {
   return {
-    id: apiPost.id,
-    title: apiPost.title,
-    content: apiPost.content,
-    date: new Date(apiPost.postedAt).toLocaleDateString('ko-KR'), // 날짜 포맷팅
-    likeCount: apiPost.likeCount,
-    isLiked: apiPost.likeByMe ?? false,
-    commentCount: apiPost.commentCount,
-    writer: apiPost.nickname,
-    thumbnailUrl: apiPost.thumbnailImageUrl || undefined,
-    boardId: apiPost.boardId,
-    category: mapCategoryIdToBadge(apiPost.categoryId),
-    isReserved: apiPost.pinned,
+    id: item.id,
+    title: item.title,
+    content: item.content,
+    writer: item.nickname,
+    date: item.postedAt,
+    pinned: item.pinned,
+    isReserved: item.isReserved,
+    boardId: item.boardId,
+    likeCount: item.likeCount,
+    isLiked: item.likedByMe,
+    scrappedByMe: item.scrappedByMe,
+    scrapCount: item.scrapCount,
+    commentCount: item.commentCount,
+    thumbnailUrl: item.thumbnailImageUrl ?? undefined,
+    images: undefined,
+    category: 'others',
   };
 };
 
-// API 응답을 Post 배열로 변환
-export const transformApiResponseToPosts = (apiResponse: { content: PostContent[] }): Post[] => {
-  return apiResponse.content.map((post) => transformApiPostToPost(post as ExtendedPostContent));
+// 게시글 상세 API 변환
+
+export const transformDetailToPost = (item: PostDetailResponse): Post => {
+  return {
+    id: item.id,
+    title: item.title,
+    content: item.content,
+    writer: item.nickname,
+    date: item.postedAt,
+    pinned: item.pinned,
+    isReserved: false,
+    boardId: item.boardId,
+    likeCount: item.likeCount,
+    isLiked: item.likedByMe,
+    scrappedByMe: item.scrappedByMe,
+    scrapCount: item.scrapCount,
+    commentCount: item.commentCount,
+    images: item.imageUrlList,
+    thumbnailUrl: item.imageUrlList?.[0]?.originalUrl,
+    category: mapCategoryIdToBadge(item.categoryId),
+  };
+};
+
+// 게시글 생성/수정 API 변환
+
+export const transformMutationToPost = (item: PostMutationResponse): Post => {
+  return {
+    id: item.id,
+    title: item.title,
+    content: item.content,
+    writer: item.nickname,
+    date: item.postedAt,
+    pinned: item.pinned,
+    isReserved: false,
+    boardId: item.boardId ?? null,
+    likeCount: 0,
+    isLiked: false,
+    scrappedByMe: false,
+    scrapCount: 0,
+    commentCount: 0,
+    images: undefined,
+    thumbnailUrl: undefined,
+    category: mapCategoryIdToBadge(item.categoryId),
+  };
 };

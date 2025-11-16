@@ -26,7 +26,7 @@ export function DayChipRadio({
 
   const inThisMonth = isSameMonth(date, displayMonth);
   const list = activityMap[formatDate] ?? [];
-  const isSelected = modifiers?.today ?? false;
+  const isSelected = modifiers?.selected ?? false;
 
   return (
     <button

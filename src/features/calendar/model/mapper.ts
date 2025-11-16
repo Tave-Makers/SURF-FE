@@ -1,11 +1,11 @@
-import { format, eachDayOfInterval } from 'date-fns';
+import { format, eachDayOfInterval, isValid } from 'date-fns';
 import { scheduleResDTO } from './types';
 import { ActivityCategory } from '@/entities/calendar/model/types';
 import { ActivityMap } from '@/entities/calendar/model/types';
 import { EventCardProps } from '@/entities/calendar/ui/EventCard/EventCard';
 
 /**
- * 서버에서 내려주는 카테고리 문자열을 UI에서 사용하는 ActivityType으로 변환
+ * 서버에서 내려주는 카테고리 문자열을 UI에서 사용하는 ActivityCategory로 변환
  */
 const mapCategoryToActivityCategory = (category: string): ActivityCategory => {
   switch (category) {
@@ -47,12 +47,17 @@ export const mapScheduleListToScheduleMap = (dtoList: scheduleResDTO[]): Activit
   dtoList.forEach((dto) => {
     const event = mapDTOToEvent(dto);
 
-    if (!event.startDate || !event.endDate) return;
+    if (!isValid(event.startDate) || !isValid(event.endDate)) {
+      if (process.env.NODE_ENV === 'development') {
+        console.error('[mapScheduleListToScheduleMap] 유효하지 않은 날짜가 포함된 dto', dto);
+      }
+      return;
+    }
 
     try {
       const intervalDates = eachDayOfInterval({
-        start: event.startDate,
-        end: event.endDate,
+        start: event.startDate ?? new Date(),
+        end: event.endDate ?? new Date(),
       });
 
       intervalDates.forEach((date) => {

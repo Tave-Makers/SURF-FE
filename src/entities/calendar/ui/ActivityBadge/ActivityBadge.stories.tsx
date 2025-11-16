@@ -3,11 +3,11 @@ import { ActivityBadge } from './ActivityBadge';
 import type { DailyActivity } from '@/entities/calendar/model/types';
 
 const createDummyItem = (
-  type: DailyActivity['type'],
+  category: DailyActivity['category'],
   title: string = '일정 제목',
 ): DailyActivity => ({
   id: 'dummy-id',
-  type,
+  category,
   title,
 });
 

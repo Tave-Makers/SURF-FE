@@ -1,8 +1,7 @@
 import type { DayButtonProps } from 'react-day-picker';
-import { isSameMonth } from 'date-fns';
+import { format, isSameMonth } from 'date-fns';
 import type { ActivityMap } from '@/entities/calendar/model/types';
 import { DailyActivityBadgeList } from '@/entities/calendar/ui/DailyActivityBadgeList/DailyActivityBadgeList';
-import { ymd } from '@/entities/calendar/lib/utils';
 
 type Props = DayButtonProps & {
   displayMonth: Date;
@@ -19,13 +18,14 @@ export function DayChipRadio({
   ...btn
 }: Props) {
   const date = day.date;
+  const formatDate = format(date, 'yyyy-MM-dd');
 
   if (!(date instanceof Date) || Number.isNaN(date.getTime())) {
     return <button {...btn} className="w-full" />;
   }
 
   const inThisMonth = isSameMonth(date, displayMonth);
-  const list = activityMap[ymd(date)] ?? [];
+  const list = activityMap[formatDate] ?? [];
   const isToday = modifiers?.today ?? false;
 
   return (

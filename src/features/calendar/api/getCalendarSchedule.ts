@@ -16,6 +16,7 @@ export async function getCalendarSchedule(
       },
     );
     console.log('캘린더 일정 불러오기 요청 성공');
+    console.log(response.data);
     return response.data.data;
   } catch (error) {
     console.log('캘린더 일정 불러오기 요청 실패:', error);

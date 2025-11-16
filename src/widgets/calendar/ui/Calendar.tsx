@@ -10,8 +10,8 @@ import { MonthNavigator } from '@/entities/calendar/ui/MonthNavigator/MonthNavig
 import { DayChipRadio } from '../../../entities/calendar/ui/DayChipRadio/DayChipRadio';
 import { EventDateCard } from '@/entities/calendar/ui/EventDateCard/EventDateCard';
 import type { ActivityMap } from '@/entities/calendar/model/types';
-import { ymd } from '@/entities/calendar/lib/utils';
 import { EventCard } from '@/entities/calendar/ui/EventCard/EventCard';
+import { format } from 'date-fns';
 
 type CalendarProps = {
   month: Date;
@@ -77,7 +77,8 @@ export default function Calendar({ month, onMonthChange, schedules }: CalendarPr
   // 월 그리드 래퍼 컴포넌트
   const MonthComponent = ({ children }: MonthProps) => <div className="w-full">{children}</div>;
 
-  const selectedItems = selectedDay ? (schedules[ymd(selectedDay)] ?? []) : [];
+  const formatDate = format(selectedDay, 'yyyy-MM-dd');
+  const selectedItems = selectedDay ? (schedules[formatDate] ?? []) : [];
 
   return (
     <div className="flex flex-1 flex-col gap-10 pt-10">
@@ -106,13 +107,15 @@ export default function Calendar({ month, onMonthChange, schedules }: CalendarPr
             items={selectedItems}
             renderItem={(_ev) => (
               <EventCard
-                key={_ev.id}
+                id={_ev.id}
                 title={_ev.title}
-                type={_ev.type}
+                category={_ev.category}
                 mode="calendar"
-                startDate={_ev.startDate}
-                endDate={_ev.endDate}
-                place={_ev.place || '미정'}
+                startDate={_ev.startDate || null}
+                endDate={_ev.endDate || null}
+                location={_ev.location || '미정'}
+                hasNotice={_ev.hasNotice}
+                postId={_ev.postId}
               />
             )}
           />

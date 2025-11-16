@@ -41,8 +41,8 @@ export const Reservation: Story = {
 export const AllVariations: Story = {
   render: () => (
     <div className="flex gap-8">
-      <PostBadge id={1} variation="reservation" />
-      <PostBadge id={2} variation="event" />
+      <PostBadge variation="reservation" />
+      <PostBadge variation="event" />
     </div>
   ),
 };

@@ -1,118 +1,62 @@
 'use client';
 
-import type { MouseEvent, KeyboardEvent } from 'react';
+import type { MouseEvent } from 'react';
 import { SurfIcon } from '@/shared/ui/icon/SurfIcon';
 import { Post } from '../model/types';
-import { PostBadge } from './PostBadge';
 
 export type PostCardProps = {
   post: Post;
-  onClick?: (e: MouseEvent<HTMLElement> | KeyboardEvent<HTMLElement>) => void;
-  onLikeToggle?: (newState: boolean) => void;
+  onClick?: (e: MouseEvent<HTMLButtonElement>) => void;
 };
 
-export const PostCard = ({ post, onClick, onLikeToggle }: PostCardProps) => {
-  const { tags, title, content, writer, date, likeCount, isLiked, commentCount, thumbnailUrl } =
-    post;
-
-  const handleLikeToggle = (e: MouseEvent<HTMLButtonElement>) => {
-    e.stopPropagation();
-    onLikeToggle?.(!isLiked);
-  };
-
-  /** 키보드 접근성: Enter나 Space로 카드 클릭 가능 */
-  const handleKeyPress = (e: KeyboardEvent<HTMLElement>) => {
-    if (e.key === 'Enter' || e.key === ' ') {
-      e.preventDefault();
-      onClick?.(e);
-    }
-  };
+export const PostCard = ({ post, onClick }: PostCardProps) => {
+  const { state = 'default', title, content, writer, date, likes, comments, thumbnailUrl } = post;
 
   return (
-    <article
-      // eslint-disable-next-line jsx-a11y/no-noninteractive-element-to-interactive-role
-      role="button"
-      tabIndex={0}
-      className="flex w-full cursor-pointer flex-row items-center gap-15 self-stretch rounded-lg px-15 py-10"
+    <button
+      type="button"
+      className="flex w-full flex-row items-center gap-15 self-stretch py-10"
       onClick={onClick}
-      onKeyDown={handleKeyPress}
-      aria-label={`게시글: ${title}`}
     >
-      <div className="flex flex-1 flex-col gap-8 self-stretch">
-        {/* PostBadge 영역 */}
-        <div className="flex gap-5">
-          {tags?.map((tag) => (
-            <PostBadge key={tag.id} id={tag.id} variation={tag.variation} />
-          ))}
-        </div>
-
-        {/* title, content 영역 */}
+      <div className="flex flex-1 flex-col gap-[0.37rem] self-stretch">
+        {state === 'reserved' ? (
+          <div className="text-caption-10-600--1 bg-border-border-normal text-foreground-accent rounded-max flex h-fit w-fit items-center justify-center gap-10 px-8 py-3">
+            예약중
+          </div>
+        ) : null}
+        {/* title, content, footer 영역 */}
         <div className="flex flex-col items-start gap-5 self-stretch">
-          <h3
-            className="text-body-body5 text-foreground-foreground-normal line-clamp-2 overflow-hidden"
-            aria-label="게시글 제목"
-          >
+          <div className="text-body-body7 text-foreground-foreground-normal line-clamp-1 overflow-hidden text-ellipsis">
             {title}
-          </h3>
-          <p
-            className="text-body-body6 text-foreground-foreground-normal-lighter line-clamp-1 overflow-hidden"
-            aria-label="게시글 내용"
-          >
+          </div>
+          <div className="text-body-body8 text-foreground-foreground-normal-lighter line-clamp-1 overflow-hidden text-ellipsis">
             {content}
-          </p>
-
-          {/* postcard footer 영역 */}
-          <footer
-            className="text-caption-caption2 text-foreground-foreground-tertiary flex flex-row items-center gap-5"
-            aria-label="게시글 정보"
-          >
-            <span>{writer}</span>
-            <span className="overflow-hidden text-[0.75rem] leading-none font-semibold">|</span>
-            <time dateTime={date}>{date}</time>
-            <span className="overflow-hidden text-[0.75rem] leading-none font-semibold">|</span>
-
-            {/* 좋아요 버튼 */}
-            <button
-              type="button"
-              className="flex items-center gap-5"
-              aria-label={`좋아요 ${likeCount}개`}
-              aria-pressed={isLiked}
-              onClick={handleLikeToggle}
-            >
-              <SurfIcon
-                name="Heart"
-                size="s"
-                aria-hidden="true"
-                className={`shrink-0 ${
-                  isLiked
-                    ? 'text-foreground-foreground-danger fill-foreground-foreground-danger'
-                    : ''
-                }`}
-              />
-              <span aria-hidden="true">{likeCount > 99 ? '99+' : likeCount}</span>
-            </button>
-
-            {/* 댓글 수 표시 */}
-            <div className="flex items-center gap-5" aria-label={`댓글 ${commentCount}개`}>
-              <SurfIcon name="Chat" size="s" aria-hidden="true" />
-              <span aria-hidden="true">{commentCount > 99 ? '99+' : commentCount}</span>
+          </div>
+          <div className="text-foreground-foreground-tertiary flex flex-row items-center gap-5">
+            <div className="text-caption-caption4">{writer}</div>
+            <div className="text-xs leading-none font-medium">|</div>
+            <div className="text-caption-caption4">{date}</div>
+            <div className="text-xs leading-none font-medium">|</div>
+            <div className="flex flex-row gap-5">
+              <div className="flex items-center gap-3">
+                <SurfIcon size="s" name="Heart" />
+                <span className="text-caption-caption4">{likes}</span>
+              </div>
+              <div className="flex items-center gap-3">
+                <SurfIcon size="s" name="Chat" />
+                <span className="text-caption-caption4">{comments}</span>
+              </div>
             </div>
-          </footer>
+          </div>
         </div>
       </div>
 
       {/* 사진 영역 */}
-      <div className="bg-foreground-foreground-tertiary aspect-square h-[4.375rem] w-[4.375rem] overflow-hidden">
+      <div className="bg-background-background-secondary aspect-square h-[3.75rem] w-[3.75rem] overflow-hidden rounded-[0.12rem]">
         {thumbnailUrl ? (
-          <img
-            src={thumbnailUrl}
-            alt={`${title} 관련 이미지`}
-            className="h-full w-full object-cover"
-          />
-        ) : (
-          <span className="sr-only">이미지가 없습니다</span>
-        )}
+          <img src={thumbnailUrl} alt="" className="h-full w-full object-cover" />
+        ) : null}
       </div>
-    </article>
+    </button>
   );
 };

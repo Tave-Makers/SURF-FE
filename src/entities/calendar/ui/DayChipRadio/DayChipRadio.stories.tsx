@@ -12,9 +12,13 @@ const TODAY = new Date();
 const TOMORROW = addDays(TODAY, 1);
 const PREV_MONTH_DAY = subMonths(TODAY, 1);
 
-const createActivity = (id: string, type: DailyActivity['type'], title: string): DailyActivity => ({
+const createActivity = (
+  id: string,
+  type: DailyActivity['category'],
+  title: string,
+): DailyActivity => ({
   id,
-  type,
+  category: type,
   title,
 });
 

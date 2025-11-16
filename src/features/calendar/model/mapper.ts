@@ -56,8 +56,8 @@ export const mapScheduleListToScheduleMap = (dtoList: scheduleResDTO[]): Activit
 
     try {
       const intervalDates = eachDayOfInterval({
-        start: event.startDate ?? new Date(),
-        end: event.endDate ?? new Date(),
+        start: event.startDate!,
+        end: event.endDate!,
       });
 
       intervalDates.forEach((date) => {

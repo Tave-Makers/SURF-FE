@@ -1,4 +1,4 @@
-import type { Meta, StoryObj } from '@storybook/nextjs-vite';
+import type { Meta, StoryObj } from '@storybook/nextjs';
 import { ActivityBadge } from './ActivityBadge';
 import type { DailyActivity } from '@/entities/calendar/model/types';
 

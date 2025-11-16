@@ -1,4 +1,4 @@
-import type { Meta, StoryObj } from '@storybook/nextjs-vite';
+import type { Meta, StoryObj } from '@storybook/nextjs';
 import { PostBadge } from './PostBadge';
 
 const meta: Meta<typeof PostBadge> = {

@@ -15,11 +15,14 @@ export async function getCalendarSchedule(
         params: params,
       },
     );
-    console.log('캘린더 일정 불러오기 요청 성공');
-    console.log(response.data);
+    if (process.env.NODE_ENV === 'development') {
+      console.log('캘린더 일정 불러오기 요청 성공', response.data);
+    }
     return response.data.data;
   } catch (error) {
-    console.log('캘린더 일정 불러오기 요청 실패:', error);
+    if (process.env.NODE_ENV === 'development') {
+      console.log('캘린더 일정 불러오기 요청 실패:', error);
+    }
     throw error;
   }
 }

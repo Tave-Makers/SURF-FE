@@ -28,7 +28,7 @@ export default function ScrapsPage() {
         <PostListPage
           useInfiniteQueryHook={useInfiniteScraps}
           onPostClick={(post) =>
-            trackScrapsEvent(SCRAPS_EVENTS.CLICK_POST_CARD, { post_id: String(post.id) })
+            trackScrapsEvent(SCRAPS_EVENTS.CLICK_POST_CARD, { post_id: String(post.postId) })
           }
           scrollRootRef={scrollRef}
         />

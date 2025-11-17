@@ -8,8 +8,8 @@ export const transformApiPostToPost = (apiPost: PostContent): Post => {
     content: apiPost.content,
     // pinned 작성 필요
     date: new Date(apiPost.postedAt).toLocaleDateString('ko-KR'), // 날짜 포맷팅
-    likeCount: apiPost.likeCount,
-    commentCount: apiPost.commentCount,
+    likes: apiPost.likeCount,
+    comments: apiPost.commentCount,
     writer: apiPost.nickname,
     thumbnailUrl: undefined, // 서버 응답에 없음(임시)
     /* 기본 프론트 Post 타입에 서버 응답으로 오는 

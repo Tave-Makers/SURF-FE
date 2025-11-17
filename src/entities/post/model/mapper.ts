@@ -1,16 +1,17 @@
 import { PostDetailData } from '../api/types';
-import { Post, CategoryBadge } from './types';
+import { POST_CATEGORIES, PostCategoryId, PostCategoryLabel } from './constants';
+import { Post } from './types';
 
-// categoryId - CategoryBadge 변환
-const mapCategoryIdToBadge = (categoryId: number | null | undefined): CategoryBadge => {
-  const map: Record<number, CategoryBadge> = {
-    1: 'event',
-    2: 'activity',
-    3: 'partnership',
-    4: 'patch',
-    5: 'etc',
-  };
-  return categoryId ? (map[categoryId] ?? 'etc') : 'etc';
+// 숫자 -> 라벨
+export const categoryIdToLabel = (id: number | null | undefined): PostCategoryLabel => {
+  const found = POST_CATEGORIES.find((c) => c.id === id);
+  return found?.label ?? '기타';
+};
+
+// 라벨 -> 숫자
+export const categoryLabelToId = (label: PostCategoryLabel): PostCategoryId => {
+  const found = POST_CATEGORIES.find((c) => c.label === label);
+  return found?.id ?? 5; // 기타
 };
 
 // 게시글 생성/수정 API 변환
@@ -31,6 +32,6 @@ export const transformMutationToPost = (item: PostDetailData): Post => {
     commentCount: 0,
     images: undefined,
     thumbnailUrl: undefined,
-    category: mapCategoryIdToBadge(item.categoryId),
+    category: categoryIdToLabel(item.categoryId),
   };
 };

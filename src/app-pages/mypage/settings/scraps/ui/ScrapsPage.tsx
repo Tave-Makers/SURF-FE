@@ -1,7 +1,7 @@
 'use client';
 
-import { useInfiniteScraps } from '@/features/post/model/useScraps';
-import { PostListPage } from '@/widgets/post-list/ui/PostListPage';
+// import { useInfiniteScraps } from '@/features/post/model/useScraps';
+// import { PostListPage } from '@/widgets/post-list/ui/PostListPage';
 import { SCRAPS_EVENTS } from '@/features/post/model/types';
 import { trackScrapsEvent } from '@/features/post/lib/trackScrapsEvent';
 import { useEffect, useCallback } from 'react';
@@ -25,13 +25,13 @@ export default function ScrapsPage() {
   return (
     <div className="flex h-full">
       <div ref={scrollRef} className="flex-1 overflow-y-auto">
-        <PostListPage
+        {/* <PostListPage
           useInfiniteQueryHook={useInfiniteScraps}
           onPostClick={(post) =>
             trackScrapsEvent(SCRAPS_EVENTS.CLICK_POST_CARD, { post_id: String(post.id) })
           }
           scrollRootRef={scrollRef}
-        />
+        /> */}
       </div>
     </div>
   );

@@ -6,15 +6,27 @@ import { ImageList } from '@/entities/post/post-image/ui/ImageList';
 import { EditorContent } from '@tiptap/react';
 import { usePostEditor } from '@/features/post/post-editor/lib/usePostEditor';
 import { useImageManager } from '@/shared/hooks/useImageManager';
+import { UploadImage } from '@/shared/types/image';
+import { useEffect } from 'react';
 
 export type PostEditorProps = {
   initialContent?: string;
+  onChange?: (data: { content: string; images: UploadImage[] }) => void;
 };
 
-export const PostEditor = ({ initialContent }: PostEditorProps) => {
+export const PostEditor = ({ initialContent, onChange }: PostEditorProps) => {
   const editor = usePostEditor(initialContent);
   const { inputRef, images, handleSelectAndUpload, handleRemove, handleReorder, openPicker } =
     useImageManager();
+
+  // 본문 or 이미지가 바뀔 때마다 부모에게 전달
+  useEffect(() => {
+    if (!editor) return;
+    onChange?.({
+      content: editor.getHTML(), // TipTap content
+      images,
+    });
+  }, [editor, images, onChange]);
 
   if (!editor) return null;
 

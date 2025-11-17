@@ -1,5 +1,5 @@
 'use client';
-
+// TODO : 변경사항 에러 임시 해결, 공지사항 페이지 PR의 최신 ScrapsPage로 변경하기
 // import { useInfiniteScraps } from '@/features/post/model/useScraps';
 // import { PostListPage } from '@/widgets/post-list/ui/PostListPage';
 import { SCRAPS_EVENTS } from '@/features/post/model/types';
@@ -25,7 +25,8 @@ export default function ScrapsPage() {
   return (
     <div className="flex h-full">
       <div ref={scrollRef} className="flex-1 overflow-y-auto">
-        {/* <PostListPage
+        {/* TODO : 변경사항 에러 임시 해결, 공지사항 페이지 PR의 최신 ScrapsPage로 변경하기
+        <PostListPage
           useInfiniteQueryHook={useInfiniteScraps}
           onPostClick={(post) =>
             trackScrapsEvent(SCRAPS_EVENTS.CLICK_POST_CARD, { post_id: String(post.id) })

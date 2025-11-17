@@ -84,6 +84,7 @@ export type PostDetailData = {
   nickname: string;
   imageUrlList: ImageItemResponse[];
   categoryId: number | null;
+  hasScheduled: boolean;
 };
 
 export type PostDetailResponse = CommonResponse<PostDetailData>;

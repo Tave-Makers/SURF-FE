@@ -1,7 +1,7 @@
 'use client';
-
-import { useInfiniteMyPosts } from '@/features/post/model/useMyPosts';
-import { PostListPage } from '@/widgets/post-list/ui/PostListPage';
+// TODO : 변경사항 에러 임시 해결, 공지사항 페이지 PR의 최신 MyPostsPage로 변경하기
+// import { useInfiniteMyPosts } from '@/features/post/model/useMyPosts';
+// import { PostListPage } from '@/widgets/post-list/ui/PostListPage';
 import { MY_POSTS_EVENTS } from '@/features/post/model/types';
 import { trackMyPostsEvent } from '@/features/post/lib/trackMyPostsEvent';
 import { useEffect, useCallback } from 'react';
@@ -25,13 +25,13 @@ export default function MyPostsPage() {
   return (
     <div className="flex h-full">
       <div ref={scrollRef} className="flex-1 overflow-y-auto">
-        <PostListPage
+        {/* <PostListPage
           useInfiniteQueryHook={useInfiniteMyPosts}
           onPostClick={(post) =>
             trackMyPostsEvent(MY_POSTS_EVENTS.CLICK_POST_CARD, { post_id: String(post.id) })
           }
           scrollRootRef={scrollRef}
-        />
+        /> */}
       </div>
     </div>
   );

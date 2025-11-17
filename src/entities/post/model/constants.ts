@@ -7,5 +7,4 @@ export const POST_CATEGORIES = [
 ] as const;
 
 export type PostCategory = (typeof POST_CATEGORIES)[number];
-export type PostCategoryId = (typeof POST_CATEGORIES)[number]['id'];
 export type PostCategoryLabel = (typeof POST_CATEGORIES)[number]['label'];

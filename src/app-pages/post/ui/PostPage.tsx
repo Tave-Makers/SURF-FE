@@ -10,6 +10,7 @@ import { useCallback, useEffect, useRef, useState } from 'react';
 import { Sheet as ModalSheet } from 'react-modal-sheet';
 import { UploadImage } from '@/shared/types/image';
 import { usePostDetail } from '@/features/post/get-post/model/usePostDetailQuery';
+import { updatePost } from '@/features/post/update-post/api/updatePost';
 
 type Mode = 'create' | 'edit';
 
@@ -70,23 +71,42 @@ export default function PostPage({ mode, postId }: PostPageProps) {
       }));
 
     try {
-      const res = await createPost({
-        boardId: 1, // 필요시 동적 변경
-        categoryId: category!.id,
-        title,
-        content,
-        pinned: false,
-        reserved: false,
-        imageUrlList,
-      });
-      if (process.env.NODE_ENV === 'development') {
-        console.log('게시글 등록 성공', res);
+      if (mode === 'create') {
+        const res = await createPost({
+          boardId: 1, // 필요시 동적 변경
+          categoryId: category!.id,
+          title,
+          content,
+          pinned: false,
+          reserved: false,
+          imageUrlList,
+        });
+
+        if (process.env.NODE_ENV === 'development') {
+          console.log('게시글 등록 성공', res);
+        }
+      } else if (mode === 'edit') {
+        const res = await updatePost(Number(postId), {
+          title,
+          content,
+          categoryId: category!.id,
+          pinned: false,
+          isReservationChanged: false,
+          reservedAt: '',
+          isImageChanged: false,
+          imageUrlList,
+          hasSchedule: false,
+        });
+
+        if (process.env.NODE_ENV === 'development') {
+          console.log('게시글 수정 성공', res);
+        }
       }
     } catch (err) {
       if (process.env.NODE_ENV === 'development') {
-        console.error('게시글 등록 실패', err);
+        console.error('게시글 처리 실패', err);
       }
-      alert('게시글 등록 실패');
+      alert('게시글 처리 실패');
     }
   };
 

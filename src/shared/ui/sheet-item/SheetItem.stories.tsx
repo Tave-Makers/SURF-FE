@@ -5,7 +5,7 @@ import { SurfIcon } from '@/shared/ui/icon/SurfIcon';
 import { Sheet } from '@/shared/ui/sheet/Sheet';
 import { useState } from 'react';
 import { Sheet as ModalSheet } from 'react-modal-sheet';
-import { ProfileImage } from '../profile-image/ProfileImage';
+import { Avatar } from '../avatar/Avatar';
 
 const meta: Meta<typeof SheetItem> = {
   title: 'Shared/UI/SheetItem',
@@ -103,8 +103,7 @@ export const LikedUsersInSheet: Story = {
                     <SheetItem
                       key={user.id}
                       title={user.name}
-                      // 아바타 컴포넌트로 변경 예정
-                      node={<ProfileImage size="s" />}
+                      node={<Avatar size="xs" className="rounded-3!" />}
                       onClick={() => alert(`${user.name} 클릭`)}
                     />
                   ))}
@@ -149,7 +148,7 @@ export const LikedUsersLargeListInSheet: Story = {
                     <SheetItem
                       key={user.id}
                       title={user.name}
-                      node={<ProfileImage size="s" />}
+                      node={<Avatar size="xs" className="rounded-3!" />}
                       onClick={() => alert(`${user.name} 클릭`)}
                     />
                   ))}

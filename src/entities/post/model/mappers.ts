@@ -9,7 +9,7 @@ export const transformDetailToPost = (item: PostDetailData): Post => {
   const { date, time } = parseDateTime(item.postedAt);
 
   return {
-    postId: item.id,
+    postId: item.postId,
     title: item.title,
     content: item.content,
     date,

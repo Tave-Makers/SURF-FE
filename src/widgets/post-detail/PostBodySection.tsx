@@ -6,6 +6,8 @@ import { PostProfile } from '@/entities/post/ui/post-profile/PostProfile';
 import { ChipToggle } from '@/shared/ui/chip-toggle/ChipToggle';
 import ReactMarkdown from 'react-markdown';
 import { Post } from '@/entities/post/model/types';
+import { useToggleLikeMutation } from '@/features/post/model/useToggleLikeMutation';
+import { useToggleScrapMutation } from '@/features/post/model/useToggleScrapMutation';
 
 export function PostBodySection({ post }: { post: Post }) {
   // 좋아요 & 스크랩 상태 관리
@@ -17,16 +19,64 @@ export function PostBodySection({ post }: { post: Post }) {
   // 이미지 모달 상태
   const [selectedImage, setSelectedImage] = useState<string | null>(null);
 
+  const likeMutation = useToggleLikeMutation();
+  const scrapMutation = useToggleScrapMutation();
+
   // 좋아요 토글 핸들러
+
   const handleLikeToggle = () => {
-    setLiked((prev) => !prev);
-    setLikeCount((prev) => (liked ? prev - 1 : prev + 1));
+    if (likeMutation.isPending) return;
+
+    const prevLiked = liked;
+    const prevLikeCount = likeCount;
+
+    // optimistic update
+    if (prevLiked) {
+      // 지금 눌려 있었으면 → 해제
+      setLiked(false);
+      setLikeCount((prev) => prev - 1);
+    } else {
+      // 지금 안 눌려 있었으면 → 설정
+      setLiked(true);
+      setLikeCount((prev) => prev + 1);
+    }
+
+    likeMutation.mutate(
+      { postId: post.postId, liked: prevLiked },
+      {
+        onError: () => {
+          setLiked(prevLiked);
+          setLikeCount(prevLikeCount);
+        },
+      },
+    );
   };
 
   // 스크랩 토글 핸들러
   const handleScrapToggle = () => {
-    setScrapped((prev) => !prev);
-    setScrapCount((prev) => (scrapped ? prev - 1 : prev + 1));
+    if (scrapMutation.isPending) return;
+
+    const prevScrapped = scrapped;
+    const prevScrapCount = scrapCount;
+
+    // optimistic update
+    if (prevScrapped) {
+      setScrapped(false);
+      setScrapCount((prev) => prev - 1);
+    } else {
+      setScrapped(true);
+      setScrapCount((prev) => prev + 1);
+    }
+
+    scrapMutation.mutate(
+      { postId: post.postId, scrapped: prevScrapped },
+      {
+        onError: () => {
+          setScrapped(prevScrapped);
+          setScrapCount(prevScrapCount);
+        },
+      },
+    );
   };
 
   return (
@@ -39,19 +89,21 @@ export function PostBodySection({ post }: { post: Post }) {
       {/* 이미지 목록 */}
       {post.imageUrlList && post.imageUrlList.length > 0 && (
         <div className="flex flex-col gap-[0.62rem]">
-          {post.imageUrlList.map((img) => (
-            <button
-              key={img.imageId}
-              className="w-full"
-              onClick={() => setSelectedImage(img.originalUrl)}
-            >
-              <img
-                src={img.originalUrl}
-                alt={`post-image-${img.imageId}`}
-                className="w-full cursor-pointer rounded-[0.5rem]"
-              />
-            </button>
-          ))}
+          {post.imageUrlList.map((img) =>
+            img.originalUrl && img.originalUrl.trim() !== '' ? (
+              <button
+                key={img.imageId}
+                className="w-full"
+                onClick={() => setSelectedImage(img.originalUrl)}
+              >
+                <img
+                  src={img.originalUrl}
+                  alt={`post-image-${img.imageId}`}
+                  className="w-full cursor-pointer rounded-[0.5rem]"
+                />
+              </button>
+            ) : null,
+          )}
         </div>
       )}
 

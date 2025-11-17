@@ -1,7 +1,7 @@
 import { useQuery } from '@tanstack/react-query';
 import { getPostDetail } from '../api/getPostDetail';
-import { transformDetailToPost } from './mappers';
-import { Post } from '../model/types';
+import { transformDetailToPost } from '@/entities/post/model/mappers';
+import { Post } from '@/entities/post/model/types';
 
 /**
  * 게시글 상세 조회 React Query 훅

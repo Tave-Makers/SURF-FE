@@ -76,7 +76,7 @@ export type ImageItemResponse = ImageItem & {
 
 // 게시글 상세 데이터 타입
 export type PostDetailData = {
-  id: number;
+  postId: number;
   title: string;
   content: string;
   pinned: boolean;

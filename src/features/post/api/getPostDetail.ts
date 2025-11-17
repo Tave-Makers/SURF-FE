@@ -1,5 +1,5 @@
 import { axiosInstance } from '@/shared/lib/axiosInstance';
-import { PostDetailResponse } from './types';
+import { PostDetailResponse } from '@/entities/post/api/types';
 
 /**
  * 게시글 단건 조회

@@ -33,13 +33,17 @@ export const PostEditor = ({ initialContent, onChange }: PostEditorProps) => {
   return (
     <div className="flex w-full min-w-0 flex-col gap-10">
       {/* 에디터 본문 */}
-      <div className="text-foreground-foreground-black text-body-body8 flex flex-1 cursor-text overflow-y-auto px-13 break-all">
-        <EditorContent
-          editor={editor}
+      <div className="text-foreground-foreground-black text-body-body8 relative flex flex-1 overflow-y-auto px-13 break-all">
+        {/* 클릭 확장 오버레이 */}
+        <button
+          type="button"
+          aria-label="본문 클릭 영역"
+          className="absolute inset-0 z-0 cursor-text"
           onClick={() => {
             if (!editor.isFocused) editor.commands.focus('end');
           }}
         />
+        <EditorContent editor={editor} />
       </div>
 
       {/* 이미지 리스트 */}

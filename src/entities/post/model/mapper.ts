@@ -26,6 +26,6 @@ export const transformMutationToPost = (item: PostDetailData): Post => {
     commentCount: 0,
     images: undefined,
     thumbnailUrl: undefined,
-    category: categoryIdToLabel(item.categoryId),
+    categoryName: categoryIdToLabel(item.categoryId),
   };
 };

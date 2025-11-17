@@ -17,5 +17,5 @@ export type Post = {
   commentCount: number;
   thumbnailUrl?: string;
   images?: ImageItemResponse[];
-  category: PostCategoryLabel;
+  categoryName: PostCategoryLabel;
 };

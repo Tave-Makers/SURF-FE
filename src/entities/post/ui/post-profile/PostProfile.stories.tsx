@@ -2,7 +2,7 @@ import type { Meta, StoryObj } from '@storybook/nextjs';
 import { PostProfile } from './PostProfile';
 
 const meta: Meta<typeof PostProfile> = {
-  title: 'ENTITIES/UI/PostProfile',
+  title: 'Entities/Post/UI/PostProfile',
   component: PostProfile,
   tags: ['autodocs'],
   argTypes: {

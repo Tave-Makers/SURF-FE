@@ -8,3 +8,11 @@ export const POST_CATEGORIES = [
 
 export type PostCategory = (typeof POST_CATEGORIES)[number];
 export type PostCategoryLabel = (typeof POST_CATEGORIES)[number]['label'];
+
+// 탭
+export type TabCategoryLabel = '전체' | PostCategoryLabel;
+export const TAB_CATEGORIES = [{ id: 'all', label: '전체' }, ...POST_CATEGORIES] as const;
+export type TabCategoryId = (typeof TAB_CATEGORIES)[number]['id'];
+
+// 예약
+export const RESERVATION_LABEL = '예약중';

@@ -15,7 +15,9 @@ export type PostEditorProps = {
 };
 
 export const PostEditor = ({ initialContent, onChange }: PostEditorProps) => {
-  const editor = usePostEditor(initialContent);
+  const editor = usePostEditor(initialContent, (html) => {
+    onChange?.({ content: html, images });
+  });
   const { inputRef, images, handleSelectAndUpload, handleRemove, handleReorder, openPicker } =
     useImageManager();
 

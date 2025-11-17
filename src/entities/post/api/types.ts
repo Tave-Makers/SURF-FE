@@ -87,15 +87,3 @@ export type PostDetailData = {
 };
 
 export type PostDetailResponse = CommonResponse<PostDetailData>;
-
-// 게시글 생성
-export type CreatePostRequest = {
-  boardId: number;
-  categoryId: number;
-  title: string;
-  content: string;
-  pinned: boolean;
-  reservedAt?: string;
-  imageUrlList?: ImageItem[];
-  reserved: boolean;
-};

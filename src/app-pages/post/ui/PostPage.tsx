@@ -60,11 +60,14 @@ export default function PostPage() {
         reserved: false,
         imageUrlList,
       });
-      console.log('게시글 등록 성공', res);
+      if (process.env.NODE_ENV === 'development') {
+        console.log('게시글 등록 성공', res);
+      }
     } catch (err) {
-      console.error('게시글 등록 실패', err);
+      if (process.env.NODE_ENV === 'development') {
+        console.error('게시글 등록 실패', err);
+      }
       alert('게시글 등록 실패');
-      throw err;
     }
   };
 

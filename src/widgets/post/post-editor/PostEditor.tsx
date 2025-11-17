@@ -21,14 +21,15 @@ export const PostEditor = ({ initialContent, onChange }: PostEditorProps) => {
   const { inputRef, images, handleSelectAndUpload, handleRemove, handleReorder, openPicker } =
     useImageManager();
 
-  // 본문 or 이미지가 바뀔 때마다 부모에게 전달
+  // 이미지 변경 시에만 부모에게 전달 (본문 변경은 TipTap onUpdate에서 처리됨)
   useEffect(() => {
     if (!editor) return;
     onChange?.({
       content: editor.getHTML(), // TipTap content
       images,
     });
-  }, [editor, images, onChange]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [images]);
 
   if (!editor) return null;
 

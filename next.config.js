@@ -10,6 +10,13 @@ const nextConfig = {
     },
   },
 
+    images: {
+    domains: [
+      'img1.kakaocdn.net',
+      't1.kakaocdn.net',
+    ],
+  },
+
   webpack(config) {
     const fileLoaderRule = config.module.rules.find(
       (rule) => rule.test?.test?.('.svg')

@@ -64,6 +64,7 @@ export function useImageManager() {
   return {
     inputRef,
     images,
+    setImages,
     openPicker,
     handleSelectAndUpload,
     handleRemove,

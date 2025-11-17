@@ -6,16 +6,35 @@ import { usePicker } from '@/shared/hooks/usePicker';
 import { AccordionSelect } from '@/shared/ui/accordion/AccordionSelect';
 import { Header, HeaderMode } from '@/shared/ui/header/Header';
 import { PostEditor } from '@/widgets/post/post-editor/PostEditor';
-import { useCallback, useRef, useState } from 'react';
+import { useCallback, useEffect, useRef, useState } from 'react';
 import { Sheet as ModalSheet } from 'react-modal-sheet';
 import { UploadImage } from '@/shared/types/image';
+import { usePostDetail } from '@/features/post/get-post/model/usePostDetailQuery';
+
+type Mode = 'create' | 'edit';
+
+type PostPageProps = {
+  mode: Mode;
+  postId?: string;
+};
 
 type EditorState = {
   content: string;
   images: UploadImage[];
 };
 
-export default function PostPage() {
+export default function PostPage({ mode, postId }: PostPageProps) {
+  /** 수정 모드시 초기 데이터 반영 */
+  const { data: postDetail } = usePostDetail(mode === 'edit' ? Number(postId) : -1);
+  const initialContent = postDetail?.content ?? '';
+  const initialImages = postDetail?.images ?? [];
+
+  useEffect(() => {
+    if (mode === 'edit' && postDetail) {
+      setTitle(postDetail.title);
+    }
+  }, [mode, postDetail]);
+
   const sheetId = 'post-category-sheet';
   const {
     isOpen,
@@ -29,13 +48,13 @@ export default function PostPage() {
 
   const [title, setTitle] = useState('');
 
-  // 에디터 내용 저장 ref (리렌더 방지)
+  /** 에디터 내용 저장 ref (리렌더 방지) */
   const editorStateRef = useRef<EditorState>({
     content: '',
     images: [],
   });
 
-  // PostEditor -> 부모로 전달받는 콜백
+  /** PostEditor -> 부모로 전달받는 콜백 */
   const handleEditorChange = useCallback((data: EditorState) => {
     editorStateRef.current = data; // 리렌더 방지
   }, []);
@@ -76,7 +95,7 @@ export default function PostPage() {
       <Header
         mode={HeaderMode.TextBtn}
         title="공지사항"
-        text="등록"
+        text={mode == 'create' ? '등록' : '수정'}
         hasLeftIcon={true}
         isDisabled={!title}
         onClickTextBtn={() => {
@@ -142,7 +161,11 @@ export default function PostPage() {
 
       {/* 본문 에디터 */}
       <div className="flex h-full flex-1 overflow-auto">
-        <PostEditor onChange={handleEditorChange} />
+        <PostEditor
+          initialContent={initialContent}
+          initialImages={initialImages}
+          onChange={handleEditorChange}
+        />
       </div>
     </div>
   );

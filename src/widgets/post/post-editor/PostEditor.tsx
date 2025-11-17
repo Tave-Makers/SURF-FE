@@ -8,20 +8,55 @@ import { usePostEditor } from '@/features/post/post-editor/lib/usePostEditor';
 import { useImageManager } from '@/shared/hooks/useImageManager';
 import { UploadImage } from '@/shared/types/image';
 import { useEffect } from 'react';
+import { ImageItemResponse } from '@/entities/post/api/types';
 
 export type PostEditorProps = {
   initialContent?: string;
+  initialImages?: ImageItemResponse[];
   onChange?: (data: { content: string; images: UploadImage[] }) => void;
 };
 
-export const PostEditor = ({ initialContent, onChange }: PostEditorProps) => {
+export const PostEditor = ({ initialContent, initialImages, onChange }: PostEditorProps) => {
   const editor = usePostEditor(initialContent, (html) => {
     onChange?.({ content: html, images });
   });
-  const { inputRef, images, handleSelectAndUpload, handleRemove, handleReorder, openPicker } =
-    useImageManager();
+  const {
+    inputRef,
+    images,
+    setImages,
+    handleSelectAndUpload,
+    handleRemove,
+    handleReorder,
+    openPicker,
+  } = useImageManager();
 
-  // 이미지 변경 시에만 부모에게 전달 (본문 변경은 TipTap onUpdate에서 처리됨)
+  const mapInitialImages = (images: ImageItemResponse[]): UploadImage[] => {
+    return images
+      .sort((a, b) => a.sequence - b.sequence)
+      .map((img) => ({
+        id: crypto.randomUUID(),
+        file: null,
+        preview: img.originalUrl,
+        uploadedUrl: img.originalUrl,
+        status: 'uploaded', // 이미 서버에 업로드된 이미지
+      }));
+  };
+
+  /** 수정 모드시 초기 본문 데이터 반영 */
+  useEffect(() => {
+    if (editor && initialContent) {
+      editor.commands.setContent(initialContent);
+    }
+  }, [editor, initialContent]);
+
+  /** 수정 모드시 초기 이미지 데이터 반영 */
+  useEffect(() => {
+    if (!initialImages) return;
+    setImages(mapInitialImages(initialImages));
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [initialImages]);
+
+  /** 이미지 변경 시에만 부모에게 전달 (본문 변경은 TipTap onUpdate에서 처리됨) */
   useEffect(() => {
     if (!editor) return;
     onChange?.({

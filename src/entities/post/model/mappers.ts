@@ -1,11 +1,11 @@
 import { parseDateTime } from '@/shared/lib/parseDateTime';
 import { PostDetailData } from '../api/types';
-import { Post } from '../model/types';
+import { PostDetail } from '../model/types';
 
 /**
  * 게시글 상세 API 데이터를 Post UI 데이터로 변환
  */
-export const transformDetailToPost = (item: PostDetailData): Post => {
+export const transformDetailToPost = (item: PostDetailData): PostDetail => {
   const { date, time } = parseDateTime(item.postedAt);
 
   return {

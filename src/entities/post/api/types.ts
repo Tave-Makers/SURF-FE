@@ -27,7 +27,7 @@ export type PostContent = {
   boardId: number;
   scrappedByMe: boolean;
   scrapCount: number;
-  likedByMe: boolean;
+  likeByMe: boolean;
   likeCount: number;
   commentCount: number;
   nickname: string;

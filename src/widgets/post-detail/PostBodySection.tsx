@@ -1,15 +1,16 @@
 'use client';
 
 import { useState } from 'react';
-import { EventCard } from '@/entities/calendar/ui/EventCard';
+
 import { PostProfile } from '@/entities/post/ui/post-profile/PostProfile';
 import { ChipToggle } from '@/shared/ui/chip-toggle/ChipToggle';
 import ReactMarkdown from 'react-markdown';
-import { Post } from '@/entities/post/model/types';
+import { PostDetail } from '@/entities/post/model/types';
 import { useToggleLikeMutation } from '@/features/post/model/useToggleLikeMutation';
 import { useToggleScrapMutation } from '@/features/post/model/useToggleScrapMutation';
+import { EventCard } from '@/entities/calendar/ui/EventCard/EventCard';
 
-export function PostBodySection({ post }: { post: Post }) {
+export function PostBodySection({ post }: { post: PostDetail }) {
   // 좋아요 & 스크랩 상태 관리
   const [liked, setLiked] = useState(post.likedByMe);
   const [likeCount, setLikeCount] = useState(post.likeCount);

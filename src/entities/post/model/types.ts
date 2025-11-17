@@ -11,20 +11,36 @@ export type Post = {
   content: string;
   writer: string;
   date: string;
-  pinned: boolean;
-  boardId: number | null;
-  likeCount: number;
-  likedByMe: boolean;
-  scrappedByMe: boolean;
-  scrapCount: number;
-  commentCount: number;
+  likes: number;
+  comments: number;
+  boardId: number;
+  state?: 'default' | 'reserved';
   thumbnailUrl?: string;
   isReserved?: boolean;
   images?: ImageItemResponse[];
-  categoryId: number | null;
+  categoryId?: number | null;
   time?: string;
   hasSchedule?: boolean;
   imageUrlList?: ImageItemResponse[];
+};
+
+export type PostDetail = {
+  postId: number;
+  title: string;
+  content: string;
+  writer: string;
+  date: string;
+  time: string;
+  boardId: number;
+  pinned: boolean;
+  hasSchedule: boolean;
+  scrappedByMe: boolean;
+  scrapCount: number;
+  likedByMe: boolean;
+  likeCount: number;
+  commentCount: number;
+  imageUrlList: ImageItemResponse[];
+  categoryId: number | null;
 };
 
 export type PostType = 'scraps' | 'my-posts';

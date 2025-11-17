@@ -4,7 +4,7 @@ type PostProfileProps = {
   profileImgUrl?: string;
   nickname: string;
   date: string;
-  time: string;
+  time?: string;
   viewCount: number;
 };
 

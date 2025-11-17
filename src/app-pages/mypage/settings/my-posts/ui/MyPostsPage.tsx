@@ -28,7 +28,7 @@ export default function MyPostsPage() {
         <PostListPage
           useInfiniteQueryHook={useInfiniteMyPosts}
           onPostClick={(post) =>
-            trackMyPostsEvent(MY_POSTS_EVENTS.CLICK_POST_CARD, { post_id: String(post.id) })
+            trackMyPostsEvent(MY_POSTS_EVENTS.CLICK_POST_CARD, { post_id: String(post.postId) })
           }
           scrollRootRef={scrollRef}
         />

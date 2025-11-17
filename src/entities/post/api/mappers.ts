@@ -3,7 +3,7 @@ import { Post } from '../model/types';
 
 export const transformApiPostToPost = (apiPost: PostContent): Post => {
   return {
-    id: apiPost.id,
+    postId: apiPost.id,
     title: apiPost.title,
     content: apiPost.content,
     // pinned 작성 필요

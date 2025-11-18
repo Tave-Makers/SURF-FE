@@ -63,6 +63,16 @@ export default function PostPage({ mode, postId }: PostPageProps) {
     defaultValue: POST_CATEGORIES[0],
   });
 
+  /** 수정 모드시 서버 categoryId로 시트 초기값 설정 */
+  useEffect(() => {
+    if (mode !== 'edit' || !postDetail) return;
+
+    const matchedCategory = POST_CATEGORIES.find((item) => item.label === postDetail.categoryName);
+    if (matchedCategory) {
+      select(matchedCategory);
+    }
+  }, [mode, postDetail, select]);
+
   /** 에디터 내용 저장 ref (리렌더 방지) */
   const editorStateRef = useRef<EditorState>({
     content: '',

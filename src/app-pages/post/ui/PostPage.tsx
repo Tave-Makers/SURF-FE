@@ -25,17 +25,21 @@ type EditorState = {
 };
 
 export default function PostPage({ mode, postId }: PostPageProps) {
-  /** 수정 모드시 초기 데이터 반영 */
+  /** 수정 모드 초기 데이터 로드 */
   const { data: postDetail } = usePostDetail(mode === 'edit' ? Number(postId) : -1);
+
   const initialContent = postDetail?.content ?? '';
   const initialImages = postDetail?.images ?? [];
 
+  /** 제목은 초기 로드 후 상태에 반영 */
+  const [title, setTitle] = useState('');
   useEffect(() => {
     if (mode === 'edit' && postDetail) {
       setTitle(postDetail.title);
     }
   }, [mode, postDetail]);
 
+  /** 카테고리 선택 */
   const sheetId = 'post-category-sheet';
   const {
     isOpen,
@@ -46,8 +50,6 @@ export default function PostPage({ mode, postId }: PostPageProps) {
   } = usePicker<PostCategory>({
     defaultValue: POST_CATEGORIES[0],
   });
-
-  const [title, setTitle] = useState('');
 
   /** 에디터 내용 저장 ref (리렌더 방지) */
   const editorStateRef = useRef<EditorState>({
@@ -60,11 +62,13 @@ export default function PostPage({ mode, postId }: PostPageProps) {
     editorStateRef.current = data; // 리렌더 방지
   }, []);
 
+  /** 게시글 생성/수정 mutation */
   const { mutateAsync } = useUpdatePost(Number(postId));
 
   const handleSubmit = async () => {
     const { content, images } = editorStateRef.current;
 
+    // 서버 전송용 이미지 리스트 가공
     const imageUrlList = images
       .filter((img) => img.uploadedUrl)
       .map((img, idx) => ({
@@ -105,15 +109,14 @@ export default function PostPage({ mode, postId }: PostPageProps) {
         }
       }
     } catch (err) {
-      if (process.env.NODE_ENV === 'development') {
-        console.error('게시글 처리 실패', err);
-      }
+      console.error('게시글 처리 실패', err);
       alert('게시글 처리 실패');
     }
   };
 
   return (
     <div className="flex h-full w-full flex-1 flex-col">
+      {/* 상단 헤더 */}
       <Header
         mode={HeaderMode.TextBtn}
         title="공지사항"

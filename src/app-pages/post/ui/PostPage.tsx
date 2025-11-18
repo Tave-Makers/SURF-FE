@@ -10,7 +10,7 @@ import { useCallback, useEffect, useRef, useState } from 'react';
 import { Sheet as ModalSheet } from 'react-modal-sheet';
 import { UploadImage } from '@/shared/types/image';
 import { usePostDetail } from '@/features/post/get-post/model/usePostDetailQuery';
-import { updatePost } from '@/features/post/update-post/api/updatePost';
+import { useUpdatePost } from '@/features/post/update-post/model/useUpdatePost';
 
 type Mode = 'create' | 'edit';
 
@@ -60,6 +60,8 @@ export default function PostPage({ mode, postId }: PostPageProps) {
     editorStateRef.current = data; // 리렌더 방지
   }, []);
 
+  const { mutateAsync } = useUpdatePost(Number(postId));
+
   const handleSubmit = async () => {
     const { content, images } = editorStateRef.current;
 
@@ -86,7 +88,7 @@ export default function PostPage({ mode, postId }: PostPageProps) {
           console.log('게시글 등록 성공', res);
         }
       } else if (mode === 'edit') {
-        const res = await updatePost(Number(postId), {
+        const res = await mutateAsync({
           title,
           content,
           categoryId: category!.id,

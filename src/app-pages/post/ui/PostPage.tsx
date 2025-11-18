@@ -6,7 +6,7 @@ import { usePicker } from '@/shared/hooks/usePicker';
 import { AccordionSelect } from '@/shared/ui/accordion/AccordionSelect';
 import { Header, HeaderMode } from '@/shared/ui/header/Header';
 import { PostEditor } from '@/widgets/post/post-editor/PostEditor';
-import { useCallback, useEffect, useRef, useState } from 'react';
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { Sheet as ModalSheet } from 'react-modal-sheet';
 import { UploadImage } from '@/shared/types/image';
 import { usePostDetail } from '@/features/post/get-post/model/usePostDetailQuery';
@@ -29,7 +29,8 @@ export default function PostPage({ mode, postId }: PostPageProps) {
   const { data: postDetail } = usePostDetail(mode === 'edit' ? Number(postId) : -1);
 
   const initialContent = postDetail?.content ?? '';
-  const initialImages = postDetail?.images ?? [];
+  const initialImages = useMemo(() => postDetail?.images ?? [], [postDetail?.images]);
+  const [isImageChanged, setIsImageChanged] = useState(false);
 
   /** 제목은 초기 로드 후 상태에 반영 */
   const [title, setTitle] = useState('');
@@ -58,9 +59,19 @@ export default function PostPage({ mode, postId }: PostPageProps) {
   });
 
   /** PostEditor -> 부모로 전달받는 콜백 */
-  const handleEditorChange = useCallback((data: EditorState) => {
-    editorStateRef.current = data; // 리렌더 방지
-  }, []);
+  const handleEditorChange = useCallback(
+    (updatedData: EditorState) => {
+      editorStateRef.current = updatedData; // 리렌더 방지
+
+      // 이미지가 바뀌었는지 검사
+      const updatedUrls = updatedData.images.map((img) => img.uploadedUrl ?? null);
+      const initialUrls = initialImages.map((img) => img.originalUrl ?? null);
+
+      const hasImageChanged = JSON.stringify(updatedUrls) !== JSON.stringify(initialUrls);
+      if (hasImageChanged) setIsImageChanged(true);
+    },
+    [initialImages],
+  );
 
   /** 게시글 생성/수정 mutation */
   const { mutateAsync } = useUpdatePost(Number(postId));
@@ -99,7 +110,7 @@ export default function PostPage({ mode, postId }: PostPageProps) {
           pinned: false,
           isReservationChanged: false,
           reservedAt: '',
-          isImageChanged: false,
+          isImageChanged,
           imageUrlList,
           hasSchedule: false,
         });

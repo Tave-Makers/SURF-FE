@@ -31,15 +31,13 @@ export const PostEditor = ({ initialContent, initialImages, onChange }: PostEdit
   } = useImageManager();
 
   const mapInitialImages = (images: ImageItemResponse[]): UploadImage[] => {
-    return images
-      .sort((a, b) => a.sequence - b.sequence)
-      .map((img) => ({
-        id: crypto.randomUUID(),
-        file: null,
-        preview: img.originalUrl,
-        uploadedUrl: img.originalUrl,
-        status: 'uploaded', // 이미 서버에 업로드된 이미지
-      }));
+    return images.map((img) => ({
+      id: crypto.randomUUID(),
+      file: null,
+      preview: img.originalUrl,
+      uploadedUrl: img.originalUrl,
+      status: 'uploaded', // 이미 서버에 업로드된 이미지
+    }));
   };
 
   /** 수정 모드시 초기 본문 데이터 반영 */

@@ -29,7 +29,14 @@ export default function PostPage({ mode, postId }: PostPageProps) {
   const { data: postDetail } = usePostDetail(mode === 'edit' ? Number(postId) : -1);
 
   const initialContent = postDetail?.content ?? '';
-  const initialImages = useMemo(() => postDetail?.images ?? [], [postDetail?.images]);
+
+  /** 초기 이미지 정렬 */
+  const initialImages = useMemo(
+    () => (postDetail?.images ?? []).sort((a, b) => a.sequence - b.sequence),
+    [postDetail?.images],
+  );
+
+  /** 이미지 변경 여부 */
   const [isImageChanged, setIsImageChanged] = useState(false);
 
   /** 최초 초기 데이터 세팅 완료 여부 */
@@ -44,7 +51,7 @@ export default function PostPage({ mode, postId }: PostPageProps) {
     }
   }, [mode, postDetail]);
 
-  /** 카테고리 선택 */
+  /** 카테고리 */
   const sheetId = 'post-category-sheet';
   const {
     isOpen,

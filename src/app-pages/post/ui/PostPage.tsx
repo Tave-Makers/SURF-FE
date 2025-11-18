@@ -80,8 +80,7 @@ export default function PostPage({ mode, postId }: PostPageProps) {
       const updatedUrls = updatedData.images.map((img) => img.uploadedUrl ?? null);
       const initialUrls = initialImages.map((img) => img.originalUrl ?? null);
 
-      const hasImageChanged = JSON.stringify(updatedUrls) !== JSON.stringify(initialUrls);
-      if (hasImageChanged) setIsImageChanged(true);
+      setIsImageChanged(JSON.stringify(updatedUrls) !== JSON.stringify(initialUrls));
     },
     [initialImages],
   );

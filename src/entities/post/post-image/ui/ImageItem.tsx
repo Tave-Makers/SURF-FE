@@ -22,13 +22,23 @@ export function ImageItem({ preview, uploadedUrl, status, onRemove }: ImageItemP
       />
 
       {status === 'error' && (
-        <div className="rounded-2 absolute inset-0 flex items-center bg-black/40 text-center text-xs text-white">
-          Upload failed
+        <div
+          role="alert"
+          className="rounded-2 absolute inset-0 flex items-center justify-center bg-black/40 text-center text-xs text-white"
+        >
+          업로드
+          <br />
+          실패
         </div>
       )}
 
       {status === 'uploading' && (
-        <div className="rounded-2 absolute inset-0 flex items-center justify-center bg-black/20 text-white">
+        <div
+          role="status"
+          aria-live="polite"
+          aria-label="이미지 업로드 중"
+          className="rounded-2 absolute inset-0 flex items-center justify-center bg-black/20 text-white"
+        >
           <div className="h-12 w-12 animate-spin rounded-full border-2 border-white border-t-transparent"></div>
         </div>
       )}

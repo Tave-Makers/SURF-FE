@@ -6,6 +6,6 @@ export const updatePost = async (
   postId: number,
   data: UpdatePostRequest,
 ): Promise<PostDetailData> => {
-  const res = await axiosInstance.patch<PostDetailResponse>(`v1/user/posts/${postId}`, data);
+  const res = await axiosInstance.patch<PostDetailResponse>(`/v1/user/posts/${postId}`, data);
   return res.data.data;
 };

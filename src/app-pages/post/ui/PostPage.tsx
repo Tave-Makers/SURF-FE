@@ -32,11 +32,15 @@ export default function PostPage({ mode, postId }: PostPageProps) {
   const initialImages = useMemo(() => postDetail?.images ?? [], [postDetail?.images]);
   const [isImageChanged, setIsImageChanged] = useState(false);
 
-  /** 제목은 초기 로드 후 상태에 반영 */
+  /** 최초 초기 데이터 세팅 완료 여부 */
+  const initialLoadedRef = useRef(false);
+
+  /** 제목 */
   const [title, setTitle] = useState('');
   useEffect(() => {
     if (mode === 'edit' && postDetail) {
       setTitle(postDetail.title);
+      initialLoadedRef.current = true;
     }
   }, [mode, postDetail]);
 
@@ -62,6 +66,8 @@ export default function PostPage({ mode, postId }: PostPageProps) {
   const handleEditorChange = useCallback(
     (updatedData: EditorState) => {
       editorStateRef.current = updatedData; // 리렌더 방지
+
+      if (!initialLoadedRef.current) return; // 초기 로딩 안되었을시 리턴
 
       // 이미지가 바뀌었는지 검사
       const updatedUrls = updatedData.images.map((img) => img.uploadedUrl ?? null);

@@ -7,16 +7,22 @@ import { EditorContent } from '@tiptap/react';
 import { usePostEditor } from '@/features/post/post-editor/lib/usePostEditor';
 import { useImageManager } from '@/shared/hooks/useImageManager';
 import { UploadImage } from '@/shared/types/image';
-import { useEffect } from 'react';
+import { useEffect, useRef } from 'react';
 import { ImageItemResponse } from '@/entities/post/api/types';
 
 export type PostEditorProps = {
-  initialContent?: string;
-  initialImages?: ImageItemResponse[];
-  onChange?: (data: { content: string; images: UploadImage[] }) => void;
+  initialContent: string;
+  initialImages: ImageItemResponse[];
+  onChange: (data: { content: string; images: UploadImage[] }) => void;
+  onInitialized: () => void;
 };
 
-export const PostEditor = ({ initialContent, initialImages, onChange }: PostEditorProps) => {
+export const PostEditor = ({
+  initialContent,
+  initialImages,
+  onChange,
+  onInitialized,
+}: PostEditorProps) => {
   const editor = usePostEditor(initialContent, (html) => {
     onChange?.({ content: html, images });
   });
@@ -30,6 +36,14 @@ export const PostEditor = ({ initialContent, initialImages, onChange }: PostEdit
     openPicker,
   } = useImageManager();
 
+  const initializedRef = useRef(false);
+
+  /** 초기 content 적용 */
+  useEffect(() => {
+    if (!editor || !initialContent) return;
+    editor.commands.setContent(initialContent);
+  }, [editor, initialContent]);
+
   const mapInitialImages = (images: ImageItemResponse[]): UploadImage[] => {
     return images.map((img) => ({
       id: crypto.randomUUID(),
@@ -40,19 +54,25 @@ export const PostEditor = ({ initialContent, initialImages, onChange }: PostEdit
     }));
   };
 
-  /** 수정 모드시 초기 본문 데이터 반영 */
-  useEffect(() => {
-    if (editor && initialContent) {
-      editor.commands.setContent(initialContent);
-    }
-  }, [editor, initialContent]);
-
-  /** 수정 모드시 초기 이미지 데이터 반영 */
+  /** 초기 images 적용 */
   useEffect(() => {
     if (!initialImages) return;
     setImages(mapInitialImages(initialImages));
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [initialImages]);
+
+  /** content + images 둘 다 초기화 완료된 시점 감지 */
+  useEffect(() => {
+    if (!editor) return;
+
+    const contentReady = initialContent != null;
+    const imagesReady = initialImages != null;
+
+    if (contentReady && imagesReady && !initializedRef.current) {
+      initializedRef.current = true;
+      onInitialized?.(); // 부모에게 알려줌
+    }
+  }, [editor, initialContent, initialImages, onInitialized]);
 
   /** 이미지 변경 시에만 부모에게 전달 (본문 변경은 TipTap onUpdate에서 처리됨) */
   useEffect(() => {

@@ -36,20 +36,14 @@ export default function PostPage({ mode, postId }: PostPageProps) {
     [postDetail?.images],
   );
 
-  /** 이미지 변경 여부 */
-  const [isImageChanged, setIsImageChanged] = useState(false);
+  /** 제목 */
+  const [title, setTitle] = useState('');
 
   /** 최초 초기 데이터 세팅 완료 여부 */
   const initialLoadedRef = useRef(false);
 
-  /** 제목 */
-  const [title, setTitle] = useState('');
-  useEffect(() => {
-    if (mode === 'edit' && postDetail) {
-      setTitle(postDetail.title);
-      initialLoadedRef.current = true;
-    }
-  }, [mode, postDetail]);
+  /** 이미지 변경 여부 */
+  const [isImageChanged, setIsImageChanged] = useState(false);
 
   /** 카테고리 */
   const sheetId = 'post-category-sheet';
@@ -63,7 +57,15 @@ export default function PostPage({ mode, postId }: PostPageProps) {
     defaultValue: POST_CATEGORIES[0],
   });
 
-  /** 수정 모드시 서버 categoryId로 시트 초기값 설정 */
+  /** 제목 초기화 */
+  useEffect(() => {
+    if (mode === 'edit' && postDetail) {
+      setTitle(postDetail.title);
+      initialLoadedRef.current = true;
+    }
+  }, [mode, postDetail]);
+
+  /** 서버 category 초기화 */
   useEffect(() => {
     if (mode !== 'edit' || !postDetail) return;
 
@@ -79,7 +81,7 @@ export default function PostPage({ mode, postId }: PostPageProps) {
     images: [],
   });
 
-  /** PostEditor -> 부모로 전달받는 콜백 */
+  /** PostEditor 변경 콜백 */
   const handleEditorChange = useCallback(
     (updatedData: EditorState) => {
       editorStateRef.current = updatedData; // 리렌더 방지
@@ -95,7 +97,12 @@ export default function PostPage({ mode, postId }: PostPageProps) {
     [initialImages],
   );
 
-  /** 게시글 생성/수정 mutation */
+  /** PostEditor 초기화 완료 콜백 */
+  const handleEditorInitialized = useCallback(() => {
+    initialLoadedRef.current = true;
+  }, []);
+
+  /** 게시글 수정 mutation */
   const { mutateAsync } = useUpdatePost(Number(postId));
 
   const handleSubmit = async () => {
@@ -187,7 +194,7 @@ export default function PostPage({ mode, postId }: PostPageProps) {
                   key={item.id}
                   type="button"
                   onClick={() => select(item)}
-                  className={`rounded-md px-5 py-10 text-left transition-colors ${
+                  className={`rounded-md px-15 py-16 text-left transition-colors ${
                     category!.id === item.id
                       ? 'bg-background-background-secondary font-semibold'
                       : 'hover:bg-background-background-secondary'
@@ -223,6 +230,7 @@ export default function PostPage({ mode, postId }: PostPageProps) {
           initialContent={initialContent}
           initialImages={initialImages}
           onChange={handleEditorChange}
+          onInitialized={handleEditorInitialized}
         />
       </div>
     </div>

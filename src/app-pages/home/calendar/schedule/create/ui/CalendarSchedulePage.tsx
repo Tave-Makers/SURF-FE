@@ -10,7 +10,7 @@ import { AppHeader } from '@/widgets/header/ui/AppHeader';
 import { HeaderMode, HeaderProps } from '@/shared/ui/header/Header';
 
 export default function CalendarSchedulePage() {
-  const { mutate: createSchedule } = usePostSchedule();
+  const { mutate: createSchedule, isPending } = usePostSchedule();
 
   const methods = useForm<ScheduleFormData>({
     defaultValues: {
@@ -46,7 +46,7 @@ export default function CalendarSchedulePage() {
   }, [title, startDate, endDate]);
 
   const handleSubmit = (data: ScheduleFormData) => {
-    if (!isFormValid) return;
+    if (!isFormValid || isPending) return;
 
     if (process.env.NODE_ENV === 'development') {
       console.log('폼 제출 시도:', data);
@@ -68,6 +68,7 @@ export default function CalendarSchedulePage() {
         if (process.env.NODE_ENV === 'development') {
           console.error('일정 생성 요청 실패:', error);
         }
+        alert('일정 생성에 실패했습니다. 잠시 후 다시 시도해 주세요.');
       },
     });
   };

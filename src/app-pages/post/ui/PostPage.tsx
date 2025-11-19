@@ -188,13 +188,13 @@ export default function PostPage({ mode, postId }: PostPageProps) {
         <ModalSheet.Container>
           <ModalSheet.Header />
           <ModalSheet.Content>
-            <div id={sheetId} className="flex flex-col gap-[0.25rem] p-15">
+            <div id={sheetId} className="flex flex-col gap-4 px-15 py-16">
               {POST_CATEGORIES.map((item) => (
                 <button
                   key={item.id}
                   type="button"
                   onClick={() => select(item)}
-                  className={`rounded-md px-15 py-16 text-left transition-colors ${
+                  className={`rounded-md px-12 py-10 text-left transition-colors ${
                     category!.id === item.id
                       ? 'bg-background-background-secondary font-semibold'
                       : 'hover:bg-background-background-secondary'

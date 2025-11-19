@@ -39,7 +39,7 @@ export default function PostPage({ mode, postId }: PostPageProps) {
   /** 제목 */
   const [title, setTitle] = useState('');
 
-  /** 최초 초기 데이터 세팅 완료 여부 */
+  /** 초기화 완료 여부 */
   const initialLoadedRef = useRef(false);
 
   /** 이미지 변경 여부 */
@@ -61,7 +61,6 @@ export default function PostPage({ mode, postId }: PostPageProps) {
   useEffect(() => {
     if (mode === 'edit' && postDetail) {
       setTitle(postDetail.title);
-      initialLoadedRef.current = true;
     }
   }, [mode, postDetail]);
 

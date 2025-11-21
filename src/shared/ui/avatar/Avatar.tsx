@@ -1,7 +1,7 @@
 'use client';
 
 import Image from 'next/image';
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import DEFAULT_PROFILE_IMAGE from '@/shared/assets/icons/profile/profile-default.png';
 
 export type AvatarSize = 'xs' | 's' | 'm' | 'l' | 'xl';
@@ -17,63 +17,45 @@ const sizes = {
 export type AvatarProps = {
   src?: string;
   size?: AvatarSize;
-  className?: string;
   priority?: boolean;
+  className?: string;
   alt?: string;
+  onClick?: () => void;
 };
 
-export function Avatar({ src, size = 'l', className, priority, alt = '' }: AvatarProps) {
+export function Avatar({
+  src,
+  size = 'l',
+  priority,
+  className = '',
+  alt = '프로필 이미지',
+  onClick,
+}: AvatarProps) {
   const [error, setError] = useState(false);
-  const [loading, setLoading] = useState(!!src);
-
-  useEffect(() => {
-    setError(false);
-    setLoading(!!src);
-  }, [src]);
 
   const base = `relative flex items-center justify-center flex-shrink-0 aspect-square 
-     rounded-[0.5rem] overflow-hidden bg-black/5 ${sizes[size].cls}`;
+    rounded-1 overflow-hidden ${sizes[size].cls}`;
 
-  const fallback = (
-    <Image
-      src={DEFAULT_PROFILE_IMAGE}
-      alt={alt}
-      fill
-      sizes={`${sizes[size].px}px`}
-      className="object-cover"
-    />
-  );
+  const imageSrc = !error && src ? src : DEFAULT_PROFILE_IMAGE;
+
+  // interactive 여부에 따라 wrapper element 결정
+  const Wrapper = onClick ? 'button' : 'div';
 
   return (
-    <div className={className ? `${base} ${className}` : base} aria-busy={loading}>
-      {src && !error ? (
-        <>
-          {loading && (
-            <div
-              className={`${sizes[size].cls} bg-background-quaternary animate-pulse`}
-              role="status"
-              aria-label="프로필 이미지 로딩 중"
-            />
-          )}
-          <Image
-            src={src}
-            alt={alt}
-            fill
-            sizes={`${sizes[size].px}px`}
-            className={`object-cover transition-opacity duration-100 ${
-              loading ? 'opacity-0' : 'opacity-100'
-            }`}
-            onError={() => {
-              setError(true);
-              setLoading(false);
-            }}
-            onLoadingComplete={() => setLoading(false)}
-            priority={priority}
-          />
-        </>
-      ) : (
-        fallback
-      )}
-    </div>
+    <Wrapper
+      className={`${base} ${className}`}
+      onClick={onClick}
+      type={onClick ? 'button' : undefined}
+    >
+      <Image
+        src={imageSrc}
+        alt={alt}
+        fill
+        sizes={`${sizes[size].px}px`}
+        className="object-cover"
+        priority={priority}
+        onError={() => setError(true)}
+      />
+    </Wrapper>
   );
 }

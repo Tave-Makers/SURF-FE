@@ -1,7 +1,11 @@
+'use client';
+
 import { format } from 'date-fns';
 import { ko } from 'date-fns/locale';
+import { useState } from 'react';
 import { SurfIcon } from '@/shared/ui/icon/SurfIcon';
 import { CalendarBadge } from '@/entities/calendar/ui/CalendarBadge/CalendarBadge';
+import { ScheduleActionSheet } from '@/entities/calendar/ui/ScheduleActionSheet/ScheduleActionSheet';
 import type { ActivityType, EventCardType } from '@/entities/calendar//model/types';
 
 /**
@@ -17,26 +21,10 @@ import type { ActivityType, EventCardType } from '@/entities/calendar//model/typ
  * @param onClickCard - 카드 전체 클릭 시 호출되는 콜백 함수 (공지사항 바로가기)
  * @param onEditSchedule - 일정 수정 클릭 시 호출되는 콜백 함수
  * @param onDeleteSchedule - 일정 삭제 클릭 시 호출되는 콜백 함수
- *
- * @methods formatEventDate - 날짜를 'MM월 dd일 (eee) HH:mm' 형식으로 포맷팅하는 함수
- *
- * @example
- * <EventCard
- *   title="후반기 만남의 장소"
- *   type="official"
- *   mode="reservation"
- *   startDate={new Date('2025-11-20T10:00:00')}
- *   endDate={new Date('2025-11-21T18:00:00')}
- *   place="서울 강남구 어딘가"
- *   isAdmin=true
- *   hasNotice=true
- *   onClickCard={() => console.log('Card clicked!')}
- *   onEditSchedule={() => console.log('Edit button clicked!')}
- *   onDeleteSchedule={() => console.log('Delete button clicked!')}
- * />
  */
 
 type EventCardProps = {
+  scheduleId?: string | number; // 일정 ID (바텀 시트 오픈 시 필요)
   title: string;
   type: ActivityType;
   mode: EventCardType;
@@ -46,7 +34,6 @@ type EventCardProps = {
   isAdmin?: boolean;
   hasNotice?: boolean;
   onClickCard?: () => void;
-  // onEditSchedule?: () => void;
   onDeleteSchedule?: () => void;
 };
 
@@ -59,18 +46,20 @@ const formatEventDate = (date: Date | null | undefined) => {
 };
 
 export function EventCard({
+  scheduleId,
   title,
   type,
   mode,
   startDate,
   endDate,
   place,
-  isAdmin = false,
+  isAdmin = true, // 기본값 false 인데 지금 임시로 true로 설정함
   hasNotice = false,
   onClickCard,
-  // onEditSchedule,
   onDeleteSchedule,
 }: EventCardProps) {
+  const [isActionSheetOpen, setIsActionSheetOpen] = useState(false);
+
   const handleCardClick = () => {
     if (mode === 'calendar') {
       onClickCard?.();
@@ -81,14 +70,6 @@ export function EventCard({
     }
   };
 
-  // const handleEditSchedule = () => {
-  //   onEditSchedule?.();
-
-  //   if (process.env.NODE_ENV === 'development') {
-  //     console.log('Edit schedule clicked');
-  //   }
-  // };
-
   const handleDeleteSchedule = () => {
     onDeleteSchedule?.();
 
@@ -97,89 +78,99 @@ export function EventCard({
     }
   };
 
-  // 캘린더 화면에서 공지사항 바로가기 여부
-  const showNoticeLink = mode === 'calendar' && hasNotice;
-
   return (
-    <button
-      type="button"
-      onClick={handleCardClick}
-      className="rounded-4 border-border-border-quinary bg-background-background-normal-lighter flex w-full flex-1 cursor-pointer flex-col items-start gap-8 border px-13 py-11"
-    >
-      {/* Header 영역 */}
-      <section className="flex items-center gap-8 self-stretch">
-        <div className="flex flex-1 flex-row items-center gap-10">
-          <CalendarBadge variation={type} />
-          {showNoticeLink && (
-            <div className="flex h-[1.18rem] cursor-pointer flex-row items-center gap-3">
-              <span className="text-caption-caption5 text-foreground-foreground-tertiary">
-                공지사항 바로가기
-              </span>
-              <div className="relative flex items-center justify-center">
-                <SurfIcon
-                  size="s"
-                  name="ChevronRight"
-                  className="text-foreground-foreground-tertiary"
-                />
-                <span className="absolute -inset-4" />
+    <>
+      <button
+        type="button"
+        onClick={handleCardClick}
+        className="rounded-4 border-border-border-quinary bg-background-background-normal-lighter flex w-full flex-1 cursor-pointer flex-col items-start gap-8 border px-13 py-11"
+      >
+        {/* Header 영역 */}
+        <section className="flex items-center gap-8 self-stretch">
+          <div className="flex flex-1 flex-row items-center gap-10">
+            <CalendarBadge variation={type} />
+            {mode === 'calendar' && hasNotice && (
+              <div className="flex h-[1.18rem] cursor-pointer flex-row items-center gap-3">
+                <span className="text-caption-caption5 text-foreground-foreground-tertiary">
+                  공지사항 바로가기
+                </span>
+                <div className="relative flex items-center justify-center">
+                  <SurfIcon
+                    size="s"
+                    name="ChevronRight"
+                    className="text-foreground-foreground-tertiary"
+                  />
+                  <span className="absolute -inset-4" />
+                </div>
               </div>
+            )}
+          </div>
+
+          {/* 닫기 또는 더보기 */}
+          <div className="flex items-center justify-center">
+            {/* 케이스 1: 일정 작성/수정 모드일 때 닫기 버튼 */}
+            {mode === 'reservation' && isAdmin && (
+              <button
+                onClick={(e) => {
+                  e.stopPropagation();
+                  handleDeleteSchedule();
+                }}
+                className="relative flex items-center justify-center"
+              >
+                <SurfIcon size="m" name="X" className="text-foreground-foreground-normal-lighter" />
+                <span className="absolute -inset-4" />
+              </button>
+            )}
+
+            {/* 케이스 2: 일정 화면이고 운영진일 때 더보기 버튼 */}
+            {mode === 'calendar' && isAdmin && (
+              <button
+                onClick={(e) => {
+                  e.stopPropagation();
+                  setIsActionSheetOpen(true);
+                }}
+                className="relative flex items-center justify-center"
+              >
+                <SurfIcon size="m" name="Dots" className="text-foreground-foreground-normal" />
+                <span className="absolute -inset-4" />
+              </button>
+            )}
+          </div>
+        </section>
+
+        {/* Container 영역 */}
+        <section className="flex w-full flex-1 flex-col items-start self-stretch">
+          {/* 일정 제목 */}
+          <div className="text-body-body3 text-foreground-foreground-normal">{title}</div>
+
+          <div className="flex flex-col items-start pt-5">
+            {/* 날짜 */}
+            <div className="text-body-body8 text-foreground-foreground-normal-lighter flex items-center gap-5">
+              <div>{formatEventDate(startDate)}</div>
+              <div>~</div>
+              <div>{formatEventDate(endDate)}</div>
             </div>
-          )}
-        </div>
 
-        {/* 닫기 또는 더보기 */}
-        <div className="flex items-center justify-center">
-          {/* 케이스 1: 일정 작성/수정 모드일 때 닫기 버튼 */}
-          {mode === 'reservation' && isAdmin && (
-            <button
-              onClick={(e) => {
-                e.stopPropagation();
-                handleDeleteSchedule();
-              }}
-              className="relative flex items-center justify-center"
-            >
-              <SurfIcon size="m" name="X" className="text-foreground-foreground-normal-lighter" />
-              <span className="absolute -inset-4" />
-            </button>
-          )}
-
-          {/* 케이스 2: 일정 화면이고 운영진일 때 더보기 버튼 */}
-          {mode === 'calendar' && isAdmin && (
-            <button
-              onClick={(e) => {
-                e.stopPropagation();
-                // TODO: 더보기 메뉴 오픈 로직
-                console.log('Open menu');
-              }}
-              className="relative flex items-center justify-center"
-            >
-              <SurfIcon size="m" name="Dots" className="text-foreground-foreground-normal" />
-              <span className="absolute -inset-4" />
-            </button>
-          )}
-        </div>
-      </section>
-
-      {/* Container 영역 */}
-      <section className="flex w-full flex-1 flex-col items-start self-stretch">
-        {/* 일정 제목 */}
-        <div className="text-body-body3 text-foreground-foreground-normal">{title}</div>
-
-        <div className="flex flex-col items-start pt-5">
-          {/* 날짜 */}
-          <div className="text-body-body8 text-foreground-foreground-normal-lighter flex items-center gap-5">
-            <div>{formatEventDate(startDate)}</div>
-            <div>~</div>
-            <div>{formatEventDate(endDate)}</div>
+            {/* 장소 */}
+            <div className="text-caption-caption2 text-foreground-foreground-normal-lighter flex items-center gap-5">
+              <div>장소 :</div>
+              <div>{place ? place : '미정'}</div>
+            </div>
           </div>
+        </section>
+      </button>
 
-          {/* 장소 */}
-          <div className="text-caption-caption2 text-foreground-foreground-normal-lighter flex items-center gap-5">
-            <div>장소 :</div>
-            <div>{place ? place : '미정'}</div>
-          </div>
-        </div>
-      </section>
-    </button>
+      {/* 일정 액션 바텀 시트 */}
+      {scheduleId && (
+        <ScheduleActionSheet
+          scheduleId={scheduleId}
+          isOpen={isActionSheetOpen}
+          onClose={() => setIsActionSheetOpen(false)}
+          onDeleteSuccess={() => {
+            onDeleteSchedule?.();
+          }}
+        />
+      )}
+    </>
   );
 }

@@ -175,6 +175,7 @@ export default function Calendar() {
             renderItem={(_ev) => (
               <EventCard
                 key={_ev.id}
+                scheduleId={_ev.id}
                 title={_ev.title}
                 type={_ev.type}
                 mode="calendar"

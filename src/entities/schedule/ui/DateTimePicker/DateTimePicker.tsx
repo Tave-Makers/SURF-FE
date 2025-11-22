@@ -9,14 +9,18 @@ type DateTimePickerProps = {
   onChange: (date: Date) => void;
 };
 
-const MINUTES = Array.from({ length: 60 }, (_, i) => i);
+// 분 단위를 30분 간격(0, 30)으로만 설정
+const MINUTES = [0, 30];
 const AM_PM_OPTIONS = ['오전', '오후'];
 
 // 연간 모든 날짜 생성 (월/일 조합)
 const generateAllDates = () => {
   const dates: Array<{ month: number; day: number }> = [];
+  // 현재 연도를 기준으로 날짜를 생성
+  const currentYear = new Date().getFullYear();
   for (let month = 1; month <= 12; month++) {
-    const daysInMonth = new Date(new Date().getFullYear(), month, 0).getDate();
+    // new Date(year, month, 0) => month의 마지막 날짜.
+    const daysInMonth = new Date(currentYear, month, 0).getDate();
     for (let day = 1; day <= daysInMonth; day++) {
       dates.push({ month, day });
     }
@@ -27,7 +31,7 @@ const generateAllDates = () => {
 const ALL_DATES = generateAllDates();
 
 export function DateTimePicker({ value, onChange }: DateTimePickerProps) {
-  // RHF에서 넘어온 value를 기준으로 내부 상태 초기화
+  // RHF에서 넘어온 value를 기준 내부 상태 초기화
   const [currentDate, setCurrentDate] = useState(value);
 
   // 파생 상태
@@ -35,7 +39,7 @@ export function DateTimePicker({ value, onChange }: DateTimePickerProps) {
   const selectedMonth = currentDate.getMonth() + 1;
   const selectedDay = currentDate.getDate();
   const selectedHour = currentDate.getHours();
-  const selectedMinute = currentDate.getMinutes();
+  const selectedMinute = currentDate.getMinutes(); // 0-59
 
   // 오전/오후 상태 (0: 오전, 1: 오후)
   const selectedAmPmIdx = selectedHour < 12 ? 0 : 1;
@@ -52,27 +56,47 @@ export function DateTimePicker({ value, onChange }: DateTimePickerProps) {
     getDateWheelIndex(selectedMonth, selectedDay),
   );
   const [amPmIdx, setAmPmIdx] = useState(selectedAmPmIdx);
-  const [hour12Idx, setHour12Idx] = useState(selectedHour12 === 12 ? 0 : selectedHour12);
-  const [minuteIdx, setMinuteIdx] = useState(selectedMinute);
+  const [hour12Idx, setHour12Idx] = useState(selectedHour12 === 12 ? 11 : selectedHour12 - 1);
+
+  // 분 인덱스 계산: 30분 이상이면 1 (30분), 미만이면 0 (00분)
+  const initialMinuteIdx = selectedMinute >= 30 ? 1 : 0;
+  const [minuteIdx, setMinuteIdx] = useState(initialMinuteIdx);
 
   // value prop이 변경될 때 내부 상태 업데이트
   useEffect(() => {
     setCurrentDate(value);
     setDateWheelIdx(getDateWheelIndex(value.getMonth() + 1, value.getDate()));
     setAmPmIdx(value.getHours() < 12 ? 0 : 1);
-    setHour12Idx(value.getHours() % 12 === 0 ? 0 : value.getHours() % 12);
-    setMinuteIdx(value.getMinutes());
+
+    const valueHour = value.getHours();
+    const valueHour12 = valueHour % 12 === 0 ? 12 : valueHour % 12; // 1~12
+    setHour12Idx(valueHour12 === 12 ? 11 : valueHour12 - 1);
+
+    // 분 업데이트 로직: 30분 간격으로 매핑 (00분 또는 30분)
+    const newMinute = value.getMinutes();
+    setMinuteIdx(newMinute >= 30 ? 1 : 0);
   }, [value, getDateWheelIndex]);
 
   // Wheel 선택 변경 시, newDate를 만들고 onChange 호출
+  // 이 onChange는 ScheduleCreateForm에서 임시 상태를 업데이트하는 데 사용됩니다.
   useEffect(() => {
     const selectedDate = ALL_DATES[dateWheelIdx];
     const month = selectedDate.month;
     const day = selectedDate.day;
 
-    const hour24 =
-      amPmIdx === 0 ? (hour12Idx === 0 ? 0 : hour12Idx) : hour12Idx === 0 ? 12 : hour12Idx + 12;
+    // 인덱스 0~11 → 1~12
+    const hour12 = (hour12Idx % 12) + 1;
 
+    let hour24: number;
+    if (amPmIdx === 0) {
+      // 오전: 12시는 0시, 나머지는 그대로
+      hour24 = hour12 % 12; // 12 -> 0, 1~11 -> 1~11
+    } else {
+      // 오후: 12시는 12시, 나머지는 +12
+      hour24 = hour12 === 12 ? 12 : hour12 + 12; // 1~11 -> 13~23
+    }
+
+    // MINUTES[minuteIdx]는 0 또는 30
     const newDate = new Date(selectedYear, month - 1, day, hour24, MINUTES[minuteIdx]);
 
     // 무한 루프 방지: value와 다를 때만 onChange 호출
@@ -102,44 +126,24 @@ export function DateTimePicker({ value, onChange }: DateTimePickerProps) {
   );
 
   const formatHour12 = useCallback((_relative: number, absolute: number): string => {
-    const hour = [12, ...Array.from({ length: 11 }, (_, i) => i + 1)][absolute % 12];
+    // 인덱스 0 -> 1시, 1 -> 2시, ... 11 -> 12시
+    const hour = (absolute % 12) + 1;
     return `${hour}`;
   }, []);
 
   const formatMinute = useCallback((_relative: number, absolute: number): string => {
+    // MINUTES는 [0, 30] 이므로 absolute % 2 = 0 또는 1
     const minute = MINUTES[absolute % MINUTES.length];
     return `${minute.toString().padStart(2, '0')}`;
   }, []);
 
   return (
-    <div
-      style={{
-        width: '100%',
-        height: '176px',
-        display: 'flex',
-        justifyContent: 'center',
-        alignItems: 'center',
-        position: 'relative',
-        gap: '8px',
-      }}
-    >
+    <div className="relative flex h-44 w-full items-center justify-center gap-2">
       {/* 선택된 값 Highlight */}
-      <div
-        style={{
-          position: 'absolute',
-          top: '50%',
-          left: 0,
-          width: '100%',
-          height: '25px',
-          backgroundColor: '#dfdfdf',
-          borderRadius: '4px',
-          transform: 'translateY(-50%)',
-          zIndex: 1,
-        }}
-      />
+      <div className="absolute top-1/2 left-0 z-10 h-[25px] w-full -translate-y-1/2 rounded-md bg-gray-300" />
 
-      {/* 날짜 Wheel (하나로 표시: "10월 1일 수") */}
-      <div style={{ zIndex: 2 }} className="flex h-full w-full">
+      {/* 날짜 Wheel (예) "10월 1일 수" */}
+      <div className="z-20 flex h-full w-full">
         <Wheel
           value={dateWheelIdx}
           length={ALL_DATES.length}
@@ -152,7 +156,7 @@ export function DateTimePicker({ value, onChange }: DateTimePickerProps) {
       </div>
 
       {/* 오전/오후 Wheel */}
-      <div style={{ zIndex: 2 }} className="flex h-full w-full">
+      <div className="z-20 flex h-full w-full">
         <Wheel
           value={amPmIdx}
           length={AM_PM_OPTIONS.length}
@@ -165,7 +169,7 @@ export function DateTimePicker({ value, onChange }: DateTimePickerProps) {
       </div>
 
       {/* 시간 Wheel */}
-      <div style={{ zIndex: 2 }} className="flex h-full w-full">
+      <div className="z-20 flex h-full w-full">
         <Wheel
           value={hour12Idx}
           length={12}
@@ -178,10 +182,10 @@ export function DateTimePicker({ value, onChange }: DateTimePickerProps) {
       </div>
 
       {/* 분 Wheel */}
-      <div style={{ zIndex: 2 }} className="flex h-full w-full">
+      <div className="z-20 flex h-full w-full">
         <Wheel
           value={minuteIdx}
-          length={MINUTES.length}
+          length={MINUTES.length} // 이제 2 (00분, 30분)
           width={35}
           loop={true}
           setValue={formatMinute}

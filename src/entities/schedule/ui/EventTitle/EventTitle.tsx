@@ -24,6 +24,9 @@ export function EventTitle({ placeholder, title, onChange }: EventTitleProps) {
         inputRef.current.value.length,
         inputRef.current.value.length,
       );
+      const target = inputRef.current;
+      target.style.height = 'auto';
+      target.style.height = `${target.scrollHeight}px`;
     }
   }, [isEditing]);
 
@@ -40,7 +43,9 @@ export function EventTitle({ placeholder, title, onChange }: EventTitleProps) {
 
   const handleBlur = () => {
     setIsEditing(false);
-    onChange?.(value);
+    if (value !== title) {
+      onChange?.(value);
+    }
   };
 
   const handleChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
@@ -51,7 +56,7 @@ export function EventTitle({ placeholder, title, onChange }: EventTitleProps) {
   const handleTextAreaKeyDown = (e: React.KeyboardEvent<HTMLTextAreaElement>) => {
     if (e.key === 'Enter') {
       e.preventDefault();
-      handleBlur();
+      inputRef.current?.blur();
     }
   };
 
@@ -94,7 +99,7 @@ export function EventTitle({ placeholder, title, onChange }: EventTitleProps) {
       {hasValue ? (
         <div className="text-foreground-foreground-normal">{displayValue}</div>
       ) : (
-        <div className="text-foreground-foreground-quaternary">{displayValue}</div>
+        <div className="text-foreground-foreground-quaternary">{placeholder}</div>
       )}
     </button>
   );

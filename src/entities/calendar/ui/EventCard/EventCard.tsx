@@ -2,7 +2,7 @@ import { format } from 'date-fns';
 import { ko } from 'date-fns/locale';
 import { SurfIcon } from '@/shared/ui/icon/SurfIcon';
 import { CalendarBadge } from '@/entities/calendar/ui/CalendarBadge/CalendarBadge';
-import { ActivityType, EventCardType } from '../../model/types';
+import type { ActivityType, EventCardType } from '@/entities/calendar//model/types';
 
 /**
  * 이벤트 카드 컴포넌트
@@ -15,6 +15,7 @@ import { ActivityType, EventCardType } from '../../model/types';
  * @param isAdmin - 관리자 여부
  * @param hasNotice - 공지사항 연동 여부
  * @param onClickCard - 카드 전체 클릭 시 호출되는 콜백 함수 (공지사항 바로가기)
+ * @param onEditSchedule - 일정 수정 클릭 시 호출되는 콜백 함수
  * @param onDeleteSchedule - 일정 삭제 클릭 시 호출되는 콜백 함수
  *
  * @methods formatEventDate - 날짜를 'MM월 dd일 (eee) HH:mm' 형식으로 포맷팅하는 함수
@@ -30,6 +31,7 @@ import { ActivityType, EventCardType } from '../../model/types';
  *   isAdmin=true
  *   hasNotice=true
  *   onClickCard={() => console.log('Card clicked!')}
+ *   onEditSchedule={() => console.log('Edit button clicked!')}
  *   onDeleteSchedule={() => console.log('Delete button clicked!')}
  * />
  */
@@ -44,6 +46,7 @@ type EventCardProps = {
   isAdmin?: boolean;
   hasNotice?: boolean;
   onClickCard?: () => void;
+  // onEditSchedule?: () => void;
   onDeleteSchedule?: () => void;
 };
 
@@ -65,6 +68,7 @@ export function EventCard({
   isAdmin = false,
   hasNotice = false,
   onClickCard,
+  // onEditSchedule,
   onDeleteSchedule,
 }: EventCardProps) {
   const handleCardClick = () => {
@@ -76,6 +80,14 @@ export function EventCard({
       }
     }
   };
+
+  // const handleEditSchedule = () => {
+  //   onEditSchedule?.();
+
+  //   if (process.env.NODE_ENV === 'development') {
+  //     console.log('Edit schedule clicked');
+  //   }
+  // };
 
   const handleDeleteSchedule = () => {
     onDeleteSchedule?.();

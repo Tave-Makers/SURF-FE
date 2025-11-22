@@ -12,13 +12,6 @@ export default meta;
 
 type Story = StoryObj<typeof PostBadge>;
 
-export const CategoryAll: Story = {
-  args: {
-    type: 'category',
-    category: '전체' as PostCategoryLabel,
-  },
-};
-
 export const CategoryEvent: Story = {
   args: {
     type: 'category',

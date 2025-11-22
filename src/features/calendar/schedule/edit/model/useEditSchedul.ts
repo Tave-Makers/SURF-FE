@@ -1,7 +1,7 @@
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { editSchedule } from '../api/editSchedule';
 
-export const useDeleteSchedule = () => {
+export const useEditSchedule = () => {
   const queryClient = useQueryClient();
 
   return useMutation({

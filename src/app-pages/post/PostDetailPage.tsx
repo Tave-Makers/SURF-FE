@@ -38,8 +38,8 @@ export default function PostDetailPage({ postId }: PostDetailPageProps) {
         <main className="flex flex-col gap-[0.62rem] px-13 pt-13">
           <PostHeader
             title={post.title}
-            category={{ title: '공지사항' }} // 서버에 category 필드가 없어서 그대로 유지
-            subCategory={{ title: '행사' }} // 서버에 없으므로 그대로 유지
+            category={{ title: post.boardLabel }}
+            subCategory={{ title: post.categoryLabel }}
           />
 
           <PostBodySection post={post} />

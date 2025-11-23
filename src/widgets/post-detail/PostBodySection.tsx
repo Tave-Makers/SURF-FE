@@ -89,7 +89,12 @@ export function PostBodySection({ post }: { post: PostDetail }) {
 
   return (
     <div className="flex flex-col gap-[1.5rem]">
-      <PostProfile nickname={post.writer} date={post.date} time={post.time} viewCount={3} />
+      <PostProfile
+        nickname={post.writer}
+        date={post.date}
+        time={post.time}
+        viewCount={post.viewCount}
+      />
       <div className="whitespace-pre-line" dangerouslySetInnerHTML={{ __html: cleanContent }} />
 
       {/* 이미지 목록 */}

@@ -1,4 +1,17 @@
-import { ImageItemResponse } from '../api/types';
+import { ImageItem, ImageItemResponse } from '../api/types';
+import { POST_BOARDS, POST_CATEGORIES, TAB_CATEGORIES } from './constants';
+export type PostType = 'scraps' | 'my-posts';
+
+export type PostCategory = 'all' | 'event' | 'activity' | 'partnership' | 'release' | 'others';
+export type CategoryBadge = Exclude<PostCategory, 'all'>;
+
+// 게시판
+export type BoardId = (typeof POST_BOARDS)[number]['id'];
+export type BoardLabel = (typeof POST_BOARDS)[number]['label'];
+
+// 게시글
+export type PostCategoryId = (typeof POST_CATEGORIES)[number]['id'];
+export type PostCategoryLabel = (typeof POST_CATEGORIES)[number]['label'];
 
 export type PostBadgeProps = {
   id: number | string;
@@ -11,17 +24,17 @@ export type Post = {
   content: string;
   writer: string;
   date: string;
-  likes: number;
-  comments: number;
-  boardId: number;
-  state?: 'default' | 'reserved';
+  pinned: boolean;
+  isReserved: boolean;
+  boardId: number | null;
+  likeCount: number;
+  isLiked: boolean;
+  scrappedByMe: boolean;
+  scrapCount: number;
+  commentCount: number;
   thumbnailUrl?: string;
-  isReserved?: boolean;
-  images?: ImageItemResponse[];
-  categoryId?: number | null;
-  time?: string;
-  hasSchedule?: boolean;
-  imageUrlList?: ImageItemResponse[];
+  images?: ImageItem[];
+  categoryName: PostCategoryLabel;
 };
 
 export type PostDetail = {
@@ -32,6 +45,7 @@ export type PostDetail = {
   date: string;
   time: string;
   boardId: number;
+  boardLabel: string | null;
   pinned: boolean;
   hasSchedule: boolean;
   scrappedByMe: boolean;
@@ -40,10 +54,12 @@ export type PostDetail = {
   likeCount: number;
   commentCount: number;
   imageUrlList: ImageItemResponse[];
-  categoryId: number | null;
+  viewCount: number;
+  isMine: boolean;
+  categoryId: number;
+  categoryLabel: string | null;
 };
 
-export type PostType = 'scraps' | 'my-posts';
-
-export type PostCategory = 'all' | 'event' | 'activity' | 'partnership' | 'release' | 'others';
-export type CategoryBadge = Exclude<PostCategory, 'all'>;
+// 탭
+export type TabCategoryId = (typeof TAB_CATEGORIES)[number]['id'];
+export type TabCategoryLabel = (typeof TAB_CATEGORIES)[number]['label'];

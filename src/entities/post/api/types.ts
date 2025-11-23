@@ -1,25 +1,10 @@
 // API 공통 응답 형식
 import { CommonResponse } from '@/shared/api/types';
 
-// 응답 Sort
-export type PostSort = {
-  empty: boolean;
-  sorted: boolean;
-  unsorted: boolean;
-};
-
-// 페이지네이션
-export type Pageable = {
-  offset: number;
-  sort: PostSort;
-  paged: boolean;
-  pageNumber: number;
-  pageSize: number;
-  unpaged: boolean;
-};
-
-export type PostContent = {
-  id: number;
+// 게시글 목록
+export type PostListItemResponse = {
+  postId: number;
+  categoryId?: number;
   title: string;
   content: string;
   pinned: boolean;
@@ -27,18 +12,20 @@ export type PostContent = {
   boardId: number;
   scrappedByMe: boolean;
   scrapCount: number;
-  likeByMe: boolean;
+  likedByMe: boolean;
   likeCount: number;
   commentCount: number;
   nickname: string;
+  thumbnailImageUrl: string | null;
+  isReserved: boolean;
+  viewCount: number;
 };
 
-// 게시물 관련 API 응답 전체 타입
-export type PostApiResponse = {
+export type PostListApiResponse = {
   totalPages: number;
   totalElements: number;
   size: number;
-  content: PostContent[];
+  content: PostListItemResponse[];
   number: number;
   sort: PostSort;
   pageable: Pageable;
@@ -46,16 +33,6 @@ export type PostApiResponse = {
   last: boolean;
   numberOfElements: number;
   empty: boolean;
-};
-
-// 게시물 관련 API 응답 전체 타입
-export type FullApiResponse = CommonResponse<PostApiResponse>;
-
-// 게시물 API 요청 타입
-export type PostApiRequest = {
-  page: number;
-  size: number;
-  sort: string[];
 };
 
 /*****************
@@ -82,15 +59,60 @@ export type PostDetailData = {
   pinned: boolean;
   postedAt: string;
   boardId: number;
+  categoryId: number;
   scrappedByMe: boolean;
   scrapCount: number;
   likedByMe: boolean;
   likeCount: number;
   commentCount: number;
   nickname: string;
+  isMine: boolean;
   imageUrlList: ImageItemResponse[];
+  viewCount: number;
   hasSchedule: boolean;
 };
 
 // 상세 API 응답 타입
 export type PostDetailResponse = CommonResponse<PostDetailData>;
+
+// 게시글 생성/수정
+export type PostMutationResponse = {
+  id: number;
+  title: string;
+  content: string;
+  pinned: boolean;
+  postedAt: string;
+  boardId?: number;
+  categoryId?: number | null;
+  nickname: string;
+};
+export type FullPostMutationResponse = CommonResponse<PostMutationResponse>;
+
+export type PostSort = {
+  empty: boolean;
+  sorted: boolean;
+  unsorted: boolean;
+};
+
+export type Pageable = {
+  offset: number;
+  sort: PostSort;
+  paged: boolean;
+  pageNumber: number;
+  pageSize: number;
+  unpaged: boolean;
+};
+
+export type PostApiRequest = {
+  page: number;
+  size: number;
+  sort: string[];
+};
+
+export type GetBoardPostsRequest = {
+  boardId: number;
+  category?: string;
+  page: number;
+  size: number;
+  sort?: string;
+};

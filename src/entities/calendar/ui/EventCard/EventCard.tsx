@@ -19,8 +19,7 @@ import type { ActivityType, EventCardType } from '@/entities/calendar//model/typ
  * @param isAdmin - 관리자 여부
  * @param hasNotice - 공지사항 연동 여부
  * @param onClickCard - 카드 전체 클릭 시 호출되는 콜백 함수 (공지사항 바로가기)
- * @param onEditSchedule - 일정 수정 클릭 시 호출되는 콜백 함수
- * @param onDeleteSchedule - 일정 삭제 클릭 시 호출되는 콜백 함수
+ * @param onDeleteSchedule - 일정 삭제 클릭 시 호출되는 콜백 함수 (공지사항 작성 시 삭제하는 콜백 함수)
  */
 
 type EventCardProps = {

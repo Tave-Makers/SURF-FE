@@ -3,7 +3,7 @@
 import { PostCard } from '@/entities/post/ui/post-card/PostCard';
 import type { Post } from '@/entities/post/model/types';
 import type { UserLevel } from '@/entities/user/model/types';
-import { TabCategoryLabel } from '@/entities/post/model/constants';
+import { TabCategoryLabel } from '@/entities/post/model/types';
 
 type PostListProps = {
   posts: Post[];

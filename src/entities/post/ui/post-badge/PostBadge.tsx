@@ -1,4 +1,5 @@
-import { PostCategoryLabel, RESERVATION_LABEL } from '@/entities/post/model/constants';
+import { RESERVATION_LABEL } from '@/entities/post/model/constants';
+import { PostCategoryLabel } from '@/entities/post/model/types';
 
 type PostBadgeProps = { type: 'category'; category: PostCategoryLabel } | { type: 'reservation' };
 

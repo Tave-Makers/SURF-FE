@@ -1,6 +1,6 @@
 import type { Meta, StoryObj } from '@storybook/nextjs';
 import { PostBadge } from './PostBadge';
-import { PostCategoryLabel } from '@/entities/post/model/constants';
+import { PostCategoryLabel } from '@/entities/post/model/types';
 
 const meta: Meta<typeof PostBadge> = {
   title: 'Entities/Post/PostBadge',

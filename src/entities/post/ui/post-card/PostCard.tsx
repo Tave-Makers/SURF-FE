@@ -4,7 +4,7 @@ import { SurfIcon } from '@/shared/ui/icon/SurfIcon';
 import { PostBadge } from '@/entities/post/ui/post-badge/PostBadge';
 import type { Post } from '@/entities/post/model/types';
 import type { UserLevel } from '@/entities/user/model/types';
-import type { TabCategoryLabel } from '@/entities/post/model/constants';
+import type { TabCategoryLabel } from '@/entities/post/model/types';
 
 type PostCardProps = {
   post: Post;

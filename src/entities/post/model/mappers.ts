@@ -4,13 +4,8 @@ import {
   PostMutationResponse,
 } from '@/entities/post/api/types';
 import { Post } from '@/entities/post/model/types';
-import {
-  POST_CATEGORIES,
-  PostCategoryLabel,
-  TabCategoryId,
-  TAB_CATEGORIES,
-  TabCategoryLabel,
-} from './constants';
+import { POST_CATEGORIES, TAB_CATEGORIES } from './constants';
+import { PostCategoryLabel, TabCategoryLabel, TabCategoryId } from './types';
 
 // categoryId - Category Label 변환
 export const categoryIdToLabel = (id: number | string | null | undefined): PostCategoryLabel => {
@@ -28,7 +23,7 @@ export const tabCategoryToServerId = (label: TabCategoryLabel): TabCategoryId =>
 // 목록 API 변환
 export const transformListItemToPost = (item: PostListItemResponse): Post => {
   return {
-    postId: item.id,
+    postId: item.postId,
     title: item.title,
     content: item.content,
     writer: item.nickname,

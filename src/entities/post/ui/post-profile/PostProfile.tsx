@@ -1,4 +1,4 @@
-import { ProfileImage } from '@/shared/ui/profile-image/ProfileImage';
+import { ProfileImage } from '@/shared/ui/avatar/Avatar';
 
 type PostProfileProps = {
   profileImgUrl?: string;

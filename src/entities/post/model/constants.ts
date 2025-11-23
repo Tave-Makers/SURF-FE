@@ -1,6 +1,7 @@
-// 게시글
-export type PostCategoryLabel = '행사' | '활동' | '제휴' | '패치' | '기타';
+// 게시판
+export const POST_BOARDS = [{ id: 1, label: '공지사항' }] as const;
 
+// 게시글
 export const POST_CATEGORIES = [
   { id: 1, label: '행사' },
   { id: 2, label: '활동' },
@@ -9,14 +10,8 @@ export const POST_CATEGORIES = [
   { id: 5, label: '기타' },
 ] as const;
 
-export type PostCategoryId = (typeof POST_CATEGORIES)[number]['id'];
-
 // 탭
-export type TabCategoryLabel = '전체' | PostCategoryLabel;
-
 export const TAB_CATEGORIES = [{ id: 'all', label: '전체' }, ...POST_CATEGORIES] as const;
-
-export type TabCategoryId = (typeof TAB_CATEGORIES)[number]['id'];
 
 // 예약
 export const RESERVATION_LABEL = '예약중';

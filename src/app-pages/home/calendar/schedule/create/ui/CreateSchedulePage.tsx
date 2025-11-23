@@ -10,7 +10,7 @@ import { mapScheduleFormToRequest } from '@/features/calendar/schedule/post/api/
 import { AppHeader } from '@/widgets/header/ui/AppHeader';
 import { HeaderMode, HeaderProps } from '@/shared/ui/header/Header';
 
-export default function CalendarSchedulePage() {
+export default function CreateSchedulePage() {
   const router = useRouter();
   const { mutate: createSchedule, isPending } = usePostSchedule();
 
@@ -18,7 +18,6 @@ export default function CalendarSchedulePage() {
     defaultValues: {
       category: 'regular',
       title: '',
-      content: '',
       startDate: new Date(),
       endDate: new Date(),
       location: '',

@@ -1,5 +1,5 @@
-import CalendarSchedulePage from '@/app-pages/home/calendar/schedule/create/ui/CalendarSchedulePage';
+import CreateSchedulePage from '@/app-pages/home/calendar/schedule/create/ui/CreateSchedulePage';
 
 export default function Page() {
-  return <CalendarSchedulePage />;
+  return <CreateSchedulePage />;
 }

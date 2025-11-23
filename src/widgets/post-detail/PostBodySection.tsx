@@ -103,7 +103,7 @@ export function PostBodySection({ post }: { post: PostDetail }) {
                 <img
                   src={img.originalUrl}
                   alt={`post-image-${img.imageId}`}
-                  className="w-full cursor-pointer rounded-[0.5rem]"
+                  className="w-full rounded-[0.5rem]"
                 />
               </div>
             ) : null,

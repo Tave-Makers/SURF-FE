@@ -14,6 +14,15 @@ export default function PostDetailPage({ postId }: PostDetailPageProps) {
 
   const { data, isLoading, isError } = usePostDetail(numericPostId);
 
+  // postId 유효성 검증
+  if (isNaN(numericPostId) || numericPostId <= 0) {
+    return (
+      <div className="flex h-full w-full items-center justify-center">
+        <span>잘못된 게시글 ID입니다.</span>
+      </div>
+    );
+  }
+
   if (isLoading)
     return (
       <div className="flex h-full w-full items-center justify-center">

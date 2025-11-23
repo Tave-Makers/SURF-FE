@@ -18,9 +18,6 @@ export function PostBodySection({ post }: { post: PostDetail }) {
   const [scrapped, setScrapped] = useState(post.scrappedByMe);
   const [scrapCount, setScrapCount] = useState(post.scrapCount);
 
-  // 이미지 모달 상태
-  const [selectedImage, setSelectedImage] = useState<string | null>(null);
-
   const likeMutation = useToggleLikeMutation();
   const scrapMutation = useToggleScrapMutation();
 
@@ -102,17 +99,13 @@ export function PostBodySection({ post }: { post: PostDetail }) {
         <div className="flex flex-col gap-[0.62rem]">
           {post.imageUrlList.map((img) =>
             img.originalUrl && img.originalUrl.trim() !== '' ? (
-              <button
-                key={img.imageId}
-                className="w-full"
-                onClick={() => setSelectedImage(img.originalUrl)}
-              >
+              <div key={img.imageId} className="w-full">
                 <img
                   src={img.originalUrl}
                   alt={`post-image-${img.imageId}`}
                   className="w-full cursor-pointer rounded-[0.5rem]"
                 />
-              </button>
+              </div>
             ) : null,
           )}
         </div>
@@ -141,16 +134,6 @@ export function PostBodySection({ post }: { post: PostDetail }) {
           iconName="Bookmark"
         />
       </div>
-
-      {/* 이미지 확대 모달 - 임시 */}
-      {selectedImage && (
-        <button
-          className="absolute inset-0 z-50 flex items-center justify-center bg-white/70 px-13"
-          onClick={() => setSelectedImage(null)}
-        >
-          <img src={selectedImage} alt="enlarged" className="w-full rounded-[0.5rem]" />
-        </button>
-      )}
     </div>
   );
 }

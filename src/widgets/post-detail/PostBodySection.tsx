@@ -4,11 +4,12 @@ import { useState } from 'react';
 
 import { PostProfile } from '@/entities/post/ui/post-profile/PostProfile';
 import { ChipToggle } from '@/shared/ui/chip-toggle/ChipToggle';
-import ReactMarkdown from 'react-markdown';
 import { PostDetail } from '@/entities/post/model/types';
 import { useToggleLikeMutation } from '@/features/post/model/useToggleLikeMutation';
 import { useToggleScrapMutation } from '@/features/post/model/useToggleScrapMutation';
 import { EventCard } from '@/entities/calendar/ui/EventCard/EventCard';
+import * as sanitizeHtml from 'sanitize-html';
+import type { IOptions } from 'sanitize-html';
 
 export function PostBodySection({ post }: { post: PostDetail }) {
   // 좋아요 & 스크랩 상태 관리
@@ -80,12 +81,16 @@ export function PostBodySection({ post }: { post: PostDetail }) {
     );
   };
 
+  const sanitizeOptions: IOptions = {
+    allowedTags: ['p', 'strong'],
+  };
+
+  const cleanContent: string = sanitizeHtml.default(post.content, sanitizeOptions);
+
   return (
     <div className="flex flex-col gap-[1.5rem]">
       <PostProfile nickname={post.writer} date={post.date} time={post.time} viewCount={3} />
-      <div className="whitespace-pre-line">
-        <ReactMarkdown>{post.content}</ReactMarkdown>
-      </div>
+      <div className="whitespace-pre-line" dangerouslySetInnerHTML={{ __html: cleanContent }} />
 
       {/* 이미지 목록 */}
       {post.imageUrlList && post.imageUrlList.length > 0 && (

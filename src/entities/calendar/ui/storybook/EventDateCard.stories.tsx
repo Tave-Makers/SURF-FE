@@ -1,6 +1,6 @@
 import type { Meta, StoryObj } from '@storybook/nextjs';
-import { EventCard } from '../EventCard/EventCard';
-import { EventDateCard } from './EventDateCard';
+import { EventCard } from '../EventCard';
+import { EventDateCard } from '../EventDateCard';
 import type { ActivityType, EventCardType } from '../../model/types';
 
 type EventItem = {

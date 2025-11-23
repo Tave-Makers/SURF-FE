@@ -8,10 +8,13 @@ import { useEditSchedule } from '@/features/calendar/schedule/edit/model/useEdit
 import { mapScheduleFormToRequest } from '@/features/calendar/schedule/post/api/mapper';
 import { AppHeader } from '@/widgets/header/ui/AppHeader';
 import { HeaderMode, HeaderProps } from '@/shared/ui/header/Header';
+import { useState } from 'react';
+import { Alert } from '@/shared/ui/alert/Alert';
 
 export default function EditSchedulePage() {
   const params = useParams();
   const router = useRouter();
+  const [showExitAlert, setShowExitAlert] = useState(false);
 
   const scheduleIdParam = Array.isArray(params?.id) ? params.id[0] : params?.id;
   const scheduleId = scheduleIdParam ? Number(scheduleIdParam) : undefined;
@@ -61,9 +64,18 @@ export default function EditSchedulePage() {
     });
   };
 
+  const handleAlert = () => {
+    if (title.trim().length >= 2) {
+      setShowExitAlert(true);
+    } else {
+      router.back();
+    }
+  };
+
   return (
     <>
       <AppHeader
+        customBack={handleAlert}
         overrideHeader={((): HeaderProps => ({
           mode: HeaderMode.TextBtn,
           title: '일정',
@@ -73,6 +85,31 @@ export default function EditSchedulePage() {
           isDisabled: !isFormValid || methods.formState.isSubmitting,
           onClickTextBtn: () => void methods.handleSubmit(handleSubmit)(),
         }))()}
+      />
+
+      <Alert
+        state="default"
+        title="변경 내용을 저장하지 않고 나가시겠습니까?"
+        infoText="작성 중인 내용은 저장되지 않습니다."
+        isOpen={showExitAlert}
+        onClose={() => setShowExitAlert(false)}
+        actions={[
+          {
+            type: 'solid',
+            label: '취소',
+            variant: 'secondary',
+            onClick: () => setShowExitAlert(false),
+          },
+          {
+            type: 'solid',
+            label: '나가기',
+            variant: 'danger',
+            onClick: () => {
+              setShowExitAlert(false);
+              router.back();
+            },
+          },
+        ]}
       />
 
       <FormProvider {...methods}>

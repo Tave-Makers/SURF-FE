@@ -1,26 +1,32 @@
 'use client';
 
-import { PostCard } from '@/entities/post/ui/PostCard';
-import { Post } from '@/entities/post/model/types';
+import { PostCard } from '@/entities/post/ui/post-card/PostCard';
+import type { Post } from '@/entities/post/model/types';
+import type { UserLevel } from '@/entities/user/model/types';
+import { TabCategoryLabel } from '@/entities/post/model/constants';
 
 type PostListProps = {
   posts: Post[];
+  currentCategory?: TabCategoryLabel;
+  userLevel: UserLevel;
   isLoading?: boolean;
   isFetchingNextPage?: boolean;
   hasNextPage?: boolean;
   onPostClick?: (post: Post) => void;
   loadMoreRef?: React.RefObject<HTMLDivElement | null>;
+  showCategoryBadge?: boolean;
 };
 
 export const PostList = ({
   posts,
+  currentCategory,
+  userLevel,
   isLoading = false,
   isFetchingNextPage = false,
   hasNextPage = false,
   onPostClick,
   loadMoreRef,
 }: PostListProps) => {
-  // 로딩 화면
   if (isLoading) {
     return (
       <div role="status" aria-live="polite">
@@ -29,22 +35,22 @@ export const PostList = ({
     );
   }
 
-  // 게시글이 없을 때의 화면
   if (posts.length === 0) {
-    return (
-      <div>
-        <div>게시글이 없습니다.</div>
-      </div>
-    );
+    return <div>게시글이 없습니다.</div>;
   }
 
   return (
-    <div className="flex flex-1 flex-col gap-4 overflow-y-auto px-13 pt-12">
-      {posts.map((post) => (
-        <PostCard key={post.id} post={post} onClick={() => onPostClick?.(post)} />
+    <div className="flex flex-1 flex-col overflow-y-auto px-13 pt-12">
+      {posts.map((post, index) => (
+        <PostCard
+          key={`${post.postId}-${index}`}
+          post={post}
+          currentCategory={currentCategory}
+          userLevel={userLevel}
+          onClick={() => onPostClick?.(post)}
+        />
       ))}
 
-      {/* 무한스크롤 sentinel */}
       <div
         ref={loadMoreRef}
         className="text-body-14-600--1-20 text-foreground-hint flex items-center justify-center py-[1rem]"

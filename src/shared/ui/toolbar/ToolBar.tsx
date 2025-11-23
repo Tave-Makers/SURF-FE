@@ -7,16 +7,16 @@ export type ToolBarItem = {
   key: string;
   label: string;
   icon: IconName;
+  active?: boolean;
 };
 
 type ToolBarProps = {
   items: ToolBarItem[];
-  activeKey: string;
   onItemClick?: (key: string) => void;
   className?: string;
 };
 
-export function ToolBar({ items, activeKey, onItemClick, className = '' }: ToolBarProps) {
+export function ToolBar({ items, onItemClick, className = '' }: ToolBarProps) {
   return (
     <nav
       className={[
@@ -30,7 +30,6 @@ export function ToolBar({ items, activeKey, onItemClick, className = '' }: ToolB
           key={item.key}
           label={item.label}
           icon={item.icon}
-          active={item.key === activeKey}
           onClick={() => {
             onItemClick?.(item.key);
           }}

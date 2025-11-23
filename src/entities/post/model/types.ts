@@ -1,20 +1,21 @@
-export type PostBadgeProps = {
-  id: number | string;
-  variation: 'event' | 'reservation';
-};
+import { ImageItemResponse } from '../api/types';
+import { PostCategoryLabel } from './constants';
 
 export type Post = {
-  id: number;
+  postId: number;
   title: string;
   content: string;
   writer: string;
   date: string;
+  pinned: boolean;
+  isReserved: boolean;
+  boardId: number | null;
   likeCount: number;
   isLiked: boolean;
+  scrappedByMe: boolean;
+  scrapCount: number;
   commentCount: number;
-  tags?: PostBadgeProps[];
   thumbnailUrl?: string;
-  boardId?: number;
+  images?: ImageItemResponse[];
+  categoryName: PostCategoryLabel;
 };
-
-export type PostType = 'scraps' | 'my-posts';

@@ -8,7 +8,7 @@ import { Header, HeaderMode } from '@/shared/ui/header/Header';
 import { PostEditor } from '@/widgets/post/post-editor/PostEditor';
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { Sheet as ModalSheet } from 'react-modal-sheet';
-import { UploadImage } from '@/shared/types/image';
+import { UploadImage } from '@/entities/image/model/types';
 import { usePostDetail } from '@/features/post/get-post/model/usePostDetailQuery';
 import { useUpdatePost } from '@/features/post/update-post/model/useUpdatePost';
 

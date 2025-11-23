@@ -1,6 +1,6 @@
 import type { Meta, StoryObj } from '@storybook/nextjs';
 import { PostEditor } from './PostEditor';
-import { UploadImage } from '@/shared/types/image';
+import { UploadImage } from '@/entities/image/model/types';
 
 const meta: Meta<typeof PostEditor> = {
   title: 'Widgets/UI/Post/PostEditor/PostEditor',

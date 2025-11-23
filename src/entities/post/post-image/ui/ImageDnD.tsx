@@ -20,7 +20,7 @@ import {
 import { CSS } from '@dnd-kit/utilities';
 import { restrictToParentElement } from '@dnd-kit/modifiers';
 import { ImageItem } from '@/entities/post/post-image/ui/ImageItem';
-import { UploadImage } from '@/shared/types/image';
+import { UploadImage } from '@/entities/image/model/types';
 import React, { useState } from 'react';
 
 type ImageDnDProps = {

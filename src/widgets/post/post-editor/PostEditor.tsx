@@ -5,8 +5,8 @@ import { PostEditorToolbar } from '@/features/post/post-editor/ui/PostEditorTool
 import { ImageList } from '@/entities/post/post-image/ui/ImageList';
 import { EditorContent } from '@tiptap/react';
 import { usePostEditor } from '@/features/post/post-editor/lib/usePostEditor';
-import { useImageManager } from '@/shared/hooks/useImageManager';
-import { UploadImage } from '@/shared/types/image';
+import { useImageManager } from '@/features/image/model/useImageManager';
+import { UploadImage } from '@/entities/image/model/types';
 import { useCallback, useEffect, useRef } from 'react';
 import { ImageItemResponse } from '@/entities/post/api/types';
 

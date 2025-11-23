@@ -1,6 +1,6 @@
 'use client';
 import DeleteIcon from '@/shared/assets/icons/post/post-image/x-circle-fill.svg';
-import { UploadImage } from '@/shared/types/image';
+import { UploadImage } from '@/entities/image/model/types';
 
 type ImageItemProps = {
   preview: string;

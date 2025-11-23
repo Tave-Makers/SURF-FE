@@ -1,4 +1,4 @@
-import { CommonResponse } from '../types';
+import { CommonResponse } from '@/shared/api/types';
 
 export type PresignedUrlItem = {
   key: string;

@@ -1,8 +1,8 @@
 'use client';
 
 import { useEffect, useRef, useState } from 'react';
-import { reorderArray } from '../utils/reorder';
-import { UploadImage } from '@/shared/types/image';
+import { reorderArray } from '@/shared/utils/reorder';
+import { UploadImage } from '@/entities/image/model/types';
 
 /**
  * 이미지 선택 및 로컬 미리보기, 순서 변경을 담당하는 훅.

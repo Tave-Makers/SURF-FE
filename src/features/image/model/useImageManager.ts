@@ -1,8 +1,8 @@
 'use client';
 
-import { UploadImage } from '../types/image';
+import { UploadImage } from '@/entities/image/model/types';
 import { useImageSelector } from './useImageSelector';
-import { useImageUploader } from './useImageUploader';
+import { useImageUploader } from '@/entities/image/model/useImageUploader';
 import { useCallback } from 'react';
 
 /**

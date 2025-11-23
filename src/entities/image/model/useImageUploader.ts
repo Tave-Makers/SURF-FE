@@ -1,5 +1,5 @@
-import { UploadImage } from '@/shared/types/image';
-import { postPresignedUrl } from '@/shared/api/image/postPresignedUrl';
+import { UploadImage } from './types';
+import { postPresignedUrl } from '../api/postPresignedUrl';
 
 /**
  * presigned URL을 받아 S3에 업로드하는 훅.

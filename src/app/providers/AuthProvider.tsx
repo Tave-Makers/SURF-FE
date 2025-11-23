@@ -5,6 +5,7 @@ import { useRouter, usePathname } from 'next/navigation';
 import { useAuthStore } from '@/features/auth/model/useAuthStore';
 import { useAuthHydrated } from '@/features/auth/model/useAuthHydrated';
 import { getValidStatus } from '@/features/auth/api/getValidStatus';
+import { mapUserLevel } from '@/entities/user/model/mappers';
 
 export function AuthProvider({ children }: { children: ReactNode }) {
   const router = useRouter();
@@ -53,8 +54,11 @@ export function AuthProvider({ children }: { children: ReactNode }) {
         // 2. 유효성 검사 API 호출
         const res = await getValidStatus();
         if (isCancelled) return;
-        const { memberId, needOnboarding, memberStatus } = res.data;
-        setAuth({ memberId });
+        const { memberId, needOnboarding, memberStatus, memberRole } = res.data;
+        setAuth({
+          memberId,
+          memberRole: mapUserLevel(memberRole),
+        });
 
         // 3. 온보딩이 필요한 경우
         if (needOnboarding && pathname !== '/onboarding') {

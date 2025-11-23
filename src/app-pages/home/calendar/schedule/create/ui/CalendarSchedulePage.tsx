@@ -2,7 +2,7 @@
 
 import { useMemo } from 'react';
 import { useForm, FormProvider } from 'react-hook-form';
-import ScheduleCreateForm from '@/widgets/schedule/ui/ScheduleCreateForm';
+import ScheduleForm from '@/widgets/schedule/ui/ScheduleForm';
 import { ScheduleFormData } from '@/features/calendar/schedule/model/types';
 import { usePostSchedule } from '@/features/calendar/schedule/model/usePostSchedule';
 import { mapScheduleFormToRequest } from '@/features/calendar/schedule/api/mapper';
@@ -89,7 +89,7 @@ export default function CalendarSchedulePage() {
 
       <FormProvider {...methods}>
         <div className="px-13">
-          <ScheduleCreateForm onSubmit={handleSubmit} />
+          <ScheduleForm onSubmit={handleSubmit} />
         </div>
       </FormProvider>
     </>

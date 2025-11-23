@@ -31,7 +31,7 @@ const CATEGORY_OPTIONS: { value: ScheduleCategory; label: string }[] = [
 const getInitialDate = (date?: Date): Date =>
   date instanceof Date && !isNaN(date.getTime()) ? date : new Date();
 
-export default function ScheduleCreateForm({ onSubmit }: SchedulCreateFormProps) {
+export default function ScheduleForm({ onSubmit }: SchedulCreateFormProps) {
   const { control, handleSubmit, watch } = useFormContext<ScheduleFormData>();
   const [isCategoryOpen, setIsCategoryOpen] = useState(false);
   const [isStartDateOpen, setIsStartDateOpen] = useState(false);

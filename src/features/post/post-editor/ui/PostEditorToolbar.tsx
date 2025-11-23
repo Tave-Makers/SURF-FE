@@ -11,7 +11,7 @@ const baseItems: ToolBarItem[] = [
 ];
 
 type Props = {
-  editor: Editor;
+  editor: Editor; // 볼드체 버튼 클릭시 굵기를 조절하는 포스트 에디터
   onCameraClick: () => void; // 파일 탐색기 여는 콜백
 };
 

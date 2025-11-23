@@ -126,6 +126,7 @@ export default function Calendar({ month, onMonthChange, schedules }: CalendarPr
             renderItem={(_ev) => (
               <EventCard
                 id={_ev.id}
+                scheduleId={_ev.id}
                 title={_ev.title}
                 category={_ev.category}
                 mode="calendar"

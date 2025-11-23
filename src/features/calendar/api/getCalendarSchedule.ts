@@ -2,7 +2,7 @@ import {
   CalendarScheduleRequest,
   CalendarScheduleResponse,
   FullApiResponseResponse,
-} from '@/features/calendar/model/types';
+} from '@/features/calendar/api/types';
 import { axiosInstance } from '@/shared/lib/axiosInstance';
 
 export async function getCalendarSchedule(

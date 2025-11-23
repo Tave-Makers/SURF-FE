@@ -8,7 +8,8 @@ import { CalendarBadge } from '@/entities/calendar/ui/CalendarBadge/CalendarBadg
 import { ScheduleActionSheet } from '@/entities/calendar/ui/ScheduleActionSheet/ScheduleActionSheet';
 import { ActivityCategory, EventCardType } from '@/entities/calendar/model/types';
 
-/** * 이벤트 카드 컴포넌트
+/**
+ * 이벤트 카드 컴포넌트
  * @param id - 일정 이벤트 고유 ID
  * @param category - 일정 이벤트 유형 (ActivityCategory: 'official', 'operation', 'other' 중 하나)
  * @param scheduleId - 일정 ID (바텀 시트 오픈 시 필요)
@@ -22,8 +23,7 @@ import { ActivityCategory, EventCardType } from '@/entities/calendar/model/types
  * @param onClickCard - 카드 전체 클릭 시 호출되는 콜백 함수 (공지사항 바로가기)
  * @param onDeleteSchedule - 일정 삭제 클릭 시 호출되는 콜백 함수 (공지사항 작성 시 삭제하는 콜백 함수)
  * @param mode - 이벤트 카드 모드 (EventCardType: 'reservation', 'calendar' 중 하나)
- * */
-
+ */
 export type EventCardProps = {
   id: number | string;
   category: ActivityCategory;

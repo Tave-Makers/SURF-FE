@@ -1,16 +1,18 @@
 'use client';
 
 import { useState } from 'react';
+import { useRouter } from 'next/navigation';
 import Calendar from '@/widgets/calendar/ui/Calendar';
 import { useCalendarSchedule } from '@/features/calendar/model/useCalendarSchedule';
 import { PostFab } from '@/entities/post/ui/post-fab/PostFab';
 
 export function CalendarPage() {
+  const router = useRouter();
   const [month, setMonth] = useState<Date>(new Date());
   const { data: schedules = {} } = useCalendarSchedule(month.getFullYear(), month.getMonth() + 1);
 
   const handleCreateSchedule = () => {
-    // router.push('/home/calendar/schedule/create');
+    router.push('/home/calendar/schedule/create');
   };
 
   return (

@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useMemo } from 'react';
+import { useState, useMemo, useEffect } from 'react';
 import { Controller, useFormContext } from 'react-hook-form';
 import { Sheet as ModalSheet } from 'react-modal-sheet';
 import { ScheduleFormData } from '@/features/calendar/schedule/model/types';
@@ -12,7 +12,11 @@ import { EventTitle } from '@/entities/schedule/ui/EventTitle/EventTitle';
 import { DateTimePicker } from '@/entities/schedule/ui/DateTimePicker/DateTimePicker';
 import { Sheet } from '@/shared/ui/sheet/Sheet';
 
-export type SchedulCreateFormProps = { onSubmit: (data: ScheduleFormData) => void };
+export type SchedulCreateFormProps = {
+  mode: 'create' | 'edit';
+  onSubmit: (data: ScheduleFormData) => void;
+  initialValues?: ScheduleFormData;
+};
 
 // 카테고리 한글 매핑
 const CATEGORY_LABELS: Record<ScheduleCategory, string> = {
@@ -31,25 +35,26 @@ const CATEGORY_OPTIONS: { value: ScheduleCategory; label: string }[] = [
 const getInitialDate = (date?: Date): Date =>
   date instanceof Date && !isNaN(date.getTime()) ? date : new Date();
 
-export default function ScheduleForm({ onSubmit }: SchedulCreateFormProps) {
-  const { control, handleSubmit, watch } = useFormContext<ScheduleFormData>();
+export default function ScheduleForm({ mode, onSubmit, initialValues }: SchedulCreateFormProps) {
+  const { control, handleSubmit, watch, reset } = useFormContext<ScheduleFormData>();
   const [isCategoryOpen, setIsCategoryOpen] = useState(false);
   const [isStartDateOpen, setIsStartDateOpen] = useState(false);
   const [isEndDateOpen, setIsEndDateOpen] = useState(false);
 
-  const selectedCategory = watch('category');
+  // edit 모드일 때 한 번 기존 값으로 reset
+  useEffect(() => {
+    if (mode === 'edit' && initialValues) {
+      reset(initialValues);
+    }
+  }, [mode, initialValues, reset]);
 
-  // RHF에 저장된 현재 시작일과 종료일 값을 가져옵니다.
+  const selectedCategory = watch('category');
   const watchedStartDate = watch('startDate');
   const watchedEndDate = watch('endDate');
 
-  // 모달이 열리기 전 RHF 값을 기준으로 임시 상태의 초기값을 설정합니다.
-  // 이 값은 초기 렌더링 시에만 사용됩니다.
   const initialTempStartDate = useMemo(() => getInitialDate(watchedStartDate), [watchedStartDate]);
   const initialTempEndDate = useMemo(() => getInitialDate(watchedEndDate), [watchedEndDate]);
 
-  // 1. DateTimePicker에서 임시로 선택된 값을 저장할 상태입니다.
-  // 이 값은 '예약하기' 버튼을 누르기 전까지 RHF 필드에 반영되지 않습니다.
   const [tempStartDate, setTempStartDate] = useState(initialTempStartDate);
   const [tempEndDate, setTempEndDate] = useState(initialTempEndDate);
 

@@ -1,6 +1,7 @@
 'use client';
 
 import { useMemo } from 'react';
+import { useRouter } from 'next/navigation';
 import { useForm, FormProvider } from 'react-hook-form';
 import ScheduleForm from '@/widgets/schedule/ui/ScheduleForm';
 import { ScheduleFormData } from '@/features/calendar/schedule/model/types';
@@ -10,6 +11,7 @@ import { AppHeader } from '@/widgets/header/ui/AppHeader';
 import { HeaderMode, HeaderProps } from '@/shared/ui/header/Header';
 
 export default function CalendarSchedulePage() {
+  const router = useRouter();
   const { mutate: createSchedule, isPending } = usePostSchedule();
 
   const methods = useForm<ScheduleFormData>({
@@ -63,6 +65,7 @@ export default function CalendarSchedulePage() {
           console.log('일정 생성 요청 성공');
         }
         alert('일정 생성 완료');
+        router.back();
       },
       onError: (error) => {
         if (process.env.NODE_ENV === 'development') {
@@ -89,7 +92,7 @@ export default function CalendarSchedulePage() {
 
       <FormProvider {...methods}>
         <div className="px-13">
-          <ScheduleForm onSubmit={handleSubmit} />
+          <ScheduleForm mode="create" onSubmit={handleSubmit} />
         </div>
       </FormProvider>
     </>

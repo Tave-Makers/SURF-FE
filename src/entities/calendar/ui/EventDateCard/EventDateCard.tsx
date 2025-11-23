@@ -40,17 +40,9 @@ export function EventDateCard<T extends { id: string | number }>({
       </header>
 
       {isLoading ? (
-        <div className="flex flex-1 items-center justify-center pt-[4.19rem]">
-          <div className="text-body-body7 text-background-background-secondary-darker">
-            불러오는 중...
-          </div>
-        </div>
+        <div className="text-background-background-secondary-darker">불러오는 중...</div>
       ) : items.length === 0 ? (
-        <div className="flex flex-1 items-center justify-center pt-[4.19rem]">
-          <div className="text-body-body7 text-background-background-secondary-darker">
-            등록된 일정이 없습니다.
-          </div>
-        </div>
+        <div className="text-background-background-secondary-darker">등록된 일정이 없습니다.</div>
       ) : (
         <div className="flex flex-col gap-10">
           {items.map((item, index) => (

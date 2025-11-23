@@ -68,7 +68,7 @@ export function ScheduleActionSheet({
           <ModalSheet.Header />
           <ModalSheet.Content>
             <Sheet>
-              <div className="rounded-4 flex w-full flex-col items-start gap-12 self-stretch px-15 pt-15 pb-17">
+              <div>
                 {/* 수정하기 버튼 */}
                 <button
                   onClick={handleEditClick}

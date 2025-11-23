@@ -114,7 +114,7 @@ export default function EditSchedulePage() {
 
       <FormProvider {...methods}>
         <div className="px-13">
-          <ScheduleForm mode="edit" scheduleId={scheduleId} onSubmit={handleSubmit} />
+          <ScheduleForm mode="edit" id={scheduleId} onSubmit={handleSubmit} />
         </div>
       </FormProvider>
     </>

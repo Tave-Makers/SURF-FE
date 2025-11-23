@@ -20,6 +20,7 @@ import { Sheet } from '@/shared/ui/sheet/Sheet';
 
 export type SchedulCreateFormProps = {
   mode: 'create' | 'edit';
+  id?: number;
   onSubmit: (data: ScheduleFormData) => void;
   initialValues?: ScheduleFormData;
 };
@@ -43,6 +44,7 @@ const getInitialDate = (date?: Date): Date =>
 
 export default function ScheduleForm({
   // mode,
+  // id,
   onSubmit,
   //  initialValues
 }: SchedulCreateFormProps) {
@@ -58,7 +60,7 @@ export default function ScheduleForm({
   const [isEndDateOpen, setIsEndDateOpen] = useState(false);
 
   // 🔥 edit 모드에서 scheduleId로 단건조회
-  // const scheduleId = initialValues?.id;
+  // const scheduleId = id;
   // const { data: scheduleDetail } = useScheduleById(scheduleId, mode === 'edit');
 
   // edit 모드일 때 한 번 기존 값으로 reset

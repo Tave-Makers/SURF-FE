@@ -1,5 +1,5 @@
 import { format, eachDayOfInterval, isValid } from 'date-fns';
-import { scheduleResDTO } from './types';
+import { scheduleResDTO } from '../api/types';
 import { ActivityCategory } from '@/entities/calendar/model/types';
 import { ActivityMap } from '@/entities/calendar/model/types';
 import { EventCardProps } from '@/entities/calendar/ui/EventCard/EventCard';

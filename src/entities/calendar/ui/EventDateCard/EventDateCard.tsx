@@ -10,10 +10,10 @@ import { ko } from 'date-fns/locale';
  *
  * @example
  * <EventDateCard
- *   date={new Date('2025-11-20T00:00:00')}
- *   items={[{ id: '1', title: '후반기 만남의 장', type: 'official', startDate: new Date('2025-11-20T10:00:00'), endDate: new Date('2025-11-21T18:00:00'), place: '서울 강남구 어딘가' }]}
+ *   date={new Date('2024-11-20')}
+ *   items={[{ id: 1, title: 'Event 1' }, { id: 2, title: 'Event 2' }]}
  *   isLoading={false}
- *   renderItem={(item, index) => <EventCard key={index} {...item} />}
+ *   renderItem={(item) => <EventCard key={item.id} {...item} />}
  * />
  */
 
@@ -31,13 +31,12 @@ export function EventDateCard<T extends { id: string | number }>({
   renderItem,
 }: EventDateCardProps<T>) {
   if (!date) return null;
+  const formattedDate = format(date, 'yyyy년 M월 d일 (E)', { locale: ko });
 
   return (
     <div className="flex w-full flex-col gap-6 pt-15">
       <header className="flex items-start">
-        <div className="text-body-body7 text-foreground-foreground-normal">
-          {format(date, 'yyyy년 M월 d일 (E)', { locale: ko })}
-        </div>
+        <div className="text-body-body7 text-foreground-foreground-normal">{formattedDate}</div>
       </header>
 
       {isLoading ? (

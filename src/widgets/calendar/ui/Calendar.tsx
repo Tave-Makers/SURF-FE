@@ -7,11 +7,27 @@ import { ko } from 'react-day-picker/locale';
 import 'react-day-picker/style.css';
 
 import { MonthNavigator } from '@/entities/calendar/ui/MonthNavigator/MonthNavigator';
-import { DayChipRadio } from '../../../entities/calendar/ui/DayChipRadio/DayChipRadio';
+import { DayChipRadio } from '@/entities/calendar/ui/DayChipRadio/DayChipRadio';
 import { EventDateCard } from '@/entities/calendar/ui/EventDateCard/EventDateCard';
 import type { ActivityMap } from '@/entities/calendar/model/types';
-import { ymd } from '@/entities/calendar/lib/utils';
 import { EventCard } from '@/entities/calendar/ui/EventCard/EventCard';
+import { format } from 'date-fns';
+
+/**
+ * calendarClassNames: DayPicker 컴포넌트의 클래스 네임 커스터마이징 객체
+ * 각 키는 DayPicker의 내부 요소에 대응하며, 값은 해당 요소에 적용할 클래스 네임입니다.
+ * root: 최상위 컨테이너
+ * months: 월들 컨테이너
+ * month: 개별 월 그리드
+ * month_grid: 월 그리드 컨테이너
+ * week: 주 그리드
+ * cell: 날짜 셀
+ * day: 날짜 버튼
+ * month_caption: 월 제목
+ * tfoot: 푸터 숨기기
+ * weekdays: 요일 행 그리드
+ * weekday: 요일 셀
+ */
 
 const calendarClassNames = {
   root: 'w-full',
@@ -29,89 +45,23 @@ const calendarClassNames = {
     'flex-1 min-w-[3.12rem] p-10 text-center text-body-body8 text-foreground-foreground-secondary-lighter',
 } as const;
 
-// mock 데이터. API 연동 시 삭제 예정
-const mock: ActivityMap = {
-  '2025-10-30': [
-    {
-      id: 'x1',
-      title: '후반기 만남의 장소',
-      type: 'official',
-      startDate: new Date(),
-      endDate: new Date(),
-      place: '온라인',
-    },
-    {
-      id: 'x2',
-      title: '회의',
-      type: 'operation',
-      startDate: new Date(),
-      endDate: new Date(),
-      place: '오프라인',
-    },
-    {
-      id: 'x3',
-      title: '후반기 만남의 장소',
-      type: 'official',
-      startDate: new Date(),
-      endDate: new Date(),
-      place: '온라인',
-    },
-  ],
-  '2025-10-31': [
-    {
-      id: 'x2',
-      title: '회의',
-      type: 'operation',
-      startDate: new Date(),
-      endDate: new Date(),
-      place: '오프라인',
-    },
-    {
-      id: 'x4',
-      title: 'OB 네트워킹 데이',
-      type: 'other',
-      startDate: new Date(),
-      endDate: new Date(),
-      place: '온라인',
-    },
-    {
-      id: 'x5',
-      title: 'OB 네트워킹 데이',
-      type: 'other',
-      startDate: new Date(),
-      endDate: new Date(),
-      place: '온라인',
-    },
-    {
-      id: 'x6',
-      title: 'OB 네트워킹 데이',
-      type: 'other',
-      startDate: new Date(),
-      endDate: new Date(),
-      place: '온라인',
-    },
-    {
-      id: 'x7',
-      title: 'OB 네트워킹 데이',
-      type: 'other',
-      startDate: new Date(),
-      endDate: new Date(),
-      place: '온라인',
-    },
-  ],
+type CalendarProps = {
+  month: Date;
+  onMonthChange: (date: Date) => void;
+  schedules: ActivityMap;
 };
 
-export default function Calendar() {
-  const [month, setMonth] = useState<Date>(new Date());
+export default function Calendar({ month, onMonthChange, schedules }: CalendarProps) {
   const [selectedDay, setSelectedDay] = useState<Date>(new Date());
 
+  // 날짜 선택 핸들러
   const handleDaySelect = (date: Date | undefined) => {
     if (!date) return;
-
     setSelectedDay(date);
-    setMonth(date);
+    onMonthChange(date);
   };
 
+  // DayPicker의 DayButton 커스텀 컴포넌트
   const DayBtn = useMemo(() => {
     function DayButton(props: DayButtonProps) {
       return (
@@ -119,7 +69,7 @@ export default function Calendar() {
           <DayChipRadio
             {...props}
             displayMonth={month}
-            activityMap={mock}
+            activityMap={schedules}
             onSelect={(date) => {
               if (date instanceof Date) {
                 setSelectedDay(date);
@@ -130,7 +80,7 @@ export default function Calendar() {
       );
     }
     return DayButton;
-  }, [month]);
+  }, [month, schedules]);
 
   // 월 네비게이터 컴포넌트
   const NavigatorComponent = ({
@@ -138,22 +88,23 @@ export default function Calendar() {
     onNextClick: _nextClick,
   }: NavProps) => (
     <div className="pb-10">
-      <MonthNavigator month={month} onChange={setMonth} />
+      <MonthNavigator month={month} onChange={onMonthChange} />
     </div>
   );
 
   // 월 그리드 래퍼 컴포넌트
   const MonthComponent = ({ children }: MonthProps) => <div className="w-full">{children}</div>;
 
-  const selectedItems = selectedDay ? (mock[ymd(selectedDay)] ?? []) : [];
+  const formatDate = format(selectedDay, 'yyyy-MM-dd');
+  const selectedItems = selectedDay ? (schedules[formatDate] ?? []) : [];
 
   return (
-    <div className="flex flex-1 flex-col gap-10">
-      <div className="flex flex-1 items-center justify-center px-10">
+    <div className="flex min-h-0 flex-1 flex-col gap-10 overflow-y-auto pt-10 pb-15">
+      <div className="flex min-h-0 flex-1 items-center justify-center px-10">
         <DayPicker
           mode="single"
           month={month}
-          onMonthChange={setMonth}
+          onMonthChange={onMonthChange}
           selected={selectedDay}
           onSelect={handleDaySelect}
           locale={ko}
@@ -174,14 +125,16 @@ export default function Calendar() {
             items={selectedItems}
             renderItem={(_ev) => (
               <EventCard
-                key={_ev.id}
+                id={_ev.id}
                 scheduleId={_ev.id}
                 title={_ev.title}
-                type={_ev.type}
+                category={_ev.category}
                 mode="calendar"
-                startDate={_ev.startDate}
-                endDate={_ev.endDate}
-                place={_ev.place || '미정'}
+                startDate={_ev.startDate || null}
+                endDate={_ev.endDate || null}
+                location={_ev.location || '미정'}
+                hasNotice={_ev.hasNotice}
+                postId={_ev.postId}
               />
             )}
           />

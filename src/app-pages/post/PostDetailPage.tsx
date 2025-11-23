@@ -6,7 +6,6 @@ import { ActionBar } from '@/shared/ui/action-bar/ActionBar';
 import { PostBodySection } from '@/widgets/post-detail/PostBodySection';
 
 type PostDetailPageProps = {
-  boardId: string;
   postId: string;
 };
 

@@ -23,7 +23,7 @@ const meta: Meta<typeof ChipToggle> = {
     },
     activeColor: {
       control: 'text',
-      description: '활성화 상태일 때 적용할 색상 클래스',
+      description: '활성화 상태일 때 적용할 색상 (red: 빨강, blue: 파랑)',
       defaultValue: 'red',
     },
     onToggleIcon: {

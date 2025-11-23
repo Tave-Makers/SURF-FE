@@ -35,6 +35,7 @@ export type PostListApiResponse = {
   empty: boolean;
 };
 
+export type FullPostListResponse = CommonResponse<PostListApiResponse>;
 /*****************
 게시글 상세 관련 타입
 ******************/

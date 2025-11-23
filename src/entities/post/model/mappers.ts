@@ -46,7 +46,7 @@ export const transformListItemToPost = (item: PostListItemResponse): Post => {
 // 게시글 상세 API 변환
 export const transformDetailToPost = (item: PostDetailData): Post => {
   return {
-    postId: item.id,
+    postId: item.postId,
     title: item.title,
     content: item.content,
     writer: item.nickname,

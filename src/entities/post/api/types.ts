@@ -70,7 +70,7 @@ export type PostApiRequest = {
 
 // 게시글 상세
 export type PostDetailData = {
-  id: number;
+  postId: number;
   title: string;
   content: string;
   pinned: boolean;

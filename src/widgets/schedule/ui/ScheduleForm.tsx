@@ -3,7 +3,7 @@
 import { useState, useMemo, useEffect } from 'react';
 import { Controller, useFormContext } from 'react-hook-form';
 import { Sheet as ModalSheet } from 'react-modal-sheet';
-import { ScheduleFormData } from '@/features/calendar/schedule/model/types';
+import { ScheduleFormData } from '@/features/calendar/schedule/post/model/types';
 import { ScheduleCategory } from '@/entities/schedule/model/types';
 import { AccordionSelect } from '@/shared/ui/accordion/AccordionSelect';
 import { ScheduleSetting } from '@/entities/schedule/ui/ScheduleSetting/ScheduleSetting';

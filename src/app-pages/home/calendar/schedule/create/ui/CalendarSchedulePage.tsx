@@ -4,9 +4,9 @@ import { useMemo } from 'react';
 import { useRouter } from 'next/navigation';
 import { useForm, FormProvider } from 'react-hook-form';
 import ScheduleForm from '@/widgets/schedule/ui/ScheduleForm';
-import { ScheduleFormData } from '@/features/calendar/schedule/model/types';
-import { usePostSchedule } from '@/features/calendar/schedule/model/usePostSchedule';
-import { mapScheduleFormToRequest } from '@/features/calendar/schedule/api/mapper';
+import { ScheduleFormData } from '@/features/calendar/schedule/post/model/types';
+import { usePostSchedule } from '@/features/calendar/schedule/post/model/usePostSchedule';
+import { mapScheduleFormToRequest } from '@/features/calendar/schedule/post/api/mapper';
 import { AppHeader } from '@/widgets/header/ui/AppHeader';
 import { HeaderMode, HeaderProps } from '@/shared/ui/header/Header';
 

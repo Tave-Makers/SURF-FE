@@ -1,8 +1,8 @@
-type PostBadgeProps = {
-  variation: 'event' | 'reservation';
-};
+import { PostBadgeProps } from '../model/types';
 
-const BADGE_TEXT_MAP = {
+type Variation = 'event' | 'reservation';
+
+const BADGE_TEXT_MAP: Record<Variation, string> = {
   event: '행사',
   reservation: '예약중',
 } as const;

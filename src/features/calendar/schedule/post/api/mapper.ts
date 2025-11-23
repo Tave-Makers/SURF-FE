@@ -18,7 +18,7 @@ export function mapScheduleFormToRequest(form: ScheduleFormData): ScheduleCreate
   return {
     category: categoryToLabel(form.category),
     title: form.title,
-    content: form.content,
+    content: form.content || '',
     startAt: form.startDate.toISOString(),
     endAt: form.endDate.toISOString(),
     location: form.location || '미정',

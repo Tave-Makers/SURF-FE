@@ -8,12 +8,12 @@ import { Sheet } from '@/shared/ui/sheet/Sheet';
 import { useDeleteSchedule } from '@/features/calendar/schedule/delete/model/useDelSchedule';
 import { useEditSchedule } from '@/features/calendar/schedule/edit/model/useEditSchedul';
 import { Sheet as ModalSheet } from 'react-modal-sheet';
+import { useRouter } from 'next/navigation';
 
 type ScheduleActionSheetProps = {
   scheduleId: string | number;
   isOpen: boolean;
   onClose: () => void;
-  onEditSuccess?: () => void;
   onDeleteSuccess?: () => void;
 };
 
@@ -24,9 +24,9 @@ export function ScheduleActionSheet({
   scheduleId,
   isOpen,
   onClose,
-  onEditSuccess,
   onDeleteSuccess,
 }: ScheduleActionSheetProps) {
+  const router = useRouter();
   const [showDeleteAlert, setShowDeleteAlert] = useState(false);
   const scheduleIdNum = typeof scheduleId === 'string' ? parseInt(scheduleId, 10) : scheduleId;
 
@@ -37,12 +37,9 @@ export function ScheduleActionSheet({
   const editScheduleMutation = useEditSchedule();
 
   const handleEditClick = () => {
-    editScheduleMutation.mutate(scheduleIdNum, {
-      onSuccess: () => {
-        onEditSuccess?.();
-        onClose();
-      },
-    });
+    // 수정 폼 페이지로 이동
+    onClose();
+    router.push(`/home/calendar/schedule/${scheduleIdNum}/edit`);
   };
 
   const handleDeleteConfirm = () => {

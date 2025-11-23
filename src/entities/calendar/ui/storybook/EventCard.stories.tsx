@@ -1,5 +1,5 @@
 import type { Meta, StoryObj } from '@storybook/nextjs';
-import { EventCard } from './EventCard';
+import { EventCard } from '../EventCard';
 import type { ActivityType, EventCardType } from '../../model/types';
 
 // 더미 데이터

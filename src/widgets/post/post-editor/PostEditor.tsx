@@ -10,6 +10,7 @@ import { UploadImage } from '@/entities/image/model/types';
 import { useCallback, useEffect, useRef, useState } from 'react';
 import { ImageItemResponse } from '@/entities/post/api/types';
 import { Alert } from '@/shared/ui/alert/Alert';
+import { safeUUID } from '@/shared/utils/uuid';
 
 export type PostEditorProps = {
   initialContent: string;
@@ -80,7 +81,7 @@ export const PostEditor = ({
 
   const mapInitialImages = useCallback((data: ImageItemResponse[]): UploadImage[] => {
     return data.map((img) => ({
-      id: crypto.randomUUID(),
+      id: safeUUID(),
       file: null,
       preview: img.originalUrl,
       uploadedUrl: img.originalUrl,

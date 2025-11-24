@@ -11,6 +11,7 @@ import { useCallback, useEffect, useRef, useState } from 'react';
 import { ImageItemResponse } from '@/entities/post/api/types';
 import { Alert } from '@/shared/ui/alert/Alert';
 import { safeUUID } from '@/shared/utils/uuid';
+import { useKeyboardOffset } from '@/shared/hooks/useKeyboardOffset';
 
 export type PostEditorProps = {
   initialContent: string;
@@ -135,6 +136,9 @@ export const PostEditor = ({
     await handleSelectAndUpload(e);
   };
 
+  /** 키보드 높이 계산 */
+  const keyboardOffset = useKeyboardOffset();
+
   if (!editor) return null;
 
   return (
@@ -178,7 +182,9 @@ export const PostEditor = ({
       />
 
       {/* 툴바 */}
-      <PostEditorToolbar editor={editor} onCameraClick={openPicker} />
+      <div style={{ paddingBottom: keyboardOffset }}>
+        <PostEditorToolbar editor={editor} onCameraClick={openPicker} />
+      </div>
 
       <Alert
         state="error"

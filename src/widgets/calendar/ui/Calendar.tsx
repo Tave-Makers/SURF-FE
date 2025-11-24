@@ -5,6 +5,7 @@ import { DayPicker } from 'react-day-picker';
 import type { DayButtonProps, NavProps, MonthProps } from 'react-day-picker';
 import { ko } from 'react-day-picker/locale';
 import 'react-day-picker/style.css';
+// import { useRouter } from 'next/navigation';
 
 import { MonthNavigator } from '@/entities/calendar/ui/MonthNavigator/MonthNavigator';
 import { DayChipRadio } from '@/entities/calendar/ui/DayChipRadio/DayChipRadio';
@@ -52,6 +53,7 @@ type CalendarProps = {
 };
 
 export default function Calendar({ month, onMonthChange, schedules }: CalendarProps) {
+  // const router = useRouter();
   const [selectedDay, setSelectedDay] = useState<Date>(new Date());
 
   // 날짜 선택 핸들러
@@ -135,6 +137,7 @@ export default function Calendar({ month, onMonthChange, schedules }: CalendarPr
                 location={_ev.location || '미정'}
                 hasNotice={_ev.hasNotice}
                 postId={_ev.postId}
+                // onClickCard={() => router.push(`/board/${_ev.boardId}/post/${_ev.postId}`)}
               />
             )}
           />

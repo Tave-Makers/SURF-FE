@@ -4,13 +4,16 @@ import { POST_CATEGORIES, PostCategory } from '@/entities/post/model/constants';
 import { createPost } from '@/features/post/create-post/api/createPost';
 import { usePicker } from '@/shared/hooks/usePicker';
 import { AccordionSelect } from '@/shared/ui/accordion/AccordionSelect';
-import { Header, HeaderMode } from '@/shared/ui/header/Header';
+import { HeaderMode, HeaderProps } from '@/shared/ui/header/Header';
 import { PostEditor } from '@/widgets/post/post-editor/PostEditor';
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { Sheet as ModalSheet } from 'react-modal-sheet';
 import { UploadImage } from '@/entities/image/model/types';
 import { usePostDetail } from '@/features/post/get-post/model/usePostDetailQuery';
 import { useUpdatePost } from '@/features/post/update-post/model/useUpdatePost';
+import { Alert } from '@/shared/ui/alert/Alert';
+import { useRouter } from 'next/navigation';
+import { AppHeader } from '@/widgets/header/ui/AppHeader';
 
 type Mode = 'create' | 'edit';
 
@@ -170,18 +173,32 @@ export default function PostPage({ mode, postId }: PostPageProps) {
     }
   };
 
+  /** 게시글 작성 중 뒤로가기 시 경고 모달 */
+  const [showExitAlert, setShowExitAlert] = useState(false);
+  const router = useRouter();
+
+  const handleAlert = () => {
+    if (title || !isContentEmpty) {
+      setShowExitAlert(true);
+    } else {
+      router.back();
+    }
+  };
+
   return (
     <div className="flex h-full w-full flex-1 flex-col">
       {/* 상단 헤더 */}
-      <Header
-        mode={HeaderMode.TextBtn}
-        title="공지사항"
-        text={mode == 'create' ? '등록' : '수정'}
-        hasLeftIcon={true}
-        isDisabled={!title || isContentEmpty}
-        onClickTextBtn={() => {
-          void handleSubmit();
-        }}
+      <AppHeader
+        customBack={handleAlert}
+        overrideHeader={((): HeaderProps => ({
+          mode: HeaderMode.TextBtn,
+          title: '공지사항',
+          hasLeftIcon: true,
+          text: `${mode == 'create' ? '등록' : '수정'}`,
+          btnVariant: 'secondary',
+          isDisabled: !title || isContentEmpty,
+          onClickTextBtn: () => void handleSubmit(),
+        }))()}
       />
 
       {/* 카테고리 선택 */}
@@ -249,6 +266,31 @@ export default function PostPage({ mode, postId }: PostPageProps) {
           onInitialized={handleEditorInitialized}
         />
       </div>
+
+      <Alert
+        state="default"
+        title="변경 내용을 저장하지 않고 나가시겠습니까?"
+        infoText="작성 중인 내용은 저장되지 않습니다."
+        isOpen={showExitAlert}
+        onClose={() => setShowExitAlert(false)}
+        actions={[
+          {
+            type: 'solid',
+            label: '취소',
+            variant: 'secondary',
+            onClick: () => setShowExitAlert(false),
+          },
+          {
+            type: 'solid',
+            label: '나가기',
+            variant: 'danger',
+            onClick: () => {
+              setShowExitAlert(false);
+              router.back();
+            },
+          },
+        ]}
+      />
     </div>
   );
 }

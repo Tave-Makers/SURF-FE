@@ -80,10 +80,27 @@ export default function PostPage({ mode, postId }: PostPageProps) {
     images: [],
   });
 
+  /** 본문 빈 상태 저장
+   *  헤더 등록 버튼 활성화 및 나가기 경고 모달 조건용 */
+  const [isContentEmpty, setIsContentEmpty] = useState(true);
+
+  const isEmptyContent = (html: string) => {
+    const cleaned = html
+      .replace(/<p><br><\/p>/g, '') // 빈 줄
+      .replace(/<p><\/p>/g, '') // 빈 문단
+      .replace(/&nbsp;/g, '') // nbsp
+      .trim();
+
+    return cleaned === '';
+  };
+
   /** PostEditor 변경 콜백 */
   const handleEditorChange = useCallback(
     (updatedData: EditorState) => {
       editorStateRef.current = updatedData; // 리렌더 방지
+
+      // content 비었는지 확인 → state 업데이트
+      setIsContentEmpty(isEmptyContent(updatedData.content));
 
       if (!initialLoadedRef.current) return; // 초기 로딩 안되었을시 리턴
 
@@ -161,7 +178,7 @@ export default function PostPage({ mode, postId }: PostPageProps) {
         title="공지사항"
         text={mode == 'create' ? '등록' : '수정'}
         hasLeftIcon={true}
-        isDisabled={!title}
+        isDisabled={!title || isContentEmpty}
         onClickTextBtn={() => {
           void handleSubmit();
         }}

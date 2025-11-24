@@ -4,7 +4,6 @@ import { POST_CATEGORIES, PostCategory } from '@/entities/post/model/constants';
 import { createPost } from '@/features/post/create-post/api/createPost';
 import { usePicker } from '@/shared/hooks/usePicker';
 import { AccordionSelect } from '@/shared/ui/accordion/AccordionSelect';
-import { HeaderMode, HeaderProps } from '@/shared/ui/header/Header';
 import { PostEditor } from '@/widgets/post/post-editor/PostEditor';
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { Sheet as ModalSheet } from 'react-modal-sheet';
@@ -13,7 +12,7 @@ import { usePostDetail } from '@/features/post/get-post/model/usePostDetailQuery
 import { useUpdatePost } from '@/features/post/update-post/model/useUpdatePost';
 import { Alert } from '@/shared/ui/alert/Alert';
 import { useRouter } from 'next/navigation';
-import { AppHeader } from '@/widgets/header/ui/AppHeader';
+import { PostEditorHeader } from '@/widgets/post/post-header/PostEditorHeader';
 
 type Mode = 'create' | 'edit';
 
@@ -188,17 +187,12 @@ export default function PostPage({ mode, postId }: PostPageProps) {
   return (
     <div className="flex h-full w-full flex-1 flex-col">
       {/* 상단 헤더 */}
-      <AppHeader
-        customBack={handleAlert}
-        overrideHeader={((): HeaderProps => ({
-          mode: HeaderMode.TextBtn,
-          title: '공지사항',
-          hasLeftIcon: true,
-          text: `${mode == 'create' ? '등록' : '수정'}`,
-          btnVariant: 'secondary',
-          isDisabled: !title || isContentEmpty,
-          onClickTextBtn: () => void handleSubmit(),
-        }))()}
+      <PostEditorHeader
+        mode={mode}
+        title={title}
+        isContentEmpty={isContentEmpty}
+        onSubmit={handleSubmit}
+        onBack={handleAlert}
       />
 
       {/* 카테고리 선택 */}

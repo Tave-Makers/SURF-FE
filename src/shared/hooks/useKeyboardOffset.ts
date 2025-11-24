@@ -16,9 +16,11 @@ export function useKeyboardOffset() {
 
     const onResize = () => {
       // 키보드 높이 = 전체 높이 - 실제 viewport 높이 - offsetTop
-      const heightDiff = window.innerHeight - viewport.height - viewport.offsetTop;
+      const heightDiff = window.innerHeight - viewport.height;
       setKeyboardOffset(heightDiff > 0 ? heightDiff : 0);
     };
+
+    onResize();
 
     viewport.addEventListener('resize', onResize);
     viewport.addEventListener('scroll', onResize); // 일부 브라우저는 scroll 발생

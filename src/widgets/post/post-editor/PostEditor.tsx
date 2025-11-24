@@ -9,12 +9,15 @@ import { useImageManager } from '@/features/image/model/useImageManager';
 import { UploadImage } from '@/entities/image/model/types';
 import { useCallback, useEffect, useRef } from 'react';
 import { ImageItemResponse } from '@/entities/post/api/types';
+import { usePostScheduleStore } from '@/features/calendar/schedule/post-schedule/model/usePostScheduleStore';
+import { EventCard } from '@/entities/calendar/ui/EventCard/EventCard';
 
 export type PostEditorProps = {
   initialContent: string;
   initialImages: ImageItemResponse[];
   onChange: (data: { content: string; images: UploadImage[] }) => void;
   onInitialized: () => void;
+  onRequestReservation: () => void;
 };
 
 export const PostEditor = ({
@@ -22,7 +25,10 @@ export const PostEditor = ({
   initialImages,
   onChange,
   onInitialized,
+  onRequestReservation,
 }: PostEditorProps) => {
+  const { linkedSchedule, clearLinkedSchedule } = usePostScheduleStore();
+
   const {
     inputRef,
     images,
@@ -152,8 +158,35 @@ export const PostEditor = ({
         }}
       />
 
+      {/* 연동된 일정 카드 */}
+      {linkedSchedule && (
+        <div className="p-13">
+          <EventCard
+            id="temp" // 서버 id 없으니 임시 id
+            category={
+              linkedSchedule.category === 'operation'
+                ? 'operation'
+                : linkedSchedule.category === 'other'
+                  ? 'other'
+                  : 'official'
+            }
+            title={linkedSchedule.title}
+            startDate={linkedSchedule.startDate}
+            endDate={linkedSchedule.endDate}
+            location={linkedSchedule.location}
+            mode="reservation"
+            isAdmin={true}
+            onDeleteSchedule={clearLinkedSchedule}
+          />
+        </div>
+      )}
+
       {/* 툴바 */}
-      <PostEditorToolbar editor={editor} onCameraClick={openPicker} />
+      <PostEditorToolbar
+        editor={editor}
+        onCameraClick={openPicker}
+        onScheduleClick={onRequestReservation}
+      />
     </div>
   );
 };

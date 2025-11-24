@@ -155,7 +155,7 @@ export default function ScheduleForm({
                 isOpen={isCategoryOpen}
                 onClose={() => setIsCategoryOpen(false)}
                 aria-labelledby="select-sheet"
-                className="flex w-full"
+                className="mx-auto flex w-full sm:w-[360px]"
               >
                 <ModalSheet.Container>
                   <ModalSheet.Header />

@@ -2,6 +2,7 @@
 
 import { ToolBar, type ToolBarItem } from '@/shared/ui/toolbar/ToolBar';
 import { type Editor } from '@tiptap/react';
+import { useRouter } from 'next/navigation';
 
 const baseItems: ToolBarItem[] = [
   { key: 'camera', label: '사진', icon: 'CameraSolid' },
@@ -13,9 +14,12 @@ const baseItems: ToolBarItem[] = [
 type Props = {
   editor: Editor; // 볼드체 버튼 클릭시 굵기를 조절하는 포스트 에디터
   onCameraClick: () => void; // 파일 탐색기 여는 콜백
+  onScheduleClick: () => void; // 예약 버튼 클릭 시 예약 DateTimePicker 모달 오픈 콜백
 };
 
-export const PostEditorToolbar = ({ editor, onCameraClick }: Props) => {
+export const PostEditorToolbar = ({ editor, onCameraClick, onScheduleClick }: Props) => {
+  const router = useRouter();
+
   const handleItemClick = (key: string) => {
     switch (key) {
       case 'bold':
@@ -25,10 +29,10 @@ export const PostEditorToolbar = ({ editor, onCameraClick }: Props) => {
         onCameraClick();
         break;
       case 'alarm':
-        console.log('예약 버튼 클릭');
+        onScheduleClick();
         break;
       case 'calendar':
-        console.log('일정 버튼 클릭');
+        router.push('/post/schedule/create');
         break;
     }
   };

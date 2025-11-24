@@ -11,6 +11,10 @@ import { Sheet as ModalSheet } from 'react-modal-sheet';
 import { UploadImage } from '@/entities/image/model/types';
 import { usePostDetail } from '@/features/post/get-post/model/usePostDetailQuery';
 import { useUpdatePost } from '@/features/post/update-post/model/useUpdatePost';
+import { Sheet } from '@/shared/ui/sheet/Sheet';
+import { DateTimePicker } from '@/entities/schedule/ui/DateTimePicker/DateTimePicker';
+import { PostBadge } from '@/entities/post/ui/post-badge/PostBadge';
+import { usePostScheduleStore } from '@/features/calendar/schedule/post-schedule/model/usePostScheduleStore';
 
 type Mode = 'create' | 'edit';
 
@@ -44,6 +48,55 @@ export default function PostPage({ mode, postId }: PostPageProps) {
 
   /** 이미지 변경 여부 */
   const [isImageChanged, setIsImageChanged] = useState(false);
+
+  /** 일정 연동 여부 (Zustand) */
+  const { linkedSchedule } = usePostScheduleStore();
+  const hasSchedule = !!linkedSchedule;
+
+  /** 게시글 예약 상태 */
+  const [reservationSheetOpen, setReservationSheetOpen] = useState(false);
+  const [reservationDate, setReservationDate] = useState<Date | null>(null); // 실제 저장될 예약 시각
+  const [tempReservationDate, setTempReservationDate] = useState<Date>(new Date()); // Wheel 임시 값
+  const [initialReservationDate, setInitialReservationDate] = useState<Date | null>(null); // 수정 모드 비교용
+
+  // 수정 모드에서 서버에 예약 정보가 있다면 초기 세팅
+  useEffect(() => {
+    if (mode !== 'edit' || !postDetail?.isReserved) return;
+    const serverDate = new Date(postDetail.isReserved);
+    setReservationDate(serverDate);
+    setTempReservationDate(serverDate);
+    setInitialReservationDate(serverDate);
+  }, [mode, postDetail]);
+
+  const isReserved = Boolean(reservationDate);
+
+  const isReservationChanged =
+    mode === 'edit' &&
+    ((initialReservationDate && !reservationDate) ||
+      (!initialReservationDate && reservationDate) ||
+      (initialReservationDate &&
+        reservationDate &&
+        initialReservationDate.getTime() !== reservationDate.getTime()));
+
+  const handleOpenReservationSheet = () => {
+    setTempReservationDate(reservationDate ?? new Date());
+    setReservationSheetOpen(true);
+  };
+
+  const handleCloseReservationSheet = () => {
+    setReservationSheetOpen(false);
+  };
+
+  const handleConfirmReservation = () => {
+    setReservationDate(tempReservationDate);
+    setReservationSheetOpen(false);
+  };
+
+  const handleCancelReservation = () => {
+    // 예약 취소
+    setReservationDate(null);
+    setReservationSheetOpen(false);
+  };
 
   /** 카테고리 */
   const sheetId = 'post-category-sheet';
@@ -123,7 +176,9 @@ export default function PostPage({ mode, postId }: PostPageProps) {
           title,
           content,
           pinned: false,
-          reserved: false,
+          reserved: isReserved,
+          reservedAt: isReserved ? reservationDate!.toISOString() : '',
+          hasSchedule: hasSchedule || false,
           imageUrlList,
         });
 
@@ -136,11 +191,11 @@ export default function PostPage({ mode, postId }: PostPageProps) {
           content,
           categoryId: category!.id,
           pinned: false,
-          isReservationChanged: false,
-          reservedAt: '',
+          isReservationChanged: isReservationChanged || false,
+          reservedAt: reservationDate ? reservationDate.toISOString() : '',
           isImageChanged,
           imageUrlList,
-          hasSchedule: false,
+          hasSchedule: hasSchedule || false,
         });
 
         if (process.env.NODE_ENV === 'development') {
@@ -159,7 +214,7 @@ export default function PostPage({ mode, postId }: PostPageProps) {
       <Header
         mode={HeaderMode.TextBtn}
         title="공지사항"
-        text={mode == 'create' ? '등록' : '수정'}
+        text={mode === 'create' ? '등록' : '수정'}
         hasLeftIcon={true}
         isDisabled={!title}
         onClickTextBtn={() => {
@@ -176,6 +231,13 @@ export default function PostPage({ mode, postId }: PostPageProps) {
           controlsId={sheetId}
         />
       </div>
+
+      {/* 예약중 태그 (사용자가 게시글 등록 시간 예약을 했을 때) */}
+      {isReserved && (
+        <div className="w-fit px-13 py-10">
+          <PostBadge type="reservation" />
+        </div>
+      )}
 
       {/* 카테고리 선택 시트 */}
       <ModalSheet
@@ -230,8 +292,42 @@ export default function PostPage({ mode, postId }: PostPageProps) {
           initialImages={initialImages}
           onChange={handleEditorChange}
           onInitialized={handleEditorInitialized}
+          onRequestReservation={handleOpenReservationSheet}
         />
       </div>
+
+      {/* 게시글 예약 바텀 시트 */}
+      <ModalSheet
+        isOpen={reservationSheetOpen}
+        onClose={handleCloseReservationSheet}
+        className="flex w-full"
+      >
+        <ModalSheet.Container>
+          <ModalSheet.Header />
+          <ModalSheet.Content>
+            <Sheet
+              title="게시글 예약 설정"
+              description="해당 시간에 맞춰 게시글이 예약됩니다."
+              primaryBtn={{
+                label: isReserved ? '수정하기' : '예약하기',
+                onClick: handleConfirmReservation,
+              }}
+              secondaryBtn={{
+                label: isReserved ? '예약 취소하기' : '취소하기',
+                onClick: isReserved ? handleCancelReservation : handleCloseReservationSheet,
+              }}
+            >
+              <div>
+                <DateTimePicker value={tempReservationDate} onChange={setTempReservationDate} />
+              </div>
+            </Sheet>
+          </ModalSheet.Content>
+        </ModalSheet.Container>
+        <ModalSheet.Backdrop
+          onTap={handleCloseReservationSheet}
+          style={{ backgroundColor: 'rgba(0, 0, 0, 0.70)' }}
+        />
+      </ModalSheet>
     </div>
   );
 }

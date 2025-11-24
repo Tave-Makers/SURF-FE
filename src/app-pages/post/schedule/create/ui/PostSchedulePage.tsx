@@ -42,6 +42,14 @@ export default function PostSchedulePage() {
     return isTitleValid && isDateValid;
   }, [title, startDate, endDate]);
 
+  const handleAlert = () => {
+    if (title.trim().length >= 2) {
+      setShowExitAlert(true);
+    } else {
+      router.back();
+    }
+  };
+
   const handleSubmit = (data: ScheduleFormData) => {
     if (!isFormValid) return;
 
@@ -49,13 +57,13 @@ export default function PostSchedulePage() {
     if (process.env.NODE_ENV === 'development') {
       console.log('저장된 일정 데이터:', data);
     }
-    // router.back();
+    router.back();
   };
 
   return (
     <>
       <AppHeader
-        customBack={() => setShowExitAlert(true)}
+        customBack={handleAlert}
         overrideHeader={((): HeaderProps => ({
           mode: HeaderMode.TextBtn,
           title: '일정',

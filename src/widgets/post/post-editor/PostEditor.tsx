@@ -7,8 +7,9 @@ import { EditorContent } from '@tiptap/react';
 import { usePostEditor } from '@/features/post/post-editor/lib/usePostEditor';
 import { useImageManager } from '@/features/image/model/useImageManager';
 import { UploadImage } from '@/entities/image/model/types';
-import { useCallback, useEffect, useRef } from 'react';
+import { useCallback, useEffect, useRef, useState } from 'react';
 import { ImageItemResponse } from '@/entities/post/api/types';
+import { Alert } from '@/shared/ui/alert/Alert';
 
 export type PostEditorProps = {
   initialContent: string;
@@ -110,6 +111,29 @@ export const PostEditor = ({
     });
   }, [images, editor, onChange]);
 
+  /** 이미지 최대 장수 제한 */
+  const MAX_IMAGES = 10;
+  const [showImageLimitAlert, setShowImageLimitAlert] = useState(false);
+
+  const handleImageUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const files = e.target.files;
+    if (!files) return;
+
+    // 지금 업로드한 파일 개수
+    const newCount = files.length;
+    // 이미 있는 이미지 개수
+    const existingCount = imagesRef.current.length;
+
+    if (existingCount + newCount > MAX_IMAGES) {
+      setShowImageLimitAlert(true);
+      e.target.value = '';
+      return;
+    }
+
+    // 허용되면 기존 로직 실행
+    await handleSelectAndUpload(e);
+  };
+
   if (!editor) return null;
 
   return (
@@ -148,12 +172,28 @@ export const PostEditor = ({
         multiple
         className="hidden"
         onChange={(e) => {
-          void handleSelectAndUpload(e);
+          void handleImageUpload(e);
         }}
       />
 
       {/* 툴바 */}
       <PostEditorToolbar editor={editor} onCameraClick={openPicker} />
+
+      <Alert
+        state="error"
+        title="이미지 최대 장수 오류"
+        infoText={`이미지는 최대 ${MAX_IMAGES}장까지 업로드할 수 있어요`}
+        actions={[
+          {
+            type: 'text',
+            label: '확인',
+            variant: 'primary',
+            onClick: () => setShowImageLimitAlert(false),
+          },
+        ]}
+        isOpen={showImageLimitAlert}
+        onClose={() => setShowImageLimitAlert(false)}
+      />
     </div>
   );
 };

@@ -30,6 +30,7 @@ export function ToolBar<K extends string>({ items, onItemClick, className = '' }
           key={item.key}
           label={item.label}
           icon={item.icon}
+          active={item.active}
           onClick={() => {
             onItemClick?.(item.key);
           }}

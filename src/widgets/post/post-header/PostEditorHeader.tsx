@@ -3,7 +3,7 @@
 import { AppHeader } from '@/widgets/header/ui/AppHeader';
 import { HeaderMode } from '@/shared/ui/header/Header';
 
-type PostHeaderProps = {
+type PostEditorHeaderProps = {
   mode: 'create' | 'edit';
   title: string;
   isContentEmpty: boolean;
@@ -17,7 +17,7 @@ export function PostEditorHeader({
   isContentEmpty,
   onSubmit,
   onBack,
-}: PostHeaderProps) {
+}: PostEditorHeaderProps) {
   return (
     <AppHeader
       customBack={onBack}

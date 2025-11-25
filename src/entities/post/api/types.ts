@@ -76,6 +76,19 @@ export type PostDetailData = {
 // 상세 API 응답 타입
 export type PostDetailResponse = CommonResponse<PostDetailData>;
 
+// 특정 게시글의 일정
+export type PostScheduleData = {
+  scheduleId: number;
+  category: string;
+  title: string;
+  startAt: string;
+  endAt: string;
+  location: string;
+  mappedByPost: boolean;
+  postId: number;
+};
+export type PostScheduleResponse = CommonResponse<PostScheduleData>;
+
 // 게시글 생성/수정
 export type PostMutationResponse = {
   id: number;

@@ -1,4 +1,4 @@
-import { PostDetailData } from '@/entities/post/api/types';
+import { PostDetailData, PostScheduleData } from '@/entities/post/api/types';
 import { PostDetail } from '@/entities/post/model/types';
 import { POST_BOARDS, POST_CATEGORIES, TAB_CATEGORIES } from './constants';
 import { PostCategoryLabel, TabCategoryLabel, TabCategoryId } from './types';
@@ -49,7 +49,10 @@ export const boardLabelToId = (label: string) => {
 // };
 
 // 게시글 상세 API 변환
-export const transformDetailToPost = (item: PostDetailData): PostDetail => {
+
+export const transformDetailToPost = (
+  item: PostDetailData & { schedule?: PostScheduleData | null },
+): PostDetail => {
   const { date, time } = parseDateTime(item.postedAt);
 
   return {
@@ -73,6 +76,7 @@ export const transformDetailToPost = (item: PostDetailData): PostDetail => {
     categoryLabel: categoryIdToLabel(item.categoryId),
     viewCount: item.viewCount,
     isMine: item.isMine,
+    schedule: item.schedule,
   };
 };
 

@@ -67,8 +67,15 @@ export function PostBodySection({ post }: { post: PostDetail }) {
       )}
 
       {/* 일정카드 */}
-      {post.hasSchedule && (
-        <EventCard title="후반기 만남의 장" type="official" mode="reservation" place="추후 공지" />
+      {post.schedule && (
+        <EventCard
+          title={post.schedule.title}
+          type="official"
+          mode="reservation"
+          place={post.schedule.location}
+          startDate={new Date(post.schedule.startAt)}
+          endDate={new Date(post.schedule.endAt)}
+        />
       )}
 
       {/* 좋아요 및 스크랩 */}

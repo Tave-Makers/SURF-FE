@@ -1,4 +1,4 @@
-import { ImageItemResponse } from '../api/types';
+import { ImageItemResponse, PostScheduleData } from '../api/types';
 import { POST_BOARDS, POST_CATEGORIES, TAB_CATEGORIES } from './constants';
 
 export type PostBadgeProps = {
@@ -47,6 +47,7 @@ export type PostDetail = {
   isMine: boolean;
   categoryId: number;
   categoryLabel: string | null;
+  schedule?: PostScheduleData | null;
 };
 
 // 탭

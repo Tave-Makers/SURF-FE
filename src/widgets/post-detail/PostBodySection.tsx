@@ -8,8 +8,7 @@ import { PostDetail } from '@/entities/post/model/types';
 import { useToggleLikeMutation } from '@/features/post/model/useToggleLikeMutation';
 import { useToggleScrapMutation } from '@/features/post/model/useToggleScrapMutation';
 import { EventCard } from '@/entities/calendar/ui/EventCard/EventCard';
-import * as sanitizeHtml from 'sanitize-html';
-import type { IOptions } from 'sanitize-html';
+import sanitizeHtml, { IOptions } from 'sanitize-html';
 
 export function PostBodySection({ post }: { post: PostDetail }) {
   // 좋아요 & 스크랩 상태 관리
@@ -82,7 +81,7 @@ export function PostBodySection({ post }: { post: PostDetail }) {
     allowedTags: ['p', 'strong'],
   };
 
-  const cleanContent: string = sanitizeHtml.default(post.content, sanitizeOptions);
+  const cleanContent = sanitizeHtml(post.content, sanitizeOptions);
 
   return (
     <div className="flex flex-col gap-[1.5rem]">

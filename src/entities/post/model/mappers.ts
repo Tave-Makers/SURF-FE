@@ -9,7 +9,7 @@ import { PostCategoryLabel, TabCategoryLabel, TabCategoryId } from './types';
 
 // categoryId - Category Label 변환
 export const categoryIdToLabel = (id: number | string | null | undefined): PostCategoryLabel => {
-  if (id === 'all' || id == null) return '기타';
+  if (id === 'all' || id == null) return '전체';
 
   const found = POST_CATEGORIES.find((c) => c.id === id);
   return found?.label ?? '기타';

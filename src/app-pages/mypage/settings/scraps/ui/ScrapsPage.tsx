@@ -3,12 +3,12 @@
 import { useEffect, useRef, useCallback, useMemo } from 'react';
 import { useInfiniteScraps } from '@/features/post/model/useScraps';
 import { transformListItemToPost } from '@/entities/post/model/mappers';
-import { PostList } from '@/widgets/post-list/ui/PostList';
 import type { Post } from '@/entities/post/model/types';
 import { SCRAPS_EVENTS } from '@/features/post/model/types';
 import { trackScrapsEvent } from '@/features/post/lib/trackScrapsEvent';
 import { useDynamicScrollTracking } from '@/shared/hooks/useDynamicScrollTracking';
 import { usePageName } from '@/shared/analytics/lib/getPageName';
+import { PostList } from '@/entities/post/ui/post-card/PostCardList';
 
 export default function ScrapsPage() {
   const pageName = usePageName();
@@ -89,15 +89,17 @@ export default function ScrapsPage() {
   return (
     <div className="flex h-full">
       <div ref={scrollRef} className="flex-1 overflow-y-auto">
-        <PostList
-          posts={allPosts}
-          userLevel="member"
-          isLoading={isLoading}
-          isFetchingNextPage={isFetchingNextPage}
-          hasNextPage={hasNextPage}
-          onPostClick={handlePostClick}
-          loadMoreRef={loadMoreRef}
-        />
+        <div ref={scrollRef} className="flex-1 overflow-y-auto">
+          <PostList
+            posts={allPosts}
+            userLevel="member"
+            isLoading={isLoading}
+            isFetchingNextPage={isFetchingNextPage}
+            hasNextPage={hasNextPage}
+            onPostClick={handlePostClick}
+            loadMoreRef={loadMoreRef}
+          />
+        </div>
       </div>
     </div>
   );

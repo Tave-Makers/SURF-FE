@@ -1,7 +1,7 @@
 'use client';
 
 import { useQuery, useInfiniteQuery } from '@tanstack/react-query';
-import { getPosts } from '@/features/post/api/getPosts';
+import { getPosts } from '@/entities/post/api/getPosts';
 import { PostListApiResponse } from '@/entities/post/api/types';
 
 /** 내가 작성한 게시글 단일 페이지 조회 */

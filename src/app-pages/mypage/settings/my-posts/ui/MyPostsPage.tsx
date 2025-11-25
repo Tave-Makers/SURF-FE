@@ -3,7 +3,7 @@
 import { useEffect, useRef, useCallback, useMemo } from 'react';
 import { useInfiniteMyPosts } from '@/features/post/model/useMyPosts';
 import { transformListItemToPost } from '@/entities/post/model/mappers';
-import { PostList } from '@/widgets/post-list/ui/PostList';
+import { PostList } from '@/entities/post/ui/post-card/PostCardList';
 import type { Post } from '@/entities/post/model/types';
 import { MY_POSTS_EVENTS } from '@/features/post/model/types';
 import { trackMyPostsEvent } from '@/features/post/lib/trackMyPostsEvent';

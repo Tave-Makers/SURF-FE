@@ -7,6 +7,7 @@ import { useToggleLikeMutation } from '@/features/post/model/useToggleLikeMutati
 import { useToggleScrapMutation } from '@/features/post/model/useToggleScrapMutation';
 import { EventCard } from '@/entities/calendar/ui/EventCard/EventCard';
 import sanitizeHtml, { IOptions } from 'sanitize-html';
+import { PostImage } from '@/entities/post/ui/post-image/PostImage';
 
 export function PostBodySection({ post }: { post: PostDetail }) {
   const likeMutation = useToggleLikeMutation();
@@ -50,20 +51,10 @@ export function PostBodySection({ post }: { post: PostDetail }) {
       <div className="whitespace-pre-line" dangerouslySetInnerHTML={{ __html: cleanContent }} />
 
       {/* 이미지 목록 */}
-      {post.imageUrlList && post.imageUrlList.length > 0 && (
-        <div className="flex flex-col gap-[0.62rem]">
-          {post.imageUrlList.map((img) =>
-            img.originalUrl && img.originalUrl.trim() !== '' ? (
-              <div key={img.imageId} className="w-full">
-                <img
-                  src={img.originalUrl}
-                  alt={`post-image-${img.imageId}`}
-                  className="w-full rounded-[0.5rem]"
-                />
-              </div>
-            ) : null,
-          )}
-        </div>
+      {post.imageUrlList?.map((img) =>
+        img.originalUrl?.trim() ? (
+          <PostImage key={img.imageId} src={img.originalUrl} alt={img.originalUrl} />
+        ) : null,
       )}
 
       {/* 일정카드 */}

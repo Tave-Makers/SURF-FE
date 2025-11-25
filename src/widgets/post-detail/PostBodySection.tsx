@@ -1,7 +1,5 @@
 'use client';
 
-import { useState } from 'react';
-
 import { PostProfile } from '@/entities/post/ui/post-profile/PostProfile';
 import { ChipToggle } from '@/shared/ui/chip-toggle/ChipToggle';
 import { PostDetail } from '@/entities/post/model/types';
@@ -11,12 +9,6 @@ import { EventCard } from '@/entities/calendar/ui/EventCard/EventCard';
 import sanitizeHtml, { IOptions } from 'sanitize-html';
 
 export function PostBodySection({ post }: { post: PostDetail }) {
-  // 좋아요 & 스크랩 상태 관리
-  const [liked, setLiked] = useState(post.likedByMe);
-  const [likeCount, setLikeCount] = useState(post.likeCount);
-  const [scrapped, setScrapped] = useState(post.scrappedByMe);
-  const [scrapCount, setScrapCount] = useState(post.scrapCount);
-
   const likeMutation = useToggleLikeMutation();
   const scrapMutation = useToggleScrapMutation();
 
@@ -25,56 +17,20 @@ export function PostBodySection({ post }: { post: PostDetail }) {
   const handleLikeToggle = () => {
     if (likeMutation.isPending) return;
 
-    const prevLiked = liked;
-    const prevLikeCount = likeCount;
-
-    // optimistic update
-    if (prevLiked) {
-      // 지금 눌려 있었으면 → 해제
-      setLiked(false);
-      setLikeCount((prev) => prev - 1);
-    } else {
-      // 지금 안 눌려 있었으면 → 설정
-      setLiked(true);
-      setLikeCount((prev) => prev + 1);
-    }
-
-    likeMutation.mutate(
-      { postId: post.postId, liked: prevLiked },
-      {
-        onError: () => {
-          setLiked(prevLiked);
-          setLikeCount(prevLikeCount);
-        },
-      },
-    );
+    likeMutation.mutate({
+      postId: post.postId,
+      liked: post.likedByMe,
+    });
   };
 
   // 스크랩 토글 핸들러
   const handleScrapToggle = () => {
     if (scrapMutation.isPending) return;
 
-    const prevScrapped = scrapped;
-    const prevScrapCount = scrapCount;
-
-    // optimistic update
-    if (prevScrapped) {
-      setScrapped(false);
-      setScrapCount((prev) => prev - 1);
-    } else {
-      setScrapped(true);
-      setScrapCount((prev) => prev + 1);
-    }
-
-    scrapMutation.mutate(
-      { postId: post.postId, scrapped: prevScrapped },
-      {
-        onError: () => {
-          setScrapped(prevScrapped);
-          setScrapCount(prevScrapCount);
-        },
-      },
-    );
+    scrapMutation.mutate({
+      postId: post.postId,
+      scrapped: post.scrappedByMe,
+    });
   };
 
   const sanitizeOptions: IOptions = {
@@ -118,16 +74,16 @@ export function PostBodySection({ post }: { post: PostDetail }) {
       {/* 좋아요 및 스크랩 */}
       <div className="flex justify-between">
         <ChipToggle
-          isClicked={liked}
-          count={likeCount}
+          isClicked={post.likedByMe}
+          count={post.likeCount}
           onToggleIcon={handleLikeToggle}
           iconName="Heart"
           activeColor="red"
           onClickNumber={() => alert('좋아요 누른 사람 목록')}
         />
         <ChipToggle
-          isClicked={scrapped}
-          count={scrapCount}
+          isClicked={post.scrappedByMe}
+          count={post.scrapCount}
           onToggleIcon={handleScrapToggle}
           activeColor="blue"
           iconName="Bookmark"

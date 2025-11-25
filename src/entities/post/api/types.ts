@@ -1,16 +1,20 @@
 import type { CommonResponse } from '@/shared/api/types';
 
-// 공통 이미지 타입
+// 게시글 상세 이미지 타입
 export type ImageItem = {
-  imageId: number;
   originalUrl: string;
-  postId: number;
   sequence: number;
+};
+
+// 게시글 상세 이미지 응답 타입
+export type ImageItemResponse = ImageItem & {
+  imageId: number;
+  postId: number;
 };
 
 // 게시글 목록
 export type PostListItemResponse = {
-  id: number;
+  postId: number;
   categoryId?: number;
   title: string;
   content: string;
@@ -25,6 +29,7 @@ export type PostListItemResponse = {
   nickname: string;
   thumbnailImageUrl: string | null;
   isReserved: boolean;
+  viewCount: number;
 };
 
 export type PostListApiResponse = {
@@ -96,4 +101,12 @@ export type PostApiRequest = {
   page: number;
   size: number;
   sort: string[];
+};
+
+export type GetBoardPostsRequest = {
+  boardId: number;
+  category?: string;
+  page: number;
+  size: number;
+  sort?: string;
 };

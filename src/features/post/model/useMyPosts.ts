@@ -1,8 +1,8 @@
 'use client';
 
-import { useQuery, useInfiniteQuery } from '@tanstack/react-query';
 import { getPosts } from '@/features/post/api/getPosts';
 import { PostApiResponse } from '@/entities/post/api/types';
+import { useQuery, useInfiniteQuery } from '@tanstack/react-query';
 
 // 내 게시글 조회 훅 (단일 페이지) - 현재 MVP2에서는 필요 없음
 export const useMyPosts = (page: number = 0, size: number = 10, sort: string[] = []) => {

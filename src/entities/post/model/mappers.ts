@@ -1,9 +1,5 @@
-import {
-  PostDetailData,
-  PostListItemResponse,
-  PostMutationResponse,
-} from '@/entities/post/api/types';
-import { Post, PostDetail } from '@/entities/post/model/types';
+import { PostDetailData } from '@/entities/post/api/types';
+import { PostDetail } from '@/entities/post/model/types';
 import { POST_BOARDS, POST_CATEGORIES, TAB_CATEGORIES } from './constants';
 import { PostCategoryLabel, TabCategoryLabel, TabCategoryId } from './types';
 import { parseDateTime } from '@/shared/lib/parseDateTime';
@@ -31,26 +27,26 @@ export const boardLabelToId = (label: string) => {
 };
 
 // 목록 API 변환
-export const transformListItemToPost = (item: PostListItemResponse): Post => {
-  return {
-    postId: item.postId,
-    title: item.title,
-    content: item.content,
-    writer: item.nickname,
-    date: item.postedAt,
-    pinned: item.pinned,
-    isReserved: item.isReserved,
-    boardId: item.boardId,
-    likeCount: item.likeCount,
-    isLiked: item.likedByMe,
-    scrappedByMe: item.scrappedByMe,
-    scrapCount: item.scrapCount,
-    commentCount: item.commentCount,
-    thumbnailUrl: item.thumbnailImageUrl ?? undefined,
-    images: undefined,
-    categoryName: categoryIdToLabel(item.categoryId ?? undefined),
-  };
-};
+// export const transformListItemToPost = (item: PostListItemResponse): Post => {
+//   return {
+//     id: item.postId,
+//     title: item.title,
+//     content: item.content,
+//     writer: item.nickname,
+//     date: item.postedAt,
+//     pinned: item.pinned,
+//     isReserved: item.isReserved,
+//     boardId: item.boardId,
+//     likeCount: item.likeCount,
+//     isLiked: item.likedByMe,
+//     scrappedByMe: item.scrappedByMe,
+//     scrapCount: item.scrapCount,
+//     commentCount: item.commentCount,
+//     thumbnailUrl: item.thumbnailImageUrl ?? undefined,
+//     images: undefined,
+//     categoryName: categoryIdToLabel(item.categoryId ?? undefined),
+//   };
+// };
 
 // 게시글 상세 API 변환
 export const transformDetailToPost = (item: PostDetailData): PostDetail => {
@@ -81,23 +77,23 @@ export const transformDetailToPost = (item: PostDetailData): PostDetail => {
 };
 
 // 게시글 생성/수정 API 변환
-export const transformMutationToPost = (item: PostMutationResponse): Post => {
-  return {
-    postId: item.id,
-    title: item.title,
-    content: item.content,
-    writer: item.nickname,
-    date: item.postedAt,
-    pinned: item.pinned,
-    isReserved: false,
-    boardId: item.boardId ?? null,
-    likeCount: 0,
-    isLiked: false,
-    scrappedByMe: false,
-    scrapCount: 0,
-    commentCount: 0,
-    images: undefined,
-    thumbnailUrl: undefined,
-    categoryName: categoryIdToLabel(item.categoryId ?? undefined),
-  };
-};
+// export const transformMutationToPost = (item: PostMutationResponse): Post => {
+//   return {
+//     postId: item.id,
+//     title: item.title,
+//     content: item.content,
+//     writer: item.nickname,
+//     date: item.postedAt,
+//     pinned: item.pinned,
+//     isReserved: false,
+//     boardId: item.boardId ?? null,
+//     likeCount: 0,
+//     isLiked: false,
+//     scrappedByMe: false,
+//     scrapCount: 0,
+//     commentCount: 0,
+//     images: undefined,
+//     thumbnailUrl: undefined,
+//     categoryName: categoryIdToLabel(item.categoryId ?? undefined),
+//   };
+// };

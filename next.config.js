@@ -9,11 +9,20 @@ const nextConfig = {
       },
     },
   },
-    images: {
-    domains: [
-      'img1.kakaocdn.net',
-      't1.kakaocdn.net',
-      "k.kakaocdn.net"
+  images: {
+    remotePatterns: [
+      {
+        protocol: 'https',
+        hostname: 'img1.kakaocdn.net',
+      },
+      {
+        protocol: 'https',
+        hostname: 't1.kakaocdn.net',
+      },
+      {
+        protocol: 'https',
+        hostname: 'k.kakaocdn.net',
+      },
     ],
   },
 

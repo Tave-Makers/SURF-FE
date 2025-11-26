@@ -33,6 +33,7 @@ function PostCardComponent({
   const dateObj = toKST(toDate(rawDate));
 
   const handleKeyDown = (e: React.KeyboardEvent<HTMLDivElement>) => {
+    if (e.currentTarget !== e.target) return;
     if (e.key === 'Enter' || e.key === ' ') {
       e.preventDefault();
       onClick?.();

@@ -208,19 +208,4 @@ export const createRouteConfig = (router: RouterInstance): RouteConfig[] => [
       hasLeftIcon: true,
     },
   },
-  {
-    id: 'post-detail',
-    // 게시글 목록이랑 합친 후 동적 세그먼트로 변경 예정
-    path: '/board/[boardId]/post/[postId]',
-    backPath: '/board/[boardId]',
-    header: {
-      mode: HeaderMode.Default,
-      title: '공지사항',
-      hasLeftIcon: true,
-      icons: [
-        { label: 'FatCornerUpRight', onClickIcon: () => alert('공유') },
-        { label: 'Dots', onClickIcon: () => alert('메뉴') },
-      ],
-    },
-  },
 ];

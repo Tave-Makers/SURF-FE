@@ -8,7 +8,7 @@ import { SCRAPS_EVENTS } from '@/features/post/model/types';
 import { trackScrapsEvent } from '@/features/post/lib/trackScrapsEvent';
 import { useDynamicScrollTracking } from '@/shared/hooks/useDynamicScrollTracking';
 import { usePageName } from '@/shared/analytics/lib/getPageName';
-import { PostList } from '@/entities/post/ui/post-card/PostCardList';
+import { PostList } from '@/widgets/post-list/ui/PostCardList';
 
 export default function ScrapsPage() {
   const pageName = usePageName();

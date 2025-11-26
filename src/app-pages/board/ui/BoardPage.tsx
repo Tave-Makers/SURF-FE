@@ -1,7 +1,7 @@
 'use client';
 
 import { useSearchParams, useRouter } from 'next/navigation';
-import { PostListContainer } from '@/widgets/post-list-container/ui/PostListContainer';
+import { PostListContainer } from '@/widgets/post-list/ui/PostListContainer';
 import { Tab } from '@/shared/ui/tab/Tab';
 import { useAuthStore } from '@/features/auth/model/useAuthStore';
 
@@ -32,7 +32,7 @@ export default function PostPage() {
         value={category}
         onValueChange={handleCategoryChange}
       />
-      <div className="px-13 pt-13">
+      <div className="flex flex-1 overflow-auto px-13 pt-13">
         <PostListContainer boardId={boardId} category={category} userLevel={userLevel} />
       </div>
     </div>

@@ -6,7 +6,6 @@ import { ActionBar } from '@/shared/ui/action-bar/ActionBar';
 import { PostBodySection } from '@/widgets/post-detail/PostBodySection';
 
 type PostDetailPageProps = {
-  boardId: string;
   postId: string;
 };
 
@@ -14,6 +13,15 @@ export default function PostDetailPage({ postId }: PostDetailPageProps) {
   const numericPostId = Number(postId);
 
   const { data, isLoading, isError } = usePostDetail(numericPostId);
+
+  // postId 유효성 검증
+  if (isNaN(numericPostId) || numericPostId <= 0) {
+    return (
+      <div className="flex h-full w-full items-center justify-center">
+        <span>잘못된 게시글 ID입니다.</span>
+      </div>
+    );
+  }
 
   if (isLoading)
     return (
@@ -38,8 +46,8 @@ export default function PostDetailPage({ postId }: PostDetailPageProps) {
         <main className="flex flex-col gap-[0.62rem] px-13 pt-13">
           <PostHeader
             title={post.title}
-            category={{ title: '공지사항' }} // 서버에 category 필드가 없어서 그대로 유지
-            subCategory={{ title: '행사' }} // 서버에 없으므로 그대로 유지
+            category={{ title: post.boardLabel }}
+            subCategory={{ title: post.categoryLabel }}
           />
 
           <PostBodySection post={post} />

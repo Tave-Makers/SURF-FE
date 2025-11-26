@@ -210,6 +210,7 @@ export const createRouteConfig = (router: RouterInstance): RouteConfig[] => [
   },
   {
     id: 'post-detail',
+    // 게시글 목록이랑 합친 후 동적 세그먼트로 변경 예정
     path: '/board/[boardId]/post/[postId]',
     backPath: '/board/[boardId]',
     header: {

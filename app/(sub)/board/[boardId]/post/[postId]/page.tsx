@@ -1,5 +1,11 @@
 import PostDetailPage from '@/app-pages/post/PostDetailPage';
 
-export default function Page({ params }: { params: { boardId: string; postId: string } }) {
-  return <PostDetailPage boardId={params.boardId} postId={params.postId} />;
+export default async function Page({
+  params,
+}: {
+  params: Promise<{ boardId: string; postId: string }>;
+}) {
+  const { postId } = await params;
+
+  return <PostDetailPage postId={postId} />;
 }

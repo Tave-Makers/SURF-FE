@@ -4,11 +4,11 @@ import { useState } from 'react';
 
 import { PostProfile } from '@/entities/post/ui/post-profile/PostProfile';
 import { ChipToggle } from '@/shared/ui/chip-toggle/ChipToggle';
-import ReactMarkdown from 'react-markdown';
 import { PostDetail } from '@/entities/post/model/types';
 import { useToggleLikeMutation } from '@/features/post/model/useToggleLikeMutation';
 import { useToggleScrapMutation } from '@/features/post/model/useToggleScrapMutation';
 import { EventCard } from '@/entities/calendar/ui/EventCard/EventCard';
+import sanitizeHtml, { IOptions } from 'sanitize-html';
 import { Sheet } from '@/shared/ui/sheet/Sheet';
 import { Sheet as ModalSheet } from 'react-modal-sheet';
 import { SheetItem } from '@/shared/ui/sheet-item/SheetItem';
@@ -17,12 +17,6 @@ import { Avatar } from '@/shared/ui/avatar/Avatar';
 import { useGetPostLikesQuery } from '@/features/post/model/useGetPostLikesQuery';
 
 export function PostBodySection({ post }: { post: PostDetail }) {
-  // 좋아요 & 스크랩 상태
-  const [liked, setLiked] = useState(post.likedByMe);
-  const [likeCount, setLikeCount] = useState(post.likeCount);
-  const [scrapped, setScrapped] = useState(post.scrappedByMe);
-  const [scrapCount, setScrapCount] = useState(post.scrapCount);
-
   // Sheet open 상태
   const [likedUsersOpen, setLikedUsersOpen] = useState(false);
 
@@ -40,48 +34,20 @@ export function PostBodySection({ post }: { post: PostDetail }) {
   const handleLikeToggle = () => {
     if (likeMutation.isPending) return;
 
-    const prev = liked;
-    const prevCount = likeCount;
-
-    // optimistic update
-    setLiked(!prev);
-    setLikeCount(prev ? likeCount - 1 : likeCount + 1);
-
-    likeMutation.mutate(
-      { postId: post.postId, liked: prev },
-      {
-        onError: () => {
-          setLiked(prev);
-          setLikeCount(prevCount);
-        },
-        onSuccess: () => {
-          if (likedUsersOpen) {
-            refetch().catch(() => {});
-          }
-        },
-      },
-    );
+    likeMutation.mutate({
+      postId: post.postId,
+      liked: post.likedByMe,
+    });
   };
 
   // 스크랩 토글
   const handleScrapToggle = () => {
     if (scrapMutation.isPending) return;
 
-    const prev = scrapped;
-    const prevCount = scrapCount;
-
-    setScrapped(!prev);
-    setScrapCount(prev ? scrapCount - 1 : scrapCount + 1);
-
-    scrapMutation.mutate(
-      { postId: post.postId, scrapped: prev },
-      {
-        onError: () => {
-          setScrapped(prev);
-          setScrapCount(prevCount);
-        },
-      },
-    );
+    scrapMutation.mutate({
+      postId: post.postId,
+      scrapped: post.scrappedByMe,
+    });
   };
 
   // 좋아요 목록 열기
@@ -90,26 +56,34 @@ export function PostBodySection({ post }: { post: PostDetail }) {
     setLikedUsersOpen(true);
   };
 
+  const sanitizeOptions: IOptions = {
+    allowedTags: ['p', 'strong'],
+  };
+
+  const cleanContent = sanitizeHtml(post.content, sanitizeOptions);
+
   return (
     <div className="flex flex-col gap-[1.5rem]">
-      <PostProfile nickname={post.writer} date={post.date} time={post.time} viewCount={3} />
-
-      <div className="whitespace-pre-line">
-        <ReactMarkdown>{post.content}</ReactMarkdown>
-      </div>
+      <PostProfile
+        nickname={post.writer}
+        date={post.date}
+        time={post.time}
+        viewCount={post.viewCount}
+      />
+      <div className="whitespace-pre-line" dangerouslySetInnerHTML={{ __html: cleanContent }} />
 
       {/* 이미지 영역 */}
       {post.imageUrlList?.length > 0 && (
         <div className="flex flex-col gap-[0.62rem]">
           {post.imageUrlList.map((img) =>
-            img.originalUrl?.trim() ? (
-              <button key={img.imageId} className="w-full">
+            img.originalUrl && img.originalUrl.trim() !== '' ? (
+              <div key={img.imageId} className="w-full">
                 <img
                   src={img.originalUrl}
-                  className="w-full cursor-pointer rounded-[0.5rem]"
-                  alt=""
+                  alt={`post-image-${img.imageId}`}
+                  className="w-full rounded-[0.5rem]"
                 />
-              </button>
+              </div>
             ) : null,
           )}
         </div>
@@ -123,8 +97,8 @@ export function PostBodySection({ post }: { post: PostDetail }) {
       {/* 좋아요 / 스크랩 */}
       <div className="flex justify-between">
         <ChipToggle
-          isClicked={liked}
-          count={likeCount}
+          isClicked={post.likedByMe}
+          count={post.likeCount}
           onToggleIcon={handleLikeToggle}
           iconName="Heart"
           activeColor="red"
@@ -132,8 +106,8 @@ export function PostBodySection({ post }: { post: PostDetail }) {
         />
 
         <ChipToggle
-          isClicked={scrapped}
-          count={scrapCount}
+          isClicked={post.scrappedByMe}
+          count={post.scrapCount}
           onToggleIcon={handleScrapToggle}
           iconName="Bookmark"
           activeColor="blue"

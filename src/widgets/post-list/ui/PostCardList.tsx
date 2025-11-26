@@ -1,11 +1,12 @@
 'use client';
 
+import { memo } from 'react';
 import { PostCard } from '@/entities/post/ui/post-card/PostCard';
 import type { Post } from '@/entities/post/model/types';
 import type { UserLevel } from '@/entities/user/model/types';
-import { TabCategoryLabel } from '@/entities/post/model/types';
+import type { TabCategoryLabel } from '@/entities/post/model/types';
 
-type PostListProps = {
+type PostCardListProps = {
   posts: Post[];
   currentCategory?: TabCategoryLabel;
   userLevel: UserLevel;
@@ -14,10 +15,11 @@ type PostListProps = {
   hasNextPage?: boolean;
   onPostClick?: (post: Post) => void;
   loadMoreRef?: React.RefObject<HTMLDivElement | null>;
-  showCategoryBadge?: boolean;
+  shouldShowCategoryBadge?: boolean;
+  shouldShowReservationBadge?: boolean;
 };
 
-export const PostList = ({
+function PostCardListComponent({
   posts,
   currentCategory,
   userLevel,
@@ -26,7 +28,9 @@ export const PostList = ({
   hasNextPage = false,
   onPostClick,
   loadMoreRef,
-}: PostListProps) => {
+  shouldShowCategoryBadge,
+  shouldShowReservationBadge,
+}: PostCardListProps) {
   if (isLoading) {
     return (
       <div role="status" aria-live="polite">
@@ -40,7 +44,7 @@ export const PostList = ({
   }
 
   return (
-    <div className="flex flex-1 flex-col overflow-y-auto px-13 pt-12">
+    <div className="flex flex-1 flex-col">
       {posts.map((post, index) => (
         <PostCard
           key={`${post.postId}-${index}`}
@@ -48,6 +52,8 @@ export const PostList = ({
           currentCategory={currentCategory}
           userLevel={userLevel}
           onClick={() => onPostClick?.(post)}
+          shouldShowCategoryBadge={shouldShowCategoryBadge}
+          shouldShowReservationBadge={shouldShowReservationBadge}
         />
       ))}
 
@@ -63,4 +69,6 @@ export const PostList = ({
       </div>
     </div>
   );
-};
+}
+
+export const PostList = memo(PostCardListComponent);

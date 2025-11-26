@@ -2,7 +2,7 @@
 
 import { useCallback } from 'react';
 import { useRouter } from 'next/navigation';
-import { PostList } from '@/entities/post/ui/post-card/PostCardList';
+import { PostList } from '@/widgets/post-list/ui/PostCardList';
 import { useInfiniteBoardPosts } from '@/entities/post/api/useInfiniteBoardPosts';
 import { useInfiniteScroll } from '@/shared/hooks/useInfiniteScroll';
 import { transformListItemToPost, categoryIdToLabel } from '@/entities/post/model/mappers';
@@ -42,7 +42,7 @@ export const PostListContainer = ({ boardId, category, userLevel }: Props) => {
   );
 
   return (
-    <div className="flex flex-1 flex-col overflow-y-auto">
+    <div className="flex flex-1 flex-col">
       <PostList
         posts={posts}
         currentCategory={categoryLabel}

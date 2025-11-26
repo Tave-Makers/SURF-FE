@@ -1,4 +1,4 @@
-import { ProfileImage } from '@/shared/ui/avatar/Avatar';
+import { ProfileImage } from '@/shared/ui/profile-image/ProfileImage';
 
 type PostProfileProps = {
   profileImgUrl?: string;
@@ -20,7 +20,7 @@ export function PostProfile({ profileImgUrl, nickname, date, time, viewCount }: 
             {date}
           </time>
           <time aria-label={`작성 시간 ${time}`}>{time}</time>
-          <div className="flex gap-2" aria-label={`조회수 ${viewCount}`}>
+          <div className="flex gap-[0.125rem]" aria-label={`조회수 ${viewCount}`}>
             <span>조회</span>
             <span>{viewCount}</span>
           </div>

@@ -1,7 +1,7 @@
 import { ProfileImage } from '@/shared/ui/profile-image/ProfileImage';
 
 type PostProfileProps = {
-  profileImgUrl?: string | null;
+  profileImgUrl?: string;
   nickname: string;
   date: string;
   time: string;

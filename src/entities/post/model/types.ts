@@ -48,6 +48,7 @@ export type PostDetail = {
   categoryId: number;
   categoryLabel: string | null;
   schedule?: PostScheduleData | null;
+  profileImageUrl?: string;
 };
 
 // 탭

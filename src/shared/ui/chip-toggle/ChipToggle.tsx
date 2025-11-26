@@ -20,23 +20,7 @@ import { ComponentProps } from 'react';
  * @param {ActiveColorVariant} [props.activeColor='red'] - 활성화 상태일 때 적용할 색상 클래스
  * @param {() => void} [props.onClickNumber] - 숫자 클릭 시 호출되는 콜백 (없으면 `onToggleIcon`이 기본 실행됨)
  *
- * @example
- * ```tsx
- * const [isClicked, setIsClicked] = useState(false);
- * const [count, setCount] = useState(42);
  *
- * <ChipToggle
- *   iconName="Heart"
- *   isClicked={isClicked}
- *   count={count}
- *   activeColor="foreground-foreground-primary"
- *   onToggleIcon={(newState) => {
- *     setIsClicked(newState);
- *     setCount((prev) => prev + (newState ? 1 : -1));
- *   }}
- *   // onClickNumber를 전달하지 않으면 숫자 클릭 시 자동으로 onToggleIcon 실행
- * />
- * ```
  */
 
 type SurfIconName = ComponentProps<typeof SurfIcon>['name'];

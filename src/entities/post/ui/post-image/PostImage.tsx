@@ -1,3 +1,4 @@
+'use client';
 import { useState } from 'react';
 
 export const PostImage = ({ src, alt }: { src: string; alt: string }) => {

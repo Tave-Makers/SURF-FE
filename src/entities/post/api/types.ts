@@ -71,6 +71,7 @@ export type PostDetailData = {
   imageUrlList: ImageItemResponse[];
   viewCount: number;
   hasSchedule: boolean;
+  profileImageUrl?: string;
 };
 
 // 상세 API 응답 타입

@@ -9,6 +9,13 @@ const nextConfig = {
       },
     },
   },
+    images: {
+    domains: [
+      'img1.kakaocdn.net',
+      't1.kakaocdn.net',
+      "k.kakaocdn.net"
+    ],
+  },
 
   webpack(config) {
     const fileLoaderRule = config.module.rules.find(

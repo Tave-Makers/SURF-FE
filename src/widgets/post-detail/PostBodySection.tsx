@@ -43,6 +43,7 @@ export function PostBodySection({ post }: { post: PostDetail }) {
   return (
     <div className="flex flex-col gap-[1.5rem]">
       <PostProfile
+        profileImgUrl={post.profileImageUrl}
         nickname={post.writer}
         date={post.date}
         time={post.time}

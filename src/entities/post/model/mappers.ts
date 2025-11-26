@@ -77,6 +77,7 @@ export const transformDetailToPost = (
     viewCount: item.viewCount,
     isMine: item.isMine,
     schedule: item.schedule,
+    profileImageUrl: item.profileImageUrl,
   };
 };
 

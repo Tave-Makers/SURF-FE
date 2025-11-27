@@ -1,0 +1,20 @@
+/* -------------------------------
+ * PostEditor 전용 스타일
+ * ------------------------------- */
+
+/* Placeholder 스타일 정의 */
+.ProseMirror p.is-editor-empty:first-child::before {
+  content: attr(data-placeholder);
+  color: var(--color-foreground-foreground-tertiary-lighter);
+  pointer-events: none;
+}
+
+/* focus 시 outline 제거 */
+.ProseMirror:focus {
+  outline: none;
+}
+
+/* focus 시 placeholder 제거 */
+.ProseMirror:focus p.is-editor-empty:first-child::before {
+  content: none;
+}

@@ -3,7 +3,7 @@ import type { Meta, StoryObj } from '@storybook/nextjs';
 import { TextInput } from './TextInput';
 
 /**
- * 💬 TextInput Storybook
+ * TextInput Storybook
  *
  * 범용 입력 필드 컴포넌트입니다.
  * Controlled / Uncontrolled, ref 제어, 아이콘, Enter 이벤트 등
@@ -46,7 +46,7 @@ export default meta;
 
 type Story = StoryObj<typeof TextInput>;
 
-/* 🔍 검색창 */
+/* 검색창 */
 export const SearchField: Story = {
   render: (args) => {
     const [search, setSearch] = useState('');
@@ -76,7 +76,7 @@ export const SearchField: Story = {
   },
 };
 
-/* 💬 댓글 입력창 */
+/* 댓글 입력창 */
 export const TextField: Story = {
   render: (args) => {
     const [comment, setComment] = useState('');
@@ -107,7 +107,7 @@ export const TextField: Story = {
   },
 };
 
-/* ⚙️ Ref 제어 예시 */
+/* Ref 제어 예시 */
 export const WithRef: Story = {
   render: (args) => {
     const internalRef = useRef<HTMLTextAreaElement>(null);

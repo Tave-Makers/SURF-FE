@@ -16,15 +16,7 @@ type Story = StoryObj<typeof PostEditor>;
 // 기본 예시 (기본 내용 포함)
 export const Default: Story = {
   render: (args) => (
-    <div
-      style={{
-        width: '360px',
-        height: '300px',
-        margin: '0 auto',
-        border: '1px solid #e0e0e0',
-        overflow: 'hidden',
-      }}
-    >
+    <div className="mx-auto flex h-[300px] w-[360px] overflow-hidden border border-[#e0e0e0]">
       <PostEditor {...args} />
     </div>
   ),
@@ -35,20 +27,9 @@ export const Default: Story = {
 
 // 빈 에디터 (Placeholder 확인용)
 export const Empty: Story = {
-  render: (args) => (
-    <div
-      style={{
-        width: '360px',
-        height: '300px',
-        margin: '0 auto',
-        border: '1px solid #e0e0e0',
-        overflow: 'hidden',
-      }}
-    >
-      <PostEditor {...args} />
+  render: () => (
+    <div className="mx-auto flex h-[300px] w-[360px] overflow-hidden border border-[#e0e0e0]">
+      <PostEditor />
     </div>
   ),
-  args: {
-    initialContent: '',
-  },
 };

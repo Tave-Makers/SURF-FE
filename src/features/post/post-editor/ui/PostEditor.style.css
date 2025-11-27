@@ -3,6 +3,11 @@
  * ------------------------------- */
 
 /* Placeholder 스타일 정의 */
+/* 커서가 placeholder 앞에 깜빡일 수 있는 실제 공간 확보 */
+.ProseMirror p.is-editor-empty:first-child {
+  min-width: 1px;
+}
+
 .ProseMirror p.is-editor-empty:first-child::before {
   content: attr(data-placeholder);
   color: var(--color-foreground-foreground-tertiary-lighter);

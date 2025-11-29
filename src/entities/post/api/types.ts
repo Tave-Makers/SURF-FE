@@ -100,7 +100,7 @@ export type Pageable = {
 export type PostApiRequest = {
   page: number;
   size: number;
-  sort: string[];
+  sort: string;
 };
 
 export type GetBoardPostsRequest = {

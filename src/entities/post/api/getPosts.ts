@@ -2,60 +2,49 @@
 
 import { axiosInstance } from '@/shared/lib/axiosInstance';
 import type {
-  PostListApiResponse,
   FullPostListResponse,
+  FullPostDetailResponse,
+  PostListApiResponse,
+  PostDetailResponse,
   PostApiRequest,
   GetBoardPostsRequest,
-} from '@/entities/post/api/types';
+} from './types';
 
 export const getPosts = {
   getMyPosts: async (params: Partial<PostApiRequest>): Promise<PostListApiResponse> => {
-    const { page, size, sort } = params;
-
-    try {
-      const response = await axiosInstance.get<FullPostListResponse>('/v1/user/posts/me', {
-        params: { page, size, sort },
-      });
-      return response.data.data;
-    } catch (error) {
-      console.error('[내가 작성한 게시글 조회 요청 실패]:', error);
-      throw error;
-    }
+    const response = await axiosInstance.get<FullPostListResponse>('/v1/user/posts/me', {
+      params,
+    });
+    return response.data.data;
   },
 
   getScraps: async (params: Partial<PostApiRequest>): Promise<PostListApiResponse> => {
-    const { page, size, sort } = params;
-
-    try {
-      const response = await axiosInstance.get<FullPostListResponse>('/v1/user/scraps/me', {
-        params: { page, size, sort },
-      });
-      return response.data.data;
-    } catch (error) {
-      console.error('[내가 스크랩한 게시글 조회 요청 실패]:', error);
-      throw error;
-    }
+    const response = await axiosInstance.get<FullPostListResponse>('/v1/user/scraps/me', {
+      params,
+    });
+    return response.data.data;
   },
 
-  getBoardPosts: async (params: Partial<GetBoardPostsRequest>): Promise<PostListApiResponse> => {
+  getBoardPosts: async (params: GetBoardPostsRequest): Promise<PostListApiResponse> => {
     const { boardId, category, page, size, sort } = params;
 
-    try {
-      const response = await axiosInstance.get<FullPostListResponse>(
-        `/v1/user/posts/board/${boardId}`,
-        {
-          params: {
-            category: category === 'all' ? undefined : category,
-            page,
-            size,
-            sort,
-          },
+    const response = await axiosInstance.get<FullPostListResponse>(
+      `/v1/user/posts/board/${boardId}`,
+      {
+        params: {
+          category: category === 'all' ? undefined : category,
+          page,
+          size,
+          sort,
         },
-      );
-      return response.data.data;
-    } catch (error) {
-      console.error('[게시글 목록 조회 실패]:', error);
-      throw error;
-    }
+      },
+    );
+
+    return response.data.data;
+  },
+
+  getDetail: async (postId: number): Promise<PostDetailResponse> => {
+    const response = await axiosInstance.get<FullPostDetailResponse>(`/v1/user/posts/${postId}`);
+    return response.data.data;
   },
 };

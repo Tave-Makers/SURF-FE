@@ -43,7 +43,7 @@ const calendarClassNames = {
   tfoot: 'hidden',
   weekdays: 'flex flex-1 grid grid-cols-7',
   weekday:
-    'flex-1 min-w-[3.12rem] p-10 text-center text-body-body8 text-foreground-foreground-secondary-lighter',
+    'flex-1 min-w-[2.81rem] p-10 text-center text-body-body8 text-foreground-foreground-secondary-lighter',
 } as const;
 
 type CalendarProps = {

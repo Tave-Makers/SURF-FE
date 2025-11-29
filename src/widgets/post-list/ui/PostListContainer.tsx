@@ -2,16 +2,18 @@
 
 import { useCallback } from 'react';
 import { useRouter } from 'next/navigation';
-import { PostList } from '@/widgets/post-list/ui/PostCardList';
+import { PostCardList } from '@/widgets/post-list/ui/PostCardList';
 import { useInfiniteBoardPosts } from '@/entities/post/api/useInfiniteBoardPosts';
 import { useInfiniteScroll } from '@/shared/hooks/useInfiniteScroll';
-import { transformListItemToPost, categoryIdToLabel } from '@/entities/post/model/mappers';
+import { transformListItemToPost } from '@/entities/post/model/mappers';
 import type { UserLevel } from '@/entities/user/model/types';
 import type { Post } from '@/entities/post/model/types';
+import type { TabCategoryKey } from '@/entities/post/model/tab';
+import { TAB_CATEGORIES } from '@/entities/post/model/tab';
 
 type Props = {
   boardId: number;
-  category: string;
+  category: TabCategoryKey;
   userLevel: UserLevel;
 };
 
@@ -30,8 +32,9 @@ export const PostListContainer = ({ boardId, category, userLevel }: Props) => {
 
   const posts = data?.pages.flatMap((page) => page.content.map(transformListItemToPost)) ?? [];
 
-  const categoryLabel = categoryIdToLabel(category);
-  const showCategoryBadge = categoryLabel === '전체';
+  const tabCategoryLabel = TAB_CATEGORIES[category].label;
+
+  const showCategoryBadge = tabCategoryLabel === '전체';
   const showReservationBadge = userLevel !== 'member';
 
   const handlePostCardClick = useCallback(
@@ -43,9 +46,9 @@ export const PostListContainer = ({ boardId, category, userLevel }: Props) => {
 
   return (
     <div className="flex flex-1 flex-col">
-      <PostList
+      <PostCardList
         posts={posts}
-        currentCategory={categoryLabel}
+        currentTabCategory={tabCategoryLabel}
         userLevel={userLevel}
         isLoading={isLoading}
         isFetchingNextPage={isFetchingNextPage}

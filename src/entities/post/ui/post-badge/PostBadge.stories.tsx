@@ -1,6 +1,6 @@
 import type { Meta, StoryObj } from '@storybook/nextjs';
 import { PostBadge } from './PostBadge';
-import { PostCategoryLabel } from '@/entities/post/model/types';
+import { PostCategoryLabel } from '@/entities/post/model/category';
 
 const meta: Meta<typeof PostBadge> = {
   title: 'Entities/Post/PostBadge',
@@ -15,14 +15,14 @@ type Story = StoryObj<typeof PostBadge>;
 export const CategoryEvent: Story = {
   args: {
     type: 'category',
-    category: '행사' as PostCategoryLabel,
+    label: '행사' as PostCategoryLabel,
   },
 };
 
 export const CategoryActivity: Story = {
   args: {
     type: 'category',
-    category: '활동' as PostCategoryLabel,
+    label: '활동' as PostCategoryLabel,
   },
 };
 

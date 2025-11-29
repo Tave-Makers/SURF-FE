@@ -35,7 +35,7 @@ const mockPost: Post = {
 export const Default: Story = {
   args: {
     post: mockPost,
-    currentCategory: '전체',
+    currentTabCategory: '전체',
     userLevel: 'member',
   },
 };
@@ -47,7 +47,7 @@ export const Liked: Story = {
       isLiked: true,
       likeCount: 99,
     },
-    currentCategory: '전체',
+    currentTabCategory: '전체',
     userLevel: 'member',
   },
 };
@@ -58,7 +58,7 @@ export const AdminView: Story = {
       ...mockPost,
       isReserved: true,
     },
-    currentCategory: '행사',
+    currentTabCategory: '행사',
     userLevel: 'manager',
   },
 };
@@ -69,7 +69,7 @@ export const WithoutThumbnail: Story = {
       ...mockPost,
       thumbnailUrl: undefined,
     },
-    currentCategory: '패치',
+    currentTabCategory: '패치',
     userLevel: 'member',
   },
 };

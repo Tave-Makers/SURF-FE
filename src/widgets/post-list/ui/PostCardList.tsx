@@ -2,13 +2,13 @@
 
 import { memo } from 'react';
 import { PostCard } from '@/entities/post/ui/post-card/PostCard';
-import type { Post } from '@/entities/post/model/types';
 import type { UserLevel } from '@/entities/user/model/types';
-import type { TabCategoryLabel } from '@/entities/post/model/types';
+import type { TabCategoryLabel } from '@/entities/post/model/tab';
+import type { Post } from '@/entities/post/model/types';
 
 type PostCardListProps = {
   posts: Post[];
-  currentCategory?: TabCategoryLabel;
+  currentTabCategory?: TabCategoryLabel;
   userLevel: UserLevel;
   isLoading?: boolean;
   isFetchingNextPage?: boolean;
@@ -21,7 +21,7 @@ type PostCardListProps = {
 
 function PostCardListComponent({
   posts,
-  currentCategory,
+  currentTabCategory,
   userLevel,
   isLoading = false,
   isFetchingNextPage = false,
@@ -49,7 +49,7 @@ function PostCardListComponent({
         <PostCard
           key={`${post.postId}-${index}`}
           post={post}
-          currentCategory={currentCategory}
+          currentTabCategory={currentTabCategory}
           userLevel={userLevel}
           onClick={() => onPostClick?.(post)}
           shouldShowCategoryBadge={shouldShowCategoryBadge}
@@ -71,4 +71,4 @@ function PostCardListComponent({
   );
 }
 
-export const PostList = memo(PostCardListComponent);
+export const PostCardList = memo(PostCardListComponent);

@@ -4,18 +4,20 @@ import { useSearchParams, useRouter } from 'next/navigation';
 import { PostListContainer } from '@/widgets/post-list/ui/PostListContainer';
 import { Tab } from '@/shared/ui/tab/Tab';
 import { useAuthStore } from '@/features/auth/model/useAuthStore';
+import { TAB_CATEGORIES } from '@/entities/post/model/tab';
 
 export default function PostPage() {
   const params = useSearchParams();
   const router = useRouter();
 
   const boardId = Number(params.get('boardId') ?? 1);
-  const category = params.get('category') ?? 'all';
+
+  const categoryKey = (params.get('category') ?? 'all') as keyof typeof TAB_CATEGORIES;
 
   const userLevel = useAuthStore((state) => state.memberRole) ?? 'member';
 
-  const handleCategoryChange = (nextCategory: string) => {
-    router.push(`?boardId=${boardId}&category=${nextCategory}`);
+  const handleCategoryChange = (nextCategoryKey: string) => {
+    router.push(`?boardId=${boardId}&category=${nextCategoryKey}`);
   };
 
   return (
@@ -29,11 +31,12 @@ export default function PostPage() {
           { value: 'patch', label: '패치' },
           { value: 'etc', label: '기타' },
         ]}
-        value={category}
+        value={categoryKey}
         onValueChange={handleCategoryChange}
       />
+
       <div className="flex flex-1 overflow-auto px-13 pt-13">
-        <PostListContainer boardId={boardId} category={category} userLevel={userLevel} />
+        <PostListContainer boardId={boardId} category={categoryKey} userLevel={userLevel} />
       </div>
     </div>
   );

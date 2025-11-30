@@ -42,7 +42,7 @@ export default function PostDetailPage({ postId }: PostDetailPageProps) {
   return (
     <div className="relative flex h-full w-full flex-col">
       {/* 스크롤 영역 */}
-      <div className="flex-1 overflow-y-auto [-ms-overflow-style:none] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
+      <div className="scrollbar-hide flex-1 overflow-y-auto">
         <main className="flex flex-col gap-[0.62rem] px-13 pt-13">
           <PostHeader
             title={post.title}

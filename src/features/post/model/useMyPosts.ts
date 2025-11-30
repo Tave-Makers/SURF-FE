@@ -3,7 +3,7 @@
 import { useQuery, useInfiniteQuery } from '@tanstack/react-query';
 import { postApi } from '@/entities/post/api/postApi';
 import { PostListApiResponse } from '@/entities/post/api/types';
-
+// TODO: Post 엔티티로 변경 및 통합
 /** 내가 작성한 게시글 단일 페이지 조회 */
 export const useMyPosts = (page: number = 0, size: number = 20, sort: string = '') => {
   return useQuery<PostListApiResponse>({

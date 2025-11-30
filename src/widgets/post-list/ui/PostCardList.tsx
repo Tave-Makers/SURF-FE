@@ -22,7 +22,6 @@ type PostCardListProps = {
 
 function PostCardListComponent({
   posts,
-  currentTabCategory,
   isLoading = false,
   isFetchingNextPage = false,
   hasNextPage = false,
@@ -59,7 +58,6 @@ function PostCardListComponent({
         <PostCard
           key={post.postId}
           post={post}
-          currentTabCategory={currentTabCategory}
           onClick={() => onPostClick?.(post)}
           shouldShowCategoryBadge={shouldShowCategoryBadge}
           shouldShowReservationBadge={shouldShowReservationBadge}

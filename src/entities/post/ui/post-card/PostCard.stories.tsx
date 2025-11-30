@@ -35,7 +35,6 @@ const mockPost: Post = {
 export const Default: Story = {
   args: {
     post: mockPost,
-    currentTabCategory: '전체',
   },
 };
 
@@ -46,7 +45,6 @@ export const Liked: Story = {
       isLiked: true,
       likeCount: 99,
     },
-    currentTabCategory: '전체',
   },
 };
 
@@ -56,7 +54,6 @@ export const AdminView: Story = {
       ...mockPost,
       isReserved: true,
     },
-    currentTabCategory: '행사',
   },
 };
 
@@ -66,6 +63,5 @@ export const WithoutThumbnail: Story = {
       ...mockPost,
       thumbnailUrl: undefined,
     },
-    currentTabCategory: '패치',
   },
 };

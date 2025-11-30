@@ -3,7 +3,7 @@ import { PostBadge } from './PostBadge';
 import { PostCategoryLabel } from '@/entities/post/model/category';
 
 const meta: Meta<typeof PostBadge> = {
-  title: 'Entities/Post/PostBadge',
+  title: 'Entities/UI/Post/PostBadge',
   component: PostBadge,
   tags: ['autodocs'],
 };

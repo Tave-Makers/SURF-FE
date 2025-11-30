@@ -2,7 +2,7 @@ import type { Meta, StoryObj } from '@storybook/nextjs';
 import { PostFab } from './PostFab';
 
 const meta = {
-  title: 'Entities/Post/UI/PostFab',
+  title: 'Entities/UI/Post/PostFab',
   component: PostFab,
   tags: ['autodocs'],
   parameters: {

@@ -3,7 +3,7 @@ import { PostCard } from './PostCard';
 import type { Post } from '@/entities/post/model/types';
 
 const meta: Meta<typeof PostCard> = {
-  title: 'Entities/Post/UI/PostCard',
+  title: 'Entities/UI/Post/PostCard',
   component: PostCard,
   tags: ['autodocs'],
   parameters: {

@@ -26,8 +26,17 @@ function PostCardComponent({
   shouldShowCategoryBadge,
   shouldShowReservationBadge,
 }: PostCardProps) {
-  const { title, content, writer, likeCount, isLiked, commentCount, categoryName, thumbnailUrl } =
-    post;
+  const {
+    title,
+    content,
+    writer,
+    likeCount,
+    isLiked,
+    isReserved,
+    commentCount,
+    categoryName,
+    thumbnailUrl,
+  } = post;
 
   const rawDate = post.date;
   const dateObj = toKST(toDate(rawDate));
@@ -53,7 +62,8 @@ function PostCardComponent({
         {/* 뱃지 */}
         <div className="flex gap-5">
           {shouldShowCategoryBadge && <PostBadge type="category" label={categoryName} />}
-          {shouldShowReservationBadge && <PostBadge type="reservation" />}
+
+          {shouldShowReservationBadge && isReserved && <PostBadge type="reservation" />}
         </div>
 
         {/* 본문 */}
@@ -76,7 +86,6 @@ function PostCardComponent({
               type="button"
               className="flex items-center gap-3"
               aria-pressed={isLiked}
-              aria-label={isLiked ? '' : '내가 좋아요 누른 글'}
               onClick={(e) => {
                 e.stopPropagation();
                 onLikeToggle?.(!isLiked);

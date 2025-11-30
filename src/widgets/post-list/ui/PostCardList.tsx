@@ -51,7 +51,6 @@ function PostCardListComponent({
     );
   }
   if (posts.length === 0) {
-    // 임시
     return <div>게시글이 없습니다.</div>;
   }
 

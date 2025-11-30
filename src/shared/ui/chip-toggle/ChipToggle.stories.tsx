@@ -50,6 +50,7 @@ export const Default: Story = {
     count: 23,
     activeColor: 'red',
     mode: 'like',
+    onToggleIcon: () => {},
   },
 };
 
@@ -61,6 +62,7 @@ export const Clicked: Story = {
     count: 23,
     activeColor: 'red',
     mode: 'like',
+    onToggleIcon: () => {},
   },
 };
 

@@ -1,5 +1,6 @@
 'use client';
 
+import { POST_CATEGORIES, PostCategory } from '@/entities/post/model/constants';
 import { usePicker } from '@/shared/hooks/usePicker';
 import { AccordionSelect } from '@/shared/ui/accordion/AccordionSelect';
 import { Header, HeaderMode } from '@/shared/ui/header/Header';
@@ -8,9 +9,9 @@ import { useState } from 'react';
 import { Sheet as ModalSheet } from 'react-modal-sheet';
 
 export default function PostPage() {
-  const { isOpen, open, close, value, select } = usePicker<string>();
+  const { isOpen, open, close, value, select } = usePicker<PostCategory>();
   const sheetId = 'post-category-sheet';
-  const items = ['행사', '활동', '제휴', '릴리즈', '기타'];
+  const items = POST_CATEGORIES;
 
   const [title, setTitle] = useState('');
 
@@ -27,7 +28,7 @@ export default function PostPage() {
       {/* 카테고리 선택 */}
       <div className="px-13">
         <AccordionSelect
-          title={value ?? '행사'}
+          title={value ?? '카테고리를 선택하세요'}
           isOpen={isOpen}
           onClick={open}
           controlsId={sheetId}

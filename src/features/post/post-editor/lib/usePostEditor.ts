@@ -10,6 +10,9 @@ export const usePostEditor = (initialContent?: string) => {
     editorProps: {
       attributes: {
         class: '',
+        role: 'textbox',
+        'aria-multiline': 'true',
+        'aria-label': '게시글 편집기',
       },
     },
     immediatelyRender: false,

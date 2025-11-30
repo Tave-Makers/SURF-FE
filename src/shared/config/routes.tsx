@@ -128,16 +128,6 @@ export const createRouteConfig = (router: RouterInstance): RouteConfig[] => [
     },
   },
   {
-    id: 'mypage-faq',
-    path: '/mypage/settings/faq',
-    backPath: '/mypage/settings',
-    header: {
-      mode: HeaderMode.Default,
-      title: 'FAQ',
-      hasLeftIcon: true,
-    },
-  },
-  {
     id: 'mypage-feedback',
     path: '/mypage/settings/feedback',
     backPath: '/mypage/settings',
@@ -205,6 +195,17 @@ export const createRouteConfig = (router: RouterInstance): RouteConfig[] => [
     backPath: '/mypage', // 임시
     header: {
       mode: HeaderMode.Default,
+      hasLeftIcon: true,
+    },
+  },
+
+  {
+    id: 'home-calendar',
+    path: '/home/calendar',
+    backPath: '/home',
+    header: {
+      mode: HeaderMode.Default,
+      title: '일정',
       hasLeftIcon: true,
     },
   },

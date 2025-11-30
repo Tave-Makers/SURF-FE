@@ -2,7 +2,7 @@
 
 import type { Meta, StoryObj } from '@storybook/nextjs';
 import { ImageList } from './ImageList';
-import { useImageUpload } from '@/shared/hooks/useImageUpload';
+import { useImageSelector } from '@/shared/hooks/useImageSelector';
 
 const meta: Meta<typeof ImageList> = {
   title: 'Entities/UI/Post/PostImage/ImageList',
@@ -21,7 +21,7 @@ type Story = StoryObj<typeof ImageList>;
 export const Default: Story = {
   render: () => {
     const { inputRef, images, openPicker, handleSelect, handleRemove, handleReorder } =
-      useImageUpload();
+      useImageSelector();
 
     return (
       <div className="flex w-[360px] flex-col items-center gap-4 rounded-lg border border-gray-200 p-4">

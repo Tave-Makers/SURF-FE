@@ -56,7 +56,7 @@ type CalendarProps = {
 export default function Calendar({ month, onMonthChange, schedules }: CalendarProps) {
   // const router = useRouter();
   const [selectedDay, setSelectedDay] = useState<Date>(new Date());
-  const memberRole = useAuthStore.getState().memberRole || 'member';
+  const memberRole = useAuthStore((state) => state.memberRole) || 'member';
 
   // 날짜 선택 핸들러
   const handleDaySelect = (date: Date | undefined) => {

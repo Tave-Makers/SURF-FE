@@ -10,7 +10,7 @@ import { useAuthStore } from '@/features/auth/model/useAuthStore';
 export function CalendarPage() {
   const router = useRouter();
   const [month, setMonth] = useState<Date>(new Date());
-  const memberRole = useAuthStore.getState().memberRole || 'member';
+  const memberRole = useAuthStore((state) => state.memberRole) || 'member';
   const { data: schedules = {} } = useCalendarSchedule(month.getFullYear(), month.getMonth() + 1);
 
   const handleCreateSchedule = () => {

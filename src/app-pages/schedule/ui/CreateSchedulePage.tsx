@@ -17,12 +17,28 @@ export default function CreateSchedulePage() {
 
   const [showExitAlert, setShowExitAlert] = useState(false);
 
+  // 시작일/마감일 분 단위 00분과 30분으로 초기화 헬퍼함수
+  const getInitialDate = () => {
+    const date = new Date();
+    const minutes = date.getMinutes();
+
+    // 30분 이상이면 30분, 30분 미만이면 0분으로 설정 (버림 기준)
+    // 예: 10:45 -> 10:30, 10:15 -> 10:00
+    const newMinutes = minutes >= 30 ? 30 : 0;
+
+    date.setMinutes(newMinutes);
+    date.setSeconds(0);
+    date.setMilliseconds(0);
+
+    return date;
+  };
+
   const methods = useForm<ScheduleFormData>({
     defaultValues: {
       category: 'regular',
       title: '',
-      startDate: new Date(),
-      endDate: new Date(),
+      startDate: getInitialDate(),
+      endDate: getInitialDate(),
       location: '',
     },
     mode: 'onChange',

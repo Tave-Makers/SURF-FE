@@ -14,35 +14,19 @@ import { ComponentProps } from 'react';
  *
  * @param {ChipToggleProps} props
  * @param {SurfIconName} props.iconName - 표시할 아이콘 이름
- * @param {boolean} [props.isClicked=false] - 현재 클릭 상태 (부모에서 관리)
- * @param {number} [props.count=0] - 숫자 값 (부모에서 관리)
- * @param {(newState: boolean) => void} [props.onToggleIcon] - 아이콘 클릭 시 호출되는 콜백
- * @param {ActiveColorVariant} [props.activeColor='red'] - 활성화 상태일 때 적용할 색상 클래스
+ * @param {boolean} props.isClicked=false - 현재 클릭 상태 (부모에서 관리)
+ * @param {number} props.count=0 - 숫자 값 (부모에서 관리)
+ * @param {(newState: boolean) => void} props.onToggleIcon - 아이콘 클릭 시 호출되는 콜백
+ * @param {ActiveColorVariant} props.activeColor='red' - 활성화 상태일 때 적용할 색상 클래스
  * @param {() => void} [props.onClickNumber] - 숫자 클릭 시 호출되는 콜백 (없으면 `onToggleIcon`이 기본 실행됨)
  *
- * @example
- * ```tsx
- * const [isClicked, setIsClicked] = useState(false);
- * const [count, setCount] = useState(42);
- *
- * <ChipToggle
- *   iconName="Heart"
- *   isClicked={isClicked}
- *   count={count}
- *   activeColor="foreground-foreground-primary"
- *   onToggleIcon={(newState) => {
- *     setIsClicked(newState);
- *     setCount((prev) => prev + (newState ? 1 : -1));
- *   }}
- *   // onClickNumber를 전달하지 않으면 숫자 클릭 시 자동으로 onToggleIcon 실행
- * />
- * ```
  */
 
 type SurfIconName = ComponentProps<typeof SurfIcon>['name'];
 
 export type ChipToggleProps = {
   iconName: SurfIconName;
+  mode: 'like' | 'scrap';
   isClicked: boolean;
   count: number;
   onToggleIcon: (newState: boolean) => void;
@@ -52,26 +36,27 @@ export type ChipToggleProps = {
 
 export type ActiveColorVariant = 'red' | 'blue';
 
+const baseStyle =
+  'relative flex items-center justify-center gap-8 h-[2.25rem] rounded-max border px-13 w-fit';
+const colorStyle = 'bg-background-background-normal-lighter border-border-border-normal';
+const interactionStyle =
+  'hover:bg-background-background-secondary-darker hover:border-border-border-secondary active:bg-background-background-secondary-darker active:border-border-border-secondary';
+
+// 색상 매핑
+const colorMap: Record<ActiveColorVariant, string> = {
+  red: 'text-foreground-foreground-danger fill-foreground-foreground-danger',
+  blue: 'text-background-background-primary fill-background-background-primary',
+};
+
 export const ChipToggle = ({
   iconName,
+  mode,
   isClicked,
   count,
   onToggleIcon,
   onClickNumber,
   activeColor,
 }: ChipToggleProps) => {
-  const baseStyle =
-    'relative flex items-center justify-center gap-8 h-[2.25rem] rounded-max border px-13 w-fit';
-  const colorStyle = 'bg-background-background-normal-lighter border-border-border-normal';
-  const interactionStyle =
-    'hover:bg-background-background-secondary-darker hover:border-border-border-secondary active:bg-background-background-secondary-darker active:border-border-border-secondary';
-
-  // 색상 매핑
-  const colorMap: Record<ActiveColorVariant, string> = {
-    red: 'text-foreground-foreground-danger fill-foreground-foreground-danger',
-    blue: 'text-background-background-primary fill-background-background-primary',
-  };
-
   const handleToggle = () => {
     onToggleIcon(!isClicked);
   };
@@ -83,7 +68,7 @@ export const ChipToggle = ({
       aria-label={`${iconName} 토글 버튼 그룹`}
     >
       {/* 실제 콘텐츠 */}
-      <div className="pointer-events-none relative z-10 flex items-center justify-center gap-8">
+      <div className="pointer-events-none relative flex h-full items-center justify-center gap-8">
         <SurfIcon
           name={iconName}
           size="s"
@@ -91,10 +76,13 @@ export const ChipToggle = ({
             isClicked ? colorMap[activeColor] : 'text-foreground-foreground-normal'
           }`}
         />
-        <span className="text-body-body7 text-foreground-foreground-normal">{count}</span>
+        {/* like일 경우 숫자 표시 / scrap일 경우 스크랩 표시 */}
+        <span className="text-body-body7 text-foreground-foreground-normal">
+          {mode === 'like' ? count : '스크랩'}
+        </span>
       </div>
 
-      {/* 클릭 영역 1: 아이콘 */}
+      {/* 왼쪽 클릭 영역: 아이콘 */}
       <button
         type="button"
         aria-label={isClicked ? '토글 해제' : '토글'}
@@ -103,7 +91,7 @@ export const ChipToggle = ({
         className="rounded-max absolute inset-y-0 left-0 w-1/2 cursor-pointer"
       />
 
-      {/* 클릭 영역 2: 숫자 */}
+      {/* 오른쪽 클릭 영역 */}
       <button
         type="button"
         onClick={() => {

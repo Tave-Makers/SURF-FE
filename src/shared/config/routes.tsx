@@ -128,16 +128,6 @@ export const createRouteConfig = (router: RouterInstance): RouteConfig[] => [
     },
   },
   {
-    id: 'mypage-faq',
-    path: '/mypage/settings/faq',
-    backPath: '/mypage/settings',
-    header: {
-      mode: HeaderMode.Default,
-      title: 'FAQ',
-      hasLeftIcon: true,
-    },
-  },
-  {
     id: 'mypage-feedback',
     path: '/mypage/settings/feedback',
     backPath: '/mypage/settings',
@@ -205,6 +195,46 @@ export const createRouteConfig = (router: RouterInstance): RouteConfig[] => [
     backPath: '/mypage', // 임시
     header: {
       mode: HeaderMode.Default,
+      hasLeftIcon: true,
+    },
+  },
+  {
+    id: 'board',
+    path: '/board',
+    backPath: '/home', // 임시
+    header: {
+      mode: HeaderMode.Default,
+      title: '공지사항',
+      hasLeftIcon: true,
+      icons: [
+        {
+          label: 'Search',
+          onClickIcon: () => {
+            router.push('/board/search');
+          },
+        },
+      ],
+    },
+  },
+  {
+    id: 'board-search',
+    path: '/board/search',
+    backPath: '/board',
+    header: {
+      mode: HeaderMode.SearchBar,
+      hasLeftIcon: true,
+      value: '',
+      onChange: () => {},
+      onSubmit: () => {},
+    },
+  },
+  {
+    id: 'home-calendar',
+    path: '/home/calendar',
+    backPath: '/home',
+    header: {
+      mode: HeaderMode.Default,
+      title: '일정',
       hasLeftIcon: true,
     },
   },

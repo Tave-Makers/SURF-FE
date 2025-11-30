@@ -9,6 +9,9 @@ import { EventCard } from '@/entities/calendar/ui/EventCard/EventCard';
 import sanitizeHtml, { IOptions } from 'sanitize-html';
 
 export function PostBodySection({ post }: { post: PostDetail }) {
+  const SAMPLE_START_DATE = new Date('2025-11-08T14:00:00');
+  const SAMPLE_END_DATE = new Date('2025-11-08T18:00:00');
+
   const likeMutation = useToggleLikeMutation();
   const scrapMutation = useToggleScrapMutation();
 
@@ -68,7 +71,15 @@ export function PostBodySection({ post }: { post: PostDetail }) {
 
       {/* 일정카드 */}
       {post.hasSchedule && (
-        <EventCard title="후반기 만남의 장" type="official" mode="reservation" place="추후 공지" />
+        <EventCard
+          title="후반기 만남의 장"
+          category="official"
+          mode="reservation"
+          location="추후 공지"
+          id={1}
+          startDate={SAMPLE_START_DATE}
+          endDate={SAMPLE_END_DATE}
+        />
       )}
 
       {/* 좋아요 및 스크랩 */}
@@ -80,6 +91,7 @@ export function PostBodySection({ post }: { post: PostDetail }) {
           iconName="Heart"
           activeColor="red"
           onClickNumber={() => alert('좋아요 누른 사람 목록')}
+          mode="like"
         />
         <ChipToggle
           isClicked={post.scrappedByMe}
@@ -87,6 +99,7 @@ export function PostBodySection({ post }: { post: PostDetail }) {
           onToggleIcon={handleScrapToggle}
           activeColor="blue"
           iconName="Bookmark"
+          mode="scrap"
         />
       </div>
     </div>

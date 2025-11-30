@@ -20,14 +20,14 @@ type Props = {
 export const PostListContainer = ({ boardId, category, userLevel }: Props) => {
   const router = useRouter();
 
-  const { data, fetchNextPage, hasNextPage, isFetchingNextPage, isLoading } = useInfiniteBoardPosts(
-    { boardId, category },
-  );
+  const { data, fetchNextPage, hasNextPage, isFetchingNextPage, isLoading, error } =
+    useInfiniteBoardPosts({ boardId, category });
 
   const loadMoreRef = useInfiniteScroll({
     enabled: true,
     hasNextPage,
     onLoadMore: () => void fetchNextPage(),
+    isFetching: isFetchingNextPage,
   });
 
   const posts = data?.pages.flatMap((page) => page.content.map(transformListItemToPost)) ?? [];
@@ -57,6 +57,7 @@ export const PostListContainer = ({ boardId, category, userLevel }: Props) => {
         onPostClick={handlePostCardClick}
         shouldShowCategoryBadge={showCategoryBadge}
         shouldShowReservationBadge={showReservationBadge}
+        error={error}
       />
     </div>
   );

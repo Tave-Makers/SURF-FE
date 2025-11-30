@@ -4,15 +4,19 @@ import { useSearchParams, useRouter } from 'next/navigation';
 import { PostListContainer } from '@/widgets/post-list/ui/PostListContainer';
 import { Tab } from '@/shared/ui/tab/Tab';
 import { useAuthStore } from '@/features/auth/model/useAuthStore';
-import { TAB_CATEGORIES } from '@/entities/post/model/tab';
+import { TAB_CATEGORIES, TAB_CATEGORY_LIST } from '@/entities/post/model/tab';
 
-export default function PostPage() {
+export default function BoardPage() {
   const params = useSearchParams();
   const router = useRouter();
 
-  const boardId = Number(params.get('boardId') ?? 1);
+  const rawBoardId = Number(params.get('boardId'));
+  const boardId = Number.isNaN(rawBoardId) || rawBoardId <= 0 ? 1 : rawBoardId;
 
-  const categoryKey = (params.get('category') ?? 'all') as keyof typeof TAB_CATEGORIES;
+  const rawCategory = params.get('category') ?? 'all';
+  const categoryKey = (
+    rawCategory in TAB_CATEGORIES ? rawCategory : 'all'
+  ) as keyof typeof TAB_CATEGORIES;
 
   const userLevel = useAuthStore((state) => state.memberRole) ?? 'member';
 
@@ -22,18 +26,7 @@ export default function PostPage() {
 
   return (
     <div className="flex h-full flex-col">
-      <Tab
-        items={[
-          { value: 'all', label: '전체' },
-          { value: 'event', label: '행사' },
-          { value: 'activity', label: '활동' },
-          { value: 'partnership', label: '제휴' },
-          { value: 'patch', label: '패치' },
-          { value: 'etc', label: '기타' },
-        ]}
-        value={categoryKey}
-        onValueChange={handleCategoryChange}
-      />
+      <Tab items={TAB_CATEGORY_LIST} value={categoryKey} onValueChange={handleCategoryChange} />
 
       <div className="flex flex-1 overflow-auto px-13 pt-13">
         <PostListContainer boardId={boardId} category={categoryKey} userLevel={userLevel} />

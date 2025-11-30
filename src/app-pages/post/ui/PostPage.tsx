@@ -1,6 +1,6 @@
 'use client';
 
-import { POST_CATEGORIES, PostCategory } from '@/entities/post/model/constants';
+import { POST_CATEGORIES, PostCategoryKey } from '@/entities/post/model/category';
 import { createPost } from '@/features/post/create-post/api/createPost';
 import { usePicker } from '@/shared/hooks/usePicker';
 import { AccordionSelect } from '@/shared/ui/accordion/AccordionSelect';
@@ -23,8 +23,8 @@ export default function PostPage() {
     close,
     value: category,
     select,
-  } = usePicker<PostCategory>({
-    defaultValue: POST_CATEGORIES[0],
+  } = usePicker<PostCategoryKey>({
+    defaultValue: 'event',
   });
 
   const [title, setTitle] = useState('');
@@ -53,7 +53,7 @@ export default function PostPage() {
     try {
       const res = await createPost({
         boardId: 1, // 필요시 동적 변경
-        categoryId: category!.id,
+        categoryId: POST_CATEGORIES[category!].id,
         title,
         content,
         pinned: false,
@@ -87,7 +87,7 @@ export default function PostPage() {
       {/* 카테고리 선택 */}
       <div className="px-13">
         <AccordionSelect
-          title={category!.label}
+          title={POST_CATEGORIES[category!].label}
           isOpen={isOpen}
           onClick={open}
           controlsId={sheetId}
@@ -105,13 +105,13 @@ export default function PostPage() {
           <ModalSheet.Header />
           <ModalSheet.Content>
             <div id={sheetId} className="flex flex-col gap-[0.25rem] p-15">
-              {POST_CATEGORIES.map((item) => (
+              {Object.values(POST_CATEGORIES).map((item) => (
                 <button
                   key={item.id}
                   type="button"
-                  onClick={() => select(item)}
+                  onClick={() => select(item.key)}
                   className={`rounded-md px-5 py-10 text-left transition-colors ${
-                    category!.id === item.id
+                    category === item.key
                       ? 'bg-background-background-secondary font-semibold'
                       : 'hover:bg-background-background-secondary'
                   }`}

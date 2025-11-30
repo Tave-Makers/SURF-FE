@@ -1,17 +1,22 @@
 import type { UserProfileApiResponse } from '@/entities/user/api/types';
-import type { YearMonth, CareerDTO, UserProfile, BannerPart } from './types';
+import type {
+  YearMonth,
+  CareerDTO,
+  UserProfile,
+  BannerPart,
+  UserLevel,
+  ServerUserLevel,
+} from './types';
 
-export function mapUserLevel(role: UserProfileApiResponse['data']['role']) {
-  switch (role) {
-    case 'SUPER_MANAGER':
-      return 'superManager' as const;
-    case 'EXECUTIVE_MANAGER':
-      return 'executiveManager' as const;
-    case 'MANAGER':
-      return 'manager' as const;
-    default:
-      return 'member' as const;
-  }
+export function mapUserLevel(role: ServerUserLevel | UserLevel): UserLevel {
+  const map: Record<ServerUserLevel, UserLevel> = {
+    SUPER_MANAGER: 'superManager',
+    EXECUTIVE_MANAGER: 'executiveManager',
+    MANAGER: 'manager',
+    MEMBER: 'member',
+  };
+  if (role in map) return map[role as ServerUserLevel];
+  return role as UserLevel;
 }
 
 export function mapPartToBanner(partKo: string): BannerPart | null {

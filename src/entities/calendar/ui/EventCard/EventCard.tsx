@@ -50,7 +50,7 @@ export function EventCard({
   startDate,
   endDate,
   location,
-  isAdmin = true, // TODO: 실제론 false로 내려줘야 함 (지금은 임시)
+  isAdmin,
   hasNotice = false,
   onClickCard,
   onDeleteSchedule,

@@ -23,9 +23,7 @@ export function CalendarPage() {
         <Calendar month={month} onMonthChange={setMonth} schedules={schedules} />
       </div>
 
-      {(memberRole === 'superManager' ||
-        memberRole === 'executiveManager' ||
-        memberRole === 'manager') && (
+      {memberRole !== 'member' && (
         <div className="absolute right-15 bottom-15 z-50">
           <PostFab onClick={handleCreateSchedule} />
         </div>

@@ -1,24 +1,24 @@
 'use client';
 
 import { useQuery, useInfiniteQuery } from '@tanstack/react-query';
-import { getPosts } from '@/entities/post/api/getPosts';
+import { postApi } from '@/entities/post/api/postApi';
 import { PostListApiResponse } from '@/entities/post/api/types';
 
 /** 내가 작성한 게시글 단일 페이지 조회 */
-export const useMyPosts = (page: number = 0, size: number = 10, sort: string[] = []) => {
+export const useMyPosts = (page: number = 0, size: number = 20, sort: string = '') => {
   return useQuery<PostListApiResponse>({
-    queryKey: ['posts', 'my-posts', page, size, sort.join(',')],
-    queryFn: () => getPosts.getMyPosts({ page, size, sort }),
+    queryKey: ['posts', 'my-posts', page, size, sort],
+    queryFn: () => postApi.getMyPosts({ page, size, sort }),
   });
 };
 
 /** 내가 작성한 게시글 무한 스크롤 조회 */
-export const useInfiniteMyPosts = (size: number = 10, sort: string[] = []) => {
+export const useInfiniteMyPosts = (size: number = 20, sort: string = '') => {
   return useInfiniteQuery<PostListApiResponse>({
-    queryKey: ['posts', 'my-posts', 'infinite', size, sort.join(',')],
+    queryKey: ['posts', 'my-posts', 'infinite', size, sort],
     queryFn: ({ pageParam = 0 }) => {
       const page = pageParam as number;
-      return getPosts.getMyPosts({ page, size, sort });
+      return postApi.getMyPosts({ page, size, sort });
     },
     getNextPageParam: (lastPage) => {
       if (lastPage.last || lastPage.empty || lastPage.numberOfElements === 0) {

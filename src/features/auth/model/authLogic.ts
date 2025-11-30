@@ -1,4 +1,3 @@
-import { getValidStatus } from '@/features/auth/api/getValidStatus';
 import { getKakaoLoginCallback } from '../api/getKakaoLoginCallback';
 import { useAuthStore } from './useAuthStore';
 import { AUTH_EVENTS } from './types';
@@ -13,18 +12,14 @@ export async function handleKakaoLoginCallback(code: string): Promise<string> {
   });
 
   try {
-    const kakaoResponse = await getKakaoLoginCallback(code);
-    const statusResponse = await getValidStatus();
-    const payload = kakaoResponse.data;
-    const payloadStatus = statusResponse.data;
+    const res = await getKakaoLoginCallback(code);
+    const payload = res.data;
 
     setAuth({
       accessToken: payload.accessToken,
       nickname: payload.nickname,
       email: payload.email,
       profileImageUrl: payload.profileImageUrl,
-      memberId: payloadStatus.memberId,
-      memberRole: payloadStatus.memberRole,
     });
 
     return '/home';

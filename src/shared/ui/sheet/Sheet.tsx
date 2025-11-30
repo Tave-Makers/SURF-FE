@@ -1,4 +1,5 @@
 'use client';
+
 import React from 'react';
 import { SolidButton } from '../button/solid-button/SolidButton';
 import { TextButton } from '../button/text-button/TextButton';
@@ -41,7 +42,7 @@ export function Sheet({
     return (
       <div className="flex w-full flex-col gap-[0.62rem]">
         {(primaryBtn || secondaryBtn) && (
-          <div className="flex w-full gap-[0.5rem]">
+          <div className="flex w-full gap-10">
             {secondaryBtn && (
               <SolidButton
                 type="button"
@@ -69,7 +70,7 @@ export function Sheet({
   };
 
   return (
-    <div className="flex w-full flex-col items-start gap-15 rounded-t-[0.5rem] bg-white px-[1.25rem] pb-[1.25rem]">
+    <div className="rounded-t-4 flex w-full flex-col items-start gap-15 bg-white px-15 pt-11 pb-15">
       <div className={`flex w-full flex-col items-start ${title ? 'gap-15' : ''}`}>
         {renderTitleSection()}
         <div

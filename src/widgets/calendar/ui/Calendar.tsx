@@ -139,7 +139,7 @@ export default function Calendar({ month, onMonthChange, schedules }: CalendarPr
                 location={_ev.location || '미정'}
                 hasNotice={_ev.hasNotice}
                 postId={_ev.postId}
-                isAdmin={memberRole !== 'member'}
+                isAdmin={memberRole !== 'member' || false}
                 // onClickCard={() => router.push(`/board/${_ev.boardId}/post/${_ev.postId}`)}
               />
             )}

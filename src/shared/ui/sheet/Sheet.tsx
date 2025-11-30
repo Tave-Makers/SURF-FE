@@ -73,7 +73,7 @@ export function Sheet({
       <div className={`flex w-full flex-col items-start ${title ? 'gap-15' : ''}`}>
         {renderTitleSection()}
         <div
-          className="max-h-[40vh] w-full overflow-y-auto [&::-webkit-scrollbar]:hidden"
+          className="scroll-hide max-h-[308px] w-full overflow-y-auto"
           onPointerDown={(e) => e.stopPropagation()}
           onPointerMove={(e) => e.stopPropagation()}
         >

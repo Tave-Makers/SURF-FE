@@ -1,4 +1,4 @@
-import type { Meta, StoryObj } from '@storybook/nextjs-vite';
+import type { Meta, StoryObj } from '@storybook/nextjs';
 import { useState } from 'react';
 import { ChipToggle } from './ChipToggle';
 
@@ -49,6 +49,7 @@ export const Default: Story = {
     isClicked: false,
     count: 23,
     activeColor: 'red',
+    mode: 'like',
   },
 };
 
@@ -59,6 +60,7 @@ export const Clicked: Story = {
     isClicked: true,
     count: 23,
     activeColor: 'red',
+    mode: 'like',
   },
 };
 
@@ -89,6 +91,7 @@ export const WithoutNumberClick: Story = {
     isClicked: false,
     count: 42,
     activeColor: 'red',
+    mode: 'like',
   },
 };
 
@@ -124,6 +127,7 @@ export const WithNumberClick: Story = {
     isClicked: false,
     count: 42,
     activeColor: 'red',
+    mode: 'like',
   },
 };
 
@@ -153,5 +157,6 @@ export const ScrapButton: Story = {
     iconName: 'Bookmark',
     isClicked: false,
     count: 42,
+    mode: 'scrap',
   },
 };

@@ -20,29 +20,13 @@ import { ComponentProps } from 'react';
  * @param {ActiveColorVariant} [props.activeColor='red'] - 활성화 상태일 때 적용할 색상 클래스
  * @param {() => void} [props.onClickNumber] - 숫자 클릭 시 호출되는 콜백 (없으면 `onToggleIcon`이 기본 실행됨)
  *
- * @example
- * ```tsx
- * const [isClicked, setIsClicked] = useState(false);
- * const [count, setCount] = useState(42);
- *
- * <ChipToggle
- *   iconName="Heart"
- *   isClicked={isClicked}
- *   count={count}
- *   activeColor="foreground-foreground-primary"
- *   onToggleIcon={(newState) => {
- *     setIsClicked(newState);
- *     setCount((prev) => prev + (newState ? 1 : -1));
- *   }}
- *   // onClickNumber를 전달하지 않으면 숫자 클릭 시 자동으로 onToggleIcon 실행
- * />
- * ```
  */
 
 type SurfIconName = ComponentProps<typeof SurfIcon>['name'];
 
 export type ChipToggleProps = {
   iconName: SurfIconName;
+  mode: 'like' | 'scrap';
   isClicked: boolean;
   count: number;
   onToggleIcon: (newState: boolean) => void;
@@ -54,6 +38,7 @@ export type ActiveColorVariant = 'red' | 'blue';
 
 export const ChipToggle = ({
   iconName,
+  mode,
   isClicked,
   count,
   onToggleIcon,
@@ -83,7 +68,7 @@ export const ChipToggle = ({
       aria-label={`${iconName} 토글 버튼 그룹`}
     >
       {/* 실제 콘텐츠 */}
-      <div className="pointer-events-none relative z-10 flex items-center justify-center gap-8">
+      <div className="pointer-events-none relative z-10 flex h-full items-center justify-center gap-8">
         <SurfIcon
           name={iconName}
           size="s"
@@ -91,7 +76,10 @@ export const ChipToggle = ({
             isClicked ? colorMap[activeColor] : 'text-foreground-foreground-normal'
           }`}
         />
-        <span className="text-body-body7 text-foreground-foreground-normal">{count}</span>
+        {/* like일 경우 숫자 표시 / scrap일 경우 스크랩 표시 */}
+        <span className="text-body-body7 text-foreground-foreground-normal leading-none!">
+          {mode === 'like' ? count : '스크랩'}
+        </span>
       </div>
 
       {/* 클릭 영역 1: 아이콘 */}

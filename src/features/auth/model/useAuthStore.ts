@@ -8,6 +8,7 @@ const initialState: AuthData = {
   email: null,
   profileImageUrl: null,
   memberId: null,
+  memberRole: null,
 };
 
 export const useAuthStore = create<AuthState>()(
@@ -18,7 +19,7 @@ export const useAuthStore = create<AuthState>()(
       clearAuth: () => set(initialState),
     }),
     {
-      name: 'auth-storage',
+      name: 'SURF-auth',
     },
   ),
 );

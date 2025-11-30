@@ -1,7 +1,7 @@
 'use client';
 
 import { ScoreMode } from '@/entities/activity-score/model/types';
-import ActivityScoreCard from '@/widgets/activity-score/ActivityScoreCard';
+import ActivityScoreCard from '@/widgets/activity-score/ui/ActivityScoreCard';
 import { ActivityHistoryList } from '@/entities/activity-score/ui/ActivityHistoryList';
 import { Tab } from '@/shared/ui/tab/Tab';
 import { useActivitySummary } from '@/entities/activity-score/model/useActivitySummary';

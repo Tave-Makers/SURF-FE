@@ -1,26 +1,21 @@
-// API 공통 응답 형식
-import { CommonResponse } from '@/shared/api/types';
+import type { CommonResponse } from '@/shared/api/types';
 
-// 응답 Sort
-export type PostSort = {
-  empty: boolean;
-  sorted: boolean;
-  unsorted: boolean;
+// 게시글 상세 이미지 타입
+export type ImageItem = {
+  originalUrl: string;
+  sequence: number;
 };
 
-// 페이지네이션
-export type Pageable = {
-  offset: number;
-  sort: PostSort;
-  paged: boolean;
-  pageNumber: number;
-  pageSize: number;
-  unpaged: boolean;
+// 게시글 상세 이미지 응답 타입
+export type ImageItemResponse = ImageItem & {
+  imageId: number;
+  postId: number;
 };
 
-// 게시물 API 타입
-export type PostContent = {
-  id: number;
+// 게시글 목록
+export type PostListItemResponse = {
+  postId: number;
+  categoryId?: number;
   title: string;
   content: string;
   pinned: boolean;
@@ -28,18 +23,20 @@ export type PostContent = {
   boardId: number;
   scrappedByMe: boolean;
   scrapCount: number;
-  likeByMe: boolean;
+  likedByMe: boolean;
   likeCount: number;
   commentCount: number;
   nickname: string;
+  thumbnailImageUrl: string | null;
+  isReserved: boolean;
+  viewCount: number;
 };
 
-// 게시물 관련 API 응답 전체 타입
-export type PostApiResponse = {
+export type PostListApiResponse = {
   totalPages: number;
   totalElements: number;
   size: number;
-  content: PostContent[];
+  content: PostListItemResponse[];
   number: number;
   sort: PostSort;
   pageable: Pageable;
@@ -49,12 +46,67 @@ export type PostApiResponse = {
   empty: boolean;
 };
 
-// 게시물 관련 API 응답 전체 타입
-export type FullApiResponse = CommonResponse<PostApiResponse>;
+export type FullPostListResponse = CommonResponse<PostListApiResponse>;
 
-// 게시물 API 요청 타입
+// 게시글 단건 조회
+export type PostDetailResponse = {
+  id: number;
+  title: string;
+  content: string;
+  pinned: boolean;
+  postedAt: string;
+  boardId: number;
+  scrappedByMe: boolean;
+  scrapCount: number;
+  likedByMe: boolean;
+  likeCount: number;
+  commentCount: number;
+  nickname: string;
+  imageUrlList: ImageItem[];
+  categoryId: number | null;
+};
+
+export type FullPostDetailResponse = CommonResponse<PostDetailResponse>;
+
+// 게시글 생성/수정
+export type PostMutationResponse = {
+  id: number;
+  title: string;
+  content: string;
+  pinned: boolean;
+  postedAt: string;
+  boardId?: number;
+  categoryId?: number | null;
+  nickname: string;
+};
+
+export type FullPostMutationResponse = CommonResponse<PostMutationResponse>;
+
+export type PostSort = {
+  empty: boolean;
+  sorted: boolean;
+  unsorted: boolean;
+};
+
+export type Pageable = {
+  offset: number;
+  sort: PostSort;
+  paged: boolean;
+  pageNumber: number;
+  pageSize: number;
+  unpaged: boolean;
+};
+
 export type PostApiRequest = {
   page: number;
   size: number;
-  sort: string[];
+  sort: string;
+};
+
+export type GetBoardPostsRequest = {
+  boardId: number;
+  category?: string;
+  page: number;
+  size: number;
+  sort?: string;
 };

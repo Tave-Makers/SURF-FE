@@ -1,46 +1,36 @@
 'use client';
 
-import { useState } from 'react';
+import { useSearchParams, useRouter } from 'next/navigation';
+import { PostListContainer } from '@/widgets/post-list/ui/PostListContainer';
 import { Tab } from '@/shared/ui/tab/Tab';
-import { POST_CATEGORY_LABEL_MAP } from '@/entities/post/model/postCategoryMap';
-import { PostList } from '@/widgets/post-list/ui/PostList';
-import type { CategoryBadge, PostCategory } from '@/entities/post/model/types';
+import { useAuthStore } from '@/features/auth/model/useAuthStore';
+import { TAB_CATEGORIES, TAB_CATEGORY_LIST } from '@/entities/post/model/tab';
 
-export const BoardPage = () => {
-  const [currentCategory, setCurrentCategory] = useState<PostCategory>('all');
-  const categories: CategoryBadge[] = ['event', 'activity', 'partnership', 'release', 'others'];
+export default function BoardPage() {
+  const params = useSearchParams();
+  const router = useRouter();
 
-  const dummyPosts = Array.from({ length: 10 }).map((_, i) => ({
-    id: i,
-    title: `🌟 2025년 제${i + 1}차 부트캠프 일정 안내`,
-    content: `Planit Bootcamp에서 진행되는 ${i + 1}번째 세션에 대한 안내입니다. 자세한 일정과 신청 방법은 공지사항에서 확인해주세요.`,
-    writer: i % 2 === 0 ? '관리자' : '부트캠프 운영팀',
-    date: `2025-11-${(i + 10).toString().padStart(2, '0')}`,
-    likeCount: Math.floor(Math.random() * 20),
-    isLiked: i % 3 === 0,
-    commentCount: Math.floor(Math.random() * 5),
-    category: categories[i % categories.length],
-    isReserved: i % 4 === 0,
-  }));
+  const rawBoardId = Number(params.get('boardId'));
+  const boardId = Number.isNaN(rawBoardId) || rawBoardId <= 0 ? 1 : rawBoardId;
+
+  const rawCategory = params.get('category') ?? 'all';
+  const categoryKey = (
+    rawCategory in TAB_CATEGORIES ? rawCategory : 'all'
+  ) as keyof typeof TAB_CATEGORIES;
+
+  const userLevel = useAuthStore((state) => state.memberRole) ?? 'member';
+
+  const handleCategoryChange = (nextCategoryKey: string) => {
+    router.push(`?boardId=${boardId}&category=${nextCategoryKey}`);
+  };
 
   return (
-    <div className="flex h-full w-full flex-col">
-      <Tab
-        defaultValue="all"
-        items={Object.entries(POST_CATEGORY_LABEL_MAP).map(([value, label]) => ({
-          value,
-          label,
-        }))}
-        onValueChange={(value) => setCurrentCategory(value as PostCategory)}
-      />
-      <div className="flex-1 overflow-y-auto">
-        <PostList
-          posts={dummyPosts}
-          currentCategory={currentCategory}
-          userLevel="manager"
-          showCategoryBadge={true}
-        />
+    <div className="flex h-full flex-col">
+      <Tab items={TAB_CATEGORY_LIST} value={categoryKey} onValueChange={handleCategoryChange} />
+
+      <div className="flex flex-1 overflow-auto px-13 pt-13">
+        <PostListContainer boardId={boardId} category={categoryKey} userLevel={userLevel} />
       </div>
     </div>
   );
-};
+}

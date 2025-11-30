@@ -76,6 +76,7 @@ function PostCardComponent({
               type="button"
               className="flex items-center gap-3"
               aria-pressed={isLiked}
+              aria-label={isLiked ? '' : '내가 좋아요 누른 글'}
               onClick={(e) => {
                 e.stopPropagation();
                 onLikeToggle?.(!isLiked);

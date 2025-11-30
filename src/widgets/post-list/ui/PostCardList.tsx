@@ -45,9 +45,9 @@ function PostCardListComponent({
 
   return (
     <div className="flex flex-1 flex-col">
-      {posts.map((post, index) => (
+      {posts.map((post) => (
         <PostCard
-          key={`${post.postId}-${index}`}
+          key={post.postId}
           post={post}
           currentTabCategory={currentTabCategory}
           userLevel={userLevel}

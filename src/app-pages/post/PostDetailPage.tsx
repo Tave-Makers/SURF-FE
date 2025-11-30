@@ -44,6 +44,7 @@ export default function PostDetailPage({ postId }: PostDetailPageProps) {
       {/* 스크롤 영역 */}
       <div className="scrollbar-hide flex-1 overflow-y-auto">
         <main className="flex flex-col gap-[0.62rem] px-13 pt-13">
+          {/* TODO: 링크 연결 */}
           <PostHeader
             title={post.title}
             category={{ title: post.boardLabel }}

@@ -209,6 +209,16 @@ export const createRouteConfig = (router: RouterInstance): RouteConfig[] => [
     },
   },
   {
+    id: 'home-calendar',
+    path: '/home/calendar',
+    backPath: '/home',
+    header: {
+      mode: HeaderMode.Default,
+      title: '일정',
+      hasLeftIcon: true,
+    },
+  },
+  {
     id: 'board',
     path: '/board',
     backPath: '/home', // 임시

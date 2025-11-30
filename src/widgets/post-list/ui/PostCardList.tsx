@@ -23,7 +23,6 @@ type PostCardListProps = {
 function PostCardListComponent({
   posts,
   currentTabCategory,
-  userLevel,
   isLoading = false,
   isFetchingNextPage = false,
   hasNextPage = false,
@@ -61,7 +60,6 @@ function PostCardListComponent({
           key={post.postId}
           post={post}
           currentTabCategory={currentTabCategory}
-          userLevel={userLevel}
           onClick={() => onPostClick?.(post)}
           shouldShowCategoryBadge={shouldShowCategoryBadge}
           shouldShowReservationBadge={shouldShowReservationBadge}

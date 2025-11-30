@@ -36,7 +36,6 @@ export const Default: Story = {
   args: {
     post: mockPost,
     currentTabCategory: '전체',
-    userLevel: 'member',
   },
 };
 
@@ -48,7 +47,6 @@ export const Liked: Story = {
       likeCount: 99,
     },
     currentTabCategory: '전체',
-    userLevel: 'member',
   },
 };
 
@@ -59,7 +57,6 @@ export const AdminView: Story = {
       isReserved: true,
     },
     currentTabCategory: '행사',
-    userLevel: 'manager',
   },
 };
 
@@ -70,6 +67,5 @@ export const WithoutThumbnail: Story = {
       thumbnailUrl: undefined,
     },
     currentTabCategory: '패치',
-    userLevel: 'member',
   },
 };

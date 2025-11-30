@@ -4,7 +4,6 @@ import { memo } from 'react';
 import { SurfIcon } from '@/shared/ui/icon/SurfIcon';
 import { PostBadge } from '@/entities/post/ui/post-badge/PostBadge';
 import { Post } from '../../model/types';
-import type { UserLevel } from '@/entities/user/model/types';
 import type { TabCategoryLabel } from '@/entities/post/model/tab';
 import { stripHtml } from '@/shared/lib/stripHtml';
 import { toDate, toKST, timeAgo } from '@/shared/utils/date';
@@ -12,7 +11,6 @@ import { toDate, toKST, timeAgo } from '@/shared/utils/date';
 type PostCardProps = {
   post: Post;
   currentTabCategory?: TabCategoryLabel;
-  userLevel: UserLevel;
   onClick?: () => void;
   onLikeToggle?: (newState: boolean) => void;
   shouldShowCategoryBadge?: boolean;

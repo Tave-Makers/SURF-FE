@@ -1,79 +1,68 @@
 'use client';
 
 import Image from 'next/image';
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import DEFAULT_PROFILE_IMAGE from '@/shared/assets/icons/profile/profile-default.png';
+
+/**
+ *
+ * @param src - 이미지 URL (선택). 없거나 로드 실패 시 기본 프로필 이미지로 대체
+ * @param size - 아바타 크기 (기본: 'l'). 'xs' | 's' | 'm' | 'l' | 'xl'
+ * @param priority - Next.js Image priority 속성 (LCP 최적화용)
+ * @param className - 추가 CSS 클래스
+ * @param alt - 이미지 대체 텍스트 (기본: '프로필 이미지')
+ * @param onClick - 클릭 핸들러. 제공 시 button 요소로 렌더링되어 접근성 향상
+ *
+ */
 
 export type AvatarSize = 'xs' | 's' | 'm' | 'l' | 'xl';
 
-const sizes = {
-  xs: { cls: 'w-[1.5rem] h-[1.5rem]', px: 24 },
-  s: { cls: 'w-[2.25rem] h-[2.25rem]', px: 36 },
-  m: { cls: 'w-[2.5rem]  h-[2.5rem]', px: 40 },
-  l: { cls: 'w-[4.5rem]  h-[4.5rem]', px: 72 },
-  xl: { cls: 'w-[6rem]    h-[6rem]', px: 96 },
+const sizesStyle = {
+  xs: { cls: 'w-[1.5rem] h-[1.5rem]', px: 24, rounded: 'rounded-3' },
+  s: { cls: 'w-[2.25rem] h-[2.25rem]', px: 36, rounded: 'rounded-4' },
+  m: { cls: 'w-[2.5rem]  h-[2.5rem]', px: 40, rounded: 'rounded-4' },
+  l: { cls: 'w-[4.5rem]  h-[4.5rem]', px: 72, rounded: 'rounded-4' },
+  xl: { cls: 'w-[6rem]    h-[6rem]', px: 96, rounded: 'rounded-4' },
 } as const;
 
 export type AvatarProps = {
   src?: string;
   size?: AvatarSize;
-  className?: string;
   priority?: boolean;
+  className?: string;
   alt?: string;
+  onClick?: () => void;
 };
 
-export function Avatar({ src, size = 'l', className, priority, alt = '' }: AvatarProps) {
+export function Avatar({
+  src,
+  size = 'l',
+  priority,
+  className = '',
+  alt = '프로필 이미지',
+  onClick,
+}: AvatarProps) {
   const [error, setError] = useState(false);
-  const [loading, setLoading] = useState(!!src);
 
-  useEffect(() => {
-    setError(false);
-    setLoading(!!src);
-  }, [src]);
+  const base = `relative flex items-center justify-center flex-shrink-0 aspect-square ${sizesStyle[size].rounded} overflow-hidden ${sizesStyle[size].cls}`;
 
-  const base = `relative flex items-center justify-center flex-shrink-0 aspect-square 
-     rounded-[0.5rem] overflow-hidden bg-black/5 ${sizes[size].cls}`;
+  const imageSrc = !error && src ? src : DEFAULT_PROFILE_IMAGE;
 
-  const fallback = (
-    <Image
-      src={DEFAULT_PROFILE_IMAGE}
-      alt={alt}
-      fill
-      sizes={`${sizes[size].px}px`}
-      className="object-cover"
-    />
-  );
+  // interactive 여부에 따라 wrapper element 결정
+  const Wrapper = onClick ? 'button' : 'div';
+  const wrapperProps = onClick ? { onClick, type: 'button' as const } : {};
 
   return (
-    <div className={className ? `${base} ${className}` : base} aria-busy={loading}>
-      {src && !error ? (
-        <>
-          {loading && (
-            <div
-              className={`${sizes[size].cls} bg-background-quaternary animate-pulse`}
-              role="status"
-              aria-label="프로필 이미지 로딩 중"
-            />
-          )}
-          <Image
-            src={src}
-            alt={alt}
-            fill
-            sizes={`${sizes[size].px}px`}
-            className={`object-cover transition-opacity duration-100 ${
-              loading ? 'opacity-0' : 'opacity-100'
-            }`}
-            onError={() => {
-              setError(true);
-              setLoading(false);
-            }}
-            onLoadingComplete={() => setLoading(false)}
-            priority={priority}
-          />
-        </>
-      ) : (
-        fallback
-      )}
-    </div>
+    <Wrapper className={`${base} ${className}`} {...wrapperProps}>
+      <Image
+        src={imageSrc}
+        alt={alt}
+        fill
+        sizes={`${sizesStyle[size].px}px`}
+        className="object-cover"
+        priority={priority}
+        onError={() => setError(true)}
+      />
+    </Wrapper>
   );
 }

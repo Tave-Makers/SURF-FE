@@ -2,41 +2,45 @@
 
 import { useEffect, useRef, useCallback } from 'react';
 import type { InfiniteData, UseInfiniteQueryResult } from '@tanstack/react-query';
-import { transformApiResponseToPosts } from '@/entities/post/api/mappers';
-import type { PostContent } from '@/entities/post/api/types';
-import { PostList } from '@/widgets/post-list/ui/PostList';
+import { transformListItemToPost } from '@/entities/post/model/mappers';
+import type { PostListItemResponse } from '@/entities/post/api/types';
+import { PostCardList } from '@/widgets/post-list/ui/PostCardList';
 import { Post } from '@/entities/post/model/types';
+import type { UserLevel } from '@/entities/user/model/types';
 
 // 서버 응답 data 페이지 당 타입
 type ApiPage = {
-  content: PostContent[];
+  content: PostListItemResponse[];
 };
 
 // 무한 스크롤 훅 응답 타입
 type UseInfinitePostsQueryResult = UseInfiniteQueryResult<InfiniteData<ApiPage>, Error>;
 
 type PostListPageProps = {
-  useInfiniteQueryHook: (size: number, sort: string[]) => UseInfinitePostsQueryResult;
+  useInfiniteQueryHook: (size: number, sort: string) => UseInfinitePostsQueryResult;
   onPostClick?: (post: Post) => void;
   scrollRootRef?: React.RefObject<HTMLDivElement | null>;
   // 추후 MVP에서 단일 페이지 조회 훅도 추가 될 수 있음
+  userLevel: UserLevel;
 };
 
 export function PostListPage({
   useInfiniteQueryHook,
   onPostClick,
   scrollRootRef,
+  userLevel,
 }: PostListPageProps) {
   // 화면 하단 DOM 요소 참조
   const loadMoreRef = useRef<HTMLDivElement | null>(null);
-  const size = 10;
-  const sort: string[] = []; // 추후 정렬 기능 구현 시 동적으로 변경
+  const size = 20;
+  const sort: string = ''; // 추후 정렬 기능 구현 시 동적으로 변경
 
   const { data, isLoading, error, fetchNextPage, hasNextPage, isFetchingNextPage } =
     useInfiniteQueryHook(size, sort);
 
   // 모든 페이지의 게시글을 하나의 배열로 합치기
-  const allPosts = data?.pages.flatMap((page) => transformApiResponseToPosts(page)) ?? [];
+  const allPosts =
+    data?.pages.flatMap((page) => page.content.map((item) => transformListItemToPost(item))) ?? [];
 
   // IntersectionObserver로 sentinel 감시
   useEffect(() => {
@@ -82,13 +86,16 @@ export function PostListPage({
 
   // 게시글 목록 렌더링
   return (
-    <PostList
+    <PostCardList
       posts={allPosts}
       isLoading={isLoading}
       isFetchingNextPage={isFetchingNextPage}
       hasNextPage={hasNextPage}
       onPostClick={handlePostClick}
       loadMoreRef={loadMoreRef}
+      shouldShowCategoryBadge={false}
+      shouldShowReservationBadge={false}
+      userLevel={userLevel}
     />
   );
 }

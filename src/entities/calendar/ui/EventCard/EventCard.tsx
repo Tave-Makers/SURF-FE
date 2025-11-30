@@ -34,17 +34,11 @@ export type EventCardProps = {
   startDate: Date | null;
   endDate: Date | null;
   location?: string;
-  startDate: Date | null;
-  endDate: Date | null;
-  location?: string;
   hasNotice?: boolean;
-  postId?: number;
-  isAdmin?: boolean;
   postId?: number;
   isAdmin?: boolean;
   onClickCard?: () => void;
   onDeleteSchedule?: () => void;
-  mode?: EventCardType;
   mode?: EventCardType;
 };
 
@@ -60,8 +54,6 @@ export function EventCard({
   hasNotice = false,
   onClickCard,
   onDeleteSchedule,
-  mode,
-  postId,
   mode,
   postId,
 }: EventCardProps) {

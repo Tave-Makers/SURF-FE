@@ -1,5 +1,3 @@
-'use client';
-
 import { axiosInstance } from '@/shared/lib/axiosInstance';
 import type {
   FullPostListResponse,

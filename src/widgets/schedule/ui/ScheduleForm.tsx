@@ -139,7 +139,7 @@ export default function ScheduleForm({ mode, id, onSubmit }: SchedulCreateFormPr
                 isOpen={isCategoryOpen}
                 onClose={() => setIsCategoryOpen(false)}
                 aria-labelledby="select-sheet"
-                className="flex w-full"
+                className="mx-auto flex w-full sm:w-[360px]"
               >
                 <ModalSheet.Container>
                   <ModalSheet.Header />
@@ -194,7 +194,7 @@ export default function ScheduleForm({ mode, id, onSubmit }: SchedulCreateFormPr
       </div>
 
       {/* 구분선 */}
-      <div className="border-border-border-tertiary mt-[1.31rem] h-[0.06rem] self-stretch" />
+      <hr className="border-border-border-tertiary mt-[1.31rem] h-[0.06rem] w-full self-stretch" />
 
       {/* 시작일/마감일 */}
       <div>
@@ -213,7 +213,7 @@ export default function ScheduleForm({ mode, id, onSubmit }: SchedulCreateFormPr
               <ModalSheet
                 isOpen={isStartDateOpen}
                 onClose={handleCancelStartDate}
-                className="flex w-full"
+                className="mx-auto flex w-full sm:w-[360px]"
               >
                 <ModalSheet.Container>
                   <ModalSheet.Header />
@@ -250,7 +250,7 @@ export default function ScheduleForm({ mode, id, onSubmit }: SchedulCreateFormPr
       </div>
 
       {/* 구분선 */}
-      <div className="border-border-border-tertiary h-[0.06rem] self-stretch" />
+      <hr className="border-border-border-tertiary h-[0.06rem] w-full self-stretch" />
 
       <div>
         <Controller
@@ -268,7 +268,7 @@ export default function ScheduleForm({ mode, id, onSubmit }: SchedulCreateFormPr
               <ModalSheet
                 isOpen={isEndDateOpen}
                 onClose={handleCancelEndDate}
-                className="flex w-full"
+                className="mx-auto flex w-full sm:w-[360px]"
               >
                 <ModalSheet.Container>
                   <ModalSheet.Header />
@@ -303,7 +303,7 @@ export default function ScheduleForm({ mode, id, onSubmit }: SchedulCreateFormPr
       </div>
 
       {/* 구분선 */}
-      <div className="border-border-border-tertiary h-[0.06rem] self-stretch" />
+      <hr className="border-border-border-tertiary h-[0.06rem] w-full self-stretch" />
 
       {/* 장소(선택) */}
       <div>
@@ -321,7 +321,7 @@ export default function ScheduleForm({ mode, id, onSubmit }: SchedulCreateFormPr
         />
 
         {/* 구분선 */}
-        <div className="border-border-border-tertiary h-[0.06rem] self-stretch" />
+        <hr className="border-border-border-tertiary h-[0.06rem] w-full self-stretch" />
       </div>
     </form>
   );

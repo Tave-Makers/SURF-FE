@@ -16,11 +16,11 @@ export function ScheduleSetting({ title, date, onClick }: ScheduleSettingProps) 
     <button
       type="button"
       onClick={onClick}
-      className="flex w-full flex-row items-center py-7 text-left"
+      className="flex w-full flex-row items-center justify-between py-7 text-left"
     >
-      <div className="text-foreground-foreground-normal text-body-body8 flex flex-1">{title}</div>
+      <div className="text-foreground-foreground-normal text-body-body8 flex shrink-0">{title}</div>
 
-      <div className="text-foreground-foreground-quaternary text-caption-caption2 flex w-full flex-1 flex-row justify-end gap-4">
+      <div className="text-foreground-foreground-quaternary text-caption-caption2 flex w-full flex-row justify-end gap-4">
         <div>{format(date, 'yyyy년 M월 d일 (E)', { locale: ko })}</div>
         <div>{format(date, 'HH:mm', { locale: ko })}</div>
       </div>

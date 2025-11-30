@@ -66,8 +66,10 @@ export function ScheduleLocation({
 
   if (isEditing) {
     return (
-      <div className="flex h-18 w-full flex-row items-center py-7">
-        <div className="text-foreground-foreground-normal text-body-body8 flex flex-1">{title}</div>
+      <div className="flex h-18 w-full flex-row items-center justify-between py-7">
+        <div className="text-foreground-foreground-normal text-body-body8 flex shrink-0">
+          {title}
+        </div>
         <div className="flex flex-1 justify-end">
           <textarea
             ref={inputRef}
@@ -76,7 +78,7 @@ export function ScheduleLocation({
             onChange={handleChange}
             onBlur={handleBlur}
             onKeyDown={handleTextAreaKeyDown}
-            maxLength={13}
+            maxLength={45}
             className="text-foreground-foreground-quaternary text-caption-caption2 w-full resize-none border-none bg-transparent text-right outline-none"
             rows={1}
             style={{ overflow: 'hidden', height: 'auto' }}
@@ -94,13 +96,13 @@ export function ScheduleLocation({
   return (
     <button
       type="button"
-      className="flex h-18 w-full cursor-pointer flex-row items-center py-7 text-left"
+      className="flex h-18 w-full cursor-pointer flex-row items-center justify-between py-7"
       onClick={handleClick}
       onKeyDown={handleKeyDown}
     >
-      <div className="text-foreground-foreground-normal text-body-body8 flex flex-1">{title}</div>
+      <div className="text-foreground-foreground-normal text-body-body8 flex shrink-0">{title}</div>
 
-      <div className="text-foreground-foreground-quaternary text-caption-caption2 flex flex-1 justify-end">
+      <div className="text-foreground-foreground-quaternary text-caption-caption2 line-clamp-1 flex shrink-0">
         {displayValue}
       </div>
     </button>

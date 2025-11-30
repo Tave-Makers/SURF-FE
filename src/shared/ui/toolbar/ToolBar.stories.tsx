@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import type { Meta, StoryObj } from '@storybook/nextjs-vite';
+import type { Meta, StoryObj } from '@storybook/nextjs';
 import { ToolBar } from './ToolBar';
 import { ToolBarItem } from './ToolBar';
 
@@ -18,10 +18,6 @@ const meta: Meta<typeof ToolBar> = {
     className: {
       control: 'text',
       description: '추가 클래스',
-    },
-    activeKey: {
-      control: 'text',
-      description: '현재 활성화된 key',
     },
     onItemClick: {
       action: 'item-click',
@@ -46,7 +42,6 @@ export const Default: Story = {
         <ToolBar
           {...args}
           items={SAMPLE_ITEMS}
-          activeKey={activeKey}
           onItemClick={(key) => {
             setActiveKey(key);
             args.onItemClick?.(key);

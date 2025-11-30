@@ -14,6 +14,7 @@ import { Alert } from '@/shared/ui/alert/Alert';
 import { useRouter } from 'next/navigation';
 import { AppHeader } from '@/widgets/header/ui/AppHeader';
 import { HeaderMode } from '@/shared/ui/header/Header';
+import { useMutation } from '@tanstack/react-query';
 
 type Mode = 'create' | 'edit';
 
@@ -121,10 +122,18 @@ export default function PostPage({ mode, postId }: PostPageProps) {
     initialLoadedRef.current = true;
   }, []);
 
+  /** 게시글 생성 mutation */
+  const { mutateAsync: createMutateAsync, isPending: isCreating } = useMutation({
+    mutationFn: createPost,
+  });
+
   /** 게시글 수정 mutation */
-  const { mutateAsync } = useUpdatePost(Number(postId));
+  const { mutateAsync, isPending: isUpdating } = useUpdatePost(Number(postId));
 
   const handleSubmit = async () => {
+    // 중복 제출 방지
+    if (isCreating || isUpdating) return;
+
     const { content, images } = editorStateRef.current;
 
     // 서버 전송용 이미지 리스트 가공
@@ -137,7 +146,7 @@ export default function PostPage({ mode, postId }: PostPageProps) {
 
     try {
       if (mode === 'create') {
-        const res = await createPost({
+        const res = await createMutateAsync({
           boardId: 1, // 필요시 동적 변경
           categoryId: category!.id,
           title,

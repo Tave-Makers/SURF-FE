@@ -1,4 +1,5 @@
 import type { CommonResponse } from '@/shared/api/types';
+import type { ServerUserLevel } from '../model/types';
 
 // 프로필 API response 원본
 export type UserProfileApiResponse = CommonResponse<{
@@ -7,7 +8,7 @@ export type UserProfileApiResponse = CommonResponse<{
   email: string;
   university: string | null;
   graduateSchool: string | null;
-  role: 'SUPER_MANAGER' | 'EXECUTIVE_MANAGER' | 'MANAGER' | 'MEMBER';
+  role: ServerUserLevel;
   activityScore: number;
   isActive: boolean;
   trackList: Array<{ generation: number; part: string }>;

@@ -78,7 +78,7 @@ export function DateTimePicker({ value, onChange }: DateTimePickerProps) {
   }, [value, getDateWheelIndex]);
 
   // Wheel 선택 변경 시, newDate를 만들고 onChange 호출
-  // 이 onChange는 ScheduleCreateForm에서 임시 상태를 업데이트하는 데 사용됩니다.
+  // 이 onChange는 ScheduleForm에서 임시 상태를 업데이트하는 데 사용됩니다.
   useEffect(() => {
     const selectedDate = ALL_DATES[dateWheelIdx];
     const month = selectedDate.month;

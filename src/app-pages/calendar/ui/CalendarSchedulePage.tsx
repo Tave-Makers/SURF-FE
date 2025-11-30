@@ -2,12 +2,12 @@
 
 import { useMemo } from 'react';
 import { useForm, FormProvider } from 'react-hook-form';
-import ScheduleCreateForm from '@/widgets/schedule/ui/ScheduleCreateForm';
-import { ScheduleFormData } from '@/features/calendar/schedule/model/types';
-import { usePostSchedule } from '@/features/calendar/schedule/model/usePostSchedule';
-import { mapScheduleFormToRequest } from '@/features/calendar/schedule/api/mapper';
+import { ScheduleFormData } from '@/features/calendar/schedule/post/model/types';
+import { usePostSchedule } from '@/features/calendar/schedule/post/model/usePostSchedule';
+import { mapScheduleFormToRequest } from '@/features/calendar/schedule/post/api/mapper';
 import { AppHeader } from '@/widgets/header/ui/AppHeader';
 import { HeaderMode, HeaderProps } from '@/shared/ui/header/Header';
+import ScheduleForm from '@/widgets/schedule/ui/ScheduleForm';
 
 export default function CalendarSchedulePage() {
   const { mutate: createSchedule, isPending } = usePostSchedule();
@@ -16,7 +16,6 @@ export default function CalendarSchedulePage() {
     defaultValues: {
       category: 'regular',
       title: '',
-      content: '',
       startDate: new Date(),
       endDate: new Date(),
       location: '',
@@ -31,10 +30,10 @@ export default function CalendarSchedulePage() {
 
   // 버튼 활성화 조건 검증
   const isFormValid = useMemo(() => {
-    // 제목 검증: 최소 2자 이상
-    const isTitleValid = title.trim().length >= 2;
+    // 제목 검증: 최소 2자 이상 (undefined 방지)
+    const isTitleValid = (title?.trim().length ?? 0) >= 2;
 
-    // 시작일/마감일 검증: 둘 다 선택되어 있고, 마감일이 시작일과 같거나 이후
+    // 시작일/마감일 검증
     const isDateValid =
       startDate instanceof Date &&
       endDate instanceof Date &&
@@ -89,7 +88,7 @@ export default function CalendarSchedulePage() {
 
       <FormProvider {...methods}>
         <div className="px-13">
-          <ScheduleCreateForm onSubmit={handleSubmit} />
+          <ScheduleForm mode="create" onSubmit={handleSubmit} />
         </div>
       </FormProvider>
     </>

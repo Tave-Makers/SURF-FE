@@ -13,7 +13,7 @@ import { DateTimePicker } from '@/entities/schedule/ui/DateTimePicker/DateTimePi
 import { Sheet } from '@/shared/ui/sheet/Sheet';
 import { useGetSingleSchedule } from '@/features/calendar/schedule/edit/model/useGetSingleSchedule';
 
-export type SchedulCreateFormProps = {
+export type ScheduleFormProps = {
   mode: 'create' | 'edit';
   id?: number;
   onSubmit: (data: ScheduleFormData) => void;
@@ -36,14 +36,13 @@ const CATEGORY_OPTIONS: { value: ScheduleCategory; label: string }[] = [
 const getInitialDate = (date?: Date): Date =>
   date instanceof Date && !isNaN(date.getTime()) ? date : new Date();
 
-export default function ScheduleForm({ mode, id, onSubmit }: SchedulCreateFormProps) {
+export default function ScheduleForm({ mode = 'create', id, onSubmit }: ScheduleFormProps) {
   const { control, handleSubmit, watch, reset } = useFormContext<ScheduleFormData>();
 
   const [isCategoryOpen, setIsCategoryOpen] = useState(false);
   const [isStartDateOpen, setIsStartDateOpen] = useState(false);
   const [isEndDateOpen, setIsEndDateOpen] = useState(false);
 
-  // 🔥 edit 모드에서 scheduleId로 단건조회
   const scheduleId = id || 0;
   const { data: scheduleDetail } = useGetSingleSchedule(scheduleId, mode);
 

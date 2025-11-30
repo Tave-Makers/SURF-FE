@@ -20,8 +20,6 @@ import { ActivityCategory, EventCardType } from '@/entities/calendar/model/types
  * @param hasNotice - 공지사항 연동 여부
  * @param postId - 연동된 공지사항 게시물 ID
  * @param isAdmin - 관리자 여부
- * @param postId - 연동된 공지사항 게시물 ID
- * @param isAdmin - 관리자 여부
  * @param onClickCard - 카드 전체 클릭 시 호출되는 콜백 함수 (공지사항 바로가기)
  * @param onDeleteSchedule - 일정 삭제 클릭 시 호출되는 콜백 함수 (공지사항 작성 시 삭제하는 콜백 함수)
  * @param mode - 이벤트 카드 모드 (EventCardType: 'reservation', 'calendar' 중 하나)

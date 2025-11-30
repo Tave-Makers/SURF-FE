@@ -17,7 +17,7 @@ type ApiPage = {
 type UseInfinitePostsQueryResult = UseInfiniteQueryResult<InfiniteData<ApiPage>, Error>;
 
 type PostListPageProps = {
-  useInfiniteQueryHook: (size: number, sort: string[]) => UseInfinitePostsQueryResult;
+  useInfiniteQueryHook: (size: number, sort: string) => UseInfinitePostsQueryResult;
   onPostClick?: (post: Post) => void;
   scrollRootRef?: React.RefObject<HTMLDivElement | null>;
   // 추후 MVP에서 단일 페이지 조회 훅도 추가 될 수 있음
@@ -33,7 +33,7 @@ export function PostListPage({
   // 화면 하단 DOM 요소 참조
   const loadMoreRef = useRef<HTMLDivElement | null>(null);
   const size = 20;
-  const sort: string[] = []; // 추후 정렬 기능 구현 시 동적으로 변경
+  const sort: string = ''; // 추후 정렬 기능 구현 시 동적으로 변경
 
   const { data, isLoading, error, fetchNextPage, hasNextPage, isFetchingNextPage } =
     useInfiniteQueryHook(size, sort);

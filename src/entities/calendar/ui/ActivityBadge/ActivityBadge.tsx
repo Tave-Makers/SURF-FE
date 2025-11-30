@@ -2,13 +2,13 @@ import type { DailyActivity } from '@/entities/calendar/model/types';
 
 type Props = { item: DailyActivity; isCurrentMonth?: boolean };
 
-const labelByType: Record<DailyActivity['type'], string> = {
+const labelByType: Record<DailyActivity['category'], string> = {
   official: '공식 일정',
   operation: '운영 일정',
   other: '기타 일정',
 };
 
-const colorByType: Record<DailyActivity['type'], string> = {
+const colorByType: Record<DailyActivity['category'], string> = {
   official: 'bg-background-background-tag-pink text-foreground-foreground-tag-pink-darker',
   operation: 'bg-background-background-tag-purple text-foreground-foreground-tag-purple-darker',
   other: 'bg-background-background-tag-green text-foreground-foreground-tag-green-darker',
@@ -21,8 +21,8 @@ export function ActivityBadge({ item, isCurrentMonth = true }: Props) {
 
   return (
     <div
-      className={`${baseClasses} ${colorByType[item.type]} ${opacityClass}`}
-      aria-label={`${labelByType[item.type]}: ${item.title}`}
+      className={`${baseClasses} ${colorByType[item.category]} ${opacityClass}`}
+      aria-label={`${labelByType[item.category]}: ${item.title}`}
     >
       <span className="truncate">{item.title}</span>
     </div>

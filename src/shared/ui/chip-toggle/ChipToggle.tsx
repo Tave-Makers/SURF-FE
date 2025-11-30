@@ -82,7 +82,7 @@ export const ChipToggle = ({
         </span>
       </div>
 
-      {/* 클릭 영역 1: 아이콘 */}
+      {/* 왼쪽 클릭 영역: 아이콘 */}
       <button
         type="button"
         aria-label={isClicked ? '토글 해제' : '토글'}
@@ -91,7 +91,7 @@ export const ChipToggle = ({
         className="rounded-max absolute inset-y-0 left-0 w-1/2 cursor-pointer"
       />
 
-      {/* 클릭 영역 2: 숫자 */}
+      {/* 오른쪽 클릭 영역 */}
       <button
         type="button"
         onClick={() => {

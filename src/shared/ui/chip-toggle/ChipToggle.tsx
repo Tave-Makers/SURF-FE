@@ -68,7 +68,7 @@ export const ChipToggle = ({
       aria-label={`${iconName} 토글 버튼 그룹`}
     >
       {/* 실제 콘텐츠 */}
-      <div className="pointer-events-none relative z-10 flex h-full items-center justify-center gap-8">
+      <div className="pointer-events-none relative flex h-full items-center justify-center gap-8">
         <SurfIcon
           name={iconName}
           size="s"

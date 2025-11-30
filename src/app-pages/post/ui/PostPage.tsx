@@ -12,7 +12,8 @@ import { usePostDetail } from '@/features/post/get-post/model/usePostDetailQuery
 import { useUpdatePost } from '@/features/post/update-post/model/useUpdatePost';
 import { Alert } from '@/shared/ui/alert/Alert';
 import { useRouter } from 'next/navigation';
-import { PostEditorHeader } from '@/widgets/post/post-header/PostEditorHeader';
+import { AppHeader } from '@/widgets/header/ui/AppHeader';
+import { HeaderMode } from '@/shared/ui/header/Header';
 
 type Mode = 'create' | 'edit';
 
@@ -187,12 +188,17 @@ export default function PostPage({ mode, postId }: PostPageProps) {
   return (
     <div className="flex h-full w-full flex-1 flex-col">
       {/* 상단 헤더 */}
-      <PostEditorHeader
-        mode={mode}
-        title={title}
-        isContentEmpty={isContentEmpty}
-        onSubmit={handleSubmit}
-        onBack={handleAlert}
+      <AppHeader
+        customBack={handleAlert}
+        overrideHeader={{
+          mode: HeaderMode.TextBtn,
+          title: '공지사항',
+          hasLeftIcon: true,
+          text: mode === 'create' ? '등록' : '수정',
+          btnVariant: 'secondary',
+          isDisabled: !title || isContentEmpty,
+          onClickTextBtn: () => void handleSubmit(),
+        }}
       />
 
       {/* 카테고리 선택 */}
@@ -244,7 +250,10 @@ export default function PostPage({ mode, postId }: PostPageProps) {
         <input
           id="post-title"
           value={title}
-          onChange={(e) => setTitle(e.target.value)}
+          onChange={(e) => {
+            const next = e.target.value.slice(0, 50);
+            setTitle(next);
+          }}
           placeholder="제목을 입력해주세요."
           aria-required="true"
           className="text-foreground-foreground-normal placeholder:foreground-foreground-tertiary-lighter text-body-body3 flex flex-1 pt-10 pb-5 focus:outline-none"

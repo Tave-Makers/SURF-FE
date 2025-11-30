@@ -118,7 +118,7 @@ export function PostBodySection({ post }: { post: PostDetail }) {
       {/* 좋아요 누른 사용자 Sheet */}
       {/* ============================= */}
       <ModalSheet isOpen={likedUsersOpen} onClose={() => setLikedUsersOpen(false)}>
-        <ModalSheet.Container className="!right-0 !left-0 mx-auto max-w-[360px]">
+        <ModalSheet.Container className="!right-0 !left-0 mx-auto w-full sm:max-w-[360px]">
           <ModalSheet.Header />
           <ModalSheet.Content>
             <Sheet title="좋아요를 누른 사람">

@@ -10,12 +10,31 @@ const nextConfig = {
     },
   },
 
-    images: {
-    domains: [
-      'img1.kakaocdn.net',
-      't1.kakaocdn.net',
-    ],
-  },
+images: {
+  remotePatterns: [
+    {
+      protocol: 'https',
+      hostname: 'k.kakaocdn.net',
+      pathname: '/**',
+    },
+    {
+      protocol: 'http',
+      hostname: 'k.kakaocdn.net',
+      pathname: '/**',
+    },
+    {
+      protocol: 'https',
+      hostname: 'img1.kakaocdn.net',
+      pathname: '/**',
+    },
+    {
+      protocol: 'https',
+      hostname: 't1.kakaocdn.net',
+      pathname: '/**',
+    },
+  ],
+},
+
 
   webpack(config) {
     const fileLoaderRule = config.module.rules.find(

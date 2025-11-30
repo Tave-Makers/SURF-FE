@@ -10,7 +10,7 @@ import type {
   GetBoardPostsRequest,
 } from './types';
 
-export const getPosts = {
+export const postApi = {
   getMyPosts: async (params: Partial<PostApiRequest>): Promise<PostListApiResponse> => {
     const response = await axiosInstance.get<FullPostListResponse>('/v1/user/posts/me', {
       params,

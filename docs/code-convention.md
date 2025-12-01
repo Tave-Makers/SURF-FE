@@ -41,11 +41,10 @@ fix/navbar-overlap-210
 ## 📩 Commit Convention
 
 ### 1. Commit Message Rules
-- 기본 규칙: **[기능 Type][GitHub 닉네임]: 작업 내용 (#이슈번호 선택)**
+- 기본 규칙: **기능 Type: 작업 내용 (#이슈번호 선택)**
 
 #### Examples
-[feat][rngrhn4114]: 로그인 API 연동 (#39)
-[fix][chaejy]: 비밀번호 유효성 검사 버그 수정 (#52)
+feat: 로그인 API 연동 (#39)
 
 
 ### 2. Commit Types

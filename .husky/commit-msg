@@ -6,7 +6,7 @@ echo "🔍 커밋 메시지 규칙 검사"
 # 일반적으로 $1 로 전달되지만, 혹시 없으면 .git/COMMIT_EDITMSG 로 대체
 MSG_FILE="${1:-.git/COMMIT_EDITMSG}"
 
-# ⚠️ GitHub Desktop (Windows)에서는 줄바꿈이 CRLF(\r\n)로 저장돼서
+# GitHub Desktop (Windows)에서는 줄바꿈이 CRLF(\r\n)로 저장돼서
 # 정규식 검사 시 줄 끝에 \r 이 남아 규칙이 깨질 수 있음
 # → \r 제거해서 LF만 남긴 임시 파일 생성
 TMP_FILE="$(mktemp)"                 # 임시 파일 생성
@@ -17,10 +17,7 @@ tr -d '\r' < "$MSG_FILE" > "$TMP_FILE"  # \r 제거 후 TMP_FILE 에 저장
 if ! pnpm exec commitlint --edit "$TMP_FILE"; then
   echo ""
   echo "❌ 커밋 메시지 규칙 위반"
-  echo "👉 규칙 예시:"
-  echo "   [feat][nickname]: 새로운 기능 추가 (#123)"
-  echo "   [fix][nickname]: 버그 수정 (#99)"
-  echo ""
+  echo "👉 규칙 예시: feat: 새로운 기능 추가 (#123)"
   echo "📖 허용된 타입: feat, fix, refactor, style, format, docs, chore, add, del, test"
   rm -f "$TMP_FILE"   # 임시 파일 정리
   exit 1              # 검사 실패 → 커밋 중단

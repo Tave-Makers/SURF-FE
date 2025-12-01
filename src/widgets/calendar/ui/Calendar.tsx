@@ -5,6 +5,7 @@ import { DayPicker } from 'react-day-picker';
 import type { DayButtonProps, NavProps, MonthProps } from 'react-day-picker';
 import { ko } from 'react-day-picker/locale';
 import 'react-day-picker/style.css';
+// import { useRouter } from 'next/navigation';
 
 import { MonthNavigator } from '@/entities/calendar/ui/MonthNavigator/MonthNavigator';
 import { DayChipRadio } from '@/entities/calendar/ui/DayChipRadio/DayChipRadio';
@@ -12,6 +13,7 @@ import { EventDateCard } from '@/entities/calendar/ui/EventDateCard/EventDateCar
 import type { ActivityMap } from '@/entities/calendar/model/types';
 import { EventCard } from '@/entities/calendar/ui/EventCard/EventCard';
 import { format } from 'date-fns';
+import { useAuthStore } from '@/features/auth/model/useAuthStore';
 
 /**
  * calendarClassNames: DayPicker 컴포넌트의 클래스 네임 커스터마이징 객체
@@ -42,7 +44,7 @@ const calendarClassNames = {
   tfoot: 'hidden',
   weekdays: 'flex flex-1 grid grid-cols-7',
   weekday:
-    'flex-1 min-w-[3.12rem] p-10 text-center text-body-body8 text-foreground-foreground-secondary-lighter',
+    'flex-1 min-w-[2.81rem] p-10 text-center text-body-body8 text-foreground-foreground-secondary-lighter',
 } as const;
 
 type CalendarProps = {
@@ -52,7 +54,9 @@ type CalendarProps = {
 };
 
 export default function Calendar({ month, onMonthChange, schedules }: CalendarProps) {
+  // const router = useRouter();
   const [selectedDay, setSelectedDay] = useState<Date>(new Date());
+  const memberRole = useAuthStore((state) => state.memberRole) || 'member';
 
   // 날짜 선택 핸들러
   const handleDaySelect = (date: Date | undefined) => {
@@ -135,6 +139,8 @@ export default function Calendar({ month, onMonthChange, schedules }: CalendarPr
                 location={_ev.location || '미정'}
                 hasNotice={_ev.hasNotice}
                 postId={_ev.postId}
+                isAdmin={memberRole !== 'member' || false}
+                // onClickCard={() => router.push(`/board/${_ev.boardId}/post/${_ev.postId}`)}
               />
             )}
           />

@@ -1,10 +1,6 @@
 'use client';
 
-import {
-  useState,
-  useMemo,
-  // useEffect
-} from 'react';
+import { useState, useMemo, useEffect } from 'react';
 import { Controller, useFormContext } from 'react-hook-form';
 import { Sheet as ModalSheet } from 'react-modal-sheet';
 import { ScheduleFormData } from '@/features/calendar/schedule/post/model/types';
@@ -15,14 +11,12 @@ import { ScheduleLocation } from '@/entities/schedule/ui/ScheduleLocation/Schedu
 import { EventTitle } from '@/entities/schedule/ui/EventTitle/EventTitle';
 import { DateTimePicker } from '@/entities/schedule/ui/DateTimePicker/DateTimePicker';
 import { Sheet } from '@/shared/ui/sheet/Sheet';
+import { useGetSingleSchedule } from '@/features/calendar/schedule/edit/model/useGetSingleSchedule';
 
-// import { useScheduleById } from '@/features/calendar/schedule/edit/model/useScheduleById';
-
-export type SchedulCreateFormProps = {
+export type ScheduleFormProps = {
   mode: 'create' | 'edit';
   id?: number;
   onSubmit: (data: ScheduleFormData) => void;
-  initialValues?: ScheduleFormData;
 };
 
 // 카테고리 한글 매핑
@@ -42,45 +36,34 @@ const CATEGORY_OPTIONS: { value: ScheduleCategory; label: string }[] = [
 const getInitialDate = (date?: Date): Date =>
   date instanceof Date && !isNaN(date.getTime()) ? date : new Date();
 
-export default function ScheduleForm({
-  // mode,
-  // id,
-  onSubmit,
-  //  initialValues
-}: SchedulCreateFormProps) {
-  const {
-    control,
-    handleSubmit,
-    watch,
-    // reset
-  } = useFormContext<ScheduleFormData>();
+export default function ScheduleForm({ mode = 'create', id, onSubmit }: ScheduleFormProps) {
+  const { control, handleSubmit, watch, reset } = useFormContext<ScheduleFormData>();
 
   const [isCategoryOpen, setIsCategoryOpen] = useState(false);
   const [isStartDateOpen, setIsStartDateOpen] = useState(false);
   const [isEndDateOpen, setIsEndDateOpen] = useState(false);
 
-  // 🔥 edit 모드에서 scheduleId로 단건조회
-  // const scheduleId = id;
-  // const { data: scheduleDetail } = useScheduleById(scheduleId, mode === 'edit');
+  const scheduleId = id || 0;
+  const { data: scheduleDetail } = useGetSingleSchedule(scheduleId, mode);
 
   // edit 모드일 때 한 번 기존 값으로 reset
-  // useEffect(() => {
-  //   if (mode === 'edit' && scheduleDetail) {
-  //     reset({
-  //       category:
-  //         scheduleDetail.category === 'operation'
-  //           ? 'operation'
-  //           : scheduleDetail.category === 'other'
-  //             ? 'other'
-  //             : 'regular',
+  useEffect(() => {
+    if (mode === 'edit' && scheduleDetail) {
+      reset({
+        category:
+          scheduleDetail.category === '운영회의'
+            ? 'operation'
+            : scheduleDetail.category === '기타일정'
+              ? 'other'
+              : 'regular',
 
-  //       title: scheduleDetail.title ?? '',
-  //       startDate: scheduleDetail.startAt ? new Date(scheduleDetail.startAt) : new Date(),
-  //       endDate: scheduleDetail.endAt ? new Date(scheduleDetail.endAt) : new Date(),
-  //       location: scheduleDetail.location ?? '',
-  //     });
-  //   }
-  // }, [mode, scheduleDetail, reset]);
+        title: scheduleDetail.title ?? '',
+        startDate: scheduleDetail.startAt ? new Date(scheduleDetail.startAt) : new Date(),
+        endDate: scheduleDetail.endAt ? new Date(scheduleDetail.endAt) : new Date(),
+        location: scheduleDetail.location ?? '',
+      });
+    }
+  }, [mode, scheduleDetail, reset]);
 
   const selectedCategory = watch('category');
   const watchedStartDate = watch('startDate');
@@ -210,7 +193,7 @@ export default function ScheduleForm({
       </div>
 
       {/* 구분선 */}
-      <div className="border-border-border-tertiary mt-[1.31rem] h-[0.06rem] self-stretch" />
+      <hr className="border-border-border-tertiary mt-[1.31rem] h-[0.06rem] w-full self-stretch" />
 
       {/* 시작일/마감일 */}
       <div>
@@ -229,7 +212,7 @@ export default function ScheduleForm({
               <ModalSheet
                 isOpen={isStartDateOpen}
                 onClose={handleCancelStartDate}
-                className="flex w-full"
+                className="mx-auto flex w-full sm:w-[360px]"
               >
                 <ModalSheet.Container>
                   <ModalSheet.Header />
@@ -266,7 +249,7 @@ export default function ScheduleForm({
       </div>
 
       {/* 구분선 */}
-      <div className="border-border-border-tertiary h-[0.06rem] self-stretch" />
+      <hr className="border-border-border-tertiary h-[0.06rem] w-full self-stretch" />
 
       <div>
         <Controller
@@ -284,7 +267,7 @@ export default function ScheduleForm({
               <ModalSheet
                 isOpen={isEndDateOpen}
                 onClose={handleCancelEndDate}
-                className="flex w-full"
+                className="mx-auto flex w-full sm:w-[360px]"
               >
                 <ModalSheet.Container>
                   <ModalSheet.Header />
@@ -319,7 +302,7 @@ export default function ScheduleForm({
       </div>
 
       {/* 구분선 */}
-      <div className="border-border-border-tertiary h-[0.06rem] self-stretch" />
+      <hr className="border-border-border-tertiary h-[0.06rem] w-full self-stretch" />
 
       {/* 장소(선택) */}
       <div>
@@ -337,7 +320,7 @@ export default function ScheduleForm({
         />
 
         {/* 구분선 */}
-        <div className="border-border-border-tertiary h-[0.06rem] self-stretch" />
+        <hr className="border-border-border-tertiary h-[0.06rem] w-full self-stretch" />
       </div>
     </form>
   );

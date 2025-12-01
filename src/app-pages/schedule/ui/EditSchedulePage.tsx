@@ -2,13 +2,15 @@
 
 import { useParams, useRouter } from 'next/navigation';
 import { useForm, FormProvider } from 'react-hook-form';
+import { useState, useMemo } from 'react';
+import { format } from 'date-fns';
+
 import ScheduleForm from '@/widgets/schedule/ui/ScheduleForm';
 import { ScheduleFormData } from '@/features/calendar/schedule/post/model/types';
 import { useEditSchedule } from '@/features/calendar/schedule/edit/model/useEditSchedule';
 import { mapScheduleFormToRequest } from '@/features/calendar/schedule/post/api/mapper';
 import { AppHeader } from '@/widgets/header/ui/AppHeader';
 import { HeaderMode, HeaderProps } from '@/shared/ui/header/Header';
-import { useState } from 'react';
 import { Alert } from '@/shared/ui/alert/Alert';
 
 export default function EditSchedulePage() {
@@ -44,28 +46,37 @@ export default function EditSchedulePage() {
   const startDate = methods.watch('startDate');
   const endDate = methods.watch('endDate');
 
-  const isFormValid =
-    title.trim().length >= 2 &&
-    startDate instanceof Date &&
-    endDate instanceof Date &&
-    endDate.getTime() >= startDate.getTime();
+  const isFormValid = useMemo(() => {
+    const isTitleValid = (title?.trim().length ?? 0) >= 2;
+
+    const isDateValid =
+      startDate instanceof Date &&
+      endDate instanceof Date &&
+      endDate.getTime() >= startDate.getTime();
+
+    return isTitleValid && isDateValid;
+  }, [title, startDate, endDate]);
 
   const handleSubmit = (data: ScheduleFormData) => {
     if (!isFormValid || isPending || !scheduleId) return;
 
-    const requestData = mapScheduleFormToRequest(data);
+    const baseRequestData = mapScheduleFormToRequest(data);
+
+    const requestData = {
+      ...baseRequestData,
+      startAt: format(data.startDate, "yyyy-MM-dd'T'HH:mm:ss"),
+      endAt: format(data.endDate, "yyyy-MM-dd'T'HH:mm:ss"),
+      location: baseRequestData.location || '',
+    };
 
     editSchedule({
       scheduleId,
-      data: {
-        ...requestData,
-        location: requestData.location || '',
-      },
+      data: requestData,
     });
   };
 
   const handleAlert = () => {
-    if (title.trim().length >= 2) {
+    if ((title?.trim().length ?? 0) >= 2) {
       setShowExitAlert(true);
     } else {
       router.back();

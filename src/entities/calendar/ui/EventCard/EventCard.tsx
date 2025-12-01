@@ -48,7 +48,7 @@ export function EventCard({
   startDate,
   endDate,
   location,
-  isAdmin = true, // TODO: 실제론 false로 내려줘야 함 (지금은 임시)
+  isAdmin,
   hasNotice = false,
   onClickCard,
   onDeleteSchedule,
@@ -87,10 +87,17 @@ export function EventCard({
 
   return (
     <>
-      <button
+      <div
         key={id}
-        type="button"
+        role="button"
+        tabIndex={0}
         onClick={handleCardClick}
+        onKeyDown={(e) => {
+          if (e.key === 'Enter' || e.key === ' ') {
+            e.preventDefault();
+            handleCardClick();
+          }
+        }}
         className="rounded-4 border-border-border-quinary bg-background-background-normal-lighter flex w-full flex-1 cursor-pointer flex-col items-start gap-8 border px-13 py-11"
       >
         {/* Header 영역 */}
@@ -170,7 +177,7 @@ export function EventCard({
             </div>
           </div>
         </section>
-      </button>
+      </div>
 
       {/* 일정 액션 바텀 시트 */}
       {scheduleId && (

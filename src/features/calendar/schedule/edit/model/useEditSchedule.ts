@@ -14,8 +14,19 @@ export const useEditSchedule = (options?: UseEditScheduleOptions) => {
     mutationFn: ({ scheduleId, data }: { scheduleId: number; data: EditScheduleRequest }) =>
       editSchedule(scheduleId, data),
 
-    onSuccess: () => {
-      void queryClient.invalidateQueries({ queryKey: ['calendar-schedule'] });
+    onSuccess: (_, variables) => {
+      const { scheduleId } = variables;
+
+      // 1) 일정 단건 invalidate
+      void queryClient.invalidateQueries({
+        queryKey: ['calendar-schedule', scheduleId],
+      });
+
+      // 2) 월별 캘린더 invalidate (부분 매칭)
+      void queryClient.invalidateQueries({
+        queryKey: ['calendar-schedule'],
+      });
+
       if (process.env.NODE_ENV === 'development') {
         console.log('일정 수정 요청 성공');
       }

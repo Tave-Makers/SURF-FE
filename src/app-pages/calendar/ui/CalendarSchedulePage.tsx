@@ -1,21 +1,16 @@
 'use client';
 
-import { useMemo, useState } from 'react';
-import { useRouter } from 'next/navigation';
+import { useMemo } from 'react';
 import { useForm, FormProvider } from 'react-hook-form';
-import ScheduleForm from '@/widgets/schedule/ui/ScheduleForm';
 import { ScheduleFormData } from '@/features/calendar/schedule/post/model/types';
 import { usePostSchedule } from '@/features/calendar/schedule/post/model/usePostSchedule';
 import { mapScheduleFormToRequest } from '@/features/calendar/schedule/post/api/mapper';
-import { Alert } from '@/shared/ui/alert/Alert';
 import { AppHeader } from '@/widgets/header/ui/AppHeader';
 import { HeaderMode, HeaderProps } from '@/shared/ui/header/Header';
+import ScheduleForm from '@/widgets/schedule/ui/ScheduleForm';
 
-export default function CreateSchedulePage() {
-  const router = useRouter();
+export default function CalendarSchedulePage() {
   const { mutate: createSchedule, isPending } = usePostSchedule();
-
-  const [showExitAlert, setShowExitAlert] = useState(false);
 
   const methods = useForm<ScheduleFormData>({
     defaultValues: {
@@ -35,10 +30,10 @@ export default function CreateSchedulePage() {
 
   // 버튼 활성화 조건 검증
   const isFormValid = useMemo(() => {
-    // 제목 검증: 최소 2자 이상
-    const isTitleValid = title.trim().length >= 2;
+    // 제목 검증: 최소 2자 이상 (undefined 방지)
+    const isTitleValid = (title?.trim().length ?? 0) >= 2;
 
-    // 시작일/마감일 검증: 둘 다 선택되어 있고, 마감일이 시작일과 같거나 이후
+    // 시작일/마감일 검증
     const isDateValid =
       startDate instanceof Date &&
       endDate instanceof Date &&
@@ -67,7 +62,6 @@ export default function CreateSchedulePage() {
           console.log('일정 생성 요청 성공');
         }
         alert('일정 생성 완료');
-        router.back();
       },
       onError: (error) => {
         if (process.env.NODE_ENV === 'development') {
@@ -78,18 +72,9 @@ export default function CreateSchedulePage() {
     });
   };
 
-  const handleAlert = () => {
-    if (title.trim().length >= 2) {
-      setShowExitAlert(true);
-    } else {
-      router.back();
-    }
-  };
-
   return (
     <>
       <AppHeader
-        customBack={handleAlert}
         overrideHeader={((): HeaderProps => ({
           mode: HeaderMode.TextBtn,
           title: '일정',
@@ -99,31 +84,6 @@ export default function CreateSchedulePage() {
           isDisabled: !isFormValid || methods.formState.isSubmitting,
           onClickTextBtn: () => void methods.handleSubmit(handleSubmit)(),
         }))()}
-      />
-
-      <Alert
-        state="default"
-        title="변경 내용을 저장하지 않고 나가시겠습니까?"
-        infoText="작성 중인 내용은 저장되지 않습니다."
-        isOpen={showExitAlert}
-        onClose={() => setShowExitAlert(false)}
-        actions={[
-          {
-            type: 'solid',
-            label: '취소',
-            variant: 'secondary',
-            onClick: () => setShowExitAlert(false),
-          },
-          {
-            type: 'solid',
-            label: '나가기',
-            variant: 'danger',
-            onClick: () => {
-              setShowExitAlert(false);
-              router.back();
-            },
-          },
-        ]}
       />
 
       <FormProvider {...methods}>

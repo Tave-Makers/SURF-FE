@@ -5,7 +5,6 @@ export type ScheduleCategory = 'regular' | 'operation' | 'other';
 export type ScheduleCreateRequest = {
   category: string;
   title: string;
-  content: string;
   startAt: string;
   endAt: string;
   location?: string;

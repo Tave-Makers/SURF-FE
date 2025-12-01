@@ -1,4 +1,4 @@
-import EditSchedulePage from '@/app-pages/home/calendar/schedule/edit/ui/EditSchedulePage';
+import EditSchedulePage from '@/app-pages/schedule/ui/EditSchedulePage';
 
 export default function Page() {
   return <EditSchedulePage />;

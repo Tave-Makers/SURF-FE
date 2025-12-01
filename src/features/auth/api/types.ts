@@ -1,3 +1,5 @@
+import { UserLevel } from '@/entities/user/model/types';
+
 export const MEMBER_STATUS = {
   REGISTERING: 'REGISTERING', // 가입중
   WAITING: 'WAITING', // 대기중
@@ -15,6 +17,7 @@ export type ValidStatusResponse = {
     memberId: number;
     needOnboarding: boolean;
     memberStatus: MemberStatusType;
+    memberRole: UserLevel;
   };
 };
 

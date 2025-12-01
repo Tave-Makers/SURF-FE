@@ -1,6 +1,7 @@
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { editSchedule } from '../api/editSchedule';
 import { EditScheduleRequest } from '../api/types';
+import { scheduleQueryKeys } from '@/features/calendar/api/queryKeys';
 
 type UseEditScheduleOptions = {
   onSuccess?: () => void;
@@ -19,12 +20,12 @@ export const useEditSchedule = (options?: UseEditScheduleOptions) => {
 
       // 1) 일정 단건 invalidate
       void queryClient.invalidateQueries({
-        queryKey: ['calendar-schedule', scheduleId],
+        queryKey: scheduleQueryKeys.detail(scheduleId),
       });
 
       // 2) 월별 캘린더 invalidate (부분 매칭)
       void queryClient.invalidateQueries({
-        queryKey: ['calendar-schedule'],
+        queryKey: scheduleQueryKeys.all,
       });
 
       if (process.env.NODE_ENV === 'development') {

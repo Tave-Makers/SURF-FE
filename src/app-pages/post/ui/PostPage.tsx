@@ -15,6 +15,7 @@ import { useRouter } from 'next/navigation';
 import { AppHeader } from '@/widgets/header/ui/AppHeader';
 import { HeaderMode } from '@/shared/ui/header/Header';
 import { useMutation } from '@tanstack/react-query';
+import { stripHtml } from '@/shared/lib/stripHtml';
 
 type PostPageProps = { mode: 'create' } | { mode: 'edit'; postId: string };
 
@@ -93,15 +94,7 @@ export default function PostPage(props: PostPageProps) {
    *  헤더 등록 버튼 활성화 및 나가기 경고 모달 조건용 */
   const [isContentEmpty, setIsContentEmpty] = useState(true);
 
-  const isEmptyContent = (html: string) => {
-    const cleaned = html
-      .replace(/<p><br><\/p>/g, '') // 빈 줄
-      .replace(/<p><\/p>/g, '') // 빈 문단
-      .replace(/&nbsp;/g, '') // nbsp
-      .trim();
-
-    return cleaned === '';
-  };
+  const isEmptyContent = (html: string) => stripHtml(html) === '';
 
   /** PostEditor 변경 콜백 */
   const handleEditorChange = useCallback(

@@ -8,5 +8,6 @@ export type CreatePostRequest = {
   pinned: boolean;
   reservedAt?: string;
   imageUrlList?: ImageItem[];
+  hasSchedule: boolean;
   reserved: boolean;
 };

@@ -148,17 +148,21 @@ export default function PostPage(props: PostPageProps) {
       }));
 
     try {
+      // TODO : 게시글 생성/수정 성공시 postId에 따른 라우팅 로직 추가
+      // let finalPostId: number | undefined;
+
       if (mode === 'create') {
         const res = await createMutateAsync({
-          boardId: 1, // 필요시 동적 변경
+          boardId: 1, // TODO: params에서 boardId 동적 받아오기
           categoryId: POST_CATEGORIES[category!].id,
           title,
           content,
           pinned: false,
-          reserved: false,
+          reserved: false, // TODO: 예약 연동
           imageUrlList,
+          hasSchedule: false, // TODO: 일정 연동
         });
-
+        // finalPostId = res.postId;
         if (process.env.NODE_ENV === 'development') {
           console.log('게시글 등록 성공', res);
         }
@@ -168,17 +172,19 @@ export default function PostPage(props: PostPageProps) {
           content,
           categoryId: POST_CATEGORIES[category!].id,
           pinned: false,
-          isReservationChanged: false,
-          reservedAt: '',
+          isReservationChanged: false, // TODO: 예약 변경 연동
+          reservedAt: '', // TODO: 예약 변경 연동
           isImageChanged,
           imageUrlList,
-          hasSchedule: false,
+          hasSchedule: false, // TODO: 일정 연동
         });
-
+        // finalPostId = postId!;
         if (process.env.NODE_ENV === 'development') {
           console.log('게시글 수정 성공', res);
         }
       }
+
+      // router.replace(`/posts/${finalPostId}`);
     } catch (err) {
       console.error('게시글 처리 실패', err);
       alert('게시글 처리 실패');

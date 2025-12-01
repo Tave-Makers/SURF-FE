@@ -103,10 +103,14 @@ export function ImageDnD({ images, onReorder, onRemove }: ImageDnDProps) {
        */}
       <DragOverlay>
         {activeImage ? (
-          <div className="scale-105 cursor-grabbing opacity-80">
+          <div
+            className="scale-105 cursor-grabbing opacity-80"
+            role="img"
+            aria-label="드래그 중인 이미지"
+          >
             <img
               src={activeImage.uploadedUrl ?? activeImage.preview}
-              alt=""
+              alt="드래그 중인 이미지 미리보기"
               className="rounded-2 h-20 w-20 object-cover"
             />
           </div>

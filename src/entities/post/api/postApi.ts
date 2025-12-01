@@ -1,9 +1,7 @@
 import { axiosInstance } from '@/shared/lib/axiosInstance';
 import type {
   FullPostListResponse,
-  FullPostDetailResponse,
   PostListApiResponse,
-  PostDetailResponse,
   PostApiRequest,
   GetBoardPostsRequest,
 } from './types';
@@ -38,11 +36,6 @@ export const postApi = {
       },
     );
 
-    return response.data.data;
-  },
-
-  getDetail: async (postId: number): Promise<PostDetailResponse> => {
-    const response = await axiosInstance.get<FullPostDetailResponse>(`/v1/user/posts/${postId}`);
     return response.data.data;
   },
 };

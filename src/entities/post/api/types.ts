@@ -48,39 +48,29 @@ export type PostListApiResponse = {
 
 export type FullPostListResponse = CommonResponse<PostListApiResponse>;
 
-// 게시글 단건 조회
-export type PostDetailResponse = {
-  id: number;
+// 게시글 상세 데이터 타입
+export type PostDetailData = {
+  postId: number;
   title: string;
   content: string;
   pinned: boolean;
   postedAt: string;
   boardId: number;
+  categoryId: number;
   scrappedByMe: boolean;
   scrapCount: number;
   likedByMe: boolean;
   likeCount: number;
   commentCount: number;
   nickname: string;
-  imageUrlList: ImageItem[];
-  categoryId: number | null;
+  isMine: boolean;
+  imageUrlList: ImageItemResponse[];
+  viewCount: number;
+  hasSchedule: boolean;
 };
 
-export type FullPostDetailResponse = CommonResponse<PostDetailResponse>;
-
-// 게시글 생성/수정
-export type PostMutationResponse = {
-  id: number;
-  title: string;
-  content: string;
-  pinned: boolean;
-  postedAt: string;
-  boardId?: number;
-  categoryId?: number | null;
-  nickname: string;
-};
-
-export type FullPostMutationResponse = CommonResponse<PostMutationResponse>;
+// 상세 API 응답 타입
+export type PostDetailResponse = CommonResponse<PostDetailData>;
 
 export type PostSort = {
   empty: boolean;
@@ -109,4 +99,15 @@ export type GetBoardPostsRequest = {
   page: number;
   size: number;
   sort?: string;
+};
+
+export type CreatePostRequest = {
+  boardId: number;
+  categoryId: number;
+  title: string;
+  content: string;
+  pinned: boolean;
+  reservedAt?: string;
+  imageUrlList?: ImageItem[];
+  reserved: boolean;
 };

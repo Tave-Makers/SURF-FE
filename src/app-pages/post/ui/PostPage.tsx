@@ -16,21 +16,22 @@ import { AppHeader } from '@/widgets/header/ui/AppHeader';
 import { HeaderMode } from '@/shared/ui/header/Header';
 import { useMutation } from '@tanstack/react-query';
 
-type Mode = 'create' | 'edit';
-
-type PostPageProps = {
-  mode: Mode;
-  postId?: string;
-};
+type PostPageProps = { mode: 'create' } | { mode: 'edit'; postId: string };
 
 type EditorState = {
   content: string;
   images: UploadImage[];
 };
 
-export default function PostPage({ mode, postId }: PostPageProps) {
+export default function PostPage(props: PostPageProps) {
+  const { mode } = props;
+
   /** 수정 모드 초기 데이터 로드 */
-  const { data: postDetail } = usePostDetail(mode === 'edit' ? Number(postId) : -1);
+  const postId = mode === 'edit' ? Number(props.postId) : undefined;
+
+  const { data: postDetail } = usePostDetail(postId!, {
+    enabled: mode === 'edit' && !!postId,
+  });
 
   const initialContent = postDetail?.content ?? '';
 
@@ -132,7 +133,7 @@ export default function PostPage({ mode, postId }: PostPageProps) {
   });
 
   /** 게시글 수정 mutation */
-  const { mutateAsync, isPending: isUpdating } = useUpdatePost(Number(postId));
+  const { mutateAsync, isPending: isUpdating } = useUpdatePost(postId ?? 0);
 
   const handleSubmit = async () => {
     // 중복 제출 방지

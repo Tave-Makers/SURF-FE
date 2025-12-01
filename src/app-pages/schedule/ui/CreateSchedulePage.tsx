@@ -2,6 +2,7 @@
 
 import { useMemo, useState } from 'react';
 import { useRouter } from 'next/navigation';
+import { format } from 'date-fns';
 import { useForm, FormProvider } from 'react-hook-form';
 import ScheduleForm from '@/widgets/schedule/ui/ScheduleForm';
 import { ScheduleFormData } from '@/features/calendar/schedule/post/model/types';
@@ -72,7 +73,13 @@ export default function CreateSchedulePage() {
       console.log('폼 제출 시도:', data);
     }
 
-    const requestData = mapScheduleFormToRequest(data);
+    const baseRequestData = mapScheduleFormToRequest(data);
+    const requestData = {
+      ...baseRequestData,
+      startAt: format(data.startDate, "yyyy-MM-dd'T'HH:mm:ss"),
+      endAt: format(data.endDate, "yyyy-MM-dd'T'HH:mm:ss"),
+    };
+
     if (process.env.NODE_ENV === 'development') {
       console.log('서버로 보낼 변환된 데이터:', requestData);
     }

@@ -38,7 +38,10 @@ export default function PostPage(props: PostPageProps) {
 
   /** 초기 이미지 정렬 */
   const initialImages = useMemo(
-    () => (postDetail?.imageUrlList ?? []).sort((a, b) => a.sequence - b.sequence),
+    () =>
+      (postDetail?.imageUrlList ? [...postDetail.imageUrlList] : []).sort(
+        (a, b) => a.sequence - b.sequence,
+      ),
     [postDetail?.imageUrlList],
   );
 
@@ -81,6 +84,8 @@ export default function PostPage(props: PostPageProps) {
     if (matchedEntry) {
       const [matchedKey] = matchedEntry; // event | activity | ...
       select(matchedKey as PostCategoryKey);
+    } else {
+      console.warn(`카테고리 매칭 실패: ${postDetail.categoryLabel}`);
     }
   }, [mode, postDetail, select]);
 

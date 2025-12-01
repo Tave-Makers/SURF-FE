@@ -65,7 +65,6 @@ export default function ScheduleForm({ mode = 'create', id, onSubmit }: Schedule
     }
   }, [mode, scheduleDetail, reset]);
 
-  const selectedCategory = watch('category');
   const watchedStartDate = watch('startDate');
   const watchedEndDate = watch('endDate');
 
@@ -122,60 +121,58 @@ export default function ScheduleForm({ mode = 'create', id, onSubmit }: Schedule
       }}
     >
       {/* 일정 카테고리 선택 */}
-      <div>
-        <Controller
-          name="category"
-          control={control}
-          render={({ field }) => (
-            <>
-              <AccordionSelect
-                title={selectedCategory ? CATEGORY_LABELS[selectedCategory] : '정규행사'}
-                isOpen={isCategoryOpen}
-                onClick={() => setIsCategoryOpen((prev) => !prev)}
-                controlsId="select-sheet"
+      <Controller
+        name="category"
+        control={control}
+        render={({ field }) => (
+          <div>
+            <AccordionSelect
+              title={field.value ? CATEGORY_LABELS[field.value] : '정규행사'}
+              isOpen={isCategoryOpen}
+              onClick={() => setIsCategoryOpen((prev) => !prev)}
+              controlsId="select-sheet"
+            />
+            <ModalSheet
+              isOpen={isCategoryOpen}
+              onClose={() => setIsCategoryOpen(false)}
+              aria-labelledby="select-sheet"
+              className="mx-auto flex w-full sm:w-[360px]"
+            >
+              <ModalSheet.Container>
+                <ModalSheet.Header />
+                <ModalSheet.Content>
+                  <div
+                    id="select-sheet"
+                    className="rounded-4 flex flex-col gap-4 px-15 pt-16 pb-15"
+                  >
+                    {CATEGORY_OPTIONS.map((option) => (
+                      <button
+                        key={option.value}
+                        type="button"
+                        onClick={() => {
+                          field.onChange(option.value);
+                          setIsCategoryOpen(false);
+                        }}
+                        className={`text-foreground-foreground-normal text-body-body5 flex w-full flex-1 items-center px-12 py-10 ${
+                          field.value === option.value
+                            ? 'bg-background-background-secondary'
+                            : 'hover:bg-background-background-secondary'
+                        } `}
+                      >
+                        {option.label}
+                      </button>
+                    ))}
+                  </div>
+                </ModalSheet.Content>
+              </ModalSheet.Container>
+              <ModalSheet.Backdrop
+                onTap={() => setIsCategoryOpen(false)}
+                style={{ backgroundColor: 'rgba(0, 0, 0, 0.70)' }}
               />
-              <ModalSheet
-                isOpen={isCategoryOpen}
-                onClose={() => setIsCategoryOpen(false)}
-                aria-labelledby="select-sheet"
-                className="mx-auto flex w-full sm:w-[360px]"
-              >
-                <ModalSheet.Container>
-                  <ModalSheet.Header />
-                  <ModalSheet.Content>
-                    <div
-                      id="select-sheet"
-                      className="rounded-4 flex flex-col gap-4 px-15 pt-16 pb-15"
-                    >
-                      {CATEGORY_OPTIONS.map((option) => (
-                        <button
-                          key={option.value}
-                          type="button"
-                          onClick={() => {
-                            field.onChange(option.value);
-                            setIsCategoryOpen(false);
-                          }}
-                          className={`text-foreground-foreground-normal text-body-body5 flex w-full flex-1 items-center px-12 py-10 ${
-                            selectedCategory === option.value
-                              ? 'bg-background-background-secondary'
-                              : 'hover:bg-background-background-secondary'
-                          } `}
-                        >
-                          {option.label}
-                        </button>
-                      ))}
-                    </div>
-                  </ModalSheet.Content>
-                </ModalSheet.Container>
-                <ModalSheet.Backdrop
-                  onTap={() => setIsCategoryOpen(false)}
-                  style={{ backgroundColor: 'rgba(0, 0, 0, 0.70)' }}
-                />
-              </ModalSheet>
-            </>
-          )}
-        />
-      </div>
+            </ModalSheet>
+          </div>
+        )}
+      />
 
       {/* 이벤트 title */}
       <div className="pt-10">

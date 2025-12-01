@@ -1,12 +1,12 @@
 import type { CommonResponse } from '@/shared/api/types';
 
-// 공통 이미지 타입
+// 게시글 상세 이미지 타입
 export type ImageItem = {
   originalUrl: string;
   sequence: number;
 };
 
-// 이미지 응답 타입
+// 게시글 상세 이미지 응답 타입
 export type ImageItemResponse = ImageItem & {
   imageId: number;
   postId: number;
@@ -14,7 +14,7 @@ export type ImageItemResponse = ImageItem & {
 
 // 게시글 목록
 export type PostListItemResponse = {
-  id: number;
+  postId: number;
   categoryId?: number;
   title: string;
   content: string;
@@ -29,6 +29,7 @@ export type PostListItemResponse = {
   nickname: string;
   thumbnailImageUrl: string | null;
   isReserved: boolean;
+  viewCount: number;
 };
 
 export type PostListApiResponse = {
@@ -46,6 +47,30 @@ export type PostListApiResponse = {
 };
 
 export type FullPostListResponse = CommonResponse<PostListApiResponse>;
+
+// 게시글 상세 데이터 타입
+export type PostDetailData = {
+  postId: number;
+  title: string;
+  content: string;
+  pinned: boolean;
+  postedAt: string;
+  boardId: number;
+  categoryId: number;
+  scrappedByMe: boolean;
+  scrapCount: number;
+  likedByMe: boolean;
+  likeCount: number;
+  commentCount: number;
+  nickname: string;
+  isMine: boolean;
+  imageUrlList: ImageItemResponse[];
+  viewCount: number;
+  hasSchedule: boolean;
+};
+
+// 상세 API 응답 타입
+export type PostDetailResponse = CommonResponse<PostDetailData>;
 
 export type PostSort = {
   empty: boolean;
@@ -65,26 +90,24 @@ export type Pageable = {
 export type PostApiRequest = {
   page: number;
   size: number;
-  sort: string[];
+  sort: string;
 };
 
-// 게시글 상세
-export type PostDetailData = {
-  postId: number;
+export type GetBoardPostsRequest = {
+  boardId: number;
+  category?: string;
+  page: number;
+  size: number;
+  sort?: string;
+};
+
+export type CreatePostRequest = {
+  boardId: number;
+  categoryId: number;
   title: string;
   content: string;
   pinned: boolean;
-  postedAt: string;
-  boardId: number;
-  scrappedByMe: boolean;
-  scrapCount: number;
-  likedByMe: boolean;
-  likeCount: number;
-  commentCount: number;
-  nickname: string;
-  imageUrlList: ImageItemResponse[];
-  categoryId: number | null;
-  hasScheduled: boolean;
+  reservedAt?: string;
+  imageUrlList?: ImageItem[];
+  reserved: boolean;
 };
-
-export type PostDetailResponse = CommonResponse<PostDetailData>;

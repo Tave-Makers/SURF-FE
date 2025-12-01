@@ -11,6 +11,8 @@
     "prepare": "husky",
     "storybook": "storybook dev -p 6006",
     "build-storybook": "storybook build",
+    "storybook-docs": "storybook dev --docs",
+    "build-storybook-docs": "storybook build --docs",
     "convert-typo": "node --loader ts-node/esm scripts/convert-typo.ts",
     "convert-color": "node --loader ts-node/esm scripts/convert-color.ts",
     "test": "vitest",

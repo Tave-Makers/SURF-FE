@@ -1,9 +1,9 @@
 import type { Meta, StoryObj } from '@storybook/nextjs';
-import { ProfileImage } from './ProfileImage';
+import { Avatar } from './Avatar';
 
-const meta: Meta<typeof ProfileImage> = {
-  title: 'Shared/UI/ProfileImage',
-  component: ProfileImage,
+const meta: Meta<typeof Avatar> = {
+  title: 'Shared/UI/Avatar',
+  component: Avatar,
   tags: ['autodocs'],
   parameters: {
     layout: 'centered',
@@ -11,7 +11,7 @@ const meta: Meta<typeof ProfileImage> = {
   },
   argTypes: {
     size: {
-      options: ['s', 'm', 'l', 'xl'],
+      options: ['xs', 's', 'm', 'l', 'xl'],
       control: { type: 'radio' },
     },
   },

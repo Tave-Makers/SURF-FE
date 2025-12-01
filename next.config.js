@@ -1,5 +1,9 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
+  experimental: {
+    reactCompiler: true
+  },
+
   turbopack: {
     // Turbopack 전용 설정
     rules: {

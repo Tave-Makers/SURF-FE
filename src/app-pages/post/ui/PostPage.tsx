@@ -1,6 +1,6 @@
 'use client';
 
-import { POST_CATEGORIES, PostCategory } from '@/entities/post/model/constants';
+import { POST_CATEGORIES, PostCategoryKey } from '@/entities/post/model/category';
 import { createPost } from '@/features/post/create-post/api/createPost';
 import { usePicker } from '@/shared/hooks/usePicker';
 import { AccordionSelect } from '@/shared/ui/accordion/AccordionSelect';
@@ -36,8 +36,8 @@ export default function PostPage({ mode, postId }: PostPageProps) {
 
   /** 초기 이미지 정렬 */
   const initialImages = useMemo(
-    () => (postDetail?.images ?? []).sort((a, b) => a.sequence - b.sequence),
-    [postDetail?.images],
+    () => (postDetail?.imageUrlList ?? []).sort((a, b) => a.sequence - b.sequence),
+    [postDetail?.imageUrlList],
   );
 
   /** 제목 */
@@ -57,8 +57,8 @@ export default function PostPage({ mode, postId }: PostPageProps) {
     close,
     value: category,
     select,
-  } = usePicker<PostCategory>({
-    defaultValue: POST_CATEGORIES[0],
+  } = usePicker<PostCategoryKey>({
+    defaultValue: 'event',
   });
 
   /** 제목 초기화 */
@@ -72,9 +72,13 @@ export default function PostPage({ mode, postId }: PostPageProps) {
   useEffect(() => {
     if (mode !== 'edit' || !postDetail) return;
 
-    const matchedCategory = POST_CATEGORIES.find((item) => item.label === postDetail.categoryName);
-    if (matchedCategory) {
-      select(matchedCategory);
+    const matchedEntry = Object.entries(POST_CATEGORIES).find(
+      ([_, value]) => value.label === postDetail.categoryLabel,
+    );
+
+    if (matchedEntry) {
+      const [matchedKey] = matchedEntry; // event | activity | ...
+      select(matchedKey as PostCategoryKey);
     }
   }, [mode, postDetail, select]);
 
@@ -148,7 +152,7 @@ export default function PostPage({ mode, postId }: PostPageProps) {
       if (mode === 'create') {
         const res = await createMutateAsync({
           boardId: 1, // 필요시 동적 변경
-          categoryId: category!.id,
+          categoryId: POST_CATEGORIES[category!].id,
           title,
           content,
           pinned: false,
@@ -163,7 +167,7 @@ export default function PostPage({ mode, postId }: PostPageProps) {
         const res = await mutateAsync({
           title,
           content,
-          categoryId: category!.id,
+          categoryId: POST_CATEGORIES[category!].id,
           pinned: false,
           isReservationChanged: false,
           reservedAt: '',
@@ -213,7 +217,7 @@ export default function PostPage({ mode, postId }: PostPageProps) {
       {/* 카테고리 선택 */}
       <div className="px-13">
         <AccordionSelect
-          title={category!.label}
+          title={POST_CATEGORIES[category!].label}
           isOpen={isOpen}
           onClick={open}
           controlsId={sheetId}
@@ -230,14 +234,14 @@ export default function PostPage({ mode, postId }: PostPageProps) {
         <ModalSheet.Container>
           <ModalSheet.Header />
           <ModalSheet.Content>
-            <div id={sheetId} className="flex flex-col gap-4 px-15 py-16">
-              {POST_CATEGORIES.map((item) => (
+            <div id={sheetId} className="flex flex-col gap-[0.25rem] p-15">
+              {Object.values(POST_CATEGORIES).map((item) => (
                 <button
                   key={item.id}
                   type="button"
-                  onClick={() => select(item)}
-                  className={`rounded-md px-12 py-10 text-left transition-colors ${
-                    category!.id === item.id
+                  onClick={() => select(item.key)}
+                  className={`rounded-md px-5 py-10 text-left transition-colors ${
+                    category === item.key
                       ? 'bg-background-background-secondary font-semibold'
                       : 'hover:bg-background-background-secondary'
                   }`}

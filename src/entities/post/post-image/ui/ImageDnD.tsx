@@ -4,21 +4,27 @@ import {
   DndContext,
   closestCenter,
   PointerSensor,
+  KeyboardSensor,
   useSensor,
   useSensors,
   DragEndEvent,
   DragStartEvent,
   DragOverlay,
 } from '@dnd-kit/core';
-import { horizontalListSortingStrategy, SortableContext, useSortable } from '@dnd-kit/sortable';
+import {
+  horizontalListSortingStrategy,
+  SortableContext,
+  useSortable,
+  sortableKeyboardCoordinates,
+} from '@dnd-kit/sortable';
 import { CSS } from '@dnd-kit/utilities';
 import { restrictToParentElement } from '@dnd-kit/modifiers';
 import { ImageItem } from '@/entities/post/post-image/ui/ImageItem';
-import { ImageData } from '@/shared/types/image';
+import { UploadImage } from '@/shared/types/image';
 import { useState } from 'react';
 
 type ImageDnDProps = {
-  images: ImageData[]; // 현재 이미지 배열
+  images: UploadImage[]; // 현재 이미지 배열
   onReorder: (from: number, to: number) => void; // 드래그 종료 시 순서 변경
   onRemove: (index: number) => void; // 이미지 삭제 핸들러
 };
@@ -32,7 +38,12 @@ type ImageDnDProps = {
  */
 export function ImageDnD({ images, onReorder, onRemove }: ImageDnDProps) {
   // 마우스 드래그 이벤트 인식 센서 등록
-  const sensors = useSensors(useSensor(PointerSensor));
+  const sensors = useSensors(
+    useSensor(PointerSensor),
+    useSensor(KeyboardSensor, {
+      coordinateGetter: sortableKeyboardCoordinates,
+    }),
+  );
   const [activeId, setActiveId] = useState<string | null>(null);
   const activeImage = activeId ? images.find((img) => img.id === activeId) : null;
 
@@ -77,7 +88,9 @@ export function ImageDnD({ images, onReorder, onRemove }: ImageDnDProps) {
             <SortableImage
               key={image.id}
               id={image.id}
-              file={image.file}
+              preview={image.preview}
+              uploadedUrl={image.uploadedUrl}
+              status={image.status}
               onRemove={() => onRemove(index)}
             />
           ))}
@@ -90,8 +103,16 @@ export function ImageDnD({ images, onReorder, onRemove }: ImageDnDProps) {
        */}
       <DragOverlay>
         {activeImage ? (
-          <div className="scale-105 cursor-grabbing opacity-80">
-            <ImageItem file={activeImage.file} />
+          <div
+            className="scale-105 cursor-grabbing opacity-80"
+            role="img"
+            aria-label="드래그 중인 이미지"
+          >
+            <img
+              src={activeImage.uploadedUrl ?? activeImage.preview}
+              alt="드래그 중인 이미지 미리보기"
+              className="rounded-2 h-20 w-20 object-cover"
+            />
           </div>
         ) : null}
       </DragOverlay>
@@ -104,32 +125,32 @@ export function ImageDnD({ images, onReorder, onRemove }: ImageDnDProps) {
  *
  * @param id 각 이미지의 고유 인덱스 (드래그 식별용)
  */
-function SortableImage({ id, file, onRemove }: { id: string; file: File; onRemove: () => void }) {
-  // 이 이미지가 드래그 가능한 대상임을 선언
+function SortableImage({
+  id,
+  preview,
+  uploadedUrl,
+  status,
+  onRemove,
+}: {
+  id: string;
+  preview: string;
+  uploadedUrl?: string;
+  status: UploadImage['status'];
+  onRemove: () => void;
+}) {
   const { attributes, listeners, setNodeRef, transform, transition, isDragging } = useSortable({
     id,
   });
 
-  // 드래그 중일 때 위치 이동 애니메이션 적용
   const style: React.CSSProperties = {
     transform: CSS.Transform.toString(transform),
-    transition: transition,
-    willChange: 'transform',
-    opacity: isDragging ? 0 : 1, // 드래그 중이면 투명 처리
+    transition,
+    opacity: isDragging ? 0 : 1,
   };
 
-  // ImageItem을 드래그 가능하게 감싸서 렌더링
   return (
-    <div
-      ref={setNodeRef}
-      style={style}
-      {...attributes}
-      {...listeners}
-      className={'cursor-grab'}
-      role="button"
-      aria-label={`이미지 ${file.name}, 드래그하여 순서 변경`}
-    >
-      <ImageItem file={file} onRemove={onRemove} />
+    <div ref={setNodeRef} style={style} {...attributes} {...listeners} className="cursor-grab">
+      <ImageItem preview={preview} uploadedUrl={uploadedUrl} status={status} onRemove={onRemove} />
     </div>
   );
 }

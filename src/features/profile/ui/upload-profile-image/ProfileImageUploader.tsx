@@ -1,7 +1,7 @@
 'use client';
 
 import { useRef, useState } from 'react';
-import { ProfileImage } from '@/shared/ui/profile-image/ProfileImage';
+import { Avatar } from '@/shared/ui/avatar/Avatar';
 
 type Props = {
   value?: string;
@@ -40,7 +40,7 @@ export const ProfileImageUploader = ({ value, onChange }: Props) => {
             className="aspect-square h-[6rem] w-[6rem] rounded-[0.5rem] object-cover"
           />
         ) : (
-          <ProfileImage size="xl" />
+          <Avatar size="xl" />
         )}
       </button>
     </div>

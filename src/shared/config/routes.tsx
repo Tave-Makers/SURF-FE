@@ -238,34 +238,4 @@ export const createRouteConfig = (router: RouterInstance): RouteConfig[] => [
       hasLeftIcon: true,
     },
   },
-  {
-    id: 'board',
-    path: '/board',
-    backPath: '/home', // 임시
-    header: {
-      mode: HeaderMode.Default,
-      title: '공지사항',
-      hasLeftIcon: true,
-      icons: [
-        {
-          label: 'Search',
-          onClickIcon: () => {
-            router.push('/board/search');
-          },
-        },
-      ],
-    },
-  },
-  {
-    id: 'board-search',
-    path: '/board/search',
-    backPath: '/board',
-    header: {
-      mode: HeaderMode.SearchBar,
-      hasLeftIcon: true,
-      value: '',
-      onChange: () => {},
-      onSubmit: () => {},
-    },
-  },
 ];

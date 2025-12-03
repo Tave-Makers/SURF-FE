@@ -6,7 +6,6 @@ export const useGetSingleSchedule = (scheduleId?: number, mode?: 'create' | 'edi
   return useQuery({
     queryKey: scheduleQueryKeys.detail(scheduleId as number),
     queryFn: () => getSingleSchedule(scheduleId as number),
-    select: (data) => data,
     enabled: mode === 'edit' && !!scheduleId,
   });
 };

@@ -129,7 +129,6 @@ export default function Calendar({ month, onMonthChange, schedules }: CalendarPr
             items={selectedItems}
             renderItem={(_ev) => (
               <EventCard
-                id={_ev.id}
                 scheduleId={_ev.id}
                 title={_ev.title}
                 category={_ev.category}
@@ -139,7 +138,7 @@ export default function Calendar({ month, onMonthChange, schedules }: CalendarPr
                 location={_ev.location || '미정'}
                 hasNotice={_ev.hasNotice}
                 postId={_ev.postId}
-                isAdmin={memberRole !== 'member' || false}
+                isAdmin={memberRole !== 'member' && memberRole !== null}
                 // onClickCard={() => router.push(`/board/${_ev.boardId}/post/${_ev.postId}`)}
               />
             )}

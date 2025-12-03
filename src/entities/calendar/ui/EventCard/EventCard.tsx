@@ -45,7 +45,7 @@ export function EventCard({
   endDate,
   location,
   isAdmin,
-  hasNotice = false,
+  hasNotice,
   onClickCard,
   onDeleteSchedule,
   mode,

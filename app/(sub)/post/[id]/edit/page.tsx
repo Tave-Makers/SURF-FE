@@ -1,6 +1,6 @@
 'use client';
 
-import PostPage from '@/app-pages/post/ui/PostPage';
+import PostPage from '@/app-pages/post/write/ui/PostPage';
 import { useParams } from 'next/navigation';
 
 export default function Page() {

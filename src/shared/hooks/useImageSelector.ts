@@ -49,14 +49,21 @@ export function useImageSelector() {
     setImages((prev) => reorderArray(prev, from, to));
   };
 
+  const imagesRef = useRef<UploadImage[]>([]);
+
+  /** 최신 images를 ref에 보관 */
+  useEffect(() => {
+    imagesRef.current = images;
+  }, [images]);
+
+  /** 언마운트 시 preview URL 정리 */
   useEffect(() => {
     return () => {
-      // 언마운트 시 모든 preview URL revoke
-      images.forEach((img) => {
+      imagesRef.current.forEach((img) => {
         if (img.preview) URL.revokeObjectURL(img.preview);
       });
     };
-  }, [images]);
+  }, []);
 
   return {
     inputRef,

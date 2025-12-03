@@ -102,3 +102,14 @@ export type GetBoardPostsRequest = {
   size: number;
   sort?: string;
 };
+
+export type CreatePostRequest = {
+  boardId: number;
+  categoryId: number;
+  title: string;
+  content: string;
+  pinned: boolean;
+  reservedAt?: string;
+  imageUrlList?: ImageItem[];
+  reserved: boolean;
+};

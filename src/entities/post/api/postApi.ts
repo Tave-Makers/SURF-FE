@@ -4,6 +4,7 @@ import type {
   PostListApiResponse,
   PostApiRequest,
   GetBoardPostsRequest,
+  PostDetailResponse,
 } from './types';
 
 export const postApi = {
@@ -39,8 +40,8 @@ export const postApi = {
     return response.data.data;
   },
 
-  // getDetail: async (postId: number): Promise<PostDetailResponse> => {
-  //   const response = await axiosInstance.get<FullPostDetailResponse>(`/v1/user/posts/${postId}`);
-  //   return response.data.data;
-  // },
+  getPostDetail: async (postId: number): Promise<PostDetailResponse['data']> => {
+    const response = await axiosInstance.get<PostDetailResponse>(`/v1/user/posts/${postId}`);
+    return response.data.data;
+  },
 };

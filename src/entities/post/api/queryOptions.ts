@@ -28,9 +28,8 @@ export const scrapsQueryOptions = (params: Partial<GetBoardPostsRequest>) =>
     queryFn: () => postApi.getScraps(params),
   });
 
-// export const postDetailQueryOptions = (postId: number) =>
-//   queryOptions({
-//     queryKey: [...postQueryKeys.all, 'detail', postId],
-//     queryFn: () => postApi.getDetail(postId),
-//     staleTime: 1000 * 60 * 10,
-//   });
+export const postDetailQueryOptions = (postId: number) =>
+  queryOptions({
+    queryKey: postQueryKeys.postDetail(postId),
+    queryFn: () => postApi.getPostDetail(postId),
+  });

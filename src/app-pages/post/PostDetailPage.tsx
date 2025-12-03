@@ -1,6 +1,6 @@
 'use client';
 
-import { usePostDetail } from '@/features/post/model/usePostDetailQuery';
+import { usePostDetail } from '@/entities/post/api/usePostDetail';
 import { PostHeader } from '@/entities/post/ui/post-header/PostHeader';
 import { ActionBar } from '@/shared/ui/action-bar/ActionBar';
 import { PostBodySection } from '@/widgets/post-detail/PostBodySection';

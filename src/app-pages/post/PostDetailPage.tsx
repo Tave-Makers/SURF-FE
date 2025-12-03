@@ -2,6 +2,7 @@
 
 import { usePostDetail } from '@/entities/post/api/usePostDetail';
 import { PostHeader } from '@/entities/post/ui/post-header/PostHeader';
+import { useKeyboardOffset } from '@/shared/hooks/useKeyboardOffset';
 import { ActionBar } from '@/shared/ui/action-bar/ActionBar';
 import { PostBodySection } from '@/widgets/post-detail/PostBodySection';
 
@@ -13,6 +14,9 @@ export default function PostDetailPage({ postId }: PostDetailPageProps) {
   const numericPostId = Number(postId);
 
   const { data, isLoading, isError } = usePostDetail(numericPostId);
+
+  /** 키보드 높이 계산 */
+  const keyboardOffset = useKeyboardOffset();
 
   // postId 유효성 검증
   if (isNaN(numericPostId) || numericPostId <= 0) {
@@ -56,7 +60,7 @@ export default function PostDetailPage({ postId }: PostDetailPageProps) {
       </div>
 
       {/* 댓글 입력창 */}
-      <div className="sticky bottom-0 w-full">
+      <div className="sticky bottom-0 w-full" style={{ paddingBottom: keyboardOffset }}>
         <ActionBar placeholder="댓글을 입력해주세요" />
       </div>
     </div>

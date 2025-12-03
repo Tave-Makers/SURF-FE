@@ -2,10 +2,10 @@
 
 import { useState } from 'react';
 import { SurfIcon } from '@/shared/ui/icon/SurfIcon';
-import { CalendarBadge } from '@/entities/calendar/ui/CalendarBadge/CalendarBadge';
-import { ScheduleActionSheet } from '@/entities/calendar/ui/ScheduleActionSheet/ScheduleActionSheet';
+import { formatScheduleDate } from '@/entities/calendar/utils/formatScheduleDate';
 import { ActivityCategory, EventCardType } from '@/entities/calendar/model/types';
-import { formatScheduleDate } from '../../utils/formatDate';
+import { CalendarBadge } from '@/entities/calendar/ui/CalendarBadge/CalendarBadge';
+import { ScheduleActionSheet } from '@/features/calendar/ui/ScheduleActionSheet/ScheduleActionSheet';
 
 /**
  * 이벤트 카드 컴포넌트

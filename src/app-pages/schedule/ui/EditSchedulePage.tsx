@@ -93,7 +93,7 @@ export default function EditSchedulePage() {
           hasLeftIcon: true,
           text: '수정',
           btnVariant: 'secondary',
-          isDisabled: !isFormValid || methods.formState.isSubmitting,
+          isDisabled: !isFormValid || methods.formState.isSubmitting || isPending,
           onClickTextBtn: () => void methods.handleSubmit(handleSubmit)(),
         }))()}
       />

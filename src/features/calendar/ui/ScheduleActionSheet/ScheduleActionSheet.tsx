@@ -104,7 +104,6 @@ export function ScheduleActionSheet({
         <ModalSheet.Backdrop onClick={onClose} className="bg-black/70" />
       </ModalSheet>
 
-      {/* 삭제 확인 Alert - 포탈로 바디에 렌더링하여 ModalSheet backdrop 위에 노출 */}
       {createPortal(
         <div className="pointer-events-none fixed inset-0 z-9999 flex items-center justify-center">
           <div className="pointer-events-auto">

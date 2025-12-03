@@ -10,7 +10,7 @@ import { useGetPostLikesQuery } from '@/features/post/model/useGetPostLikesQuery
 
 import { Sheet } from '@/shared/ui/sheet/Sheet';
 import { Sheet as ModalSheet } from 'react-modal-sheet';
-import { SheetItem } from '@/shared/ui/sheet-item/SheetItem';
+import { SheetItem } from '@/shared/ui/sheet/SheetItem';
 import { Avatar } from '@/shared/ui/avatar/Avatar';
 
 type PostDetailPageProps = {

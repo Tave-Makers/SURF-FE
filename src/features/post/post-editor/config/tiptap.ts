@@ -3,7 +3,7 @@ import { TextStyleKit } from '@tiptap/extension-text-style';
 import Placeholder from '@tiptap/extension-placeholder';
 import CharacterCount from '@tiptap/extension-character-count';
 
-const MAX_LENTH = 100000;
+const MAX_LENTH = 10000;
 
 export const POST_EDITOR_EXTENSIONS = [
   StarterKit,

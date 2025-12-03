@@ -126,7 +126,7 @@ export const usePostForm = ({ mode, postId }: Props) => {
   };
 
   const { mutateAsync: createMutate } = useMutation({ mutationFn: createPost });
-  const { mutateAsync: updateMutate } = useUpdatePost(numericPostId ?? 0);
+  const { mutateAsync: updateMutate } = useUpdatePost(numericPostId!);
 
   const handleSubmit = async () => {
     const { content, images } = editorStateRef.current;
@@ -137,9 +137,11 @@ export const usePostForm = ({ mode, postId }: Props) => {
     const categoryId = POST_CATEGORIES[category!].id;
 
     try {
+      // TODO : 게시글 생성/수정 성공시 postId에 따른 라우팅 로직 추가
+      // let targetPostId = numericPostId; // 수정 모드면 기존 ID가 기본값
       if (mode === 'create') {
         await createMutate({
-          boardId: 1,
+          boardId: 1, // TODO: params에서 boardId 동적 받아오기
           categoryId,
           title,
           content,
@@ -148,6 +150,7 @@ export const usePostForm = ({ mode, postId }: Props) => {
           imageUrlList,
           hasSchedule: false,
         });
+        // targetPostId = res.postId;
       } else {
         await updateMutate({
           title,
@@ -161,10 +164,12 @@ export const usePostForm = ({ mode, postId }: Props) => {
           hasSchedule: false,
         });
       }
-      // 성공 처리 (라우팅 등)
+      // if (targetPostId) {
+      //   router.replace(`/posts/${targetPostId}`);
+      // }
     } catch (err) {
-      console.error(err);
-      alert('처리 실패');
+      console.error('게시글 처리 실패', err);
+      alert('게시글 저장 중 오류가 발생했습니다.');
     }
   };
 

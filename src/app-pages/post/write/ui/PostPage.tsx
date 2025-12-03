@@ -8,10 +8,13 @@ import { AppHeader } from '@/widgets/header/ui/AppHeader';
 import { HeaderMode } from '@/shared/ui/header/Header';
 import { Alert } from '@/shared/ui/alert/Alert';
 import { usePostForm } from '../lib/usePostForm';
+import { useRouter } from 'next/navigation';
 
 type PostPageProps = { mode: 'create' } | { mode: 'edit'; postId: string };
 
 export default function PostPage(props: PostPageProps) {
+  const router = useRouter();
+
   const { mode } = props;
   const postId = mode === 'edit' ? props.postId : undefined;
 
@@ -137,7 +140,7 @@ export default function PostPage(props: PostPageProps) {
             variant: 'danger',
             onClick: () => {
               setShowExitAlert(false);
-              handleBack(); // 여기서는 강제로 나가게 하거나 router.back() 직접 호출
+              router.back();
             },
           },
         ]}

@@ -125,10 +125,15 @@ export const usePostForm = ({ mode, postId }: Props) => {
     else router.back();
   };
 
-  const { mutateAsync: createMutate } = useMutation({ mutationFn: createPost });
-  const { mutateAsync: updateMutate } = useUpdatePost(numericPostId!);
+  const { mutateAsync: createMutate, isPending: isCreating } = useMutation({
+    mutationFn: createPost,
+  });
+  const { mutateAsync: updateMutate, isPending: isUpdating } = useUpdatePost(numericPostId!);
 
   const handleSubmit = async () => {
+    // 중복 제출 방지
+    if (isCreating || isUpdating) return;
+
     const { content, images } = editorStateRef.current;
     const { isImagesChanged } = checkHasChanges();
     const imageUrlList = images

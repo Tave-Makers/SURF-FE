@@ -6,12 +6,12 @@ import { PostDetail } from '@/entities/post/model/types';
 /**
  * 게시글 상세 조회 React Query 훅
  */
-export const usePostDetail = (postId: number) =>
+export const usePostDetail = (postId: number, options?: { enabled?: boolean }) =>
   useQuery<PostDetail>({
     queryKey: ['postDetail', postId],
     queryFn: async () => {
       const detail = await getPostDetail(postId);
       return transformDetailToPost(detail);
     },
-    enabled: postId != null,
+    enabled: options?.enabled ?? postId != null,
   });

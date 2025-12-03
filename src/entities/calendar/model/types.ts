@@ -1,13 +1,15 @@
-export type ActivityType = 'official' | 'operation' | 'other';
+export type ActivityCategory = 'official' | 'operation' | 'other';
 export type EventCardType = 'reservation' | 'calendar';
 
-export interface DailyActivity {
-  id: string;
+export type DailyActivity = {
+  id: number | string;
+  category: ActivityCategory;
   title: string;
-  type: ActivityType;
-  startDate?: Date;
-  endDate?: Date;
-  place?: string;
-}
+  startDate: Date | null;
+  endDate: Date | null;
+  location?: string;
+  hasNotice?: boolean;
+  postId?: number;
+};
 
 export type ActivityMap = Record<string, DailyActivity[]>;

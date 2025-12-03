@@ -8,13 +8,19 @@ import { useToggleScrapMutation } from '@/features/post/model/useToggleScrapMuta
 import { EventCard } from '@/entities/calendar/ui/EventCard/EventCard';
 import sanitizeHtml, { IOptions } from 'sanitize-html';
 import { PostImage } from '@/entities/post/ui/post-image/PostImage';
+import { mapCategoryToActivityCategory } from '@/features/calendar/model/mapper';
 
-export function PostBodySection({ post }: { post: PostDetail }) {
+type PostBodySectionProps = {
+  post: PostDetail;
+  onClickLikeCount: () => void;
+};
+
+export function PostBodySection({ post, onClickLikeCount }: PostBodySectionProps) {
+  // 좋아요/스크랩 Mutation
   const likeMutation = useToggleLikeMutation();
   const scrapMutation = useToggleScrapMutation();
 
-  // 좋아요 토글 핸들러
-
+  // 좋아요 토글
   const handleLikeToggle = () => {
     if (likeMutation.isPending) return;
 
@@ -24,7 +30,7 @@ export function PostBodySection({ post }: { post: PostDetail }) {
     });
   };
 
-  // 스크랩 토글 핸들러
+  // 스크랩 토글
   const handleScrapToggle = () => {
     if (scrapMutation.isPending) return;
 
@@ -61,16 +67,17 @@ export function PostBodySection({ post }: { post: PostDetail }) {
       {/* 일정카드 */}
       {post.schedule && (
         <EventCard
+          id={post.schedule.scheduleId}
           title={post.schedule.title}
-          type="official"
+          category={mapCategoryToActivityCategory(post.schedule.category)}
           mode="reservation"
-          place={post.schedule.location}
+          location={post.schedule.location}
           startDate={new Date(post.schedule.startAt)}
           endDate={new Date(post.schedule.endAt)}
         />
       )}
 
-      {/* 좋아요 및 스크랩 */}
+      {/* 좋아요 / 스크랩 */}
       <div className="flex justify-between">
         <ChipToggle
           isClicked={post.likedByMe}
@@ -78,14 +85,17 @@ export function PostBodySection({ post }: { post: PostDetail }) {
           onToggleIcon={handleLikeToggle}
           iconName="Heart"
           activeColor="red"
-          onClickNumber={() => alert('좋아요 누른 사람 목록')}
+          onClickNumber={onClickLikeCount}
+          mode="like"
         />
+
         <ChipToggle
           isClicked={post.scrappedByMe}
           count={post.scrapCount}
           onToggleIcon={handleScrapToggle}
-          activeColor="blue"
           iconName="Bookmark"
+          activeColor="blue"
+          mode="scrap"
         />
       </div>
     </div>

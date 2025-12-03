@@ -3,8 +3,11 @@
 import { SurfIcon } from '@/shared/ui/icon/SurfIcon';
 import { SolidButton } from '@/shared/ui/button/solid-button/SolidButton';
 import * as amplitude from '@amplitude/analytics-browser';
+import { useRouter } from 'next/navigation';
 
 export const HomePage = () => {
+  const router = useRouter();
+
   const handleTestEvent = () => {
     amplitude.track('TEST_EVENT', {
       page: 'HomePage',
@@ -12,6 +15,11 @@ export const HomePage = () => {
     });
     console.info('[Amplitude] TEST_EVENT 전송 완료');
   };
+
+  const handleCalendarClick = () => {
+    router.push('/home/calendar');
+  };
+
   return (
     <div>
       <h1 className="text-head-26-700--1 text-background-primary">안녕하세요 hello world</h1>
@@ -33,6 +41,10 @@ export const HomePage = () => {
       <SolidButton size="s" variant="primary" onClick={handleTestEvent}>
         Amplitude 이벤트 테스트
       </SolidButton>
+
+      <button className="bg-amber-300" onClick={handleCalendarClick}>
+        캘린더 화면 보기 클릭!
+      </button>
     </div>
   );
 };

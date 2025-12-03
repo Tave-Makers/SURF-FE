@@ -15,13 +15,8 @@ export function AppHeader({ customBack, overrideHeader }: AppHeaderProps) {
   const router = useRouter();
   const routeConfig = useMemo(() => createRouteConfig(router), [router]);
 
-  // routeConfig 내 path가 현재 pathname과 일치하는지 검사
-  // 동적 세그먼트는 정규식으로 변환하여 매칭
-  const currentRoute = routeConfig.find((item) => {
-    if (pathname === item.path) return true;
-    const regex = new RegExp('^' + item.path.replace(/\[.*?\]/g, '[^/]+') + '$');
-    return regex.test(pathname);
-  });
+  // 현재 경로에 맞는 route 설정 찾기
+  const currentRoute = routeConfig.find((item) => pathname === item.path);
 
   // 뒤로가기 동작
   const handleBack = () => {
@@ -29,6 +24,7 @@ export function AppHeader({ customBack, overrideHeader }: AppHeaderProps) {
       customBack();
       return;
     }
+
     if (currentRoute) {
       if (window.history.length > 1) {
         router.back();

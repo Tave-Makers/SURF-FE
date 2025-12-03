@@ -23,7 +23,7 @@ const meta: Meta<typeof ChipToggle> = {
     },
     activeColor: {
       control: 'text',
-      description: '활성화 상태일 때 적용할 색상 (red: 빨강, blue: 파랑)',
+      description: '활성화 상태일 때 적용할 색상 클래스',
       defaultValue: 'red',
     },
     onToggleIcon: {
@@ -49,6 +49,8 @@ export const Default: Story = {
     isClicked: false,
     count: 23,
     activeColor: 'red',
+    mode: 'like',
+    onToggleIcon: () => {},
   },
 };
 
@@ -59,6 +61,8 @@ export const Clicked: Story = {
     isClicked: true,
     count: 23,
     activeColor: 'red',
+    mode: 'like',
+    onToggleIcon: () => {},
   },
 };
 
@@ -89,6 +93,7 @@ export const WithoutNumberClick: Story = {
     isClicked: false,
     count: 42,
     activeColor: 'red',
+    mode: 'like',
   },
 };
 
@@ -124,6 +129,7 @@ export const WithNumberClick: Story = {
     isClicked: false,
     count: 42,
     activeColor: 'red',
+    mode: 'like',
   },
 };
 
@@ -153,5 +159,6 @@ export const ScrapButton: Story = {
     iconName: 'Bookmark',
     isClicked: false,
     count: 42,
+    mode: 'scrap',
   },
 };

@@ -19,10 +19,6 @@ const meta: Meta<typeof ToolBar> = {
       control: 'text',
       description: '추가 클래스',
     },
-    activeKey: {
-      control: 'text',
-      description: '현재 활성화된 key',
-    },
     onItemClick: {
       action: 'item-click',
       description: '탭 클릭 시 호출',
@@ -46,7 +42,6 @@ export const Default: Story = {
         <ToolBar
           {...args}
           items={SAMPLE_ITEMS}
-          activeKey={activeKey}
           onItemClick={(key) => {
             setActiveKey(key);
             args.onItemClick?.(key);

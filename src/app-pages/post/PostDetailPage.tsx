@@ -1,7 +1,8 @@
 'use client';
 
-import { usePostDetail } from '@/features/post/model/usePostDetailQuery';
+import { usePostDetail } from '@/entities/post/api/usePostDetail';
 import { PostHeader } from '@/entities/post/ui/post-header/PostHeader';
+import { useKeyboardOffset } from '@/shared/hooks/useKeyboardOffset';
 import { ActionBar } from '@/shared/ui/action-bar/ActionBar';
 import { PostBodySection } from '@/widgets/post-detail/PostBodySection';
 import { AppHeader } from '@/widgets/header/ui/AppHeader';
@@ -11,9 +12,9 @@ import { Sheet } from '@/shared/ui/sheet/Sheet';
 import { SheetItem } from '@/shared/ui/sheet-item/SheetItem';
 import { SurfIcon } from '@/shared/ui/icon/SurfIcon';
 import { useState } from 'react';
-import { useRouter } from 'next/navigation';
 import { deletePost } from '@/features/post/api/deletePost';
 import { Alert } from '@/shared/ui/alert/Alert';
+import { useRouter } from 'next/navigation';
 
 type PostDetailPageProps = {
   postId: string;
@@ -22,6 +23,9 @@ type PostDetailPageProps = {
 export default function PostDetailPage({ postId }: PostDetailPageProps) {
   const router = useRouter();
   const numericPostId = Number(postId);
+  const keyboardOffset = useKeyboardOffset();
+
+  // 게시글 상세 조회 API
   const { data, isLoading, isError } = usePostDetail(numericPostId);
   const [open, setOpen] = useState(false);
   const [showDeleteAlert, setShowDeleteAlert] = useState(false);
@@ -35,6 +39,7 @@ export default function PostDetailPage({ postId }: PostDetailPageProps) {
     );
   }
 
+  // 로딩/에러 처리
   if (isLoading)
     return (
       <div className="flex h-full w-full items-center justify-center">
@@ -87,20 +92,21 @@ export default function PostDetailPage({ postId }: PostDetailPageProps) {
       {/* 본문 */}
       <div className="relative flex h-full w-full flex-col">
         {/* 스크롤 영역 */}
-        <div className="flex-1 overflow-y-auto [-ms-overflow-style:none] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
+        <div className="scrollbar-hide flex-1 overflow-y-auto">
           <main className="flex flex-col gap-[0.62rem] px-13 pt-13">
+            {/* TODO: 링크 연결 */}
             <PostHeader
               title={post.title}
               category={{ title: post.boardLabel }}
               subCategory={{ title: post.categoryLabel }}
             />
 
-            <PostBodySection post={post} />
+            <PostBodySection post={post} onClickLikeCount={() => alert('좋아요 누른 사람 목록')} />
           </main>
         </div>
 
         {/* 댓글 입력창 */}
-        <div className="sticky bottom-0 w-full">
+        <div className="sticky bottom-0 w-full" style={{ paddingBottom: keyboardOffset }}>
           <ActionBar placeholder="댓글을 입력해주세요" />
         </div>
       </div>

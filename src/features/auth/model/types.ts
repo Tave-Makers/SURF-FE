@@ -1,9 +1,12 @@
+import type { UserLevel } from '@/entities/user/model/types';
+
 export type AuthData = {
   accessToken: string | null;
   nickname: string | null;
   email: string | null;
   profileImageUrl: string | null;
   memberId: number | null;
+  memberRole: UserLevel | null;
 };
 
 export type AuthState = AuthData & {

@@ -1,7 +1,8 @@
 'use client';
 
-import { usePostDetail } from '@/features/post/model/usePostDetailQuery';
+import { usePostDetail } from '@/entities/post/api/usePostDetail';
 import { PostHeader } from '@/entities/post/ui/post-header/PostHeader';
+import { useKeyboardOffset } from '@/shared/hooks/useKeyboardOffset';
 import { ActionBar } from '@/shared/ui/action-bar/ActionBar';
 import { PostBodySection } from '@/widgets/post-detail/PostBodySection';
 import { useState } from 'react';
@@ -29,6 +30,8 @@ export default function PostDetailPage({ postId }: PostDetailPageProps) {
   );
 
   const [likedUsersOpen, setLikedUsersOpen] = useState(false);
+  /** 키보드 높이 계산 */
+  const keyboardOffset = useKeyboardOffset();
 
   // postId 유효성 검증
   if (isNaN(numericPostId) || numericPostId <= 0) {
@@ -66,8 +69,9 @@ export default function PostDetailPage({ postId }: PostDetailPageProps) {
   return (
     <div className="relative flex h-full w-full flex-col">
       {/* 스크롤 영역 */}
-      <div className="flex-1 overflow-y-auto [-ms-overflow-style:none] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
+      <div className="scrollbar-hide flex-1 overflow-y-auto">
         <main className="flex flex-col gap-[0.62rem] px-13 pt-13">
+          {/* TODO: 링크 연결 */}
           <PostHeader
             title={post.title}
             category={{ title: post.boardLabel }}
@@ -79,7 +83,7 @@ export default function PostDetailPage({ postId }: PostDetailPageProps) {
       </div>
 
       {/* 댓글 입력창 */}
-      <div className="sticky bottom-0 w-full">
+      <div className="sticky bottom-0 w-full" style={{ paddingBottom: keyboardOffset }}>
         <ActionBar placeholder="댓글을 입력해주세요" />
       </div>
       {/* ============================= */}

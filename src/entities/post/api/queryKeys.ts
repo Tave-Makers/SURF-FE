@@ -9,4 +9,6 @@ export const postQueryKeys = {
   myPosts: () => [...postQueryKeys.all, 'me'] as const,
 
   scraps: () => [...postQueryKeys.all, 'scraps'] as const,
+
+  postDetail: (postId: number) => [...postQueryKeys.all, 'postDetail', postId] as const,
 };

@@ -14,12 +14,15 @@ type PostBodySectionProps = {
 };
 
 export function PostBodySection({ post, onClickLikeCount }: PostBodySectionProps) {
+  const SAMPLE_START_DATE = new Date('2025-11-08T14:00:00');
+  const SAMPLE_END_DATE = new Date('2025-11-08T18:00:00');
   // 좋아요/스크랩 Mutation
   const likeMutation = useToggleLikeMutation();
   const scrapMutation = useToggleScrapMutation();
 
   // 좋아요 토글
   const handleLikeToggle = () => {
+    console.log('좋아요 눌림');
     if (likeMutation.isPending) return;
 
     likeMutation.mutate({
@@ -73,7 +76,15 @@ export function PostBodySection({ post, onClickLikeCount }: PostBodySectionProps
 
       {/* 일정 카드 */}
       {post.hasSchedule && (
-        <EventCard title="후반기 만남의 장" type="official" mode="reservation" place="추후 공지" />
+        <EventCard
+          title="후반기 만남의 장"
+          category="official"
+          mode="reservation"
+          location="추후 공지"
+          id={1}
+          startDate={SAMPLE_START_DATE}
+          endDate={SAMPLE_END_DATE}
+        />
       )}
 
       {/* 좋아요 / 스크랩 */}
@@ -85,6 +96,7 @@ export function PostBodySection({ post, onClickLikeCount }: PostBodySectionProps
           iconName="Heart"
           activeColor="red"
           onClickNumber={onClickLikeCount}
+          mode="like"
         />
 
         <ChipToggle
@@ -93,6 +105,7 @@ export function PostBodySection({ post, onClickLikeCount }: PostBodySectionProps
           onToggleIcon={handleScrapToggle}
           iconName="Bookmark"
           activeColor="blue"
+          mode="scrap"
         />
       </div>
     </div>

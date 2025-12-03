@@ -3,14 +3,14 @@
 import { useState, useMemo, useEffect } from 'react';
 import { Controller, useFormContext } from 'react-hook-form';
 import { Sheet as ModalSheet } from 'react-modal-sheet';
-import { ScheduleFormData } from '@/features/calendar/schedule/post/model/types';
-import { ScheduleCategory } from '@/entities/schedule/model/types';
+import { Sheet } from '@/shared/ui/sheet/Sheet';
 import { AccordionSelect } from '@/shared/ui/accordion/AccordionSelect';
+import { ScheduleCategory } from '@/entities/schedule/model/types';
 import { ScheduleSetting } from '@/entities/schedule/ui/ScheduleSetting/ScheduleSetting';
 import { ScheduleLocation } from '@/entities/schedule/ui/ScheduleLocation/ScheduleLocation';
 import { EventTitle } from '@/entities/schedule/ui/EventTitle/EventTitle';
 import { DateTimePicker } from '@/entities/schedule/ui/DateTimePicker/DateTimePicker';
-import { Sheet } from '@/shared/ui/sheet/Sheet';
+import { ScheduleFormData } from '@/features/calendar/schedule/post/model/types';
 import { useGetSingleSchedule } from '@/features/calendar/schedule/edit/model/useGetSingleSchedule';
 
 export type ScheduleFormProps = {

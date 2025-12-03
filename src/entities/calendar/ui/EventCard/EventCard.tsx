@@ -5,7 +5,7 @@ import { SurfIcon } from '@/shared/ui/icon/SurfIcon';
 import { formatScheduleDate } from '@/entities/calendar/utils/formatScheduleDate';
 import { ActivityCategory, EventCardType } from '@/entities/calendar/model/types';
 import { CalendarBadge } from '@/entities/calendar/ui/CalendarBadge/CalendarBadge';
-import { ScheduleActionSheet } from '@/features/calendar/ui/ScheduleActionSheet/ScheduleActionSheet';
+import { ScheduleActionSheet } from '@/features/calendar/schedule/ui/ScheduleActionSheet/ScheduleActionSheet';
 
 /**
  * 이벤트 카드 컴포넌트

@@ -6,7 +6,7 @@ function loadJSON(filePath: string) {
 }
 
 // 원시 토큰 로드
-const raw = loadJSON('tokens/typography.json');
+const raw = loadJSON('tokens/tokens.json');
 const meta = raw[''] ?? {};
 const groups = { Title: meta.Title, Body: meta.Body, Caption: meta.Caption };
 
@@ -51,29 +51,28 @@ function ensureDim(val: unknown, fallback = '0px') {
 
 function ensureNumberOrRaw(val: unknown) {
   // 여기서는 px로 가되, 문자열 단위가 있으면 그대로.
-  if (val == null) return 'normal';
+  if (val == null) return '';
   if (typeof val === 'number' && Number.isFinite(val)) return `${val}px`;
   if (typeof val === 'string') {
     const v = val.trim();
     if (/^-?\d+(\.\d+)?(px|em|rem|%)$/.test(v)) return v;
     const n = parseFloat(v);
-    return Number.isFinite(n) ? `${n}px` : 'normal';
+    return Number.isFinite(n) ? `${n}px` : '';
   }
-  return 'normal';
+  return '';
 }
 
 function ensureLetterSpacing(val: unknown) {
-  // normal | <length>; percentage는 미허용
-  if (val == null) return 'normal';
+  if (val == null) return '';
   if (typeof val === 'number' && Number.isFinite(val)) return `${val}px`;
   if (typeof val === 'string') {
     const v = val.trim().toLowerCase();
     if (v === 'normal') return 'normal';
     if (/^-?\d+(\.\d+)?(px|em|rem)$/.test(v)) return v;
     const n = parseFloat(v);
-    return Number.isFinite(n) ? `${n}px` : 'normal';
+    return Number.isFinite(n) ? `${n}px` : '';
   }
-  return 'normal';
+  return '';
 }
 
 function makeClassName(group: string, key: string) {
@@ -81,20 +80,41 @@ function makeClassName(group: string, key: string) {
 }
 
 // 참조 해석 유틸
-function resolveRef(obj: any, ref: string) {
+function resolveRef(root: any, ref: string) {
   if (!ref) return '';
+
   const clean = ref.replace(/[{}]/g, '');
-  const pathParts = clean.split('.');
-  let current = obj;
-  for (const part of pathParts) {
-    if (current && typeof current === 'object' && part in current) {
-      current = current[part];
-      if (current && typeof current === 'object' && 'value' in current) {
-        current = current.value;
-      }
+  const parts = clean.split('.');
+
+  function find(obj: any): any {
+    if (!obj || typeof obj !== 'object') return undefined;
+
+    let cur = obj;
+    for (const p of parts) {
+      if (cur && typeof cur === 'object' && p in cur) {
+        cur = cur[p];
+      } else return undefined;
+    }
+
+    if (cur && typeof cur === 'object' && 'value' in cur) {
+      return cur.value;
+    }
+    return cur;
+  }
+
+  // 직접 경로 탐색
+  const direct = find(root);
+  if (direct !== undefined) return direct;
+
+  // tokenSet 순회
+  for (const setName of Object.keys(root)) {
+    if (typeof root[setName] === 'object') {
+      const nested = find(root[setName]);
+      if (nested !== undefined) return nested;
     }
   }
-  return current;
+
+  return '';
 }
 
 // 실사용 CSS 파일 경로
@@ -112,25 +132,25 @@ for (const [groupName, groupObj] of Object.entries(groups)) {
     const val = token.value;
     const className = makeClassName(groupName, key);
 
-    const fontFamily = resolveRef(meta, val.fontFamily) || 'sans-serif';
-    const fontWeight = normalizeWeight(resolveRef(meta, val.fontWeight));
-    const lineHeightRaw = resolveRef(meta, val.lineHeight);
-    const fontSizeRaw = resolveRef(meta, val.fontSize);
-    const letterSpacingRaw = resolveRef(meta, val.letterSpacing);
-    const paragraphSpacingRaw = resolveRef(meta, val.paragraphSpacing);
-    const paragraphIndentRaw = resolveRef(meta, val.paragraphIndent);
-    const textCaseRaw = resolveRef(meta, val.textCase);
-    const textDecoration = resolveRef(meta, val.textDecoration) || 'none';
+    const fontFamily = resolveRef(raw, val.fontFamily);
+    const fontWeight = normalizeWeight(resolveRef(raw, val.fontWeight));
+    const lineHeightRaw = resolveRef(raw, val.lineHeight);
+    const fontSizeRaw = resolveRef(raw, val.fontSize);
+    const letterSpacingRaw = resolveRef(raw, val.letterSpacing);
+    const paragraphSpacingRaw = resolveRef(raw, val.paragraphSpacing);
+    const paragraphIndentRaw = resolveRef(raw, val.paragraphIndent);
+    const textCaseRaw = resolveRef(raw, val.textCase);
+    const textDecoration = resolveRef(raw, val.textDecoration);
 
     const lineHeight = ensureNumberOrRaw(lineHeightRaw);
     const fontSize = ensureDim(fontSizeRaw); // px로
     const letterSpacing = ensureLetterSpacing(letterSpacingRaw);
-    const paragraphSpacing = ensureDim(paragraphSpacingRaw, '0px');
-    const paragraphIndent = ensureDim(paragraphIndentRaw, '0px');
-    const textTransform = textCaseMap[String(textCaseRaw ?? 'none').toLowerCase()] || 'none';
+    const paragraphSpacing = ensureDim(paragraphSpacingRaw);
+    const paragraphIndent = ensureDim(paragraphIndentRaw);
+    const textTransform = textCaseMap[String(textCaseRaw).toLowerCase()];
 
     cssOutput += `  ${className} {\n`;
-    cssOutput += `    font-family: ${fontFamily}, sans-serif;\n`;
+    cssOutput += `    font-family: ${fontFamily};\n`;
     cssOutput += `    font-weight: ${fontWeight};\n`;
     cssOutput += `    line-height: ${lineHeight};\n`;
     cssOutput += `    font-size: ${fontSize};\n`;

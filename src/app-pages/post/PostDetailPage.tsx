@@ -9,7 +9,7 @@ import { AppHeader } from '@/widgets/header/ui/AppHeader';
 import { HeaderMode } from '@/shared/ui/header/Header';
 import { Sheet as ModalSheet } from 'react-modal-sheet';
 import { Sheet } from '@/shared/ui/sheet/Sheet';
-import { SheetItem } from '@/shared/ui/sheet-item/SheetItem';
+import { SheetItem } from '@/shared/ui/sheet/SheetItem';
 import { SurfIcon } from '@/shared/ui/icon/SurfIcon';
 import { useState } from 'react';
 import { deletePost } from '@/features/post/api/deletePost';

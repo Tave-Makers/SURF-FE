@@ -25,21 +25,19 @@ type Props = {
 };
 
 export const PostEditorToolbar = ({ editor, onCameraClick }: Props) => {
+  const actionMap: Record<ToolbarKey, () => void> = {
+    [TOOLBAR_KEY.BOLD]: () => editor.chain().focus().toggleBold().run(),
+    [TOOLBAR_KEY.CAMERA]: onCameraClick,
+    [TOOLBAR_KEY.ALARM]: () => {
+      // TODO: 예약 기능
+    },
+    [TOOLBAR_KEY.CALENDAR]: () => {
+      // TODO: 일정 기능
+    },
+  };
+
   const handleItemClick = (key: ToolbarKey) => {
-    switch (key) {
-      case TOOLBAR_KEY.BOLD:
-        editor.chain().focus().toggleBold().run();
-        break;
-      case TOOLBAR_KEY.CAMERA:
-        onCameraClick();
-        break;
-      case TOOLBAR_KEY.ALARM:
-        // TODO: 예약 기능 구현
-        break;
-      case TOOLBAR_KEY.CALENDAR:
-        // TODO: 일정 기능 구현
-        break;
-    }
+    actionMap[key]?.();
   };
 
   // bold만 active 상태 추가

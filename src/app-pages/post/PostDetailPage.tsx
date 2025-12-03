@@ -24,10 +24,12 @@ export default function PostDetailPage({ postId }: PostDetailPageProps) {
   const { data, isLoading, isError } = usePostDetail(numericPostId);
 
   // 좋아요 누른 사람 목록 API
-  const { data: likedUsersData, refetch: refetchLikedUsers } = useGetPostLikesQuery(
-    numericPostId,
-    false,
-  );
+  const {
+    data: likedUsersData,
+    isLoading: isLikesLoading,
+    isError: isLikesError,
+    refetch: refetchLikedUsers,
+  } = useGetPostLikesQuery(numericPostId, false);
 
   const [likedUsersOpen, setLikedUsersOpen] = useState(false);
   /** 키보드 높이 계산 */
@@ -96,18 +98,20 @@ export default function PostDetailPage({ postId }: PostDetailPageProps) {
             <Sheet title="좋아요를 누른 사람">
               <div className="flex flex-col">
                 {/* 로딩 */}
-                {isLoading && <div className="py-4 text-center text-gray-500">불러오는 중...</div>}
+                {isLikesLoading && (
+                  <div className="py-4 text-center text-gray-500">불러오는 중...</div>
+                )}
 
                 {/* 에러 */}
-                {isError && (
+                {isLikesError && (
                   <div className="py-4 text-center text-red-500">
                     좋아요 목록을 불러오지 못했습니다.
                   </div>
                 )}
 
                 {/* 목록 */}
-                {!isLoading &&
-                  !isError &&
+                {!isLikesLoading &&
+                  !isLikesError &&
                   likedUsers.map((user) => (
                     <SheetItem
                       key={user.id}
@@ -117,7 +121,7 @@ export default function PostDetailPage({ postId }: PostDetailPageProps) {
                   ))}
 
                 {/* 비어 있을 때 */}
-                {!isLoading && !isError && likedUsers.length === 0 && (
+                {!isLikesLoading && !isLikesError && likedUsers.length === 0 && (
                   <div className="py-4 text-center text-gray-500">좋아요가 없습니다.</div>
                 )}
               </div>

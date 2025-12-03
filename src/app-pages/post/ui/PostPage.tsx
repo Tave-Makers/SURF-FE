@@ -268,9 +268,9 @@ export default function PostPage(props: PostPageProps) {
         <input
           id="post-title"
           value={title}
+          maxLength={50}
           onChange={(e) => {
-            const next = e.target.value.slice(0, 50);
-            setTitle(next);
+            setTitle(e.target.value);
           }}
           placeholder="제목을 입력해주세요."
           aria-required="true"

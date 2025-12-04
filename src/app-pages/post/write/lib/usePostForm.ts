@@ -2,7 +2,7 @@ import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { useMutation } from '@tanstack/react-query';
 import { stripHtml } from '@/shared/lib/stripHtml';
-import { usePostDetail } from '@/features/post/get-post/model/usePostDetailQuery';
+import { usePostDetail } from '@/entities/post/api/usePostDetail';
 import { useUpdatePost } from '@/features/post/update-post/model/useUpdatePost';
 import { createPost } from '@/features/post/create-post/api/createPost';
 import { usePicker } from '@/shared/hooks/usePicker';

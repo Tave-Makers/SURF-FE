@@ -5,9 +5,9 @@ export type CreatePostRequest = {
   categoryId: number;
   title: string;
   content: string;
-  pinned: boolean;
-  reservedAt?: string;
+  pinned?: boolean;
+  reservedAt?: string | null;
   imageUrlList?: ImageItem[];
-  hasSchedule: boolean;
-  reserved: boolean;
+  hasSchedule?: boolean;
+  reserved?: boolean;
 };

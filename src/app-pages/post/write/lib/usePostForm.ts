@@ -1,13 +1,12 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { useRouter } from 'next/navigation';
-import { useMutation } from '@tanstack/react-query';
 import { stripHtml } from '@/shared/lib/stripHtml';
 import { usePostDetail } from '@/entities/post/api/usePostDetail';
 import { useUpdatePost } from '@/features/post/update-post/model/useUpdatePost';
-import { createPost } from '@/features/post/create-post/api/createPost';
 import { usePicker } from '@/shared/hooks/usePicker';
 import { POST_CATEGORIES, PostCategoryKey } from '@/entities/post/model/category';
 import { EditorState, PostPageMode, PostSnapshot } from '../model/types';
+import { useCreatePost } from '@/features/post/create-post/model/useCreatePost';
 
 type Props = {
   mode: PostPageMode;
@@ -125,9 +124,7 @@ export const usePostForm = ({ mode, postId }: Props) => {
     else router.back();
   };
 
-  const { mutateAsync: createMutate, isPending: isCreating } = useMutation({
-    mutationFn: createPost,
-  });
+  const { mutateAsync: createMutate, isPending: isCreating } = useCreatePost();
   const { mutateAsync: updateMutate, isPending: isUpdating } = useUpdatePost(numericPostId!);
 
   const handleSubmit = async () => {

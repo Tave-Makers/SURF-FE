@@ -51,8 +51,8 @@ export default function PostDetailPage({ postId }: PostDetailPageProps) {
           {/* TODO: 링크 연결 */}
           <PostHeader
             title={post.title}
-            category={{ title: post.boardLabel }}
-            subCategory={{ title: post.categoryLabel }}
+            category={post.boardLabel ? { title: post.boardLabel } : undefined}
+            subCategory={post.categoryLabel ? { title: post.categoryLabel } : undefined}
           />
 
           <PostBodySection post={post} />

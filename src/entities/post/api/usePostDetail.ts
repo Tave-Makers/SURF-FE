@@ -6,6 +6,6 @@ import { postDetailQueryOptions } from '@/entities/post/api/queryOptions';
 export const usePostDetail = (postId: number, options?: { enabled?: boolean }) =>
   useQuery({
     ...postDetailQueryOptions(postId),
-    enabled: options?.enabled ?? postId != null,
+    enabled: options?.enabled ?? true,
     select: transformDetailToPost,
   });

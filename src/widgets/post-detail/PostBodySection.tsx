@@ -22,7 +22,6 @@ export function PostBodySection({ post, onClickLikeCount }: PostBodySectionProps
 
   // 좋아요 토글
   const handleLikeToggle = () => {
-    console.log('좋아요 눌림');
     if (likeMutation.isPending) return;
 
     likeMutation.mutate({

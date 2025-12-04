@@ -106,13 +106,14 @@ export const PostEditor = ({
 
   /** 이미지 변경 시 부모에게 알림 (contentRef 사용) */
   useEffect(() => {
-    if (!editor) return;
+    if (!editor || !initializedRef.current) return;
 
     onChange({
       content: contentRef.current,
       images,
     });
-  }, [images, editor, onChange]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [images, editor]);
 
   /** 이미지 최대 장수 제한 */
   const { MAX_IMAGES } = POST_VALIDATION;

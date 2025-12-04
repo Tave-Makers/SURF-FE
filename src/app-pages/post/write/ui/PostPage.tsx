@@ -10,6 +10,7 @@ import { Alert } from '@/shared/ui/alert/Alert';
 import { usePostForm } from '../lib/usePostForm';
 import { useRouter } from 'next/navigation';
 import { POST_VALIDATION } from '@/entities/post/model/validation';
+import { POST_BOARDS } from '@/entities/post/model/board';
 
 type PostPageProps =
   | { mode: 'create'; boardId: string }
@@ -41,6 +42,9 @@ export default function PostPage(props: PostPageProps) {
     handleSubmit,
   } = usePostForm({ mode, boardId, postId });
 
+  const board = POST_BOARDS.find((b) => b.id === Number(boardId));
+  const boardLabel = board ? board.label : '';
+
   const { MAX_TITLE_LENGTH } = POST_VALIDATION;
 
   return (
@@ -50,7 +54,7 @@ export default function PostPage(props: PostPageProps) {
         customBack={handleBack}
         overrideHeader={{
           mode: HeaderMode.TextBtn,
-          title: '공지사항',
+          title: boardLabel,
           hasLeftIcon: true,
           text: mode === 'create' ? '등록' : '수정',
           btnVariant: 'secondary',

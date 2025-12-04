@@ -7,6 +7,7 @@ import { usePicker } from '@/shared/hooks/usePicker';
 import { POST_CATEGORIES, PostCategoryKey } from '@/entities/post/model/category';
 import { EditorState, PostPageMode, PostSnapshot } from '../model/types';
 import { useCreatePost } from '@/features/post/create-post/model/useCreatePost';
+import { POST_VALIDATION } from '@/entities/post/model/validation';
 
 type Props = {
   mode: PostPageMode;
@@ -131,7 +132,26 @@ export const usePostForm = ({ mode, postId }: Props) => {
     // 중복 제출 방지
     if (isCreating || isUpdating) return;
 
+    const { MAX_TITLE_LENGTH, MAX_CONTENT_LENGTH, MAX_IMAGES } = POST_VALIDATION;
+
+    if (title.length > MAX_TITLE_LENGTH) {
+      alert(`제목은 최대 ${MAX_TITLE_LENGTH}자까지 입력할 수 있습니다.`);
+      return;
+    }
+
     const { content, images } = editorStateRef.current;
+    const textContent = stripHtml(content);
+
+    if (textContent.length > MAX_CONTENT_LENGTH) {
+      alert(`본문은 최대 ${MAX_CONTENT_LENGTH}자까지 입력할 수 있습니다.`);
+      return;
+    }
+
+    if (images.length > MAX_IMAGES) {
+      alert(`이미지는 최대 ${MAX_IMAGES}개까지 첨부할 수 있습니다.`);
+      return;
+    }
+
     const { isImagesChanged } = checkHasChanges();
     const imageUrlList = images
       .filter((img) => img.uploadedUrl)

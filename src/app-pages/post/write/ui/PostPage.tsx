@@ -9,6 +9,7 @@ import { HeaderMode } from '@/shared/ui/header/Header';
 import { Alert } from '@/shared/ui/alert/Alert';
 import { usePostForm } from '../lib/usePostForm';
 import { useRouter } from 'next/navigation';
+import { POST_VALIDATION } from '@/entities/post/model/validation';
 
 type PostPageProps = { mode: 'create' } | { mode: 'edit'; postId: string };
 
@@ -37,6 +38,8 @@ export default function PostPage(props: PostPageProps) {
     handleBack,
     handleSubmit,
   } = usePostForm({ mode, postId });
+
+  const { MAX_TITLE_LENGTH } = POST_VALIDATION;
 
   return (
     <div className="flex h-full w-full flex-1 flex-col">
@@ -103,7 +106,7 @@ export default function PostPage(props: PostPageProps) {
         <input
           id="post-title"
           value={title}
-          maxLength={50}
+          maxLength={MAX_TITLE_LENGTH}
           onChange={(e) => setTitle(e.target.value)}
           placeholder="제목을 입력해주세요."
           className="text-foreground-foreground-normal placeholder:foreground-foreground-tertiary-lighter text-body-body3 flex flex-1 pt-10 pb-5 focus:outline-none"

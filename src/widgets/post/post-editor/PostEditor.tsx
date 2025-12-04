@@ -12,6 +12,7 @@ import { ImageItemResponse } from '@/entities/post/api/types';
 import { Alert } from '@/shared/ui/alert/Alert';
 import { safeUUID } from '@/shared/utils/uuid';
 import { useKeyboardOffset } from '@/shared/hooks/useKeyboardOffset';
+import { POST_VALIDATION } from '@/entities/post/model/validation';
 
 export type PostEditorProps = {
   initialContent: string;
@@ -114,7 +115,7 @@ export const PostEditor = ({
   }, [images, editor, onChange]);
 
   /** 이미지 최대 장수 제한 */
-  const MAX_IMAGES = 10;
+  const { MAX_IMAGES } = POST_VALIDATION;
   const [showImageLimitAlert, setShowImageLimitAlert] = useState(false);
 
   const handleImageUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {

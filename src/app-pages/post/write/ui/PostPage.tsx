@@ -11,12 +11,14 @@ import { usePostForm } from '../lib/usePostForm';
 import { useRouter } from 'next/navigation';
 import { POST_VALIDATION } from '@/entities/post/model/validation';
 
-type PostPageProps = { mode: 'create' } | { mode: 'edit'; postId: string };
+type PostPageProps =
+  | { mode: 'create'; boardId: string }
+  | { mode: 'edit'; boardId: string; postId: string };
 
 export default function PostPage(props: PostPageProps) {
   const router = useRouter();
 
-  const { mode } = props;
+  const { mode, boardId } = props;
   const postId = mode === 'edit' ? props.postId : undefined;
 
   // 로직 훅 호출 (Logic과 View의 연결 고리)
@@ -37,7 +39,7 @@ export default function PostPage(props: PostPageProps) {
     handleEditorChange,
     handleBack,
     handleSubmit,
-  } = usePostForm({ mode, postId });
+  } = usePostForm({ mode, boardId, postId });
 
   const { MAX_TITLE_LENGTH } = POST_VALIDATION;
 

@@ -11,10 +11,11 @@ import { POST_VALIDATION } from '@/entities/post/model/validation';
 
 type Props = {
   mode: PostPageMode;
+  boardId: string;
   postId?: string;
 };
 
-export const usePostForm = ({ mode, postId }: Props) => {
+export const usePostForm = ({ mode, boardId, postId }: Props) => {
   const router = useRouter();
   const numericPostId = mode === 'edit' && postId ? Number(postId) : undefined;
 
@@ -159,11 +160,10 @@ export const usePostForm = ({ mode, postId }: Props) => {
     const categoryId = POST_CATEGORIES[category!].id;
 
     try {
-      // TODO : 게시글 생성/수정 성공시 postId에 따른 라우팅 로직 추가
-      // let targetPostId = numericPostId; // 수정 모드면 기존 ID가 기본값
+      let targetPostId = numericPostId; // 수정 모드면 기존 ID가 기본값
       if (mode === 'create') {
-        await createMutate({
-          boardId: 1, // TODO: params에서 boardId 동적 받아오기
+        const res = await createMutate({
+          boardId: Number(boardId),
           categoryId,
           title,
           content,
@@ -172,7 +172,7 @@ export const usePostForm = ({ mode, postId }: Props) => {
           imageUrlList,
           hasSchedule: false,
         });
-        // targetPostId = res.postId;
+        targetPostId = res.postId;
       } else {
         await updateMutate({
           title,
@@ -186,9 +186,9 @@ export const usePostForm = ({ mode, postId }: Props) => {
           hasSchedule: false,
         });
       }
-      // if (targetPostId) {
-      //   router.replace(`/posts/${targetPostId}`);
-      // }
+      if (targetPostId) {
+        router.replace(`/board/${boardId}/post/${targetPostId}`);
+      }
     } catch (err) {
       console.error('게시글 처리 실패', err);
       alert('게시글 저장 중 오류가 발생했습니다.');

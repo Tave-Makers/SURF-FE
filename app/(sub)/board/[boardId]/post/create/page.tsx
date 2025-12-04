@@ -4,6 +4,6 @@ import PostPage from '@/app-pages/post/write/ui/PostPage';
 import { useParams } from 'next/navigation';
 
 export default function Page() {
-  const { id } = useParams<{ id: string }>();
-  return <PostPage mode="edit" postId={id} />;
+  const { boardId } = useParams<{ boardId: string; postId: string }>();
+  return <PostPage mode="create" boardId={boardId} />;
 }

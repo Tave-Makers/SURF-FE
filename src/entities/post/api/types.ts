@@ -1,4 +1,5 @@
-import type { CommonResponse } from '@/shared/api/types';
+// API 공통 응답 형식
+import { CommonResponse } from '@/shared/api/types';
 
 // 게시글 상세 이미지 타입
 export type ImageItem = {
@@ -32,6 +33,7 @@ export type PostListItemResponse = {
   viewCount: number;
 };
 
+// 게시물 관련 API 응답 전체 타입
 export type PostListApiResponse = {
   totalPages: number;
   totalElements: number;

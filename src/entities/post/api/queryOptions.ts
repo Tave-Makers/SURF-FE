@@ -27,3 +27,9 @@ export const scrapsQueryOptions = (params: Partial<GetBoardPostsRequest>) =>
     queryKey: postQueryKeys.scraps(),
     queryFn: () => postApi.getScraps(params),
   });
+
+export const postDetailQueryOptions = (postId: number) =>
+  queryOptions({
+    queryKey: postQueryKeys.postDetail(postId),
+    queryFn: () => postApi.getPostDetail(postId),
+  });

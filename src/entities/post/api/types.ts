@@ -113,3 +113,15 @@ export type CreatePostRequest = {
   imageUrlList?: ImageItem[];
   reserved: boolean;
 };
+
+// 좋아요 누른 유저 타입
+export interface LikedUser {
+  id: number;
+  name: string;
+  profileImageUrl: string;
+}
+
+// 게시글 좋아요 누른 유저 API 응답 타입
+export interface GetPostLikesResponse {
+  likes: LikedUser[];
+}

@@ -2,8 +2,9 @@ import { PostDetailData, PostListItemResponse, PostScheduleData } from '@/entiti
 import { TAB_CATEGORIES, TabCategoryLabel, TabCategoryKey } from '@/entities/post/model/tab';
 import { categoryIdToLabel } from './category';
 import type { Post, PostDetail } from './types';
-import { parseDateTime } from '@/shared/lib/parseDateTime';
 import { POST_BOARDS } from './board';
+import { formatDate, formatDateTime, toKST } from '@/shared/utils/date';
+import { toDate } from 'date-fns';
 
 export const transformListItemToPost = (item: PostListItemResponse): Post => ({
   postId: item.postId,
@@ -43,14 +44,14 @@ export const boardLabelToId = (label: string) => {
 export const transformDetailToPost = (
   item: PostDetailData & { schedule?: PostScheduleData | null },
 ): PostDetail => {
-  const { date, time } = parseDateTime(item.postedAt);
+  const dateObj = toKST(toDate(item.postedAt));
 
   return {
     postId: item.postId,
     title: item.title,
     content: item.content,
-    date,
-    time,
+    date: formatDate(dateObj),
+    time: formatDateTime(dateObj).split(' ')[1],
     pinned: item.pinned,
     boardId: item.boardId,
     boardLabel: boardIdToLabel(item.boardId),

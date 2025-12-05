@@ -1,6 +1,7 @@
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { toggleScrap } from '../api/toggleScrap';
 import { PostDetail } from '@/entities/post/model/types';
+import { postQueryKeys } from '@/entities/post/api/queryKeys';
 
 export const useToggleScrapMutation = () => {
   const queryClient = useQueryClient();
@@ -9,16 +10,18 @@ export const useToggleScrapMutation = () => {
     mutationFn: ({ postId, scrapped }: { postId: number; scrapped: boolean }) =>
       toggleScrap(postId, scrapped),
 
-    // optimistic update
+    // Optimistic update
     onMutate: async ({ postId, scrapped }) => {
-      // 1) 기존에 진행 중이던 동일 쿼리의 요청 취소
-      await queryClient.cancelQueries({ queryKey: ['postDetail', postId] });
+      const queryKey = postQueryKeys.postDetail(postId);
 
-      // 2) rollback을 위해 이전 데이터 백업
-      const prevData = queryClient.getQueryData(['postDetail', postId]);
+      // 1) 기존 요청 취소
+      await queryClient.cancelQueries({ queryKey });
 
-      // 3) 캐시를 직접 수정하여 UI를 즉시 업데이트
-      queryClient.setQueryData(['postDetail', postId], (old: PostDetail) => {
+      // 2) 이전 데이터 백업
+      const prevData = queryClient.getQueryData<PostDetail>(queryKey);
+
+      // 3) 캐시 직접 수정 → UI 즉시 반영
+      queryClient.setQueryData<PostDetail | undefined>(queryKey, (old) => {
         if (!old) return old;
 
         return {
@@ -28,22 +31,23 @@ export const useToggleScrapMutation = () => {
         };
       });
 
-      // rollback용 데이터 반환
       return { prevData };
     },
 
-    // optimistic update 실패 시 — 롤백 처리
+    // 실패 시 롤백
     onError: (_err, variables, context) => {
+      const queryKey = postQueryKeys.postDetail(variables.postId);
+
       if (context?.prevData) {
-        queryClient.setQueryData(['postDetail', variables.postId], context.prevData);
+        queryClient.setQueryData(queryKey, context.prevData);
       }
     },
 
-    // 성공/실패 여부와 관계없이 최신 서버 상태로 동기화
+    // 성공/실패 관계없이 최종 서버 상태로 동기화
     onSettled: (_data, _error, variables) => {
-      void queryClient.invalidateQueries({
-        queryKey: ['postDetail', variables.postId],
-      });
+      const queryKey = postQueryKeys.postDetail(variables.postId);
+
+      void queryClient.invalidateQueries({ queryKey });
     },
   });
 };

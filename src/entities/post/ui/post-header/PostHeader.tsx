@@ -1,7 +1,7 @@
 import Link from 'next/link';
 
 export type CategoryItem = {
-  title: string;
+  title: string | null;
   href?: string;
 };
 

@@ -1,10 +1,23 @@
 import { ScheduleCreateRequest, ScheduleCreateResponse } from '@/entities/schedule/model/types';
-import { useMutation } from '@tanstack/react-query';
+import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { postSchedule } from '../api/postSchedule';
+import { scheduleQueryKeys } from '@/features/calendar/api/queryKeys';
 
 export const usePostSchedule = () => {
+  const queryClient = useQueryClient();
+
   return useMutation<ScheduleCreateResponse, Error, ScheduleCreateRequest>({
     mutationKey: ['schedule', 'create'],
     mutationFn: (data) => postSchedule(data),
+
+    onSuccess: () => {
+      void queryClient.invalidateQueries({ queryKey: scheduleQueryKeys.all });
+    },
+
+    onError: (error) => {
+      if (process.env.NODE_ENV === 'development') {
+        console.error('일정 생성 요청 실패:', error);
+      }
+    },
   });
 };

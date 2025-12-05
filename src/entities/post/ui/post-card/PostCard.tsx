@@ -1,46 +1,44 @@
 'use client';
 
+import { memo } from 'react';
 import { SurfIcon } from '@/shared/ui/icon/SurfIcon';
 import { PostBadge } from '@/entities/post/ui/post-badge/PostBadge';
-import type { Post } from '@/entities/post/model/types';
-import type { UserLevel } from '@/entities/user/model/types';
-import type { TabCategoryLabel } from '@/entities/post/model/constants';
+import { Post } from '../../model/types';
+import { stripHtml } from '@/shared/lib/stripHtml';
+import { toDate, toKST, timeAgo } from '@/shared/utils/date';
 
 type PostCardProps = {
   post: Post;
-  currentCategory?: TabCategoryLabel;
-  userLevel: UserLevel;
   onClick?: () => void;
   onLikeToggle?: (newState: boolean) => void;
+  shouldShowCategoryBadge?: boolean;
+  shouldShowReservationBadge?: boolean;
 };
 
-export const PostCard = ({
+function PostCardComponent({
   post,
-  currentCategory,
-  userLevel,
   onClick,
   onLikeToggle,
-}: PostCardProps) => {
+  shouldShowCategoryBadge,
+  shouldShowReservationBadge,
+}: PostCardProps) {
   const {
     title,
     content,
     writer,
-    date,
     likeCount,
     isLiked,
+    isReserved,
     commentCount,
     categoryName,
-    isReserved,
     thumbnailUrl,
   } = post;
 
-  // 탭이 "전체"일 때만 카테고리 배지 표시
-  const shouldShowCategoryBadge = currentCategory === '전체';
-
-  // 예약중 배지는 member가 아닐 때만 표시
-  const showReservationBadge = isReserved && userLevel !== 'member';
+  const rawDate = post.date;
+  const dateObj = toKST(toDate(rawDate));
 
   const handleKeyDown = (e: React.KeyboardEvent<HTMLDivElement>) => {
+    if (e.currentTarget !== e.target) return;
     if (e.key === 'Enter' || e.key === ' ') {
       e.preventDefault();
       onClick?.();
@@ -59,9 +57,9 @@ export const PostCard = ({
       <div className="flex flex-1 flex-col gap-8 self-stretch">
         {/* 뱃지 */}
         <div className="flex gap-5">
-          {shouldShowCategoryBadge && <PostBadge type="category" category={categoryName} />}
+          {shouldShowCategoryBadge && <PostBadge type="category" label={categoryName} />}
 
-          {showReservationBadge && <PostBadge type="reservation" />}
+          {shouldShowReservationBadge && isReserved && <PostBadge type="reservation" />}
         </div>
 
         {/* 본문 */}
@@ -70,13 +68,13 @@ export const PostCard = ({
             {title}
           </h3>
           <p className="text-body-body6 text-foreground-foreground-normal-lighter line-clamp-1">
-            {content}
+            {stripHtml(content)}
           </p>
 
           <footer className="text-caption-caption2 text-foreground-foreground-tertiary flex items-center gap-5">
             <span>{writer}</span>
             <span>|</span>
-            <time dateTime={date}>{date}</time>
+            <time dateTime={rawDate}>{timeAgo(dateObj)}</time>
             <span>|</span>
 
             {/* 좋아요 */}
@@ -123,4 +121,6 @@ export const PostCard = ({
       )}
     </div>
   );
-};
+}
+
+export const PostCard = memo(PostCardComponent);

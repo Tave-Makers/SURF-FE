@@ -5,7 +5,7 @@ import { useState, useRef, useEffect } from 'react';
 export type EventTitleProps = {
   placeholder: string;
   title: string;
-  onChange?: (value: string) => void;
+  onChange: (value: string) => void;
 };
 
 export function EventTitle({ placeholder, title, onChange }: EventTitleProps) {
@@ -41,16 +41,10 @@ export function EventTitle({ placeholder, title, onChange }: EventTitleProps) {
     }
   };
 
-  const handleBlur = () => {
-    setIsEditing(false);
-    if (value !== title) {
-      onChange?.(value);
-    }
-  };
-
   const handleChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
     const newValue = e.target.value.replace(/\n/g, ' ');
     setValue(newValue);
+    onChange(newValue);
   };
 
   const handleTextAreaKeyDown = (e: React.KeyboardEvent<HTMLTextAreaElement>) => {
@@ -68,7 +62,6 @@ export function EventTitle({ placeholder, title, onChange }: EventTitleProps) {
           placeholder={placeholder}
           value={value}
           onChange={handleChange}
-          onBlur={handleBlur}
           onKeyDown={handleTextAreaKeyDown}
           minLength={2}
           maxLength={20}

@@ -1,16 +1,14 @@
 'use client';
 
-import { format } from 'date-fns';
-import { ko } from 'date-fns/locale';
 import { useState } from 'react';
 import { SurfIcon } from '@/shared/ui/icon/SurfIcon';
-import { CalendarBadge } from '@/entities/calendar/ui/CalendarBadge/CalendarBadge';
-import { ScheduleActionSheet } from '@/entities/calendar/ui/ScheduleActionSheet/ScheduleActionSheet';
+import { formatScheduleDate } from '@/entities/calendar/utils/formatScheduleDate';
 import { ActivityCategory, EventCardType } from '@/entities/calendar/model/types';
+import { CalendarBadge } from '@/entities/calendar/ui/CalendarBadge/CalendarBadge';
+import { ScheduleActionSheet } from '@/features/calendar/schedule/ui/ScheduleActionSheet/ScheduleActionSheet';
 
 /**
  * 이벤트 카드 컴포넌트
- * @param id - 일정 이벤트 고유 ID
  * @param category - 일정 이벤트 유형 (ActivityCategory: 'official', 'operation', 'other' 중 하나)
  * @param scheduleId - 일정 ID (바텀 시트 오픈 시 필요)
  * @param title - 일정 이벤트 제목
@@ -25,7 +23,6 @@ import { ActivityCategory, EventCardType } from '@/entities/calendar/model/types
  * @param mode - 이벤트 카드 모드 (EventCardType: 'reservation', 'calendar' 중 하나)
  */
 export type EventCardProps = {
-  id: number | string;
   category: ActivityCategory;
   scheduleId?: string | number;
   title: string;
@@ -41,7 +38,6 @@ export type EventCardProps = {
 };
 
 export function EventCard({
-  id,
   category,
   scheduleId,
   title,
@@ -49,7 +45,7 @@ export function EventCard({
   endDate,
   location,
   isAdmin,
-  hasNotice = false,
+  hasNotice,
   onClickCard,
   onDeleteSchedule,
   mode,
@@ -61,6 +57,7 @@ export function EventCard({
     if (mode === 'calendar') {
       onClickCard?.();
 
+      // TODO: 공지사항 바로가기 로직 추가
       if (process.env.NODE_ENV === 'development') {
         console.log('EventCard clicked');
       }
@@ -70,6 +67,7 @@ export function EventCard({
   const handleDeleteSchedule = () => {
     onDeleteSchedule?.();
 
+    // TODO: 아래 로그는 삭제할 예정
     if (process.env.NODE_ENV === 'development') {
       console.log('Delete schedule clicked');
     }
@@ -78,17 +76,16 @@ export function EventCard({
   // 캘린더 화면에서 공지사항 바로가기 노출 여부
   const showNoticeLink = mode === 'calendar' && hasNotice && postId !== undefined;
 
-  const formattedStartDate = startDate
-    ? format(startDate, 'MM월 dd일 (eee) HH:mm', { locale: ko })
-    : '미정';
-  const formattedEndDate = endDate
-    ? format(endDate, 'MM월 dd일 (eee) HH:mm', { locale: ko })
-    : '미정';
+  // 시작일/종료일 포맷팅
+  const formattedStartDate = formatScheduleDate(startDate);
+  const formattedEndDate = formatScheduleDate(endDate);
+
+  const baseClassNames =
+    'rounded-4 border-border-border-quinary bg-background-background-normal-lighter flex w-full flex-1 cursor-pointer flex-col items-start gap-8 border px-13 py-11';
 
   return (
     <>
       <div
-        key={id}
         role="button"
         tabIndex={0}
         onClick={handleCardClick}
@@ -98,7 +95,7 @@ export function EventCard({
             handleCardClick();
           }
         }}
-        className="rounded-4 border-border-border-quinary bg-background-background-normal-lighter flex w-full flex-1 cursor-pointer flex-col items-start gap-8 border px-13 py-11"
+        className={baseClassNames}
       >
         {/* Header 영역 */}
         <section className="flex items-center gap-8 self-stretch">
@@ -125,7 +122,7 @@ export function EventCard({
 
           {/* 닫기 또는 더보기 */}
           <div className="flex items-center justify-center">
-            {/* 케이스 1: 일정 작성/수정 모드일 때 닫기 버튼 */}
+            {/* case1: 일정 작성/수정 모드일 때 닫기 버튼 */}
             {mode === 'reservation' && isAdmin && (
               <button
                 type="button"
@@ -140,7 +137,7 @@ export function EventCard({
               </button>
             )}
 
-            {/* 케이스 2: 일정 화면이고 운영진일 때 더보기 버튼 */}
+            {/* case2: 캘린더 화면이고 운영진일 때 더보기 버튼 */}
             {mode === 'calendar' && isAdmin && (
               <button
                 type="button"

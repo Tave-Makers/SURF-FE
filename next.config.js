@@ -1,5 +1,9 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
+  experimental: {
+    reactCompiler: true
+  },
+
   turbopack: {
     // Turbopack 전용 설정
     rules: {
@@ -9,6 +13,42 @@ const nextConfig = {
       },
     },
   },
+
+images: {
+  remotePatterns: [
+    {
+      protocol: 'https',
+      hostname: 'k.kakaocdn.net',
+      pathname: '/**',
+    },
+    {
+      protocol: 'http',
+      hostname: 'k.kakaocdn.net',
+      pathname: '/**',
+    },
+    {
+      protocol: 'https',
+      hostname: 'img1.kakaocdn.net',
+      pathname: '/**',
+    },
+    {
+      protocol: 'http',
+      hostname: 'img1.kakaocdn.net',
+      pathname: '/**',
+    },
+    {
+      protocol: 'https',
+      hostname: 't1.kakaocdn.net',
+      pathname: '/**',
+    },
+    {
+      protocol: 'http',
+      hostname: 't1.kakaocdn.net',
+      pathname: '/**',
+    },
+  ],
+},
+
 
   webpack(config) {
     const fileLoaderRule = config.module.rules.find(

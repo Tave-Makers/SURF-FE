@@ -3,14 +3,14 @@
 import { useState, useMemo, useEffect } from 'react';
 import { Controller, useFormContext } from 'react-hook-form';
 import { Sheet as ModalSheet } from 'react-modal-sheet';
-import { ScheduleFormData } from '@/features/calendar/schedule/post/model/types';
-import { ScheduleCategory } from '@/entities/schedule/model/types';
+import { Sheet } from '@/shared/ui/sheet/Sheet';
 import { AccordionSelect } from '@/shared/ui/accordion/AccordionSelect';
+import { ScheduleCategory } from '@/entities/schedule/model/types';
 import { ScheduleSetting } from '@/entities/schedule/ui/ScheduleSetting/ScheduleSetting';
 import { ScheduleLocation } from '@/entities/schedule/ui/ScheduleLocation/ScheduleLocation';
 import { EventTitle } from '@/entities/schedule/ui/EventTitle/EventTitle';
 import { DateTimePicker } from '@/entities/schedule/ui/DateTimePicker/DateTimePicker';
-import { Sheet } from '@/shared/ui/sheet/Sheet';
+import { ScheduleFormData } from '@/features/calendar/schedule/post/model/types';
 import { useGetSingleSchedule } from '@/features/calendar/schedule/edit/model/useGetSingleSchedule';
 
 export type ScheduleFormProps = {
@@ -32,6 +32,12 @@ const CATEGORY_OPTIONS: { value: ScheduleCategory; label: string }[] = [
   { value: 'other', label: '기타일정' },
 ];
 
+const CATEGORY_MAP: Record<string, ScheduleCategory> = {
+  정규행사: 'regular',
+  운영회의: 'operation',
+  기타일정: 'other',
+};
+
 // RHF 필드 값이 유효한지 확인하고, 유효하지 않으면 현재 날짜를 반환하는 헬퍼 함수
 const getInitialDate = (date?: Date): Date =>
   date instanceof Date && !isNaN(date.getTime()) ? date : new Date();
@@ -39,9 +45,7 @@ const getInitialDate = (date?: Date): Date =>
 export default function ScheduleForm({ mode = 'create', id, onSubmit }: ScheduleFormProps) {
   const { control, handleSubmit, watch, reset } = useFormContext<ScheduleFormData>();
 
-  const [isCategoryOpen, setIsCategoryOpen] = useState(false);
-  const [isStartDateOpen, setIsStartDateOpen] = useState(false);
-  const [isEndDateOpen, setIsEndDateOpen] = useState(false);
+  const [openModal, setOpenModal] = useState<'category' | 'startDate' | 'endDate' | null>(null);
 
   const scheduleId = id || 0;
   const { data: scheduleDetail } = useGetSingleSchedule(scheduleId, mode);
@@ -50,13 +54,7 @@ export default function ScheduleForm({ mode = 'create', id, onSubmit }: Schedule
   useEffect(() => {
     if (mode === 'edit' && scheduleDetail) {
       reset({
-        category:
-          scheduleDetail.category === '운영회의'
-            ? 'operation'
-            : scheduleDetail.category === '기타일정'
-              ? 'other'
-              : 'regular',
-
+        category: CATEGORY_MAP[scheduleDetail.category] || 'regular',
         title: scheduleDetail.title ?? '',
         startDate: scheduleDetail.startAt ? new Date(scheduleDetail.startAt) : new Date(),
         endDate: scheduleDetail.endAt ? new Date(scheduleDetail.endAt) : new Date(),
@@ -65,7 +63,6 @@ export default function ScheduleForm({ mode = 'create', id, onSubmit }: Schedule
     }
   }, [mode, scheduleDetail, reset]);
 
-  const selectedCategory = watch('category');
   const watchedStartDate = watch('startDate');
   const watchedEndDate = watch('endDate');
 
@@ -75,43 +72,25 @@ export default function ScheduleForm({ mode = 'create', id, onSubmit }: Schedule
   const [tempStartDate, setTempStartDate] = useState(initialTempStartDate);
   const [tempEndDate, setTempEndDate] = useState(initialTempEndDate);
 
-  /* 시작일 모달 핸들러 */
-
-  // 시작일 모달 열기: RHF 값을 임시 상태에 동기화하고 모달 열기
-  const handleOpenStartDate = () => {
-    // 모달을 열기 직전에 RHF의 현재 값을 임시 상태의 초기값으로 설정합니다.
-    setTempStartDate(getInitialDate(watchedStartDate));
-    setIsStartDateOpen(true);
+  // 날짜 모달 열기 핸들러
+  const handleOpenDateModal = (type: 'startDate' | 'endDate') => {
+    if (type === 'startDate') {
+      setTempStartDate(getInitialDate(watchedStartDate));
+    } else {
+      setTempEndDate(getInitialDate(watchedEndDate));
+    }
+    setOpenModal(type);
   };
 
-  // 시작일 '예약하기' (저장) 핸들러: 임시 상태를 RHF에 반영하고 모달 닫기
-  const handleSaveStartDate = (rhfOnChange: (date: Date) => void) => {
-    rhfOnChange(tempStartDate);
-    setIsStartDateOpen(false);
+  // 날짜 저장 핸들러
+  const handleSaveDate = (type: 'startDate' | 'endDate', rhfOnChange: (date: Date) => void) => {
+    rhfOnChange(type === 'startDate' ? tempStartDate : tempEndDate);
+    setOpenModal(null);
   };
 
-  // 시작일 '취소하기' 핸들러: RHF에 반영하지 않고 모달 닫기
-  const handleCancelStartDate = () => {
-    setIsStartDateOpen(false);
-  };
-
-  /* 종료일 모달 핸들러 */
-
-  // 종료일 모달 열기: RHF 값을 임시 상태에 동기화하고 모달 열기
-  const handleOpenEndDate = () => {
-    setTempEndDate(getInitialDate(watchedEndDate));
-    setIsEndDateOpen(true);
-  };
-
-  // 종료일 '예약하기' (저장) 핸들러: 임시 상태를 RHF에 반영하고 모달 닫기
-  const handleSaveEndDate = (rhfOnChange: (date: Date) => void) => {
-    rhfOnChange(tempEndDate);
-    setIsEndDateOpen(false);
-  };
-
-  // 종료일 '취소하기' 핸들러: RHF에 반영하지 않고 모달 닫기
-  const handleCancelEndDate = () => {
-    setIsEndDateOpen(false);
+  // 모달 닫기 핸들러
+  const handleCloseModal = () => {
+    setOpenModal(null);
   };
 
   return (
@@ -122,60 +101,58 @@ export default function ScheduleForm({ mode = 'create', id, onSubmit }: Schedule
       }}
     >
       {/* 일정 카테고리 선택 */}
-      <div>
-        <Controller
-          name="category"
-          control={control}
-          render={({ field }) => (
-            <>
-              <AccordionSelect
-                title={selectedCategory ? CATEGORY_LABELS[selectedCategory] : '정규행사'}
-                isOpen={isCategoryOpen}
-                onClick={() => setIsCategoryOpen((prev) => !prev)}
-                controlsId="select-sheet"
+      <Controller
+        name="category"
+        control={control}
+        render={({ field }) => (
+          <div>
+            <AccordionSelect
+              title={field.value ? CATEGORY_LABELS[field.value] : '정규행사'}
+              isOpen={openModal === 'category'}
+              onClick={() => setOpenModal(openModal === 'category' ? null : 'category')}
+              controlsId="select-sheet"
+            />
+            <ModalSheet
+              isOpen={openModal === 'category'}
+              onClose={handleCloseModal}
+              aria-labelledby="select-sheet"
+              className="mx-auto flex w-full sm:w-[360px]"
+            >
+              <ModalSheet.Container>
+                <ModalSheet.Header />
+                <ModalSheet.Content>
+                  <div
+                    id="select-sheet"
+                    className="rounded-4 flex flex-col gap-4 px-15 pt-16 pb-15"
+                  >
+                    {CATEGORY_OPTIONS.map((option) => (
+                      <button
+                        key={option.value}
+                        type="button"
+                        onClick={() => {
+                          field.onChange(option.value);
+                          handleCloseModal();
+                        }}
+                        className={`text-foreground-foreground-normal text-body-body5 flex w-full flex-1 items-center px-12 py-10 ${
+                          field.value === option.value
+                            ? 'bg-background-background-secondary'
+                            : 'hover:bg-background-background-secondary'
+                        } `}
+                      >
+                        {option.label}
+                      </button>
+                    ))}
+                  </div>
+                </ModalSheet.Content>
+              </ModalSheet.Container>
+              <ModalSheet.Backdrop
+                onTap={handleCloseModal}
+                style={{ backgroundColor: 'rgba(0, 0, 0, 0.70)' }}
               />
-              <ModalSheet
-                isOpen={isCategoryOpen}
-                onClose={() => setIsCategoryOpen(false)}
-                aria-labelledby="select-sheet"
-                className="mx-auto flex w-full sm:w-[360px]"
-              >
-                <ModalSheet.Container>
-                  <ModalSheet.Header />
-                  <ModalSheet.Content>
-                    <div
-                      id="select-sheet"
-                      className="rounded-4 flex flex-col gap-4 px-15 pt-16 pb-15"
-                    >
-                      {CATEGORY_OPTIONS.map((option) => (
-                        <button
-                          key={option.value}
-                          type="button"
-                          onClick={() => {
-                            field.onChange(option.value);
-                            setIsCategoryOpen(false);
-                          }}
-                          className={`text-foreground-foreground-normal text-body-body5 flex w-full flex-1 items-center px-12 py-10 ${
-                            selectedCategory === option.value
-                              ? 'bg-background-background-secondary'
-                              : 'hover:bg-background-background-secondary'
-                          } `}
-                        >
-                          {option.label}
-                        </button>
-                      ))}
-                    </div>
-                  </ModalSheet.Content>
-                </ModalSheet.Container>
-                <ModalSheet.Backdrop
-                  onTap={() => setIsCategoryOpen(false)}
-                  style={{ backgroundColor: 'rgba(0, 0, 0, 0.70)' }}
-                />
-              </ModalSheet>
-            </>
-          )}
-        />
-      </div>
+            </ModalSheet>
+          </div>
+        )}
+      />
 
       {/* 이벤트 title */}
       <div className="pt-10">
@@ -207,11 +184,11 @@ export default function ScheduleForm({ mode = 'create', id, onSubmit }: Schedule
                 // RHF 필드 값 표시
                 date={field.value}
                 // 모달 열기 시 임시 상태 동기화 및 모달 열기
-                onClick={handleOpenStartDate}
+                onClick={() => handleOpenDateModal('startDate')}
               />
               <ModalSheet
-                isOpen={isStartDateOpen}
-                onClose={handleCancelStartDate}
+                isOpen={openModal === 'startDate'}
+                onClose={handleCloseModal}
                 className="mx-auto flex w-full sm:w-[360px]"
               >
                 <ModalSheet.Container>
@@ -223,12 +200,12 @@ export default function ScheduleForm({ mode = 'create', id, onSubmit }: Schedule
                       primaryBtn={{
                         label: '예약하기',
                         // 임시 상태를 RHF에 반영
-                        onClick: () => handleSaveStartDate(field.onChange),
+                        onClick: () => handleSaveDate('startDate', field.onChange),
                       }}
                       secondaryBtn={{
                         label: '취소하기',
                         // RHF에 반영하지 않고 닫기
-                        onClick: handleCancelStartDate,
+                        onClick: handleCloseModal,
                       }}
                     >
                       <div>
@@ -239,7 +216,7 @@ export default function ScheduleForm({ mode = 'create', id, onSubmit }: Schedule
                   </ModalSheet.Content>
                 </ModalSheet.Container>
                 <ModalSheet.Backdrop
-                  onTap={() => handleCancelStartDate()}
+                  onTap={handleCloseModal}
                   style={{ backgroundColor: 'rgba(0, 0, 0, 0.70)' }}
                 />
               </ModalSheet>
@@ -262,11 +239,11 @@ export default function ScheduleForm({ mode = 'create', id, onSubmit }: Schedule
                 // RHF 필드 값 표시
                 date={field.value}
                 // 모달 열기 시 임시 상태 동기화 및 모달 열기
-                onClick={handleOpenEndDate}
+                onClick={() => handleOpenDateModal('endDate')}
               />
               <ModalSheet
-                isOpen={isEndDateOpen}
-                onClose={handleCancelEndDate}
+                isOpen={openModal === 'endDate'}
+                onClose={handleCloseModal}
                 className="mx-auto flex w-full sm:w-[360px]"
               >
                 <ModalSheet.Container>
@@ -278,12 +255,12 @@ export default function ScheduleForm({ mode = 'create', id, onSubmit }: Schedule
                       primaryBtn={{
                         label: '예약하기',
                         // 임시 상태를 RHF에 반영
-                        onClick: () => handleSaveEndDate(field.onChange),
+                        onClick: () => handleSaveDate('endDate', field.onChange),
                       }}
                       secondaryBtn={{
                         label: '취소하기',
                         // RHF에 반영하지 않고 닫기
-                        onClick: handleCancelEndDate,
+                        onClick: handleCloseModal,
                       }}
                     >
                       {/* DateTimePicker는 임시 상태를 사용하고, 임시 상태를 업데이트 */}
@@ -292,7 +269,7 @@ export default function ScheduleForm({ mode = 'create', id, onSubmit }: Schedule
                   </ModalSheet.Content>
                 </ModalSheet.Container>
                 <ModalSheet.Backdrop
-                  onTap={() => handleCancelEndDate()}
+                  onTap={handleCloseModal}
                   style={{ backgroundColor: 'rgba(0, 0, 0, 0.70)' }}
                 />
               </ModalSheet>

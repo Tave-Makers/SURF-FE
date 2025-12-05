@@ -1,17 +1,16 @@
 'use client';
 
+import { format } from 'date-fns';
+import { useState } from 'react';
 import { useParams, useRouter } from 'next/navigation';
 import { useForm, FormProvider } from 'react-hook-form';
-import { useState, useMemo } from 'react';
-import { format } from 'date-fns';
-
-import ScheduleForm from '@/widgets/schedule/ui/ScheduleForm';
+import { Alert } from '@/shared/ui/alert/Alert';
+import { HeaderMode, HeaderProps } from '@/shared/ui/header/Header';
 import { ScheduleFormData } from '@/features/calendar/schedule/post/model/types';
 import { useEditSchedule } from '@/features/calendar/schedule/edit/model/useEditSchedule';
 import { mapScheduleFormToRequest } from '@/features/calendar/schedule/post/api/mapper';
 import { AppHeader } from '@/widgets/header/ui/AppHeader';
-import { HeaderMode, HeaderProps } from '@/shared/ui/header/Header';
-import { Alert } from '@/shared/ui/alert/Alert';
+import ScheduleForm from '@/widgets/schedule/ui/ScheduleForm';
 
 export default function EditSchedulePage() {
   const params = useParams();
@@ -46,16 +45,19 @@ export default function EditSchedulePage() {
   const startDate = methods.watch('startDate');
   const endDate = methods.watch('endDate');
 
-  const isFormValid = useMemo(() => {
-    const isTitleValid = (title?.trim().length ?? 0) >= 2;
+  // 제목 검증: 최소 2자 이상
+  const isTitleValid = title.trim().length >= 2;
 
-    const isDateValid =
-      startDate instanceof Date &&
-      endDate instanceof Date &&
-      endDate.getTime() >= startDate.getTime();
+  // 시작일/마감일 검증: 둘 다 선택되어 있고, 마감일이 시작일과 같거나 이후
+  const isDateValid =
+    startDate instanceof Date &&
+    endDate instanceof Date &&
+    !isNaN(startDate.getTime()) &&
+    !isNaN(endDate.getTime()) &&
+    endDate.getTime() >= startDate.getTime();
 
-    return isTitleValid && isDateValid;
-  }, [title, startDate, endDate]);
+  // 최종 버튼 활성화 조건
+  const isFormValid = isTitleValid && isDateValid;
 
   const handleSubmit = (data: ScheduleFormData) => {
     if (!isFormValid || isPending || !scheduleId) return;
@@ -93,7 +95,7 @@ export default function EditSchedulePage() {
           hasLeftIcon: true,
           text: '수정',
           btnVariant: 'secondary',
-          isDisabled: !isFormValid || methods.formState.isSubmitting,
+          isDisabled: !isFormValid || methods.formState.isSubmitting || isPending,
           onClickTextBtn: () => void methods.handleSubmit(handleSubmit)(),
         }))()}
       />

@@ -1,5 +1,6 @@
 import { UploadImage } from './types';
 import { postPresignedUrl } from '../api/postPresignedUrl';
+import { safeUUID } from '@/shared/utils/uuid';
 
 /**
  * presigned URL을 받아 S3에 업로드하는 훅.
@@ -25,7 +26,7 @@ export function useImageUploader() {
       ext = mimeExt || 'jpg';
     }
 
-    return `${crypto.randomUUID()}.${ext}`;
+    return `${safeUUID()}.${ext}`;
   };
 
   /** presigned URL로 S3 PUT 업로드 (timeout 포함) */

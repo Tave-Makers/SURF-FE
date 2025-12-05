@@ -3,7 +3,7 @@ export type ScheduleCategory = 'regular' | 'operation' | 'other';
 
 // 캘린더에서 일정 생성 Request 타입
 export type ScheduleCreateRequest = {
-  category: string;
+  category: ScheduleCategory;
   title: string;
   startAt: string;
   endAt: string;

@@ -7,8 +7,12 @@ import { EditorContent } from '@tiptap/react';
 import { usePostEditor } from '@/features/post/post-editor/lib/usePostEditor';
 import { useImageManager } from '@/features/image/model/useImageManager';
 import { UploadImage } from '@/entities/image/model/types';
-import { useCallback, useEffect, useRef } from 'react';
+import { useCallback, useEffect, useRef, useState } from 'react';
 import { ImageItemResponse } from '@/entities/post/api/types';
+import { Alert } from '@/shared/ui/alert/Alert';
+import { safeUUID } from '@/shared/utils/uuid';
+import { useKeyboardOffset } from '@/shared/hooks/useKeyboardOffset';
+import { POST_VALIDATION } from '@/entities/post/model/validation';
 import { usePostScheduleStore } from '@/features/calendar/schedule/post-schedule/model/usePostScheduleStore';
 import { EventCard } from '@/entities/calendar/ui/EventCard/EventCard';
 
@@ -85,7 +89,7 @@ export const PostEditor = ({
 
   const mapInitialImages = useCallback((data: ImageItemResponse[]): UploadImage[] => {
     return data.map((img) => ({
-      id: crypto.randomUUID(),
+      id: safeUUID(),
       file: null,
       preview: img.originalUrl,
       uploadedUrl: img.originalUrl,
@@ -108,13 +112,40 @@ export const PostEditor = ({
 
   /** 이미지 변경 시 부모에게 알림 (contentRef 사용) */
   useEffect(() => {
-    if (!editor) return;
+    if (!editor || !initializedRef.current) return;
 
     onChange({
       content: contentRef.current,
       images,
     });
-  }, [images, editor, onChange]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [images, editor]);
+
+  /** 이미지 최대 장수 제한 */
+  const { MAX_IMAGES } = POST_VALIDATION;
+  const [showImageLimitAlert, setShowImageLimitAlert] = useState(false);
+
+  const handleImageUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const files = e.target.files;
+    if (!files) return;
+
+    // 지금 업로드한 파일 개수
+    const newCount = files.length;
+    // 이미 있는 이미지 개수
+    const existingCount = imagesRef.current.length;
+
+    if (existingCount + newCount > MAX_IMAGES) {
+      setShowImageLimitAlert(true);
+      e.target.value = '';
+      return;
+    }
+
+    // 허용되면 기존 로직 실행
+    await handleSelectAndUpload(e);
+  };
+
+  /** 키보드 높이 계산 */
+  const keyboardOffset = useKeyboardOffset();
 
   if (!editor) return null;
 
@@ -154,7 +185,7 @@ export const PostEditor = ({
         multiple
         className="hidden"
         onChange={(e) => {
-          void handleSelectAndUpload(e);
+          void handleImageUpload(e);
         }}
       />
 
@@ -182,10 +213,28 @@ export const PostEditor = ({
       )}
 
       {/* 툴바 */}
-      <PostEditorToolbar
-        editor={editor}
-        onCameraClick={openPicker}
-        onScheduleClick={onRequestReservation}
+      <div style={{ paddingBottom: keyboardOffset }}>
+        <PostEditorToolbar
+          editor={editor}
+          onCameraClick={openPicker}
+          onScheduleClick={onRequestReservation}
+        />
+      </div>
+
+      <Alert
+        state="error"
+        title="이미지 최대 장수 오류"
+        infoText={`이미지는 최대 ${MAX_IMAGES}장까지 업로드할 수 있어요`}
+        actions={[
+          {
+            type: 'text',
+            label: '확인',
+            variant: 'primary',
+            onClick: () => setShowImageLimitAlert(false),
+          },
+        ]}
+        isOpen={showImageLimitAlert}
+        onClose={() => setShowImageLimitAlert(false)}
       />
     </div>
   );

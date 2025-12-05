@@ -1,12 +1,13 @@
-import type { CommonResponse } from '@/shared/api/types';
+// API 공통 응답 형식
+import { CommonResponse } from '@/shared/api/types';
 
-// 공통 이미지 타입
+// 게시글 상세 이미지 타입
 export type ImageItem = {
   originalUrl: string;
   sequence: number;
 };
 
-// 이미지 응답 타입
+// 게시글 상세 이미지 응답 타입
 export type ImageItemResponse = ImageItem & {
   imageId: number;
   postId: number;
@@ -14,7 +15,7 @@ export type ImageItemResponse = ImageItem & {
 
 // 게시글 목록
 export type PostListItemResponse = {
-  id: number;
+  postId: number;
   categoryId?: number;
   title: string;
   content: string;
@@ -29,8 +30,10 @@ export type PostListItemResponse = {
   nickname: string;
   thumbnailImageUrl: string | null;
   isReserved: boolean;
+  viewCount: number;
 };
 
+// 게시물 관련 API 응답 전체 타입
 export type PostListApiResponse = {
   totalPages: number;
   totalElements: number;
@@ -46,6 +49,30 @@ export type PostListApiResponse = {
 };
 
 export type FullPostListResponse = CommonResponse<PostListApiResponse>;
+
+// 게시글 상세 데이터 타입
+export type PostDetailData = {
+  postId: number;
+  title: string;
+  content: string;
+  pinned: boolean;
+  postedAt: string;
+  boardId: number;
+  categoryId: number;
+  scrappedByMe: boolean;
+  scrapCount: number;
+  likedByMe: boolean;
+  likeCount: number;
+  commentCount: number;
+  nickname: string;
+  isMine: boolean;
+  imageUrlList: ImageItemResponse[];
+  viewCount: number;
+  hasSchedule: boolean;
+};
+
+// 상세 API 응답 타입
+export type PostDetailResponse = CommonResponse<PostDetailData>;
 
 export type PostSort = {
   empty: boolean;
@@ -65,26 +92,25 @@ export type Pageable = {
 export type PostApiRequest = {
   page: number;
   size: number;
-  sort: string[];
+  sort: string;
 };
 
-// 게시글 상세
-export type PostDetailData = {
-  postId: number;
-  title: string;
-  content: string;
-  pinned: boolean;
-  postedAt: string;
+export type GetBoardPostsRequest = {
   boardId: number;
-  scrappedByMe: boolean;
-  scrapCount: number;
-  likedByMe: boolean;
-  likeCount: number;
-  commentCount: number;
-  nickname: string;
-  imageUrlList: ImageItemResponse[];
-  categoryId: number | null;
-  hasScheduled: boolean;
+  category?: string;
+  page: number;
+  size: number;
+  sort?: string;
 };
 
-export type PostDetailResponse = CommonResponse<PostDetailData>;
+// 좋아요 누른 유저 타입
+export interface LikedUser {
+  id: number;
+  name: string;
+  profileImageUrl: string;
+}
+
+// 게시글 좋아요 누른 유저 API 응답 타입
+export interface GetPostLikesResponse {
+  likes: LikedUser[];
+}

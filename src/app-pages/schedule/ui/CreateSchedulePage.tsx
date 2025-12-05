@@ -1,37 +1,22 @@
 'use client';
 
-import { useMemo, useState } from 'react';
+import { format } from 'date-fns';
+import { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { useForm, FormProvider } from 'react-hook-form';
-import ScheduleForm from '@/widgets/schedule/ui/ScheduleForm';
+import { Alert } from '@/shared/ui/alert/Alert';
+import { HeaderMode, HeaderProps } from '@/shared/ui/header/Header';
+import { getInitialDate } from '@/entities/calendar/utils/getInitialTime';
 import { ScheduleFormData } from '@/features/calendar/schedule/post/model/types';
 import { usePostSchedule } from '@/features/calendar/schedule/post/model/usePostSchedule';
 import { mapScheduleFormToRequest } from '@/features/calendar/schedule/post/api/mapper';
-import { Alert } from '@/shared/ui/alert/Alert';
 import { AppHeader } from '@/widgets/header/ui/AppHeader';
-import { HeaderMode, HeaderProps } from '@/shared/ui/header/Header';
+import ScheduleForm from '@/widgets/schedule/ui/ScheduleForm';
 
 export default function CreateSchedulePage() {
   const router = useRouter();
-  const { mutate: createSchedule, isPending } = usePostSchedule();
-
   const [showExitAlert, setShowExitAlert] = useState(false);
-
-  // 시작일/마감일 분 단위 00분과 30분으로 초기화 헬퍼함수
-  const getInitialDate = () => {
-    const date = new Date();
-    const minutes = date.getMinutes();
-
-    // 30분 이상이면 30분, 30분 미만이면 0분으로 설정 (버림 기준)
-    // 예: 10:45 -> 10:30, 10:15 -> 10:00
-    const newMinutes = minutes >= 30 ? 30 : 0;
-
-    date.setMinutes(newMinutes);
-    date.setSeconds(0);
-    date.setMilliseconds(0);
-
-    return date;
-  };
+  const { mutate: createSchedule, isPending } = usePostSchedule();
 
   const methods = useForm<ScheduleFormData>({
     defaultValues: {
@@ -49,21 +34,19 @@ export default function CreateSchedulePage() {
   const startDate = methods.watch('startDate');
   const endDate = methods.watch('endDate');
 
-  // 버튼 활성화 조건 검증
-  const isFormValid = useMemo(() => {
-    // 제목 검증: 최소 2자 이상
-    const isTitleValid = title.trim().length >= 2;
+  // 제목 검증: 최소 2자 이상
+  const isTitleValid = title.trim().length >= 2;
 
-    // 시작일/마감일 검증: 둘 다 선택되어 있고, 마감일이 시작일과 같거나 이후
-    const isDateValid =
-      startDate instanceof Date &&
-      endDate instanceof Date &&
-      !isNaN(startDate.getTime()) &&
-      !isNaN(endDate.getTime()) &&
-      endDate.getTime() >= startDate.getTime();
+  // 시작일/마감일 검증: 둘 다 선택되어 있고, 마감일이 시작일과 같거나 이후
+  const isDateValid =
+    startDate instanceof Date &&
+    endDate instanceof Date &&
+    !isNaN(startDate.getTime()) &&
+    !isNaN(endDate.getTime()) &&
+    endDate.getTime() >= startDate.getTime();
 
-    return isTitleValid && isDateValid;
-  }, [title, startDate, endDate]);
+  // 최종 버튼 활성화 조건
+  const isFormValid = isTitleValid && isDateValid;
 
   const handleSubmit = (data: ScheduleFormData) => {
     if (!isFormValid || isPending) return;
@@ -72,7 +55,12 @@ export default function CreateSchedulePage() {
       console.log('폼 제출 시도:', data);
     }
 
-    const requestData = mapScheduleFormToRequest(data);
+    const baseRequestData = mapScheduleFormToRequest(data);
+    const requestData = {
+      ...baseRequestData,
+      startAt: format(data.startDate, "yyyy-MM-dd'T'HH:mm:ss"),
+      endAt: format(data.endDate, "yyyy-MM-dd'T'HH:mm:ss"),
+    };
     if (process.env.NODE_ENV === 'development') {
       console.log('서버로 보낼 변환된 데이터:', requestData);
     }
@@ -112,7 +100,7 @@ export default function CreateSchedulePage() {
           hasLeftIcon: true,
           text: '완료',
           btnVariant: 'secondary',
-          isDisabled: !isFormValid || methods.formState.isSubmitting,
+          isDisabled: !isFormValid || methods.formState.isSubmitting || isPending,
           onClickTextBtn: () => void methods.handleSubmit(handleSubmit)(),
         }))()}
       />

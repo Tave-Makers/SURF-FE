@@ -3,7 +3,7 @@ import { PostCard } from './PostCard';
 import type { Post } from '@/entities/post/model/types';
 
 const meta: Meta<typeof PostCard> = {
-  title: 'Entities/Post/UI/PostCard',
+  title: 'Entities/UI/Post/PostCard',
   component: PostCard,
   tags: ['autodocs'],
   parameters: {
@@ -35,8 +35,6 @@ const mockPost: Post = {
 export const Default: Story = {
   args: {
     post: mockPost,
-    currentCategory: '전체',
-    userLevel: 'member',
   },
 };
 
@@ -47,8 +45,6 @@ export const Liked: Story = {
       isLiked: true,
       likeCount: 99,
     },
-    currentCategory: '전체',
-    userLevel: 'member',
   },
 };
 
@@ -58,8 +54,6 @@ export const AdminView: Story = {
       ...mockPost,
       isReserved: true,
     },
-    currentCategory: '행사',
-    userLevel: 'manager',
   },
 };
 
@@ -69,7 +63,5 @@ export const WithoutThumbnail: Story = {
       ...mockPost,
       thumbnailUrl: undefined,
     },
-    currentCategory: '패치',
-    userLevel: 'member',
   },
 };

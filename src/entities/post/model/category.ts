@@ -14,5 +14,10 @@ export const categoryIdToLabel = (id: number | null | undefined) => {
   return found?.label ?? '기타';
 };
 
+export const categoryIdToKey = (id?: number | null) => {
+  if (!id) return undefined;
+  return Object.values(POST_CATEGORIES).find((c) => c.id === id)?.key;
+};
+
 export const isPostCategoryKey = (value: unknown): value is PostCategoryKey =>
   Object.keys(POST_CATEGORIES).includes(String(value));

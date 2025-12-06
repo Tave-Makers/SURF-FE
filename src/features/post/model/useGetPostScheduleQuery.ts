@@ -7,5 +7,6 @@ export function useGetPostScheduleQuery(postId: number, enabled = true) {
     queryKey: ['postSchedule', postId],
     queryFn: () => getPostSchedule(postId),
     enabled,
+    retry: false,
   });
 }

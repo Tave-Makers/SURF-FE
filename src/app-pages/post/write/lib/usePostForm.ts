@@ -9,6 +9,8 @@ import { EditorState, PostPageMode, PostSnapshot } from '../model/types';
 import { useCreatePost } from '@/features/post/create-post/model/useCreatePost';
 import { POST_VALIDATION } from '@/entities/post/model/validation';
 import { usePostScheduleStore } from '@/features/calendar/schedule/post-schedule/model/usePostScheduleStore';
+import { useGetPostScheduleQuery } from '@/features/post/model/useGetPostScheduleQuery';
+import { ScheduleCategory } from '@/entities/schedule/model/types';
 
 type Props = {
   mode: PostPageMode;
@@ -20,6 +22,7 @@ export const usePostForm = ({ mode, boardId, postId }: Props) => {
   const router = useRouter();
   const {
     linkedSchedule,
+    setLinkedSchedule,
     reserved,
     setReserved,
     reservedAt,
@@ -32,6 +35,11 @@ export const usePostForm = ({ mode, boardId, postId }: Props) => {
   const { data: postDetail } = usePostDetail(numericPostId!, {
     enabled: mode === 'edit' && !!numericPostId,
   });
+
+  const { data: postSchedule } = useGetPostScheduleQuery(
+    numericPostId!,
+    mode === 'edit' && !!numericPostId && !!postDetail?.hasSchedule,
+  );
 
   // 2. UI State
   const [title, setTitle] = useState('');
@@ -76,8 +84,35 @@ export const usePostForm = ({ mode, boardId, postId }: Props) => {
       const initialCategory = matchedEntry ? (matchedEntry[0] as PostCategoryKey) : 'event';
       selectCategory(initialCategory);
 
-      if (!reservedAt) {
-        // TODO: 서버에서 받은 예약 시간이 있다면 설정 필요
+      // 예약 정보 초기화 로직
+      if (!reserved && postDetail.postedAt) {
+        const postedDate = new Date(postDetail.postedAt);
+        const now = new Date();
+
+        // 게시일이 미래라면 '예약' 상태로 간주
+        if (postedDate > now) {
+          setReserved(true);
+          setReservedAt(postedDate);
+        }
+      }
+
+      // 일정 정보 초기화 로직
+      if (!linkedSchedule && postSchedule) {
+        // 카테고리 매핑 로직
+        const mappedCategory =
+          postSchedule.category === 'operation' || postSchedule.category === 'other'
+            ? postSchedule.category
+            : 'regular';
+
+        setLinkedSchedule({
+          id: postSchedule.scheduleId,
+          title: postSchedule.title,
+          startDate: new Date(postSchedule.startAt),
+          endDate: new Date(postSchedule.endAt),
+          location: postSchedule.location,
+
+          category: mappedCategory as ScheduleCategory,
+        });
       }
 
       // 스냅샷 저장
@@ -90,7 +125,17 @@ export const usePostForm = ({ mode, boardId, postId }: Props) => {
           .map((img) => img.originalUrl),
       };
     }
-  }, [mode, postDetail, selectCategory, reservedAt, setReserved, setReservedAt]);
+  }, [
+    mode,
+    postDetail,
+    postSchedule,
+    selectCategory,
+    reserved,
+    setReserved,
+    setReservedAt,
+    linkedSchedule,
+    setLinkedSchedule,
+  ]);
 
   // 에디터 초기값 (메모이제이션)
   const initialContent = useMemo(() => postDetail?.content ?? '', [postDetail]);
@@ -181,9 +226,10 @@ export const usePostForm = ({ mode, boardId, postId }: Props) => {
           title,
           content,
           pinned: false,
-          reserved,
+          reservedAt: reservedAt ? reservedAt.toISOString() : '',
           imageUrlList,
           hasSchedule: !!linkedSchedule,
+          reserved,
         });
         targetPostId = res.postId;
       } else {

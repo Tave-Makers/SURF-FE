@@ -7,6 +7,8 @@ export type PostSnapshot = {
   category: PostCategoryKey;
   content: string;
   imageUrls: (string | null)[];
+  reserved: boolean;
+  reservedAt: Date | null;
 };
 
 // 에디터 내부 상태 타입

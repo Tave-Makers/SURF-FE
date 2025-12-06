@@ -64,6 +64,8 @@ export const usePostForm = ({ mode, boardId, postId }: Props) => {
     category: 'event',
     content: '',
     imageUrls: [],
+    reserved: false,
+    reservedAt: null,
   });
 
   const editorStateRef = useRef<EditorState>({
@@ -85,12 +87,17 @@ export const usePostForm = ({ mode, boardId, postId }: Props) => {
       selectCategory(initialCategory);
 
       // 예약 정보 초기화 로직
+      let initialReserved = reserved; // Store에 있는 현재 값 (또는 기본값 false)
+      let initialReservedAt = reservedAt; // Store에 있는 현재 값
+
+      // API 데이터 기반으로 초기 예약 상태 계산
       if (!reserved && postDetail.postedAt) {
         const postedDate = new Date(postDetail.postedAt);
         const now = new Date();
 
-        // 게시일이 미래라면 '예약' 상태로 간주
         if (postedDate > now) {
+          initialReserved = true;
+          initialReservedAt = postedDate;
           setReserved(true);
           setReservedAt(postedDate);
         }
@@ -123,6 +130,8 @@ export const usePostForm = ({ mode, boardId, postId }: Props) => {
         imageUrls: (postDetail.imageUrlList || [])
           .sort((a, b) => a.sequence - b.sequence)
           .map((img) => img.originalUrl),
+        reserved: initialReserved,
+        reservedAt: initialReservedAt,
       };
     }
   }, [
@@ -131,6 +140,7 @@ export const usePostForm = ({ mode, boardId, postId }: Props) => {
     postSchedule,
     selectCategory,
     reserved,
+    reservedAt,
     setReserved,
     setReservedAt,
     linkedSchedule,
@@ -154,6 +164,8 @@ export const usePostForm = ({ mode, boardId, postId }: Props) => {
       category: category!,
       content: editorStateRef.current.content,
       imageUrls: editorStateRef.current.images.map((img) => img.uploadedUrl ?? null),
+      reserved,
+      reservedAt,
     };
     const init = initialSnapshot.current;
 
@@ -162,15 +174,24 @@ export const usePostForm = ({ mode, boardId, postId }: Props) => {
     const isContentChanged = current.content !== init.content;
     const isImagesChanged = JSON.stringify(current.imageUrls) !== JSON.stringify(init.imageUrls);
 
+    const isReservedToggleChanged = current.reserved !== init.reserved;
+    const currentTime = current.reservedAt ? current.reservedAt.getTime() : null;
+    const initTime = init.reservedAt ? init.reservedAt.getTime() : null;
+    const isReservedTimeChanged = currentTime !== initTime;
+
+    // 최종 예약 변경 여부 (상태가 바뀌었거나, 시간이 바뀌었을 때)
+    const isReservationChanged = isReservedToggleChanged || isReservedTimeChanged;
+
     const isEmpty =
       !current.title && stripHtml(current.content) === '' && current.imageUrls.length === 0;
 
     return {
       hasChanges: isTitleChanged || isCategoryChanged || isContentChanged || isImagesChanged,
       isImagesChanged,
+      isReservationChanged,
       isEmpty,
     };
-  }, [title, category]);
+  }, [title, category, reserved, reservedAt]);
 
   // 6. 핸들러들
   const handleEditorChange = useCallback((updatedData: EditorState) => {
@@ -211,7 +232,7 @@ export const usePostForm = ({ mode, boardId, postId }: Props) => {
       return;
     }
 
-    const { isImagesChanged } = checkHasChanges();
+    const { isImagesChanged, isReservationChanged } = checkHasChanges();
     const imageUrlList = images
       .filter((img) => img.uploadedUrl)
       .map((img, idx) => ({ originalUrl: img.uploadedUrl!, sequence: idx }));
@@ -238,7 +259,7 @@ export const usePostForm = ({ mode, boardId, postId }: Props) => {
           content,
           categoryId,
           pinned: false,
-          isReservationChanged: reserved,
+          isReservationChanged: isReservationChanged,
           reservedAt: reservedAt ? reservedAt.toISOString() : '',
           isImageChanged: isImagesChanged,
           imageUrlList,

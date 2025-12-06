@@ -9,6 +9,7 @@ import { EditorState, PostPageMode, PostSnapshot } from '../model/types';
 import { useCreatePost } from '@/features/post/create-post/model/useCreatePost';
 import { POST_VALIDATION } from '@/entities/post/model/validation';
 import { usePostScheduleStore } from '@/features/calendar/schedule/post-schedule/model/usePostScheduleStore';
+import { usePostReservationStore } from '@/features/calendar/schedule/post-schedule/model/usePostScheduleStore';
 import { useGetPostScheduleQuery } from '@/features/post/model/useGetPostScheduleQuery';
 import { ScheduleCategory } from '@/entities/schedule/model/types';
 
@@ -20,15 +21,14 @@ type Props = {
 
 export const usePostForm = ({ mode, boardId, postId }: Props) => {
   const router = useRouter();
-  const {
-    linkedSchedule,
-    setLinkedSchedule,
-    reserved,
-    setReserved,
-    reservedAt,
-    setReservedAt,
-    resetPostState, // 초기화 함수
-  } = usePostScheduleStore();
+  const { linkedSchedule, setLinkedSchedule, clearLinkedSchedule } = usePostScheduleStore();
+  const { reserved, setReserved, reservedAt, setReservedAt, resetReservation } =
+    usePostReservationStore();
+  const resetPostState = () => {
+    clearLinkedSchedule();
+    resetReservation();
+  };
+
   const numericPostId = mode === 'edit' && postId ? Number(postId) : undefined;
 
   // 1. 데이터 로드

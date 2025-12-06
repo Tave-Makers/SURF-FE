@@ -8,6 +8,7 @@ import { POST_CATEGORIES, PostCategoryKey } from '@/entities/post/model/category
 import { EditorState, PostPageMode, PostSnapshot } from '../model/types';
 import { useCreatePost } from '@/features/post/create-post/model/useCreatePost';
 import { POST_VALIDATION } from '@/entities/post/model/validation';
+import { usePostScheduleStore } from '@/features/calendar/schedule/post-schedule/model/usePostScheduleStore';
 
 type Props = {
   mode: PostPageMode;
@@ -17,6 +18,7 @@ type Props = {
 
 export const usePostForm = ({ mode, boardId, postId }: Props) => {
   const router = useRouter();
+  const { linkedSchedule } = usePostScheduleStore();
   const numericPostId = mode === 'edit' && postId ? Number(postId) : undefined;
 
   // 1. 데이터 로드
@@ -170,7 +172,7 @@ export const usePostForm = ({ mode, boardId, postId }: Props) => {
           pinned: false,
           reserved: false,
           imageUrlList,
-          hasSchedule: false,
+          hasSchedule: !!linkedSchedule,
         });
         targetPostId = res.postId;
       } else {
@@ -183,7 +185,7 @@ export const usePostForm = ({ mode, boardId, postId }: Props) => {
           reservedAt: '',
           isImageChanged: isImagesChanged,
           imageUrlList,
-          hasSchedule: false,
+          hasSchedule: !!linkedSchedule,
         });
       }
       if (targetPostId) {

@@ -103,17 +103,6 @@ export type GetBoardPostsRequest = {
   sort?: string;
 };
 
-export type CreatePostRequest = {
-  boardId: number;
-  categoryId: number;
-  title: string;
-  content: string;
-  pinned: boolean;
-  reservedAt?: string;
-  imageUrlList?: ImageItem[];
-  reserved: boolean;
-};
-
 // 좋아요 누른 유저 타입
 export interface LikedUser {
   id: number;

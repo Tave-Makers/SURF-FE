@@ -1,8 +1,8 @@
 'use client';
 
-import { UploadImage } from '../types/image';
+import { UploadImage } from '@/entities/image/model/types';
 import { useImageSelector } from './useImageSelector';
-import { useImageUploader } from './useImageUploader';
+import { useImageUploader } from '@/entities/image/model/useImageUploader';
 import { useCallback } from 'react';
 
 /**
@@ -45,18 +45,22 @@ export function useImageManager() {
         console.log('[DEV] 파일 선택됨:', newlySelected);
       }
 
-      const uploadedChunk = await uploadImages(newlySelected, (progressChunk) => {
+      try {
+        const uploadedChunk = await uploadImages(newlySelected, (progressChunk) => {
+          if (process.env.NODE_ENV === 'development') {
+            console.log('[DEV] 업로드 진행 중:', progressChunk);
+          }
+          applyUploadedState(progressChunk);
+        });
+
         if (process.env.NODE_ENV === 'development') {
-          console.log('[DEV] 업로드 진행 중:', progressChunk);
+          console.log('[DEV] 업로드 완료:', uploadedChunk);
         }
-        applyUploadedState(progressChunk);
-      });
 
-      if (process.env.NODE_ENV === 'development') {
-        console.log('[DEV] 업로드 완료:', uploadedChunk);
+        applyUploadedState(uploadedChunk);
+      } catch (err) {
+        console.error('이미지 업로드 중 오류 발생', err);
       }
-
-      applyUploadedState(uploadedChunk);
     },
     [handleSelect, uploadImages, applyUploadedState],
   );
@@ -64,6 +68,7 @@ export function useImageManager() {
   return {
     inputRef,
     images,
+    setImages,
     openPicker,
     handleSelectAndUpload,
     handleRemove,

@@ -2,7 +2,7 @@
 
 import type { Meta, StoryObj } from '@storybook/nextjs';
 import { ImageList } from './ImageList';
-import { useImageSelector } from '@/shared/hooks/useImageSelector';
+import { useImageSelector } from '@/features/image/model/useImageSelector';
 
 const meta: Meta<typeof ImageList> = {
   title: 'Entities/UI/Post/PostImage/ImageList',

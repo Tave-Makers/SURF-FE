@@ -3,7 +3,7 @@ import type { Meta, StoryObj } from '@storybook/nextjs';
 import { ToolBar } from './ToolBar';
 import { ToolBarItem } from './ToolBar';
 
-const SAMPLE_ITEMS: ToolBarItem[] = [
+const SAMPLE_ITEMS: ToolBarItem<string>[] = [
   { key: 'camera', label: '사진', icon: 'CameraSolid' },
   { key: 'alarm', label: '예약', icon: 'AlarmSolid' },
   { key: 'calendar', label: '일정', icon: 'CalendarSolid' },

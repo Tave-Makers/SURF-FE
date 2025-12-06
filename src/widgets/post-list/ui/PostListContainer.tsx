@@ -39,9 +39,9 @@ export const PostListContainer = ({ boardId, category, userLevel }: Props) => {
 
   const handlePostCardClick = useCallback(
     (post: Post) => {
-      router.push(`/post/${post.postId}`);
+      router.push(`/board/${boardId}/post/${post.postId}`);
     },
-    [router],
+    [router, boardId],
   );
 
   return (

@@ -1,5 +1,5 @@
 import { create } from 'zustand';
-import type { ScheduleFormData } from '@/features/calendar/schedule/post/model/types';
+import type { ScheduleFormData } from '@/features/calendar/schedule/write/model/types';
 
 type PostScheduleState = {
   linkedSchedule: ScheduleFormData | null;

@@ -11,6 +11,7 @@ import { usePostForm } from '../lib/usePostForm';
 import { useRouter } from 'next/navigation';
 import { POST_VALIDATION } from '@/entities/post/model/validation';
 import { POST_BOARDS } from '@/entities/post/model/board';
+import { PostBadge } from '@/entities/post/ui/post-badge/PostBadge';
 
 type PostPageProps =
   | { mode: 'create'; boardId: string }
@@ -36,6 +37,10 @@ export default function PostPage(props: PostPageProps) {
     initialImages,
     showExitAlert,
     setShowExitAlert,
+    reserved,
+    setReserved,
+    reservedAt,
+    setReservedAt,
     isSubmitDisabled,
     handleEditorChange,
     handleBack,
@@ -73,6 +78,13 @@ export default function PostPage(props: PostPageProps) {
         />
       </div>
 
+      {/* 예약중 태그 */}
+      {reserved && reservedAt && (
+        <div className="px-13 pt-10">
+          <PostBadge type="reservation" />
+        </div>
+      )}
+
       {/* 3. 카테고리 시트 */}
       <ModalSheet
         isOpen={isCategoryOpen}
@@ -83,7 +95,7 @@ export default function PostPage(props: PostPageProps) {
         <ModalSheet.Container>
           <ModalSheet.Header />
           <ModalSheet.Content>
-            <div id={categorySheetId} className="flex flex-col gap-[0.25rem] p-15">
+            <div id={categorySheetId} className="flex flex-col gap-5 p-15">
               {Object.values(POST_CATEGORIES).map((item) => (
                 <button
                   key={item.id}
@@ -126,8 +138,10 @@ export default function PostPage(props: PostPageProps) {
           initialImages={initialImages}
           onChange={handleEditorChange}
           onInitialized={() => {}}
-          // TODO: 핸들러 추가
-          onRequestReservation={() => {}}
+          reserved={reserved}
+          setReserved={setReserved}
+          reservedAt={reservedAt}
+          setReservedAt={setReservedAt}
         />
       </div>
 

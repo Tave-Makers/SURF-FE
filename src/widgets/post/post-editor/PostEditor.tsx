@@ -15,13 +15,19 @@ import { useKeyboardOffset } from '@/shared/hooks/useKeyboardOffset';
 import { POST_VALIDATION } from '@/entities/post/model/validation';
 import { usePostScheduleStore } from '@/features/calendar/schedule/post-schedule/model/usePostScheduleStore';
 import { EventCard } from '@/entities/calendar/ui/EventCard/EventCard';
+import { DateTimePicker } from '@/entities/schedule/ui/DateTimePicker/DateTimePicker';
+import { Sheet as ModalSheet } from 'react-modal-sheet';
+import { Sheet } from '@/shared/ui/sheet/Sheet';
 
 export type PostEditorProps = {
   initialContent: string;
   initialImages: ImageItemResponse[];
   onChange: (data: { content: string; images: UploadImage[] }) => void;
   onInitialized: () => void;
-  onRequestReservation: () => void;
+  reserved: boolean;
+  setReserved: (value: boolean) => void;
+  reservedAt: Date | null;
+  setReservedAt: (value: Date | null) => void;
 };
 
 export const PostEditor = ({
@@ -29,7 +35,9 @@ export const PostEditor = ({
   initialImages,
   onChange,
   onInitialized,
-  onRequestReservation,
+  setReserved,
+  reservedAt,
+  setReservedAt,
 }: PostEditorProps) => {
   const { linkedSchedule, clearLinkedSchedule } = usePostScheduleStore();
 
@@ -147,6 +155,25 @@ export const PostEditor = ({
   /** 키보드 높이 계산 */
   const keyboardOffset = useKeyboardOffset();
 
+  /** 예약 시간 선택 모달 */
+  const [isReservationOpen, setIsReservationOpen] = useState(false);
+  const [tempReservationDate, setTempReservationDate] = useState<Date>(new Date());
+
+  const handleOpenReservation = useCallback(() => {
+    setTempReservationDate(reservedAt || new Date());
+    setIsReservationOpen(true);
+  }, [reservedAt]);
+
+  const handleSaveReservation = useCallback(() => {
+    setReservedAt(tempReservationDate);
+    setReserved(true);
+    setIsReservationOpen(false);
+  }, [tempReservationDate, setReservedAt, setReserved]);
+
+  const handleCloseReservation = useCallback(() => {
+    setIsReservationOpen(false);
+  }, []);
+
   if (!editor) return null;
 
   return (
@@ -216,9 +243,42 @@ export const PostEditor = ({
         <PostEditorToolbar
           editor={editor}
           onCameraClick={openPicker}
-          onScheduleClick={onRequestReservation}
+          onScheduleClick={handleOpenReservation}
         />
       </div>
+
+      {/* 예약 시간 선택 모달 */}
+      <ModalSheet
+        isOpen={isReservationOpen}
+        onClose={handleCloseReservation}
+        className="mx-auto flex w-full sm:w-[360px]"
+      >
+        <ModalSheet.Container>
+          <ModalSheet.Header />
+          <ModalSheet.Content>
+            <Sheet
+              title="게시글 예약 설정"
+              description="해당 시간에 맞춰 게시글이 예약됩니다"
+              primaryBtn={{
+                label: '예약하기',
+                onClick: handleSaveReservation,
+              }}
+              secondaryBtn={{
+                label: '취소하기',
+                onClick: handleCloseReservation,
+              }}
+            >
+              <div>
+                <DateTimePicker value={tempReservationDate} onChange={setTempReservationDate} />
+              </div>
+            </Sheet>
+          </ModalSheet.Content>
+        </ModalSheet.Container>
+        <ModalSheet.Backdrop
+          onTap={handleCloseReservation}
+          style={{ backgroundColor: 'rgba(0, 0, 0, 0.70)' }}
+        />
+      </ModalSheet>
 
       <Alert
         state="error"

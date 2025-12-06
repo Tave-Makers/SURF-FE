@@ -18,7 +18,14 @@ type Props = {
 
 export const usePostForm = ({ mode, boardId, postId }: Props) => {
   const router = useRouter();
-  const { linkedSchedule, clearLinkedSchedule } = usePostScheduleStore();
+  const {
+    linkedSchedule,
+    reserved,
+    setReserved,
+    reservedAt,
+    setReservedAt,
+    resetPostState, // 초기화 함수
+  } = usePostScheduleStore();
   const numericPostId = mode === 'edit' && postId ? Number(postId) : undefined;
 
   // 1. 데이터 로드
@@ -69,6 +76,10 @@ export const usePostForm = ({ mode, boardId, postId }: Props) => {
       const initialCategory = matchedEntry ? (matchedEntry[0] as PostCategoryKey) : 'event';
       selectCategory(initialCategory);
 
+      if (!reservedAt) {
+        // TODO: 서버에서 받은 예약 시간이 있다면 설정 필요
+      }
+
       // 스냅샷 저장
       initialSnapshot.current = {
         title: postDetail.title,
@@ -79,7 +90,7 @@ export const usePostForm = ({ mode, boardId, postId }: Props) => {
           .map((img) => img.originalUrl),
       };
     }
-  }, [mode, postDetail, selectCategory]);
+  }, [mode, postDetail, selectCategory, reservedAt, setReserved, setReservedAt]);
 
   // 에디터 초기값 (메모이제이션)
   const initialContent = useMemo(() => postDetail?.content ?? '', [postDetail]);
@@ -170,7 +181,7 @@ export const usePostForm = ({ mode, boardId, postId }: Props) => {
           title,
           content,
           pinned: false,
-          reserved: false,
+          reserved,
           imageUrlList,
           hasSchedule: !!linkedSchedule,
         });
@@ -181,17 +192,14 @@ export const usePostForm = ({ mode, boardId, postId }: Props) => {
           content,
           categoryId,
           pinned: false,
-          isReservationChanged: false,
-          reservedAt: '',
+          isReservationChanged: reserved,
+          reservedAt: reservedAt ? reservedAt.toISOString() : '',
           isImageChanged: isImagesChanged,
           imageUrlList,
           hasSchedule: !!linkedSchedule,
         });
       }
-      // 성공 시 연동된 일정 정리
-      if (linkedSchedule) {
-        clearLinkedSchedule();
-      }
+      resetPostState();
 
       if (targetPostId) {
         router.replace(`/board/${boardId}/post/${targetPostId}`);
@@ -216,6 +224,10 @@ export const usePostForm = ({ mode, boardId, postId }: Props) => {
     initialImages,
     showExitAlert,
     setShowExitAlert,
+    reserved,
+    setReserved,
+    reservedAt,
+    setReservedAt,
     isSubmitDisabled: !title || isContentEmpty,
 
     // Handlers

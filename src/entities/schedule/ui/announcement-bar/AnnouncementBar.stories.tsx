@@ -5,9 +5,10 @@ import type { ActivityCategory } from '@/entities/calendar/model/types';
 const CATEGORY_OPTIONS: ActivityCategory[] = ['official', 'operation', 'other'];
 
 const meta: Meta<typeof AnnouncementBar> = {
-  title: 'Entities/Calendar/AnnouncementBar',
+  title: 'Entities/UI/Schedule/AnnouncementBar',
   component: AnnouncementBar,
   tags: ['autodocs'],
+
   argTypes: {
     category: {
       control: 'select',

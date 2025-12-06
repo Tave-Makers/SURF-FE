@@ -126,6 +126,7 @@ export default function PostPage(props: PostPageProps) {
           initialImages={initialImages}
           onChange={handleEditorChange}
           onInitialized={() => {}}
+          // onRequestReservation={}
         />
       </div>
 

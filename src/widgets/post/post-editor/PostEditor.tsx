@@ -193,7 +193,6 @@ export const PostEditor = ({
       {linkedSchedule && (
         <div className="p-13">
           <EventCard
-            id="temp" // 서버 id 없으니 임시 id
             category={
               linkedSchedule.category === 'operation'
                 ? 'operation'

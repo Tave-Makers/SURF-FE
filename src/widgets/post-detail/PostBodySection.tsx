@@ -80,7 +80,6 @@ export function PostBodySection({ post, onClickLikeCount }: PostBodySectionProps
           category="official"
           mode="reservation"
           location="추후 공지"
-          id={1}
           startDate={SAMPLE_START_DATE}
           endDate={SAMPLE_END_DATE}
         />

@@ -1,4 +1,5 @@
 import type { ScheduleFormData } from '../model/types';
+import type { ScheduleCategory } from '@/entities/schedule/model/types';
 import type { ScheduleCreateRequest } from '@/entities/schedule/model/types';
 
 function categoryToLabel(category: string): string {
@@ -16,7 +17,7 @@ function categoryToLabel(category: string): string {
 
 export function mapScheduleFormToRequest(form: ScheduleFormData): ScheduleCreateRequest {
   return {
-    category: categoryToLabel(form.category),
+    category: categoryToLabel(form.category) as ScheduleCategory,
     title: form.title,
     startAt: form.startDate.toISOString(),
     endAt: form.endDate.toISOString(),

@@ -18,7 +18,7 @@ type Props = {
 
 export const usePostForm = ({ mode, boardId, postId }: Props) => {
   const router = useRouter();
-  const { linkedSchedule } = usePostScheduleStore();
+  const { linkedSchedule, clearLinkedSchedule } = usePostScheduleStore();
   const numericPostId = mode === 'edit' && postId ? Number(postId) : undefined;
 
   // 1. 데이터 로드
@@ -188,6 +188,11 @@ export const usePostForm = ({ mode, boardId, postId }: Props) => {
           hasSchedule: !!linkedSchedule,
         });
       }
+      // 성공 시 연동된 일정 정리
+      if (linkedSchedule) {
+        clearLinkedSchedule();
+      }
+
       if (targetPostId) {
         router.replace(`/board/${boardId}/post/${targetPostId}`);
       }

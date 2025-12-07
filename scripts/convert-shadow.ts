@@ -23,14 +23,11 @@ const raw = loadJSON('tokens/tokens.json');
 // 최상위에 이미 완전히 해석된 shadow 정의들이 있음
 const topLevel = raw[''] ?? {};
 
-const shadowKeys = [
-  'embossed',
-  'embossed-inverse',
-  'raised',
-  'raised-inverse',
-  'floated',
-  'lifted',
-];
+const shadowKeys = Object.keys(topLevel).filter((key) => topLevel[key]?.type === 'boxShadow');
+
+if (shadowKeys.length === 0) {
+  console.warn('⚠️  No shadow tokens found in root level');
+}
 
 // 실사용 CSS 파일 경로
 const outPath = path.resolve('src/shared/styles/shadow-tokens.css');

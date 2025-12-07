@@ -49,20 +49,26 @@ function ensureDim(val: unknown, fallback = '0px') {
 }
 
 function ensureNumberOrRaw(val: unknown, fallback = 'normal') {
-  // line-height용: 숫자면 그대로, px 단위면 유지, 없으면 normal
   if (val == null) return fallback;
+
+  // number → px 단위 추가
   if (typeof val === 'number' && Number.isFinite(val)) {
-    // line-height는 단위 없는 숫자도 유효
-    return String(val);
+    return `${val}px`;
   }
+
   if (typeof val === 'string') {
     const v = val.trim();
+
     if (v === 'normal') return 'normal';
+
+    // px/em/rem/% 등 단위가 이미 있는 경우 그대로 사용
     if (/^-?\d+(\.\d+)?(px|em|rem|%)$/.test(v)) return v;
+
+    // 단위 없는 숫자라면 → px로 변환
     const n = parseFloat(v);
-    // 단위 없는 숫자 (1.5 같은)
-    return Number.isFinite(n) ? String(n) : fallback;
+    if (Number.isFinite(n)) return `${n}px`;
   }
+
   return fallback;
 }
 

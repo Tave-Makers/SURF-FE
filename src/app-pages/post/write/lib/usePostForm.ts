@@ -12,6 +12,7 @@ import { usePostScheduleStore } from '@/features/calendar/schedule/post-schedule
 import { usePostReservationStore } from '@/features/calendar/schedule/post-schedule/model/usePostScheduleStore';
 import { useGetPostScheduleQuery } from '@/features/post/model/useGetPostScheduleQuery';
 import { ScheduleCategory } from '@/entities/schedule/model/types';
+import { useEditSchedule } from '@/features/calendar/schedule/edit/model/useEditSchedule';
 
 type Props = {
   mode: PostPageMode;
@@ -40,6 +41,8 @@ export const usePostForm = ({ mode, boardId, postId }: Props) => {
     numericPostId!,
     mode === 'edit' && !!numericPostId && !!postDetail?.hasSchedule,
   );
+
+  const { mutateAsync: editScheduleMutate } = useEditSchedule();
 
   // 2. UI State
   const [title, setTitle] = useState('');
@@ -265,7 +268,21 @@ export const usePostForm = ({ mode, boardId, postId }: Props) => {
           imageUrlList,
           hasSchedule: !!linkedSchedule,
         });
+
+        if (linkedSchedule && linkedSchedule.id) {
+          await editScheduleMutate({
+            scheduleId: linkedSchedule.id,
+            data: {
+              category: linkedSchedule.category,
+              title: linkedSchedule.title,
+              startAt: linkedSchedule.startDate.toISOString(),
+              endAt: linkedSchedule.endDate.toISOString(),
+              location: linkedSchedule.location ?? '',
+            },
+          });
+        }
       }
+
       resetPostState();
 
       if (targetPostId) {

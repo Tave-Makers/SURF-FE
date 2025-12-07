@@ -51,6 +51,9 @@
   --color-foreground-foreground-tag-purple-darker: #493569;
   --color-foreground-foreground-tertiary: #9da6be;
   --color-foreground-foreground-tertiary-lighter: #d2dae5;
+
+  --color-background-carousel-pagenation: #ffffff4d;
+  --color-foreground-static-white: #ffffff;
 }
 
 [data-theme='dark'] {

@@ -3,16 +3,16 @@ import Image from 'next/image';
 interface ShortcutProps {
   type: 'circle' | 'rectangle';
   label: string;
-  image?: string;
+  imageSrc?: string;
 }
 
-export const Shortcut = ({ type, label, image }: ShortcutProps) => {
+export const Shortcut = ({ type, label, imageSrc }: ShortcutProps) => {
   if (type === 'circle') {
     return (
       <div className="flex flex-col items-center gap-7">
         <div className="h-[40px] w-[40px] overflow-hidden rounded-full bg-gray-200">
-          {image && (
-            <Image src={image} alt={label} width={40} height={40} className="object-cover" />
+          {imageSrc && (
+            <Image src={imageSrc} alt={label} width={40} height={40} className="object-cover" />
           )}
         </div>
         <span className="text-caption-caption6">{label}</span>
@@ -28,8 +28,8 @@ export const Shortcut = ({ type, label, image }: ShortcutProps) => {
 
       {/* 이미지 영역 */}
       <div className="flex-1 bg-gray-200">
-        {image && (
-          <Image src={image} alt={label} width={105} height={110} className="h-full w-full" />
+        {imageSrc && (
+          <Image src={imageSrc} alt={label} width={105} height={110} className="h-full w-full" />
         )}
       </div>
     </div>

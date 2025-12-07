@@ -2,7 +2,7 @@ import type { Meta, StoryObj } from '@storybook/nextjs';
 import { Shortcut } from './Shortcut';
 
 const meta: Meta<typeof Shortcut> = {
-  title: 'Entities/Shortcut',
+  title: 'Shared/UI/Shortcut',
   component: Shortcut,
   tags: ['autodocs'],
   parameters: {
@@ -21,7 +21,7 @@ const meta: Meta<typeof Shortcut> = {
       options: ['circle', 'rectangle'],
     },
     label: { control: 'text' },
-    image: { control: 'text' },
+    imageSrc: { control: 'text' },
   },
 };
 
@@ -33,7 +33,8 @@ export const Circle: Story = {
   args: {
     type: 'circle',
     label: 'Label',
-    image: '',
+    imageSrc:
+      'https://product.mujikorea.co.kr/images/products/8809191730770/NEW/8809191730770.jpg?w=960&f=webp',
   },
 };
 
@@ -41,6 +42,7 @@ export const Rectangle: Story = {
   args: {
     type: 'rectangle',
     label: 'Label',
-    image: '',
+    imageSrc:
+      'https://product.mujikorea.co.kr/images/products/8809191730770/NEW/8809191730770.jpg?w=960&f=webp',
   },
 };

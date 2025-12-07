@@ -15,14 +15,16 @@ import { SurfIcon } from '@/shared/ui/icon/SurfIcon';
 import { useState } from 'react';
 import { deletePost } from '@/features/post/api/deletePost';
 import { Alert } from '@/shared/ui/alert/Alert';
-import { useRouter } from 'next/navigation';
+import { usePathname, useRouter } from 'next/navigation';
 import { Avatar } from '@/shared/ui/avatar/Avatar';
+import { categoryIdToKey } from '@/entities/post/model/category';
 
 type PostDetailPageProps = {
   postId: string;
 };
 
 export default function PostDetailPage({ postId }: PostDetailPageProps) {
+  const pathname = usePathname();
   const router = useRouter();
   const numericPostId = Number(postId);
   const keyboardOffset = useKeyboardOffset();
@@ -109,11 +111,16 @@ export default function PostDetailPage({ postId }: PostDetailPageProps) {
           style={{ paddingBottom: overrideHeaderHeight }}
         >
           <main className="flex flex-col gap-[0.62rem] px-13 pt-13">
-            {/* TODO: 링크 연결 */}
             <PostHeader
               title={post.title}
-              category={{ title: post.boardLabel }}
-              subCategory={{ title: post.categoryLabel }}
+              category={{
+                title: post.boardLabel,
+                href: `/board/${post.boardId}?category=all`,
+              }}
+              subCategory={{
+                title: post.categoryLabel,
+                href: `/board/${post.boardId}?category=${categoryIdToKey(post.categoryId)}`,
+              }}
             />
 
             <PostBodySection post={post} onClickLikeCount={openLikedUsers} />
@@ -208,7 +215,7 @@ export default function PostDetailPage({ postId }: PostDetailPageProps) {
                       node={<SurfIcon name="EditSolid" />}
                       onClick={() => {
                         setOpen(false);
-                        alert('수정하기 클릭');
+                        router.push(`${pathname}/edit`);
                       }}
                     />
 

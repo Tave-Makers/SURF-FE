@@ -22,7 +22,7 @@ export const Shortcut = ({ type, label, imageSrc }: ShortcutProps) => {
 
   // rectangle
   return (
-    <div className="bg-background-background-normal-lighter rounded-5 flex h-[150px] w-[105px] flex-col overflow-hidden">
+    <div className="bg-background-background-normal-lighter rounded-5 border-border-border-secondary flex h-[150px] w-[105px] flex-col overflow-hidden border">
       {/* Label 영역 */}
       <div className="text-foreground-foreground-normal text-body-body5 px-13 pt-13">{label}</div>
 

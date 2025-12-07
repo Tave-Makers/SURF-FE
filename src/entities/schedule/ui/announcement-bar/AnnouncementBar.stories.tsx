@@ -17,6 +17,18 @@ const meta: Meta<typeof AnnouncementBar> = {
     date: { control: 'date' },
     title: { control: 'text' },
   },
+
+  decorators: [
+    (Story, context) => {
+      const dateArg = context.args.date;
+
+      if (!(dateArg instanceof Date)) {
+        context.args.date = new Date(dateArg);
+      }
+
+      return <Story {...context} />;
+    },
+  ],
 };
 
 export default meta;

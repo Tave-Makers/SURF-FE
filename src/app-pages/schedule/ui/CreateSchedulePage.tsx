@@ -7,9 +7,9 @@ import { useForm, FormProvider } from 'react-hook-form';
 import { Alert } from '@/shared/ui/alert/Alert';
 import { HeaderMode, HeaderProps } from '@/shared/ui/header/Header';
 import { getInitialDate } from '@/entities/calendar/utils/getInitialTime';
-import { ScheduleFormData } from '@/features/calendar/schedule/write/model/types';
-import { usePostSchedule } from '@/features/calendar/schedule/write/model/usePostSchedule';
-import { mapScheduleFormToRequest } from '@/features/calendar/schedule/write/api/mapper';
+import { ScheduleFormData } from '@/features/schedule/create/model/types';
+import { usePostSchedule } from '@/features/schedule/create/model/usePostSchedule';
+import { mapScheduleFormToRequest } from '@/features/schedule/create/api/mapper';
 import { AppHeader } from '@/widgets/header/ui/AppHeader';
 import ScheduleForm from '@/widgets/schedule/ui/ScheduleForm';
 

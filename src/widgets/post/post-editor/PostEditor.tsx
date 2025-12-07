@@ -13,7 +13,7 @@ import { Alert } from '@/shared/ui/alert/Alert';
 import { safeUUID } from '@/shared/utils/uuid';
 import { useKeyboardOffset } from '@/shared/hooks/useKeyboardOffset';
 import { POST_VALIDATION } from '@/entities/post/model/validation';
-import { usePostScheduleStore } from '@/features/calendar/schedule/post-schedule/model/usePostScheduleStore';
+import { useCreatePostScheduleStore } from '@/features/schedule/create-post-schedule/model/useCreatePostScheduleStore';
 import { EventCard } from '@/entities/calendar/ui/EventCard/EventCard';
 import { DateTimePicker } from '@/entities/schedule/ui/DateTimePicker/DateTimePicker';
 import { Sheet as ModalSheet } from 'react-modal-sheet';
@@ -39,7 +39,7 @@ export const PostEditor = ({
   reservedAt,
   setReservedAt,
 }: PostEditorProps) => {
-  const { linkedSchedule, clearLinkedSchedule } = usePostScheduleStore();
+  const { linkedSchedule, clearLinkedSchedule } = useCreatePostScheduleStore();
 
   const {
     inputRef,

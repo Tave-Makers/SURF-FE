@@ -1,7 +1,7 @@
 import { create } from 'zustand';
-import type { ScheduleFormData } from '@/features/calendar/schedule/write/model/types';
+import type { ScheduleFormData } from '@/features/schedule/create/model/types';
 
-type PostScheduleState = {
+type CreatePostScheduleState = {
   linkedSchedule: ScheduleFormData | null;
   setLinkedSchedule: (schedule: ScheduleFormData) => void;
   clearLinkedSchedule: () => void;
@@ -15,7 +15,7 @@ type PostReservationState = {
   resetReservation: () => void;
 };
 
-export const usePostScheduleStore = create<PostScheduleState>((set) => ({
+export const useCreatePostScheduleStore = create<CreatePostScheduleState>((set) => ({
   linkedSchedule: null,
   setLinkedSchedule: (schedule) => set({ linkedSchedule: schedule }),
   clearLinkedSchedule: () => set({ linkedSchedule: null }),

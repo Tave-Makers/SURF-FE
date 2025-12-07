@@ -7,8 +7,8 @@ import { Sheet as ModalSheet } from 'react-modal-sheet';
 import { Alert } from '@/shared/ui/alert/Alert';
 import { SurfIcon } from '@/shared/ui/icon/SurfIcon';
 import { Sheet } from '@/shared/ui/sheet/Sheet';
-import { useDeleteSchedule } from '@/features/calendar/schedule/delete/model/useDelSchedule';
-import { useEditSchedule } from '@/features/calendar/schedule/edit/model/useEditSchedule';
+import { useDeleteSchedule } from '@/features/schedule/delete/model/useDelSchedule';
+import { useEditSchedule } from '@/features/schedule/edit/model/useEditSchedule';
 
 type ScheduleActionSheetProps = {
   scheduleId: string | number;

@@ -8,12 +8,12 @@ import { POST_CATEGORIES, PostCategoryKey } from '@/entities/post/model/category
 import { EditorState, PostPageMode, PostSnapshot } from '../model/types';
 import { useCreatePost } from '@/features/post/create-post/model/useCreatePost';
 import { POST_VALIDATION } from '@/entities/post/model/validation';
-import { usePostScheduleStore } from '@/features/calendar/schedule/post-schedule/model/usePostScheduleStore';
-import { usePostReservationStore } from '@/features/calendar/schedule/post-schedule/model/usePostScheduleStore';
+import { useCreatePostScheduleStore } from '@/features/schedule/create-post-schedule/model/useCreatePostScheduleStore';
+import { usePostReservationStore } from '@/features/schedule/create-post-schedule/model/useCreatePostScheduleStore';
 import { useGetPostScheduleQuery } from '@/features/post/model/useGetPostScheduleQuery';
 import { ScheduleCategory } from '@/entities/schedule/model/types';
-import { useEditSchedule } from '@/features/calendar/schedule/edit/model/useEditSchedule';
-import { useCreatePostSchedule } from '@/features/calendar/schedule/post-schedule/model/useCreatePostSchedule';
+import { useEditSchedule } from '@/features/schedule/edit/model/useEditSchedule';
+import { useCreatePostSchedule } from '@/features/schedule/create-post-schedule/model/useCreatePostSchedule';
 
 type Props = {
   mode: PostPageMode;
@@ -23,7 +23,7 @@ type Props = {
 
 export const usePostForm = ({ mode, boardId, postId }: Props) => {
   const router = useRouter();
-  const { linkedSchedule, setLinkedSchedule, clearLinkedSchedule } = usePostScheduleStore();
+  const { linkedSchedule, setLinkedSchedule, clearLinkedSchedule } = useCreatePostScheduleStore();
   const { reserved, setReserved, reservedAt, setReservedAt, resetReservation } =
     usePostReservationStore();
   const resetPostState = () => {

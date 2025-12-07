@@ -13,6 +13,7 @@ import { usePostReservationStore } from '@/features/calendar/schedule/post-sched
 import { useGetPostScheduleQuery } from '@/features/post/model/useGetPostScheduleQuery';
 import { ScheduleCategory } from '@/entities/schedule/model/types';
 import { useEditSchedule } from '@/features/calendar/schedule/edit/model/useEditSchedule';
+import { useCreatePostSchedule } from '@/features/calendar/schedule/post-schedule/model/useCreatePostSchedule';
 
 type Props = {
   mode: PostPageMode;
@@ -43,6 +44,7 @@ export const usePostForm = ({ mode, boardId, postId }: Props) => {
   );
 
   const { mutateAsync: editScheduleMutate } = useEditSchedule();
+  const { mutateAsync: createScheduleMutate } = useCreatePostSchedule();
 
   // 2. UI State
   const [title, setTitle] = useState('');
@@ -256,6 +258,19 @@ export const usePostForm = ({ mode, boardId, postId }: Props) => {
           reserved,
         });
         targetPostId = res.postId;
+
+        if (linkedSchedule && targetPostId) {
+          await createScheduleMutate({
+            postId: targetPostId, // 생성된 게시글 ID 사용
+            data: {
+              title: linkedSchedule.title,
+              startAt: linkedSchedule.startDate.toISOString(),
+              endAt: linkedSchedule.endDate.toISOString(),
+              location: linkedSchedule.location ?? '',
+              category: linkedSchedule.category,
+            },
+          });
+        }
       } else {
         await updateMutate({
           title,

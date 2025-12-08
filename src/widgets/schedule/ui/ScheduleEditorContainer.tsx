@@ -70,7 +70,7 @@ export default function ScheduleEditorContainer({ entryPoint }: Props) {
       title: '',
       startDate: new Date(),
       endDate: new Date(),
-      location: '',
+      location: '미정',
     },
     mode: 'onChange',
   });
@@ -97,6 +97,7 @@ export default function ScheduleEditorContainer({ entryPoint }: Props) {
     // Case A: 게시글 모드 -> Zustand 저장
     if (entryPoint === 'post') {
       setLinkedSchedule(data);
+      console.log(data);
       // TODO: 로그 삭제
       if (process.env.NODE_ENV === 'development') {
         console.log('게시글 모드: 일정 정보 store 저장 완료');

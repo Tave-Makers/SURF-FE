@@ -121,8 +121,7 @@ export const usePostForm = ({ mode, boardId, postId }: Props) => {
           title: postSchedule.title,
           startDate: new Date(postSchedule.startAt),
           endDate: new Date(postSchedule.endAt),
-          location: postSchedule.location,
-
+          location: postSchedule.location ?? '미정',
           category: mappedCategory as ScheduleCategory,
         });
       }
@@ -266,7 +265,7 @@ export const usePostForm = ({ mode, boardId, postId }: Props) => {
               title: linkedSchedule.title,
               startAt: linkedSchedule.startDate.toISOString(),
               endAt: linkedSchedule.endDate.toISOString(),
-              location: linkedSchedule.location ?? '',
+              location: linkedSchedule.location ?? '미정',
               category: linkedSchedule.category,
             },
           });
@@ -285,16 +284,17 @@ export const usePostForm = ({ mode, boardId, postId }: Props) => {
         });
 
         if (linkedSchedule && linkedSchedule.id) {
-          await editScheduleMutate({
+          const res = await editScheduleMutate({
             scheduleId: linkedSchedule.id,
             data: {
               category: linkedSchedule.category,
               title: linkedSchedule.title,
               startAt: linkedSchedule.startDate.toISOString(),
               endAt: linkedSchedule.endDate.toISOString(),
-              location: linkedSchedule.location ?? '',
+              location: linkedSchedule.location ?? '미정',
             },
           });
+          console.log(res);
         }
       }
 

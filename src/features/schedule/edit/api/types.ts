@@ -1,8 +1,9 @@
+import { ScheduleCategory } from '@/entities/schedule/model/types';
 import { CommonResponse } from '@/shared/api/types';
 
 // 일정 수정 Request body type
 export type EditScheduleRequest = {
-  category: string;
+  category: ScheduleCategory;
   title: string;
   startAt: string; // ISO 8601 형식의 날짜 문자열
   endAt: string; // ISO 8601 형식의 날짜 문자열

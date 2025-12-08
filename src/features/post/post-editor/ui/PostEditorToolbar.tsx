@@ -36,7 +36,7 @@ export const PostEditorToolbar = ({ editor, onCameraClick, onScheduleClick }: Pr
       onScheduleClick();
     },
     [TOOLBAR_KEY.CALENDAR]: () => {
-      router.push('/post/schedule/create');
+      router.push('/post/schedule');
     },
   };
 

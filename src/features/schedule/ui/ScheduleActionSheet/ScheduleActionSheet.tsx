@@ -39,7 +39,7 @@ export function ScheduleActionSheet({
   const handleEditClick = () => {
     // 수정 폼 페이지로 이동
     onClose();
-    router.push(`/home/calendar/schedule/${scheduleIdNum}/edit`);
+    router.push(`/home/calendar/schedule/${scheduleId}/edit`);
   };
 
   const handleDeleteConfirm = () => {

@@ -210,7 +210,7 @@ export const usePostForm = ({ mode, boardId, postId }: Props) => {
         });
 
         if (linkedSchedule && linkedSchedule.id) {
-          const res = await editScheduleMutate({
+          await editScheduleMutate({
             scheduleId: linkedSchedule.id,
             data: {
               category: linkedSchedule.category,
@@ -220,7 +220,6 @@ export const usePostForm = ({ mode, boardId, postId }: Props) => {
               location: linkedSchedule.location ?? '미정',
             },
           });
-          console.log(res);
         }
       }
       resetPostState();

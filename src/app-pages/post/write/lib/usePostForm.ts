@@ -14,6 +14,7 @@ import { useGetPostScheduleQuery } from '@/features/post/model/useGetPostSchedul
 import { ScheduleCategory } from '@/entities/schedule/model/types';
 import { useEditSchedule } from '@/features/schedule/edit/model/useEditSchedule';
 import { useCreatePostSchedule } from '@/features/schedule/create-post-schedule/model/useCreatePostSchedule';
+import { ScheduleFormData } from '@/features/schedule/create/model/types';
 
 type Props = {
   mode: PostPageMode;
@@ -21,15 +22,46 @@ type Props = {
   postId?: string;
 };
 
+const isSameSchedule = (storeData: ScheduleFormData | null, serverData: ScheduleFormData) => {
+  if (!storeData) return false; // 스토어가 비어있으면 다르다고 판단 (업데이트 필요)
+
+  // 1. ID 비교
+  if (storeData.id !== serverData.id) return false;
+
+  // 2. 텍스트 데이터 비교
+  if (storeData.title !== serverData.title) return false;
+  if (storeData.category !== serverData.category) return false;
+  if (storeData.location !== serverData.location) return false;
+
+  // 3. 날짜 비교 (Date 객체는 getTime()으로 밀리초 단위 비교가 필수)
+  const storeStart = new Date(storeData.startDate).getTime();
+  const serverStart = new Date(serverData.startDate).getTime();
+  if (storeStart !== serverStart) return false;
+
+  const storeEnd = new Date(storeData.endDate).getTime();
+  const serverEnd = new Date(serverData.endDate).getTime();
+  if (storeEnd !== serverEnd) return false;
+
+  return true; // 모든 검사를 통과하면 같은 데이터임
+};
+
 export const usePostForm = ({ mode, boardId, postId }: Props) => {
   const router = useRouter();
+
+  // 스토어 데이터
   const { linkedSchedule, setLinkedSchedule, clearLinkedSchedule } = useCreatePostScheduleStore();
   const { reserved, setReserved, reservedAt, setReservedAt, resetReservation } =
     usePostReservationStore();
-  const resetPostState = () => {
+  const resetPostState = useCallback(() => {
     clearLinkedSchedule();
     resetReservation();
-  };
+    isScheduleInitializedRef.current = false;
+  }, [clearLinkedSchedule, resetReservation]);
+
+  // 예약 모달 상태
+  const [isReservationModalOpen, setIsReservationModalOpen] = useState(false);
+  const openReservationModal = () => setIsReservationModalOpen(true);
+  const closeReservationModal = () => setIsReservationModalOpen(false);
 
   const numericPostId = mode === 'edit' && postId ? Number(postId) : undefined;
 
@@ -64,13 +96,15 @@ export const usePostForm = ({ mode, boardId, postId }: Props) => {
   } = usePicker<PostCategoryKey>({ defaultValue: 'event' });
 
   // 3. Refs (스냅샷 및 에디터 상태)
-  const initialSnapshot = useRef<PostSnapshot>({
+  const initialSnapshot = useRef<PostSnapshot & { initialSchedule: ScheduleFormData | null }>({
     title: '',
     category: 'event',
     content: '',
     imageUrls: [],
     reserved: false,
     reservedAt: null,
+    scheduleId: null,
+    initialSchedule: null,
   });
 
   const editorStateRef = useRef<EditorState>({
@@ -78,9 +112,15 @@ export const usePostForm = ({ mode, boardId, postId }: Props) => {
     images: [],
   });
 
+  const isScheduleInitializedRef = useRef(false);
+
   // 4. 초기화 로직
   useEffect(() => {
-    if (mode === 'create') return;
+    if (mode === 'create' || isScheduleInitializedRef.current) return;
+    if (linkedSchedule) {
+      isScheduleInitializedRef.current = true; // 초기화된 것으로 간주
+      return;
+    }
 
     if (mode === 'edit' && postDetail) {
       setTitle(postDetail.title);
@@ -92,38 +132,45 @@ export const usePostForm = ({ mode, boardId, postId }: Props) => {
       selectCategory(initialCategory);
 
       // 예약 정보 초기화 로직
-      let initialReserved = reserved; // Store에 있는 현재 값 (또는 기본값 false)
-      let initialReservedAt = reservedAt; // Store에 있는 현재 값
+      let initialReserved = false;
+      let initialReservedAt: Date | null = null;
 
-      // API 데이터 기반으로 초기 예약 상태 계산
-      if (!reserved && postDetail.postedAt) {
+      if (postDetail.postedAt) {
         const postedDate = new Date(postDetail.postedAt);
-        const now = new Date();
-
-        if (postedDate > now) {
+        if (postedDate > new Date()) {
           initialReserved = true;
           initialReservedAt = postedDate;
-          setReserved(true);
-          setReservedAt(postedDate);
         }
       }
 
+      setReserved(initialReserved);
+      setReservedAt(initialReservedAt);
+
       // 일정 정보 초기화 로직
-      if (!linkedSchedule && postSchedule) {
+      let initialScheduleData: ScheduleFormData | null = null;
+
+      if (postSchedule) {
         // 카테고리 매핑 로직
         const mappedCategory =
           postSchedule.category === 'operation' || postSchedule.category === 'other'
             ? postSchedule.category
             : 'regular';
 
-        setLinkedSchedule({
+        const newScheduleData = {
           id: postSchedule.scheduleId,
           title: postSchedule.title,
           startDate: new Date(postSchedule.startAt),
           endDate: new Date(postSchedule.endAt),
           location: postSchedule.location ?? '미정',
           category: mappedCategory as ScheduleCategory,
-        });
+        };
+        initialScheduleData = newScheduleData;
+
+        const shouldSyncStore = !isSameSchedule(linkedSchedule, newScheduleData);
+        if (shouldSyncStore) {
+          setLinkedSchedule(newScheduleData);
+          isScheduleInitializedRef.current = true;
+        }
       }
 
       // 스냅샷 저장
@@ -136,18 +183,18 @@ export const usePostForm = ({ mode, boardId, postId }: Props) => {
           .map((img) => img.originalUrl),
         reserved: initialReserved,
         reservedAt: initialReservedAt,
+        scheduleId: postSchedule?.scheduleId || null,
+        initialSchedule: initialScheduleData,
       };
     }
   }, [
     mode,
     postDetail,
     postSchedule,
+    linkedSchedule,
     selectCategory,
-    reserved,
-    reservedAt,
     setReserved,
     setReservedAt,
-    linkedSchedule,
     setLinkedSchedule,
   ]);
 
@@ -186,16 +233,41 @@ export const usePostForm = ({ mode, boardId, postId }: Props) => {
     // 최종 예약 변경 여부 (상태가 바뀌었거나, 시간이 바뀌었을 때)
     const isReservationChanged = isReservedToggleChanged || isReservedTimeChanged;
 
+    // [수정] 일정 변경 감지 로직 (여기서 계산)
+    let isScheduleChanged = false;
+
+    const currentSchedule = linkedSchedule;
+    const initialSchedule = init.initialSchedule;
+
+    if (!currentSchedule && !initialSchedule) {
+      // 둘 다 없으면 변경 없음
+      isScheduleChanged = false;
+    } else if (!currentSchedule || !initialSchedule) {
+      // 둘 중 하나만 있으면 변경됨 (추가 or 삭제)
+      isScheduleChanged = true;
+    } else {
+      // 둘 다 있으면 내용 비교 (!isSameSchedule 활용)
+      // 주의: isSameSchedule의 첫 번째 인자가 null 허용하도록 수정하셨다면 그대로 쓰면 됩니다.
+      isScheduleChanged = !isSameSchedule(currentSchedule, initialSchedule);
+    }
+
     const isEmpty =
       !current.title && stripHtml(current.content) === '' && current.imageUrls.length === 0;
 
     return {
-      hasChanges: isTitleChanged || isCategoryChanged || isContentChanged || isImagesChanged,
+      hasChanges:
+        isTitleChanged ||
+        isCategoryChanged ||
+        isContentChanged ||
+        isImagesChanged ||
+        isReservationChanged ||
+        isImagesChanged ||
+        isScheduleChanged,
       isImagesChanged,
       isReservationChanged,
       isEmpty,
     };
-  }, [title, category, reserved, reservedAt]);
+  }, [title, category, reserved, reservedAt, linkedSchedule]);
 
   // 6. 핸들러들
   const handleEditorChange = useCallback((updatedData: EditorState) => {
@@ -206,7 +278,10 @@ export const usePostForm = ({ mode, boardId, postId }: Props) => {
   const handleBack = () => {
     const { hasChanges, isEmpty } = checkHasChanges();
     if (hasChanges && !isEmpty) setShowExitAlert(true);
-    else router.back();
+    else {
+      resetPostState();
+      router.back();
+    }
   };
 
   const { mutateAsync: createMutate, isPending: isCreating } = useCreatePost();
@@ -297,9 +372,7 @@ export const usePostForm = ({ mode, boardId, postId }: Props) => {
           console.log(res);
         }
       }
-
       resetPostState();
-
       if (targetPostId) {
         router.replace(`/board/${boardId}/post/${targetPostId}`);
       }
@@ -321,17 +394,25 @@ export const usePostForm = ({ mode, boardId, postId }: Props) => {
     selectCategory,
     initialContent,
     initialImages,
-    showExitAlert,
-    setShowExitAlert,
+    linkedSchedule,
     reserved,
     setReserved,
     reservedAt,
     setReservedAt,
+
+    // UI State
+    showExitAlert,
+    setShowExitAlert,
+    isReservationModalOpen,
     isSubmitDisabled: !title || isContentEmpty,
 
     // Handlers
     handleEditorChange,
     handleBack,
     handleSubmit,
+    handleScheduleRemove: clearLinkedSchedule,
+    openReservationModal,
+    closeReservationModal,
+    resetPostState,
   };
 };

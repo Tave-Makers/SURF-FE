@@ -1,19 +1,25 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useMemo } from 'react';
 import { useRouter, useParams, useSearchParams } from 'next/navigation';
 import { useForm, FormProvider } from 'react-hook-form';
+import { format } from 'date-fns';
+
+// Hooks & Store
 import { useScheduleFormInit } from '@/features/schedule/model/useScheduleFormInit';
 import { useCreateSchedule } from '@/features/schedule/create/model/useCreateSchedule';
 import { useEditSchedule } from '@/features/schedule/edit/model/useEditSchedule';
 import { useCreatePostScheduleStore } from '@/features/schedule/create-post-schedule/model/useCreatePostScheduleStore';
+import { useGetPostScheduleQuery } from '@/features/post/model/useGetPostScheduleQuery'; // ✅ 추가된 쿼리
+
+// UI & Types
 import { mapScheduleFormToRequest } from '@/features/schedule/create/api/mapper';
 import { AppHeader } from '@/widgets/header/ui/AppHeader';
 import { HeaderMode } from '@/shared/ui/header/Header';
 import { Alert } from '@/shared/ui/alert/Alert';
 import ScheduleForm from '@/widgets/schedule/ui/ScheduleForm';
 import { ScheduleFormData } from '@/features/schedule/create/model/types';
-import { format } from 'date-fns';
+import { ScheduleCategory } from '@/entities/schedule/model/types';
 
 type Props = {
   entryPoint: 'calendar' | 'post'; // 진입점
@@ -25,45 +31,80 @@ export default function ScheduleEditorContainer({ entryPoint }: Props) {
   const searchParams = useSearchParams();
   const [showExitAlert, setShowExitAlert] = useState(false);
 
-  // --- 1. 파라미터 및 모드 파악---
-  let scheduleId: number | undefined;
-  let calendarMode: 'create' | 'edit' = 'create'; // 기본값 create
-  let postMode: 'create' | 'edit' = 'create'; // 기본값 create
+  // --- 1. 파라미터 파싱 ---
+  // [Calendar] ID는 URL Path
+  const paramId = Array.isArray(params?.id) ? params.id[0] : params?.id;
+  const scheduleId = paramId ? Number(paramId) : undefined;
+
+  // [Post] ID는 Query String
+  const queryPostId = searchParams.get('postId');
+  const postId = queryPostId ? Number(queryPostId) : undefined;
+
+  // 모드 설정
+  let calendarMode: 'create' | 'edit' = 'create';
+  let postMode: 'create' | 'edit' = 'create';
 
   if (entryPoint === 'calendar') {
-    // [Calendar] ID는 URL Path에서만 가져옴
-    const paramId = Array.isArray(params?.id) ? params.id[0] : params?.id;
-    scheduleId = paramId ? Number(paramId) : undefined;
-
-    // ID가 있으면 수정 모드
     calendarMode = scheduleId ? 'edit' : 'create';
   } else {
-    // [Post] ID는 Query String에서만 가져옴
-    const queryId = searchParams.get('scheduleId');
-    scheduleId = queryId ? Number(queryId) : undefined;
-
-    // 모드는 Query String의 'mode' 파라미터 사용
     postMode = (searchParams.get('mode') as 'create' | 'edit') || 'create';
   }
 
-  // UI 제어용 플래그 (캘린더 수정 상태인지)
   const isCalendarEdit = entryPoint === 'calendar' && calendarMode === 'edit';
 
-  // --- 2. 로직 훅 호출 (데이터 초기화) ---
-  const { initialData, isLoading } = useScheduleFormInit({
+  // --- 2. 데이터 패칭 (이원화 전략) ---
+
+  // A. [Calendar Mode] 기존 훅 그대로 사용 (캘린더 수정 시 동작)
+  const { initialData: calendarInitialData, isLoading: isCalendarLoading } = useScheduleFormInit({
     entryPoint,
     postMode,
     calendarMode,
     scheduleId,
   });
 
-  // --- 3. API & Store ---
+  // B. [Post Mode] Store 가져오기 (1순위)
+  const { linkedSchedule, setLinkedSchedule } = useCreatePostScheduleStore();
+
+  // C. [Post Mode] 서버 데이터 패칭 (2순위 - 새로고침 대비용)
+  // postId가 있고, 게시글 모드일 때만 호출 (API: getPostSchedule 사용)
+  const { data: serverPostSchedule, isLoading: isPostScheduleLoading } = useGetPostScheduleQuery(
+    postId!,
+    entryPoint === 'post' && !!postId,
+  );
+
+  // --- 3. 최종 초기 데이터 결정 (Merge Logic) ---
+  const activeInitialData = useMemo(() => {
+    // Case 1: 게시글 모드 - Store에 데이터가 있음 (수정 중) -> 최우선
+    if (entryPoint === 'post' && linkedSchedule) {
+      return linkedSchedule;
+    }
+
+    // Case 2: 게시글 모드 - Store는 비었지만 서버 데이터 있음 (새로고침)
+    if (entryPoint === 'post' && serverPostSchedule) {
+      const category =
+        serverPostSchedule.category === 'operation' || serverPostSchedule.category === 'other'
+          ? serverPostSchedule.category
+          : 'regular';
+
+      return {
+        category: category as ScheduleCategory,
+        title: serverPostSchedule.title,
+        startDate: new Date(serverPostSchedule.startAt),
+        endDate: new Date(serverPostSchedule.endAt),
+        location: serverPostSchedule.location ?? '미정',
+      } as ScheduleFormData;
+    }
+
+    // Case 3: 캘린더 모드 - 기존 훅 데이터 사용
+    return calendarInitialData;
+  }, [entryPoint, linkedSchedule, serverPostSchedule, calendarInitialData]);
+
+  // --- 4. API Mutations ---
   const { mutate: createSchedule, isPending: isCreating } = useCreateSchedule();
   const { mutate: editSchedule, isPending: isEditing } = useEditSchedule();
-  const { setLinkedSchedule } = useCreatePostScheduleStore();
-
   const isPending = isCreating || isEditing;
 
+  // --- 5. React Hook Form ---
   const methods = useForm<ScheduleFormData>({
     defaultValues: {
       category: 'regular',
@@ -72,43 +113,41 @@ export default function ScheduleEditorContainer({ entryPoint }: Props) {
       endDate: new Date(),
       location: '미정',
     },
+    values: activeInitialData ?? undefined, // 비동기 데이터 주입 (reset 대신 values 사용 권장)
     mode: 'onChange',
   });
 
   const title = methods.watch('title');
   const startDate = methods.watch('startDate');
   const endDate = methods.watch('endDate');
-
-  // 유효성 검사
   const isFormValid =
     title?.trim().length >= 2 && startDate && endDate && startDate.getTime() <= endDate.getTime();
 
-  // --- 4. 헤더 설정 ---
+  // --- 6. 핸들러 ---
   const getHeaderTextBtn = () => {
-    if (entryPoint === 'post') return '연동'; // 게시글 모드
-    if (isCalendarEdit) return '수정'; // 캘린더 수정
-    return '완료'; // 캘린더 생성
+    if (entryPoint === 'post') return '연동';
+    if (isCalendarEdit) return '수정';
+    return '완료';
   };
 
-  // --- 5. 제출 핸들러 (동작 분기) ---
+  const currentScheduleId = linkedSchedule?.id || serverPostSchedule?.scheduleId;
+
   const handleSubmit = (data: ScheduleFormData) => {
     if (!isFormValid || isPending) return;
 
-    // Case A: 게시글 모드 -> Zustand 저장
+    // [Post Mode] Zustand 저장 후 복귀
     if (entryPoint === 'post') {
-      setLinkedSchedule(data);
-      console.log(data);
-      // TODO: 로그 삭제
-      if (process.env.NODE_ENV === 'development') {
-        console.log('게시글 모드: 일정 정보 store 저장 완료');
-      }
+      setLinkedSchedule({
+        ...data,
+        id: currentScheduleId, // 여기서 ID를 꼭 넣어줘야 합니다!
+      });
+      if (process.env.NODE_ENV === 'development') console.log('Store 저장 완료');
       router.back();
       return;
     }
 
-    // Case B: 캘린더 모드 -> API 호출
+    // [Calendar Mode] API 호출
     const baseRequestData = mapScheduleFormToRequest(data);
-
     const requestData = {
       ...baseRequestData,
       startAt: format(data.startDate, "yyyy-MM-dd'T'HH:mm:ss"),
@@ -121,10 +160,6 @@ export default function ScheduleEditorContainer({ entryPoint }: Props) {
         {
           onSuccess: () => {
             alert('일정 수정 완료');
-            // TODO: 로그 삭제
-            if (process.env.NODE_ENV === 'development') {
-              console.log('캘린더 모드: 일정 수정 완료');
-            }
             router.back();
           },
         },
@@ -133,10 +168,6 @@ export default function ScheduleEditorContainer({ entryPoint }: Props) {
       createSchedule(requestData, {
         onSuccess: () => {
           alert('일정 생성 완료');
-          // TODO: 로그 삭제
-          if (process.env.NODE_ENV === 'development') {
-            console.log('캘린더 모드: 일정 생성 완료');
-          }
           router.back();
         },
       });
@@ -147,6 +178,12 @@ export default function ScheduleEditorContainer({ entryPoint }: Props) {
     if ((title?.trim().length ?? 0) >= 2) setShowExitAlert(true);
     else router.back();
   };
+
+  // --- 7. 로딩 처리 ---
+  const isLoading =
+    entryPoint === 'post'
+      ? !linkedSchedule && isPostScheduleLoading // 게시글 모드 로딩 조건
+      : isCalendarLoading; // 캘린더 모드 로딩 조건
 
   if (isLoading) return <div>Loading...</div>;
 
@@ -164,7 +201,6 @@ export default function ScheduleEditorContainer({ entryPoint }: Props) {
           onClickTextBtn: () => void methods.handleSubmit(handleSubmit)(),
         }}
       />
-
       <Alert
         state="default"
         title="변경 내용을 저장하지 않고 나가시겠습니까?"
@@ -189,10 +225,9 @@ export default function ScheduleEditorContainer({ entryPoint }: Props) {
           },
         ]}
       />
-
       <FormProvider {...methods}>
         <div className="px-13">
-          <ScheduleForm onSubmit={handleSubmit} initialData={initialData} />
+          <ScheduleForm onSubmit={handleSubmit} initialData={activeInitialData} />
         </div>
       </FormProvider>
     </>

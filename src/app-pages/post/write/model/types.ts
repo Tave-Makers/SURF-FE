@@ -9,6 +9,7 @@ export type PostSnapshot = {
   imageUrls: (string | null)[];
   reserved: boolean;
   reservedAt: Date | null;
+  scheduleId: number | null;
 };
 
 // 에디터 내부 상태 타입

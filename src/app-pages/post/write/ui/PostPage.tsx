@@ -7,7 +7,7 @@ import { Sheet as ModalSheet } from 'react-modal-sheet';
 import { AppHeader } from '@/widgets/header/ui/AppHeader';
 import { HeaderMode } from '@/shared/ui/header/Header';
 import { Alert } from '@/shared/ui/alert/Alert';
-import { usePostForm } from '../lib/usePostForm';
+import { usePostForm } from '../../../../features/post/post-form/model/usePostForm';
 import { useRouter } from 'next/navigation';
 import { POST_VALIDATION } from '@/entities/post/model/validation';
 import { POST_BOARDS } from '@/entities/post/model/board';
@@ -55,7 +55,6 @@ export default function PostPage(props: PostPageProps) {
     handleSubmit,
     resetPostState,
   } = usePostForm({ mode, boardId, postId });
-  console.log('linkedSchedule in PostPage:', linkedSchedule);
 
   // 예약 시간 임시 저장용 state (취소 시 롤백 위함)
   const [tempDate, setTempDate] = useState<Date>(new Date());

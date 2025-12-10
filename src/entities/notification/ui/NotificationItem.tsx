@@ -24,7 +24,7 @@ export const NotificationItem = ({
       className={`p-[1rem] ${isRead ? 'bg-background-normal' : 'bg-background-notification'} flex items-center gap-[1.25rem]`}
     >
       {/* 아바타 + 뱃지 박스 */}
-      {userImageUrl && badge && (
+      {badge && (
         <div className="relative">
           <Avatar src={userImageUrl} size="m" />
 

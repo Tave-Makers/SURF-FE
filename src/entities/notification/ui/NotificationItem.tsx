@@ -26,7 +26,7 @@ export const NotificationItem = ({
   return (
     <button
       onClick={onClick}
-      className={`w-full p-[1rem] ${isRead ? 'bg-background-normal' : 'bg-background-notification'} flex items-center gap-[1.25rem]`}
+      className={`w-full p-13 ${isRead ? 'bg-background-normal' : 'bg-background-notification'} flex items-center gap-15`}
     >
       {/* 아바타 + 뱃지 박스 */}
       {badge && (
@@ -41,7 +41,7 @@ export const NotificationItem = ({
       )}
 
       {/* 내용 */}
-      <div className="flex flex-col items-start gap-[0.375rem]">
+      <div className="flex flex-col items-start gap-7">
         <h4 className="text-foreground-normal text-body-body7">{title}</h4>
         <time className="text-caption-caption4 text-foreground-quinary-darker">
           {formatDateTime(time)}

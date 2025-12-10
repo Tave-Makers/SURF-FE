@@ -28,7 +28,7 @@ export const NotificationItem = ({
         <div className="relative">
           <Avatar src={userImageUrl} size="m" />
 
-          <div className="absolute right-[-5px] bottom-[-5px] h-[1.125rem] w-[1.125rem]">
+          <div className="absolute right-[-5px] bottom-[-5px] h-[1.15rem] w-[1.15rem]">
             {badge === 'LIKE' && <LikeNotificationBadge className="h-full w-full" />}
             {badge === 'MENTION' && <MentionNotificationBadge className="h-full w-full" />}
           </div>

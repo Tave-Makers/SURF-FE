@@ -170,6 +170,7 @@ export default function PostPage(props: PostPageProps) {
       </div>
 
       {/* 6. 예약 설정 모달 */}
+      {/* TODO: 리팩토링 필요 */}
       <ModalSheet
         isOpen={isReservationModalOpen}
         onClose={closeReservationModal}

@@ -6,7 +6,7 @@ import { formatDateTime } from '@/shared/utils/date';
 export type NOTIFICATION_BADGE = 'LIKE' | 'MENTION';
 
 export type NotificationItemProps = {
-  id: number;
+  id?: number;
   userImageUrl?: string;
   title: string;
   time: Date;

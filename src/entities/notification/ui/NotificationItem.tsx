@@ -6,12 +6,13 @@ import { formatDateTime } from '@/shared/utils/date';
 export type NOTIFICATION_BADGE = 'LIKE' | 'MENTION';
 
 export type NotificationItemProps = {
-  id?: number;
+  id: number;
   userImageUrl?: string;
   title: string;
   time: Date;
   badge?: NOTIFICATION_BADGE;
   isRead: boolean;
+  onClick?: () => void;
 };
 
 export const NotificationItem = ({
@@ -20,10 +21,12 @@ export const NotificationItem = ({
   time,
   badge,
   isRead,
+  onClick,
 }: NotificationItemProps) => {
   return (
-    <div
-      className={`p-[1rem] ${isRead ? 'bg-background-normal' : 'bg-background-notification'} flex items-center gap-[1.25rem]`}
+    <button
+      onClick={onClick}
+      className={`w-full p-[1rem] ${isRead ? 'bg-background-normal' : 'bg-background-notification'} flex items-center gap-[1.25rem]`}
     >
       {/* 아바타 + 뱃지 박스 */}
       {badge && (
@@ -38,12 +41,12 @@ export const NotificationItem = ({
       )}
 
       {/* 내용 */}
-      <div className="flex flex-col gap-[0.375rem]">
+      <div className="flex flex-col items-start gap-[0.375rem]">
         <h4 className="text-foreground-normal text-body-body7">{title}</h4>
         <time className="text-caption-caption4 text-foreground-quinary-darker">
           {formatDateTime(time)}
         </time>
       </div>
-    </div>
+    </button>
   );
 };

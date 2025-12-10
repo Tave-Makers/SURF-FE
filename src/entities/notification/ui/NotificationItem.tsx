@@ -1,13 +1,15 @@
 import LikeNotificationBadge from '@/shared/assets/icons/notification/notification-badge-like.svg';
 import MentionNotificationBadge from '@/shared/assets/icons/notification/notification-badge-mention.svg';
 import { Avatar } from '@/shared/ui/avatar/Avatar';
+import { formatDateTime } from '@/shared/utils/date';
 
-type NOTIFICATION_BADGE = 'LIKE' | 'MENTION';
+export type NOTIFICATION_BADGE = 'LIKE' | 'MENTION';
 
 export type NotificationItemProps = {
+  id: number;
   userImageUrl?: string;
   title: string;
-  time: string;
+  time: Date;
   badge?: NOTIFICATION_BADGE;
   isRead: boolean;
 };
@@ -38,7 +40,9 @@ export const NotificationItem = ({
       {/* 내용 */}
       <div className="flex flex-col gap-[0.375rem]">
         <h4 className="text-foreground-normal text-body-body7">{title}</h4>
-        <span className="text-caption-caption4 text-foreground-quinary-darker">{time}</span>
+        <time className="text-caption-caption4 text-foreground-quinary-darker">
+          {formatDateTime(time)}
+        </time>
       </div>
     </div>
   );

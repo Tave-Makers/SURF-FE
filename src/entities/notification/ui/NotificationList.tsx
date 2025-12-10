@@ -7,8 +7,8 @@ type NotificationListProps = {
 export const NotificationList = ({ items }: NotificationListProps) => {
   return (
     <div className="flex flex-col">
-      {items.map((item, index) => (
-        <NotificationItem key={index} {...item} />
+      {items.map((item) => (
+        <NotificationItem key={item.id} {...item} />
       ))}
     </div>
   );

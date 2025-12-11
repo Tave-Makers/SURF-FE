@@ -9,14 +9,14 @@ const labelByType: Record<DailyActivity['category'], string> = {
 };
 
 const colorByType: Record<DailyActivity['category'], string> = {
-  official: 'bg-background-background-tag-pink text-foreground-foreground-tag-pink-darker',
-  operation: 'bg-background-background-tag-purple text-foreground-foreground-tag-purple-darker',
-  other: 'bg-background-background-tag-green text-foreground-foreground-tag-green-darker',
+  official: 'bg-background-tag-pink text-foreground-tag-pink-darker',
+  operation: 'bg-background-tag-purple text-foreground-tag-purple-darker',
+  other: 'bg-background-tag-green text-foreground-tag-green-darker',
 };
 
 export function ActivityBadge({ item, isCurrentMonth = true }: Props) {
   const baseClasses =
-    'flex w-full min-w-0 items-center inline-flex rounded-2 px-2 py-3 text-caption-caption5 flex-shrink-0';
+    'flex w-full min-w-0 items-center inline-flex rounded-2 px-2 py-3 text-caption5 flex-shrink-0';
   const opacityClass = isCurrentMonth ? '' : 'opacity-50';
 
   return (

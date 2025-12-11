@@ -18,9 +18,9 @@ export function ScheduleSetting({ title, date, onClick }: ScheduleSettingProps) 
       onClick={onClick}
       className="flex w-full flex-row items-center justify-between py-7 text-left"
     >
-      <div className="text-foreground-foreground-normal text-body-body8 flex shrink-0">{title}</div>
+      <div className="text-foreground-normal text-body8 flex shrink-0">{title}</div>
 
-      <div className="text-foreground-foreground-quaternary text-caption-caption2 flex w-full flex-row justify-end gap-4">
+      <div className="text-foreground-quaternary text-caption2 flex w-full flex-row justify-end gap-4">
         <div>{format(date, 'yyyy년 M월 d일 (E)', { locale: ko })}</div>
         <div>{format(date, 'HH:mm', { locale: ko })}</div>
       </div>

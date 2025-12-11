@@ -72,14 +72,8 @@ export function ScheduleActionSheet({
                   disabled={editScheduleMutation.isPending}
                   className="flex w-full items-center gap-8 self-stretch px-12 py-10"
                 >
-                  <SurfIcon
-                    size="m"
-                    name="Edit"
-                    className="fill-foreground-foreground-normal-lighter"
-                  />
-                  <span className="text-body-body5 text-foreground-foreground-normal">
-                    수정하기
-                  </span>
+                  <SurfIcon size="m" name="Edit" className="fill-foreground-normal-lighter" />
+                  <span className="text-body5 text-foreground-normal">수정하기</span>
                 </button>
 
                 {/* 삭제하기 버튼 */}
@@ -91,11 +85,9 @@ export function ScheduleActionSheet({
                   <SurfIcon
                     size="m"
                     name="Trash"
-                    className="fill-foreground-foreground-danger text-foreground-foreground-danger"
+                    className="fill-foreground-danger text-foreground-danger"
                   />
-                  <span className="text-body-body5 text-foreground-foreground-danger-darker">
-                    삭제하기
-                  </span>
+                  <span className="text-body5 text-foreground-danger-darker">삭제하기</span>
                 </button>
               </div>
             </Sheet>

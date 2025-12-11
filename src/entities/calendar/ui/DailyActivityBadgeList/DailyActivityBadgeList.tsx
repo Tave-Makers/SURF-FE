@@ -21,10 +21,10 @@ export function DailyActivityBadgeList({ items, maxVisible = 2, isCurrentMonth =
       {remain > 0 && (
         <div
           className={[
-            'rounded-2 text-caption-caption6 flex max-w-full items-center justify-center px-2 py-4',
+            'rounded-2 text-caption6 flex max-w-full items-center justify-center px-2 py-4',
             isCurrentMonth
-              ? 'text-foreground-foreground-secondary'
-              : 'text-foreground-foreground-secondary-lighter opacity-50',
+              ? 'text-foreground-secondary'
+              : 'text-foreground-secondary-lighter opacity-50',
           ].join(' ')}
         >
           <span className="truncate">{remain}개 더보기</span>

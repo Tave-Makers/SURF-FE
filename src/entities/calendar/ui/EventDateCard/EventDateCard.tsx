@@ -36,13 +36,13 @@ export function EventDateCard<T extends { id: string | number }>({
   return (
     <div className="flex w-full flex-col gap-6 pt-15">
       <header className="flex items-start">
-        <div className="text-body-body7 text-foreground-foreground-normal">{formattedDate}</div>
+        <div className="text-body7 text-foreground-normal">{formattedDate}</div>
       </header>
 
       {isLoading ? (
-        <div className="text-background-background-secondary-darker">불러오는 중...</div>
+        <div className="text-background-secondary-darker">불러오는 중...</div>
       ) : items.length === 0 ? (
-        <div className="text-background-background-secondary-darker">등록된 일정이 없습니다.</div>
+        <div className="text-background-secondary-darker">등록된 일정이 없습니다.</div>
       ) : (
         <div className="flex flex-col gap-10">
           {items.map((item, index) => (

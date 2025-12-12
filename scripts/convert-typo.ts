@@ -6,7 +6,7 @@ function loadJSON(filePath: string) {
 }
 
 // 원시 토큰 로드
-const raw = loadJSON('tokens/typography.json');
+const raw = loadJSON('tokens/tokens.json');
 const meta = raw[''] ?? {};
 const groups = { Title: meta.Title, Body: meta.Body, Caption: meta.Caption };
 
@@ -30,7 +30,6 @@ const textCaseMap: Record<string, string> = {
   none: 'none',
 };
 
-// ---------- 유틸들 ----------
 function normalizeWeight(str: string) {
   const key = str?.toLowerCase?.();
   return weightMap[key] ?? str; // 숫자 문자열/숫자 유지
@@ -49,31 +48,41 @@ function ensureDim(val: unknown, fallback = '0px') {
   return fallback;
 }
 
-function ensureNumberOrRaw(val: unknown) {
-  // 여기서는 px로 가되, 문자열 단위가 있으면 그대로.
-  if (val == null) return 'normal';
-  if (typeof val === 'number' && Number.isFinite(val)) return `${val}px`;
+function ensureNumberOrRaw(val: unknown, fallback = 'normal') {
+  if (val == null) return fallback;
+
+  // number → px 단위 추가
+  if (typeof val === 'number' && Number.isFinite(val)) {
+    return `${val}px`;
+  }
+
   if (typeof val === 'string') {
     const v = val.trim();
+
+    if (v === 'normal') return 'normal';
+
+    // px/em/rem/% 등 단위가 이미 있는 경우 그대로 사용
     if (/^-?\d+(\.\d+)?(px|em|rem|%)$/.test(v)) return v;
+
+    // 단위 없는 숫자라면 → px로 변환
     const n = parseFloat(v);
-    return Number.isFinite(n) ? `${n}px` : 'normal';
+    if (Number.isFinite(n)) return `${n}px`;
   }
-  return 'normal';
+
+  return fallback;
 }
 
-function ensureLetterSpacing(val: unknown) {
-  // normal | <length>; percentage는 미허용
-  if (val == null) return 'normal';
+function ensureLetterSpacing(val: unknown, fallback = 'normal') {
+  if (val == null) return fallback;
   if (typeof val === 'number' && Number.isFinite(val)) return `${val}px`;
   if (typeof val === 'string') {
     const v = val.trim().toLowerCase();
     if (v === 'normal') return 'normal';
     if (/^-?\d+(\.\d+)?(px|em|rem)$/.test(v)) return v;
     const n = parseFloat(v);
-    return Number.isFinite(n) ? `${n}px` : 'normal';
+    return Number.isFinite(n) ? `${n}px` : fallback;
   }
-  return 'normal';
+  return fallback;
 }
 
 function makeClassName(group: string, key: string) {
@@ -81,20 +90,52 @@ function makeClassName(group: string, key: string) {
 }
 
 // 참조 해석 유틸
-function resolveRef(obj: any, ref: string) {
+function resolveRef(root: any, ref: string) {
   if (!ref) return '';
+
   const clean = ref.replace(/[{}]/g, '');
-  const pathParts = clean.split('.');
-  let current = obj;
-  for (const part of pathParts) {
-    if (current && typeof current === 'object' && part in current) {
-      current = current[part];
-      if (current && typeof current === 'object' && 'value' in current) {
-        current = current.value;
-      }
+  const parts = clean.split('.');
+
+  function find(obj: any): any {
+    if (!obj || typeof obj !== 'object') return undefined;
+
+    let cur = obj;
+    for (const p of parts) {
+      if (cur && typeof cur === 'object' && p in cur) {
+        cur = cur[p];
+      } else return undefined;
+    }
+
+    if (cur && typeof cur === 'object' && 'value' in cur) {
+      return cur.value;
+    }
+    return cur;
+  }
+
+  // 직접 경로 탐색
+  const direct = find(root);
+  if (direct !== undefined) return direct;
+
+  // tokenSet 순회
+  for (const setName of Object.keys(root)) {
+    if (typeof root[setName] === 'object') {
+      const nested = find(root[setName]);
+      if (nested !== undefined) return nested;
     }
   }
-  return current;
+
+  return '';
+}
+
+function buildFontFamilyCss(rawFontFamily: string) {
+  if (!rawFontFamily) {
+    return '-apple-system, BlinkMacSystemFont, system-ui, "Segoe UI", sans-serif';
+  }
+
+  // 스페이스가 있으면 따옴표로 감싸기
+  const quotedFamily = rawFontFamily.includes(' ') ? `"${rawFontFamily}"` : rawFontFamily;
+
+  return `${quotedFamily}, 'Wanted Sans', -apple-system, BlinkMacSystemFont, system-ui, "Segoe UI", sans-serif`;
 }
 
 // 실사용 CSS 파일 경로
@@ -112,25 +153,26 @@ for (const [groupName, groupObj] of Object.entries(groups)) {
     const val = token.value;
     const className = makeClassName(groupName, key);
 
-    const fontFamily = resolveRef(meta, val.fontFamily) || 'sans-serif';
-    const fontWeight = normalizeWeight(resolveRef(meta, val.fontWeight));
-    const lineHeightRaw = resolveRef(meta, val.lineHeight);
-    const fontSizeRaw = resolveRef(meta, val.fontSize);
-    const letterSpacingRaw = resolveRef(meta, val.letterSpacing);
-    const paragraphSpacingRaw = resolveRef(meta, val.paragraphSpacing);
-    const paragraphIndentRaw = resolveRef(meta, val.paragraphIndent);
-    const textCaseRaw = resolveRef(meta, val.textCase);
-    const textDecoration = resolveRef(meta, val.textDecoration) || 'none';
+    const rawFontFamily = resolveRef(raw, val.fontFamily);
+    const fontFamilyCss = buildFontFamilyCss(rawFontFamily);
+    const fontWeight = normalizeWeight(resolveRef(raw, val.fontWeight));
+    const lineHeightRaw = resolveRef(raw, val.lineHeight);
+    const fontSizeRaw = resolveRef(raw, val.fontSize);
+    const letterSpacingRaw = resolveRef(raw, val.letterSpacing);
+    const paragraphSpacingRaw = resolveRef(raw, val.paragraphSpacing);
+    const paragraphIndentRaw = resolveRef(raw, val.paragraphIndent);
+    const textCaseRaw = resolveRef(raw, val.textCase);
+    const textDecoration = resolveRef(raw, val.textDecoration) || 'none';
 
     const lineHeight = ensureNumberOrRaw(lineHeightRaw);
-    const fontSize = ensureDim(fontSizeRaw); // px로
+    const fontSize = ensureDim(fontSizeRaw);
     const letterSpacing = ensureLetterSpacing(letterSpacingRaw);
-    const paragraphSpacing = ensureDim(paragraphSpacingRaw, '0px');
-    const paragraphIndent = ensureDim(paragraphIndentRaw, '0px');
-    const textTransform = textCaseMap[String(textCaseRaw ?? 'none').toLowerCase()] || 'none';
+    const paragraphSpacing = ensureDim(paragraphSpacingRaw);
+    const paragraphIndent = ensureDim(paragraphIndentRaw);
+    const textTransform = textCaseMap[String(textCaseRaw || 'none').toLowerCase()] ?? 'none';
 
     cssOutput += `  ${className} {\n`;
-    cssOutput += `    font-family: ${fontFamily}, sans-serif;\n`;
+    cssOutput += `    font-family: ${fontFamilyCss};\n`;
     cssOutput += `    font-weight: ${fontWeight};\n`;
     cssOutput += `    line-height: ${lineHeight};\n`;
     cssOutput += `    font-size: ${fontSize};\n`;
@@ -140,8 +182,9 @@ for (const [groupName, groupObj] of Object.entries(groups)) {
     cssOutput += `    text-decoration: ${textDecoration};\n`;
     cssOutput += `  }\n`;
 
-    // 문단 간격은 실제 문단 요소에 적용
-    cssOutput += `  ${className} p { margin-bottom: ${paragraphSpacing}; }\n`;
+    if (paragraphSpacing !== '0px') {
+      cssOutput += `  ${className} p { margin-bottom: ${paragraphSpacing}; }\n`;
+    }
   }
 }
 

@@ -51,7 +51,7 @@ function resolveSemantics(
 }
 
 // 원시 토큰 로드
-const raw = loadJSON('tokens/color.json');
+const raw = loadJSON('tokens/tokens.json');
 const primitiveLight = raw['Primitive/Light'] ?? {};
 const primitiveDark = raw['Primitive/Dark'] ?? {};
 const semanticLight = raw['Semantic/Light'] ?? {};

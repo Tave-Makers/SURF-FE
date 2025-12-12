@@ -33,7 +33,8 @@ export const Default: Story = {
     onItemClick: (item) => alert(`Clicked ${item.label}`),
 
     renderItem: (item, onItemClick) => {
-      let className = 'w-full px-10 text-sm rounded-3 text-body-body11 ';
+      let className =
+        'w-full items-center justify-center px-10 text-sm rounded-3 text-body-body11 ';
 
       if (item.type === 'active') {
         className += 'bg-background-quaternary text-foreground-secondary';

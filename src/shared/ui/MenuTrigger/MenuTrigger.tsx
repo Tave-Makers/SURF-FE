@@ -13,7 +13,7 @@ type MenuTriggerProps = {
 };
 
 export function MenuTrigger({ label, isOpen, onClick }: MenuTriggerProps) {
-  const baseStyle = 'flex h-18 items-center justify-center gap-5 px-8';
+  const baseStyle = 'flex h-18 items-center justify-center gap-5 px-8 rounded-3';
 
   return (
     <button type="button" className={baseStyle} onClick={onClick}>

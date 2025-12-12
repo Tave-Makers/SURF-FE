@@ -18,7 +18,7 @@ export function MenuDropDown<T extends { id: number }>({
   onItemClick,
 }: MenuDropDownProps<T>) {
   return (
-    <div className="rounded-3 bg-background-normal-lighter flex w-full flex-col p-5">
+    <div className="rounded-3 shadow-raised bg-background-normal-lighter flex w-full flex-col p-5">
       {items.map((item) => (
         <div key={item.id} className="w-full items-center justify-center">
           {renderItem(item, () => onItemClick(item))}

@@ -28,7 +28,6 @@ export default function PostDetailPage({ postId }: PostDetailPageProps) {
   const router = useRouter();
   const numericPostId = Number(postId);
   const keyboardOffset = useKeyboardOffset();
-  const overrideHeaderHeight = 48;
 
   // 게시글 상세 조회 API
   const { data, isLoading, isError } = usePostDetail(numericPostId);
@@ -84,7 +83,7 @@ export default function PostDetailPage({ postId }: PostDetailPageProps) {
   };
 
   return (
-    <>
+    <div className="flex h-full flex-col">
       <AppHeader
         overrideHeader={{
           mode: HeaderMode.Default,
@@ -106,10 +105,7 @@ export default function PostDetailPage({ postId }: PostDetailPageProps) {
       {/* 본문 */}
       <div className="relative flex h-full min-h-0 w-full flex-col">
         {/* 스크롤 영역 */}
-        <div
-          className="scrollbar-hide flex-1 overflow-y-auto"
-          style={{ paddingBottom: overrideHeaderHeight }}
-        >
+        <div className="scrollbar-hide flex-1 overflow-y-auto">
           <main className="flex flex-col gap-[0.62rem] px-13 pt-13">
             <PostHeader
               title={post.title}
@@ -256,6 +252,6 @@ export default function PostDetailPage({ postId }: PostDetailPageProps) {
         </ModalSheet.Container>
         <ModalSheet.Backdrop onClick={() => setOpen(false)} />
       </ModalSheet>
-    </>
+    </div>
   );
 }

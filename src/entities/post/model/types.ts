@@ -30,6 +30,7 @@ export type PostDetail = {
   categoryLabel: string | null;
   schedule?: PostScheduleData | null;
   profileImageUrl?: string;
+  postedAt: string;
 };
 
 // 게시판

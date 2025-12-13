@@ -4,6 +4,7 @@ import { PostScheduleResponse } from '@/entities/post/api/types';
 /**
  * 게시글 일정 조회
  */
+
 export const getPostSchedule = async (postId: number): Promise<PostScheduleResponse['data']> => {
   try {
     const { data } = await axiosInstance.get<PostScheduleResponse>(

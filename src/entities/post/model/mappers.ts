@@ -65,5 +65,6 @@ export const transformDetailToPost = (item: PostDetailData): PostDetail => {
     categoryLabel: categoryIdToLabel(item.categoryId),
     viewCount: item.viewCount,
     isMine: item.isMine,
+    postedAt: item.postedAt,
   };
 };

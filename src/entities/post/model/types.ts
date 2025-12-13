@@ -28,6 +28,7 @@ export type PostDetail = {
   isMine: boolean;
   categoryId: number;
   categoryLabel: string | null;
+  postedAt: string;
 };
 
 // 게시판

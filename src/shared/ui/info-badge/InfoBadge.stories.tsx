@@ -11,16 +11,16 @@ type Story = StoryObj<typeof InfoBadge>;
 
 export const Default: Story = {
   args: {
-    children: '13기 데이터 분석',
+    text: '13기 데이터 분석',
   },
 };
 
 export const MultipleBadges: Story = {
   render: () => (
     <div className="flex gap-4">
-      <InfoBadge>13기 데이터 분석</InfoBadge>
-      <InfoBadge>14기 디자인</InfoBadge>
-      <InfoBadge>+2</InfoBadge>
+      <InfoBadge text="13기 데이터 분석" />
+      <InfoBadge text="14기 디자인" />
+      <InfoBadge text="+2" />
     </div>
   ),
 };

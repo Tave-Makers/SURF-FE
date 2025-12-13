@@ -23,7 +23,7 @@ export function MonthNavigator({ month, onChange }: Props) {
         <SurfIcon name="ChevronLeft" size="l" />
       </button>
 
-      <div className="text-body3 text-foreground-normal select-none">
+      <div className="text-body-body3 text-foreground-normal select-none">
         {format(month, 'yyyy년 M월', { locale: ko })}
       </div>
 

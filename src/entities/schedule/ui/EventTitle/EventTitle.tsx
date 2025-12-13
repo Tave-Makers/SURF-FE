@@ -56,7 +56,7 @@ export function EventTitle({ placeholder, title, onChange }: EventTitleProps) {
 
   if (isEditing) {
     return (
-      <div className="text-body3 flex w-full flex-col gap-10 self-stretch">
+      <div className="text-body-body3 flex w-full flex-col gap-10 self-stretch">
         <textarea
           ref={inputRef}
           placeholder={placeholder}

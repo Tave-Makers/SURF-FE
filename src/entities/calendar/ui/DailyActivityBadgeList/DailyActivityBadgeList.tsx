@@ -21,7 +21,7 @@ export function DailyActivityBadgeList({ items, maxVisible = 2, isCurrentMonth =
       {remain > 0 && (
         <div
           className={[
-            'rounded-2 text-caption6 flex max-w-full items-center justify-center px-2 py-4',
+            'rounded-2 text-caption-caption6 flex max-w-full items-center justify-center px-2 py-4',
             isCurrentMonth
               ? 'text-foreground-secondary'
               : 'text-foreground-secondary-lighter opacity-50',

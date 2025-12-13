@@ -104,7 +104,9 @@ export function EventCard({
 
             {showNoticeLink && (
               <div className="flex h-[1.18rem] cursor-pointer flex-row items-center gap-3">
-                <span className="text-caption5 text-foreground-tertiary">공지사항 바로가기</span>
+                <span className="text-caption-caption5 text-foreground-tertiary">
+                  공지사항 바로가기
+                </span>
                 <div className="relative flex items-center justify-center">
                   <SurfIcon size="s" name="ChevronRight" className="text-foreground-tertiary" />
                   {/* 클릭 범위 확장용 */}
@@ -151,18 +153,18 @@ export function EventCard({
         {/* Container 영역 */}
         <section className="flex w-full flex-1 flex-col items-start self-stretch">
           {/* 일정 제목 */}
-          <div className="text-body3 text-foreground-normal">{title}</div>
+          <div className="text-body-body3 text-foreground-normal">{title}</div>
 
           <div className="flex flex-col items-start pt-5">
             {/* 날짜 */}
-            <div className="text-body8 text-foreground-normal-lighter flex items-center gap-5">
+            <div className="text-body-body8 text-foreground-normal-lighter flex items-center gap-5">
               <div>{formattedStartDate}</div>
               <div>~</div>
               <div>{formattedEndDate}</div>
             </div>
 
             {/* 장소 */}
-            <div className="text-caption2 text-foreground-normal-lighter mt-3 flex items-center gap-5">
+            <div className="text-caption-caption2 text-foreground-normal-lighter mt-3 flex items-center gap-5">
               <div>장소 :</div>
               <div>{location ? location : '미정'}</div>
             </div>

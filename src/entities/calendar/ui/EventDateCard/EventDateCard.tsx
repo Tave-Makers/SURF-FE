@@ -36,7 +36,7 @@ export function EventDateCard<T extends { id: string | number }>({
   return (
     <div className="flex w-full flex-col gap-6 pt-15">
       <header className="flex items-start">
-        <div className="text-body7 text-foreground-normal">{formattedDate}</div>
+        <div className="text-body-body7 text-foreground-normal">{formattedDate}</div>
       </header>
 
       {isLoading ? (

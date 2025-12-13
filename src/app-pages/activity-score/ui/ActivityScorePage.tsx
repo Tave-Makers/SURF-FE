@@ -130,7 +130,7 @@ export default function ActivityScorePage() {
         )}
 
         {!isHistoryLoading && !isHistoryError && history.length === 0 && (
-          <div className="text-body-body8 text-foreground-foreground-tertiary text-center">
+          <div className="text-body-body8 text-foreground-tertiary text-center">
             활동 내역이 없습니다.
           </div>
         )}
@@ -141,7 +141,7 @@ export default function ActivityScorePage() {
         {hasNextPage && (
           <div
             ref={loadMoreRef}
-            className="text-body-body8 text-foreground-foreground-tertiary flex items-center justify-center py-[1rem]"
+            className="text-body-body8 text-foreground-tertiary flex items-center justify-center py-[1rem]"
             aria-live="polite"
             aria-atomic="true"
           >

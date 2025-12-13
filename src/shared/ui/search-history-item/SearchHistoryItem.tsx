@@ -52,7 +52,7 @@ const SearchHistoryItem = ({ keyword = '', onSelect, onDelete }: SearchHistoryIt
       <button
         type="button"
         onClick={() => onSelect?.(keyword)}
-        className="text-body-body7 text-foreground-foreground-normal"
+        className="text-body-body7 text-foreground-normal"
         aria-label={`${keyword} 검색`}
       >
         {keyword}
@@ -65,7 +65,7 @@ const SearchHistoryItem = ({ keyword = '', onSelect, onDelete }: SearchHistoryIt
         aria-label="검색 기록 삭제"
         className="flex shrink-0 items-center"
       >
-        <SurfIcon name="X" size="s" className="text-foreground-foreground-normal" />
+        <SurfIcon name="X" size="s" className="text-foreground-normal" />
       </button>
     </div>
   );

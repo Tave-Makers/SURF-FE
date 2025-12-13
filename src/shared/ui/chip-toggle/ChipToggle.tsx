@@ -44,8 +44,8 @@ const interactionStyle =
 
 // 색상 매핑
 const colorMap: Record<ActiveColorVariant, string> = {
-  red: 'text-foreground-foreground-danger fill-foreground-foreground-danger',
-  blue: 'text-background-background-primary fill-background-background-primary',
+  red: 'text-foreground-danger fill-foreground-foreground-danger',
+  blue: 'text-background-primary fill-background-background-primary',
 };
 
 export const ChipToggle = ({
@@ -72,12 +72,10 @@ export const ChipToggle = ({
         <SurfIcon
           name={iconName}
           size="s"
-          className={`shrink-0 ${
-            isClicked ? colorMap[activeColor] : 'text-foreground-foreground-normal'
-          }`}
+          className={`shrink-0 ${isClicked ? colorMap[activeColor] : 'text-foreground-normal'}`}
         />
         {/* like일 경우 숫자 표시 / scrap일 경우 스크랩 표시 */}
-        <span className="text-body-body7 text-foreground-foreground-normal">
+        <span className="text-body-body7 text-foreground-normal">
           {mode === 'like' ? count : '스크랩'}
         </span>
       </div>

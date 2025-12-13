@@ -43,7 +43,7 @@ export function AccordionSelect({ title, isOpen, onClick, controlsId }: Accordio
       aria-expanded={isOpen}
       {...(controlsId && { 'aria-controls': controlsId })}
     >
-      <span className="text-body-body7 text-foreground-foreground-normal">{title}</span>
+      <span className="text-body-body7 text-foreground-normal">{title}</span>
       <span className={`transition-transform duration-300 ${isOpen ? 'rotate-180' : ''}`}>
         <SurfIcon name="ChevronDown" size="l" />
       </span>

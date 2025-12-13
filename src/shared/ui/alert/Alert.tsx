@@ -63,11 +63,11 @@ export const Alert = ({
         aria-describedby={descId}
       >
         <div className="flex flex-col gap-5">
-          <span id={titleId} className="text-foreground-foreground-normal text-title-title2">
+          <span id={titleId} className="text-foreground-normal text-title-title2">
             {title}
           </span>
           {infoText && (
-            <span id={descId} className="text-foreground-foreground-normal-lighter text-body-body8">
+            <span id={descId} className="text-foreground-normal-lighter text-body-body8">
               {infoText}
             </span>
           )}

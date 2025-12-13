@@ -18,12 +18,12 @@ export function MonthNavigator({ month, onChange }: Props) {
         type="button"
         onClick={prev}
         aria-label="이전 달로 이동"
-        className="text-foreground-foreground-normal"
+        className="text-foreground-normal"
       >
         <SurfIcon name="ChevronLeft" size="l" />
       </button>
 
-      <div className="text-body-body3 text-foreground-foreground-normal select-none">
+      <div className="text-body-body3 text-foreground-normal select-none">
         {format(month, 'yyyy년 M월', { locale: ko })}
       </div>
 
@@ -31,7 +31,7 @@ export function MonthNavigator({ month, onChange }: Props) {
         type="button"
         onClick={next}
         aria-label="다음 달로 이동"
-        className="text-foreground-foreground-normal"
+        className="text-foreground-normal"
       >
         <SurfIcon name="ChevronRight" size="l" />
       </button>

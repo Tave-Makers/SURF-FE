@@ -49,8 +49,8 @@ export function Tab({ items, value, defaultValue, onValueChange }: TabProps) {
               className={[
                 'text-body-body7 flex-1 p-10 transition-colors',
                 isActive
-                  ? 'text-foreground-foreground-normal after:bg-foreground-normal relative after:absolute after:bottom-0 after:left-0 after:h-[2px] after:w-full'
-                  : 'text-foreground-foreground-quaternary',
+                  ? 'text-foreground-normal after:bg-foreground-normal relative after:absolute after:bottom-0 after:left-0 after:h-[2px] after:w-full'
+                  : 'text-foreground-quaternary',
               ].join(' ')}
             >
               {item.label}

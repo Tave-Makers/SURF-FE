@@ -114,7 +114,7 @@ export const ActionBar = forwardRef<HTMLTextAreaElement, ActionBarProps>(
           <SurfIcon
             name="ArrowUp"
             size="l"
-            className="text-foreground-foreground-accent group-hover:text-foreground-foreground-accent-hover transition-colors duration-200"
+            className="text-foreground-accent group-hover:text-foreground-accent-hover transition-colors duration-200"
           />
         </button>
       </div>

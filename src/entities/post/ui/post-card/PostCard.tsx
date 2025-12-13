@@ -64,14 +64,12 @@ function PostCardComponent({
 
         {/* 본문 */}
         <div className="flex flex-col items-start gap-5 self-stretch">
-          <h3 className="text-body-body5 text-foreground-foreground-normal line-clamp-2">
-            {title}
-          </h3>
-          <p className="text-body-body6 text-foreground-foreground-normal-lighter line-clamp-1">
+          <h3 className="text-body-body5 text-foreground-normal line-clamp-2">{title}</h3>
+          <p className="text-body-body6 text-foreground-normal-lighter line-clamp-1">
             {stripHtml(content)}
           </p>
 
-          <footer className="text-caption-caption2 text-foreground-foreground-tertiary flex items-center gap-5">
+          <footer className="text-caption-caption2 text-foreground-tertiary flex items-center gap-5">
             <span>{writer}</span>
             <span>|</span>
             <time dateTime={rawDate}>{timeAgo(dateObj)}</time>
@@ -91,9 +89,7 @@ function PostCardComponent({
                 name="Heart"
                 size="s"
                 className={
-                  isLiked
-                    ? 'text-foreground-foreground-danger fill-foreground-foreground-danger'
-                    : ''
+                  isLiked ? 'text-foreground-danger fill-foreground-foreground-danger' : ''
                 }
               />
               <span>{likeCount > 99 ? '99+' : likeCount}</span>

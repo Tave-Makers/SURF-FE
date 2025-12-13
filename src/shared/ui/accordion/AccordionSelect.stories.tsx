@@ -36,10 +36,10 @@ export const ToggleAccordionSelect: Story = {
             <ModalSheet.Header />
             <ModalSheet.Content>
               <div id={sheetId} className="flex flex-col gap-[0.25rem] p-15">
-                <p className="text-body-body6 text-foreground-foreground-normal">
+                <p className="text-body-body6 text-foreground-normal">
                   이건 단순히 토글되는 시트입니다.
                 </p>
-                <p className="text-body-body6 text-foreground-foreground-normal-lighter">
+                <p className="text-body-body6 text-foreground-normal-lighter">
                   시트를 내리거나 배경을 누르면 시트가 닫혀요.
                 </p>
               </div>

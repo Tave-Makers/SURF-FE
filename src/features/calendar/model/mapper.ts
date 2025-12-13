@@ -25,7 +25,7 @@ export const mapCategoryToActivityCategory = (category: string): ActivityCategor
  */
 const mapDTOToEvent = (dto: scheduleResDTO): EventCardProps => {
   return {
-    id: dto.scheduleId,
+    scheduleId: dto.scheduleId,
     title: dto.title,
     category: mapCategoryToActivityCategory(dto.category),
     startDate: new Date(dto.startAt),
@@ -65,7 +65,10 @@ export const mapScheduleListToScheduleMap = (dtoList: scheduleResDTO[]): Activit
         if (!activityMap[dateKey]) {
           activityMap[dateKey] = [];
         }
-        activityMap[dateKey].push(event);
+        activityMap[dateKey].push({
+          ...event,
+          id: event.scheduleId as number,
+        });
       });
     } catch (error) {
       console.error(error);

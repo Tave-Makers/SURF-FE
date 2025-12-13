@@ -69,5 +69,6 @@ export const transformDetailToPost = (
     isMine: item.isMine,
     schedule: item.schedule,
     profileImageUrl: item.profileImageUrl,
+    postedAt: item.postedAt,
   };
 };

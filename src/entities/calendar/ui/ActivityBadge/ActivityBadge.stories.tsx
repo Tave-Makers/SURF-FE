@@ -6,7 +6,7 @@ const createDummyItem = (
   category: DailyActivity['category'],
   title: string = '일정 제목',
 ): DailyActivity => ({
-  id: 'dummy-id',
+  id: 1,
   category,
   title,
   startDate: new Date(),

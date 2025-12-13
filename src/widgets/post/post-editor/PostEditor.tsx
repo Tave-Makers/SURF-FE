@@ -13,19 +13,27 @@ import { Alert } from '@/shared/ui/alert/Alert';
 import { safeUUID } from '@/shared/utils/uuid';
 import { useKeyboardOffset } from '@/shared/hooks/useKeyboardOffset';
 import { POST_VALIDATION } from '@/entities/post/model/validation';
+import { EventCard } from '@/entities/calendar/ui/EventCard/EventCard';
+import { ScheduleFormData } from '@/features/schedule/create/model/types';
 
 export type PostEditorProps = {
   initialContent: string;
   initialImages: ImageItemResponse[];
+  linkedSchedule: ScheduleFormData | null;
   onChange: (data: { content: string; images: UploadImage[] }) => void;
   onInitialized: () => void;
+  onScheduleRemove: () => void;
+  onReservationClick: () => void;
 };
 
 export const PostEditor = ({
   initialContent,
   initialImages,
+  linkedSchedule,
   onChange,
   onInitialized,
+  onScheduleRemove,
+  onReservationClick,
 }: PostEditorProps) => {
   const {
     inputRef,
@@ -183,9 +191,35 @@ export const PostEditor = ({
         }}
       />
 
+      {/* 연동된 일정 카드 */}
+      {linkedSchedule && (
+        <div className="p-13">
+          <EventCard
+            category={
+              linkedSchedule.category === 'operation'
+                ? 'operation'
+                : linkedSchedule.category === 'other'
+                  ? 'other'
+                  : 'official'
+            }
+            title={linkedSchedule.title}
+            startDate={linkedSchedule.startDate}
+            endDate={linkedSchedule.endDate}
+            location={linkedSchedule.location}
+            mode="reservation"
+            isAdmin={true}
+            onDeleteSchedule={onScheduleRemove}
+          />
+        </div>
+      )}
+
       {/* 툴바 */}
       <div style={{ paddingBottom: keyboardOffset }}>
-        <PostEditorToolbar editor={editor} onCameraClick={openPicker} />
+        <PostEditorToolbar
+          editor={editor}
+          onCameraClick={openPicker}
+          onScheduleClick={onReservationClick}
+        />
       </div>
 
       <Alert

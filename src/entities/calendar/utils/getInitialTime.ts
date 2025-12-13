@@ -2,7 +2,7 @@
  * 시작일/마감일 분 단위 00분과 30분으로 초기화 유틸
  */
 
-export const getInitialDate = () => {
+export const getInitialTime = () => {
   const date = new Date();
   const minutes = date.getMinutes();
 

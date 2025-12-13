@@ -96,8 +96,8 @@ export default function ScheduleForm({ onSubmit, initialData }: ScheduleFormProp
                         }}
                         className={`text-foreground-foreground-normal text-body-body5 flex w-full flex-1 items-center px-12 py-10 ${
                           field.value === option.value
-                            ? 'bg-background-background-secondary'
-                            : 'hover:bg-background-background-secondary'
+                            ? 'bg-background-secondary'
+                            : 'hover:bg-background-secondary'
                         }`}
                       >
                         {option.label}

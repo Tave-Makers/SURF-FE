@@ -85,7 +85,7 @@ export default function ActivityScorePage() {
             <button
               type="button"
               onClick={() => void refetchSummary()}
-              className="bg-background-background-primary rounded px-[1rem] py-[0.5rem] text-white"
+              className="bg-background-primary rounded px-[1rem] py-[0.5rem] text-white"
             >
               다시 시도
             </button>
@@ -122,7 +122,7 @@ export default function ActivityScorePage() {
             <button
               type="button"
               onClick={() => void refetchHistory()}
-              className="bg-background-background-primary rounded px-[1rem] py-[0.5rem] text-white"
+              className="bg-background-primary rounded px-[1rem] py-[0.5rem] text-white"
             >
               다시 시도
             </button>

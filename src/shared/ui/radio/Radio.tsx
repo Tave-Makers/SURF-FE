@@ -56,7 +56,7 @@ export const Radio = forwardRef<HTMLInputElement, RadioProps>(
           disabled={isDisabled}
           onChange={onChange}
           ref={ref}
-          className="checked:border-background-background-primary border-background-background-quinary checked:bg-background-background-primary h-[1.25rem] w-[1.25rem] cursor-pointer appearance-none rounded-full border p-5 checked:bg-clip-content disabled:cursor-not-allowed"
+          className="checked:border-background-background-primary border-background-background-quinary checked:bg-background-primary h-[1.25rem] w-[1.25rem] cursor-pointer appearance-none rounded-full border p-5 checked:bg-clip-content disabled:cursor-not-allowed"
           {...rest}
         />
         {label && (

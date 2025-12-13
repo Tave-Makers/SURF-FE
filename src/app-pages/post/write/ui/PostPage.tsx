@@ -128,8 +128,8 @@ export default function PostPage(props: PostPageProps) {
                   onClick={() => selectCategory(item.key)}
                   className={`rounded-md px-5 py-10 text-left transition-colors ${
                     category === item.key
-                      ? 'bg-background-background-secondary font-semibold'
-                      : 'hover:bg-background-background-secondary'
+                      ? 'bg-background-secondary font-semibold'
+                      : 'hover:bg-background-secondary'
                   }`}
                 >
                   {item.label}

@@ -56,17 +56,17 @@ export const SolidButton = forwardRef<HTMLButtonElement, SolidButtonProps>(
 
     const variantMap: Record<ButtonVariant, string> = {
       primary:
-        'text-foreground-foreground-accent bg-background-background-primary hover:bg-background-background-primary-darker',
+        'text-foreground-foreground-accent bg-background-primary hover:bg-background-primary-darker',
       secondary:
-        'text-foreground-foreground-normal bg-background-background-secondary hover:bg-background-background-secondary-darker',
+        'text-foreground-foreground-normal bg-background-secondary hover:bg-background-secondary-darker',
       danger:
         'text-foreground-foreground-accent bg-foreground-foreground-danger hover:bg-foreground-foreground-danger-darker',
       warning:
-        'text-foreground-danger bg-background-background-secondary hover:bg-background-background-secondary-darker hover:text-background-background-danger-darker',
+        'text-foreground-danger bg-background-secondary hover:bg-background-secondary-darker hover:text-background-background-danger-darker',
     };
 
     const disabledClass =
-      'bg-background-background-secondary-darker text-foreground-foreground-accent cursor-not-allowed opacity-50';
+      'bg-background-secondary-darker text-foreground-foreground-accent cursor-not-allowed opacity-50';
 
     const baseClass = 'inline-flex w-full items-center justify-center overflow-hidden rounded-3';
 

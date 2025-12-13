@@ -95,7 +95,7 @@ export const TextInput = forwardRef<HTMLTextAreaElement, TextInputProps>(
     };
 
     return (
-      <div className="rounded-6 bg-background-background-quaternary flex min-h-[2.25rem] w-full flex-1 items-center justify-between py-7 pr-8 pl-11 transition-[height] duration-150 ease-in-out">
+      <div className="rounded-6 bg-background-quaternary flex min-h-[2.25rem] w-full flex-1 items-center justify-between py-7 pr-8 pl-11 transition-[height] duration-150 ease-in-out">
         <textarea
           ref={internalRef}
           value={currentValue}

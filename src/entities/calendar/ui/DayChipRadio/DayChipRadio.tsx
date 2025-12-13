@@ -37,7 +37,7 @@ export function DayChipRadio({
       }}
       className={[
         'rounded-3 flex h-[5rem] w-full flex-col items-start gap-2 overflow-hidden px-2 py-1',
-        isSelected ? 'bg-background-background-secondary-lighter' : inThisMonth ? '' : 'opacity-50',
+        isSelected ? 'bg-background-secondary-lighter' : inThisMonth ? '' : 'opacity-50',
       ].join(' ')}
     >
       <div className="flex w-full min-w-0 flex-col">

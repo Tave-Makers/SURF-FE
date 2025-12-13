@@ -39,9 +39,9 @@ export type SearchHistoryItemProps = {
 const SearchHistoryItem = ({ keyword = '', onSelect, onDelete }: SearchHistoryItemProps) => {
   const baseStyle =
     'flex w-fit items-center justify-center gap-7 h-[2rem] rounded-max border px-11 py-7';
-  const colorStyle = 'bg-background-background-normal-lighter border-border-border-normal';
+  const colorStyle = 'bg-background-normal-lighter border-border-border-normal';
   const interactionStyle =
-    'hover:bg-background-background-secondary-darker hover:border-border-border-secondary active:bg-background-background-secondary-darker active:border-border-border-secondary';
+    'hover:bg-background-secondary-darker hover:border-border-border-secondary active:bg-background-secondary-darker active:border-border-border-secondary';
 
   return (
     <div

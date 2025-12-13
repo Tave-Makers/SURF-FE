@@ -57,16 +57,15 @@ export const TextButton = forwardRef<HTMLButtonElement, TextButtonProps>(
     };
 
     const variantMap: Record<ButtonVariant, string> = {
-      primary: 'text-foreground-foreground-primary hover:text-foreground-foreground-primary-darker',
-      secondary:
-        'text-foreground-foreground-normal-lighter hover:text-foreground-foreground-normal',
-      warning: 'text-foreground-foreground-danger hover:text-foreground-foreground-danger-darker',
+      primary: 'text-foreground-primary hover:text-foreground-primary-darker',
+      secondary: 'text-foreground-normal-lighter hover:text-foreground-normal',
+      warning: 'text-foreground-danger hover:text-foreground-danger-darker',
     };
 
     const disabledMap: Record<ButtonVariant, string> = {
-      primary: 'text-foreground-foreground-primary-darker cursor-not-allowed opacity-30',
-      secondary: 'text-foreground-foreground-normal cursor-not-allowed opacity-30',
-      warning: 'text-foreground-foreground-danger-darker cursor-not-allowed opacity-30',
+      primary: 'text-foreground-primary-darker cursor-not-allowed opacity-30',
+      secondary: 'text-foreground-normal cursor-not-allowed opacity-30',
+      warning: 'text-foreground-danger-darker cursor-not-allowed opacity-30',
     };
 
     const baseClass = 'inline-flex w-full items-center justify-center overflow-hidden rounded-3';

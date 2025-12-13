@@ -215,12 +215,7 @@ export default function PostDetailPage({ postId }: PostDetailPageProps) {
                     {/* 삭제하기 */}
                     <SheetItem
                       title="삭제하기"
-                      node={
-                        <SurfIcon
-                          name="TrashOneSolid"
-                          className="text-foreground-foreground-danger"
-                        />
-                      }
+                      node={<SurfIcon name="TrashOneSolid" className="text-foreground-danger" />}
                       onClick={() => {
                         setOpen(false);
                         setShowDeleteAlert(true);

@@ -41,10 +41,10 @@ export const ActivityScoreBanner = ({ part, score, onClickMore }: ActivityScoreB
           className="pointer-events-none absolute inset-0 h-full w-full object-cover select-none"
         />
       )}
-      <div className="rounded-4 bg-background-background-normal-alpha-accent absolute inset-0 flex h-full w-full flex-col" />
+      <div className="rounded-4 bg-background-normal-alpha-accent absolute inset-0 flex h-full w-full flex-col" />
 
       {/* 3. 텍스트/UI */}
-      <div className="text-foreground-foreground-accent z-10 flex h-full w-full flex-col gap-15">
+      <div className="text-foreground-accent z-10 flex h-full w-full flex-col gap-15">
         <div className="text-body-body7 flex w-full flex-row items-center justify-between p-7">
           <span>현재 내 활동점수는?</span>
           <button

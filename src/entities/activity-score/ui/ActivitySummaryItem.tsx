@@ -41,7 +41,7 @@ export const ActivitySummaryItem: FC<ActivitySummaryItemProps> = ({
       onMouseLeave={() => hide()}
     >
       <Icon width="1.5rem" height="1.5rem" />
-      <span className="text-body-body8 text-foreground-foreground-normal">{count}회</span>
+      <span className="text-body-body8 text-foreground-normal">{count}회</span>
       {tooltip && showTooltip && (
         <div
           id={`tooltip-${id}`}

@@ -60,7 +60,7 @@ export const SolidButton = forwardRef<HTMLButtonElement, SolidButtonProps>(
       secondary:
         'text-foreground-foreground-normal bg-background-secondary hover:bg-background-secondary-darker',
       danger:
-        'text-foreground-foreground-accent bg-foreground-foreground-danger hover:bg-foreground-foreground-danger-darker',
+        'text-foreground-foreground-accent bg-foreground-danger hover:bg-foreground-danger-darker',
       warning:
         'text-foreground-danger bg-background-secondary hover:bg-background-secondary-darker hover:text-background-background-danger-darker',
     };

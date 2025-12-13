@@ -28,6 +28,7 @@
   --radius-6: 16px;
   --radius-7: 24px;
   --radius-max: 9999px;
+  --stroke-weight-0: 0.4px;
   --stroke-weight-1: 1px;
   --stroke-weight-2: 2px;
   --stroke-weight-3: 3px;
@@ -39,4 +40,12 @@
   --opacity-100: 1;
   --opacity-30: 0.3;
   --opacity-50: 0.5;
+  --margin-2xl: 28px;
+  --margin-2xs: 4px;
+  --margin-3xl: 32px;
+  --margin-lg: 20px;
+  --margin-md: 16px;
+  --margin-sm: 12px;
+  --margin-xl: 24px;
+  --margin-xs: 8px;
 }

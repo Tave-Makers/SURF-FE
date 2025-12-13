@@ -1,24 +1,55 @@
+import { ImageItemResponse } from '../api/types';
+import { POST_BOARDS } from './board';
+import { PostCategoryLabel } from './category';
+
 export type PostBadgeProps = {
   id: number | string;
   variation: 'event' | 'reservation';
 };
 
-export type Post = {
-  id: number;
+export type PostDetail = {
+  postId: number;
   title: string;
   content: string;
   writer: string;
   date: string;
+  time: string;
+  boardId: number;
+  boardLabel: string | null;
+  pinned: boolean;
+  hasSchedule: boolean;
+  scrappedByMe: boolean;
+  scrapCount: number;
+  likedByMe: boolean;
   likeCount: number;
-  isLiked: boolean;
   commentCount: number;
-  isReserved?: boolean;
-  thumbnailUrl?: string;
-  boardId?: number;
-  category: CategoryBadge;
+  imageUrlList: ImageItemResponse[];
+  viewCount: number;
+  isMine: boolean;
+  categoryId: number;
+  categoryLabel: string | null;
+  postedAt: string;
 };
 
-export type PostType = 'scraps' | 'my-posts';
+// 게시판
+export type BoardId = (typeof POST_BOARDS)[number]['id'];
+export type BoardLabel = (typeof POST_BOARDS)[number]['label'];
 
-export type PostCategory = 'all' | 'event' | 'activity' | 'partnership' | 'release' | 'others';
-export type CategoryBadge = Exclude<PostCategory, 'all'>;
+export type Post = {
+  postId: number;
+  title: string;
+  content: string;
+  writer: string;
+  date: string;
+  pinned: boolean;
+  isReserved: boolean;
+  boardId: number | null;
+  likeCount: number;
+  isLiked: boolean;
+  scrappedByMe: boolean;
+  scrapCount: number;
+  commentCount: number;
+  thumbnailUrl?: string;
+  images?: ImageItemResponse[];
+  categoryName: PostCategoryLabel;
+};

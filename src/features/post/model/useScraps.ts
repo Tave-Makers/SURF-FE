@@ -1,24 +1,25 @@
 'use client';
 
 import { useQuery, useInfiniteQuery } from '@tanstack/react-query';
-import { getPosts } from '@/features/post/api/getPosts';
-import { PostApiResponse } from '@/entities/post/api/types';
+import { postApi } from '@/entities/post/api/postApi';
+import { PostListApiResponse } from '@/entities/post/api/types';
 
+// TODO: Post 엔티티로 변경 및 통합
 /** 스크랩한 게시글 단일 페이지 조회 */
-export const useScraps = (page: number = 0, size: number = 10, sort: string[] = []) => {
-  return useQuery<PostApiResponse>({
-    queryKey: ['posts', 'scraps', page, size, sort.join(',')],
-    queryFn: () => getPosts.getScraps({ page, size, sort }),
+export const useScraps = (page: number = 0, size: number = 20, sort: string = '') => {
+  return useQuery<PostListApiResponse>({
+    queryKey: ['posts', 'scraps', page, size, sort],
+    queryFn: () => postApi.getScraps({ page, size, sort }),
   });
 };
 
 /** 스크랩한 게시글 무한 스크롤 조회 */
-export const useInfiniteScraps = (size: number = 10, sort: string[] = []) => {
-  return useInfiniteQuery<PostApiResponse>({
-    queryKey: ['posts', 'scraps', 'infinite', size, sort.join(',')],
+export const useInfiniteScraps = (size: number = 20, sort: string = '') => {
+  return useInfiniteQuery<PostListApiResponse>({
+    queryKey: ['posts', 'scraps', 'infinite', size, sort],
     queryFn: ({ pageParam = 0 }) => {
       const page = pageParam as number;
-      return getPosts.getScraps({ page, size, sort });
+      return postApi.getScraps({ page, size, sort });
     },
     getNextPageParam: (lastPage) => {
       if (lastPage.last || lastPage.empty || lastPage.numberOfElements === 0) {

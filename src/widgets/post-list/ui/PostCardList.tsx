@@ -1,54 +1,66 @@
 'use client';
 
+import { memo } from 'react';
 import { PostCard } from '@/entities/post/ui/post-card/PostCard';
-import type { Post, PostCategory } from '@/entities/post/model/types';
 import type { UserLevel } from '@/entities/user/model/types';
+import type { TabCategoryLabel } from '@/entities/post/model/tab';
+import type { Post } from '@/entities/post/model/types';
 
-type PostListProps = {
+type PostCardListProps = {
   posts: Post[];
-  currentCategory: PostCategory;
+  currentTabCategory?: TabCategoryLabel;
   userLevel: UserLevel;
   isLoading?: boolean;
   isFetchingNextPage?: boolean;
   hasNextPage?: boolean;
   onPostClick?: (post: Post) => void;
   loadMoreRef?: React.RefObject<HTMLDivElement | null>;
-  showCategoryBadge?: boolean;
+  shouldShowCategoryBadge?: boolean;
+  shouldShowReservationBadge?: boolean;
+  error?: Error | null;
 };
 
-export const PostList = ({
+function PostCardListComponent({
   posts,
-  currentCategory,
-  userLevel,
   isLoading = false,
   isFetchingNextPage = false,
   hasNextPage = false,
   onPostClick,
   loadMoreRef,
-  showCategoryBadge = false,
-}: PostListProps) => {
+  shouldShowCategoryBadge,
+  shouldShowReservationBadge,
+  error = null,
+}: PostCardListProps) {
   if (isLoading) {
+    // 임시
     return (
       <div role="status" aria-live="polite">
         게시글을 불러오는 중...
       </div>
     );
   }
-
+  if (error) {
+    // 임시
+    return (
+      <div role="alert" className="text-foreground-danger py-20 text-center">
+        게시글을 불러오는 중 오류가 발생했습니다.
+        <button onClick={() => window.location.reload()}>다시 시도</button>
+      </div>
+    );
+  }
   if (posts.length === 0) {
     return <div>게시글이 없습니다.</div>;
   }
 
   return (
-    <div className="flex flex-1 flex-col overflow-y-auto px-13 pt-12">
-      {posts.map((post, index) => (
+    <div className="flex flex-1 flex-col">
+      {posts.map((post) => (
         <PostCard
-          key={`${post.id}-${index}`}
+          key={post.postId}
           post={post}
-          currentCategory={currentCategory}
-          userLevel={userLevel}
           onClick={() => onPostClick?.(post)}
-          showCategoryBadge={showCategoryBadge}
+          shouldShowCategoryBadge={shouldShowCategoryBadge}
+          shouldShowReservationBadge={shouldShowReservationBadge}
         />
       ))}
 
@@ -64,4 +76,6 @@ export const PostList = ({
       </div>
     </div>
   );
-};
+}
+
+export const PostCardList = memo(PostCardListComponent);

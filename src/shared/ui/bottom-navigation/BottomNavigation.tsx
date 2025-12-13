@@ -2,11 +2,7 @@
 
 import React from 'react';
 import { SurfIcon } from '@/shared/ui/icon/SurfIcon';
-
-const navItems = [
-  { id: 'home', label: '홈', activeIcon: 'HomeSolid', defaultIcon: 'Home' },
-  { id: 'mypage', label: '마이페이지', activeIcon: 'SmileCircleSolid', defaultIcon: 'SmileCircle' },
-] as const;
+import { BOTTOM_NAV_ITEMS } from '@/shared/config/bottom-nav';
 
 type BottomNavigationProps = {
   activeId: string;
@@ -20,7 +16,7 @@ export function BottomNavigation({ activeId, onNavigate }: BottomNavigationProps
       aria-label="하단 네비게이션"
       className="bg-background-normal rounded-t-5 bottom-0 left-0 flex w-full justify-around pb-13 shadow-[0_2px_30px_0_rgba(0,0,0,0.02)]"
     >
-      {navItems.map((item) => (
+      {BOTTOM_NAV_ITEMS.map((item) => (
         <button
           key={item.id}
           onClick={() => onNavigate(item.id)}

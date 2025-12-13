@@ -80,8 +80,8 @@ export const SelectAccordion: Story = {
                     onClick={() => select(item)}
                     className={`rounded-md px-5 py-10 text-left transition-colors ${
                       value === item
-                        ? 'bg-background-background-secondary font-semibold'
-                        : 'hover:bg-background-background-secondary'
+                        ? 'bg-background-secondary font-semibold'
+                        : 'hover:bg-background-secondary'
                     }`}
                   >
                     {item}

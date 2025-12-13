@@ -94,7 +94,7 @@ export const ActionBar = forwardRef<HTMLTextAreaElement, ActionBarProps>(
     };
 
     return (
-      <div className="border-border-normal bg-background-background-normal-lighter flex w-full items-center gap-10 border-t px-13 pt-13 pb-15">
+      <div className="border-border-normal bg-background-normal-lighter flex w-full items-center gap-10 border-t px-13 pt-13 pb-15">
         <TextInput
           mode="chat"
           ref={internalRef}
@@ -109,7 +109,7 @@ export const ActionBar = forwardRef<HTMLTextAreaElement, ActionBarProps>(
         <button
           type="button"
           onClick={handleSend}
-          className="bg-background-background-primary group hover:bg-background-background-primary-darker rounded-max flex h-[2.25rem] w-[2.25rem] shrink-0 items-center justify-center self-end p-7"
+          className="bg-background-primary group hover:bg-background-primary-darker rounded-max flex h-[2.25rem] w-[2.25rem] shrink-0 items-center justify-center self-end p-7"
         >
           <SurfIcon
             name="ArrowUp"

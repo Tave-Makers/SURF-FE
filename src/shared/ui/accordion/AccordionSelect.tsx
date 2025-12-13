@@ -39,7 +39,7 @@ export function AccordionSelect({ title, isOpen, onClick, controlsId }: Accordio
     <button
       type="button"
       onClick={onClick}
-      className="border-border-normal bg-background-background-normal flex w-full items-center justify-between border-b py-10"
+      className="border-border-normal bg-background-normal flex w-full items-center justify-between border-b py-10"
       aria-expanded={isOpen}
       {...(controlsId && { 'aria-controls': controlsId })}
     >

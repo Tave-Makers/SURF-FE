@@ -39,11 +39,11 @@ export function AccordionSelect({ title, isOpen, onClick, controlsId }: Accordio
     <button
       type="button"
       onClick={onClick}
-      className="border-border-border-normal bg-background-background-normal flex w-full items-center justify-between border-b py-10"
+      className="border-border-normal bg-background-normal flex w-full items-center justify-between border-b py-10"
       aria-expanded={isOpen}
       {...(controlsId && { 'aria-controls': controlsId })}
     >
-      <span className="text-body-body7 text-foreground-foreground-normal">{title}</span>
+      <span className="text-body-body8 text-foreground-normal">{title}</span>
       <span className={`transition-transform duration-300 ${isOpen ? 'rotate-180' : ''}`}>
         <SurfIcon name="ChevronDown" size="l" />
       </span>

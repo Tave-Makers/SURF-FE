@@ -42,17 +42,17 @@ export function Accordion({
     <div
       className={`border-b ${
         isDisabled
-          ? 'border-border-border-normal bg-background-background-quinary'
+          ? 'border-border-normal bg-background-quinary'
           : isOpen
             ? 'border-none'
-            : 'border-border-border-quaternary'
+            : 'border-border-quaternary'
       } `}
     >
       <button
         type="button"
         disabled={isDisabled}
         onClick={handleToggle}
-        className="disabled:bg-background-background-quinary text-foreground-foreground-normal text-body-body5 flex w-full cursor-pointer items-center justify-between p-13 disabled:cursor-not-allowed"
+        className="disabled:bg-background-quinary text-foreground-normal text-body-body6 flex w-full cursor-pointer items-center justify-between p-13 disabled:cursor-not-allowed"
       >
         <span>
           {renderTitle

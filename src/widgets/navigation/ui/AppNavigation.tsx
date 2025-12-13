@@ -11,7 +11,7 @@ export function AppNavigation() {
   const routeConfig = useMemo(() => createRouteConfig(router), [router]);
 
   // 현재 활성화된 메뉴 ID 계산
-  // 추후 not found page 추가
+  // TODO: 추후 not found page 추가
   const activeId =
     routeConfig.find((item) => pathname === item.path || pathname.startsWith(`${item.path}/`))
       ?.id ?? 'home';

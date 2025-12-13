@@ -1,10 +1,10 @@
 'use client';
+
 import React from 'react';
-import { SurfIcon } from '../icon/SurfIcon';
+import { SurfIcon } from '@/shared/ui/icon/SurfIcon';
 
 const navItems = [
   { id: 'home', label: '홈', activeIcon: 'HomeSolid', defaultIcon: 'Home' },
-  { id: 'chat', label: '커피챗', activeIcon: 'ChatSolid', defaultIcon: 'Chat' },
   { id: 'mypage', label: '마이페이지', activeIcon: 'SmileCircleSolid', defaultIcon: 'SmileCircle' },
 ] as const;
 
@@ -18,24 +18,24 @@ export function BottomNavigation({ activeId, onNavigate }: BottomNavigationProps
     <nav
       role="navigation"
       aria-label="하단 네비게이션"
-      className="bg-background-normal bottom-0 left-0 flex h-[4.5rem] w-full justify-around rounded-t-[0.625rem] pb-[0.75rem] shadow-[0_2px_30px_0_rgba(0,0,0,0.10)]"
+      className="bg-background-normal rounded-t-5 bottom-0 left-0 flex w-full justify-around pb-13 shadow-[0_2px_30px_0_rgba(0,0,0,0.02)]"
     >
       {navItems.map((item) => (
         <button
           key={item.id}
           onClick={() => onNavigate(item.id)}
-          className="flex flex-1 cursor-pointer flex-col items-center gap-[0.31rem] py-[0.62rem]"
+          className="flex flex-1 cursor-pointer flex-col items-center gap-6 pt-13"
         >
           <SurfIcon
             name={activeId === item.id ? item.activeIcon : item.defaultIcon}
             size="l"
-            className={activeId === item.id ? 'text-foreground-primary' : 'text-foreground-hint'}
+            className={activeId === item.id ? 'text-foreground-primary' : 'text-foreground-quinary'}
           />
           <span
             className={
               activeId === item.id
-                ? 'text-caption-10-400--1 text-foreground-primary'
-                : 'text-caption-10-400--1 text-foreground-hint'
+                ? 'text-caption-caption6 text-foreground-primary-darker'
+                : 'text-caption-caption6 text-foreground-quinary-darker'
             }
           >
             {item.label}

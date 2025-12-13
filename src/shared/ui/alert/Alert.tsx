@@ -55,7 +55,7 @@ export const Alert = ({
       <div className="absolute inset-0 w-full bg-black/60" onClick={onClose} aria-hidden />
       <section
         // 버튼이 1개일 때 && 버튼 종류가 textbutton일 때: px-15, pt-15, pb-14 로 설정
-        className={`bg-background-background-normal-lighter rounded-4 relative z-10 flex w-[17.18rem] flex-col gap-14 overflow-hidden ${
+        className={`bg-background-normal-lighter rounded-4 relative z-10 flex w-[17.1875rem] flex-col gap-14 overflow-hidden shadow-[0_0_2px_rgba(0,0,0,0.06),_0_3px_6px_rgba(0,0,0,0.12)] ${
           actions.length === 1 && actions[0].type === 'text' ? 'px-15 pt-15 pb-14' : 'p-15'
         }`}
         role={isError ? 'alert' : undefined}
@@ -63,11 +63,11 @@ export const Alert = ({
         aria-describedby={descId}
       >
         <div className="flex flex-col gap-5">
-          <span id={titleId} className="text-foreground-foreground-normal text-title-title2">
+          <span id={titleId} className="text-foreground-normal text-title-title2">
             {title}
           </span>
           {infoText && (
-            <span id={descId} className="text-foreground-foreground-normal-lighter text-body-body8">
+            <span id={descId} className="text-foreground-normal-lighter text-body-body9">
               {infoText}
             </span>
           )}

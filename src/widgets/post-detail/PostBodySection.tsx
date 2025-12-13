@@ -67,7 +67,7 @@ export function PostBodySection({ post, onClickLikeCount }: PostBodySectionProps
       {/* 일정카드 */}
       {post.schedule && (
         <EventCard
-          id={post.schedule.scheduleId}
+          scheduleId={post.schedule.scheduleId}
           title={post.schedule.title}
           category={mapCategoryToActivityCategory(post.schedule.category)}
           mode="reservation"

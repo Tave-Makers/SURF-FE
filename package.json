@@ -15,6 +15,9 @@
     "build-storybook-docs": "storybook build --docs",
     "convert-typo": "node --loader ts-node/esm scripts/convert-typo.ts",
     "convert-color": "node --loader ts-node/esm scripts/convert-color.ts",
+    "convert-scheme": "node --loader ts-node/esm scripts/convert-scheme.ts",
+    "convert-shadow": "node --loader ts-node/esm scripts/convert-shadow.ts",
+    "convert-tokens": "pnpm run convert-typo && pnpm run convert-color && pnpm run convert-scheme && pnpm run convert-shadow",
     "test": "vitest",
     "test:ui": "vitest --ui",
     "test:run": "vitest run"

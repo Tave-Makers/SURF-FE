@@ -1,7 +1,7 @@
 'use client';
 
 import { Avatar } from '@/shared/ui/avatar/Avatar';
-import { Chip } from '@/shared/ui/chip/Chip';
+import { InfoBadge } from '@/shared/ui/info-badge/InfoBadge';
 import type { UserLevel } from '@/entities/user/model/types';
 import { USER_LEVEL_BADGE } from '@/entities/user/ui/user-level/UserLevelBadges';
 
@@ -23,8 +23,8 @@ export function ProfileHeader({ name, level, chips }: Props) {
           <BadgeIcon width={20} height={20} />
         </div>
         <div className="flex flex-row flex-wrap gap-[0.25rem]">
-          {chips.map((chip) => (
-            <Chip key={chip}>{chip}</Chip>
+          {chips.map((chip, idx) => (
+            <InfoBadge key={`${chip}-${idx}`} text={chip} />
           ))}
         </div>
       </div>

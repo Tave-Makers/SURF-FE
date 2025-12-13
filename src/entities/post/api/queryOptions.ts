@@ -36,7 +36,14 @@ export const postDetailQueryOptions = (postId: number) =>
       const detail = await postApi.getPostDetail(postId);
 
       // 2) 일정 조회
-      const schedule = detail.hasSchedule ? await postApi.getPostSchedule(postId) : null;
+      let schedule = null;
+      if (detail.hasSchedule) {
+        try {
+          schedule = await postApi.getPostSchedule(postId);
+        } catch (error) {
+          console.error('Failed to fetch post schedule:', error);
+        }
+      }
 
       // 3) 조합 후 그대로 반환 (select 에서 transform)
       return {

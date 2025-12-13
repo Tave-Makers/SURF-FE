@@ -90,9 +90,9 @@ export function EventTitle({ placeholder, title, onChange }: EventTitleProps) {
       onKeyDown={handleKeyDown}
     >
       {hasValue ? (
-        <div className="text-foreground-foreground-normal">{displayValue}</div>
+        <div className="text-foreground-normal">{displayValue}</div>
       ) : (
-        <div className="text-foreground-foreground-quaternary">{placeholder}</div>
+        <div className="text-foreground-quaternary">{placeholder}</div>
       )}
     </button>
   );

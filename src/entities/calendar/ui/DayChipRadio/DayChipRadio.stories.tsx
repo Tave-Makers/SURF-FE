@@ -13,7 +13,7 @@ const TOMORROW = addDays(TODAY, 1);
 const PREV_MONTH_DAY = subMonths(TODAY, 1);
 
 const createActivity = (
-  id: string,
+  id: number,
   type: DailyActivity['category'],
   title: string,
 ): DailyActivity => ({
@@ -34,15 +34,15 @@ const createMockDay = (date: Date, displayMonth: Date = TODAY): CalendarDay => {
 // mock 데이터
 const mockActivityMap: ActivityMap = {
   [toYmd(TODAY)]: [
-    createActivity('1', 'official', '오늘 공식 일정'),
-    createActivity('2', 'operation', '오늘 운영 회의'),
-    createActivity('3', 'other', '추가 일정 (더보기)'),
+    createActivity(1, 'official', '오늘 공식 일정'),
+    createActivity(2, 'operation', '오늘 운영 회의'),
+    createActivity(3, 'other', '추가 일정 (더보기)'),
   ],
   [toYmd(TOMORROW)]: [
-    createActivity('4', 'official', '내일 일정 하나'),
-    createActivity('5', 'official', '내일 일정 하나'),
+    createActivity(4, 'official', '내일 일정 하나'),
+    createActivity(5, 'official', '내일 일정 하나'),
   ],
-  [toYmd(PREV_MONTH_DAY)]: [createActivity('6', 'other', '지난달 일정')],
+  [toYmd(PREV_MONTH_DAY)]: [createActivity(6, 'other', '지난달 일정')],
 };
 
 type DayChipRadioProps = React.ComponentProps<typeof DayChipRadio>;

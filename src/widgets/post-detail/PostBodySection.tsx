@@ -7,6 +7,8 @@ import { useToggleLikeMutation } from '@/features/post/model/useToggleLikeMutati
 import { useToggleScrapMutation } from '@/features/post/model/useToggleScrapMutation';
 import { EventCard } from '@/entities/calendar/ui/EventCard/EventCard';
 import sanitizeHtml, { IOptions } from 'sanitize-html';
+import { PostImage } from '@/entities/post/ui/post-image/PostImage';
+import { mapCategoryToActivityCategory } from '@/features/calendar/model/mapper';
 
 type PostBodySectionProps = {
   post: PostDetail;
@@ -14,8 +16,6 @@ type PostBodySectionProps = {
 };
 
 export function PostBodySection({ post, onClickLikeCount }: PostBodySectionProps) {
-  const SAMPLE_START_DATE = new Date('2025-11-08T14:00:00');
-  const SAMPLE_END_DATE = new Date('2025-11-08T18:00:00');
   // 좋아요/스크랩 Mutation
   const likeMutation = useToggleLikeMutation();
   const scrapMutation = useToggleScrapMutation();
@@ -49,6 +49,7 @@ export function PostBodySection({ post, onClickLikeCount }: PostBodySectionProps
   return (
     <div className="flex flex-col gap-[1.5rem]">
       <PostProfile
+        profileImgUrl={post.profileImageUrl}
         nickname={post.writer}
         date={post.date}
         time={post.time}
@@ -56,32 +57,23 @@ export function PostBodySection({ post, onClickLikeCount }: PostBodySectionProps
       />
       <div className="whitespace-pre-line" dangerouslySetInnerHTML={{ __html: cleanContent }} />
 
-      {/* 이미지 영역 */}
-      {post.imageUrlList?.length > 0 && (
-        <div className="flex flex-col gap-[0.62rem]">
-          {post.imageUrlList.map((img) =>
-            img.originalUrl && img.originalUrl.trim() !== '' ? (
-              <div key={img.imageId} className="w-full">
-                <img
-                  src={img.originalUrl}
-                  alt={`post-image-${img.imageId}`}
-                  className="w-full rounded-[0.5rem]"
-                />
-              </div>
-            ) : null,
-          )}
-        </div>
+      {/* 이미지 목록 */}
+      {post.imageUrlList?.map((img) =>
+        img.originalUrl?.trim() ? (
+          <PostImage key={img.imageId} src={img.originalUrl} alt={img.originalUrl} />
+        ) : null,
       )}
 
-      {/* 일정 카드 */}
-      {post.hasSchedule && (
+      {/* 일정카드 */}
+      {post.schedule && (
         <EventCard
-          title="후반기 만남의 장"
-          category="official"
+          id={post.schedule.scheduleId}
+          title={post.schedule.title}
+          category={mapCategoryToActivityCategory(post.schedule.category)}
           mode="reservation"
-          location="추후 공지"
-          startDate={SAMPLE_START_DATE}
-          endDate={SAMPLE_END_DATE}
+          location={post.schedule.location}
+          startDate={new Date(post.schedule.startAt)}
+          endDate={new Date(post.schedule.endAt)}
         />
       )}
 

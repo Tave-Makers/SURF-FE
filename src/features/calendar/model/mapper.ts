@@ -7,7 +7,7 @@ import { EventCardProps } from '@/entities/calendar/ui/EventCard/EventCard';
 /**
  * 서버에서 내려주는 카테고리 문자열을 UI에서 사용하는 ActivityCategory로 변환
  */
-const mapCategoryToActivityCategory = (category: string): ActivityCategory => {
+export const mapCategoryToActivityCategory = (category: string): ActivityCategory => {
   switch (category) {
     case '정규행사':
       return 'official';

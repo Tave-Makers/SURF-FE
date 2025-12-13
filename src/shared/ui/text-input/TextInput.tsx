@@ -105,7 +105,7 @@ export const TextInput = forwardRef<HTMLTextAreaElement, TextInputProps>(
           placeholder={placeholder}
           aria-label={ariaLabel ?? '텍스트 입력'}
           {...rest}
-          className="text-body-body7 text-foreground-normal placeholder-foreground-foreground-quaternary flex-1 resize-none overflow-y-auto bg-transparent outline-none [-ms-overflow-style:none] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden"
+          className="text-body-body7 text-foreground-normal placeholder-foreground-quaternary flex-1 resize-none overflow-y-auto bg-transparent outline-none [-ms-overflow-style:none] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden"
         />
         {iconName && (
           <button

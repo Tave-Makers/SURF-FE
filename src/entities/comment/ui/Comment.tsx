@@ -104,9 +104,7 @@ const Comment = ({
               size="s"
               aria-hidden="true"
               className={`shrink-0 ${
-                isLiked
-                  ? 'text-foreground-danger fill-foreground-foreground-danger'
-                  : 'text-foreground-normal'
+                isLiked ? 'text-foreground-danger fill-foreground-danger' : 'text-foreground-normal'
               }`}
             />
             <span aria-hidden="true">{likeCount}</span>

@@ -88,9 +88,7 @@ function PostCardComponent({
               <SurfIcon
                 name="Heart"
                 size="s"
-                className={
-                  isLiked ? 'text-foreground-danger fill-foreground-foreground-danger' : ''
-                }
+                className={isLiked ? 'text-foreground-danger fill-foreground-danger' : ''}
               />
               <span>{likeCount > 99 ? '99+' : likeCount}</span>
             </button>

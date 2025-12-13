@@ -41,7 +41,7 @@ const SearchHistoryItem = ({ keyword = '', onSelect, onDelete }: SearchHistoryIt
     'flex w-fit items-center justify-center gap-7 h-[2rem] rounded-max border px-11 py-7';
   const colorStyle = 'bg-background-normal-lighter border-border-normal';
   const interactionStyle =
-    'hover:bg-background-secondary-darker hover:border-border-secondary active:bg-background-secondary-darker active:border-border-secondary';
+    'hover:bg-background-secondary-darker hover:border-secondary active:bg-background-secondary-darker active:border-secondary';
 
   return (
     <div

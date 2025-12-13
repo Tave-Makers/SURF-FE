@@ -40,12 +40,12 @@ const baseStyle =
   'relative flex items-center justify-center gap-8 h-[2.25rem] rounded-max border px-13 w-fit';
 const colorStyle = 'bg-background-normal-lighter border-border-normal';
 const interactionStyle =
-  'hover:bg-background-secondary-darker hover:border-border-secondary active:bg-background-secondary-darker active:border-border-secondary';
+  'hover:bg-background-secondary-darker hover:border-secondary active:bg-background-secondary-darker active:border-secondary';
 
 // 색상 매핑
 const colorMap: Record<ActiveColorVariant, string> = {
-  red: 'text-foreground-danger fill-foreground-foreground-danger',
-  blue: 'text-background-primary fill-background-background-primary',
+  red: 'text-foreground-danger fill-foreground-danger',
+  blue: 'text-background-primary fill-background-primary',
 };
 
 export const ChipToggle = ({

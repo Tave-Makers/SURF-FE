@@ -34,7 +34,6 @@ export const postDetailQueryOptions = (postId: number) =>
     queryFn: async () => {
       // 1) 상세 조회
       const detail = await postApi.getPostDetail(postId);
-      console.log(detail);
 
       // 2) 일정 조회
       const schedule = detail.hasSchedule ? await postApi.getPostSchedule(postId) : null;

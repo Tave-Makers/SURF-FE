@@ -130,7 +130,7 @@ export default function ScheduleForm({ onSubmit, initialData }: ScheduleFormProp
         />
       </div>
 
-      <hr className="border-border-border-tertiary mt-[1.31rem] h-[0.06rem] w-full self-stretch" />
+      <hr className="border-border-tertiary mt-[1.31rem] h-[0.06rem] w-full self-stretch" />
 
       {/* 3. 시작일 */}
       <div>
@@ -178,7 +178,7 @@ export default function ScheduleForm({ onSubmit, initialData }: ScheduleFormProp
         />
       </div>
 
-      <hr className="border-border-border-tertiary h-[0.06rem] w-full self-stretch" />
+      <hr className="border-border-tertiary h-[0.06rem] w-full self-stretch" />
 
       {/* 4. 종료일 */}
       <div>
@@ -226,7 +226,7 @@ export default function ScheduleForm({ onSubmit, initialData }: ScheduleFormProp
         />
       </div>
 
-      <hr className="border-border-border-tertiary h-[0.06rem] w-full self-stretch" />
+      <hr className="border-border-tertiary h-[0.06rem] w-full self-stretch" />
 
       {/* 5. 장소 */}
       <div>
@@ -242,7 +242,7 @@ export default function ScheduleForm({ onSubmit, initialData }: ScheduleFormProp
             />
           )}
         />
-        <hr className="border-border-border-tertiary h-[0.06rem] w-full self-stretch" />
+        <hr className="border-border-tertiary h-[0.06rem] w-full self-stretch" />
       </div>
     </form>
   );

@@ -38,9 +38,9 @@ export type ActiveColorVariant = 'red' | 'blue';
 
 const baseStyle =
   'relative flex items-center justify-center gap-8 h-[2.25rem] rounded-max border px-13 w-fit';
-const colorStyle = 'bg-background-normal-lighter border-border-border-normal';
+const colorStyle = 'bg-background-normal-lighter border-border-normal';
 const interactionStyle =
-  'hover:bg-background-secondary-darker hover:border-border-border-secondary active:bg-background-secondary-darker active:border-border-border-secondary';
+  'hover:bg-background-secondary-darker hover:border-border-secondary active:bg-background-secondary-darker active:border-border-secondary';
 
 // 색상 매핑
 const colorMap: Record<ActiveColorVariant, string> = {

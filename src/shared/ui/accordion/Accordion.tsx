@@ -42,10 +42,10 @@ export function Accordion({
     <div
       className={`border-b ${
         isDisabled
-          ? 'border-border-border-normal bg-background-background-quinary'
+          ? 'border-border-normal bg-background-background-quinary'
           : isOpen
             ? 'border-none'
-            : 'border-border-border-quaternary'
+            : 'border-border-quaternary'
       } `}
     >
       <button

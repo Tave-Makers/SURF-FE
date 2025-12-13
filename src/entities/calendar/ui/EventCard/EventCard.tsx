@@ -81,7 +81,7 @@ export function EventCard({
   const formattedEndDate = formatScheduleDate(endDate);
 
   const baseClassNames =
-    'rounded-4 border-border-border-quinary bg-background-normal-lighter flex w-full flex-1 cursor-pointer flex-col items-start gap-8 border px-13 py-11';
+    'rounded-4 border-border-quinary bg-background-normal-lighter flex w-full flex-1 cursor-pointer flex-col items-start gap-8 border px-13 py-11';
 
   return (
     <>

@@ -17,6 +17,7 @@ export const useDeletePostMutation = () => {
       });
 
       // 2) 전체 post 관련 쿼리 invalidate
+      // TODO : 새로고침을 해야 캐시 무효화가 되는 오류 해결하기
       void queryClient.invalidateQueries({
         queryKey: postQueryKeys.all,
         exact: false,

@@ -72,12 +72,9 @@ export default function PostDetailPage({ postId }: PostDetailPageProps) {
   const handleDelete = async () => {
     try {
       await deletePost(numericPostId);
-
-      alert('게시글이 삭제되었습니다.');
       setShowDeleteAlert(false);
       router.back();
     } catch (e) {
-      alert('삭제에 실패했습니다. 다시 시도해주세요.');
       console.error(e);
     }
   };

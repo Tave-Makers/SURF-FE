@@ -24,7 +24,7 @@ export function ProfileHeader({ name, level, chips }: Props) {
         </div>
         <div className="flex flex-row flex-wrap gap-[0.25rem]">
           {chips.map((chip) => (
-            <InfoBadge key={chip}>{chip}</InfoBadge>
+            <InfoBadge key={chip} text={chip} />
           ))}
         </div>
       </div>

@@ -12,7 +12,7 @@ export const useDeletePostMutation = () => {
 
     onSuccess: (_, postId) => {
       // 1) 상세 페이지 캐시 invalidate
-      void queryClient.invalidateQueries({
+      void queryClient.removeQueries({
         queryKey: postQueryKeys.postDetail(postId),
       });
 

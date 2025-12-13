@@ -5,31 +5,149 @@ import { PostEditorToolbar } from '@/features/post/post-editor/ui/PostEditorTool
 import { ImageList } from '@/entities/post/post-image/ui/ImageList';
 import { EditorContent } from '@tiptap/react';
 import { usePostEditor } from '@/features/post/post-editor/lib/usePostEditor';
-import { useImageManager } from '@/shared/hooks/useImageManager';
-import { UploadImage } from '@/shared/types/image';
-import { useEffect } from 'react';
+import { useImageManager } from '@/features/image/model/useImageManager';
+import { UploadImage } from '@/entities/image/model/types';
+import { useCallback, useEffect, useRef, useState } from 'react';
+import { ImageItemResponse } from '@/entities/post/api/types';
+import { Alert } from '@/shared/ui/alert/Alert';
+import { safeUUID } from '@/shared/utils/uuid';
+import { useKeyboardOffset } from '@/shared/hooks/useKeyboardOffset';
+import { POST_VALIDATION } from '@/entities/post/model/validation';
+import { EventCard } from '@/entities/calendar/ui/EventCard/EventCard';
+import { ScheduleFormData } from '@/features/schedule/create/model/types';
 
 export type PostEditorProps = {
-  initialContent?: string;
-  onChange?: (data: { content: string; images: UploadImage[] }) => void;
+  initialContent: string;
+  initialImages: ImageItemResponse[];
+  linkedSchedule: ScheduleFormData | null;
+  onChange: (data: { content: string; images: UploadImage[] }) => void;
+  onInitialized: () => void;
+  onScheduleRemove: () => void;
+  onReservationClick: () => void;
 };
 
-export const PostEditor = ({ initialContent, onChange }: PostEditorProps) => {
-  const editor = usePostEditor(initialContent, (html) => {
-    onChange?.({ content: html, images });
-  });
-  const { inputRef, images, handleSelectAndUpload, handleRemove, handleReorder, openPicker } =
-    useImageManager();
+export const PostEditor = ({
+  initialContent,
+  initialImages,
+  linkedSchedule,
+  onChange,
+  onInitialized,
+  onScheduleRemove,
+  onReservationClick,
+}: PostEditorProps) => {
+  const {
+    inputRef,
+    images,
+    setImages,
+    handleSelectAndUpload,
+    handleRemove,
+    handleReorder,
+    openPicker,
+  } = useImageManager();
 
-  // 이미지 변경 시에만 부모에게 전달 (본문 변경은 TipTap onUpdate에서 처리됨)
+  /** 최신 이미지/내용을 위한 ref */
+  const imagesRef = useRef<UploadImage[]>([]);
+  const contentRef = useRef<string>('');
+
+  /** images 변화 → ref 반영 */
+  useEffect(() => {
+    imagesRef.current = images;
+  }, [images]);
+
+  /**
+   * TipTap onUpdate 콜백 안정화
+   * (이미지는 ref에서 읽고, 여기서는 HTML만 업데이트)
+   */
+  const onUpdate = useCallback(
+    (html: string) => {
+      contentRef.current = html;
+      onChange({
+        content: html,
+        images: imagesRef.current,
+      });
+    },
+    [onChange],
+  );
+
+  const editor = usePostEditor(initialContent, onUpdate);
+
+  /** 초기화 완료 체크 플래그 */
+  const contentAppliedRef = useRef(false);
+  const imagesAppliedRef = useRef(false);
+  const initializedRef = useRef(false);
+
+  /** 초기 content 적용 */
   useEffect(() => {
     if (!editor) return;
-    onChange?.({
-      content: editor.getHTML(), // TipTap content
+    editor.commands.setContent(initialContent);
+    contentAppliedRef.current = true;
+
+    // content + images 둘 다 끝났다면 초기화 완료
+    if (contentAppliedRef.current && imagesAppliedRef.current && !initializedRef.current) {
+      initializedRef.current = true;
+      onInitialized();
+    }
+  }, [editor, initialContent, onInitialized]);
+
+  const mapInitialImages = useCallback((data: ImageItemResponse[]): UploadImage[] => {
+    return data.map((img) => ({
+      id: safeUUID(),
+      file: null,
+      preview: img.originalUrl,
+      uploadedUrl: img.originalUrl,
+      status: 'uploaded',
+    }));
+  }, []);
+
+  /** 초기 images 적용 */
+  useEffect(() => {
+    if (!initialImages) return;
+    setImages(mapInitialImages(initialImages));
+    imagesAppliedRef.current = true;
+
+    // content + images 둘 다 끝났다면 초기화 완료
+    if (contentAppliedRef.current && imagesAppliedRef.current && !initializedRef.current) {
+      initializedRef.current = true;
+      onInitialized();
+    }
+  }, [initialImages, mapInitialImages, setImages, onInitialized]);
+
+  /** 이미지 변경 시 부모에게 알림 (contentRef 사용) */
+  useEffect(() => {
+    if (!editor || !initializedRef.current) return;
+
+    onChange({
+      content: contentRef.current,
       images,
     });
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [images]);
+  }, [images, editor]);
+
+  /** 이미지 최대 장수 제한 */
+  const { MAX_IMAGES } = POST_VALIDATION;
+  const [showImageLimitAlert, setShowImageLimitAlert] = useState(false);
+
+  const handleImageUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const files = e.target.files;
+    if (!files) return;
+
+    // 지금 업로드한 파일 개수
+    const newCount = files.length;
+    // 이미 있는 이미지 개수
+    const existingCount = imagesRef.current.length;
+
+    if (existingCount + newCount > MAX_IMAGES) {
+      setShowImageLimitAlert(true);
+      e.target.value = '';
+      return;
+    }
+
+    // 허용되면 기존 로직 실행
+    await handleSelectAndUpload(e);
+  };
+
+  /** 키보드 높이 계산 */
+  const keyboardOffset = useKeyboardOffset();
 
   if (!editor) return null;
 
@@ -69,12 +187,56 @@ export const PostEditor = ({ initialContent, onChange }: PostEditorProps) => {
         multiple
         className="hidden"
         onChange={(e) => {
-          void handleSelectAndUpload(e);
+          void handleImageUpload(e);
         }}
       />
 
+      {/* 연동된 일정 카드 */}
+      {linkedSchedule && (
+        <div className="p-13">
+          <EventCard
+            category={
+              linkedSchedule.category === 'operation'
+                ? 'operation'
+                : linkedSchedule.category === 'other'
+                  ? 'other'
+                  : 'official'
+            }
+            title={linkedSchedule.title}
+            startDate={linkedSchedule.startDate}
+            endDate={linkedSchedule.endDate}
+            location={linkedSchedule.location}
+            mode="reservation"
+            isAdmin={true}
+            onDeleteSchedule={onScheduleRemove}
+          />
+        </div>
+      )}
+
       {/* 툴바 */}
-      <PostEditorToolbar editor={editor} onCameraClick={openPicker} />
+      <div style={{ paddingBottom: keyboardOffset }}>
+        <PostEditorToolbar
+          editor={editor}
+          onCameraClick={openPicker}
+          onScheduleClick={onReservationClick}
+        />
+      </div>
+
+      <Alert
+        state="error"
+        title="이미지 최대 장수 오류"
+        infoText={`이미지는 최대 ${MAX_IMAGES}장까지 업로드할 수 있어요`}
+        actions={[
+          {
+            type: 'text',
+            label: '확인',
+            variant: 'primary',
+            onClick: () => setShowImageLimitAlert(false),
+          },
+        ]}
+        isOpen={showImageLimitAlert}
+        onClose={() => setShowImageLimitAlert(false)}
+      />
     </div>
   );
 };

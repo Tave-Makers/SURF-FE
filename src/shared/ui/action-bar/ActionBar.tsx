@@ -9,7 +9,34 @@ import { SurfIcon } from '../icon/SurfIcon';
  * Controlled / Uncontrolled 양쪽 모드 모두 지원합니다.
  *
  * ---
+<<<<<<< HEAD
+ * ### 🧩 사용 예시
+ *
+ * **Controlled**
+ * ```tsx
+ * const [message, setMessage] = useState('');
+ * <ActionBar
+ *   value={message}
+ *   onChange={setMessage}
+ *   onSend={(msg) => console.log('전송됨:', msg)}
+ *   placeholder="메시지를 입력하세요"
+ * />
+ * ```
+ *
+ * **Uncontrolled**
+ * ```tsx
+ * <ActionBar
+ *   defaultValue="안녕하세요"
+ *   onSend={(msg) => console.log('전송됨:', msg)}
+ *   placeholder="메시지를 입력하세요"
+ * />
+ * ```
+ *
+ * ---
+ * ### ⚙️ Props
+=======
  * ### Props
+>>>>>>> develop
  * @typedef {object} ActionBarProps
  * @param {string} [value] - 입력값 (Controlled 모드)
  * @param {string} [defaultValue] - 초기값 (Uncontrolled 모드)
@@ -20,7 +47,11 @@ import { SurfIcon } from '../icon/SurfIcon';
  * @param {boolean} [isEmojiActive=false] - 이모지 버튼 활성화 여부 (true일 경우 Solid 아이콘 표시)
  *
  * ---
+<<<<<<< HEAD
+ * ### 🧠 기타
+=======
  * ### 기타
+>>>>>>> develop
  * - 전송 후 입력값은 자동으로 초기화됩니다.
  * - ref를 사용해 부모 컴포넌트에서 직접 포커스 제어가 가능합니다.
  */

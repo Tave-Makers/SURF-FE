@@ -4,6 +4,8 @@ import type {
   PostListApiResponse,
   PostApiRequest,
   GetBoardPostsRequest,
+  PostDetailResponse,
+  PostScheduleResponse,
 } from './types';
 
 export const postApi = {
@@ -37,5 +39,22 @@ export const postApi = {
     );
 
     return response.data.data;
+  },
+
+  getPostDetail: async (postId: number): Promise<PostDetailResponse['data']> => {
+    const response = await axiosInstance.get<PostDetailResponse>(`/v1/user/posts/${postId}`);
+    return response.data.data;
+  },
+
+  getPostSchedule: async (postId: number): Promise<PostScheduleResponse['data']> => {
+    try {
+      const { data } = await axiosInstance.get<PostScheduleResponse>(
+        `/v1/user/post/${postId}/schedule`,
+      );
+      return data.data;
+    } catch (error) {
+      console.error('Error fetching post schedule:', error);
+      throw error;
+    }
   },
 };

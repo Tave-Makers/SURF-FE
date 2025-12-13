@@ -1,5 +1,5 @@
 import { ImageDnD } from './ImageDnD';
-import type { UploadImage } from '@/shared/types/image';
+import type { UploadImage } from '@/entities/image/model/types';
 
 type ImageListProps = {
   images: UploadImage[];

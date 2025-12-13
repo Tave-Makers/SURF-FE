@@ -29,9 +29,6 @@ importers:
       '@tanstack/react-query':
         specifier: ^5.90.2
         version: 5.90.6(react@19.1.0)
-      '@tiptap/core':
-        specifier: ^3.13.0
-        version: 3.13.0(@tiptap/pm@3.13.0)
       '@tiptap/extension-character-count':
         specifier: ^3.13.0
         version: 3.13.0(@tiptap/extensions@3.13.0(@tiptap/core@3.13.0(@tiptap/pm@3.13.0))(@tiptap/pm@3.13.0))
@@ -41,9 +38,6 @@ importers:
       '@tiptap/extension-text-style':
         specifier: ^3.13.0
         version: 3.13.0(@tiptap/core@3.13.0(@tiptap/pm@3.13.0))
-      '@tiptap/pm':
-        specifier: ^3.13.0
-        version: 3.13.0
       '@tiptap/react':
         specifier: ^3.13.0
         version: 3.13.0(@floating-ui/dom@1.7.4)(@tiptap/core@3.13.0(@tiptap/pm@3.13.0))(@tiptap/pm@3.13.0)(@types/react-dom@19.2.2(@types/react@19.2.2))(@types/react@19.2.2)(react-dom@19.1.0(react@19.1.0))(react@19.1.0)

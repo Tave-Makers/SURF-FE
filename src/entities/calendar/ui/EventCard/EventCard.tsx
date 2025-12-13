@@ -153,11 +153,11 @@ export function EventCard({
         {/* Container 영역 */}
         <section className="flex w-full flex-1 flex-col items-start self-stretch">
           {/* 일정 제목 */}
-          <div className="text-body-body3 text-foreground-normal">{title}</div>
+          <div className="text-body-body4 text-foreground-normal">{title}</div>
 
           <div className="flex flex-col items-start pt-5">
             {/* 날짜 */}
-            <div className="text-body-body8 text-foreground-normal-lighter flex items-center gap-5">
+            <div className="text-body-body9 text-foreground-normal-lighter flex items-center gap-5">
               <div>{formattedStartDate}</div>
               <div>~</div>
               <div>{formattedEndDate}</div>

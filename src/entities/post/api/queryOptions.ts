@@ -2,7 +2,6 @@ import { infiniteQueryOptions, queryOptions } from '@tanstack/react-query';
 import { postApi } from './postApi';
 import { postQueryKeys } from './queryKeys';
 import type { GetBoardPostsRequest } from './types';
-import { getPostSchedule } from '@/features/post/api/getPostSchedule';
 
 export const boardPostsQueryOptions = (params: Omit<GetBoardPostsRequest, 'page' | 'size'>) =>
   infiniteQueryOptions({
@@ -38,7 +37,7 @@ export const postDetailQueryOptions = (postId: number) =>
       console.log(detail);
 
       // 2) 일정 조회
-      const schedule = detail.hasSchedule ? await getPostSchedule(postId) : null;
+      const schedule = detail.hasSchedule ? await postApi.getPostSchedule(postId) : null;
 
       // 3) 조합 후 그대로 반환 (select 에서 transform)
       return {

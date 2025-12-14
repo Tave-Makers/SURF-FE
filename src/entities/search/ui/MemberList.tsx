@@ -1,9 +1,9 @@
 import { MemberItemUser } from '../model/types';
 import { MemberItem } from './MemberItem';
 
-export type MemberListProps = {
+interface MemberListProps {
   members: MemberItemUser[];
-};
+}
 
 export const MemberList = ({ members }: MemberListProps) => {
   return (

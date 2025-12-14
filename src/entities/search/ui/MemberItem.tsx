@@ -4,9 +4,9 @@ import { InfoBadge } from '@/shared/ui/info-badge/InfoBadge';
 import { MemberItemUser } from '../model/types';
 import { useDynamicVisibleCount } from '../model/useDynamicVisibleCount';
 
-export type MemberItemProps = {
+interface MemberItemProps {
   user: MemberItemUser;
-};
+}
 
 export const MemberItem = ({ user }: MemberItemProps) => {
   const { name, bio, level, chips } = user;

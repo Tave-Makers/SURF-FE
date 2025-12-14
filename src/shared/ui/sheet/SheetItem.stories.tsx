@@ -55,12 +55,7 @@ export const WithSheetActions: Story = {
                   />
                   <SheetItem
                     title="삭제하기"
-                    node={
-                      <SurfIcon
-                        name="TrashOneSolid"
-                        className="text-foreground-foreground-danger"
-                      />
-                    }
+                    node={<SurfIcon name="TrashOneSolid" className="text-foreground-danger" />}
                     onClick={() => alert('삭제하기 클릭')}
                     textColor="danger"
                   />

@@ -47,6 +47,8 @@ export function mapUserProfile(dto: UserProfileApiResponse['data']): UserProfile
 
   return {
     name: dto.username,
+    bio: null, // TODO: API에서 bio 받아오도록 수정 필요
+    avatarUrl: null, // TODO: API에서 avatarUrl 받아오도록 수정 필요
     phoneNumber: dto.phoneNumber,
     email: dto.email,
     university: dto.university,

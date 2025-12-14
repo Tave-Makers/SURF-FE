@@ -12,7 +12,7 @@ export const MemberItem = ({ user }: MemberItemProps) => {
   const BadgeIcon = USER_LEVEL_BADGE[level];
 
   return (
-    <article className="flex w-full gap-11">
+    <article className="flex w-full gap-11 p-12">
       {/* 프로필 이미지 */}
       <Avatar size="m" />
 

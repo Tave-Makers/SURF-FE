@@ -37,11 +37,11 @@ export function DayChipRadio({
       }}
       className={[
         'rounded-3 flex h-[5rem] w-full flex-col items-start gap-2 overflow-hidden px-2 py-1',
-        isSelected ? 'bg-background-background-secondary-lighter' : inThisMonth ? '' : 'opacity-50',
+        isSelected ? 'bg-background-secondary-lighter' : inThisMonth ? '' : 'opacity-50',
       ].join(' ')}
     >
       <div className="flex w-full min-w-0 flex-col">
-        <div className="text-body-body8 text-foreground-foreground-secondary-lighter flex w-full items-center justify-center py-3">
+        <div className="text-body-body8 text-foreground-secondary-lighter flex w-full items-center justify-center py-3">
           {date.getDate()}
         </div>
         <div>

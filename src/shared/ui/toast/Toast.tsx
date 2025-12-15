@@ -5,7 +5,7 @@ interface ToastProps {
 }
 
 const containerStyle =
-  'flex items-center justify-start px-13 py-10 rounded-3 bg-background-normal-inverse-alpha animate-fade-in';
+  'flex items-center justify-start px-13 py-10 rounded-3 bg-background-normal-inverse-alpha';
 const textStyle = 'text-body-body9 text-foreground-normal-reverse';
 
 const Toast = ({ text }: ToastProps) => {

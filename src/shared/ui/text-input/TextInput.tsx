@@ -95,7 +95,7 @@ export const TextInput = forwardRef<HTMLTextAreaElement, TextInputProps>(
     };
 
     return (
-      <div className="rounded-6 bg-background-background-quaternary flex min-h-[2.25rem] w-full flex-1 items-center justify-between py-7 pr-8 pl-11 transition-[height] duration-150 ease-in-out">
+      <div className="rounded-6 bg-background-quaternary flex min-h-[2.25rem] w-full flex-1 items-center justify-between py-7 pr-8 pl-11 transition-[height] duration-150 ease-in-out">
         <textarea
           ref={internalRef}
           value={currentValue}
@@ -105,7 +105,7 @@ export const TextInput = forwardRef<HTMLTextAreaElement, TextInputProps>(
           placeholder={placeholder}
           aria-label={ariaLabel ?? '텍스트 입력'}
           {...rest}
-          className="text-body-body7 text-foreground-foreground-normal placeholder-foreground-foreground-quaternary flex-1 resize-none overflow-y-auto bg-transparent outline-none [-ms-overflow-style:none] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden"
+          className="text-body-body7 text-foreground-normal placeholder-foreground-quaternary flex-1 resize-none overflow-y-auto bg-transparent outline-none [-ms-overflow-style:none] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden"
         />
         {iconName && (
           <button
@@ -114,7 +114,7 @@ export const TextInput = forwardRef<HTMLTextAreaElement, TextInputProps>(
             onClick={onIconClick}
             className="flex cursor-pointer items-center justify-center self-end"
           >
-            <SurfIcon name={iconName} size="l" className="text-foreground-foreground-quaternary" />
+            <SurfIcon name={iconName} size="l" className="text-foreground-quaternary" />
           </button>
         )}
       </div>

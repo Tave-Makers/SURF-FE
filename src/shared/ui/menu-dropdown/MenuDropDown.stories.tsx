@@ -45,20 +45,9 @@ export const Default: Story = {
       }
 
       return (
-        <div
-          role="button"
-          className={className}
-          onClick={onItemClick}
-          tabIndex={0}
-          onKeyDown={(e) => {
-            if (e.key === 'Enter' || e.key === ' ') {
-              e.preventDefault();
-              onItemClick();
-            }
-          }}
-        >
+        <button className={className} onClick={onItemClick}>
           {item.label}
-        </div>
+        </button>
       );
     },
   },

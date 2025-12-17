@@ -26,9 +26,9 @@ export const MemberItem = ({ user, onClick }: MemberItemProps) => {
   return (
     <button onClick={onClick} className="flex w-full gap-11 overflow-hidden p-12">
       {/* 프로필 이미지 */}
-      <Avatar size="m" />
+      <Avatar size="m" src={user.avatarUrl ?? undefined} />
 
-      <div className="flex w-full flex-col gap-7 overflow-hidden">
+      <div className="flex w-full flex-col items-start gap-7 overflow-hidden">
         {/* 헤더: 이름 + 레벨 + 칩 */}
         <header className="flex w-full items-center gap-8">
           {/* 이름 + 권한 아이콘 */}
@@ -38,16 +38,16 @@ export const MemberItem = ({ user, onClick }: MemberItemProps) => {
           </h3>
 
           {/* 기수 (칩 목록) */}
-          <ul ref={containerRef} className="flex min-w-0 flex-1 items-center gap-5 overflow-hidden">
+          <ul ref={containerRef} className="flex min-w-0 flex-1 gap-5 overflow-hidden">
             {visibleChips.map((chip) => (
-              <li key={chip} className="shrink-0">
+              <li key={chip} className="flex shrink-0 items-center">
                 <InfoBadge text={chip} />
               </li>
             ))}
 
             {/* +N개 UI 처리 */}
             {remainingCount > 0 && (
-              <li className="shrink-0">
+              <li className="flex shrink-0 items-center">
                 <InfoBadge text={`+${remainingCount}`} />
               </li>
             )}

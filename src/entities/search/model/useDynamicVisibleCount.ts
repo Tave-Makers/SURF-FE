@@ -70,7 +70,7 @@ export const useDynamicVisibleCount = <T>({
     }
 
     return () => observer.disconnect();
-  }, [items, gap, moreBadgeWidth]);
+  }, [items.length, gap, moreBadgeWidth]);
 
   return {
     visibleCount,

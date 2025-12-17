@@ -4,7 +4,7 @@ import { MemberItem } from './MemberItem';
 import type { MemberItemUser } from '../model/types';
 
 const meta: Meta<typeof MemberItem> = {
-  title: 'Entities/UI/Notification/MemberItem',
+  title: 'Entities/UI/Search/MemberItem',
   component: MemberItem,
   parameters: {
     layout: 'padded',
@@ -57,7 +57,7 @@ export const SuperManagerLevel: Story = {
   },
 };
 
-export const ExcecutiveManagerLevel: Story = {
+export const ExecutiveManagerLevel: Story = {
   args: {
     user: {
       ...mockUser,

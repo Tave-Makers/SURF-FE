@@ -4,7 +4,7 @@ import { MemberList } from './MemberList';
 import type { MemberItemUser } from '../model/types';
 
 const meta: Meta<typeof MemberList> = {
-  title: 'Entities/UI/Notification/MemberList',
+  title: 'Entities/UI/Search/MemberList',
   component: MemberList,
   parameters: {
     layout: 'padded',

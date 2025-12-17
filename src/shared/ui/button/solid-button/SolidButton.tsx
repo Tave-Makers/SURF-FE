@@ -49,22 +49,23 @@ export const SolidButton = forwardRef<HTMLButtonElement, SolidButtonProps>(
     };
 
     const sizeTextMap: Record<ButtonSize, string> = {
-      s: 'text-body-body7',
-      m: 'text-body-body5',
-      l: 'text-body-body5',
+      s: 'text-body-body8',
+      m: 'text-body-body6',
+      l: 'text-body-body6',
     };
 
     const variantMap: Record<ButtonVariant, string> = {
-      primary: 'text-foreground-accent bg-background-primary hover:bg-background-primary-darker',
+      primary:
+        'text-foreground-static-white bg-background-primary hover:bg-background-primary-darker',
       secondary:
         'text-foreground-normal bg-background-secondary hover:bg-background-secondary-darker',
-      danger: 'text-foreground-accent bg-foreground-danger hover:bg-foreground-danger-darker',
+      danger: 'text-foreground-static-white bg-foreground-danger hover:bg-foreground-danger-darker',
       warning:
         'text-foreground-danger bg-background-secondary hover:bg-background-secondary-darker hover:text-background-danger-darker',
     };
 
     const disabledClass =
-      'bg-background-secondary-darker text-foreground-accent cursor-not-allowed opacity-50';
+      'bg-background-secondary-darker text-foreground-static-white cursor-not-allowed opacity-50';
 
     const baseClass = 'inline-flex w-full items-center justify-center overflow-hidden rounded-3';
 

@@ -6,9 +6,10 @@ import { useDynamicVisibleCount } from '../model/useDynamicVisibleCount';
 
 interface MemberItemProps {
   user: MemberItemUser;
+  onClick?: () => void;
 }
 
-export const MemberItem = ({ user }: MemberItemProps) => {
+export const MemberItem = ({ user, onClick }: MemberItemProps) => {
   const { name, bio, level, chips } = user;
   const BadgeIcon = USER_LEVEL_BADGE[level];
 
@@ -23,7 +24,7 @@ export const MemberItem = ({ user }: MemberItemProps) => {
   const remainingCount = chips.length - visibleCount;
 
   return (
-    <article className="flex w-full gap-11 overflow-hidden p-12">
+    <button onClick={onClick} className="flex w-full gap-11 overflow-hidden p-12">
       {/* 프로필 이미지 */}
       <Avatar size="m" />
 
@@ -73,6 +74,6 @@ export const MemberItem = ({ user }: MemberItemProps) => {
           </li>
         ))}
       </ul>
-    </article>
+    </button>
   );
 };

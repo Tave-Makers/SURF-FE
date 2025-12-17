@@ -52,7 +52,7 @@ export const ActivityBadge = forwardRef<HTMLDivElement, ActivityBadgeProps>(
             </>
           ) : (
             <>
-              <div className="text-body-body8 text-forground-normal truncate">{badgeName}</div>
+              <div className="text-body-body8 text-foreground-normal truncate">{badgeName}</div>
               {timestamp && (
                 <time
                   className="text-caption-caption4 text-foreground-tertiary"

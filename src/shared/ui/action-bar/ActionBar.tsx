@@ -62,7 +62,7 @@ export const ActionBar = forwardRef<HTMLTextAreaElement, ActionBarProps>(
     };
 
     return (
-      <div className="border-border-normal bg-background-normal flex w-full items-center gap-10 border-t-[0.4px] px-13 pt-13 pb-15">
+      <div className="border-border-normal bg-background-normal flex w-full items-center gap-10 border-t px-13 pt-13 pb-15">
         <TextInput
           mode="chat"
           ref={internalRef}

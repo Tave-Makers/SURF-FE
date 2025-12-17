@@ -17,6 +17,7 @@ type Story = StoryObj<typeof MemberList>;
 
 const mockMembers: MemberItemUser[] = [
   {
+    userId: 1,
     name: '테이브',
     bio: '프론트엔드와 블록체인을 좋아합니다',
     level: 'superManager',
@@ -24,6 +25,7 @@ const mockMembers: MemberItemUser[] = [
     avatarUrl: null,
   },
   {
+    userId: 2,
     name: '짱구',
     bio: '디자인 시스템에 관심이 많아요',
     level: 'executiveManager',
@@ -31,6 +33,7 @@ const mockMembers: MemberItemUser[] = [
     avatarUrl: null,
   },
   {
+    userId: 3,
     name: '도라에몽',
     bio: null,
     level: 'manager',
@@ -38,6 +41,7 @@ const mockMembers: MemberItemUser[] = [
     avatarUrl: null,
   },
   {
+    userId: 4,
     name: '스펀지밥',
     bio: null,
     level: 'member',

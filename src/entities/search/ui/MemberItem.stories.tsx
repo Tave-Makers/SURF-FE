@@ -16,6 +16,7 @@ export default meta;
 type Story = StoryObj<typeof MemberItem>;
 
 const mockUser: MemberItemUser = {
+  userId: 1,
   name: '테이브',
   bio: '프론트엔드와 블록체인을 좋아합니다',
   level: 'superManager',

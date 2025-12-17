@@ -9,7 +9,7 @@ export const MemberList = ({ members }: MemberListProps) => {
   return (
     <ul className="flex flex-col">
       {members.map((member) => (
-        <li key={member.name}>
+        <li key={member.userId}>
           <MemberItem user={member} />
         </li>
       ))}

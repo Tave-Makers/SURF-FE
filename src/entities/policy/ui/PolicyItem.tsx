@@ -32,16 +32,14 @@ export const PolicyItem = forwardRef<HTMLButtonElement, PolicyItemProps>(
         className={[baseClass, className].filter(Boolean).join(' ')}
       >
         <div className="flex w-full items-center">
-          {children && (
-            <span className="text-body-body8 text-foreground-foreground-normal">{children}</span>
-          )}
+          {children && <span className="text-body-body8 text-foreground-normal">{children}</span>}
         </div>
         {rightIconName && (
           <SurfIcon
             name={rightIconName}
             size={'s'}
             aria-hidden
-            className="text-foreground-foreground-tertiary aspect-square opacity-100"
+            className="text-foreground-tertiary aspect-square opacity-100"
           />
         )}
       </button>

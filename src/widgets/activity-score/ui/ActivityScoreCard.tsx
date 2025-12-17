@@ -24,8 +24,8 @@ export default function ActivityScoreCard({ score, records, mode }: ActivityScor
         <span id="activity-score-title" className="sr-only">
           현재 활동 점수
         </span>
-        <span className="text-body-body1 text-foreground-foreground-normal">{score}</span>
-        <span className="text-body-body2 text-foreground-foreground-normal pt-15">점</span>
+        <span className="text-body-body1 text-foreground-normal">{score}</span>
+        <span className="text-body-body2 text-foreground-normal pt-15">점</span>
       </h2>
 
       {/* 활동 아이콘 + 툴팁 */}

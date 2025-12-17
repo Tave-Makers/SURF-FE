@@ -94,10 +94,10 @@ export default function ScheduleForm({ onSubmit, initialData }: ScheduleFormProp
                           field.onChange(option.value);
                           handleCloseModal();
                         }}
-                        className={`text-foreground-foreground-normal text-body-body5 flex w-full flex-1 items-center px-12 py-10 ${
+                        className={`text-foreground-normal text-body-body5 flex w-full flex-1 items-center px-12 py-10 ${
                           field.value === option.value
-                            ? 'bg-background-background-secondary'
-                            : 'hover:bg-background-background-secondary'
+                            ? 'bg-background-secondary'
+                            : 'hover:bg-background-secondary'
                         }`}
                       >
                         {option.label}
@@ -130,7 +130,7 @@ export default function ScheduleForm({ onSubmit, initialData }: ScheduleFormProp
         />
       </div>
 
-      <hr className="border-border-border-tertiary mt-[1.31rem] h-[0.06rem] w-full self-stretch" />
+      <hr className="border-border-tertiary mt-[1.31rem] h-[0.06rem] w-full self-stretch" />
 
       {/* 3. 시작일 */}
       <div>
@@ -178,7 +178,7 @@ export default function ScheduleForm({ onSubmit, initialData }: ScheduleFormProp
         />
       </div>
 
-      <hr className="border-border-border-tertiary h-[0.06rem] w-full self-stretch" />
+      <hr className="border-border-tertiary h-[0.06rem] w-full self-stretch" />
 
       {/* 4. 종료일 */}
       <div>
@@ -226,7 +226,7 @@ export default function ScheduleForm({ onSubmit, initialData }: ScheduleFormProp
         />
       </div>
 
-      <hr className="border-border-border-tertiary h-[0.06rem] w-full self-stretch" />
+      <hr className="border-border-tertiary h-[0.06rem] w-full self-stretch" />
 
       {/* 5. 장소 */}
       <div>
@@ -242,7 +242,7 @@ export default function ScheduleForm({ onSubmit, initialData }: ScheduleFormProp
             />
           )}
         />
-        <hr className="border-border-border-tertiary h-[0.06rem] w-full self-stretch" />
+        <hr className="border-border-tertiary h-[0.06rem] w-full self-stretch" />
       </div>
     </form>
   );

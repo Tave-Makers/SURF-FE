@@ -13,18 +13,6 @@ import { SurfIcon } from '@/shared/ui/icon/SurfIcon';
  * - `isOpen`: 현재 열림 상태 (true일 경우 아이콘이 회전)
  * - `onClick`: 클릭 시 실행할 콜백 함수
  * - `controlsId`: (선택) aria-controls로 연결할 콘텐츠의 ID
- *
- * @example
- * ```tsx
- * const { isOpen, open, close } = useToggleSheet();
- *
- * <AccordionSelect
- *   title="행사 종류 선택"
- *   isOpen={isOpen}
- *   onClick={open}
- *   controlsId="select-sheet"
- * />
- * ```
  */
 
 type AccordionSelectProps = {

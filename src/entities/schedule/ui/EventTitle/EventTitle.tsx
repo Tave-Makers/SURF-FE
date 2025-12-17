@@ -65,7 +65,7 @@ export function EventTitle({ placeholder, title, onChange }: EventTitleProps) {
           onKeyDown={handleTextAreaKeyDown}
           minLength={2}
           maxLength={20}
-          className="text-foreground-foreground-normal w-full resize-none border-none bg-transparent outline-none"
+          className="text-foreground-normal w-full resize-none border-none bg-transparent outline-none"
           rows={1}
           style={{ overflow: 'hidden', height: 'auto' }}
           onInput={(e) => {
@@ -90,9 +90,9 @@ export function EventTitle({ placeholder, title, onChange }: EventTitleProps) {
       onKeyDown={handleKeyDown}
     >
       {hasValue ? (
-        <div className="text-foreground-foreground-normal">{displayValue}</div>
+        <div className="text-foreground-normal">{displayValue}</div>
       ) : (
-        <div className="text-foreground-foreground-quaternary">{placeholder}</div>
+        <div className="text-foreground-quaternary">{placeholder}</div>
       )}
     </button>
   );

@@ -33,8 +33,8 @@ export type CareerCreateDTO = CareerBase;
 export type CareerUpdateDTO = Partial<CareerBase> & { careerId: number };
 
 export type UserProfile = {
+  userId: number;
   name: string;
-  // TODO: bio와 avatarUrl 받아와도 될지 확인 필요
   bio: string | null;
   avatarUrl: string | null;
   phoneNumber: string;

@@ -1,3 +1,6 @@
 import { UserProfile } from '@/entities/user/model/types';
 
-export type MemberItemUser = Pick<UserProfile, 'name' | 'bio' | 'level' | 'chips' | 'avatarUrl'>;
+export type MemberItemUser = Pick<
+  UserProfile,
+  'userId' | 'name' | 'bio' | 'level' | 'chips' | 'avatarUrl'
+>;

@@ -2,7 +2,7 @@ import type { Meta, StoryObj } from '@storybook/nextjs';
 import { Callout } from './Callout';
 
 const meta: Meta<typeof Callout> = {
-  title: 'Shared/UI/Callout',
+  title: 'Entities/UI/Note/Callout',
   component: Callout,
   tags: ['autodocs'],
 };

@@ -13,11 +13,11 @@ type MenuItemProps = {
 
 export function MenuItem({ label, onClick, isSelected = false }: MenuItemProps) {
   const menuItemBaseStyle =
-    'rounded-3 flex h-[1.87rem] min-w-[4.5rem] items-center justify-center px-10 bg-background-normal-lighter active:bg-background-quaternary';
+    'rounded-3 flex h-[1.87rem] min-w-[4.5rem] w-full items-center justify-center px-10 bg-background-normal-lighter active:bg-background-quaternary';
 
   const labelBaseStyle = isSelected
-    ? 'text-foreground-primary text-body11'
-    : 'text-foreground-normal-lighter text-body11';
+    ? 'text-foreground-primary text-body-body11'
+    : 'text-foreground-normal-lighter text-body-body11';
 
   return (
     <button type="button" onClick={onClick} className={menuItemBaseStyle}>

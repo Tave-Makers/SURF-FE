@@ -1,4 +1,4 @@
-import { SurfIcon } from '../icon/SurfIcon';
+import { SurfIcon } from '@/shared/ui/icon/SurfIcon';
 
 /**
  * @param label - 버튼에 표시될 라벨 텍스트

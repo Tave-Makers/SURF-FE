@@ -7,7 +7,7 @@ export type ScheduleCreateRequest = {
   title: string;
   startAt: string;
   endAt: string;
-  location?: string;
+  location: string;
 };
 
 // 캘린더에서 일정 생성 Response 타입

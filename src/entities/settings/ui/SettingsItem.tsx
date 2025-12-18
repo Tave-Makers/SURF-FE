@@ -45,19 +45,17 @@ export const SettingsItem = forwardRef<HTMLButtonElement, SettingsItemProps>(
               name={leftIconName}
               size={'m'}
               aria-hidden
-              className="text-foreground-foreground-normal"
+              className="text-foreground-normal"
             />
           )}
-          {children && (
-            <span className="text-body-body8 text-foreground-foreground-normal">{children}</span>
-          )}
+          {children && <span className="text-body-body8 text-foreground-normal">{children}</span>}
         </div>
         {rightIconName && (
           <SurfIcon
             name={rightIconName}
             size={'s'}
             aria-hidden
-            className="text-foreground-foreground-tertiary aspect-square opacity-100"
+            className="text-foreground-tertiary aspect-square opacity-100"
           />
         )}
       </button>

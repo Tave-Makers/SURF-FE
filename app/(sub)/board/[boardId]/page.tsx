@@ -1,3 +1,8 @@
-export default function Page() {
-  return <div>게시판 목록</div>;
-}
+import BoardPage from '@/app-pages/board/ui/BoardPage';
+
+const Page = async ({ params }: { params: Promise<{ boardId: string }> }) => {
+  const { boardId } = await params;
+  return <BoardPage boardId={boardId} />;
+};
+
+export default Page;

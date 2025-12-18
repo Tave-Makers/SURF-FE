@@ -18,12 +18,14 @@ export function MenuDropDown<T extends { id: number }>({
   onItemClick,
 }: MenuDropDownProps<T>) {
   return (
-    <div className="rounded-3 shadow-raised bg-background-normal-lighter flex max-h-[10.6rem] w-full flex-col overflow-y-auto p-5">
-      {items.map((item) => (
-        <div key={item.id} className="w-full items-center justify-center">
-          {renderItem(item, () => onItemClick(item))}
-        </div>
-      ))}
+    <div className="rounded-3 shadow-raised bg-background-normal-lighter flex w-full p-5">
+      <div className="menu-dropdown-scrollbar flex max-h-[9.85rem] flex-col overflow-y-auto">
+        {items.map((item) => (
+          <div key={item.id} className="w-full shrink-0 items-center justify-center">
+            {renderItem(item, () => onItemClick(item))}
+          </div>
+        ))}
+      </div>
     </div>
   );
 }

@@ -1,4 +1,4 @@
-import { Avatar } from '../../../../shared/ui/avatar/Avatar';
+import { Avatar } from '@/shared/ui/avatar/Avatar';
 
 /**
  * Callout 컴포넌트
@@ -12,13 +12,12 @@ export type CalloutProps = {
   userName?: string;
 };
 
+const baseStyle =
+  'bg-background-secondary-lighter flex w-full items-start gap-8 self-stretch px-13 py-10';
+
 export function Callout({ userImage, userName }: CalloutProps) {
   return (
-    <aside
-      className="bg-background-secondary-lighter flex w-full items-start gap-8 self-stretch px-13 py-10"
-      role="note"
-      aria-label="쪽지 수신자 안내"
-    >
+    <aside className={baseStyle} role="note" aria-label="쪽지 수신자 안내">
       <Avatar src={userImage} size="xs" alt="프로필 이미지" />
 
       <div className="flex flex-1 flex-col items-start justify-center gap-3">

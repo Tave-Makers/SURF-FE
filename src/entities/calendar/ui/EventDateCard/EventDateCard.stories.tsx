@@ -35,7 +35,6 @@ const meta: Meta<typeof EventDateCard<EventItem>> = {
     // 기본 renderItem 정의
     renderItem: (item) => (
       <EventCard
-        id={item.id}
         title={item.title}
         category={item.category}
         mode={item.mode}

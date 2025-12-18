@@ -3,7 +3,7 @@
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import Calendar from '@/widgets/calendar/ui/Calendar';
-import { useCalendarSchedule } from '@/features/calendar/model/useCalendarSchedule';
+import { useGetCalendarSchedule } from '@/features/calendar/model/useGetCalendarSchedule';
 import { PostFab } from '@/entities/post/ui/post-fab/PostFab';
 import { useAuthStore } from '@/features/auth/model/useAuthStore';
 
@@ -11,7 +11,10 @@ export function CalendarPage() {
   const router = useRouter();
   const [month, setMonth] = useState<Date>(new Date());
   const memberRole = useAuthStore((state) => state.memberRole) || 'member';
-  const { data: schedules = {} } = useCalendarSchedule(month.getFullYear(), month.getMonth() + 1);
+  const { data: schedules = {} } = useGetCalendarSchedule(
+    month.getFullYear(),
+    month.getMonth() + 1,
+  );
 
   const handleCreateSchedule = () => {
     router.push('/home/calendar/schedule/create');

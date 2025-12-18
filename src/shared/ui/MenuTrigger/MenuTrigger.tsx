@@ -6,15 +6,15 @@ import { SurfIcon } from '@/shared/ui/icon/SurfIcon';
  * @param onClick - 버튼 클릭 시 실행될 토글 함수
  */
 
-type MenuTriggerProps = {
+interface MenuTriggerProps {
   label: string;
   isOpen: boolean;
   onClick: () => void;
-};
+}
+
+const baseStyle = 'flex h-18 items-center justify-center gap-5 px-8 rounded-3';
 
 export function MenuTrigger({ label, isOpen, onClick }: MenuTriggerProps) {
-  const baseStyle = 'flex h-18 items-center justify-center gap-5 px-8 rounded-3';
-
   return (
     <button type="button" className={baseStyle} onClick={onClick}>
       <div className="text-foreground-normal text-body-body9 flex">{label}</div>

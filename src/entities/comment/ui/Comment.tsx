@@ -77,8 +77,8 @@ const Comment = ({
         {/* 이름, 날짜, 시간, 더보기 */}
         <header className="flex items-center">
           <div className="flex gap-8">
-            <p className="text-body-body7 text-foreground-foreground-normal">{name}</p>
-            <p className="text-caption-caption6 text-foreground-foreground-quinary-darker flex items-center gap-5">
+            <p className="text-body-body7 text-foreground-normal">{name}</p>
+            <p className="text-caption-caption6 text-foreground-quinary-darker flex items-center gap-5">
               <time>{date}</time>
               <time>{time}</time>
             </p>
@@ -89,13 +89,13 @@ const Comment = ({
         </header>
 
         {/* 댓글 내용 */}
-        <p className="text-body-body8 text-foreground-foreground-normal">{content}</p>
+        <p className="text-body-body8 text-foreground-normal">{content}</p>
 
         {/* 좋아요, 답글 */}
         <footer className="flex gap-11">
           <button
             type="button"
-            className="text-caption-caption4 text-foreground-foreground-secondary-lighter flex items-center gap-5"
+            className="text-caption-caption4 text-foreground-secondary-lighter flex items-center gap-5"
             aria-label={`좋아요 ${likeCount}개`}
             onClick={handleLikeToggle}
           >
@@ -104,9 +104,7 @@ const Comment = ({
               size="s"
               aria-hidden="true"
               className={`shrink-0 ${
-                isLiked
-                  ? 'text-foreground-foreground-danger fill-foreground-foreground-danger'
-                  : 'text-foreground-foreground-normal'
+                isLiked ? 'text-foreground-danger fill-foreground-danger' : 'text-foreground-normal'
               }`}
             />
             <span aria-hidden="true">{likeCount}</span>
@@ -114,7 +112,7 @@ const Comment = ({
 
           <button
             type="button"
-            className="text-caption-caption4 text-foreground-foreground-secondary-lighter flex items-center gap-5"
+            className="text-caption-caption4 text-foreground-secondary-lighter flex items-center gap-5"
             aria-label="답글 달기"
             onClick={onReplyClick}
           >

@@ -10,7 +10,7 @@
 
 .ProseMirror p.is-editor-empty:first-child::before {
   content: attr(data-placeholder);
-  color: var(--color-foreground-foreground-tertiary-lighter);
+  color: var(--color-foreground-tertiary-lighter);
   pointer-events: none;
 }
 

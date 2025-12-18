@@ -28,10 +28,8 @@ export function Sheet({
 }: SheetProps) {
   const renderTitleSection = () => (
     <div className="flex w-full flex-col gap-5">
-      {title && <div className="text-foreground-foreground-normal text-title-title2">{title}</div>}
-      {description && (
-        <div className="text-body-body8 text-foreground-foreground-tertiary">{description}</div>
-      )}
+      {title && <div className="text-foreground-normal text-title-title2">{title}</div>}
+      {description && <div className="text-body-body8 text-foreground-tertiary">{description}</div>}
     </div>
   );
 

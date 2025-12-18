@@ -39,7 +39,7 @@ export const Controlled: Story = {
           onIconClick={handleEmojiClick}
         />
         {emojiActive && (
-          <div className="text-foreground-foreground-normal text-caption-caption4">
+          <div className="text-foreground-normal text-caption-caption4">
             😀 이모지 패널 열림 상태
           </div>
         )}
@@ -75,7 +75,7 @@ export const Uncontrolled: Story = {
           ref={inputRef}
         />
         {emojiActive && (
-          <div className="text-foreground-foreground-normal text-caption-caption4">
+          <div className="text-foreground-normal text-caption-caption4">
             🪄 이모지 패널이 열려 있습니다
           </div>
         )}
@@ -111,7 +111,7 @@ export const UncontrolledWithDefaultValue: Story = {
           ref={inputRef}
         />
         {emojiActive && (
-          <div className="text-foreground-foreground-normal text-caption-caption4">
+          <div className="text-foreground-normal text-caption-caption4">
             🪄 이모지 패널이 열려 있습니다
           </div>
         )}

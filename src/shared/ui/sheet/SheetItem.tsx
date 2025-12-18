@@ -20,9 +20,7 @@ type SheetItemProps = {
  */
 export function SheetItem({ title, node, onClick, textColor = 'normal' }: SheetItemProps) {
   const textColorClass =
-    textColor === 'danger'
-      ? 'text-foreground-foreground-danger'
-      : 'text-foreground-foreground-normal';
+    textColor === 'danger' ? 'text-foreground-danger' : 'text-foreground-normal';
 
   return (
     <button onClick={onClick} className="flex w-full items-center gap-8 px-12 py-10">

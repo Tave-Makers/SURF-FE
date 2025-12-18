@@ -159,8 +159,4 @@ body {
   &:hover::-webkit-scrollbar-thumb {
     background-color: var(--color-background-secondary);
   }
-
-  &:hover {
-    scrollbar-color: var(--color-background-secondary) transparent;
-  }
 }

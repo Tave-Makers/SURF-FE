@@ -140,6 +140,9 @@ body {
 
 /* MenuDropDown 컴포넌트 전용 커스텀 스크롤바 */
 .menu-dropdown-scrollbar {
+  scrollbar-width: thin;
+  scrollbar-color: transparent transparent;
+
   &::-webkit-scrollbar {
     width: 0.125rem;
   }
@@ -154,6 +157,10 @@ body {
   }
 
   &:hover::-webkit-scrollbar-thumb {
-    background-color: #e9edf2;
+    background-color: var(--color-background-secondary);
+  }
+
+  &:hover {
+    scrollbar-color: var(--color-background-secondary) transparent;
   }
 }

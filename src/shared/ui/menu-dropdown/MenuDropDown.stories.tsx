@@ -38,29 +38,30 @@ const MOCK_ITEMS2: StoryItem[] = [
   { id: 7, label: 'default', type: 'default' },
 ];
 
+const renderStoryItem = (item: StoryItem, onItemClick: () => void) => {
+  let className =
+    'w-full h-[1.87rem] items-center justify-center px-10 text-sm rounded-3 text-body-body11 ';
+
+  if (item.type === 'active') {
+    className += 'bg-background-quaternary text-foreground-secondary';
+  } else if (item.type === 'selected') {
+    className += 'text-foreground-primary';
+  } else {
+    className += 'text-foreground-secondary';
+  }
+
+  return (
+    <button type="button" className={className} onClick={onItemClick}>
+      {item.label}
+    </button>
+  );
+};
+
 export const Default: Story = {
   args: {
     items: MOCK_ITEMS1,
     onItemClick: (item) => alert(`Clicked ${item.label}`),
-
-    renderItem: (item, onItemClick) => {
-      let className =
-        'w-full h-[1.87rem] items-center justify-center px-10 text-sm rounded-3 text-body-body11 ';
-
-      if (item.type === 'active') {
-        className += 'bg-background-quaternary text-foreground-secondary';
-      } else if (item.type === 'selected') {
-        className += 'text-foreground-primary';
-      } else {
-        className += 'text-foreground-secondary';
-      }
-
-      return (
-        <button className={className} onClick={onItemClick}>
-          {item.label}
-        </button>
-      );
-    },
+    renderItem: renderStoryItem,
   },
 };
 
@@ -68,24 +69,6 @@ export const Scroll: Story = {
   args: {
     items: MOCK_ITEMS2,
     onItemClick: (item) => alert(`Clicked ${item.label}`),
-
-    renderItem: (item, onItemClick) => {
-      let className =
-        'w-full h-[1.87rem] items-center justify-center px-10 text-sm rounded-3 text-body-body11 ';
-
-      if (item.type === 'active') {
-        className += 'bg-background-quaternary text-foreground-secondary';
-      } else if (item.type === 'selected') {
-        className += 'text-foreground-primary';
-      } else {
-        className += 'text-foreground-secondary';
-      }
-
-      return (
-        <button className={className} onClick={onItemClick}>
-          {item.label}
-        </button>
-      );
-    },
+    renderItem: renderStoryItem,
   },
 };

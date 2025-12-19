@@ -29,7 +29,13 @@ export function Markdown({ children }: { children: string }) {
           const hasNoMt = /\[no-mt\]\s*$/.test(raw);
           const label = raw.replace(/\s*\[(my-0|mb-0|no-mt)\]\s*$/, '');
 
-          const cls = hasMy0 ? 'my-0' : hasMb0 ? 'mt-6 mb-0' : hasNoMt ? 'mt-0 mb-6' : 'mt-6 mb-6';
+          const cls = hasMy0
+            ? 'my-0'
+            : hasMb0
+              ? 'mt-15 mb-0'
+              : hasNoMt
+                ? 'mt-0 mb-15'
+                : 'mt-15 mb-15';
 
           return (
             <h2 {...rest} className={`${className ?? ''} ${cls}`}>
@@ -38,22 +44,22 @@ export function Markdown({ children }: { children: string }) {
           );
         },
         h3: ({ children: c, className, ...rest }) => (
-          <h3 {...rest} className={`${className ?? ''} mt-6`}>
+          <h3 {...rest} className={`${className ?? ''} mt-15`}>
             {c}
           </h3>
         ),
         p: ({ children: c, className, ...rest }) => (
-          <p {...rest} className={`mb-2 leading-[1.65] break-keep ${className ?? ''}`}>
+          <p {...rest} className={`mb-2 leading-[2] break-keep ${className ?? ''}`}>
             {c}
           </p>
         ),
         ul: ({ children: c, className, ...rest }) => (
-          <ul {...rest} className={`mb-2 list-disc pl-5 ${className ?? ''}`}>
+          <ul {...rest} className={`mb-2 list-disc pl-13 ${className ?? ''}`}>
             {c}
           </ul>
         ),
         ol: ({ children: c, className, ...rest }) => (
-          <ol {...rest} className={`mb-2 list-decimal pl-5 ${className ?? ''}`}>
+          <ol {...rest} className={`mb-2 list-decimal pl-13 ${className ?? ''}`}>
             {c}
           </ol>
         ),

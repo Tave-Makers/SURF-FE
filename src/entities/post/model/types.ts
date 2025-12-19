@@ -1,4 +1,4 @@
-import { ImageItemResponse } from '../api/types';
+import { ImageItemResponse, PostScheduleData } from '../api/types';
 import { POST_BOARDS } from './board';
 import { PostCategoryLabel } from './category';
 
@@ -28,6 +28,9 @@ export type PostDetail = {
   isMine: boolean;
   categoryId: number;
   categoryLabel: string | null;
+  schedule?: PostScheduleData | null;
+  profileImageUrl?: string;
+  postedAt: string;
 };
 
 // 게시판

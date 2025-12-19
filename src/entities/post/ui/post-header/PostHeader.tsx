@@ -1,7 +1,7 @@
 import Link from 'next/link';
 
 export type CategoryItem = {
-  title: string;
+  title: string | null;
   href?: string;
 };
 
@@ -32,7 +32,7 @@ export function PostHeader({ title, category, subCategory }: PostHeaderProps) {
       {category && (
         <nav
           aria-label="게시글 카테고리 경로"
-          className="text-caption-caption4 text-foreground-foreground-normal flex gap-3"
+          className="text-caption-caption4 text-foreground-normal flex gap-3"
         >
           {renderCategory(category)}
           {subCategory && (
@@ -45,7 +45,7 @@ export function PostHeader({ title, category, subCategory }: PostHeaderProps) {
           )}
         </nav>
       )}
-      <h1 className="text-foreground-foreground-normal text-body-body3 pt-10">{title}</h1>
+      <h1 className="text-foreground-normal text-body-body3 pt-10">{title}</h1>
     </header>
   );
 }

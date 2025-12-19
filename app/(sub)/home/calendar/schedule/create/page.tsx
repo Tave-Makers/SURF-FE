@@ -1,5 +1,7 @@
-import CalendarSchedulePage from '@/app-pages/home/calendar/schedule/create/ui/CalendarSchedulePage';
+'use client';
 
-export default function Page() {
-  return <CalendarSchedulePage />;
+import ScheduleEditorContainer from '@/widgets/schedule/ui/ScheduleEditorContainer';
+
+export default function CreateSchedulePage() {
+  return <ScheduleEditorContainer entryPoint="calendar" />;
 }

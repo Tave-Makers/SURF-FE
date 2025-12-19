@@ -2,7 +2,7 @@ export type ActivityCategory = 'official' | 'operation' | 'other';
 export type EventCardType = 'reservation' | 'calendar';
 
 export type DailyActivity = {
-  id: number | string;
+  id: number;
   category: ActivityCategory;
   title: string;
   startDate: Date | null;

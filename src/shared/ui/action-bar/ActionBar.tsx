@@ -9,7 +9,34 @@ import { SurfIcon } from '../icon/SurfIcon';
  * Controlled / Uncontrolled 양쪽 모드 모두 지원합니다.
  *
  * ---
+<<<<<<< HEAD
+ * ### 🧩 사용 예시
+ *
+ * **Controlled**
+ * ```tsx
+ * const [message, setMessage] = useState('');
+ * <ActionBar
+ *   value={message}
+ *   onChange={setMessage}
+ *   onSend={(msg) => console.log('전송됨:', msg)}
+ *   placeholder="메시지를 입력하세요"
+ * />
+ * ```
+ *
+ * **Uncontrolled**
+ * ```tsx
+ * <ActionBar
+ *   defaultValue="안녕하세요"
+ *   onSend={(msg) => console.log('전송됨:', msg)}
+ *   placeholder="메시지를 입력하세요"
+ * />
+ * ```
+ *
+ * ---
+ * ### ⚙️ Props
+=======
  * ### Props
+>>>>>>> develop
  * @typedef {object} ActionBarProps
  * @param {string} [value] - 입력값 (Controlled 모드)
  * @param {string} [defaultValue] - 초기값 (Uncontrolled 모드)
@@ -20,7 +47,11 @@ import { SurfIcon } from '../icon/SurfIcon';
  * @param {boolean} [isEmojiActive=false] - 이모지 버튼 활성화 여부 (true일 경우 Solid 아이콘 표시)
  *
  * ---
+<<<<<<< HEAD
+ * ### 🧠 기타
+=======
  * ### 기타
+>>>>>>> develop
  * - 전송 후 입력값은 자동으로 초기화됩니다.
  * - ref를 사용해 부모 컴포넌트에서 직접 포커스 제어가 가능합니다.
  */
@@ -63,7 +94,7 @@ export const ActionBar = forwardRef<HTMLTextAreaElement, ActionBarProps>(
     };
 
     return (
-      <div className="border-border-border-normal bg-background-background-normal-lighter flex w-full items-center gap-10 border-t px-13 pt-13 pb-15">
+      <div className="border-border-normal bg-background-normal-lighter flex w-full items-center gap-10 border-t px-13 pt-13 pb-15">
         <TextInput
           mode="chat"
           ref={internalRef}
@@ -78,12 +109,12 @@ export const ActionBar = forwardRef<HTMLTextAreaElement, ActionBarProps>(
         <button
           type="button"
           onClick={handleSend}
-          className="bg-background-background-primary group hover:bg-background-background-primary-darker rounded-max flex h-[2.25rem] w-[2.25rem] shrink-0 items-center justify-center self-end p-7"
+          className="bg-background-primary group hover:bg-background-primary-darker rounded-max flex h-[2.25rem] w-[2.25rem] shrink-0 items-center justify-center self-end p-7"
         >
           <SurfIcon
             name="ArrowUp"
             size="l"
-            className="text-foreground-foreground-accent group-hover:text-foreground-foreground-accent-hover transition-colors duration-200"
+            className="text-foreground-accent group-hover:text-foreground-accent-hover transition-colors duration-200"
           />
         </button>
       </div>

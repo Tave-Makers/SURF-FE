@@ -3,25 +3,25 @@
 import { ToolBarItems } from './ToolBarItems';
 import { IconName } from '@/shared/ui/icon/SurfIcon';
 
-export type ToolBarItem = {
-  key: string;
+export type ToolBarItem<K extends string> = {
+  key: K;
   label: string;
   icon: IconName;
   active?: boolean;
 };
 
-type ToolBarProps = {
-  items: ToolBarItem[];
-  onItemClick?: (key: string) => void;
+type ToolBarProps<K extends string> = {
+  items: ToolBarItem<K>[];
+  onItemClick?: (key: K) => void;
   className?: string;
 };
 
-export function ToolBar({ items, onItemClick, className = '' }: ToolBarProps) {
+export function ToolBar<K extends string>({ items, onItemClick, className = '' }: ToolBarProps<K>) {
   return (
     <nav
       className={[
         'flex w-full items-center gap-15 px-13 py-8',
-        'rounded-1 border-border-border-tertiary border-t-1 opacity-100',
+        'rounded-1 border-border-tertiary border-t-1 opacity-100',
         className,
       ].join(' ')}
     >
@@ -30,6 +30,7 @@ export function ToolBar({ items, onItemClick, className = '' }: ToolBarProps) {
           key={item.key}
           label={item.label}
           icon={item.icon}
+          active={item.active}
           onClick={() => {
             onItemClick?.(item.key);
           }}

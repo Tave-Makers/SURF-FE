@@ -85,7 +85,7 @@ export default function ActivityScorePage() {
             <button
               type="button"
               onClick={() => void refetchSummary()}
-              className="bg-background-background-primary rounded px-[1rem] py-[0.5rem] text-white"
+              className="bg-background-primary rounded px-[1rem] py-[0.5rem] text-white"
             >
               다시 시도
             </button>
@@ -122,7 +122,7 @@ export default function ActivityScorePage() {
             <button
               type="button"
               onClick={() => void refetchHistory()}
-              className="bg-background-background-primary rounded px-[1rem] py-[0.5rem] text-white"
+              className="bg-background-primary rounded px-[1rem] py-[0.5rem] text-white"
             >
               다시 시도
             </button>
@@ -130,7 +130,7 @@ export default function ActivityScorePage() {
         )}
 
         {!isHistoryLoading && !isHistoryError && history.length === 0 && (
-          <div className="text-body-body8 text-foreground-foreground-tertiary text-center">
+          <div className="text-body-body8 text-foreground-tertiary text-center">
             활동 내역이 없습니다.
           </div>
         )}
@@ -141,7 +141,7 @@ export default function ActivityScorePage() {
         {hasNextPage && (
           <div
             ref={loadMoreRef}
-            className="text-body-body8 text-foreground-foreground-tertiary flex items-center justify-center py-[1rem]"
+            className="text-body-body8 text-foreground-tertiary flex items-center justify-center py-[1rem]"
             aria-live="polite"
             aria-atomic="true"
           >

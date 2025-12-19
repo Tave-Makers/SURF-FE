@@ -5,7 +5,7 @@ import { formatDateTime } from '@/shared/utils/date';
 
 export type NOTIFICATION_BADGE = 'LIKE' | 'MENTION';
 
-export type NotificationItemProps = {
+export interface NotificationItemProps {
   id: number;
   userImageUrl?: string;
   title: string;
@@ -13,7 +13,7 @@ export type NotificationItemProps = {
   badge?: NOTIFICATION_BADGE;
   isRead: boolean;
   onClick?: () => void;
-};
+}
 
 export const NotificationItem = ({
   userImageUrl,
@@ -41,7 +41,7 @@ export const NotificationItem = ({
       )}
 
       {/* 내용 */}
-      <div className="flex flex-col items-start gap-7">
+      <div className="flex flex-col items-start gap-7 text-left">
         <h4 className="text-foreground-normal text-body-body7">{title}</h4>
         <time className="text-caption-caption4 text-foreground-quinary-darker">
           {formatDateTime(time)}

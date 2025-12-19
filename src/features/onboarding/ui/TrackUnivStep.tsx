@@ -66,7 +66,10 @@ export function TrackUnivStep() {
               />
 
               {fields.length > 1 && (
-                <button onClick={() => remove(idx)} className="p-8">
+                <button
+                  onClick={() => remove(idx)}
+                  className="flex h-[2.5rem] w-[2.5rem] items-center justify-center"
+                >
                   <SurfIcon size="l" name="TrashOne" />
                 </button>
               )}

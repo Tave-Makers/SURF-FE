@@ -7,13 +7,11 @@ import { ScheduleFormData } from '@/features/schedule/create/model/types';
 type Props = {
   title: string;
   category: string;
-  editorStateRef: React.MutableRefObject<EditorState>;
+  editorStateRef: React.RefObject<EditorState>;
   linkedSchedule: ScheduleFormData | null;
   reserved: boolean;
   reservedAt: Date | null;
-  initialSnapshot: React.MutableRefObject<
-    PostSnapshot & { initialSchedule: ScheduleFormData | null }
-  >;
+  initialSnapshot: React.RefObject<PostSnapshot & { initialSchedule: ScheduleFormData | null }>;
 };
 
 export const usePostDirtyCheck = ({

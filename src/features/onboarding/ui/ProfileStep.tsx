@@ -10,7 +10,7 @@ export function ProfileStep() {
   return (
     <>
       {/* 프로필 이미지 업로더 */}
-      <div className="flex items-center justify-center gap-[0.62rem] self-stretch pt-[2.5rem] pb-[0.62rem]">
+      <div className="flex items-center justify-center gap-10 self-stretch pt-19 pb-10">
         <Controller
           name="profileImageUrl"
           control={control}
@@ -21,7 +21,7 @@ export function ProfileStep() {
       </div>
 
       {/* 이름 입력 */}
-      <div className="flex w-full flex-col items-start gap-[0.62rem] self-stretch">
+      <div className="flex w-full flex-col items-start gap-10 self-stretch">
         <FieldGroup title="이름" isRequired className="w-full">
           <Controller
             name="name"

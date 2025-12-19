@@ -50,7 +50,7 @@ export function TrackUnivStep() {
       <div>
         <FieldGroup title="기수 및 파트" isRequired>
           {fields.map((field, idx) => (
-            <div key={field.id} className="flex items-center gap-[0.25rem]">
+            <div key={field.id} className="flex items-center gap-5">
               <SelectField
                 size="l"
                 placeholder="기수 및 파트를 선택해주세요"
@@ -66,7 +66,7 @@ export function TrackUnivStep() {
               />
 
               {fields.length > 1 && (
-                <button onClick={() => remove(idx)} className="p-[0.6rem]">
+                <button onClick={() => remove(idx)} className="p-8">
                   <SurfIcon size="l" name="TrashOne" />
                 </button>
               )}
@@ -79,7 +79,7 @@ export function TrackUnivStep() {
             size="s"
             variant="secondary"
             onClick={() => append({ generation: null, part: null })}
-            className="my-[0.625rem]"
+            className="my-10"
           >
             추가하기
           </SolidButton>
@@ -87,7 +87,7 @@ export function TrackUnivStep() {
       </div>
 
       {/* 대학교 및 대학원 */}
-      <div className="flex flex-col gap-[0.5rem]">
+      <div className="flex flex-col gap-3">
         <FieldGroup title="대학교" isRequired>
           <Controller
             name="university"

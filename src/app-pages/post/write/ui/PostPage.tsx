@@ -96,7 +96,7 @@ export default function PostPage(props: PostPageProps) {
       {/* 2. 카테고리 선택 */}
       <div className="px-13">
         <AccordionSelect
-          title={POST_CATEGORIES[category!].label}
+          title={POST_CATEGORIES[category].label}
           isOpen={isCategoryOpen}
           onClick={openCategory}
           controlsId={categorySheetId}

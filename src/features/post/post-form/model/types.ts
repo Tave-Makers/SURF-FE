@@ -19,3 +19,17 @@ export type EditorState = {
 };
 
 export type PostPageMode = 'create' | 'edit';
+
+export interface PostFormState {
+  title: string;
+  category: PostCategoryKey;
+  content: string;
+  images: UploadImage[];
+  reserved: boolean;
+  reservedAt: Date | null;
+
+  // Actions
+  setField: <K extends keyof PostFormState>(field: K, value: PostFormState[K]) => void;
+  setEditorState: (content: string, images: UploadImage[]) => void;
+  resetForm: () => void;
+}

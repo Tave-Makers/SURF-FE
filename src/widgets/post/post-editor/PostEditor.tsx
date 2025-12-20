@@ -159,7 +159,7 @@ export const PostEditor = ({
             if (!editor.isFocused) editor.commands.focus('end');
           }}
         />
-        <EditorContent editor={editor} className="relative z-10 w-full" />
+        <EditorContent editor={editor} />
       </div>
 
       {/* 이미지 리스트 영역 */}

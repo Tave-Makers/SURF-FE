@@ -1,23 +1,6 @@
 import { PostCategoryKey } from '@/entities/post/model/category';
 import { UploadImage } from '@/entities/image/model/types';
 
-// 비교를 위한 스냅샷 타입
-export type PostSnapshot = {
-  title: string;
-  category: PostCategoryKey;
-  content: string;
-  imageUrls: (string | null)[];
-  reserved: boolean;
-  reservedAt: Date | null;
-  scheduleId: number | null;
-};
-
-// 에디터 내부 상태 타입
-export type EditorState = {
-  content: string;
-  images: UploadImage[];
-};
-
 export type PostPageMode = 'create' | 'edit';
 
 export interface PostFormState {
@@ -33,3 +16,13 @@ export interface PostFormState {
   setEditorState: (content: string, images: UploadImage[]) => void;
   resetForm: () => void;
 }
+
+export type EditorState = Pick<PostFormState, 'content' | 'images'>;
+
+export type PostSnapshot = Pick<
+  PostFormState,
+  'title' | 'category' | 'content' | 'reserved' | 'reservedAt'
+> & {
+  imageUrls: (string | null)[]; // UploadImage 객체 대신 URL 문자열 배열로 비교
+  scheduleId: number | null; // 게시글 외적 요소이므로 별도 추가
+};

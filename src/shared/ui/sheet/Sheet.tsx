@@ -24,11 +24,11 @@ export function Sheet({ title, description, children }: SheetProps) {
   const renderTitleSection = () => (
     <div className="flex w-full flex-col gap-5">
       {title && (
-        <h2 id="sheet-title" className="text-foreground-normal text-title-title2">
+        <div id="sheet-title" className="text-foreground-normal text-title-title2">
           {title}
-        </h2>
+        </div>
       )}
-      {description && <h3 className="text-body-body9 text-foreground-tertiary">{description}</h3>}
+      {description && <div className="text-body-body9 text-foreground-tertiary">{description}</div>}
     </div>
   );
 

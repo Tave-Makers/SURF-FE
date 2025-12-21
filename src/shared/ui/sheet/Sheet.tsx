@@ -37,6 +37,7 @@ export function Sheet({ title, description, children }: SheetProps) {
       role="dialog"
       aria-modal="true"
       aria-labelledby={title ? 'sheet-title' : undefined}
+      aria-describedby={description}
       className="rounded-t-4 bg-background-normal flex w-full flex-col items-start"
     >
       <header className="flex w-full justify-center pt-9" aria-label="드래그 핸들">

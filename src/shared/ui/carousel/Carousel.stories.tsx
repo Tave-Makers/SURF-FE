@@ -2,7 +2,7 @@ import type { Meta, StoryObj } from '@storybook/nextjs';
 import { Carousel } from './Carousel';
 
 const meta: Meta<typeof Carousel> = {
-  title: 'Shared/UI/Carousel',
+  title: 'Shared/UI/Carousel/Carousel',
   component: Carousel,
   tags: ['autodocs'],
   argTypes: {

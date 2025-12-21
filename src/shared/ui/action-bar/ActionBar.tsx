@@ -25,7 +25,7 @@ import { SurfIcon } from '../icon/SurfIcon';
  * - ref를 사용해 부모 컴포넌트에서 직접 포커스 제어가 가능합니다.
  */
 
-type ActionBarProps = {
+interface ActionBarProps {
   value?: string;
   defaultValue?: string;
   onChange?: (val: string) => void;
@@ -33,7 +33,7 @@ type ActionBarProps = {
   onSend?: (val: string) => void;
   onIconClick?: () => void;
   isEmojiActive?: boolean;
-};
+}
 
 export const ActionBar = forwardRef<HTMLTextAreaElement, ActionBarProps>(
   (

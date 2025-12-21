@@ -2,7 +2,7 @@
 
 import { useCallback, useEffect, useRef, useState } from 'react';
 import { Pagenation } from '../pagenation/Pagenation';
-import { SurfIcon } from '@/shared/ui/icon/SurfIcon';
+import { Control } from './Control';
 
 interface CarouselImage {
   src: string;
@@ -15,7 +15,7 @@ interface CarouselProps {
 }
 
 const baseStyle =
-  'rounded-5 w-full h-[150px] relative overflow-hidden bg-white bg-gradient-to-b from-[rgba(0,0,0,0)] to-[rgba(0,0,0,0.3)] shadow-[0_2px_8px_rgba(0,0,0,0.06)]';
+  'rounded-5 w-full h-[9.375rem] relative overflow-hidden bg-white bg-gradient-to-b from-background-carousel-start to-background-carousel-end shadow-[0_2px_8px_rgba(0,0,0,0.06)]';
 
 export const Carousel = ({ images, className = '' }: CarouselProps) => {
   const [current, setCurrent] = useState(0);
@@ -52,21 +52,33 @@ export const Carousel = ({ images, className = '' }: CarouselProps) => {
 
   return (
     <div className={`${baseStyle} ${className}`}>
-      <img
-        src={images[current].src}
-        alt={images[current].alt}
-        className="rounded-5 h-full w-full object-cover"
-      />
+      <div
+        className="flex h-full transition-transform duration-500 ease-in-out"
+        style={{ transform: `translateX(-${current * 100}%)` }}
+      >
+        {images.map((img, idx) => (
+          <img
+            key={idx}
+            src={img.src}
+            alt={img.alt}
+            className="h-full w-full flex-shrink-0 object-cover"
+          />
+        ))}
+      </div>
 
       {/* 좌측 버튼 */}
-      <button onClick={handlePrev} className="absolute top-1/2 left-[10px] -translate-y-1/2">
-        <SurfIcon name="ChevronLeft" size="s" />
-      </button>
+      <Control
+        direction="left"
+        onClick={handlePrev}
+        className="absolute top-1/2 left-[10px] -translate-y-1/2"
+      />
 
       {/* 우측 버튼 */}
-      <button onClick={handleNext} className="absolute top-1/2 right-[10px] -translate-y-1/2">
-        <SurfIcon name="ChevronRight" size="s" />
-      </button>
+      <Control
+        direction="right"
+        onClick={handleNext}
+        className="absolute top-1/2 right-[10px] -translate-y-1/2"
+      />
 
       {/* 페이지네이션 */}
       <Pagenation

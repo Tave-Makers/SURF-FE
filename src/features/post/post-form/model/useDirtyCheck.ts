@@ -10,14 +10,21 @@ export const usePostDirtyCheck = () => {
   const { linkedSchedule } = useCreatePostScheduleStore();
 
   const checkHasChanges = useCallback(() => {
+    // 공통: 현재 에디터가 비어있는지 판단
+    const isEmpty = !title.trim() && stripHtml(content).trim() === '' && images.length === 0;
+
+    // 생성 모드: 스냅샷이 없는 경우
     if (!initialSnapshot) {
-      // 스냅샷이 없으면 현재 폼 상태로 isEmpty 판단
-      console.log('title: ', title);
-      console.log('content: ', content);
-      const isEmpty = !title.trim() && stripHtml(content).trim() === '' && images.length === 0;
-      return { hasChanges: false, isEmpty };
+      return {
+        hasChanges: !isEmpty,
+        isEmpty,
+        isImagesChanged: images.length > 0,
+        isReservationChanged: reserved || !!reservedAt,
+        isScheduleChanged: !!linkedSchedule,
+      };
     }
 
+    // 수정 모드: 스냅샷이 있는 경우
     // 현재 이미지 URL 리스트 가공 (uploadedUrl만 추출)
     const currentImageUrls = images.map((img) => img.uploadedUrl ?? null);
 
@@ -45,8 +52,6 @@ export const usePostDirtyCheck = () => {
     } else {
       isScheduleChanged = !isSameSchedule(linkedSchedule, initialSchedule);
     }
-
-    const isEmpty = !title.trim() && stripHtml(content).trim() === '' && images.length === 0;
 
     return {
       hasChanges:

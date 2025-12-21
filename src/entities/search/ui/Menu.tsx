@@ -2,6 +2,11 @@ import { useState } from 'react';
 import { MenuTrigger, MenuDropDown, MenuItem } from '@/shared/ui/menu';
 import type { MenuItemProps } from '@/shared/ui/menu/menu-item/MenuItem';
 
+/**
+ * @param label - 메뉴 트리거에 표시될 라벨 텍스트
+ * @param itemList - 메뉴 아이템 리스트
+ */
+
 interface MenuProps {
   label: string;
   itemList?: MenuItemProps[];

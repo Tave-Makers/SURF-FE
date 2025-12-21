@@ -36,7 +36,7 @@ const calendarClassNames = {
   months: 'w-full justify-center items-center',
   month: 'grid grid-cols-7',
   month_grid:
-    'block flex flex-col w-full rounded-5 px-3 pb-10 bg-background-background-normal shadow-[0_0_30px_0_rgba(0,0,0,0.05)]',
+    'block flex flex-col w-full rounded-5 px-3 pb-10 bg-background-normal shadow-[0_0_30px_0_rgba(0,0,0,0.05)]',
   week: 'grid grid-cols-7 px-3',
   cell: 'min-w-0',
   day: 'w-full min-w-0',
@@ -44,7 +44,7 @@ const calendarClassNames = {
   tfoot: 'hidden',
   weekdays: 'flex flex-1 grid grid-cols-7',
   weekday:
-    'flex-1 min-w-[2.81rem] p-10 text-center text-body-body8 text-foreground-foreground-secondary-lighter',
+    'flex-1 min-w-[2.81rem] p-10 text-center text-body-body8 text-foreground-secondary-lighter',
 } as const;
 
 type CalendarProps = {

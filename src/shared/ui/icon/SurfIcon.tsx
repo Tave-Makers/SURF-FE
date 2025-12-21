@@ -1,7 +1,7 @@
 import * as Icons from '@mynaui/icons-react';
 import { ComponentType } from 'react';
 
-type IconSize = 's' | 'm' | 'l';
+type IconSize = 's' | 'm' | 'l' | 'xl';
 export type IconName = Extract<keyof typeof Icons, string>;
 
 type BaseIconProps = {
@@ -16,8 +16,8 @@ interface IconProps {
   className?: string;
 }
 
-const sizeMap: Record<IconSize, number> = { s: 16, m: 20, l: 24 };
-const strokeMap: Record<IconSize, number> = { s: 1.2, m: 1.5, l: 1.5 };
+const sizeMap: Record<IconSize, number> = { s: 16, m: 20, l: 24, xl: 28 };
+const strokeMap: Record<IconSize, number> = { s: 1.2, m: 1.5, l: 1.5, xl: 1.75 };
 
 export const SurfIcon = ({ name, size = 'm', className = '' }: IconProps) => {
   const icons = Icons as unknown as Record<string, ComponentType<BaseIconProps>>;
@@ -33,7 +33,7 @@ export const SurfIcon = ({ name, size = 'm', className = '' }: IconProps) => {
   return (
     <IconComponent
       size={sizeMap[size]}
-      className={`inline-block transition-colors duration-200 ${className}`}
+      className={`inline-block ${className}`}
       {...(!isSolid && { stroke: strokeMap[size] })}
     />
   );

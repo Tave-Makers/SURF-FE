@@ -16,9 +16,7 @@ export function ToolBarItems({ label, icon, onClick, active }: ToolBarItemsProps
       type="button"
       aria-pressed={active}
       onClick={onClick}
-      className={
-        'text-foreground-foreground-normal inline-flex items-center gap-5 focus:outline-none'
-      }
+      className={'text-foreground-normal inline-flex items-center gap-5 focus:outline-none'}
     >
       <SurfIcon name={icon} size="m" />
       <span className="text-body-body9">{label}</span>

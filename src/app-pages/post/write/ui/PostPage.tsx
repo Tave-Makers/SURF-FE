@@ -7,10 +7,14 @@ import { Sheet as ModalSheet } from 'react-modal-sheet';
 import { AppHeader } from '@/widgets/header/ui/AppHeader';
 import { HeaderMode } from '@/shared/ui/header/Header';
 import { Alert } from '@/shared/ui/alert/Alert';
-import { usePostForm } from '../lib/usePostForm';
+import { usePostForm } from '../../../../features/post/post-form/model/usePostForm';
 import { useRouter } from 'next/navigation';
 import { POST_VALIDATION } from '@/entities/post/model/validation';
 import { POST_BOARDS } from '@/entities/post/model/board';
+import { PostBadge } from '@/entities/post/ui/post-badge/PostBadge';
+import { useEffect, useState } from 'react';
+import { Sheet } from '@/shared/ui/sheet/Sheet';
+import { DateTimePicker } from '@/entities/schedule/ui/DateTimePicker/DateTimePicker';
 
 type PostPageProps =
   | { mode: 'create'; boardId: string }
@@ -34,13 +38,39 @@ export default function PostPage(props: PostPageProps) {
     selectCategory,
     initialContent,
     initialImages,
+    linkedSchedule,
+    handleScheduleRemove,
     showExitAlert,
     setShowExitAlert,
+    isReservationModalOpen,
+    openReservationModal,
+    closeReservationModal,
+    reserved,
+    setReserved,
+    reservedAt,
+    setReservedAt,
     isSubmitDisabled,
     handleEditorChange,
     handleBack,
     handleSubmit,
+    resetPostState,
   } = usePostForm({ mode, boardId, postId });
+
+  // 예약 시간 임시 저장용 state (취소 시 롤백 위함)
+  const [tempDate, setTempDate] = useState<Date>(new Date());
+
+  // 모달 열릴 때 현재 예약 시간으로 초기화
+  useEffect(() => {
+    if (isReservationModalOpen) {
+      setTempDate(reservedAt || new Date());
+    }
+  }, [isReservationModalOpen, reservedAt]);
+
+  const handleSaveReservation = () => {
+    setReservedAt(tempDate);
+    setReserved(true);
+    closeReservationModal();
+  };
 
   const board = POST_BOARDS.find((b) => b.id === Number(boardId));
   const boardLabel = board ? board.label : '';
@@ -73,6 +103,13 @@ export default function PostPage(props: PostPageProps) {
         />
       </div>
 
+      {/* 예약중 태그 */}
+      {reserved && reservedAt && (
+        <div className="px-13 pt-10">
+          <PostBadge type="reservation" />
+        </div>
+      )}
+
       {/* 3. 카테고리 시트 */}
       <ModalSheet
         isOpen={isCategoryOpen}
@@ -83,7 +120,7 @@ export default function PostPage(props: PostPageProps) {
         <ModalSheet.Container>
           <ModalSheet.Header />
           <ModalSheet.Content>
-            <div id={categorySheetId} className="flex flex-col gap-[0.25rem] p-15">
+            <div id={categorySheetId} className="flex flex-col gap-5 p-15">
               {Object.values(POST_CATEGORIES).map((item) => (
                 <button
                   key={item.id}
@@ -91,8 +128,8 @@ export default function PostPage(props: PostPageProps) {
                   onClick={() => selectCategory(item.key)}
                   className={`rounded-md px-5 py-10 text-left transition-colors ${
                     category === item.key
-                      ? 'bg-background-background-secondary font-semibold'
-                      : 'hover:bg-background-background-secondary'
+                      ? 'bg-background-secondary font-semibold'
+                      : 'hover:bg-background-secondary'
                   }`}
                 >
                   {item.label}
@@ -115,7 +152,7 @@ export default function PostPage(props: PostPageProps) {
           maxLength={MAX_TITLE_LENGTH}
           onChange={(e) => setTitle(e.target.value)}
           placeholder="제목을 입력해주세요."
-          className="text-foreground-foreground-normal placeholder:foreground-foreground-tertiary-lighter text-body-body3 flex flex-1 pt-10 pb-5 focus:outline-none"
+          className="text-foreground-normal placeholder:foreground-tertiary-lighter text-body-body3 flex flex-1 pt-10 pb-5 focus:outline-none"
         />
       </div>
 
@@ -124,12 +161,40 @@ export default function PostPage(props: PostPageProps) {
         <PostEditor
           initialContent={initialContent}
           initialImages={initialImages}
+          linkedSchedule={linkedSchedule}
           onChange={handleEditorChange}
           onInitialized={() => {}}
+          onScheduleRemove={handleScheduleRemove}
+          onReservationClick={openReservationModal}
         />
       </div>
 
-      {/* 6. 뒤로가기 경고 모달 */}
+      {/* 6. 예약 설정 모달 */}
+      {/* TODO: 리팩토링 필요 */}
+      <ModalSheet
+        isOpen={isReservationModalOpen}
+        onClose={closeReservationModal}
+        className="mx-auto flex w-full sm:w-[360px]"
+      >
+        <ModalSheet.Container>
+          <ModalSheet.Header />
+          <ModalSheet.Content>
+            <Sheet
+              title="게시글 예약 설정"
+              description="해당 시간에 맞춰 게시글이 예약됩니다"
+              primaryBtn={{ label: '예약하기', onClick: handleSaveReservation }}
+              secondaryBtn={{ label: '취소하기', onClick: closeReservationModal }}
+            >
+              <div>
+                <DateTimePicker value={tempDate} onChange={setTempDate} />
+              </div>
+            </Sheet>
+          </ModalSheet.Content>
+        </ModalSheet.Container>
+        <ModalSheet.Backdrop onTap={closeReservationModal} />
+      </ModalSheet>
+
+      {/* 7. 뒤로가기 경고 모달 */}
       <Alert
         state="default"
         title="변경 내용을 저장하지 않고 나가시겠습니까?"
@@ -149,6 +214,7 @@ export default function PostPage(props: PostPageProps) {
             variant: 'danger',
             onClick: () => {
               setShowExitAlert(false);
+              resetPostState();
               router.back();
             },
           },

@@ -17,8 +17,14 @@ export const useUpdatePost = (postId: number) => {
 
       // 게시판 목록 invalidate
       const categoryKey = categoryIdToKey(mappedRes.categoryId);
+
       void queryClient.invalidateQueries({
         queryKey: postQueryKeys.boardPosts(mappedRes.boardId, categoryKey),
+      });
+
+      // 게시글 상세 조회 invalidate
+      void queryClient.invalidateQueries({
+        queryKey: postQueryKeys.postDetail(postId),
       });
 
       // 내 게시글 목록 invalidate

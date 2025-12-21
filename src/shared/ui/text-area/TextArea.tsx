@@ -167,7 +167,12 @@ export const TextArea = forwardRef<HTMLTextAreaElement, TextAreaProps>(
         </div>
 
         {errorMessage ? (
-          <div id={errorId} className="text-caption-caption6 text-foreground-danger px-10">
+          <div
+            id={errorId}
+            className="text-caption-caption6 text-foreground-danger px-10"
+            role="alert"
+            aria-live="polite"
+          >
             {errorMessage}
           </div>
         ) : guideMessage ? (

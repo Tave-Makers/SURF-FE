@@ -8,8 +8,8 @@ interface UseDynamicVisibleCountProps<T> {
 
 export const useDynamicVisibleCount = <T>({
   items,
-  gap = 20,
-  moreBadgeWidth = 40,
+  gap = 4,
+  moreBadgeWidth = 28,
 }: UseDynamicVisibleCountProps<T>) => {
   // 실제 보여줄 개수 상태
   const [visibleCount, setVisibleCount] = useState(items.length);

@@ -1,6 +1,32 @@
 'use client';
 
-import { forwardRef, InputHTMLAttributes, ChangeEvent, useId } from 'react';
+import { forwardRef, useId, type InputHTMLAttributes, type ChangeEvent } from 'react';
+
+const labelBaseStyle = 'inline-flex w-fit items-center gap-10 group';
+
+const labelEnabledStyle = 'cursor-pointer';
+
+const labelDisabledStyle = '!cursor-not-allowed';
+
+const inputHiddenStyle = 'sr-only';
+
+const trackStyle =
+  'relative h-[1.1875rem] w-[1.875rem] rounded-full ' +
+  'bg-background-secondary transition-colors duration-300 ' +
+  'group-has-[:checked]:bg-background-primary ' +
+  'group-has-[:disabled]:bg-background-secondary ' +
+  'group-has-[:focus-visible]:outline-[1.5px] ' +
+  'group-has-[:focus-visible]:outline-offset-2';
+
+const handleStyle =
+  'absolute top-[0.125rem] left-[0.125rem] ' +
+  'h-[0.9375rem] w-[0.9375rem] rounded-full ' +
+  'bg-foreground-static-white ' +
+  'transition-transform duration-300 will-change-transform ' +
+  'group-has-[:checked]:translate-x-[0.6875rem] ' +
+  'group-has-[:disabled]:bg-background-secondary-darker';
+
+const labelTextStyle = 'text-body-body10 text-foreground-normal';
 
 type BaseProps = Omit<
   InputHTMLAttributes<HTMLInputElement>,
@@ -26,39 +52,52 @@ type UncontrolledProps = {
 
 export type ToggleProps = BaseProps & (ControlledProps | UncontrolledProps);
 
+/**
+ *
+ * @param props - Toggle 컴포넌트 props
+ * @param props.id - input id (미지정 시 자동 생성)
+ * @param props.label - 토글 우측에 표시되는 라벨 텍스트
+ * @param props.isChecked - (controlled) 현재 토글 상태
+ * @param props.isDefaultChecked - (uncontrolled) 초기 토글 상태
+ * @param props.onChange - 토글 상태 변경 시 호출되는 콜백
+ * @param props.isDisabled - 토글 비활성화 여부
+ */
 export const Toggle = forwardRef<HTMLInputElement, ToggleProps>(
-  ({ id, label, isChecked, isDefaultChecked, isDisabled, name, value, ...rest }, ref) => {
+  (
+    { id, label, isChecked, isDefaultChecked, isDisabled, name, value, className, ...rest },
+    ref,
+  ) => {
     const autoId = useId();
     const inputId = id ?? autoId;
 
     return (
       <label
         htmlFor={inputId}
-        className={`inline-flex w-fit items-center gap-10 ${
-          isDisabled ? '!cursor-not-allowed' : 'cursor-pointer'
-        } group`}
+        className={[
+          labelBaseStyle,
+          isDisabled ? labelDisabledStyle : labelEnabledStyle,
+          className,
+        ].join(' ')}
       >
         <input
           id={inputId}
-          type="checkbox"
           ref={ref}
+          type="checkbox"
           name={name}
           value={value}
           checked={isChecked}
           defaultChecked={isDefaultChecked}
           disabled={isDisabled}
           aria-label={label ? undefined : '토글 버튼'}
-          className="sr-only"
+          className={inputHiddenStyle}
           {...rest}
         />
-        {/* 토글 트랙 */}
-        <div className="bg-background-background-secondary group-has-[:checked]:bg-background-background-primary group-has-[:disabled]:bg-background-background-secondary relative h-[1.1875rem] w-[1.875rem] rounded-full transition-colors duration-300 group-has-[:focus-visible]:outline-[1.5px] group-has-[:focus-visible]:outline-offset-2">
-          {/* 토글 핸들 */}
-          <span className="bg-foreground-foreground-accent group-has-[:disabled]:bg-background-background-secondary-darker absolute top-[0.125rem] left-[0.125rem] h-[0.9375rem] w-[0.9375rem] rounded-full transition-transform duration-300 will-change-transform group-has-[:checked]:translate-x-[0.6875rem]" />
+
+        <div className={trackStyle}>
+          <span className={handleStyle} />
         </div>
-        {label && (
-          <span className="text-body-body10 text-foreground-foreground-normal">{label}</span>
-        )}
+
+        {label && <span className={labelTextStyle}>{label}</span>}
       </label>
     );
   },

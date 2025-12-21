@@ -17,6 +17,8 @@ import { UploadImage } from '@/entities/image/model/types';
 import { ScheduleFormData } from '@/features/schedule/create/model/types';
 import { POST_VALIDATION } from '@/entities/post/model/validation';
 import { PostPageMode } from '@/features/post/post-form/model/types';
+import { ScheduleCategory } from '@/entities/schedule/model/types';
+import { ActivityCategory } from '@/entities/calendar/model/types';
 
 export type PostEditorProps = {
   mode: PostPageMode;
@@ -141,15 +143,16 @@ export const PostEditor = ({
   const renderScheduleCard = () => {
     if (!linkedSchedule) return null;
 
-    const categoryMap = {
+    const categoryMap: Record<ScheduleCategory, ActivityCategory> = {
+      regular: 'official',
       operation: 'operation',
       other: 'other',
-    } as const;
+    };
 
     return (
       <div className="p-13">
         <EventCard
-          category={categoryMap[linkedSchedule.category as keyof typeof categoryMap] || 'official'}
+          category={categoryMap[linkedSchedule.category]}
           title={linkedSchedule.title}
           startDate={linkedSchedule.startDate}
           endDate={linkedSchedule.endDate}

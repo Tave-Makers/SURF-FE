@@ -14,7 +14,7 @@ export function BottomNavigation({ activeId, onNavigate }: BottomNavigationProps
     <nav
       role="navigation"
       aria-label="하단 네비게이션"
-      className="bg-background-normal rounded-t-5 bottom-0 left-0 flex w-full justify-around pb-13 shadow-[0_2px_30px_0_rgba(0,0,0,0.02)]"
+      className="bg-background-normal rounded-t-5 shadow-embossed-inverse bottom-0 left-0 flex w-full justify-around pb-13"
     >
       {BOTTOM_NAV_ITEMS.map((item) => (
         <button

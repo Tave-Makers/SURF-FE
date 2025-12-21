@@ -128,7 +128,7 @@ export const WithRef: Story = {
         />
         <button
           onClick={() => internalRef.current?.focus()}
-          className="bg-background-background-primary hover:bg-background-background-primary-darker rounded px-3 py-1 text-white transition-colors"
+          className="bg-background-primary hover:bg-background-primary-darker rounded px-3 py-1 text-white transition-colors"
         >
           포커스 주기
         </button>

@@ -28,21 +28,6 @@ export const createRouteConfig = (router: RouterInstance): RouteConfig[] => [
     },
   },
   {
-    id: 'chat',
-    path: '/chat',
-    backPath: '/home',
-    header: {
-      mode: HeaderMode.Default,
-      title: '채팅',
-      hasLeftIcon: true,
-      icons: [
-        { label: 'Search', onClickIcon: () => alert('검색') },
-        { label: 'Share', onClickIcon: () => alert('공유') },
-        { label: 'DotsVertical', onClickIcon: () => alert('메뉴') },
-      ],
-    },
-  },
-  {
     id: 'mypage',
     path: '/mypage',
     backPath: '/home',

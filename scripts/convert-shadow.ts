@@ -49,7 +49,7 @@ for (const key of shadowKeys) {
 
   const cssShadow = makeShadowString(shadowArray);
 
-  cssOutput += `  --box-shadow-${key}: ${cssShadow};\n`;
+  cssOutput += `  --shadow-${key}: ${cssShadow};\n`;
 }
 
 cssOutput += `}\n`;

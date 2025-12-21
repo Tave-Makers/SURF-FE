@@ -38,9 +38,7 @@ export const usePostInitialization = ({
 
     // 이미 스냅샷이 있는 경우 (뒤로가기 등 세션 유지 상황)
     if (initialSnapshot) {
-      if (content) {
-        setEditorState(content, images);
-      }
+      setEditorState(content, images);
       isInitializedRef.current = true;
       return;
     }

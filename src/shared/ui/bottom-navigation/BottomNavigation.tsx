@@ -4,24 +4,20 @@ import React from 'react';
 import { SurfIcon } from '@/shared/ui/icon/SurfIcon';
 import { BOTTOM_NAV_ITEMS } from '@/shared/config/bottom-nav';
 
-type BottomNavigationProps = {
+interface BottomNavigationProps {
   activeId: string;
   onNavigate: (id: string) => void; // 클릭 시 id만 전달
-};
+}
+
+const navStyle =
+  'bg-background-normal rounded-t-5 shadow-embossed-inverse bottom-0 left-0 flex w-full justify-around pb-13';
+const buttonStyle = 'flex flex-1 cursor-pointer flex-col items-center gap-6 pt-13';
 
 export function BottomNavigation({ activeId, onNavigate }: BottomNavigationProps) {
   return (
-    <nav
-      role="navigation"
-      aria-label="하단 네비게이션"
-      className="bg-background-normal rounded-t-5 shadow-embossed-inverse bottom-0 left-0 flex w-full justify-around pb-13"
-    >
+    <nav role="navigation" aria-label="하단 네비게이션" className={navStyle}>
       {BOTTOM_NAV_ITEMS.map((item) => (
-        <button
-          key={item.id}
-          onClick={() => onNavigate(item.id)}
-          className="flex flex-1 cursor-pointer flex-col items-center gap-6 pt-13"
-        >
+        <button key={item.id} onClick={() => onNavigate(item.id)} className={buttonStyle}>
           <SurfIcon
             name={activeId === item.id ? item.activeIcon : item.defaultIcon}
             size="l"

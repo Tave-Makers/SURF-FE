@@ -2,6 +2,7 @@
 @import './font-tokens.css';
 @import './color-tokens.css';
 @import './scheme-tokens.css';
+@import './shadow-tokens.css';
 
 /* 뷰포트 높이 전파 */
 html,

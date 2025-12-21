@@ -10,7 +10,7 @@ interface BottomNavigationProps {
 }
 
 const navStyle =
-  'bg-background-normal rounded-t-5 shadow-embossed-inverse bottom-0 left-0 flex w-full justify-around pb-13';
+  'bg-background-normal-lighter rounded-t-5 shadow-embossed-inverse bottom-0 left-0 flex w-full justify-around pb-13';
 const buttonStyle = 'flex flex-1 cursor-pointer flex-col items-center gap-6 pt-13';
 
 export function BottomNavigation({ activeId, onNavigate }: BottomNavigationProps) {

@@ -35,9 +35,7 @@ export const Default: Story = {
 
     return (
       <div>
-        <div className="text-body-body7 text-foreground-foreground-normal">
-          현재 활성 탭: {activeKey}
-        </div>
+        <div className="text-body-body7 text-foreground-normal">현재 활성 탭: {activeKey}</div>
 
         <ToolBar
           {...args}

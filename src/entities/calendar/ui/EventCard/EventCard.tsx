@@ -5,7 +5,7 @@ import { SurfIcon } from '@/shared/ui/icon/SurfIcon';
 import { formatScheduleDate } from '@/entities/calendar/utils/formatScheduleDate';
 import { ActivityCategory, EventCardType } from '@/entities/calendar/model/types';
 import { CalendarBadge } from '@/entities/calendar/ui/CalendarBadge/CalendarBadge';
-import { ScheduleActionSheet } from '@/features/calendar/schedule/ui/ScheduleActionSheet/ScheduleActionSheet';
+import { ScheduleActionSheet } from '@/features/schedule/ui/ScheduleActionSheet/ScheduleActionSheet';
 
 /**
  * 이벤트 카드 컴포넌트
@@ -81,7 +81,7 @@ export function EventCard({
   const formattedEndDate = formatScheduleDate(endDate);
 
   const baseClassNames =
-    'rounded-4 border-border-border-quinary bg-background-background-normal-lighter flex w-full flex-1 cursor-pointer flex-col items-start gap-8 border px-13 py-11';
+    'rounded-4 border-border-quinary bg-background-normal-lighter flex w-full flex-1 cursor-pointer flex-col items-start gap-8 border px-13 py-11';
 
   return (
     <>
@@ -104,15 +104,11 @@ export function EventCard({
 
             {showNoticeLink && (
               <div className="flex h-[1.18rem] cursor-pointer flex-row items-center gap-3">
-                <span className="text-caption-caption5 text-foreground-foreground-tertiary">
+                <span className="text-caption-caption5 text-foreground-tertiary">
                   공지사항 바로가기
                 </span>
                 <div className="relative flex items-center justify-center">
-                  <SurfIcon
-                    size="s"
-                    name="ChevronRight"
-                    className="text-foreground-foreground-tertiary"
-                  />
+                  <SurfIcon size="s" name="ChevronRight" className="text-foreground-tertiary" />
                   {/* 클릭 범위 확장용 */}
                   <span className="absolute -inset-4" />
                 </div>
@@ -132,7 +128,7 @@ export function EventCard({
                 }}
                 className="relative flex items-center justify-center"
               >
-                <SurfIcon size="m" name="X" className="text-foreground-foreground-normal-lighter" />
+                <SurfIcon size="m" name="X" className="text-foreground-normal-lighter" />
                 <span className="absolute -inset-4" />
               </button>
             )}
@@ -147,7 +143,7 @@ export function EventCard({
                 }}
                 className="relative flex items-center justify-center"
               >
-                <SurfIcon size="m" name="Dots" className="text-foreground-foreground-normal" />
+                <SurfIcon size="m" name="Dots" className="text-foreground-normal" />
                 <span className="absolute -inset-4" />
               </button>
             )}
@@ -157,18 +153,18 @@ export function EventCard({
         {/* Container 영역 */}
         <section className="flex w-full flex-1 flex-col items-start self-stretch">
           {/* 일정 제목 */}
-          <div className="text-body-body3 text-foreground-foreground-normal">{title}</div>
+          <div className="text-body-body3 text-foreground-normal">{title}</div>
 
           <div className="flex flex-col items-start pt-5">
             {/* 날짜 */}
-            <div className="text-body-body8 text-foreground-foreground-normal-lighter flex items-center gap-5">
+            <div className="text-body-body8 text-foreground-normal-lighter flex items-center gap-5">
               <div>{formattedStartDate}</div>
               <div>~</div>
               <div>{formattedEndDate}</div>
             </div>
 
             {/* 장소 */}
-            <div className="text-caption-caption2 text-foreground-foreground-normal-lighter mt-3 flex items-center gap-5">
+            <div className="text-caption-caption2 text-foreground-normal-lighter mt-3 flex items-center gap-5">
               <div>장소 :</div>
               <div>{location ? location : '미정'}</div>
             </div>

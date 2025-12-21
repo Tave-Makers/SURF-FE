@@ -1,9 +1,8 @@
-// Sheet.stories.tsx
 import type { Meta, StoryObj } from '@storybook/nextjs';
-import { Sheet } from './Sheet';
+import React, { useState } from 'react';
+
+import Sheet from './Sheet';
 import { CheckList } from '../check-list/CheckList';
-import { useState } from 'react';
-import { Sheet as ModalSheet } from 'react-modal-sheet';
 
 const meta: Meta<typeof Sheet> = {
   title: 'Shared/UI/Sheet',
@@ -14,6 +13,10 @@ const meta: Meta<typeof Sheet> = {
     description: { control: 'text' },
     children: { table: { disable: true } },
   },
+  args: {
+    title: '약관 동의',
+    description: '약관 확인 후 동의해주세요.',
+  },
 };
 export default meta;
 
@@ -22,7 +25,7 @@ type Story = StoryObj<typeof Sheet>;
 /* children이 체크리스트인 경우 */
 export const WithCheckList: Story = {
   render: (args) => {
-    const [checkedItems, setCheckedItems] = useState<{ [key: string]: boolean }>({
+    const [checkedItems, setCheckedItems] = useState<Record<string, boolean>>({
       1: false,
       2: false,
       3: false,
@@ -35,10 +38,7 @@ export const WithCheckList: Story = {
     ];
 
     const handleToggle = (next: boolean, id: string) => {
-      setCheckedItems((prev) => ({
-        ...prev,
-        [id]: next,
-      }));
+      setCheckedItems((prev) => ({ ...prev, [id]: next }));
     };
 
     return (
@@ -60,70 +60,20 @@ export const WithCheckList: Story = {
       </div>
     );
   },
-  args: {
-    title: '약관 동의',
-    description: '약관 확인 후 동의해주세요.',
-    primaryBtn: { label: '선택하기', onClick: () => alert('선택 클릭') },
-    secondaryBtn: { label: '취소하기', onClick: () => alert('취소 클릭') },
-    textBtn: { label: '자세히보기', onClick: () => alert('자세히보기 클릭') },
-  },
 };
 
-/* children이 사각형 div인 경우 */
 export const WithBox: Story = {
+  args: {
+    title: '박스 예제',
+    description: '임의의 콘텐츠를 넣을 수 있습니다',
+  },
   render: (args) => (
     <div className="w-[20rem]">
       <Sheet {...args}>
-        <div className="flex h-32 w-full items-center justify-center rounded-lg bg-[var(--color-background-tertiary)]">
+        <div className="bg-background-badge-darker flex h-32 w-full items-center justify-center">
           콘텐츠 박스
         </div>
       </Sheet>
     </div>
   ),
-  args: {
-    title: '박스 예제',
-    description: '임의의 콘텐츠를 넣을 수 있습니다',
-    primaryBtn: { label: '확인', onClick: () => alert('확인 클릭') },
-  },
-};
-
-/* react-modal-sheet 라이브러리 사용 예시 */
-export const InModalSheetLib: Story = {
-  render: (args) => {
-    const [open, setOpen] = useState(false);
-    const [checked, setChecked] = useState(false);
-
-    return (
-      <div>
-        <button className="rounded bg-blue-500 px-4 py-2 text-white" onClick={() => setOpen(true)}>
-          모달 열기
-        </button>
-
-        <ModalSheet isOpen={open} onClose={() => setOpen(false)} className="w-[20rem]">
-          <ModalSheet.Container>
-            <ModalSheet.Header />
-            <ModalSheet.Content>
-              <Sheet {...args}>
-                <CheckList
-                  id={'1'}
-                  title="약관에 동의합니다."
-                  isChecked={checked}
-                  onChange={(next) => setChecked(next)}
-                  onClickItem={(id) => alert(`${id}번 약관 상세로 이동합니다.`)}
-                />
-              </Sheet>
-            </ModalSheet.Content>
-          </ModalSheet.Container>
-          <ModalSheet.Backdrop />
-        </ModalSheet>
-      </div>
-    );
-  },
-  args: {
-    title: '모달 시트',
-    description: 'react-modal-sheet 안에서 사용 예시',
-    primaryBtn: { label: '선택하기', onClick: () => alert('선택 클릭') },
-    secondaryBtn: { label: '취소하기', onClick: () => alert('취소 클릭') },
-    textBtn: { label: '자세히보기', onClick: () => alert('자세히보기 클릭') },
-  },
 };

@@ -15,7 +15,6 @@ import { PostBadge } from '@/entities/post/ui/post-badge/PostBadge';
 import { useEffect, useState } from 'react';
 import { Sheet } from '@/shared/ui/sheet/Sheet';
 import { DateTimePicker } from '@/entities/schedule/ui/DateTimePicker/DateTimePicker';
-import { SolidButton } from '@/shared/ui/button';
 
 type PostPageProps =
   | { mode: 'create'; boardId: string }
@@ -180,15 +179,14 @@ export default function PostPage(props: PostPageProps) {
         <ModalSheet.Container>
           <ModalSheet.Header />
           <ModalSheet.Content>
-            <Sheet title="게시글 예약 설정" description="해당 시간에 맞춰 게시글이 예약됩니다">
+            <Sheet
+              title="게시글 예약 설정"
+              description="해당 시간에 맞춰 게시글이 예약됩니다"
+              primaryBtn={{ label: '예약하기', onClick: handleSaveReservation }}
+              secondaryBtn={{ label: '취소하기', onClick: closeReservationModal }}
+            >
               <div>
                 <DateTimePicker value={tempDate} onChange={setTempDate} />
-                <SolidButton size="m" variant="primary" onClick={handleSaveReservation}>
-                  예약하기
-                </SolidButton>
-                <SolidButton size="m" variant="secondary" onClick={closeReservationModal}>
-                  취소하기
-                </SolidButton>
               </div>
             </Sheet>
           </ModalSheet.Content>

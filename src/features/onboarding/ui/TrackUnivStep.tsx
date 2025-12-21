@@ -140,7 +140,7 @@ export function TrackUnivStep() {
         <ModalSheet.Container>
           <ModalSheet.Header />
           <ModalSheet.Content>
-            <Sheet>
+            <Sheet primaryBtn={{ label: '선택하기', onClick: handleSelectTrack }}>
               <WheelPicker
                 initPeriodIdx={0}
                 initPartIdx={0}
@@ -158,9 +158,6 @@ export function TrackUnivStep() {
                   }
                 }}
               />
-              <SolidButton size="m" variant="primary" onClick={handleSelectTrack}>
-                선택하기
-              </SolidButton>
             </Sheet>
           </ModalSheet.Content>
         </ModalSheet.Container>

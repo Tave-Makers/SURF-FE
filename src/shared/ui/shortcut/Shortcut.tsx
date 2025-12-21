@@ -29,7 +29,13 @@ export const Shortcut = ({ type, label, imageSrc }: ShortcutProps) => {
       {/* 이미지 영역 */}
       <div className="flex-1 bg-gray-200">
         {imageSrc && (
-          <Image src={imageSrc} alt={label} width={105} height={110} className="h-full w-full" />
+          <Image
+            src={imageSrc}
+            alt={label}
+            width={105}
+            height={110}
+            className="h-full w-full object-cover"
+          />
         )}
       </div>
     </div>

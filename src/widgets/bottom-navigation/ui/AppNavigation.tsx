@@ -4,7 +4,7 @@ import React from 'react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { SurfIcon } from '@/shared/ui/icon/SurfIcon';
-import { BOTTOM_NAV_ITEMS, type TabId } from '../model/routes';
+import { BOTTOM_NAV_ITEMS, type TabId } from '../model/config';
 
 const navStyle =
   'bottom-0 left-0 bg-background-normal-lighter rounded-t-5 shadow-embossed-inverse flex w-full justify-around pb-13';
@@ -30,7 +30,7 @@ export function AppNavigation() {
             className={linkStyle}
           >
             <SurfIcon
-              name={isActive ? item.activeIcon : item.defaultIcon}
+              name={isActive ? item.icons.active : item.icons.default}
               size="l"
               className={isActive ? 'text-foreground-primary' : 'text-foreground-quinary'}
             />

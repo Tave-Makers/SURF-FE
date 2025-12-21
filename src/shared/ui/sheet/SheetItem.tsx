@@ -12,16 +12,16 @@ import type { ReactNode } from 'react';
  * @param props.textColor - 텍스트 색상 타입
  */
 
-type textColor = 'normal' | 'danger';
+type TextColor = 'normal' | 'danger';
 
 interface SheetItemProps {
   title: string;
   node?: ReactNode;
   onClick?: () => void;
-  textColor?: textColor;
+  textColor?: TextColor;
 }
 
-const TEXT_COLOR_STYLES: Record<textColor, string> = {
+const TEXT_COLOR_STYLES: Record<TextColor, string> = {
   normal: 'text-foreground-normal',
   danger: 'text-foreground-danger-darker',
 };

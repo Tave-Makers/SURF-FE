@@ -6,7 +6,7 @@ const labelBaseStyle = 'inline-flex w-fit items-center gap-10 group';
 
 const labelEnabledStyle = 'cursor-pointer';
 
-const labelDisabledStyle = '!cursor-not-allowed';
+const labelDisabledStyle = 'cursor-not-allowed!';
 
 const inputHiddenStyle = 'sr-only';
 
@@ -59,6 +59,7 @@ export type ToggleProps = BaseProps & (ControlledProps | UncontrolledProps);
  * @param props.isDefaultChecked - (uncontrolled) 초기 토글 상태
  * @param props.onChange - 토글 상태 변경 시 호출되는 콜백
  * @param props.isDisabled - 토글 비활성화 여부
+ * @param props.className - 외부에서 추가할 label 커스텀 className
  */
 export const Toggle = forwardRef<HTMLInputElement, ToggleProps>(
   (

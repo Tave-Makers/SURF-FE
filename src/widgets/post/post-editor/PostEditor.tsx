@@ -77,17 +77,22 @@ export const PostEditor = ({
   useEffect(() => {
     if (!editor || initializedRef.current) return;
 
-    // 생성 모드이면 즉시 초기화 완료
+    // 생성 모드: 데이터 주입을 기다리지 않고 즉시 활성화
     if (mode === 'create') {
+      // 일정 페이지 등 외부에서 돌아온 경우: Zustand에 저장된 이미지를 복구
+      if (initialImages && initialImages.length > 0) {
+        setImages(initialImages);
+      }
+
       initializedRef.current = true;
       onInitialized();
       return;
     }
 
+    // 수정 모드: 서버에서 넘어온 데이터를 에디터 및 이미지 매니저에 주입
     const currentHtml = editor.getHTML();
     const hasNoContent = currentHtml === '' || currentHtml === '<p></p>';
 
-    // 수정 모드
     // 1) 본문 데이터 주입
     if (initialContent && hasNoContent) {
       editor.commands.setContent(initialContent);

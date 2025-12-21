@@ -23,15 +23,27 @@ interface SheetProps {
 export function Sheet({ title, description, children }: SheetProps) {
   const renderTitleSection = () => (
     <div className="flex w-full flex-col gap-5">
-      {title && <div className="text-foreground-normal text-title-title2">{title}</div>}
-      {description && <div className="text-body-body9 text-foreground-tertiary">{description}</div>}
+      {title && (
+        <h2 id="sheet-title" className="text-foreground-normal text-title-title2">
+          {title}
+        </h2>
+      )}
+      {description && <h3 className="text-body-body9 text-foreground-tertiary">{description}</h3>}
     </div>
   );
 
   return (
-    <div className="rounded-t-4 bg-background-normal flex w-full flex-col items-start">
-      <header className="flex w-full justify-center pt-9">
-        <div className="bg-foreground-tertiary rounded-max h-[0.3125rem] w-[2.25rem]" />
+    <div
+      role="dialog"
+      aria-modal="true"
+      aria-labelledby={title ? 'sheet-title' : undefined}
+      className="rounded-t-4 bg-background-normal flex w-full flex-col items-start"
+    >
+      <header className="flex w-full justify-center pt-9" aria-label="드래그 핸들">
+        <div
+          className="bg-foreground-tertiary rounded-max h-[0.3125rem] w-[2.25rem]"
+          aria-hidden="true"
+        />
       </header>
       <div className="flex w-full flex-col px-15 pt-11 pb-15">
         {renderTitleSection()}

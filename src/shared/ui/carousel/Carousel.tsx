@@ -14,7 +14,7 @@ interface CarouselProps {
   className?: string;
 }
 
-const baseClass =
+const baseStyle =
   'rounded-5 w-full h-[150px] relative overflow-hidden bg-white bg-gradient-to-b from-[rgba(0,0,0,0)] to-[rgba(0,0,0,0.3)] shadow-[0_2px_8px_rgba(0,0,0,0.06)]';
 
 export const Carousel = ({ images, className = '' }: CarouselProps) => {
@@ -51,7 +51,7 @@ export const Carousel = ({ images, className = '' }: CarouselProps) => {
   };
 
   return (
-    <div className={`${baseClass} ${className}`}>
+    <div className={`${baseStyle} ${className}`}>
       <img
         src={images[current].src}
         alt={images[current].alt}

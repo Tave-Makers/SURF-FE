@@ -1,10 +1,10 @@
 import type { Meta, StoryObj } from '@storybook/nextjs';
 import { SurfIcon } from '@/shared/ui/icon/SurfIcon';
-import Sheet from '@/shared/ui/sheet/Sheet';
+import { Sheet } from '@/shared/ui/sheet/Sheet';
 import { useState } from 'react';
 import { Sheet as ModalSheet } from 'react-modal-sheet';
 import { Avatar } from '../avatar/Avatar';
-import SheetItem from './SheetItem';
+import { SheetItem } from './SheetItem';
 
 const meta: Meta<typeof SheetItem> = {
   title: 'Shared/UI/SheetItem',

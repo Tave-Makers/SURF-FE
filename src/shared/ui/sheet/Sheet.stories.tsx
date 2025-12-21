@@ -1,7 +1,7 @@
 import type { Meta, StoryObj } from '@storybook/nextjs';
 import React, { useState } from 'react';
 
-import Sheet from './Sheet';
+import { Sheet } from './Sheet';
 import { CheckList } from '../check-list/CheckList';
 
 const meta: Meta<typeof Sheet> = {

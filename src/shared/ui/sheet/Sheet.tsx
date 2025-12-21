@@ -20,7 +20,7 @@ interface SheetProps {
   children: React.ReactNode; // 시트 내용
 }
 
-export default function Sheet({ title, description, children }: SheetProps) {
+export function Sheet({ title, description, children }: SheetProps) {
   const renderTitleSection = () => (
     <div className="flex w-full flex-col gap-5">
       {title && <div className="text-foreground-normal text-title-title2">{title}</div>}

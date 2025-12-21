@@ -21,7 +21,7 @@ interface SheetItemProps {
   textColor?: textColor;
 }
 
-export default function SheetItem({ title, node, onClick, textColor = 'normal' }: SheetItemProps) {
+export function SheetItem({ title, node, onClick, textColor = 'normal' }: SheetItemProps) {
   const textColorClass =
     textColor === 'danger' ? 'text-foreground-danger-darker' : 'text-foreground-normal';
 

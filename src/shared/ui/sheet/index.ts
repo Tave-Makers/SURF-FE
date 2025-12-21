@@ -1,2 +1,2 @@
-export { default as Sheet } from './Sheet';
-export { default as SheetItem } from './SheetItem';
+export { Sheet } from './Sheet';
+export { SheetItem } from './SheetItem';

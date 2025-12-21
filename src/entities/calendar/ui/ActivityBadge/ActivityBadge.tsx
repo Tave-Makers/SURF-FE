@@ -3,9 +3,9 @@ import type { DailyActivity } from '@/entities/calendar/model/types';
 type Props = { item: DailyActivity; isCurrentMonth?: boolean };
 
 const labelByType: Record<DailyActivity['category'], string> = {
-  official: '공식 일정',
-  operation: '운영 일정',
-  other: '기타 일정',
+  official: '정규행사',
+  operation: '운영회의',
+  other: '기타일정',
 };
 
 const colorByType: Record<DailyActivity['category'], string> = {

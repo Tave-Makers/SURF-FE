@@ -98,7 +98,7 @@ export function ScheduleLocation({
       onClick={handleClick}
       onKeyDown={handleKeyDown}
     >
-      <div className="text-foreground-normal text-body-body8 flex shrink-0">{title}</div>
+      <div className="text-foreground-normal text-body-body9 flex shrink-0">{title}</div>
 
       <div className="text-foreground-quaternary text-caption-caption2 line-clamp-1 flex shrink-0">
         {displayValue}

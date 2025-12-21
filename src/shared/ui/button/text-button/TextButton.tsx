@@ -79,9 +79,9 @@ export const TextButton = forwardRef<HTMLButtonElement, TextButtonProps>(
         ].join(' ')}
       >
         <span className="flex w-full items-center justify-between">
-          {leftIconName ? <SurfIcon name={leftIconName} size={size} /> : <span />}
+          {leftIconName && <SurfIcon name={leftIconName} size={size} />}
           <span className="flex-1 text-center">{children}</span>
-          {rightIconName ? <SurfIcon name={rightIconName} size={size} /> : <span />}
+          {rightIconName && <SurfIcon name={rightIconName} size={size} />}
         </span>
       </button>
     );

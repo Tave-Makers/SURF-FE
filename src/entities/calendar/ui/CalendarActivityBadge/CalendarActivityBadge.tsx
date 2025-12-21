@@ -9,9 +9,9 @@ const labelByType: Record<DailyActivity['category'], string> = {
 };
 
 const colorByType: Record<DailyActivity['category'], string> = {
-  official: 'bg-background-tag-pink text-foreground-tag-pink-darker',
-  operation: 'bg-background-tag-purple text-foreground-tag-purple-darker',
-  other: 'bg-background-tag-green text-foreground-tag-green-darker',
+  official: 'bg-background-badge-pink text-foreground-badge-pink-darker',
+  operation: 'bg-background-badge-purple text-foreground-badge-purple-darker',
+  other: 'bg-background-badge-green text-foreground-badge-green-darker',
 };
 
 export function CalendarActivityBadge({ item, isCurrentMonth = true }: Props) {

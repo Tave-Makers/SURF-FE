@@ -1,13 +1,17 @@
 import type { DailyActivity } from '@/entities/calendar/model/types';
 import { CalendarActivityBadge } from '@/entities/calendar/ui/CalendarActivityBadge/CalendarActivityBadge';
 
-type Props = {
+type DailyActivityBadgeListProps = {
   items: DailyActivity[];
-  maxVisible?: number; // 셀 1칸에 보일 최대 태그 수
+  maxVisible?: number;
   isCurrentMonth?: boolean;
 };
 
-export function DailyActivityBadgeList({ items, maxVisible = 2, isCurrentMonth = true }: Props) {
+export function DailyActivityBadgeList({
+  items,
+  maxVisible = 2,
+  isCurrentMonth = true,
+}: DailyActivityBadgeListProps) {
   if (!items?.length) return null;
 
   const visible = items.slice(0, maxVisible);

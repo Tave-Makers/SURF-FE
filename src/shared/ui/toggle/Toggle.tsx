@@ -10,21 +10,19 @@ const labelDisabledStyle = '!cursor-not-allowed';
 
 const inputHiddenStyle = 'sr-only';
 
-const trackStyle =
-  'relative h-[1.1875rem] w-[1.875rem] rounded-full ' +
-  'bg-background-secondary transition-colors duration-300 ' +
-  'group-has-[:checked]:bg-background-primary ' +
-  'group-has-[:disabled]:bg-background-secondary ' +
-  'group-has-[:focus-visible]:outline-[1.5px] ' +
-  'group-has-[:focus-visible]:outline-offset-2';
+const trackStyle = `relative h-[1.1875rem] w-[1.875rem] rounded-full
+   bg-background-secondary transition-colors duration-300
+   group-has-[:checked]:bg-background-primary
+   group-has-[:disabled]:bg-background-secondary
+   group-has-[:focus-visible]:outline-[1.5px]
+   group-has-[:focus-visible]:outline-offset-2`;
 
-const handleStyle =
-  'absolute top-[0.125rem] left-[0.125rem] ' +
-  'h-[0.9375rem] w-[0.9375rem] rounded-full ' +
-  'bg-foreground-static-white ' +
-  'transition-transform duration-300 will-change-transform ' +
-  'group-has-[:checked]:translate-x-[0.6875rem] ' +
-  'group-has-[:disabled]:bg-background-secondary-darker';
+const handleStyle = `absolute top-[0.125rem] left-[0.125rem]
+   h-[0.9375rem] w-[0.9375rem] rounded-full
+   bg-foreground-static-white
+   transition-transform duration-300 will-change-transform
+   group-has-[:checked]:translate-x-[0.6875rem]
+   group-has-[:disabled]:bg-background-secondary-darker`;
 
 const labelTextStyle = 'text-body-body10 text-foreground-normal';
 

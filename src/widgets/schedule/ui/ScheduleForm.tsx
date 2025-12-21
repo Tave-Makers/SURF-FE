@@ -13,6 +13,7 @@ import { getInitialDate } from '@/entities/calendar/utils/getInitialDate';
 import { CATEGORY_LABELS } from '@/entities/schedule/model/constants';
 import { SCHEDULE_CATEGORIES } from '@/entities/schedule/model/constants';
 import { ScheduleFormData } from '@/features/schedule/create/model/types';
+import { SolidButton } from '@/shared/ui/button';
 
 export type ScheduleFormProps = {
   onSubmit: (data: ScheduleFormData) => void;
@@ -152,18 +153,17 @@ export default function ScheduleForm({ onSubmit, initialData }: ScheduleFormProp
                 <ModalSheet.Container>
                   <ModalSheet.Header />
                   <ModalSheet.Content>
-                    <Sheet
-                      title="일정 시작 설정"
-                      description="해당 시간에 맞춰 일정이 생성됩니다"
-                      primaryBtn={{
-                        label: '예약하기',
-                        onClick: () => handleSaveDate('startDate', field.onChange),
-                      }}
-                      secondaryBtn={{
-                        label: '취소하기',
-                        onClick: handleCloseModal,
-                      }}
-                    >
+                    <Sheet title="일정 시작 설정" description="해당 시간에 맞춰 일정이 생성됩니다">
+                      <SolidButton
+                        size="m"
+                        variant="primary"
+                        onClick={() => handleSaveDate('startDate', field.onChange)}
+                      >
+                        예약하기
+                      </SolidButton>
+                      <SolidButton size="m" variant="secondary" onClick={handleCloseModal}>
+                        취소하기
+                      </SolidButton>
                       <DateTimePicker value={tempStartDate} onChange={setTempStartDate} />
                     </Sheet>
                   </ModalSheet.Content>

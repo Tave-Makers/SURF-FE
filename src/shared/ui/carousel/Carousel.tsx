@@ -21,15 +21,20 @@ export const Carousel = ({ images, className = '' }: CarouselProps) => {
   const [current, setCurrent] = useState(0);
   const timerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
 
+  const length = images.length;
+
   const resetTimer = useCallback(() => {
     // 이전 타미어 존재하면 제거
     if (timerRef.current) clearTimeout(timerRef.current);
 
+    // 2장 이상일 때만 autoplay
+    if (length <= 1) return;
+
     // 4초 후 다음 이미지로 이동
     timerRef.current = setTimeout(() => {
-      setCurrent((prev) => (prev + 1) % images.length);
+      setCurrent((prev) => (prev + 1) % length);
     }, 4000);
-  }, [images.length]);
+  }, [length]);
 
   // 이미지 변경마다 타이머 새로 설정
   useEffect(() => {
@@ -50,6 +55,10 @@ export const Carousel = ({ images, className = '' }: CarouselProps) => {
     setCurrent((prev) => (prev + 1) % images.length);
   };
 
+  if (length === 0) {
+    return <div className={`${baseStyle} ${className}`} />;
+  }
+
   return (
     <div className={`${baseStyle} ${className} group`}>
       <div
@@ -66,19 +75,23 @@ export const Carousel = ({ images, className = '' }: CarouselProps) => {
         ))}
       </div>
 
-      {/* 좌측 버튼 */}
-      <Control
-        direction="left"
-        onClick={handlePrev}
-        className="absolute top-1/2 left-[10px] -translate-y-1/2 opacity-0 group-hover:opacity-100"
-      />
+      {length > 1 && (
+        <>
+          {/* 좌측 버튼 */}
+          <Control
+            direction="left"
+            onClick={handlePrev}
+            className="absolute top-1/2 left-[10px] -translate-y-1/2 opacity-0 transition-opacity group-hover:opacity-100"
+          />
 
-      {/* 우측 버튼 */}
-      <Control
-        direction="right"
-        onClick={handleNext}
-        className="absolute top-1/2 right-[10px] -translate-y-1/2 opacity-0 group-hover:opacity-100"
-      />
+          {/* 우측 버튼 */}
+          <Control
+            direction="right"
+            onClick={handleNext}
+            className="absolute top-1/2 right-[10px] -translate-y-1/2 opacity-0 transition-opacity group-hover:opacity-100"
+          />
+        </>
+      )}
 
       {/* 페이지네이션 */}
       <Pagenation

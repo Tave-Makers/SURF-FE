@@ -32,3 +32,19 @@ export const Default: Story = {
     className: 'w-[300px] h-[150px]',
   },
 };
+
+export const Empty: Story = {
+  name: 'Empty (No Images)',
+  args: {
+    images: [],
+    className: 'w-[300px] h-[150px]',
+  },
+};
+
+export const Single: Story = {
+  name: 'Single Image',
+  args: {
+    images: [sampleImages[0]],
+    className: 'w-[300px] h-[150px]',
+  },
+};

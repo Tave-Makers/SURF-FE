@@ -1,5 +1,5 @@
 import type { DailyActivity } from '@/entities/calendar/model/types';
-import { ActivityBadge } from '@/entities/calendar/ui/ActivityBadge/ActivityBadge';
+import { CalendarActivityBadge } from '@/entities/calendar/ui/CalendarActivityBadge/CalendarActivityBadge';
 
 type Props = {
   items: DailyActivity[];
@@ -16,7 +16,7 @@ export function DailyActivityBadgeList({ items, maxVisible = 2, isCurrentMonth =
   return (
     <div className="flex h-full w-full min-w-0 flex-col items-start justify-center gap-3">
       {visible.map((it) => (
-        <ActivityBadge key={it.id} item={it} isCurrentMonth={isCurrentMonth} />
+        <CalendarActivityBadge key={it.id} item={it} isCurrentMonth={isCurrentMonth} />
       ))}
       {remain > 0 && (
         <div

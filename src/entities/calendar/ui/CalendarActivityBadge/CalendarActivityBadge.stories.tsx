@@ -1,5 +1,5 @@
 import type { Meta, StoryObj } from '@storybook/nextjs';
-import { ActivityBadge } from './ActivityBadge';
+import { CalendarActivityBadge } from './CalendarActivityBadge';
 import type { DailyActivity } from '@/entities/calendar/model/types';
 
 const createDummyItem = (
@@ -13,9 +13,9 @@ const createDummyItem = (
   endDate: new Date(),
 });
 
-const meta: Meta<typeof ActivityBadge> = {
+const meta: Meta<typeof CalendarActivityBadge> = {
   title: 'Entities/UI/Calendar/ActivityBadge',
-  component: ActivityBadge,
+  component: CalendarActivityBadge,
   parameters: {
     layout: 'centered',
   },
@@ -44,7 +44,7 @@ const meta: Meta<typeof ActivityBadge> = {
 };
 
 export default meta;
-type Story = StoryObj<typeof ActivityBadge>;
+type Story = StoryObj<typeof CalendarActivityBadge>;
 
 // ───────────────────────────────
 // 기본 상태들 (타입별)
@@ -97,14 +97,26 @@ export const AllVariations: Story = {
   render: () => (
     <div className="flex w-[150px] flex-col gap-4">
       <div className="text-sm font-bold">Current Month</div>
-      <ActivityBadge item={createDummyItem('official', '공식 일정')} isCurrentMonth={true} />
-      <ActivityBadge item={createDummyItem('operation', '운영 일정')} isCurrentMonth={true} />
-      <ActivityBadge item={createDummyItem('other', '기타 일정')} isCurrentMonth={true} />
+      <CalendarActivityBadge
+        item={createDummyItem('official', '공식 일정')}
+        isCurrentMonth={true}
+      />
+      <CalendarActivityBadge
+        item={createDummyItem('operation', '운영 일정')}
+        isCurrentMonth={true}
+      />
+      <CalendarActivityBadge item={createDummyItem('other', '기타 일정')} isCurrentMonth={true} />
 
       <div className="mt-4 text-sm font-bold">Other Month (Opacity 50%)</div>
-      <ActivityBadge item={createDummyItem('official', '공식 일정')} isCurrentMonth={false} />
-      <ActivityBadge item={createDummyItem('operation', '운영 일정')} isCurrentMonth={false} />
-      <ActivityBadge item={createDummyItem('other', '기타 일정')} isCurrentMonth={false} />
+      <CalendarActivityBadge
+        item={createDummyItem('official', '공식 일정')}
+        isCurrentMonth={false}
+      />
+      <CalendarActivityBadge
+        item={createDummyItem('operation', '운영 일정')}
+        isCurrentMonth={false}
+      />
+      <CalendarActivityBadge item={createDummyItem('other', '기타 일정')} isCurrentMonth={false} />
     </div>
   ),
 };

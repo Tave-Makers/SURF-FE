@@ -75,7 +75,7 @@ export const TextButton = forwardRef<HTMLButtonElement, TextButtonProps>(
           baseStyle,
           sizePaddingMap[size],
           sizeTextMap[size],
-          isDisabled ? disabledMap[variant] : `${variantMap[variant]}`,
+          isDisabled ? disabledMap[variant] : variantMap[variant],
         ].join(' ')}
       >
         <span className="flex w-full items-center justify-between">

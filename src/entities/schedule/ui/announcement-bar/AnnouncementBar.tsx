@@ -12,7 +12,7 @@ interface AnnouncementBarProps {
 export const AnnouncementBar = ({ title, date, category, onClick }: AnnouncementBarProps) => {
   return (
     <button
-      className="text-body-body9 text-foreground-foreground-normal bg-background-background-normal-lighter rounded-5 flex h-[50px] w-full items-center gap-10 px-13"
+      className="text-body-body9 text-foreground-normal bg-background-normal-lighter rounded-5 flex h-[3.125rem] w-full items-center gap-10 px-13"
       onClick={onClick}
     >
       <div>{formatMonthDay(date)}</div>

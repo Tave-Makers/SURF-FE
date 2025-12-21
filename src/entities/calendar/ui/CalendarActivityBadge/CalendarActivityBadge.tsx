@@ -14,7 +14,7 @@ const colorByType: Record<DailyActivity['category'], string> = {
   other: 'bg-background-badge-green text-foreground-badge-green-darker',
 };
 
-export function ActivityBadge({ item, isCurrentMonth = true }: Props) {
+export function CalendarActivityBadge({ item, isCurrentMonth = true }: Props) {
   const baseClasses =
     'flex w-full min-w-0 items-center inline-flex rounded-2 px-2 py-3 text-caption-caption5 flex-shrink-0';
   const opacityClass = isCurrentMonth ? '' : 'opacity-50';

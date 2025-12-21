@@ -21,9 +21,13 @@ interface SheetItemProps {
   textColor?: textColor;
 }
 
+const TEXT_COLOR_STYLES: Record<textColor, string> = {
+  normal: 'text-foreground-normal',
+  danger: 'text-foreground-danger-darker',
+};
+
 export function SheetItem({ title, node, onClick, textColor = 'normal' }: SheetItemProps) {
-  const textColorClass =
-    textColor === 'danger' ? 'text-foreground-danger-darker' : 'text-foreground-normal';
+  const textColorClass = TEXT_COLOR_STYLES[textColor];
 
   return (
     <button onClick={onClick} className="flex w-full items-center gap-8 px-12 py-10">

@@ -51,7 +51,7 @@ export const Carousel = ({ images, className = '' }: CarouselProps) => {
   };
 
   return (
-    <div className={`${baseStyle} ${className}`}>
+    <div className={`${baseStyle} ${className} group`}>
       <div
         className="flex h-full transition-transform duration-500 ease-in-out"
         style={{ transform: `translateX(-${current * 100}%)` }}
@@ -70,14 +70,14 @@ export const Carousel = ({ images, className = '' }: CarouselProps) => {
       <Control
         direction="left"
         onClick={handlePrev}
-        className="absolute top-1/2 left-[10px] -translate-y-1/2"
+        className="absolute top-1/2 left-[10px] -translate-y-1/2 opacity-0 group-hover:opacity-100"
       />
 
       {/* 우측 버튼 */}
       <Control
         direction="right"
         onClick={handleNext}
-        className="absolute top-1/2 right-[10px] -translate-y-1/2"
+        className="absolute top-1/2 right-[10px] -translate-y-1/2 opacity-0 group-hover:opacity-100"
       />
 
       {/* 페이지네이션 */}

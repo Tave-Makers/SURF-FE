@@ -8,7 +8,7 @@ interface ControlProps {
   className?: string;
 }
 
-export const Control = ({ direction, onClick, className }: ControlProps) => {
+export const Control = ({ direction, onClick, className = '' }: ControlProps) => {
   const isLeft = direction === 'left';
 
   return (
@@ -18,7 +18,8 @@ export const Control = ({ direction, onClick, className }: ControlProps) => {
         <span className="absolute -inset-[0.8rem]" aria-hidden />
 
         {/* 버튼 UI */}
-        <span className="bg-background-carousel-pagenation flex h-[1rem] w-[1rem] cursor-pointer items-center justify-center rounded-full">
+        {/* TODO:  background-carousel-pagenation 토큰 생성 및 배경 색상에 적용*/}
+        <span className="flex h-[1rem] w-[1rem] cursor-pointer items-center justify-center rounded-full bg-[#ffffff4d]">
           <SurfIcon
             name={isLeft ? 'ChevronLeft' : 'ChevronRight'}
             size="s"

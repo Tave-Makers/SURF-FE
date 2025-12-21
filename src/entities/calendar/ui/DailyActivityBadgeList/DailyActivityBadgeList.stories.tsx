@@ -5,7 +5,7 @@ import type { DailyActivity } from '@/entities/calendar/model/types';
 const createDummyItems = (count: number): DailyActivity[] => {
   const types: DailyActivity['category'][] = ['official', 'operation', 'other'];
   return Array.from({ length: count }, (_, i) => ({
-    id: `dummy-${i}`,
+    id: i,
     category: types[i % 3],
     title: `일정 제목 ${i + 1}`,
     startDate: new Date(),

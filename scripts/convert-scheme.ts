@@ -41,7 +41,7 @@ function flatten(obj: Leaf, prefix = '', out: Record<string, { value: any; type:
 }
 
 // 원시 토큰 로드
-const raw = loadJSON('tokens/scheme.json');
+const raw = loadJSON('tokens/tokens.json');
 const scheme = raw['Scheme/Default'];
 if (!scheme) throw new Error('"Scheme/Default"가 없습니다.');
 
@@ -62,8 +62,9 @@ function pickResolved(prefix: string) {
 
 const spacingTok = pickResolved('spacing'); // "1".."20"
 const radiusTok = pickResolved('radius'); // "1".."7","max"
-const strokeTok = pickResolved('stroke.weight'); // "1","2","3","4","5","iconL","iconM","iconS"
+const strokeTok = pickResolved('stroke.weight'); // "0".."5","iconL","iconM","iconS"
 const opacityTok = pickResolved('opacity'); // "30","50","100"
+const marginTok = pickResolved('margin'); // "3xl", "2xl", "xl", "lg", ...
 
 // 값 포맷
 const spacingPx: Record<string, string> = {};
@@ -78,10 +79,14 @@ for (const [k, v] of Object.entries(strokeTok)) strokeVal[k] = `${v}px`;
 const opacityVal: Record<string, string> = {};
 for (const [k, v] of Object.entries(opacityTok)) opacityVal[k] = (v / 100).toString();
 
+const marginPx: Record<string, string> = {};
+for (const [k, v] of Object.entries(marginTok)) marginPx[k] = `${v}px`;
+
 const varSpacing = (k: string) => `--spacing-${k}`;
 const varRadius = (k: string) => `--radius-${k}`;
 const varStroke = (k: string) => `--stroke-weight-${k}`;
 const varOpacity = (k: string) => `--opacity-${k}`;
+const varMargin = (k: string) => `--margin-${k}`;
 
 // 실사용 CSS 파일 경로
 const outPath = path.resolve('src/shared/styles/scheme-tokens.css');
@@ -102,6 +107,9 @@ Object.entries(strokeVal)
 Object.entries(opacityVal)
   .sort()
   .forEach(([k, v]) => (cssOutput += `  ${varOpacity(k)}: ${v};\n`));
+Object.entries(marginPx)
+  .sort()
+  .forEach(([k, v]) => (cssOutput += `  ${varMargin(k)}: ${v};\n`));
 cssOutput += `}\n`;
 
 fs.writeFileSync(outPath, cssOutput, 'utf-8');

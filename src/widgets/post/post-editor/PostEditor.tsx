@@ -16,8 +16,10 @@ import { useKeyboardOffset } from '@/shared/hooks/useKeyboardOffset';
 import { UploadImage } from '@/entities/image/model/types';
 import { ScheduleFormData } from '@/features/schedule/create/model/types';
 import { POST_VALIDATION } from '@/entities/post/model/validation';
+import { PostPageMode } from '@/features/post/post-form/model/types';
 
 export type PostEditorProps = {
+  mode: PostPageMode;
   initialContent: string;
   initialImages: UploadImage[];
   linkedSchedule: ScheduleFormData | null;
@@ -28,6 +30,7 @@ export type PostEditorProps = {
 };
 
 export const PostEditor = ({
+  mode,
   initialContent,
   initialImages,
   linkedSchedule,
@@ -74,9 +77,17 @@ export const PostEditor = ({
   useEffect(() => {
     if (!editor || initializedRef.current) return;
 
+    // 생성 모드이면 즉시 초기화 완료
+    if (mode === 'create') {
+      initializedRef.current = true;
+      onInitialized();
+      return;
+    }
+
     const currentHtml = editor.getHTML();
     const hasNoContent = currentHtml === '' || currentHtml === '<p></p>';
 
+    // 수정 모드
     // 1) 본문 데이터 주입
     if (initialContent && hasNoContent) {
       editor.commands.setContent(initialContent);
@@ -90,12 +101,12 @@ export const PostEditor = ({
     }
 
     // 2) 이미지 데이터 주입 (최초 1회)
-    if (initialImages && initialImages.length > 0 && !initializedRef.current) {
+    if (initialImages && initialImages.length > 0) {
       setImages(initialImages);
       initializedRef.current = true;
       onInitialized();
     }
-  }, [editor, initialContent, initialImages, setImages, onInitialized]);
+  }, [editor, initialContent, initialImages, setImages, onInitialized, mode]);
 
   // 3. Side Effects
 

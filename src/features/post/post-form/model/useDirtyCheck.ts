@@ -10,7 +10,13 @@ export const usePostDirtyCheck = () => {
   const { linkedSchedule } = useCreatePostScheduleStore();
 
   const checkHasChanges = useCallback(() => {
-    if (!initialSnapshot) return { hasChanges: false, isEmpty: true };
+    if (!initialSnapshot) {
+      // 스냅샷이 없으면 현재 폼 상태로 isEmpty 판단
+      console.log('title: ', title);
+      console.log('content: ', content);
+      const isEmpty = !title.trim() && stripHtml(content).trim() === '' && images.length === 0;
+      return { hasChanges: false, isEmpty };
+    }
 
     // 현재 이미지 URL 리스트 가공 (uploadedUrl만 추출)
     const currentImageUrls = images.map((img) => img.uploadedUrl ?? null);

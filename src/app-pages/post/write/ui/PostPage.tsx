@@ -159,6 +159,7 @@ export default function PostPage(props: PostPageProps) {
       {/* 5. 본문 에디터 */}
       <div className="flex h-full flex-1 overflow-auto">
         <PostEditor
+          mode={mode}
           initialContent={initialContent}
           initialImages={initialImages}
           linkedSchedule={linkedSchedule}

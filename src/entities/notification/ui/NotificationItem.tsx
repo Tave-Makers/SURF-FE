@@ -13,6 +13,7 @@ export interface NotificationItemProps {
   badge?: NOTIFICATION_BADGE;
   isRead: boolean;
   onClick?: () => void;
+  deepLink: string;
 }
 
 export const NotificationItem = ({

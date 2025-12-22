@@ -75,11 +75,15 @@ export const SolidButton = forwardRef<HTMLButtonElement, SolidButtonProps>(
           className,
         ].join(' ')}
       >
-        <span className="flex w-full items-center justify-between">
-          {leftIconName && <SurfIcon name={leftIconName} size={size} />}
-          <span className="flex-1 text-center">{children}</span>
-          {rightIconName && <SurfIcon name={rightIconName} size={size} />}
-        </span>
+        {leftIconName && (
+          <SurfIcon name={leftIconName} size={size} className="h-[1.5rem] w-[1.5rem]" />
+        )}
+        <div className="h-[1.5rem] w-[0.25rem]"></div>
+        {children && <span>{children}</span>}
+        <div className="h-[1.5rem] w-[0.25rem]"></div>
+        {rightIconName && (
+          <SurfIcon name={rightIconName} size={size} className="h-[1.5rem] w-[1.5rem]" />
+        )}
       </button>
     );
   },

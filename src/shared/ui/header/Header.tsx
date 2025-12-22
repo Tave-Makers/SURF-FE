@@ -177,7 +177,7 @@ export function Header(props: HeaderProps) {
   }
 
   return (
-    <header className="bg-background-normal-lighter top-0 flex h-20 w-full items-center justify-between px-8 py-5">
+    <header className="bg-background-normal-lighter top-0 flex h-[3rem] w-full items-center justify-between px-8 py-5">
       {content}
     </header>
   );

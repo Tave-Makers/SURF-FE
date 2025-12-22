@@ -1,5 +1,5 @@
 import { AppHeader } from '@/widgets/header/ui/AppHeader';
-import { AppNavigation } from '@/widgets/navigation/ui/AppNavigation';
+import { AppNavigation } from '@/widgets/bottom-navigation/ui/AppNavigation';
 
 export default function MainLayout({ children }: { children: React.ReactNode }) {
   return (

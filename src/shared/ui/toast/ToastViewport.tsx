@@ -14,7 +14,7 @@ const ToastViewport = () => {
   if (!current) return null;
 
   return createPortal(
-    <div className={viewportStyle}>
+    <div className={viewportStyle} role="status" aria-live="polite" aria-atomic="true">
       <Toast text={current.text} />
     </div>,
     document.body,

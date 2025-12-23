@@ -8,11 +8,11 @@ import { POST_CATEGORIES, PostCategoryKey } from '@/entities/post/model/category
 import { EditorState, PostPageMode, PostSnapshot } from './types';
 import { useCreatePost } from '@/features/post/create-post/model/useCreatePost';
 import { POST_VALIDATION } from '@/entities/post/model/validation';
-import { useCreatePostScheduleStore } from '@/features/schedule/create-post-schedule/model/useCreatePostScheduleStore';
-import { usePostReservationStore } from '@/features/schedule/create-post-schedule/model/useCreatePostScheduleStore';
-import { useGetPostScheduleQuery } from '@/features/post/model/useGetPostScheduleQuery';
+import { useCreatePostScheduleStore } from '@/features/schedule/post-schedule/create/model/useCreatePostScheduleStore';
+import { usePostReservationStore } from '@/features/schedule/post-schedule/create/model/useCreatePostScheduleStore';
+import { useGetPostScheduleQuery } from '@/features/schedule/post-schedule/edit/model/useGetPostScheduleQuery';
 import { useEditSchedule } from '@/features/schedule/edit/model/useEditSchedule';
-import { useCreatePostSchedule } from '@/features/schedule/create-post-schedule/model/useCreatePostSchedule';
+import { useCreatePostSchedule } from '@/features/schedule/post-schedule/create/model/useCreatePostSchedule';
 import { ScheduleFormData } from '@/features/schedule/create/model/types';
 import { usePostDirtyCheck } from '@/features/post/post-form/model/useDirtyCheck';
 import { usePostInitialization } from '@/features/post/post-form/model/usePostInitialization';

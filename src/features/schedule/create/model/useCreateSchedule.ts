@@ -1,7 +1,7 @@
 import { ScheduleCreateRequest, ScheduleCreateResponse } from '@/entities/schedule/model/types';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { createSchedule } from '../api/createSchedule';
-import { scheduleQueryKeys } from '@/features/calendar/api/queryKeys';
+import { scheduleQueryKeys } from '@/entities/schedule/api/queryKeys';
 
 export const useCreateSchedule = () => {
   const queryClient = useQueryClient();

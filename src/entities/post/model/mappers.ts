@@ -1,10 +1,11 @@
-import { PostDetailData, PostListItemResponse, PostScheduleData } from '@/entities/post/api/types';
+import { PostDetailData, PostListItemResponse } from '@/entities/post/api/types';
 import { TAB_CATEGORIES, TabCategoryLabel, TabCategoryKey } from '@/entities/post/model/tab';
 import { categoryIdToLabel } from './category';
 import type { Post, PostDetail } from './types';
 import { POST_BOARDS } from './board';
 import { formatDate, formatDateTime, toKST } from '@/shared/utils/date';
 import { toDate } from 'date-fns';
+import { PostScheduleData } from '@/entities/schedule/post-schedule/api/types';
 
 export const transformListItemToPost = (item: PostListItemResponse): Post => ({
   postId: item.postId,

@@ -13,13 +13,6 @@ export enum HeaderMode {
   SearchBar = 'searchBar',
 }
 
-// 공통 props
-// type BaseHeaderProps = {
-//   hasLeftIcon: boolean;
-//   onClickBack: () => void;
-//   title?: string;
-// };
-
 type HeaderIcon = {
   label?: SurfIconName; // 아이콘 이름
   onClickIcon?: () => void; // 아이콘 클릭 시 이벤트
@@ -73,17 +66,17 @@ export type HeaderProps =
 const renderLeftIcon = (hasLeftIcon?: boolean, onClickBack?: () => void) =>
   hasLeftIcon && (
     <button
-      className="cursor-pointer border-none bg-transparent p-[0.5rem]"
+      className="cursor-pointer border-none bg-transparent p-8"
       onClick={onClickBack}
       type="button"
     >
-      <SurfIcon name="ChevronLeft" size="l" className="text-logo-normal" />
+      <SurfIcon name="ChevronLeft" size="l" className="text-foreground-normal" />
     </button>
   );
 
 const renderTitle = (title?: string) =>
   title ? (
-    <div className="text-head-18-700--1 text-border-contrast flex-1 !leading-[18px]">{title}</div>
+    <div className="text-title-title1 text-border-contrast flex-1 leading-14!">{title}</div>
   ) : null;
 
 const renderRightIcons = (icons: MaxThree<HeaderIcon> = []) => (
@@ -93,11 +86,11 @@ const renderRightIcons = (icons: MaxThree<HeaderIcon> = []) => (
         icon.label && (
           <button
             key={idx}
-            className="cursor-pointer border-none bg-transparent p-[0.5rem]"
+            className="cursor-pointer border-none bg-transparent p-8"
             onClick={icon.onClickIcon}
             type="button"
           >
-            <SurfIcon name={icon.label} size="l" className="text-logo-normal" />
+            <SurfIcon name={icon.label} size="l" className="text-foreground-normal" />
           </button>
         ),
     )}
@@ -184,7 +177,7 @@ export function Header(props: HeaderProps) {
   }
 
   return (
-    <header className="bg-background-normal-lighter top-0 flex h-[3rem] w-full items-center justify-between px-[0.5rem] py-[0.25rem]">
+    <header className="bg-background-normal-lighter top-0 flex h-[3rem] w-full items-center justify-between px-8 py-5">
       {content}
     </header>
   );

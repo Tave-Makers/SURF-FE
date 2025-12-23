@@ -1,16 +1,46 @@
 'use client';
 
-import { SurfIcon } from '@/shared/ui/icon/SurfIcon';
 import { SolidButton } from '@/shared/ui/button/solid-button/SolidButton';
 import * as amplitude from '@amplitude/analytics-browser';
 import { useRouter } from 'next/navigation';
 import { useToastStore } from '@/shared/store/toastStore';
+
+import { useEffect } from 'react';
+import { getFcmToken } from '@/shared/lib/fcm';
+import { useRegisterToken } from '@/entities/notification/model/useRegisterToken';
 
 const handleToast = () => {
   useToastStore.getState().show('성공');
 };
 
 export const HomePage = () => {
+  const { mutate: registerToken } = useRegisterToken();
+
+  useEffect(() => {
+    const isRegistered = sessionStorage.getItem('isFcmRegistered');
+    if (isRegistered) return;
+
+    const handleFcmRegistration = async () => {
+      try {
+        const token = await getFcmToken();
+
+        if (token) {
+          registerToken({
+            token: token,
+            platform: 'WEB',
+          });
+
+          sessionStorage.setItem('isFcmRegistered', 'true');
+        }
+        console.log('홈 화면: FCM 토큰 등록 완료');
+      } catch (error) {
+        console.error('FCM 설정 실패:', error);
+      }
+    };
+
+    void handleFcmRegistration();
+  }, [registerToken]);
+
   const router = useRouter();
 
   const handleTestEvent = () => {
@@ -27,22 +57,6 @@ export const HomePage = () => {
 
   return (
     <div>
-      <h1 className="text-head-26-700--1 text-background-primary">안녕하세요 hello world</h1>
-      <h1 className="text-caption-9-600--4 text-foreground-success">안녕하세요 hello world</h1>
-      {/* 기본(stroke) 아이콘 */}
-      <SurfIcon
-        name="SmileCircle"
-        size="m"
-        className="cursor-pointer text-[color:var(--color-foreground-success)] hover:text-[color:var(--color-foreground-danger)]"
-      />
-
-      {/* Solid 아이콘 */}
-      <SurfIcon
-        name="SmileCircleSolid"
-        size="l"
-        className="cursor-pointer text-[color:var(--color-foreground-primary)] hover:text-[color:var(--color-foreground-warning)]"
-      />
-
       <SolidButton size="s" variant="primary" onClick={handleTestEvent}>
         Amplitude 이벤트 테스트
       </SolidButton>
@@ -50,6 +64,7 @@ export const HomePage = () => {
       <button className="bg-amber-300" onClick={handleCalendarClick}>
         캘린더 화면 보기 클릭!
       </button>
+
       <button onClick={handleToast}>토스트</button>
     </div>
   );

@@ -3,7 +3,7 @@ import { MenuTrigger } from './MenuTrigger';
 import { usePicker } from '@/shared/hooks/usePicker';
 
 const meta: Meta<typeof MenuTrigger> = {
-  title: 'Shared/UI/MenuTrigger',
+  title: 'Shared/UI/Menu/MenuTrigger',
   component: MenuTrigger,
   tags: ['autodocs'],
 };

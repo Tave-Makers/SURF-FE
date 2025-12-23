@@ -8,7 +8,7 @@ type StoryItem = {
 };
 
 const meta: Meta<typeof MenuDropDown<StoryItem>> = {
-  title: 'Shared/UI/MenuDropDown',
+  title: 'Shared/UI/Menu/MenuDropDown',
   component: MenuDropDown,
   tags: ['autodocs'],
   parameters: {

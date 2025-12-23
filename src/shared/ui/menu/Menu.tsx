@@ -23,7 +23,7 @@ export const Menu = ({ label, itemList = [] }: MenuProps) => {
 
   return (
     <div className="relative w-fit">
-      <MenuTrigger label={menuLabel ? menuLabel : label} isOpen={isMenuOpen} onClick={toggleMenu} />
+      <MenuTrigger label={menuLabel} isOpen={isMenuOpen} onClick={toggleMenu} />
       {isMenuOpen && (
         <div className="absolute top-full left-0 z-10 mt-2 w-full min-w-max">
           <MenuDropDown

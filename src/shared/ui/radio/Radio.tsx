@@ -59,7 +59,7 @@ export const Radio = forwardRef<HTMLInputElement, RadioProps>(
           className="checked:border-background-primary border-background-quinary checked:bg-background-primary h-[1.25rem] w-[1.25rem] cursor-pointer appearance-none rounded-full border p-5 checked:bg-clip-content disabled:cursor-not-allowed"
           {...rest}
         />
-        {label && <span className="text-foreground-normal text-body-body10">{label}</span>}
+        {label && <span className="text-foreground-normal text-body-body11">{label}</span>}
       </label>
     );
   },

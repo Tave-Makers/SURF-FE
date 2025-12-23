@@ -47,7 +47,7 @@ export function PostBodySection({ post, onClickLikeCount }: PostBodySectionProps
   const cleanContent = sanitizeHtml(post.content, sanitizeOptions);
 
   return (
-    <div className="flex flex-col gap-[1.5rem]">
+    <div className="flex flex-col gap-16">
       <PostProfile
         profileImgUrl={post.profileImageUrl}
         nickname={post.writer}

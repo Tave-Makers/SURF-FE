@@ -154,7 +154,7 @@ export const PostEditor = ({
   return (
     <div className="flex w-full min-w-0 flex-col gap-10">
       {/* 에디터 본문 */}
-      <div className="text-foreground-black text-body-body8 relative flex flex-1 overflow-y-auto px-13 break-all">
+      <div className="text-foreground-normal text-body-body7 relative flex flex-1 overflow-y-auto px-13 break-all">
         {/* 클릭 확장 오버레이 */}
         <button
           type="button"

@@ -4,12 +4,8 @@ import { Alert } from './Alert';
 const meta = {
   title: 'Shared/UI/Alert',
   component: Alert,
-  tags: ['autodocs'],
   parameters: {
     layout: 'centered',
-    docs: {
-      story: { inline: false, height: '300px' },
-    },
   },
   argTypes: {
     state: {

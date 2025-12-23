@@ -129,7 +129,7 @@ export function ProfileTabs({
 
       <div ref={contentRef} className="scroll-touch min-h-0 flex-1 overflow-y-auto">
         {tab === 'profile' ? (
-          <div className="flex flex-col gap-[1.5rem] px-[1rem] py-[1.25rem]">
+          <div className="flex flex-col gap-16 px-13 py-15">
             <FieldGroup title="전화번호">
               <TextArea value={phoneNumber ?? ''} onChange={noop} readOnly />
             </FieldGroup>
@@ -147,7 +147,7 @@ export function ProfileTabs({
 
             <FieldGroup title="경력">
               {Array.isArray(careers) && careers.length > 0 ? (
-                <ul className="flex flex-col gap-[0.5rem]">
+                <ul className="flex flex-col gap-8">
                   {careers.map((c) => (
                     <li key={c.careerId ?? `${c.companyName}-${c.startDate}`}>
                       <CareerCard item={c} />
@@ -156,7 +156,7 @@ export function ProfileTabs({
                 </ul>
               ) : (
                 <p
-                  className="text-foreground-hint text-[0.875rem] leading-[1.25rem]"
+                  className="text-foreground-quaternary text-[0.875rem] leading-15"
                   role="status"
                   aria-live="polite"
                 >
@@ -170,7 +170,7 @@ export function ProfileTabs({
             {!isLoading && (
               <>
                 {Array.isArray(badges) && badges.length > 0 ? (
-                  <div className="grid grid-cols-3 gap-[3rem] p-[2.5rem]">
+                  <div className="grid grid-cols-3 gap-20 p-19">
                     {badges.map((b, i) => (
                       <ActivityBadge
                         key={badgeKey(b, i)}
@@ -181,7 +181,7 @@ export function ProfileTabs({
                   </div>
                 ) : (
                   <p
-                    className="text-foreground-hint text-[0.875rem] leading-[1.25rem]"
+                    className="text-foreground-quaternary text-[0.875rem] leading-15"
                     role="status"
                     aria-live="polite"
                   >
@@ -194,7 +194,7 @@ export function ProfileTabs({
 
                 {/* 추가 로딩 표시 */}
                 {isFetchingNextPage && (
-                  <div className="mt-2 px-[2.5rem]" role="status" aria-live="polite">
+                  <div className="mt-2 px-19" role="status" aria-live="polite">
                     더 불러오는 중...
                   </div>
                 )}

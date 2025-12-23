@@ -18,7 +18,6 @@ import { SurfIcon } from '../icon/SurfIcon';
  * @param {(val: string) => void} [onSend] - 메시지 전송 핸들러 (Enter 또는 버튼 클릭 시 호출)
  * @param {() => void} [onIconClick] - 아이콘 클릭 시 호출되는 콜백
  * @param {boolean} [isEmojiActive=false] - 이모지 버튼 활성화 여부 (true일 경우 Solid 아이콘 표시)
- *
  * ---
  * ### 기타
  * - 전송 후 입력값은 자동으로 초기화됩니다.
@@ -63,7 +62,7 @@ export const ActionBar = forwardRef<HTMLTextAreaElement, ActionBarProps>(
     };
 
     return (
-      <div className="border-border-normal bg-background-normal-lighter flex w-full items-center gap-10 border-t px-13 pt-13 pb-15">
+      <div className="border-border-normal bg-background-normal flex w-full items-center gap-10 border-t px-13 pt-13 pb-15">
         <TextInput
           mode="chat"
           ref={internalRef}
@@ -83,7 +82,7 @@ export const ActionBar = forwardRef<HTMLTextAreaElement, ActionBarProps>(
           <SurfIcon
             name="ArrowUp"
             size="l"
-            className="text-foreground-accent group-hover:text-foreground-accent-hover transition-colors duration-200"
+            className="text-foreground-static-white group-hover:text-foreground-tertiary transition-colors duration-200"
           />
         </button>
       </div>

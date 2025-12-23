@@ -33,7 +33,10 @@ export type CareerCreateDTO = CareerBase;
 export type CareerUpdateDTO = Partial<CareerBase> & { careerId: number };
 
 export type UserProfile = {
+  userId: number;
   name: string;
+  bio: string | null;
+  avatarUrl: string | null;
   phoneNumber: string;
   email: string;
   university: string | null;

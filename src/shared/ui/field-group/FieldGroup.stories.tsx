@@ -30,10 +30,17 @@ export const WithMultipleTextAreas: Story = {
     const [longIntro, setLongIntro] = useState('');
 
     return (
-      <FieldGroup {...args}>
-        <TextArea value={shortIntro} onChange={setShortIntro} placeholder="한 줄 소개" />
-        <TextArea value={longIntro} onChange={setLongIntro} placeholder="자세한 소개" />
-      </FieldGroup>
+      <>
+        <FieldGroup isRequired={true} title="자기소개">
+          <TextArea value={shortIntro} onChange={setShortIntro} placeholder="한 줄 소개" />
+          <TextArea value={longIntro} onChange={setLongIntro} placeholder="자세한 소개" />
+        </FieldGroup>
+        <span />
+        <FieldGroup {...args}>
+          <TextArea value={shortIntro} onChange={setShortIntro} placeholder="한 줄 소개" />
+          <TextArea value={longIntro} onChange={setLongIntro} placeholder="자세한 소개" />
+        </FieldGroup>
+      </>
     );
   },
 };

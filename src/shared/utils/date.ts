@@ -33,3 +33,10 @@ export function timeAgo(date: Date): string {
 
   return formatDate(date);
 }
+
+// Date 객체를 받아 MM.DD로 변환
+export function formatMonthDay(date: Date) {
+  const m = String(date.getMonth() + 1).padStart(2, '0');
+  const d = String(date.getDate()).padStart(2, '0');
+  return `${m}.${d}`;
+}

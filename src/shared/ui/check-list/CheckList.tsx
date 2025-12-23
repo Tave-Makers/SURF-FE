@@ -31,15 +31,15 @@ export function CheckList({
         <SurfIcon
           name="Check"
           size="m"
-          className={isChecked ? 'text-background-primary' : 'text-foreground-hint'}
+          className={isChecked ? 'text-background-primary' : 'text-foreground-tertiary'}
         />
-        <div className="text-foreground-secondary-darker text-body-14-600--1-24 flex shrink-0 grow basis-0">
+        <div className="text-foreground-normal-lighter text-body-body8 flex shrink-0 grow basis-0">
           {title}
         </div>
       </button>
       {/* 우측 버튼*/}
       <button onClick={() => onClickItem?.(id)} className="cursor-pointer">
-        <SurfIcon name="ChevronRight" size="m" className="text-foreground-hint" />
+        <SurfIcon name="ChevronRight" size="m" className="text-foreground-tertiary" />
       </button>
     </div>
   );

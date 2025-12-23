@@ -41,7 +41,7 @@ export function DayChipRadio({
       ].join(' ')}
     >
       <div className="flex w-full min-w-0 flex-col">
-        <div className="text-body-body8 text-foreground-secondary-lighter flex w-full items-center justify-center py-3">
+        <div className="text-body-body9 text-foreground-secondary-lighter flex w-full items-center justify-center py-3">
           {date.getDate()}
         </div>
         <div>

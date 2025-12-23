@@ -51,9 +51,9 @@ export const TextButton = forwardRef<HTMLButtonElement, TextButtonProps>(
     };
 
     const sizeTextMap: Record<ButtonSize, string> = {
-      s: 'text-body-body7',
-      m: 'text-body-body5',
-      l: 'text-body-body5',
+      s: 'text-body-body8',
+      m: 'text-body-body6',
+      l: 'text-body-body6',
     };
 
     const variantMap: Record<ButtonVariant, string> = {

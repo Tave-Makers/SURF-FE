@@ -66,7 +66,7 @@ function PostCardListComponent({
 
       <div
         ref={loadMoreRef}
-        className="text-body-14-600--1-20 text-foreground-hint flex items-center justify-center py-[1rem]"
+        className="text-body-body8 text-foreground-tertiary flex items-center justify-center py-[1rem]"
       >
         {isFetchingNextPage
           ? '더 많은 게시글을 불러오는 중...'

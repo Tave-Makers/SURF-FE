@@ -2,6 +2,7 @@ import { infiniteQueryOptions, queryOptions } from '@tanstack/react-query';
 import { postApi } from './postApi';
 import { postQueryKeys } from './queryKeys';
 import type { GetBoardPostsRequest } from './types';
+import { postScheduleApi } from '@/entities/schedule/post-schedule/api/postScheduleApi';
 
 export const boardPostsQueryOptions = (params: Omit<GetBoardPostsRequest, 'page' | 'size'>) =>
   infiniteQueryOptions({
@@ -39,7 +40,7 @@ export const postDetailQueryOptions = (postId: number) =>
       let schedule = null;
       if (detail.hasSchedule) {
         try {
-          schedule = await postApi.getPostSchedule(postId);
+          schedule = await postScheduleApi.getPostSchedule(postId);
         } catch (error) {
           console.error('Failed to fetch post schedule:', error);
         }

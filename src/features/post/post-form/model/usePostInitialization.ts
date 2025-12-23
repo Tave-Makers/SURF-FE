@@ -5,7 +5,7 @@ import { isSameSchedule } from '@/features/schedule/lib/scheduleUtils';
 import { PostPageMode, PostSnapshot } from '@/features/post/post-form/model/types';
 import { ScheduleFormData } from '@/features/schedule/create/model/types';
 import { PostDetail } from '@/entities/post/model/types';
-import { PostScheduleData } from '@/entities/post/api/types';
+import { PostScheduleData } from '@/entities/schedule/post-schedule/api/types';
 
 // 필요한 타입 정의 (너무 길면 별도 interface로 분리)
 type Props = {

@@ -1,4 +1,5 @@
-import { ImageItemResponse, PostScheduleData } from '../api/types';
+import { PostScheduleData } from '@/entities/schedule/post-schedule/api/types';
+import { ImageItemResponse } from '../api/types';
 import { POST_BOARDS } from './board';
 import { PostCategoryLabel } from './category';
 

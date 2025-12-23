@@ -1,5 +1,5 @@
 import { useMemo } from 'react';
-import { useCreatePostScheduleStore } from '../create-post-schedule/model/useCreatePostScheduleStore';
+import { useCreatePostScheduleStore } from '../post-schedule/create/model/useCreatePostScheduleStore';
 import { useGetSingleSchedule } from '../edit/model/useGetSingleSchedule';
 import { ScheduleFormData } from '../create/model/types';
 import { CATEGORY_MAP } from '@/entities/schedule/model/constants';

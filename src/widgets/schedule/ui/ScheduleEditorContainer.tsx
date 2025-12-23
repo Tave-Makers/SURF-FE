@@ -9,8 +9,8 @@ import { format } from 'date-fns';
 import { useScheduleFormInit } from '@/features/schedule/model/useScheduleFormInit';
 import { useCreateSchedule } from '@/features/schedule/create/model/useCreateSchedule';
 import { useEditSchedule } from '@/features/schedule/edit/model/useEditSchedule';
-import { useCreatePostScheduleStore } from '@/features/schedule/create-post-schedule/model/useCreatePostScheduleStore';
-import { useGetPostScheduleQuery } from '@/features/post/model/useGetPostScheduleQuery'; // ✅ 추가된 쿼리
+import { useCreatePostScheduleStore } from '@/features/schedule/post-schedule/create/model/useCreatePostScheduleStore';
+import { useGetPostScheduleQuery } from '@/features/schedule/post-schedule/edit/model/useGetPostScheduleQuery'; // ✅ 추가된 쿼리
 
 // UI & Types
 import { mapScheduleFormToRequest } from '@/features/schedule/create/api/mapper';

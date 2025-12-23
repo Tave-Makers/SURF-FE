@@ -25,7 +25,7 @@ import { useAuthStore } from '@/features/auth/model/useAuthStore';
  * week: 주 그리드
  * cell: 날짜 셀
  * day: 날짜 버튼
- * month_caption: 월 제목
+ * month_caption: 월 제목 숨기기
  * tfoot: 푸터 숨기기
  * weekdays: 요일 행 그리드
  * weekday: 요일 셀
@@ -44,7 +44,7 @@ const calendarClassNames = {
   tfoot: 'hidden',
   weekdays: 'flex flex-1 grid grid-cols-7',
   weekday:
-    'flex-1 min-w-[2.81rem] p-10 text-center text-body-body8 text-foreground-secondary-lighter',
+    'flex-1 min-w-[2.81rem] p-10 text-center text-body-body9 text-foreground-secondary-lighter',
 } as const;
 
 type CalendarProps = {

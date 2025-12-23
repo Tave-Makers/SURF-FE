@@ -2,6 +2,7 @@
 @import './font-tokens.css';
 @import './color-tokens.css';
 @import './scheme-tokens.css';
+@import './shadow-tokens.css';
 
 /* 뷰포트 높이 전파 */
 html,
@@ -136,4 +137,24 @@ body {
 }
 .scrollbar-hide::-webkit-scrollbar {
   display: none; /* Chrome, Safari */
+}
+
+/* MenuDropDown 컴포넌트 전용 커스텀 스크롤바 */
+.menu-dropdown-scrollbar {
+  &::-webkit-scrollbar {
+    width: 0.125rem;
+  }
+
+  &::-webkit-scrollbar-track {
+    background: transparent;
+  }
+
+  &::-webkit-scrollbar-thumb {
+    background-color: transparent;
+    border-radius: 62.4375rem;
+  }
+
+  &:hover::-webkit-scrollbar-thumb {
+    background-color: var(--color-background-secondary);
+  }
 }

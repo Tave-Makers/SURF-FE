@@ -11,6 +11,9 @@ export type SelectFieldProps = Omit<HTMLAttributes<HTMLButtonElement>, 'onClick'
   placeholder?: string;
 };
 
+const containerStyle =
+  'flex flex-row items-center justify-between w-full p-10 rounded-3 bg-background-quaternary';
+
 export const SelectField = forwardRef<HTMLButtonElement, SelectFieldProps>(
   (
     {
@@ -25,12 +28,9 @@ export const SelectField = forwardRef<HTMLButtonElement, SelectFieldProps>(
     ref,
   ) => {
     const isSelected = !!selectedValue;
-    const textColor = isSelected ? 'text-foreground-normal' : 'text-foreground-hint';
-    const sizeTextClass = size === 'm' ? 'text-caption-12-400' : 'text-body-14-400--2-24';
-    const containerBase =
-      'flex flex-row items-center justify-between w-full p-[0.62rem] rounded-[0.25rem] bg-background-normal-darker';
+    const textColor = isSelected ? 'text-foreground-normal' : 'text-foreground-tertiary';
+    const textStyle = size === 'm' ? 'text-body-body11' : 'text-body-body9';
     const disabledOpacity = isDisabled ? 'opacity-[var(--opacity-50,0.5)]' : '';
-
     return (
       <button
         ref={ref}
@@ -38,19 +38,15 @@ export const SelectField = forwardRef<HTMLButtonElement, SelectFieldProps>(
         disabled={isDisabled}
         aria-disabled={isDisabled || undefined}
         aria-expanded={isSelected}
-        className={[containerBase, disabledOpacity, className].join(' ')}
+        className={[containerStyle, disabledOpacity, className].join(' ')}
         onClick={onClick}
         {...rest}
       >
-        <div className={[sizeTextClass, textColor].join(' ')}>
+        <div className={[textStyle, textColor].join(' ')}>
           {isSelected ? selectedValue : placeholder}
         </div>
         <div className="flex items-center">
-          <SurfIcon
-            name="ChevronRight"
-            size={size}
-            className="text-[color:var(--color-border-hint)]"
-          />
+          <SurfIcon name="ChevronRight" size={size} className="text-foreground-tertiary" />
         </div>
       </button>
     );

@@ -164,7 +164,6 @@ export default function PostPage(props: PostPageProps) {
           initialImages={initialImages}
           linkedSchedule={linkedSchedule}
           onChange={handleEditorChange}
-          onInitialized={() => {}}
           onScheduleRemove={handleScheduleRemove}
           onReservationClick={openReservationModal}
         />

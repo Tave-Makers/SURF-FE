@@ -26,7 +26,6 @@ export type PostEditorProps = {
   initialImages: UploadImage[];
   linkedSchedule: ScheduleFormData | null;
   onChange: (data: { content: string; images: UploadImage[] }) => void;
-  onInitialized: () => void;
   onScheduleRemove: () => void;
   onReservationClick: () => void;
 };
@@ -37,7 +36,6 @@ export const PostEditor = ({
   initialImages,
   linkedSchedule,
   onChange,
-  onInitialized,
   onScheduleRemove,
   onReservationClick,
 }: PostEditorProps) => {
@@ -87,7 +85,6 @@ export const PostEditor = ({
       }
 
       initializedRef.current = true;
-      onInitialized();
       return;
     }
 
@@ -103,7 +100,6 @@ export const PostEditor = ({
       // 이미지가 없는 게시글인 경우 여기서 초기화 완료 처리
       if (!initialImages || initialImages.length === 0) {
         initializedRef.current = true;
-        onInitialized();
       }
     }
 
@@ -111,9 +107,8 @@ export const PostEditor = ({
     if (initialImages && initialImages.length > 0) {
       setImages(initialImages);
       initializedRef.current = true;
-      onInitialized();
     }
-  }, [editor, initialContent, initialImages, setImages, onInitialized, mode]);
+  }, [editor, initialContent, initialImages, setImages, mode]);
 
   // 3. Side Effects
 

@@ -6,7 +6,7 @@ import { SurfIcon } from '@/shared/ui/icon/SurfIcon';
  * @param onClick - 버튼 클릭 시 실행될 토글 함수
  */
 
-interface MenuTriggerProps {
+export interface MenuTriggerProps {
   label: string;
   isOpen: boolean;
   onClick: () => void;

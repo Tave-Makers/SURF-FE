@@ -17,27 +17,6 @@ import { Avatar } from '@/shared/ui/avatar/Avatar';
  * @prop onLikeToggle 좋아요 클릭 콜백 (newState: true=좋아요, false=취소)
  * @prop onReplyClick 답글 클릭 콜백
  * @prop onMoreClick 더보기 클릭 콜백
- *
- * @example
- * ```tsx
- * const [isLiked, setIsLiked] = useState(false);
- * const [count, setCount] = useState(42);
- *
- * <Comment
- *   name="김테이브"
- *   date="2026.10.16"
- *   time="01:21"
- *   content="좋은 글이네요! 😊"
- *   likeCount={count}
- *   isLiked={isLiked}
- *   onLikeToggle={(newState) => {
- *     setIsLiked(newState);
- *     setCount((prev) => prev + (newState ? 1 : -1));
- *   }}
- *   onReplyClick={() => console.log('답글 클릭')}
- *   onMoreClick={() => console.log('더보기 클릭')}
- * />
- * ```
  */
 
 type CommentProps = {
@@ -77,8 +56,8 @@ const Comment = ({
         {/* 이름, 날짜, 시간, 더보기 */}
         <header className="flex items-center">
           <div className="flex gap-8">
-            <p className="text-body-body7 text-foreground-normal">{name}</p>
-            <p className="text-caption-caption6 text-foreground-quinary-darker flex items-center gap-5">
+            <p className="text-body-body6 text-foreground-normal">{name}</p>
+            <p className="text-caption-caption4 text-foreground-quinary-darker flex items-center gap-5">
               <time>{date}</time>
               <time>{time}</time>
             </p>
@@ -89,7 +68,7 @@ const Comment = ({
         </header>
 
         {/* 댓글 내용 */}
-        <p className="text-body-body8 text-foreground-normal">{content}</p>
+        <p className="text-body-body7 text-foreground-normal">{content}</p>
 
         {/* 좋아요, 답글 */}
         <footer className="flex gap-11">

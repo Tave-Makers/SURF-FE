@@ -37,7 +37,7 @@ export const ProfileImageUploader = ({ value, onChange }: Props) => {
           <img
             src={previewUrl || value}
             alt="프로필 이미지"
-            className="aspect-square h-[6rem] w-[6rem] rounded-[0.5rem] object-cover"
+            className="rounded-4 aspect-square h-[6rem] w-[6rem] object-cover"
           />
         ) : (
           <Avatar size="xl" />

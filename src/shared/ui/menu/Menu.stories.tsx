@@ -3,7 +3,7 @@ import { Menu } from './Menu';
 import { useState } from 'react';
 
 const meta = {
-  title: 'Entities/UI/Search/Menu',
+  title: 'Shared/UI/Menu/Menu',
   component: Menu,
   tags: ['autodocs'],
   parameters: {

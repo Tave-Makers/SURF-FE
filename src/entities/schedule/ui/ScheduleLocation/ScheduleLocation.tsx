@@ -67,7 +67,7 @@ export function ScheduleLocation({
   if (isEditing) {
     return (
       <div className="flex h-18 w-full flex-row items-center justify-between py-7">
-        <div className="text-foreground-normal text-body-body8 flex shrink-0">{title}</div>
+        <div className="text-foreground-normal text-body-body9 flex shrink-0">{title}</div>
         <div className="flex flex-1 justify-end">
           <textarea
             ref={inputRef}
@@ -98,7 +98,7 @@ export function ScheduleLocation({
       onClick={handleClick}
       onKeyDown={handleKeyDown}
     >
-      <div className="text-foreground-normal text-body-body8 flex shrink-0">{title}</div>
+      <div className="text-foreground-normal text-body-body9 flex shrink-0">{title}</div>
 
       <div className="text-foreground-quaternary text-caption-caption2 line-clamp-1 flex shrink-0">
         {displayValue}

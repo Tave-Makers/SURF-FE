@@ -1,0 +1,39 @@
+import { create } from 'zustand';
+
+type ToastData = {
+  id: string;
+  text: string;
+};
+
+export interface ToastStore {
+  current: ToastData | null;
+  show: (text: string, durationMs?: number) => void;
+  clear: () => void;
+}
+
+export const useToastStore = create<ToastStore>((set) => {
+  let hideTimer: ReturnType<typeof setTimeout> | null = null;
+  return {
+    current: null,
+    show: (text, durationMs = 3000) => {
+      // 이미 걸려있는 타이머가 있으면 취소 (시간 카운트 리셋)
+      if (hideTimer) clearTimeout(hideTimer);
+
+      //current만 교체
+      const id = crypto.randomUUID();
+      set({ current: { id, text } });
+
+      hideTimer = setTimeout(() => {
+        // 타이머 끝나면 제거
+        set({ current: null });
+        hideTimer = null;
+      }, durationMs);
+    },
+
+    clear: () => {
+      if (hideTimer) clearTimeout(hideTimer);
+      hideTimer = null;
+      set({ current: null });
+    },
+  };
+});

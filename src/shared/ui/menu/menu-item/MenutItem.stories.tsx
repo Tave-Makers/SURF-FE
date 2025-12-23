@@ -2,7 +2,7 @@ import type { Meta, StoryObj } from '@storybook/nextjs';
 import { MenuItem } from './MenuItem';
 
 const meta: Meta<typeof MenuItem> = {
-  title: 'Shared/UI/MenuItem',
+  title: 'Shared/UI/Menu/MenuItem',
   component: MenuItem,
   tags: ['autodocs'],
   decorators: [

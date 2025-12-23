@@ -19,6 +19,7 @@ import { POST_VALIDATION } from '@/entities/post/model/validation';
 import { PostPageMode } from '@/features/post/post-form/model/types';
 import { ScheduleCategory } from '@/entities/schedule/model/types';
 import { ActivityCategory } from '@/entities/calendar/model/types';
+import { usePostFormStore } from '@/features/post/post-form/model/usePostFormStore';
 
 export type PostEditorProps = {
   mode: PostPageMode;
@@ -51,7 +52,8 @@ export const PostEditor = ({
   } = useImageManager();
 
   const contentRef = useRef<string>(initialContent);
-  const initializedRef = useRef(false);
+  const { isEditorInitialized: isInitialized, setIsEditorInitialized: setIsInitialized } =
+    usePostFormStore();
   const keyboardOffset = useKeyboardOffset();
   const { MAX_IMAGES } = POST_VALIDATION;
 
@@ -64,18 +66,18 @@ export const PostEditor = ({
     (html: string) => {
       contentRef.current = html;
       // 초기화 완료 후에만 부모 컴포넌트의 상태를 업데이트
-      if (initializedRef.current) {
+      if (isInitialized) {
         onChange({ content: html, images });
       }
     },
-    [onChange, images],
+    [onChange, images, isInitialized],
   );
 
   const editor = usePostEditor(initialContent, onUpdate);
 
   // 외부 데이터(initialValue) 주입 및 초기화 세션 관리
   useEffect(() => {
-    if (!editor || initializedRef.current) return;
+    if (!editor || isInitialized) return;
 
     // 생성 모드: 데이터 주입을 기다리지 않고 즉시 활성화
     if (mode === 'create') {
@@ -83,8 +85,7 @@ export const PostEditor = ({
       if (initialImages && initialImages.length > 0) {
         setImages(initialImages);
       }
-
-      initializedRef.current = true;
+      setIsInitialized(true);
       return;
     }
 
@@ -99,24 +100,24 @@ export const PostEditor = ({
 
       // 이미지가 없는 게시글인 경우 여기서 초기화 완료 처리
       if (!initialImages || initialImages.length === 0) {
-        initializedRef.current = true;
+        setIsInitialized(true);
       }
     }
 
     // 2) 이미지 데이터 주입 (최초 1회)
     if (initialImages && initialImages.length > 0) {
       setImages(initialImages);
-      initializedRef.current = true;
+      setIsInitialized(true);
     }
-  }, [editor, initialContent, initialImages, setImages, mode]);
+  }, [editor, isInitialized, setIsInitialized, initialContent, initialImages, setImages, mode]);
 
   // 3. Side Effects
 
   // 이미지 리스트 변경 감지 (삭제/순서변경 등) 시 부모에게 알림
   useEffect(() => {
-    if (!initializedRef.current) return;
+    if (!isInitialized) return;
     onChange({ content: contentRef.current, images });
-  }, [images, onChange]);
+  }, [images, onChange, isInitialized]);
 
   // 4. Handlers
   const handleImageUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {

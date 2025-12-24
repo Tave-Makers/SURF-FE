@@ -4,7 +4,7 @@ import { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { Tab } from '@/shared/ui/tab/Tab';
 import { HeaderMode } from '@/shared/ui/header/Header';
-import type { NotificationTab } from '@/entities/notification/model/tab';
+import type { NotificationTab } from '@/entities/notification/model/notificationTab';
 import { NotificationList } from '@/entities/notification/ui/NotificationList';
 import { useGetNotifications } from '@/entities/notification/model/useGetNotifications';
 import { useReadNotification } from '@/entities/notification/model/useReadNotification';

@@ -1,5 +1,5 @@
 import type { NotificationCategory } from '../api/constants';
-import type { NotificationTab } from './tab';
+import type { NotificationTab } from './notificationTab';
 import type { NOTIFICATION_BADGE } from '../ui/NotificationItem';
 import type { Notification } from '../api/types';
 import { NotificationItemProps } from '../ui/NotificationItem';

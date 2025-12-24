@@ -43,29 +43,3 @@ if (firebaseConfig.apiKey && firebaseConfig.projectId) {
 } else {
   console.error('[SW] Firebase Config가 전달되지 않았습니다.');
 }
-
-// 알림 클릭 이벤트 처리
-self.addEventListener('notificationclick', function(event) {
-  console.log('[SW] 알림 클릭됨');
-  
-  event.notification.close(); 
-
-  // notificationOptions.data에 넣어둔 URL 꺼내기
-  const urlToOpen = event.notification.data?.url || '/';
-
-  event.waitUntil(
-    clients.matchAll({ type: 'window', includeUncontrolled: true }).then(function(windowClients) {
-      for (let i = 0; i < windowClients.length; i++) {
-        var client = windowClients[i];
-        
-        if (client.url === urlToOpen && 'focus' in client) {
-          return client.focus();
-        }
-      }
-      // 새 창 열기
-      if (clients.openWindow) {
-        return clients.openWindow(urlToOpen);
-      }
-    })
-  );
-});

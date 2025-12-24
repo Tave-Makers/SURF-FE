@@ -8,8 +8,8 @@ interface UserData {
 }
 
 interface NoticeData {
-  title?: string;
-  description?: string;
+  title: string;
+  description: string;
 }
 
 interface ImgData {

@@ -1,4 +1,5 @@
 import { useId } from 'react';
+import { mapPartToImageMap } from '../../model/mappers';
 
 interface UserData {
   name: string;
@@ -40,6 +41,10 @@ export function HeroCard({ userData, noticeData, imgData }: HeroCardProps) {
   const textColor = imgData.isDark
     ? 'text-foreground-static-white'
     : 'text-foreground-static-black';
+
+  const selectedCharImgUrl = imgData.charImgUrl.find((img) =>
+    img.includes(mapPartToImageMap[userData.part]),
+  );
 
   return (
     <div className="relative w-full overflow-hidden bg-transparent">
@@ -85,7 +90,7 @@ export function HeroCard({ userData, noticeData, imgData }: HeroCardProps) {
         {/* 캐릭터 이미지 */}
         <g clipPath={`url(#arc-clip-${id})`}>
           <image
-            href={imgData.charImgUrl}
+            href={selectedCharImgUrl}
             x={charX}
             y={charY}
             width={charSize}

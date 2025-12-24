@@ -1,4 +1,3 @@
-// SheetItem.stories.tsx
 import type { Meta, StoryObj } from '@storybook/nextjs';
 import { SurfIcon } from '@/shared/ui/icon/SurfIcon';
 import { Sheet } from '@/shared/ui/sheet/Sheet';

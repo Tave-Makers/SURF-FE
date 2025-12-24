@@ -147,7 +147,7 @@ export const usePostForm = ({ mode, boardId, postId }: Props) => {
       return alert(`본문은 최대 ${MAX_CONTENT_LENGTH}자까지입니다.`);
     if (images.length > MAX_IMAGES) return alert(`이미지는 최대 ${MAX_IMAGES}개까지입니다.`);
 
-    const { isImagesChanged, isReservationChanged } = checkHasChanges();
+    const { isContentChanged, isImagesChanged, isReservationChanged } = checkHasChanges();
     const imageUrlList = images
       .filter((img) => img.uploadedUrl)
       .map((img, idx) => ({ originalUrl: img.uploadedUrl!, sequence: idx }));
@@ -191,6 +191,7 @@ export const usePostForm = ({ mode, boardId, postId }: Props) => {
           pinned: false,
           isReservationChanged,
           reservedAt: reservedAt ? reservedAt.toISOString() : '',
+          isContentChanged,
           isImageChanged: isImagesChanged,
           imageUrlList,
           hasSchedule: !!linkedSchedule,

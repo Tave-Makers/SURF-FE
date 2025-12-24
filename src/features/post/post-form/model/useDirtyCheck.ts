@@ -61,6 +61,7 @@ export const usePostDirtyCheck = () => {
         isImagesChanged ||
         isReservationChanged ||
         isScheduleChanged,
+      isContentChanged,
       isImagesChanged,
       isReservationChanged,
       isScheduleChanged,

@@ -13,7 +13,7 @@ interface NoticeData {
 
 interface ImgData {
   bgImgUrl: string;
-  charImgUrl: string;
+  charImgUrl: string[];
   isDark: boolean;
 }
 

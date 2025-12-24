@@ -47,24 +47,6 @@ export const Secondary: Story = { args: { variant: 'secondary' } };
 export const Danger: Story = { args: { variant: 'danger' } };
 export const Warning: Story = { args: { variant: 'warning' } };
 
-// 사이즈 비교
-export const Sizes: Story = {
-  args: { variant: 'primary' },
-  render: (args) => (
-    <div style={{ display: 'flex', gap: 12 }}>
-      <SolidButton {...args} size="s">
-        Small
-      </SolidButton>
-      <SolidButton {...args} size="m">
-        Medium
-      </SolidButton>
-      <SolidButton {...args} size="l">
-        Large
-      </SolidButton>
-    </div>
-  ),
-};
-
 // 아이콘 상태들 비교
 export const NoIcons: Story = {
   args: { leftIconName: null, rightIconName: null, children: '아이콘 없음' },

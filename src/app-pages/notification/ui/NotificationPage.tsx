@@ -43,6 +43,26 @@ export function NotificationPage() {
     }
   };
 
+  const renderContent = () => {
+    // 로딩 중일 때
+    if (isLoading) {
+      return <div className="p-20 text-center text-gray-500">로딩 중...</div>;
+    }
+
+    // 데이터가 없거나 비어있을 때 (탭 별 메시지 분기)
+    if (!data || data.length === 0) {
+      const emptyMessages = {
+        ALL: '새로운 알림이 없습니다.',
+        ACTIVITY: '새로운 활동 알림이 없습니다.',
+        SCHEDULE: '새로운 일정 알림이 없습니다.',
+      };
+      return <div className="p-20 text-center text-gray-500">{emptyMessages[currentTab]}</div>;
+    }
+
+    // 데이터가 있을 때
+    return <NotificationList items={data} onItemClick={handleNotificationClick} />;
+  };
+
   return (
     <div className="flex h-full flex-col">
       <AppHeader
@@ -54,15 +74,7 @@ export function NotificationPage() {
         }}
       />
       <Tab value={currentTab} onValueChange={handleTabChange} items={tabItems} />
-      <div className="flex-1">
-        {isLoading ? (
-          <div className="p-20 text-center text-gray-500">로딩 중...</div>
-        ) : !data || data.length === 0 ? (
-          <div className="p-20 text-center text-gray-500">새로운 알림이 없습니다.</div>
-        ) : (
-          <NotificationList items={data} onItemClick={handleNotificationClick} />
-        )}
-      </div>
+      <div className="flex-1">{renderContent()}</div>
     </div>
   );
 }

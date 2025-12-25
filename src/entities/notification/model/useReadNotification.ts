@@ -1,12 +1,12 @@
 import { useMutation, useQueryClient } from '@tanstack/react-query';
-import { patchNotification } from '../api/patchNotification';
+import { readNotification } from '../api/readNotification';
 import { notificationKeys } from './queryKeys';
 
 export function useReadNotification() {
   const queryClient = useQueryClient();
 
   return useMutation({
-    mutationFn: (id: number) => patchNotification(id),
+    mutationFn: (id: number) => readNotification(id),
 
     onSuccess: () => queryClient.invalidateQueries({ queryKey: notificationKeys.all }),
     onError: (error) => {

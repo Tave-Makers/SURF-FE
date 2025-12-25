@@ -74,7 +74,7 @@ export function NotificationPage() {
         }}
       />
       <Tab value={currentTab} onValueChange={handleTabChange} items={tabItems} />
-      <div className="flex-1">{renderContent()}</div>
+      <div className="flex-1 overflow-y-auto">{renderContent()}</div>
     </div>
   );
 }

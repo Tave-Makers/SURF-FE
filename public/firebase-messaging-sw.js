@@ -1,6 +1,6 @@
 // Firebase 서비스 워커 스크립트
-importScripts('https://www.gstatic.com/firebasejs/10.7.1/firebase-app-compat.js');
-importScripts('https://www.gstatic.com/firebasejs/10.7.1/firebase-messaging-compat.js');
+importScripts('/firebasejs/firebase-app-compat.js');
+importScripts('/firebasejs/firebase-messaging-compat.js');
 
 // URL 쿼리 파라미터 파싱 함수
 const getQueryParam = (key) => {
@@ -17,29 +17,57 @@ const firebaseConfig = {
   appId: getQueryParam('appId'),
 };
 
+const requiredKeys = ['apiKey', 'projectId', 'messagingSenderId', 'appId'];
+const isValidConfig = requiredKeys.every((key) => !!firebaseConfig[key]);
+
 // 설정값이 있을 때만 초기화
-if (firebaseConfig.apiKey && firebaseConfig.projectId) {
-  firebase.initializeApp(firebaseConfig);
-  
-  const messaging = firebase.messaging();
+if (isValidConfig) {
+  try {
+    firebase.initializeApp(firebaseConfig);
+    const messaging = firebase.messaging();
 
-  // 백그라운드 메시지 수신 핸들러
-  messaging.onBackgroundMessage((payload) => {
-    console.log('[SW] 백그라운드 알림 수신:', payload);
+    // 백그라운드 메시지 수신 핸들러
+    messaging.onBackgroundMessage((payload) => {
+      console.log('[SW] 백그라운드 알림 수신:', payload);
 
-    // 알림 내용 추출   
-    const notificationTitle = payload.data.body || '알림';
-    const notificationOptions = {
-      body: payload.data.body || '',
-      icon: '/icons/icon-192x192.png', // TODO: 로고 경로로 변경
-      data: {
-        url: payload.data.deepLink || '/' // 클릭 시 이동할 주소
+      const notificationTitle = 
+        payload.notification?.title || 
+        payload.data?.title || 
+        '알림';
+      
+      const notificationBody = 
+        payload.notification?.body || 
+        payload.data?.body || 
+        '';
+
+      let targetUrl = payload.data?.deepLink || '/';
+      
+      try {
+        const urlObj = new URL(targetUrl, self.location.origin);
+        if (urlObj.origin !== self.location.origin) {
+            console.warn('[SW] 허용되지 않은 외부 URL입니다. 홈으로 리다이렉트합니다.', targetUrl);
+            targetUrl = '/';
+        }
+      } catch (e) {
+        targetUrl = '/';
       }
-    };
 
-    // 브라우저 알림 표시
-    self.registration.showNotification(notificationTitle, notificationOptions);
-  });
+      const notificationOptions = {
+        body: notificationBody,
+        icon: '/icons/icon-192x192.png',  // TODO: 경로 수정 필요
+        data: {
+          url: targetUrl
+        }
+      };
+
+      return self.registration.showNotification(notificationTitle, notificationOptions)
+        .catch((err) => {
+          console.error('[SW] 알림 표시 실패:', err);
+        });
+    });
+  } catch (error) {
+    console.error('[SW] Firebase 초기화 중 에러 발생:', error);
+  }
 } else {
-  console.error('[SW] Firebase Config가 전달되지 않았습니다.');
+  console.error('[SW] 필수 Firebase 설정값이 누락되었습니다.');
 }

@@ -5,6 +5,7 @@ export function useRegisterToken() {
   return useMutation({
     mutationFn: registerDeviceToken,
     onSuccess: () => {
+      sessionStorage.setItem('isFcmRegistered', 'true');
       console.log('FCM 토큰 서버 등록 성공');
     },
     onError: (err) => {

@@ -26,10 +26,7 @@ export const HomePage = () => {
             token: token,
             platform: 'WEB',
           });
-
-          sessionStorage.setItem('isFcmRegistered', 'true');
         }
-        console.log('홈 화면: FCM 토큰 등록 완료');
       } catch (error) {
         console.error('FCM 설정 실패:', error);
       }

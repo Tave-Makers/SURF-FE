@@ -1,10 +1,11 @@
 import { getToken } from 'firebase/messaging';
-import { messaging } from '@/shared/config/firebase';
+import { getMessagingInstance } from '@/shared/config/firebase';
 
 const VAPID_KEY = process.env.NEXT_PUBLIC_FIREBASE_VAPID_KEY;
 
 export async function getFcmToken() {
-  if (typeof window === 'undefined' || !messaging) return null;
+  const messaging = getMessagingInstance();
+  if (!messaging) return null;
 
   try {
     const permission = await Notification.requestPermission();

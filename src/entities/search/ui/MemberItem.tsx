@@ -1,11 +1,11 @@
 import { USER_LEVEL_BADGE } from '@/entities/user/ui/user-level/UserLevelBadges';
 import { Avatar } from '@/shared/ui/avatar/Avatar';
 import { InfoBadge } from '@/shared/ui/info-badge/InfoBadge';
-import { MemberItemUser } from '../model/types';
+import { MemberSearchItem } from '../model/types';
 import { useDynamicVisibleCount } from '../model/useDynamicVisibleCount';
 
 interface MemberItemProps {
-  user: MemberItemUser;
+  user: MemberSearchItem;
   onClick?: () => void;
 }
 

@@ -1,8 +1,8 @@
-import { MemberItemUser } from '../model/types';
+import { MemberSearchItem } from '../model/types';
 import { MemberItem } from './MemberItem';
 
 interface MemberListProps {
-  members: MemberItemUser[];
+  members: MemberSearchItem[];
 }
 
 export const MemberList = ({ members }: MemberListProps) => {

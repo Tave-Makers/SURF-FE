@@ -1,6 +1,10 @@
-import { UserProfile } from '@/entities/user/model/types';
+import { UserLevel } from '@/entities/user/model/types';
 
-export type MemberItemUser = Pick<
-  UserProfile,
-  'userId' | 'name' | 'bio' | 'level' | 'chips' | 'avatarUrl'
->;
+export interface MemberSearchItem {
+  userId: number;
+  name: string;
+  bio: string | null;
+  avatarUrl: string | null;
+  level: UserLevel;
+  chips: string[];
+}

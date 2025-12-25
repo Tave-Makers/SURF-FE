@@ -1,7 +1,7 @@
 import type { Meta, StoryObj } from '@storybook/nextjs';
 
 import { MemberList } from './MemberList';
-import type { MemberItemUser } from '../model/types';
+import type { MemberSearchItem } from '../model/types';
 
 const meta: Meta<typeof MemberList> = {
   title: 'Entities/UI/Search/MemberList',
@@ -15,7 +15,7 @@ export default meta;
 
 type Story = StoryObj<typeof MemberList>;
 
-const mockMembers: MemberItemUser[] = [
+const mockMembers: MemberSearchItem[] = [
   {
     userId: 1,
     name: '테이브',

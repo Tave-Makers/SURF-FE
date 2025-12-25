@@ -31,7 +31,7 @@ if (firebaseConfig.apiKey && firebaseConfig.projectId) {
     const notificationTitle = payload.data.body || '알림';
     const notificationOptions = {
       body: payload.data.body || '',
-      icon: '/icons/icon-192x192.png', // TODO: 앱 아이콘 경로로 변경
+      icon: '/icons/icon-192x192.png', // TODO: 로고 경로로 변경
       data: {
         url: payload.data.deepLink || '/' // 클릭 시 이동할 주소
       }

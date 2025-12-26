@@ -12,21 +12,21 @@ export type RouteConfig = {
 };
 
 export const createRouteConfig = (router: RouterInstance): RouteConfig[] => [
-  {
-    id: 'home',
-    path: '/home',
-    backPath: '/home',
-    header: {
-      mode: HeaderMode.Default,
-      title: '홈',
-      hasLeftIcon: true,
-      icons: [
-        { label: 'Search', onClickIcon: () => alert('검색') },
-        { label: 'Share', onClickIcon: () => alert('공유') },
-        { label: 'DotsVertical', onClickIcon: () => alert('메뉴') },
-      ],
-    },
-  },
+  // {
+  //   id: 'home',
+  //   path: '/home',
+  //   backPath: '/home',
+  //   header: {
+  //     mode: HeaderMode.Default,
+  //     title: '홈',
+  //     hasLeftIcon: true,
+  //     icons: [
+  //       { label: 'Search', onClickIcon: () => alert('검색') },
+  //       { label: 'Share', onClickIcon: () => alert('공유') },
+  //       { label: 'DotsVertical', onClickIcon: () => alert('메뉴') },
+  //     ],
+  //   },
+  // },
   {
     id: 'mypage',
     path: '/mypage',

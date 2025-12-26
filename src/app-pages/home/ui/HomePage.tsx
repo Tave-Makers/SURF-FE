@@ -1,56 +1,167 @@
 'use client';
 
-import { SurfIcon } from '@/shared/ui/icon/SurfIcon';
-import { SolidButton } from '@/shared/ui/button/solid-button/SolidButton';
-import * as amplitude from '@amplitude/analytics-browser';
-import { useRouter } from 'next/navigation';
-import { useToastStore } from '@/shared/store/toastStore';
-
-const handleToast = () => {
-  useToastStore.getState().show('성공');
-};
+import { AnnouncementBar } from '@/entities/schedule/ui/announcement-bar/AnnouncementBar';
+import { Carousel } from '@/shared/ui/carousel/Carousel';
+import { HeaderMode } from '@/shared/ui/header/Header';
+import { Shortcut } from '@/shared/ui/shortcut/Shortcut';
+import { AppHeader } from '@/widgets/header/ui/AppHeader';
 
 export const HomePage = () => {
-  const router = useRouter();
-
-  const handleTestEvent = () => {
-    amplitude.track('TEST_EVENT', {
-      page: 'HomePage',
-      clickedAt: new Date().toISOString(),
-    });
-    console.info('[Amplitude] TEST_EVENT 전송 완료');
+  const handleBack = () => {
+    // 뒤로 가기 로직
   };
 
-  const handleCalendarClick = () => {
-    router.push('/home/calendar');
-  };
+  const sampleImages = [
+    { src: 'https://public.mujikorea.co.kr/images/plans/2510_men_bn_pc.jpg', alt: '샘플 이미지 1' },
+    {
+      src: 'https://public.mujikorea.co.kr/images/products/categories/kPekPdSyST6wgk6RqUVZz0JnquFG6rhmTmEjJL5H.jpg',
+      alt: '샘플 이미지 2',
+    },
+    {
+      src: 'https://public.mujikorea.co.kr/images/products/categories/mjPpw4Qa3Ds4faXJOmFhHIhD83YQqC88jPFYxbFZ.jpg',
+      alt: '샘플 이미지 3',
+    },
+  ];
 
   return (
-    <div>
-      <h1 className="text-head-26-700--1 text-background-primary">안녕하세요 hello world</h1>
-      <h1 className="text-caption-9-600--4 text-foreground-success">안녕하세요 hello world</h1>
-      {/* 기본(stroke) 아이콘 */}
-      <SurfIcon
-        name="SmileCircle"
-        size="m"
-        className="cursor-pointer text-[color:var(--color-foreground-success)] hover:text-[color:var(--color-foreground-danger)]"
-      />
+    <div className="overflow-y-auto pb-20">
+      <div className="absolute z-10 px-13 py-11 sm:w-[360px]">
+        {/* AppHeader */}
+        <AppHeader
+          customBack={handleBack}
+          overrideHeader={{
+            mode: HeaderMode.Logo,
+            logo: <div>Custom Logo</div>,
+            icons: [
+              {
+                label: 'Bell',
+                onClickIcon: () => {
+                  console.log('알림 창으로 이동');
+                },
+              },
+            ],
+          }}
+          className="bg-transparent"
+        />
+      </div>
 
-      {/* Solid 아이콘 */}
-      <SurfIcon
-        name="SmileCircleSolid"
-        size="l"
-        className="cursor-pointer text-[color:var(--color-foreground-primary)] hover:text-[color:var(--color-foreground-warning)]"
-      />
+      <div>
+        {/* Hero Card */}
+        <div className="bg-foreground-normal-lighter h-85 w-full"></div>
 
-      <SolidButton size="s" variant="primary" onClick={handleTestEvent}>
-        Amplitude 이벤트 테스트
-      </SolidButton>
+        <div className="flex flex-col gap-16 px-13 pt-15">
+          {/* Announcement Bar */}
+          <AnnouncementBar
+            title="공지사항"
+            date={new Date()}
+            category="official"
+            onClick={() => {
+              console.log('공지사항 클릭');
+            }}
+          />
 
-      <button className="bg-amber-300" onClick={handleCalendarClick}>
-        캘린더 화면 보기 클릭!
-      </button>
-      <button onClick={handleToast}>토스트</button>
+          {/* Carousel */}
+          <Carousel images={sampleImages} />
+
+          {/* Shortcut Buttons */}
+          <div className="flex flex-row gap-11">
+            <Shortcut
+              type="rectangle"
+              label="바로가기 1"
+              imageSrc="/path/to/image1.png"
+              onClick={() => {
+                console.log('바로가기 1 클릭');
+              }}
+            />
+            <Shortcut
+              type="rectangle"
+              label="바로가기 2"
+              imageSrc="/path/to/image2.png"
+              onClick={() => {
+                console.log('바로가기 2 클릭');
+              }}
+            />
+            <Shortcut
+              type="rectangle"
+              label="바로가기 3"
+              imageSrc="/path/to/image3.png"
+              onClick={() => {
+                console.log('바로가기 3 클릭');
+              }}
+            />
+          </div>
+
+          {/* 테이브 채널 바로가기 */}
+          <div className="flex flex-col gap-11">
+            <div>TAVE 채널 바로가기</div>
+            <div className="flex flex-row gap-11">
+              <Shortcut
+                type="circle"
+                label="테이브 채널"
+                imageSrc="/path/to/tabe-channel.png"
+                onClick={() => {
+                  console.log('테이브 채널 클릭');
+                }}
+              />
+              <Shortcut
+                type="circle"
+                label="테이브 채널"
+                imageSrc="/path/to/tabe-channel.png"
+                onClick={() => {
+                  console.log('테이브 채널 클릭');
+                }}
+              />
+              <Shortcut
+                type="circle"
+                label="테이브 채널"
+                imageSrc="/path/to/tabe-channel.png"
+                onClick={() => {
+                  console.log('테이브 채널 클릭');
+                }}
+              />
+            </div>
+          </div>
+
+          {/* 후원사 바로가기 */}
+          <div className="flex flex-col gap-11">
+            <div>후원사 바로가기</div>
+            <div className="flex flex-row gap-11">
+              <Shortcut
+                type="circle"
+                label="후원사"
+                imageSrc="/path/to/tabe-channel.png"
+                onClick={() => {
+                  console.log('후원사 클릭');
+                }}
+              />
+              <Shortcut
+                type="circle"
+                label="후원사"
+                imageSrc="/path/to/tabe-channel.png"
+                onClick={() => {
+                  console.log('후원사 클릭');
+                }}
+              />
+              <Shortcut
+                type="circle"
+                label="후원사"
+                imageSrc="/path/to/tabe-channel.png"
+                onClick={() => {
+                  console.log('후원사 클릭');
+                }}
+              />
+              <Shortcut
+                type="circle"
+                label="후원사"
+                imageSrc="/path/to/tabe-channel.png"
+                onClick={() => {
+                  console.log('후원사 클릭');
+                }}
+              />
+            </div>
+          </div>
+        </div>
+      </div>
     </div>
   );
 };

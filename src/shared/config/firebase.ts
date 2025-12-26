@@ -1,6 +1,6 @@
 // firebase 초기화 및 설정
 import { initializeApp, getApps, getApp } from 'firebase/app';
-import { getMessaging } from 'firebase/messaging';
+import { getMessaging, type Messaging } from 'firebase/messaging';
 
 const firebaseConfig = {
   apiKey: process.env.NEXT_PUBLIC_FIREBASE_API_KEY,
@@ -14,4 +14,20 @@ const firebaseConfig = {
 // 중복 초기화 방지
 const app = !getApps().length ? initializeApp(firebaseConfig) : getApp();
 
-export const messaging = getMessaging(app);
+let messagingInstance: Messaging | null = null;
+
+/**
+ * Firebase Messaging 인스턴스를 반환합니다.
+ * 클라이언트 환경에서만 호출 가능합니다.
+ */
+export function getMessagingInstance(): Messaging | null {
+  if (typeof window === 'undefined') {
+    return null;
+  }
+
+  if (!messagingInstance) {
+    messagingInstance = getMessaging(app);
+  }
+
+  return messagingInstance;
+}

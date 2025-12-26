@@ -9,7 +9,7 @@ export function useGetNotifications(selectedTab: NotificationTab) {
   const apiCategory = mapTabToCategory(selectedTab);
 
   return useQuery({
-    queryKey: notificationKeys.list(selectedTab),
+    queryKey: notificationKeys.list(apiCategory),
     queryFn: () => getNotifications(apiCategory),
     select: (response) => {
       return response.notifications.map(mapNotificationToItem);

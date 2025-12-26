@@ -75,7 +75,7 @@ images: {
         }
       );
 
-      // 3. 기존 규칙에서 SVG를 제외합니다.
+      // 기존 규칙에서 SVG를 제외
       fileLoaderRule.exclude = /\.svg$/i;
     } else {
       // 기존 규칙을 못 찾았다면 SVGR만 강제로 추가

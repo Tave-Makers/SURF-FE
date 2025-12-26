@@ -26,7 +26,7 @@ export function useReadNotification() {
 
           return oldData.map((notification) =>
             notification.id === notificationId
-              ? { ...notification, isRead: true } // 해당 ID 알림 읽음 처리
+              ? { ...notification, read: true } // 해당 ID 알림 읽음 처리
               : notification,
           );
         },
@@ -37,7 +37,7 @@ export function useReadNotification() {
     },
 
     // 에러 발생 시 롤백
-    onError: (err, newTodo, context) => {
+    onError: (err, notificationId, context) => {
       if (process.env.NODE_ENV === 'development') {
         console.error('알림 읽음 처리 실패:', err);
       }

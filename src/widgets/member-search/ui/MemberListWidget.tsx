@@ -3,10 +3,11 @@ import { MemberList } from '@/entities/search/ui/MemberList';
 import { useCallback, useRef } from 'react';
 
 interface MemberListWidgetProps {
+  keyword?: string; // 검색어가 있으면 학교를, 없으면 소개글을 보여줌
   queryResult: ReturnType<typeof useMemberSearch>;
 }
 
-export function MemberListWidget({ queryResult }: MemberListWidgetProps) {
+export function MemberListWidget({ keyword, queryResult }: MemberListWidgetProps) {
   const { members, fetchNextPage, hasNextPage, isFetchingNextPage, isLoading } = queryResult;
 
   // IntersectionObserver 인스턴스를 저장할 ref
@@ -39,7 +40,7 @@ export function MemberListWidget({ queryResult }: MemberListWidgetProps) {
 
   return (
     <div className="flex flex-col divide-y divide-gray-50">
-      <MemberList members={members} />
+      <MemberList members={members} keyword={keyword} />
 
       {/* 무한 스크롤 트리거 지점: lastElementRef를 ref로 전달 */}
       <div ref={lastElementRef} className="flex h-10 w-full items-center justify-center">

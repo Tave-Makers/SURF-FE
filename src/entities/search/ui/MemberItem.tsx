@@ -6,14 +6,18 @@ import { useDynamicVisibleCount } from '../model/useDynamicVisibleCount';
 
 interface MemberItemProps {
   user: MemberSearchItem;
+  keyword?: string; // 검색어가 있으면 학교를, 없으면 소개글을 보여줌
   onClick?: () => void;
 }
 
-export const MemberItem = ({ user, onClick }: MemberItemProps) => {
-  const { name, bio, level, chips } = user;
+export const MemberItem = ({ user, keyword, onClick }: MemberItemProps) => {
+  const { name, university, bio, level, chips } = user;
+
+  const subText = keyword && keyword.trim() !== '' ? university : bio;
+
   const BadgeIcon = USER_LEVEL_BADGE[level];
 
-  // 1. 커스텀 훅 사용
+  // 커스텀 훅 사용
   const { visibleCount, containerRef, ghostContainerRef } = useDynamicVisibleCount({
     items: chips,
     gap: 4, // 칩 간격
@@ -55,7 +59,7 @@ export const MemberItem = ({ user, onClick }: MemberItemProps) => {
         </header>
 
         {/* 한 줄 소개 */}
-        <p className="text-foreground-normal text-caption-caption4 truncate">{bio ?? ''}</p>
+        <p className="text-foreground-normal text-caption-caption4 truncate">{subText ?? ''}</p>
       </div>
 
       {/* [Ghost Container]

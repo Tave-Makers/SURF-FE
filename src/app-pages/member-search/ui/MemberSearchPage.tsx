@@ -24,7 +24,7 @@ export function MemberSearchPage() {
       />
       <MemberSearchWidget filters={filters} totalCount={queryResult.totalCount} />
       <main className="flex-1 overflow-y-auto">
-        <MemberListWidget queryResult={queryResult} />
+        <MemberListWidget keyword={filters.keyword} queryResult={queryResult} />
       </main>
     </div>
   );

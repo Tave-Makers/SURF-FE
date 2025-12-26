@@ -55,28 +55,35 @@ images: {
       (rule) => rule.test?.test?.('.svg')
     );
     
-    // fileLoaderRule이 없으면 안전 가드 처리
-    if (!fileLoaderRule) {
-      // 1) *.svg?url → 그냥 자산으로 처리
+    // fileLoaderRule이 있을 때
+    if (fileLoaderRule) {
+      config.module.rules.push(
+        // 2-1) *.svg?url 로 import하면 기존 규칙(이미지 경로)을 따름
+        {
+          ...fileLoaderRule,
+          test: /\.svg$/i,
+          resourceQuery: /url/,
+          type: 'asset/resource',
+        },
+        
+        // 2-2) 나머지 → SVGR 컴포넌트로 처리
+        {
+          test: /\.svg$/i,
+          issuer: fileLoaderRule.issuer,
+          resourceQuery: { not: [...(fileLoaderRule.resourceQuery?.not || []), /url/] },
+          use: ['@svgr/webpack'],
+        }
+      );
+
+      // 3. 기존 규칙에서 SVG를 제외합니다.
+      fileLoaderRule.exclude = /\.svg$/i;
+    } else {
+      // 기존 규칙을 못 찾았다면 SVGR만 강제로 추가
       config.module.rules.push({
         test: /\.svg$/i,
-        resourceQuery: /url/,
-        type: 'asset/resource',
-      });
-    
-      // 2) 나머지 → SVGR 컴포넌트로 처리
-      config.module.rules.push({
-        test: /\.svg$/i,
-        issuer: /\.[jt]sx?$/,
-        resourceQuery: { not: [/url/] },
         use: ['@svgr/webpack'],
       });
-    
-      return config;
     }
-    
-    // 정상적으로 fileLoaderRule을 찾은 경우 원래 방식 수행
-    fileLoaderRule.exclude = /\.svg$/i;
     return config;
   },
 };

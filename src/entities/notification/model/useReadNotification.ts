@@ -22,7 +22,7 @@ export function useReadNotification() {
       queryClient.setQueriesData(
         { queryKey: notificationKeys.all },
         (oldData: Notification[] | undefined) => {
-          if (!oldData) return [];
+          if (!oldData) return oldData;
 
           return oldData.map((notification) =>
             notification.id === notificationId

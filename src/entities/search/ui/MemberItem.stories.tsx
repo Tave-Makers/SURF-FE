@@ -18,6 +18,7 @@ type Story = StoryObj<typeof MemberItem>;
 const mockUser: MemberSearchItem = {
   userId: 1,
   name: '테이브',
+  university: '홍익대학교',
   bio: '프론트엔드와 블록체인을 좋아합니다',
   level: 'superManager',
   chips: ['15기 프론트엔드', '15기 디자인'],

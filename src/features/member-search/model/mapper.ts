@@ -6,6 +6,7 @@ export function mapMemberSearchItem(dto: MemberSearchItemDTO): MemberSearchItem 
   return {
     userId: dto.memberId,
     name: dto.username,
+    university: dto.university,
     bio: dto.selfIntroduction,
     avatarUrl: dto.profileImageUrl,
     level: mapUserLevel(dto.role),

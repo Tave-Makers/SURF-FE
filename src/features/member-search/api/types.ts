@@ -4,6 +4,7 @@ import { CommonResponse, PageMeta } from '@/shared/api/types';
 export interface MemberSearchItemDTO {
   memberId: number;
   username: string;
+  university: string;
   selfIntroduction: string | null;
   profileImageUrl: string | null;
   role: ServerUserLevel;

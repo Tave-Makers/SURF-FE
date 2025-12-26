@@ -9,9 +9,9 @@ import { MemberSearchWidget } from '@/widgets/member-search/ui/MemberSearchWidge
 
 export function MemberSearchPage() {
   const filters = useMemberFilters();
-  const { keyword, generation, part } = filters;
+  const { keyword, debouncedKeyword, generation, part } = filters;
 
-  const queryResult = useMemberSearch({ keyword, generation, part });
+  const queryResult = useMemberSearch({ keyword, debouncedKeyword, generation, part });
 
   return (
     <div className="flex h-full flex-col">

@@ -22,7 +22,7 @@ export function toMemberSearchRequest(
   return {
     pageNum,
     pageSize,
-    keyword: filters.keyword || undefined,
+    keyword: filters.debouncedKeyword || undefined,
     generation: filters.generation ?? undefined,
     part: filters.part ?? undefined,
   };

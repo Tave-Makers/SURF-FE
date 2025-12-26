@@ -12,7 +12,8 @@ export interface MemberSearchItem {
 }
 
 export interface MemberSearchFilters {
-  keyword: string;
+  keyword: string; // UI용
+  debouncedKeyword: string; // API용
   generation: number | undefined;
   part: TrackPart | undefined;
 }

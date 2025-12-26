@@ -4,9 +4,8 @@ import { MemberSearchFilters } from '@/entities/search/model/types';
 
 export function useMemberSearch(filters: MemberSearchFilters) {
   const queryFilters = {
-    keyword: filters.keyword,
-    generation: filters.generation ?? undefined,
-    part: filters.part ?? undefined,
+    ...filters,
+    keyword: filters.debouncedKeyword,
   };
 
   const { data, fetchNextPage, hasNextPage, isFetchingNextPage, isLoading, isError, refetch } =

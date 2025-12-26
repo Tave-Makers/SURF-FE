@@ -6,6 +6,7 @@ import { useEffect } from 'react';
 import { getFcmToken } from '@/shared/lib/fcm';
 import { useRegisterToken } from '@/entities/notification/model/useRegisterToken';
 
+// TODO: 추후 삭제
 const handleToast = () => {
   useToastStore.getState().show('성공');
 };

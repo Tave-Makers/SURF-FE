@@ -10,6 +10,11 @@ interface MemberListWidgetProps {
 export function MemberListWidget({ keyword, queryResult }: MemberListWidgetProps) {
   const { members, fetchNextPage, hasNextPage, isFetchingNextPage, isLoading } = queryResult;
 
+  const handleClick = () => {
+    // TODO: 타회원 프로필 조회 페이지와 연결
+    // router.push(`/members/${id}`);
+  };
+
   // IntersectionObserver 인스턴스를 저장할 ref
   const observer = useRef<IntersectionObserver | null>(null);
 
@@ -40,7 +45,7 @@ export function MemberListWidget({ keyword, queryResult }: MemberListWidgetProps
 
   return (
     <div className="flex flex-col divide-y divide-gray-50">
-      <MemberList members={members} keyword={keyword} />
+      <MemberList members={members} keyword={keyword} onClick={handleClick} />
 
       {/* 무한 스크롤 트리거 지점: lastElementRef를 ref로 전달 */}
       <div ref={lastElementRef} className="flex h-10 w-full items-center justify-center">

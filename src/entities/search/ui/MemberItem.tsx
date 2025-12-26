@@ -34,7 +34,7 @@ export const MemberItem = ({ user, onClick }: MemberItemProps) => {
           {/* 이름 + 권한 아이콘 */}
           <h3 className="text-foreground-normal text-body-body6 flex shrink-0 items-center gap-5">
             <span>{name}</span>
-            <BadgeIcon className="h-[1.125rem] w-[1.125rem] shrink-0" />
+            {BadgeIcon && <BadgeIcon className="h-[1.125rem] w-[1.125rem] shrink-0" />}
           </h3>
 
           {/* 기수 (칩 목록) */}

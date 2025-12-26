@@ -49,7 +49,7 @@ export function Markdown({ children }: { children: string }) {
           </h3>
         ),
         p: ({ children: c, className, ...rest }) => (
-          <p {...rest} className={`mb-2 leading-[2] break-keep ${className ?? ''}`}>
+          <p {...rest} className={`mb-2 break-keep ${className ?? ''}`}>
             {c}
           </p>
         ),

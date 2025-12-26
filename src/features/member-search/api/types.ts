@@ -1,6 +1,14 @@
 import { ServerUserLevel } from '@/entities/user/model/types';
 import { CommonResponse, PageMeta } from '@/shared/api/types';
 
+export interface MemberSearchRequestDTO {
+  pageNum: number;
+  pageSize: number;
+  keyword?: string;
+  generation?: number;
+  part?: string;
+}
+
 export interface MemberSearchItemDTO {
   memberId: number;
   username: string;

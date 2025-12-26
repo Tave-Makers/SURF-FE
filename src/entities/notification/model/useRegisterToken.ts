@@ -6,10 +6,14 @@ export function useRegisterToken() {
     mutationFn: registerDeviceToken,
     onSuccess: () => {
       sessionStorage.setItem('isFcmRegistered', 'true');
-      console.log('FCM 토큰 서버 등록 성공');
+      if (process.env.NODE_ENV === 'development') {
+        console.log('FCM 토큰 서버 등록 성공');
+      }
     },
     onError: (err) => {
-      console.error('FCM 토큰 등록 실패', err);
+      if (process.env.NODE_ENV === 'development') {
+        console.error('FCM 토큰 등록 실패', err);
+      }
     },
   });
 }

@@ -38,7 +38,9 @@ export function useReadNotification() {
 
     // 에러 발생 시 롤백
     onError: (err, newTodo, context) => {
-      console.error('알림 읽음 처리 실패:', err);
+      if (process.env.NODE_ENV === 'development') {
+        console.error('알림 읽음 처리 실패:', err);
+      }
 
       if (context?.previousNotifications) {
         context.previousNotifications.forEach(([queryKey, data]) => {

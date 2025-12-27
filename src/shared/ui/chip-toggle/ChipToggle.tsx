@@ -40,7 +40,7 @@ const baseStyle =
   'relative flex items-center justify-center gap-8 h-[2.25rem] rounded-max border px-13 w-fit';
 const colorStyle = 'bg-background-normal-lighter border-border-normal';
 const interactionStyle =
-  'hover:bg-background-secondary-darker hover:border-secondary active:bg-background-secondary-darker active:border-secondary';
+  'hover:bg-background-secondary-darker hover:border-border-secondary active:bg-background-secondary-darker active:border-border-secondary';
 
 // 색상 매핑
 const colorMap: Record<ActiveColorVariant, string> = {
@@ -75,7 +75,7 @@ export const ChipToggle = ({
           className={`shrink-0 ${isClicked ? colorMap[activeColor] : 'text-foreground-normal'}`}
         />
         {/* like일 경우 숫자 표시 / scrap일 경우 스크랩 표시 */}
-        <span className="text-body-body7 text-foreground-normal">
+        <span className="text-body-body8 text-foreground-normal">
           {mode === 'like' ? count : '스크랩'}
         </span>
       </div>

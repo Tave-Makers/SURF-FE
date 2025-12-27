@@ -6,6 +6,7 @@ import { PostBadge } from '@/entities/post/ui/post-badge/PostBadge';
 import { Post } from '../../model/types';
 import { stripHtml } from '@/shared/lib/stripHtml';
 import { toDate, toKST, timeAgo } from '@/shared/utils/date';
+import Image from 'next/image';
 
 type PostCardProps = {
   post: Post;
@@ -64,8 +65,8 @@ function PostCardComponent({
 
         {/* 본문 */}
         <div className="flex flex-col items-start gap-5 self-stretch">
-          <h3 className="text-body-body5 text-foreground-normal line-clamp-2">{title}</h3>
-          <p className="text-body-body6 text-foreground-normal-lighter line-clamp-1">
+          <h3 className="text-body-body6 text-foreground-normal line-clamp-2">{title}</h3>
+          <p className="text-body-body7 text-foreground-normal-lighter line-clamp-1">
             {stripHtml(content)}
           </p>
 
@@ -105,11 +106,13 @@ function PostCardComponent({
       {/* 썸네일 */}
       {thumbnailUrl && (
         <div className="aspect-square h-[4.375rem] w-[4.375rem] overflow-hidden">
-          <img
+          <Image
             src={thumbnailUrl}
             alt={`${title} 관련 이미지`}
-            className="h-full w-full object-cover"
+            className="object-cover"
             loading="lazy"
+            width={70}
+            height={70}
           />
         </div>
       )}

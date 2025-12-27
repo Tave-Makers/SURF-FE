@@ -23,6 +23,32 @@ export type TextButtonProps = Omit<
   onClick?: (e: React.MouseEvent<HTMLButtonElement>) => void;
 };
 
+const sizePaddingMap: Record<ButtonSize, string> = {
+  s: 'p-7',
+  m: 'p-9',
+  l: 'p-11',
+};
+
+const sizeTextMap: Record<ButtonSize, string> = {
+  s: 'text-body-body8',
+  m: 'text-body-body6',
+  l: 'text-body-body6',
+};
+
+const variantMap: Record<ButtonVariant, string> = {
+  primary: 'text-foreground-primary hover:text-foreground-primary-darker',
+  secondary: 'text-foreground-normal-lighter hover:text-foreground-normal',
+  warning: 'text-foreground-danger hover:text-foreground-danger-darker',
+};
+
+const disabledMap: Record<ButtonVariant, string> = {
+  primary: 'text-foreground-primary-darker cursor-not-allowed opacity-30',
+  secondary: 'text-foreground-normal cursor-not-allowed opacity-30',
+  warning: 'text-foreground-danger-darker cursor-not-allowed opacity-30',
+};
+
+const baseStyle = 'inline-flex w-full items-center justify-center overflow-hidden rounded-3';
+
 export const TextButton = forwardRef<HTMLButtonElement, TextButtonProps>(
   (
     {
@@ -38,38 +64,6 @@ export const TextButton = forwardRef<HTMLButtonElement, TextButtonProps>(
     },
     ref,
   ) => {
-    const sizeHeightMap: Record<ButtonSize, string> = {
-      s: 'h-[2rem]',
-      m: 'h-[2.5rem]',
-      l: 'h-[3rem]',
-    };
-
-    const sizePaddingMap: Record<ButtonSize, string> = {
-      s: 'p-7',
-      m: 'p-9',
-      l: 'p-11',
-    };
-
-    const sizeTextMap: Record<ButtonSize, string> = {
-      s: 'text-body-body7',
-      m: 'text-body-body5',
-      l: 'text-body-body5',
-    };
-
-    const variantMap: Record<ButtonVariant, string> = {
-      primary: 'text-foreground-primary hover:text-foreground-primary-darker',
-      secondary: 'text-foreground-normal-lighter hover:text-foreground-normal',
-      warning: 'text-foreground-danger hover:text-foreground-danger-darker',
-    };
-
-    const disabledMap: Record<ButtonVariant, string> = {
-      primary: 'text-foreground-primary-darker cursor-not-allowed opacity-30',
-      secondary: 'text-foreground-normal cursor-not-allowed opacity-30',
-      warning: 'text-foreground-danger-darker cursor-not-allowed opacity-30',
-    };
-
-    const baseClass = 'inline-flex w-full items-center justify-center overflow-hidden rounded-3';
-
     return (
       <button
         ref={ref}
@@ -78,11 +72,10 @@ export const TextButton = forwardRef<HTMLButtonElement, TextButtonProps>(
         onClick={onClick}
         {...rest}
         className={[
-          baseClass,
+          baseStyle,
           sizePaddingMap[size],
-          sizeHeightMap[size],
           sizeTextMap[size],
-          isDisabled ? disabledMap[variant] : `${variantMap[variant]} cursor-pointer`,
+          isDisabled ? disabledMap[variant] : variantMap[variant],
         ].join(' ')}
       >
         {leftIconName && (

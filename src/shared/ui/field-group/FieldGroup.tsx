@@ -17,18 +17,18 @@ export const FieldGroup = ({
 }: FieldGroupProps) => {
   return (
     <fieldset className={`m-0 flex flex-col border-0 p-0 ${className}`} role="group">
-      <legend className="text-body-16-600--1 text-foreground-normal pb-[0.625rem]">
+      <legend className="text-title-title2 text-foreground-normal pb-10">
         {title}
         {isRequired && (
           <>
-            <span aria-hidden="true" className="text-body-16-600--1 text-foreground-danger">
+            <span aria-hidden="true" className="text-foreground-danger">
               *
             </span>
             <span className="sr-only">(필수)</span>
           </>
         )}
       </legend>
-      <div className="flex flex-col gap-[0.25rem]">{children}</div>
+      <div className="flex flex-col gap-5">{children}</div>
     </fieldset>
   );
 };

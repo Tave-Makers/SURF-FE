@@ -20,6 +20,30 @@ export type SolidButtonProps = Omit<ButtonHTMLAttributes<HTMLButtonElement>, 'di
   onClick?: (e: React.MouseEvent<HTMLButtonElement>) => void;
 };
 
+const sizePaddingMap: Record<ButtonSize, string> = {
+  s: 'p-7',
+  m: 'p-9',
+  l: 'p-11',
+};
+
+const sizeTextMap: Record<ButtonSize, string> = {
+  s: 'text-body-body8',
+  m: 'text-body-body6',
+  l: 'text-body-body6',
+};
+
+const variantMap: Record<ButtonVariant, string> = {
+  primary: 'text-foreground-static-white bg-background-primary hover:bg-background-primary-darker',
+  secondary: 'text-foreground-normal bg-background-secondary hover:bg-background-secondary-darker',
+  danger: 'text-foreground-static-white bg-foreground-danger hover:bg-foreground-danger-darker',
+  warning:
+    'text-foreground-danger bg-background-secondary hover:bg-background-secondary-darker hover:text-background-danger-darker',
+};
+
+const baseStyle = 'inline-flex w-full items-center justify-center overflow-hidden rounded-3';
+const disabledStyle =
+  'bg-background-secondary-darker text-foreground-static-white cursor-not-allowed opacity-50';
+
 export const SolidButton = forwardRef<HTMLButtonElement, SolidButtonProps>(
   (
     {
@@ -36,38 +60,6 @@ export const SolidButton = forwardRef<HTMLButtonElement, SolidButtonProps>(
     },
     ref,
   ) => {
-    const sizeHeightMap: Record<ButtonSize, string> = {
-      s: 'h-[2rem]',
-      m: 'h-[2.5rem]',
-      l: 'h-[3rem]',
-    };
-
-    const sizePaddingMap: Record<ButtonSize, string> = {
-      s: 'p-7',
-      m: 'p-9',
-      l: 'p-11',
-    };
-
-    const sizeTextMap: Record<ButtonSize, string> = {
-      s: 'text-body-body7',
-      m: 'text-body-body5',
-      l: 'text-body-body5',
-    };
-
-    const variantMap: Record<ButtonVariant, string> = {
-      primary: 'text-foreground-accent bg-background-primary hover:bg-background-primary-darker',
-      secondary:
-        'text-foreground-normal bg-background-secondary hover:bg-background-secondary-darker',
-      danger: 'text-foreground-accent bg-foreground-danger hover:bg-foreground-danger-darker',
-      warning:
-        'text-foreground-danger bg-background-secondary hover:bg-background-secondary-darker hover:text-background-danger-darker',
-    };
-
-    const disabledClass =
-      'bg-background-secondary-darker text-foreground-accent cursor-not-allowed opacity-50';
-
-    const baseClass = 'inline-flex w-full items-center justify-center overflow-hidden rounded-3';
-
     return (
       <button
         ref={ref}
@@ -76,11 +68,10 @@ export const SolidButton = forwardRef<HTMLButtonElement, SolidButtonProps>(
         onClick={onClick}
         {...rest}
         className={[
-          baseClass,
+          baseStyle,
           sizePaddingMap[size],
-          sizeHeightMap[size],
           sizeTextMap[size],
-          isDisabled ? disabledClass : `${variantMap[variant]} cursor-pointer`,
+          isDisabled ? disabledStyle : `${variantMap[variant]}`,
           className,
         ].join(' ')}
       >

@@ -3,8 +3,6 @@
 import Image, { type StaticImageData } from 'next/image';
 import { forwardRef, type HTMLAttributes } from 'react';
 
-const DefaultCircleUrl = '/icons/profile/circle-default.svg';
-
 type ActivityBadgeProps = HTMLAttributes<HTMLDivElement> & {
   src?: string | StaticImageData;
   alt?: string;
@@ -15,12 +13,12 @@ type ActivityBadgeProps = HTMLAttributes<HTMLDivElement> & {
 
 export const ActivityBadge = forwardRef<HTMLDivElement, ActivityBadgeProps>(
   ({ src, alt = '', badgeName, timestamp, loading = false, className = '', ...rest }, ref) => {
-    const badgeBox = 'relative w-[4.06rem] h-[4.06rem] rounded-full overflow-hidden';
+    const badgeBox = 'relative w-[4.0625rem] h-[4.0625rem] rounded-full overflow-hidden';
 
     return (
       <div
         ref={ref}
-        className={['flex flex-col items-center justify-center gap-[0.62rem]', className].join(' ')}
+        className={['flex flex-col items-center justify-center gap-10', className].join(' ')}
         role="group"
         aria-label={
           loading
@@ -31,21 +29,22 @@ export const ActivityBadge = forwardRef<HTMLDivElement, ActivityBadgeProps>(
       >
         <div className={badgeBox}>
           {loading ? (
-            <div className="bg-background-quaternary h-full w-full animate-pulse" />
-          ) : (
+            <div className="bg-background-quaternary h-full w-full animate-pulse rounded-full" />
+          ) : src ? (
             <Image
-              src={src || DefaultCircleUrl}
+              src={src}
               alt={alt || badgeName}
               fill
-              sizes="4.06rem"
+              sizes="4.0625rem"
               className="object-cover"
-              placeholder="empty"
-              priority={false}
             />
+          ) : (
+            // TODO: 기본 배지 이미지로 교체 필요
+            <div aria-hidden className="bg-background-quaternary h-full w-full rounded-full" />
           )}
         </div>
 
-        <div className="flex flex-col items-center justify-center gap-[2px]">
+        <div className="flex flex-col items-center justify-center gap-3">
           {loading ? (
             <>
               <div className="bg-background-quaternary h-[1.25rem] w-[4.06rem] animate-pulse" />
@@ -53,11 +52,12 @@ export const ActivityBadge = forwardRef<HTMLDivElement, ActivityBadgeProps>(
             </>
           ) : (
             <>
-              <div className="text-body-14-600--1-20 text-border-contrast truncate">
-                {badgeName}
-              </div>
+              <div className="text-body-body8 text-foreground-normal truncate">{badgeName}</div>
               {timestamp && (
-                <time className="text-caption-12-400 text-border-normal" dateTime={timestamp}>
+                <time
+                  className="text-caption-caption4 text-foreground-tertiary"
+                  dateTime={timestamp}
+                >
                   {timestamp}
                 </time>
               )}

@@ -1,6 +1,14 @@
 'use client';
 
-import { forwardRef, useRef, useLayoutEffect, useState, type TextareaHTMLAttributes } from 'react';
+import React, {
+  forwardRef,
+  useId,
+  useLayoutEffect,
+  useMemo,
+  useRef,
+  useState,
+  type TextareaHTMLAttributes,
+} from 'react';
 
 export type TextAreaProps = Omit<
   TextareaHTMLAttributes<HTMLTextAreaElement>,
@@ -36,32 +44,53 @@ export const TextArea = forwardRef<HTMLTextAreaElement, TextAreaProps>(
     },
     ref,
   ) => {
-    const textareaRef = useRef<HTMLTextAreaElement>(null);
+    const textareaRef = useRef<HTMLTextAreaElement | null>(null);
     const [isFocused, setIsFocused] = useState(false);
+    const uid = useId();
+
+    const isInteractive = !isDisabled && !readOnly;
 
     const hasValue = value.trim().length > 0;
-    const isInteractive = !(isDisabled || readOnly);
 
-    const textColor = hasValue ? 'text-foreground-normal' : 'text-foreground-hint';
+    const textColor = hasValue ? 'text-foreground-normal' : 'text-foreground-tertiary';
+
     const borderColor =
       isInteractive && isFocused ? 'border border-border-primary' : 'border border-transparent';
 
-    const disabledOpacity = isDisabled ? 'opacity-[var(--opacity-50,0.5)]' : '';
+    const containerOpacity = isDisabled ? 'opacity-50' : '';
+
+    const { describedBy, guideId, errorId } = useMemo(() => {
+      const gId = `textarea-guide-${uid}`;
+      const eId = `textarea-error-${uid}`;
+      const dBy = errorMessage ? eId : guideMessage ? gId : undefined;
+      return { describedBy: dBy, guideId: gId, errorId: eId };
+    }, [uid, errorMessage, guideMessage]);
+
+    const setRefs = (node: HTMLTextAreaElement | null) => {
+      textareaRef.current = node;
+
+      if (typeof ref === 'function') {
+        ref(node);
+      } else if (ref) {
+        ref.current = node;
+      }
+    };
 
     useLayoutEffect(() => {
-      if (!textareaRef.current || mode === 'oneLine') return;
       const el = textareaRef.current;
+      if (!el) return;
+
+      if (mode === 'oneLine') {
+        el.style.height = '24px';
+        el.style.overflow = 'hidden';
+        return;
+      }
+
       el.style.height = 'auto';
       el.style.height = `${el.scrollHeight}px`;
+      // 내용이 많아져도 기본은 늘어나고, 필요시 스크롤
       el.style.overflowY = el.scrollHeight > el.clientHeight ? 'auto' : 'hidden';
     }, [value, mode]);
-
-    useLayoutEffect(() => {
-      if (mode !== 'oneLine' || !textareaRef.current) return;
-      const el = textareaRef.current;
-      el.style.height = '24px';
-      el.style.overflow = 'hidden';
-    }, [mode]);
 
     const handleFocus = (e: React.FocusEvent<HTMLTextAreaElement>) => {
       if (!isInteractive) return;
@@ -75,27 +104,31 @@ export const TextArea = forwardRef<HTMLTextAreaElement, TextAreaProps>(
       onBlurProp?.(e);
     };
 
+    const handleChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
+      const raw = e.target.value;
+
+      const next = mode === 'oneLine' ? raw.replace(/\n/g, ' ') : raw;
+
+      if (typeof textLimit === 'number' && next.length > textLimit) return;
+      onChange(next);
+    };
+
     return (
       <div
-        className={`flex flex-col gap-[0.25rem] ${disabledOpacity} ${className}`}
+        className={`flex flex-col gap-5 ${containerOpacity} ${className}`}
         data-readonly={readOnly || undefined}
         data-disabled={isDisabled || undefined}
       >
         <div
           className={[
-            'bg-background-normal-darker',
-            'box-border flex flex-col gap-[0.37rem] rounded-[0.25rem] p-[0.625rem]',
+            'bg-background-quaternary',
+            'rounded-3 box-border flex flex-col gap-7 p-10',
             borderColor,
           ].join(' ')}
           style={{ height: '100%', overflow: 'hidden' }}
         >
           <textarea
-            ref={(node) => {
-              textareaRef.current = node;
-              if (typeof ref === 'function') ref(node);
-              else if (ref && 'current' in ref)
-                (ref as React.RefObject<HTMLTextAreaElement>).current = node as HTMLTextAreaElement;
-            }}
+            ref={setRefs}
             value={value}
             placeholder={placeholder}
             disabled={isDisabled}
@@ -103,19 +136,15 @@ export const TextArea = forwardRef<HTMLTextAreaElement, TextAreaProps>(
             onFocus={handleFocus}
             onBlur={handleBlur}
             onMouseDown={(e) => {
-              if (readOnly) e.preventDefault();
+              if (!isInteractive) e.preventDefault();
             }}
-            onChange={(e) => {
-              const raw = e.target.value;
-              const next = mode === 'oneLine' ? raw.replace(/\n/g, ' ') : raw;
-              if (!textLimit || next.length <= textLimit) onChange(next);
-            }}
+            onChange={handleChange}
             maxLength={typeof textLimit === 'number' ? textLimit : undefined}
             className={[
-              'text-body-14-400--2-24',
+              'text-body-body9',
               'w-full resize-none bg-transparent outline-none',
               'box-content min-h-0 appearance-none border-0 p-0',
-              'placeholder:text-foreground-hint',
+              'placeholder:text-foreground-tertiary',
               textColor,
               readOnly ? 'cursor-default select-text' : '',
               mode === 'oneLine'
@@ -125,15 +154,13 @@ export const TextArea = forwardRef<HTMLTextAreaElement, TextAreaProps>(
             rows={mode === 'oneLine' ? 1 : undefined}
             aria-invalid={!!errorMessage}
             aria-readonly={readOnly || undefined}
-            aria-describedby={
-              errorMessage ? 'textarea-error' : guideMessage ? 'textarea-guide' : undefined
-            }
+            aria-describedby={describedBy}
             tabIndex={readOnly ? -1 : undefined}
             {...rest}
           />
 
           {typeof textLimit === 'number' && (
-            <div className="text-caption-10-400--1 text-background-hint flex justify-end">
+            <div className="text-caption-caption6 text-foreground-tertiary flex justify-end">
               {value.length} / {textLimit}
             </div>
           )}
@@ -141,16 +168,15 @@ export const TextArea = forwardRef<HTMLTextAreaElement, TextAreaProps>(
 
         {errorMessage ? (
           <div
-            id="textarea-error"
-            className="text-caption-10-400--1 text-foreground-warning px-[0.625rem]"
+            id={errorId}
+            className="text-caption-caption6 text-foreground-danger px-10"
+            role="alert"
+            aria-live="polite"
           >
             {errorMessage}
           </div>
         ) : guideMessage ? (
-          <div
-            id="textarea-guide"
-            className="text-caption-10-400--1 text-foreground-normal px-[0.625rem]"
-          >
+          <div id={guideId} className="text-caption-caption6 text-foreground-normal px-10">
             {guideMessage}
           </div>
         ) : null}

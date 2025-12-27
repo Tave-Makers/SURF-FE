@@ -83,7 +83,7 @@ export const TextArea = forwardRef<HTMLTextAreaElement, TextAreaProps>(
       >
         <div
           className={[
-            'bg-background-normal-darker',
+            'bg-background-quaternary',
             'box-border flex flex-col gap-[0.37rem] rounded-[0.25rem] p-[0.625rem]',
             borderColor,
           ].join(' ')}
@@ -112,10 +112,10 @@ export const TextArea = forwardRef<HTMLTextAreaElement, TextAreaProps>(
             }}
             maxLength={typeof textLimit === 'number' ? textLimit : undefined}
             className={[
-              'text-body-14-400--2-24',
+              'text-body-body9',
               'w-full resize-none bg-transparent outline-none',
               'box-content min-h-0 appearance-none border-0 p-0',
-              'placeholder:text-foreground-hint',
+              'placeholder:text-foreground-tertiary',
               textColor,
               readOnly ? 'cursor-default select-text' : '',
               mode === 'oneLine'

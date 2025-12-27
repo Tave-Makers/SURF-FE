@@ -1,8 +1,7 @@
 import { infiniteQueryOptions } from '@tanstack/react-query';
 import { memberSearchQueryKeys } from './queryKeys';
 import { memberSearchApi } from '@/features/member-search/api/memberSearchApi';
-import { toMemberSearchRequest } from '@/features/member-search/model/mapper';
-import { mapMemberSearchItem } from '../model/mapper';
+import { toMemberSearchRequest, mapMemberSearchItem } from '../model/mapper';
 import { MemberSearchFilters } from '@/entities/search/model/types';
 import { MemberSearchResponse } from '@/features/member-search/api/types';
 

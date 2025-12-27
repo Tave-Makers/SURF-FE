@@ -24,7 +24,21 @@ export function MemberSearchPage() {
       />
       <MemberSearchWidget filters={filters} totalCount={queryResult.totalCount} />
       <main className="flex-1 overflow-y-auto">
-        <MemberListWidget keyword={filters.keyword} queryResult={queryResult} />
+        {queryResult.isError ? (
+          <div className="flex flex-col items-center justify-center p-20 text-center">
+            <p className="text-foreground-normal text-body-body6 mb-8">
+              회원 정보를 불러오는 중 오류가 발생했습니다.
+            </p>
+            <button
+              onClick={() => void queryResult.refetch()}
+              className="bg-background-primary text-foreground-static-white rounded px-16 py-8"
+            >
+              다시 시도
+            </button>
+          </div>
+        ) : (
+          <MemberListWidget keyword={filters.keyword} queryResult={queryResult} />
+        )}
       </main>
     </div>
   );

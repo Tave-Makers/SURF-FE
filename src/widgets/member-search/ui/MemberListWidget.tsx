@@ -1,6 +1,6 @@
 import { useMemberSearch } from '@/features/member-search/api/useMemberSearch';
 import { MemberList } from '@/entities/search/ui/MemberList';
-import { useCallback, useRef } from 'react';
+import { useCallback, useEffect, useRef } from 'react';
 
 interface MemberListWidgetProps {
   keyword?: string; // 검색어가 있으면 학교를, 없으면 소개글을 보여줌
@@ -12,11 +12,21 @@ export function MemberListWidget({ keyword, queryResult }: MemberListWidgetProps
 
   const handleClick = () => {
     // TODO: 타회원 프로필 조회 페이지와 연결
-    // router.push(`/members/${id}`);
+    // router.push(`/members/${userId}`);
   };
 
   // IntersectionObserver 인스턴스를 저장할 ref
   const observer = useRef<IntersectionObserver | null>(null);
+
+  // IntersectionObserver 생성 및 정리
+  useEffect(() => {
+    return () => {
+      // 컴포넌트 언마운트 시 observer 정리
+      if (observer.current) {
+        observer.current.disconnect();
+      }
+    };
+  }, []);
 
   // 마지막 요소가 화면에 들어왔을 때 실행될 콜백 ref
   const lastElementRef = useCallback(

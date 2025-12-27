@@ -45,24 +45,6 @@ export const Primary: Story = { args: { variant: 'primary' } };
 export const Secondary: Story = { args: { variant: 'secondary' } };
 export const Warning: Story = { args: { variant: 'warning' } };
 
-// 사이즈 비교
-export const Sizes: Story = {
-  args: { variant: 'primary' },
-  render: (args) => (
-    <div style={{ display: 'flex', gap: 12 }}>
-      <TextButton {...args} size="s">
-        Small
-      </TextButton>
-      <TextButton {...args} size="m">
-        Medium
-      </TextButton>
-      <TextButton {...args} size="l">
-        Large
-      </TextButton>
-    </div>
-  ),
-};
-
 // 아이콘 상태들 비교
 export const NoIcons: Story = {
   args: { leftIconName: null, rightIconName: null, children: '아이콘 없음' },

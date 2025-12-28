@@ -127,7 +127,7 @@ export function SendMessagePage() {
           size="l"
           variant="primary"
           onClick={() => setIsSendAlertOpen(true)}
-          isDisabled={!isCtaEnabled || isPending}
+          isDisabled={!canSend}
         >
           {isPending ? '전송 중' : '쪽지 보내기'}
         </SolidButton>

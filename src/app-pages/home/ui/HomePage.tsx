@@ -176,21 +176,23 @@ export const HomePage = () => {
           </div>
         </div>
       </div>
-      <LawBottomSheet
-        isOpen={isOpen}
-        onClose={() => setIsOpen(false)}
-        agreements={agreements}
-        onCheck={handleCheck}
-        onClickPrimaryBtn={() => {
-          if (isAllRequiredChecked) {
-            setIsOpen(false);
-          } else {
-            alert('필수 약관에 모두 동의해 주세요.');
-          }
-        }}
-        onClickLawDetail={onClickLawDetail}
-        allAgreed={isAllRequiredChecked}
-      />
+      {isAllRequiredChecked ? null : (
+        <LawBottomSheet
+          isOpen={isOpen}
+          onClose={() => setIsOpen(false)}
+          agreements={agreements}
+          onCheck={handleCheck}
+          onClickPrimaryBtn={() => {
+            if (isAllRequiredChecked) {
+              setIsOpen(false);
+            } else {
+              alert('필수 약관에 모두 동의해 주세요.');
+            }
+          }}
+          onClickLawDetail={onClickLawDetail}
+          allAgreed={isAllRequiredChecked}
+        />
+      )}
     </div>
   );
 };

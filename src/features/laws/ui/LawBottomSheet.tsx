@@ -32,7 +32,6 @@ export function LawBottomSheet({
       className="mx-auto flex w-full sm:w-[360px]"
     >
       <ModalSheet.Container>
-        <ModalSheet.Header />
         <ModalSheet.Content>
           <Sheet
             title="SURF에 오신 것을 환영해요! 👋"

@@ -6,8 +6,8 @@ import { LawBottomSheet } from '@/features/laws/ui/LawBottomSheet';
 import { useState } from 'react';
 
 export function LoginPage() {
-  const [isOpen, setIsOpen] = useState(true);
   const { agreements, handleCheck, isAllRequiredChecked, onClickLawDetail } = useLawAgreement();
+  const [isOpen, setIsOpen] = useState(!agreements.laws1 || !agreements.laws2 || !agreements.laws3);
 
   return (
     <div className="flex h-full w-full flex-col items-center justify-center px-13">

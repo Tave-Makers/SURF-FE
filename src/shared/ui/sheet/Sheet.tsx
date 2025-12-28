@@ -107,15 +107,15 @@ export function Sheet({
       aria-modal="true"
       aria-labelledby={title ? 'sheet-title' : undefined}
       aria-describedby={description}
-      className="rounded-t-4 bg-background-normal flex w-full flex-col items-start"
+      className="rounded-t-4 bg-background-normal flex w-full flex-col items-start gap-15"
     >
-      <header className="flex w-full justify-center pt-9" aria-label="드래그 핸들">
+      <header className="flex w-full justify-center pt-11" aria-label="드래그 핸들">
         <div
           className="bg-foreground-tertiary rounded-max h-[0.3125rem] w-[2.25rem]"
           aria-hidden="true"
         />
       </header>
-      <div className="flex w-full flex-col px-15 pt-11 pb-15">
+      <div className="flex w-full flex-col px-15 pt-11">
         {renderTitleSection()}
         <div
           className="scroll-hide max-h-[308px] w-full overflow-y-auto"
@@ -125,7 +125,7 @@ export function Sheet({
           {children}
         </div>
       </div>
-      {renderButtons()}
+      <div className="w-full px-15 pb-15">{renderButtons()}</div>
     </div>
   );
 }

@@ -29,6 +29,9 @@ export function SendMessagePage() {
   const [isExitAlertOpen, setIsExitAlertOpen] = useState<boolean>(false);
   const [isSendAlertOpen, setIsSendAlertOpen] = useState<boolean>(false);
 
+  // 본문/제목 최소 글자 수
+  const MIN_LENGTH = 10;
+
   const keyboardOffset = useKeyboardOffset();
   const router = useRouter();
 
@@ -43,11 +46,11 @@ export function SendMessagePage() {
 
   // 쪽지 전송
   function handleSend() {
-    if (!memberId) return;
+    if (validMemberId === null) return;
 
     sendMessage(
       {
-        receiverId: Number(memberId),
+        receiverId: validMemberId,
         title,
         content,
         replyEmail: senderEmail,
@@ -66,16 +69,18 @@ export function SendMessagePage() {
   // 이메일 형식 검증
   const isValidEmail = (email: string) => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
 
-  /**
-   CTA 활성화 조건
-     1. 이메일 형식 유효
-     2. 제목/본문 최소 길이 충족
-   */
-  const isCtaEnabled = useMemo(() => {
-    return isValidEmail(senderEmail) && title.trim().length >= 10 && content.trim().length >= 10;
-  }, [senderEmail, title, content]);
+  // 회원 아이디 검증
+  const validMemberId = useMemo(() => {
+    const id = Number(memberId);
+    return Number.isInteger(id) && id > 0 ? id : null;
+  }, [memberId]);
 
-  const canSend = Boolean(memberId) && isCtaEnabled && !isPending;
+  const isBtnEnabled =
+    !isPending &&
+    validMemberId !== null &&
+    isValidEmail(senderEmail) &&
+    title.trim().length >= MIN_LENGTH &&
+    content.trim().length >= MIN_LENGTH;
 
   return (
     <div className="flex h-full flex-col">
@@ -127,7 +132,7 @@ export function SendMessagePage() {
           size="l"
           variant="primary"
           onClick={() => setIsSendAlertOpen(true)}
-          isDisabled={!canSend}
+          isDisabled={!isBtnEnabled}
         >
           {isPending ? '전송 중' : '쪽지 보내기'}
         </SolidButton>
@@ -175,7 +180,7 @@ export function SendMessagePage() {
             variant: 'primary',
             label: isPending ? '전송 중' : '전송하기',
             onClick: () => void handleSend(),
-            isDisabled: !canSend,
+            isDisabled: !isBtnEnabled,
           },
         ]}
       />

@@ -68,8 +68,6 @@ export function DateTimePicker({ value, onChange, mode = 'all' }: DateTimePicker
 
   const getInitialRoundedDate = useCallback(() => {
     return roundToNearestMinutes(value, { nearestTo: 30, roundingMethod: 'ceil' });
-
-    return value;
   }, [value]);
 
   // 초기값 설정

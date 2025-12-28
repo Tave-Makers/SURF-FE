@@ -12,7 +12,7 @@ export default function PolicyPage() {
       <PolicyItem
         rightIconName="ChevronRight"
         onClick={() => {
-          router.push('/mypage/settings/policy/service');
+          router.push('/settings/policy/service');
         }}
       >
         {LAW_LIST[0].title}
@@ -20,7 +20,7 @@ export default function PolicyPage() {
       <PolicyItem
         rightIconName="ChevronRight"
         onClick={() => {
-          router.push('/mypage/settings/policy/personal-info');
+          router.push('/settings/policy/personal-info');
         }}
       >
         {LAW_LIST[1].title}
@@ -28,7 +28,7 @@ export default function PolicyPage() {
       <PolicyItem
         rightIconName="ChevronRight"
         onClick={() => {
-          router.push('/mypage/settings/policy/marketing-info');
+          router.push('/settings/policy/marketing-info');
         }}
       >
         {LAW_LIST[2].title}

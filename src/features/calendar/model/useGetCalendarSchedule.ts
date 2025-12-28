@@ -7,7 +7,7 @@ import { mapScheduleListToScheduleMap } from './mapper';
 
 export const useGetCalendarSchedule = (year: number, month: number) => {
   return useQuery({
-    queryKey: scheduleQueryKeys.scheduleList(year, month),
+    queryKey: scheduleQueryKeys.list(year, month),
     queryFn: () => getCalendarSchedule({ year, month }),
     select: (data) => {
       return mapScheduleListToScheduleMap(data.scheduleResDTOList);

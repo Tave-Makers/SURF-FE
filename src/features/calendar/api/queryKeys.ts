@@ -1,9 +1,26 @@
 export const scheduleQueryKeys = {
-  all: ['calendar-schedule'] as const,
+  all: ['schedule'] as const,
 
-  scheduleLists: () => [...scheduleQueryKeys.all, 'list'] as const,
-  scheduleList: (year: number, month: number) =>
-    [...scheduleQueryKeys.scheduleLists(), year, month] as const,
+  /* --------------------
+   * Lists (목록 계열)
+   * -------------------- */
+  lists: () => [...scheduleQueryKeys.all, 'list'] as const,
 
-  detail: (scheduleId: number) => [...scheduleQueryKeys.all, 'detail', scheduleId] as const,
+  /**
+   * 캘린더 / 전체 일정 목록
+   * - year, month가 있으면 월별
+   * - 없으면 전체
+   */
+  list: (params?: { year?: number; month?: number }) =>
+    [...scheduleQueryKeys.lists(), params] as const,
+
+  /* --------------------
+   * Details (단건 계열)
+   * -------------------- */
+  details: () => [...scheduleQueryKeys.all, 'detail'] as const,
+
+  /**
+   * 단일 일정
+   */
+  detail: (scheduleId: number) => [...scheduleQueryKeys.details(), scheduleId] as const,
 };

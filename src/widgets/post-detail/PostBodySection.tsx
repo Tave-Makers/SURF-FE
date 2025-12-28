@@ -9,13 +9,15 @@ import { EventCard } from '@/entities/calendar/ui/EventCard/EventCard';
 import sanitizeHtml, { IOptions } from 'sanitize-html';
 import { PostImage } from '@/entities/post/ui/post-image/PostImage';
 import { mapCategoryToActivityCategory } from '@/features/calendar/model/mapper';
+import { PostScheduleData } from '@/entities/post/api/types';
 
 type PostBodySectionProps = {
   post: PostDetail;
+  schedule?: PostScheduleData;
   onClickLikeCount: () => void;
 };
 
-export function PostBodySection({ post, onClickLikeCount }: PostBodySectionProps) {
+export function PostBodySection({ post, schedule, onClickLikeCount }: PostBodySectionProps) {
   // 좋아요/스크랩 Mutation
   const likeMutation = useToggleLikeMutation();
   const scrapMutation = useToggleScrapMutation();
@@ -65,15 +67,15 @@ export function PostBodySection({ post, onClickLikeCount }: PostBodySectionProps
       )}
 
       {/* 일정카드 */}
-      {post.schedule && (
+      {schedule && (
         <EventCard
-          scheduleId={post.schedule.scheduleId}
-          title={post.schedule.title}
-          category={mapCategoryToActivityCategory(post.schedule.category)}
+          scheduleId={schedule.scheduleId}
+          title={schedule.title}
+          category={mapCategoryToActivityCategory(schedule.category)}
           mode="reservation"
-          location={post.schedule.location}
-          startDate={new Date(post.schedule.startAt)}
-          endDate={new Date(post.schedule.endAt)}
+          location={schedule.location}
+          startDate={new Date(schedule.startAt)}
+          endDate={new Date(schedule.endAt)}
         />
       )}
 

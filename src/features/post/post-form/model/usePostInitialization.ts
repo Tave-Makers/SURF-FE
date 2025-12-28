@@ -17,6 +17,7 @@ interface Props extends PostFormActions {
   linkedSchedule: ScheduleFormData | null;
   setLinkedSchedule: (data: ScheduleFormData) => void;
   isInitializedRef: React.RefObject<boolean>;
+  isScheduleFetching: boolean;
 }
 
 export const usePostInitialization = ({
@@ -28,6 +29,7 @@ export const usePostInitialization = ({
   setEditorState,
   setLinkedSchedule,
   isInitializedRef,
+  isScheduleFetching,
 }: Props) => {
   const { initialSnapshot, setSnapshot, content, images } = usePostFormStore();
 
@@ -35,6 +37,10 @@ export const usePostInitialization = ({
     // 1. 초기화 가드
     if (mode === 'create' || isInitializedRef.current) return;
     if (mode === 'edit' && !postDetail) return;
+    // 일정이 있는 게시글인데, 일정을 아직 가져오지 못했거나 '새로 가져오는 중(Fetching)'이면 대기
+    if (postDetail?.hasSchedule && (postSchedule === undefined || isScheduleFetching)) {
+      return;
+    }
 
     // 이미 스냅샷이 있는 경우 (뒤로가기 등 세션 유지 상황)
     if (initialSnapshot) {
@@ -138,5 +144,6 @@ export const usePostInitialization = ({
     linkedSchedule,
     content,
     images,
+    isScheduleFetching,
   ]);
 };

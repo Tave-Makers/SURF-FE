@@ -6,8 +6,13 @@ import { Carousel } from '@/shared/ui/carousel/Carousel';
 import { HeaderMode } from '@/shared/ui/header/Header';
 import { Shortcut } from '@/shared/ui/shortcut/Shortcut';
 import { AppHeader } from '@/widgets/header/ui/AppHeader';
+import { LawBottomSheet } from '@/features/laws/ui/LawBottomSheet';
+import { useLawAgreement } from '@/features/laws/model/useLawAgreement';
+import { useState } from 'react';
 
 export const HomePage = () => {
+  const { agreements, handleCheck, isAllRequiredChecked, onClickLawDetail } = useLawAgreement();
+  const [isOpen, setIsOpen] = useState(!agreements.laws1 || !agreements.laws2 || !agreements.laws3);
   const { data: homeData } = useGetHome();
 
   return (
@@ -171,6 +176,21 @@ export const HomePage = () => {
           </div>
         </div>
       </div>
+      <LawBottomSheet
+        isOpen={isOpen}
+        onClose={() => setIsOpen(false)}
+        agreements={agreements}
+        onCheck={handleCheck}
+        onClickPrimaryBtn={() => {
+          if (isAllRequiredChecked) {
+            setIsOpen(false);
+          } else {
+            alert('필수 약관에 모두 동의해 주세요.');
+          }
+        }}
+        onClickLawDetail={onClickLawDetail}
+        allAgreed={isAllRequiredChecked}
+      />
     </div>
   );
 };

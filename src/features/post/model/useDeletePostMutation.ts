@@ -3,24 +3,33 @@
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { deletePost } from '@/features/post/api/deletePost';
 import { postQueryKeys } from '@/entities/post/api/queryKeys';
+import { scheduleQueryKeys } from '@/features/calendar/api/queryKeys';
 
 export const useDeletePostMutation = () => {
   const queryClient = useQueryClient();
 
   return useMutation({
+    mutationKey: ['post', 'delete'],
     mutationFn: (postId: number) => deletePost(postId),
 
     onSuccess: (_, postId) => {
-      // 1) 상세 페이지 캐시 invalidate
-      void queryClient.removeQueries({
-        queryKey: postQueryKeys.postDetail(postId),
+      // 1) 게시글 상세 캐시 제거
+      queryClient.removeQueries({
+        queryKey: postQueryKeys.detail(postId),
       });
 
-      // 2) 전체 post 관련 쿼리 invalidate
-      // TODO : 새로고침을 해야 캐시 무효화가 되는 오류 해결하기
+      // 2) 게시글 목록 계열 invalidate
       void queryClient.invalidateQueries({
-        queryKey: postQueryKeys.all,
-        exact: false,
+        queryKey: postQueryKeys.lists(),
+      });
+
+      void queryClient.invalidateQueries({
+        queryKey: postQueryKeys.myPosts(),
+      });
+
+      // 3) 일정 목록 invalidate (scheduleId 없음 → 넓게)
+      void queryClient.invalidateQueries({
+        queryKey: scheduleQueryKeys.lists(),
       });
     },
 

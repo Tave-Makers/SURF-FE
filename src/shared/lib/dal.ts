@@ -5,8 +5,11 @@ import { cookies } from 'next/headers';
 import { redirect } from 'next/navigation';
 import type { ValidStatusResponse } from '@/features/auth/api/types';
 
-const BACKEND = process.env.API_BASE_URL!;
-if (!BACKEND) throw new Error('API_BASE_URL is not set');
+const BACKEND = (() => {
+  const url = process.env.API_BASE_URL;
+  if (!url) throw new Error('API_BASE_URL is not set');
+  return url;
+})();
 
 function buildCookieHeader(cookieStore: Awaited<ReturnType<typeof cookies>>) {
   const parts: string[] = [];

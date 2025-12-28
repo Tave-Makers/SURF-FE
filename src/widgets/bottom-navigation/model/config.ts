@@ -4,8 +4,8 @@ export const BOTTOM_NAV_ITEMS = [
   {
     id: 'home',
     label: '홈',
-    path: '/home',
-    relatedRoots: ['/home'],
+    path: '/',
+    relatedRoots: ['/', '/home'],
     icons: { active: 'HomeSolid', default: 'Home' } satisfies {
       active: IconName;
       default: IconName;

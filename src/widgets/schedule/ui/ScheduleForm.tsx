@@ -165,7 +165,11 @@ export default function ScheduleForm({ onSubmit, initialData }: ScheduleFormProp
                       }}
                     >
                       <div className="py-15">
-                        <DateTimePicker value={tempEndDate} onChange={setTempEndDate} mode="all" />
+                        <DateTimePicker
+                          value={tempStartDate}
+                          onChange={setTempStartDate}
+                          mode="all"
+                        />
                       </div>
                     </Sheet>
                   </ModalSheet.Content>

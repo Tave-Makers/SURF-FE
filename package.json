@@ -4,8 +4,8 @@
   "private": true,
   "type": "module",
   "scripts": {
-    "dev": "node scripts/gen-sw.js && next dev",
-    "build": "node scripts/gen-sw.js && next build",
+    "dev": "node scripts/gen-sw.js && next dev --turbopack",
+    "build": "node scripts/gen-sw.js && next build --turbopack",
     "start": "next start",
     "lint": "eslint",
     "prepare": "husky",

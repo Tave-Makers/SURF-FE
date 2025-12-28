@@ -68,9 +68,13 @@ export default function PostPage(props: PostPageProps) {
   }, [isReservationModalOpen, reservedAt]);
 
   const handleSaveReservation = () => {
-    setReservedAt(tempDate);
-    setReserved(true);
-    closeReservationModal();
+    if (tempDate > new Date()) {
+      setReservedAt(tempDate);
+      setReserved(true);
+      closeReservationModal();
+    } else {
+      alert('현재 시간 이후로만 예약할 수 있습니다.');
+    }
   };
 
   const handleRemoveReservation = () => {

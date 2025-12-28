@@ -54,6 +54,7 @@ export const PostEditor = ({
   const contentRef = useRef<string>(initialContent);
   const { isEditorInitialized: isInitialized, setIsEditorInitialized: setIsInitialized } =
     usePostFormStore();
+  const [isDataSynced, setIsDataSynced] = useState(false);
   const keyboardOffset = useKeyboardOffset();
   const { MAX_IMAGES } = POST_VALIDATION;
 
@@ -113,13 +114,14 @@ export const PostEditor = ({
 
   // 복귀 시 초기 이미지가 들어오면 로컬 상태에 동기화
   useEffect(() => {
-    if (!isInitialized || !initialImages) return;
+    if (isDataSynced || !isInitialized || !initialImages) return;
 
     // 현재 로컬 images가 비어있고, initialImages가 있으면 동기화
     if (images.length === 0 && initialImages.length > 0) {
       setImages(initialImages);
+      setIsDataSynced(true);
     }
-  }, [isInitialized, initialImages, images.length, setImages]);
+  }, [isInitialized, initialImages, images.length, isDataSynced, setImages]);
 
   // 3. Side Effects
 

@@ -24,7 +24,7 @@ export const Shortcut = ({ type, label, imageSrc, onClick }: ShortcutProps) => {
   // rectangle
   return (
     <button
-      className="bg-background-normal-lighter rounded-5 border-border-secondary flex h-[9.375rem] w-[6.5625rem] flex-col overflow-hidden border"
+      className="bg-background-normal-lighter rounded-5 border-border-secondary flex h-[9.375rem] w-[6.5625rem] flex-col items-start overflow-hidden border shadow-[0_0_20px_3px_rgba(0,0,0,0.04)]"
       onClick={onClick}
     >
       {/* Label 영역 */}

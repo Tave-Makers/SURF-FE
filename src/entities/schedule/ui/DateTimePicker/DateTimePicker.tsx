@@ -10,6 +10,7 @@ import {
   startOfDay,
   subYears,
   addYears,
+  roundToNearestMinutes,
 } from 'date-fns';
 import { ko } from 'date-fns/locale';
 
@@ -24,7 +25,7 @@ export type DateTimePickerProps = {
 const MINUTES = [0, 30];
 const AM_PM_OPTIONS = ['오전', '오후'];
 
-export function DateTimePicker({ value, onChange, mode = 'future' }: DateTimePickerProps) {
+export function DateTimePicker({ value, onChange, mode = 'all' }: DateTimePickerProps) {
   // index 0 => 오늘
   const { BASE_DATE, TOTAL_DAYS } = useMemo(() => {
     const today = startOfDay(new Date());
@@ -65,8 +66,14 @@ export function DateTimePicker({ value, onChange, mode = 'future' }: DateTimePic
     [BASE_DATE],
   );
 
+  const getInitialRoundedDate = useCallback(() => {
+    return roundToNearestMinutes(value, { nearestTo: 30, roundingMethod: 'ceil' });
+
+    return value;
+  }, [value]);
+
   // 초기값 설정
-  const [indices, setIndices] = useState(() => getIndicesFromDate(value));
+  const [indices, setIndices] = useState(() => getIndicesFromDate(getInitialRoundedDate()));
 
   // --- 이벤트 핸들러 ---
   const handleWheelChange = useCallback(

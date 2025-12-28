@@ -19,6 +19,7 @@ import { usePostInitialization } from '@/features/post/post-form/model/usePostIn
 import { usePostDirtyCheck } from '@/features/post/post-form/model/useDirtyCheck';
 
 import { EditorState, PostPageMode } from './types';
+import { useDeletePostSchedule } from '@/features/schedule/delete/model/useDelPostSchedule';
 
 type Props = {
   mode: PostPageMode;
@@ -69,6 +70,7 @@ export const usePostForm = ({ mode, boardId, postId }: Props) => {
   const { mutateAsync: updateMutate, isPending: isUpdating } = useUpdatePost(numericPostId!);
   const { mutateAsync: createScheduleMutate } = useCreatePostSchedule();
   const { mutateAsync: editScheduleMutate } = useEditSchedule();
+  const { mutateAsync: deleteScheduleMutate } = useDeletePostSchedule();
 
   // 3. Logic Hooks (Initialization & Dirty Check)
 
@@ -208,6 +210,13 @@ export const usePostForm = ({ mode, boardId, postId }: Props) => {
               location: linkedSchedule.location ?? '미정',
             },
           });
+        } else {
+          if (postSchedule?.scheduleId) {
+            await deleteScheduleMutate({
+              postId: numericPostId!,
+              scheduleId: postSchedule.scheduleId,
+            });
+          }
         }
       }
 

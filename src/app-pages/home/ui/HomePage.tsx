@@ -9,14 +9,20 @@ import { AppHeader } from '@/widgets/header/ui/AppHeader';
 import { LawBottomSheet } from '@/features/laws/ui/LawBottomSheet';
 import { useLawAgreement } from '@/features/laws/model/useLawAgreement';
 import { useState } from 'react';
+import { TAVE_CHANNEL_LINKS, SPONSOR_LINKS } from '@/entities/home/model/constants';
 
 export const HomePage = () => {
   const { agreements, handleCheck, isAllRequiredChecked, onClickLawDetail } = useLawAgreement();
   const [isOpen, setIsOpen] = useState(!agreements.laws1 || !agreements.laws2 || !agreements.laws3);
   const { data: homeData } = useGetHome();
 
+  const handleShortcutClick = (link: string, label: string) => {
+    console.log(`${label} 클릭 - ${link}로 이동`);
+    // window.open(link, '_blank'); // 실제 구현 시 주석 해제
+  };
+
   return (
-    <div className="overflow-y-auto pb-20">
+    <div className="overflow-y-auto pb-[1.61rem]">
       <div className="absolute z-10 w-full sm:w-[360px]">
         {/* AppHeader */}
         <AppHeader
@@ -56,8 +62,8 @@ export const HomePage = () => {
         <div className="flex flex-col gap-16 px-13 pt-15">
           {/* Announcement Bar */}
           <AnnouncementBar
-            title={homeData?.announcementTitle ?? '공지사항'}
-            date={homeData?.announcementDate ?? ''}
+            title={homeData?.announcementTitle ?? '타이틀 제목 없음'}
+            date={homeData?.announcementDate ?? '날짜없음'}
             category="official" // 카테고리 데이터 필요 {homeData?.announcementCategory ?? 'official'}
             onClick={() => {
               console.log('공지사항 클릭');
@@ -99,83 +105,38 @@ export const HomePage = () => {
 
           {/* 테이브 채널 바로가기 */}
           <div className="flex flex-col gap-11">
-            <div>TAVE 채널 바로가기</div>
-            <div className="flex w-full flex-1 flex-row gap-11">
-              <Shortcut
-                type="circle"
-                label="테이브 채널"
-                imageSrc="/path/to/tabe-channel.png"
-                onClick={() => {
-                  console.log('테이브 채널 클릭');
-                }}
-              />
-              <Shortcut
-                type="circle"
-                label="테이브 채널"
-                imageSrc="/path/to/tabe-channel.png"
-                onClick={() => {
-                  console.log('테이브 채널 클릭');
-                }}
-              />
-              <Shortcut
-                type="circle"
-                label="테이브 채널"
-                imageSrc="/path/to/tabe-channel.png"
-                onClick={() => {
-                  console.log('테이브 채널 클릭');
-                }}
-              />
-              <Shortcut
-                type="circle"
-                label="테이브 채널"
-                imageSrc="/path/to/tabe-channel.png"
-                onClick={() => {
-                  console.log('테이브 채널 클릭');
-                }}
-              />
+            <div className="text-body-body7 text-black">TAVE 채널 바로가기</div>
+            <div className="flex w-full flex-row gap-11">
+              {TAVE_CHANNEL_LINKS.map((channel) => (
+                <Shortcut
+                  key={channel.id}
+                  type="circle"
+                  label={channel.label}
+                  imageSrc={channel.imageSrc}
+                  onClick={() => handleShortcutClick(channel.link, channel.label)}
+                />
+              ))}
             </div>
           </div>
 
           {/* 후원사 바로가기 */}
           <div className="flex flex-col gap-11">
-            <div>후원사 바로가기</div>
-            <div className="flex flex-row gap-11">
-              <Shortcut
-                type="circle"
-                label="후원사"
-                imageSrc="/path/to/tabe-channel.png"
-                onClick={() => {
-                  console.log('후원사 클릭');
-                }}
-              />
-              <Shortcut
-                type="circle"
-                label="후원사"
-                imageSrc="/path/to/tabe-channel.png"
-                onClick={() => {
-                  console.log('후원사 클릭');
-                }}
-              />
-              <Shortcut
-                type="circle"
-                label="후원사"
-                imageSrc="/path/to/tabe-channel.png"
-                onClick={() => {
-                  console.log('후원사 클릭');
-                }}
-              />
-              <Shortcut
-                type="circle"
-                label="후원사"
-                imageSrc="/path/to/tabe-channel.png"
-                onClick={() => {
-                  console.log('후원사 클릭');
-                }}
-              />
+            <div className="text-body-body7 text-black">후원사 바로가기</div>
+            <div className="grid grid-cols-4 gap-11">
+              {SPONSOR_LINKS.map((sponsor) => (
+                <Shortcut
+                  key={sponsor.id}
+                  type="circle"
+                  label={sponsor.label}
+                  imageSrc={sponsor.imageSrc}
+                  onClick={() => handleShortcutClick(sponsor.link, sponsor.label)}
+                />
+              ))}
             </div>
           </div>
         </div>
       </div>
+
       {isAllRequiredChecked ? null : (
         <LawBottomSheet
           isOpen={isOpen}

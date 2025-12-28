@@ -11,13 +11,15 @@ import { Alert } from '@/shared/ui/alert/Alert';
 import { AppHeader } from '@/widgets/header/ui/AppHeader';
 import { HeaderMode } from '@/shared/ui/header/Header';
 import { useSendMessage } from '@/entities/message/model/useSendMessage';
+import { kakaoImgNormalize } from '@/shared/lib/kakaoImgNormalize';
 
 export function SendMessagePage() {
   // 쿼리 파라미터
   const searchParams = useSearchParams();
   const memberId = searchParams.get('memberId');
   const nickname = searchParams.get('nickname') ?? undefined;
-  const profileImageUrl = searchParams.get('profileImageUrl') ?? undefined;
+  const rawProfileImageUrl = searchParams.get('profileImageUrl') ?? undefined;
+  const profileImageUrl = kakaoImgNormalize(rawProfileImageUrl);
 
   // 폼 상태
   const [senderEmail, setSenderEmail] = useState<string>('');
@@ -59,8 +61,7 @@ export function SendMessagePage() {
       {
         onSuccess: () => {
           setIsSendAlertOpen(false);
-          // TODO: 리뷰 후 머지 시 적용 예정
-          // router.back();
+          router.back();
         },
       },
     );
@@ -75,6 +76,7 @@ export function SendMessagePage() {
     return Number.isInteger(id) && id > 0 ? id : null;
   }, [memberId]);
 
+  // 버튼 활성화 조건
   const isBtnEnabled =
     !isPending &&
     validMemberId !== null &&

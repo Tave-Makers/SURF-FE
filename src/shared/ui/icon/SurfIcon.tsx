@@ -4,11 +4,11 @@ import { ComponentType } from 'react';
 type IconSize = 's' | 'm' | 'l' | 'xl';
 export type IconName = Extract<keyof typeof Icons, string>;
 
-interface BaseIconProps {
+type BaseIconProps = {
   size?: number;
   stroke?: number;
   className?: string;
-}
+};
 
 interface IconProps {
   name: IconName;

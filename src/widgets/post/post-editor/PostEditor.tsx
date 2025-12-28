@@ -111,6 +111,16 @@ export const PostEditor = ({
     }
   }, [editor, isInitialized, setIsInitialized, initialContent, initialImages, setImages, mode]);
 
+  // 복귀 시 초기 이미지가 들어오면 로컬 상태에 동기화
+  useEffect(() => {
+    if (!isInitialized || !initialImages) return;
+
+    // 현재 로컬 images가 비어있고, initialImages가 있으면 동기화
+    if (images.length === 0 && initialImages.length > 0) {
+      setImages(initialImages);
+    }
+  }, [isInitialized, initialImages, images.length, setImages]);
+
   // 3. Side Effects
 
   // 이미지 리스트 변경 감지 (삭제/순서변경 등) 시 부모에게 알림

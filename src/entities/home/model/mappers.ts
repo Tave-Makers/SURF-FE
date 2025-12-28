@@ -1,4 +1,5 @@
 import { HomeApiResponseData } from '../api/types';
+import { mapMemberPartToBatch } from '@/entities/user/model/mappers';
 
 export const mapHomeDataToHomeUI = (data: HomeApiResponseData) => {
   return {
@@ -8,7 +9,7 @@ export const mapHomeDataToHomeUI = (data: HomeApiResponseData) => {
     carouselImages: mapBannersToCarouselImages(data.banners),
     userName: data.memberName,
     userBatch: data.memberGeneration,
-    userPart: data.memberPart,
+    userPart: mapMemberPartToBatch(data.memberPart),
     announcementTitle: data.nextScheduleTitle,
     announcementDate: data.nextScheduleDate,
     // deepLink: data.deepLink, // 필요시 추가

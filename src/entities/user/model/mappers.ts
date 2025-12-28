@@ -32,6 +32,18 @@ export function mapPartToBanner(partKo: string): BannerPart | null {
   return partMap[norm] ?? null;
 }
 
+export function mapMemberPartToBatch(memberPart: string): string {
+  const batchMap: Record<string, string> = {
+    WEB_FRONTEND: '웹 프론트엔드',
+    APP_FRONTEND: '앱 프론트엔드',
+    BACKEND: '백엔드',
+    DESIGN: '디자인',
+    DATA_ANALYSIS: '데이터 분석',
+    DEEP_LEARNING: '딥러닝',
+  };
+  return batchMap[memberPart] ?? null;
+}
+
 export function mapUserProfile(dto: UserProfileApiResponse['data']): UserProfile {
   const primaryTrack = dto.trackList?.[0];
   const bannerPart = primaryTrack?.part ? mapPartToBanner(primaryTrack.part) : null;

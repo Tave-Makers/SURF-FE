@@ -16,30 +16,28 @@ const HOP_BY_HOP = new Set([
   'content-length',
 ]);
 
-export async function GET(req: NextRequest, ctx: { params: { path: string[] } }) {
-  return proxy(req, ctx.params.path);
-}
-export async function POST(req: NextRequest, ctx: { params: { path: string[] } }) {
-  return proxy(req, ctx.params.path);
-}
-export async function PUT(req: NextRequest, ctx: { params: { path: string[] } }) {
-  return proxy(req, ctx.params.path);
-}
-export async function PATCH(req: NextRequest, ctx: { params: { path: string[] } }) {
-  return proxy(req, ctx.params.path);
-}
-export async function DELETE(req: NextRequest, ctx: { params: { path: string[] } }) {
-  return proxy(req, ctx.params.path);
+type Ctx = { params: Promise<{ path: string[] }> };
+
+async function handler(req: NextRequest, ctx: Ctx) {
+  const { path } = await ctx.params;
+  return proxy(req, path);
 }
 
+export const GET = handler;
+export const POST = handler;
+export const PUT = handler;
+export const PATCH = handler;
+export const DELETE = handler;
+export const HEAD = handler;
+
 async function proxy(req: NextRequest, path: string[]) {
-  const targetUrl = new URL(`${BACKEND.replace(/\/+$/, '')}/${path.join('/')}`);
-  // querystring 보존
+  const base = BACKEND.replace(/\/+$/, '');
+  const targetUrl = new URL(`${base}/${path.join('/')}`);
+
   targetUrl.search = req.nextUrl.search;
 
   const body = req.method === 'GET' || req.method === 'HEAD' ? undefined : await req.arrayBuffer();
 
-  // ✅ 원 요청 헤더 복사 + hop-by-hop 제거
   const headers = new Headers(req.headers);
   for (const key of HOP_BY_HOP) headers.delete(key);
 
@@ -56,6 +54,10 @@ async function proxy(req: NextRequest, path: string[]) {
     res.headers.set('location', location);
 
     for (const c of getSetCookies(upstream)) res.headers.append('set-cookie', c);
+
+    const cc = upstream.headers.get('cache-control');
+    if (cc) res.headers.set('cache-control', cc);
+
     return res;
   }
 
@@ -65,7 +67,9 @@ async function proxy(req: NextRequest, path: string[]) {
     const v = upstream.headers.get(h);
     if (v) res.headers.set(h, v);
   }
+
   for (const c of getSetCookies(upstream)) res.headers.append('set-cookie', c);
+
   console.log('[proxy] incoming', req.method, req.nextUrl.pathname, req.nextUrl.search);
   console.log('[proxy] target', targetUrl.toString());
 

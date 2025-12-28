@@ -2,6 +2,7 @@
 
 import { PolicyItem } from '@/entities/policy/ui/PolicyItem';
 import { useRouter } from 'next/navigation';
+import { LAW_LIST } from '@/features/laws/constants/law-list';
 
 export default function PolicyPage() {
   const router = useRouter();
@@ -14,7 +15,7 @@ export default function PolicyPage() {
           router.push('/mypage/settings/policy/service');
         }}
       >
-        [필수] SURF 이용약관
+        {LAW_LIST[0].title}
       </PolicyItem>
       <PolicyItem
         rightIconName="ChevronRight"
@@ -22,7 +23,7 @@ export default function PolicyPage() {
           router.push('/mypage/settings/policy/personal-info');
         }}
       >
-        [필수] 개인정보 수집·이용 동의서
+        {LAW_LIST[1].title}
       </PolicyItem>
       <PolicyItem
         rightIconName="ChevronRight"
@@ -30,7 +31,7 @@ export default function PolicyPage() {
           router.push('/mypage/settings/policy/marketing-info');
         }}
       >
-        [선택] 마케팅 정보 수신 동의
+        {LAW_LIST[2].title}
       </PolicyItem>
     </div>
   );

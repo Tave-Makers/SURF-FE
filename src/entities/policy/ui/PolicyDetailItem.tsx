@@ -16,7 +16,7 @@ export const PolicyDetailItem = ({ policyId }: PolicyDetailItemProps) => {
 
   return (
     <div className="flex flex-1 flex-col overflow-y-auto px-13 py-10 pb-[3.5rem]">
-      <div className="text-xs leading-16 font-normal text-[#000]">
+      <div className="text-xs leading-16 font-normal text-black">
         <Markdown>{md}</Markdown>
       </div>
     </div>

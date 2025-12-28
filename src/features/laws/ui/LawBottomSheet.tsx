@@ -23,7 +23,12 @@ export function LawBottomSheet({
   if (!isOpen) return null;
 
   return (
-    <ModalSheet isOpen={isOpen} onClose={onClose} className="mx-auto flex w-full sm:w-[360px]">
+    <ModalSheet
+      isOpen={isOpen}
+      onClose={onClose}
+      disableDrag={true}
+      className="mx-auto flex w-full sm:w-[360px]"
+    >
       <ModalSheet.Container>
         <ModalSheet.Header />
         <ModalSheet.Content>
@@ -51,7 +56,7 @@ export function LawBottomSheet({
           </Sheet>
         </ModalSheet.Content>
       </ModalSheet.Container>
-      <ModalSheet.Backdrop onTap={onClose} />
+      <ModalSheet.Backdrop />
     </ModalSheet>
   );
 }

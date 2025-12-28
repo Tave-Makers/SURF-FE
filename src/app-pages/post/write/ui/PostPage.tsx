@@ -177,7 +177,6 @@ export default function PostPage(props: PostPageProps) {
         className="mx-auto flex w-full sm:w-[360px]"
       >
         <ModalSheet.Container>
-          <ModalSheet.Header />
           <ModalSheet.Content>
             <Sheet
               title="게시글 예약 설정"
@@ -185,8 +184,8 @@ export default function PostPage(props: PostPageProps) {
               primaryBtn={{ label: '예약하기', onClick: handleSaveReservation }}
               secondaryBtn={{ label: '취소하기', onClick: closeReservationModal }}
             >
-              <div>
-                <DateTimePicker value={tempDate} onChange={setTempDate} />
+              <div className="py-15">
+                <DateTimePicker mode="all" value={tempDate} onChange={setTempDate} />
               </div>
             </Sheet>
           </ModalSheet.Content>

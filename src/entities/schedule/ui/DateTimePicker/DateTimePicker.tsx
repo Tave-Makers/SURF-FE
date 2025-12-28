@@ -2,20 +2,52 @@
 
 import { useState, useCallback, useMemo } from 'react';
 import { Wheel } from '@/shared/ui/wheel-picker/Wheel';
-import { isToday, addDays, differenceInCalendarDays, format, startOfDay } from 'date-fns';
+import {
+  isToday,
+  addDays,
+  differenceInCalendarDays,
+  format,
+  startOfDay,
+  subYears,
+  addYears,
+} from 'date-fns';
 import { ko } from 'date-fns/locale';
 
-type DateTimePickerProps = {
+export type DatePickerMode = 'future' | 'all';
+
+export type DateTimePickerProps = {
   value: Date;
   onChange: (date: Date) => void;
+  mode?: DatePickerMode;
 };
 
 const MINUTES = [0, 30];
 const AM_PM_OPTIONS = ['오전', '오후'];
 
-export function DateTimePicker({ value, onChange }: DateTimePickerProps) {
+export function DateTimePicker({ value, onChange, mode = 'future' }: DateTimePickerProps) {
   // index 0 => 오늘
-  const BASE_DATE = useMemo(() => startOfDay(new Date()), []);
+  const { BASE_DATE, TOTAL_DAYS } = useMemo(() => {
+    const today = startOfDay(new Date());
+
+    if (mode === 'future') {
+      // 미래 모드: 오늘부터 ~ 3년 뒤까지
+      // Index 0 = 오늘
+      return {
+        BASE_DATE: today,
+        TOTAL_DAYS: 365 * 3,
+      };
+    } else {
+      // 전체 모드: 과거 50년 ~ 미래 50년 (총 100년 범위)
+      // Index 0 = 50년 전
+      const pastDate = subYears(today, 50);
+      const futureDate = addYears(today, 50);
+
+      return {
+        BASE_DATE: pastDate,
+        TOTAL_DAYS: differenceInCalendarDays(futureDate, pastDate),
+      };
+    }
+  }, [mode]);
 
   const getIndicesFromDate = useCallback(
     (date: Date) => {
@@ -108,7 +140,7 @@ export function DateTimePicker({ value, onChange }: DateTimePickerProps) {
       <div className="z-20 flex h-full w-full">
         <Wheel
           value={indices.dateIdx}
-          length={365} // 1년치만 보여줌
+          length={TOTAL_DAYS}
           width={140}
           loop={false}
           setValue={formatDateLabel}

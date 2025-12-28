@@ -1,6 +1,6 @@
 import { create } from 'zustand';
 
-type AgreementId = 'laws1' | 'laws2' | 'laws3';
+export type AgreementId = 'laws1' | 'laws2' | 'laws3';
 
 interface AgreementState {
   agreements: Record<AgreementId, boolean>;

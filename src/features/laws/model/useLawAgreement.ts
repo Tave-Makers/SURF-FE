@@ -1,12 +1,13 @@
 import { useRouter } from 'next/navigation';
 import { useAgreementStore } from './useAgreementStore';
+import { AgreementId } from './useAgreementStore';
 
 export const useLawAgreement = () => {
   const router = useRouter();
 
   const { agreements, setAgreement } = useAgreementStore();
 
-  const handleCheck = (id: string, checked: boolean) => {
+  const handleCheck = (id: AgreementId, checked: boolean) => {
     setAgreement(id, checked);
   };
 

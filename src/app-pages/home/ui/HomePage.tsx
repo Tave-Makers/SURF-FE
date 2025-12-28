@@ -52,8 +52,7 @@ export const HomePage = () => {
           {/* Announcement Bar */}
           <AnnouncementBar
             title={homeData?.announcementTitle ?? '공지사항'}
-            date={new Date()}
-            // date={homeData?.announcementDate ?? ''}
+            date={homeData?.announcementDate ?? ''}
             category="official" // 카테고리 데이터 필요 {homeData?.announcementCategory ?? 'official'}
             onClick={() => {
               console.log('공지사항 클릭');

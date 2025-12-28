@@ -42,7 +42,7 @@ export function LawBottomSheet({
               disabled: allAgreed === false,
             }}
           >
-            <div className="flex w-full flex-col gap-8 py-10">
+            <div className="my-15 flex w-full flex-col gap-8 py-10">
               {LAW_LIST.map((law) => (
                 <CheckList
                   key={law.id}

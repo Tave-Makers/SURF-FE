@@ -107,7 +107,7 @@ export function Sheet({
       aria-modal="true"
       aria-labelledby={title ? 'sheet-title' : undefined}
       aria-describedby={description}
-      className="rounded-t-4 bg-background-normal flex w-full flex-col items-start gap-15"
+      className="rounded-t-4 bg-background-normal flex w-full flex-col items-start"
     >
       <header className="flex w-full justify-center pt-11" aria-label="드래그 핸들">
         <div

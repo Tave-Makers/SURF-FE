@@ -1,7 +1,6 @@
 import type { ReactNode } from 'react';
 import '@/shared/styles/globals.css';
 import { QueryProvider } from '@/app/providers/QueryProvider';
-import { AuthProvider } from '@/app/providers/AuthProvider';
 import 'keen-slider/keen-slider.min.css';
 import { ReactQueryDevtools } from '@tanstack/react-query-devtools';
 import { AnalyticsProvider } from '@/app/providers/AnalyticsProvider';
@@ -28,15 +27,13 @@ export default function RootLayout({ children }: { children: ReactNode }) {
       <body className="flex min-h-screen items-center justify-center bg-gray-100">
         <AnalyticsProvider />
         <QueryProvider>
-          <AuthProvider>
-            <PageTrackingProvider>
-              <main className="bg-background-tertiary box-content flex h-full w-dvw sm:w-[360px]">
-                {children}
-              </main>
-              <GlobalComponents />
-            </PageTrackingProvider>
-            <ReactQueryDevtools initialIsOpen={false} />
-          </AuthProvider>
+          <PageTrackingProvider>
+            <main className="bg-background-tertiary box-content flex h-full w-dvw sm:w-[360px]">
+              {children}
+            </main>
+            <GlobalComponents />
+          </PageTrackingProvider>
+          <ReactQueryDevtools initialIsOpen={false} />
         </QueryProvider>
       </body>
     </html>

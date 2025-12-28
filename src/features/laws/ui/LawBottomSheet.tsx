@@ -31,10 +31,9 @@ export function LawBottomSheet({
             title="SURF에 오신 것을 환영해요! 👋"
             description="서비스 시작을 위해 약관 내용을 확인하고 동의해 주세요."
             primaryBtn={{
-              label:
-                // TODO: 워딩 확인 필요
-                '동의하고 시작하기',
+              label: '동의하고 시작하기',
               onClick: onClickPrimaryBtn,
+              disabled: LAW_LIST.some((law) => law.required && !agreements[law.id]),
             }}
           >
             <div className="flex w-full flex-col gap-8 py-10">

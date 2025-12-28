@@ -1,24 +1,16 @@
 import { useRouter } from 'next/navigation';
-import { useState } from 'react';
+import { useAgreementStore } from './useAgreementStore';
 
 export const useLawAgreement = () => {
   const router = useRouter();
 
-  const [agreements, setAgreements] = useState({
-    laws1: false, // 서비스 이용약관
-    laws2: false, // 개인정보 수집
-    laws3: false, // 마케팅 수신
-  });
+  const { agreements, setAgreement } = useAgreementStore();
 
   const handleCheck = (id: string, checked: boolean) => {
-    setAgreements((prev) => ({ ...prev, [id]: checked }));
+    setAgreement(id, checked);
   };
 
-  const handleAllAgree = () => {
-    setAgreements({ laws1: true, laws2: true, laws3: true });
-  };
-
-  const isAllRequiredChecked = agreements.laws1 && agreements.laws2;
+  const isAllRequiredChecked = agreements.laws1 && agreements.laws2 && agreements.laws3;
 
   const onClickLawDetail = (id: string) => {
     if (id === 'laws1') {
@@ -30,5 +22,5 @@ export const useLawAgreement = () => {
     }
   };
 
-  return { agreements, handleCheck, handleAllAgree, isAllRequiredChecked, onClickLawDetail };
+  return { agreements, handleCheck, isAllRequiredChecked, onClickLawDetail };
 };

@@ -7,8 +7,7 @@ import { useState } from 'react';
 
 export function LoginPage() {
   const [isOpen, setIsOpen] = useState(true);
-  const { agreements, handleCheck, handleAllAgree, isAllRequiredChecked, onClickLawDetail } =
-    useLawAgreement();
+  const { agreements, handleCheck, isAllRequiredChecked, onClickLawDetail } = useLawAgreement();
 
   return (
     <div className="flex h-full w-full flex-col items-center justify-center px-13">
@@ -22,7 +21,7 @@ export function LoginPage() {
           if (isAllRequiredChecked) {
             setIsOpen(false);
           } else {
-            handleAllAgree();
+            alert('필수 약관에 모두 동의해 주세요.');
           }
         }}
         onClickLawDetail={onClickLawDetail}

@@ -7,6 +7,7 @@ import { TextButton } from '../button/text-button/TextButton';
 type SheetButton = {
   label: string;
   onClick?: () => void;
+  disabled?: boolean;
 };
 
 type SheetProps = {
@@ -46,20 +47,33 @@ export function Sheet({
                 type="button"
                 size="l"
                 variant="secondary"
+                isDisabled={secondaryBtn.disabled}
                 onClick={secondaryBtn.onClick}
               >
                 {secondaryBtn.label}
               </SolidButton>
             )}
             {primaryBtn && (
-              <SolidButton type="button" size="l" variant="primary" onClick={primaryBtn.onClick}>
+              <SolidButton
+                type="button"
+                size="l"
+                variant="primary"
+                isDisabled={primaryBtn.disabled}
+                onClick={primaryBtn.onClick}
+              >
                 {primaryBtn.label}
               </SolidButton>
             )}
           </div>
         )}
         {textBtn && (
-          <TextButton type="button" size="m" variant="secondary" onClick={textBtn.onClick}>
+          <TextButton
+            type="button"
+            size="m"
+            variant="secondary"
+            isDisabled={textBtn.disabled}
+            onClick={textBtn.onClick}
+          >
             {textBtn.label}
           </TextButton>
         )}

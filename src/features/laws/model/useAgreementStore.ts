@@ -4,7 +4,7 @@ export type AgreementId = 'laws1' | 'laws2' | 'laws3';
 
 interface AgreementState {
   agreements: Record<AgreementId, boolean>;
-  setAgreement: (id: AgreementId, checked: boolean) => void;
+  setAgreement: (id: string, checked: boolean) => void;
   resetAgreements: () => void; // 동의 여부 초기화용
 }
 

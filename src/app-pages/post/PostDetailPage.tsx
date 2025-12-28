@@ -13,12 +13,12 @@ import { Sheet } from '@/shared/ui/sheet/Sheet';
 import { SheetItem } from '@/shared/ui/sheet/SheetItem';
 import { SurfIcon } from '@/shared/ui/icon/SurfIcon';
 import { useState } from 'react';
-import { deletePost } from '@/features/post/api/deletePost';
 import { Alert } from '@/shared/ui/alert/Alert';
 import { usePathname, useRouter } from 'next/navigation';
 import { Avatar } from '@/shared/ui/avatar/Avatar';
 import { categoryIdToKey } from '@/entities/post/model/category';
 import { useGetSingleSchedule } from '@/features/schedule/edit/model/useGetSingleSchedule';
+import { useDeletePostMutation } from '@/features/post/model/useDeletePostMutation';
 
 type PostDetailPageProps = {
   postId: string;
@@ -54,6 +54,7 @@ export default function PostDetailPage({ postId }: PostDetailPageProps) {
 
   const [open, setOpen] = useState(false);
   const [showDeleteAlert, setShowDeleteAlert] = useState(false);
+  const { mutate: deletePostMutate } = useDeletePostMutation();
 
   // 로딩/에러 처리
   if (isLoading)
@@ -77,14 +78,13 @@ export default function PostDetailPage({ postId }: PostDetailPageProps) {
     setLikedUsersOpen(true);
   };
 
-  const handleDelete = async () => {
-    try {
-      await deletePost(numericPostId);
-      setShowDeleteAlert(false);
-      router.back();
-    } catch (e) {
-      console.error(e);
-    }
+  const handleDelete = () => {
+    deletePostMutate(numericPostId, {
+      onSuccess: () => {
+        setShowDeleteAlert(false);
+        router.back();
+      },
+    });
   };
 
   return (

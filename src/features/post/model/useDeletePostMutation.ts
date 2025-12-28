@@ -13,28 +13,23 @@ export const useDeletePostMutation = () => {
     mutationFn: (postId: number) => deletePost(postId),
 
     onSuccess: (_, postId) => {
-      // 1) 게시글 상세 캐시 제거
       queryClient.removeQueries({
         queryKey: postQueryKeys.detail(postId),
       });
 
-      // 2) 게시글 목록 계열 invalidate
       void queryClient.invalidateQueries({
         queryKey: postQueryKeys.lists(),
       });
 
-      void queryClient.invalidateQueries({
-        queryKey: postQueryKeys.myPosts(),
-      });
-
-      // 3) 일정 목록 invalidate (scheduleId 없음 → 넓게)
       void queryClient.invalidateQueries({
         queryKey: scheduleQueryKeys.lists(),
       });
     },
 
     onError: (error) => {
-      console.error('[Post Delete Error]', error);
+      if (error instanceof Error) {
+        console.error('[Post Delete Error]', error.message);
+      }
     },
   });
 };

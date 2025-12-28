@@ -25,6 +25,7 @@ export function LoginPage() {
           }
         }}
         onClickLawDetail={onClickLawDetail}
+        allAgreed={isAllRequiredChecked}
       />
     </div>
   );

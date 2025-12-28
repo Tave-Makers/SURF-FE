@@ -10,6 +10,7 @@ export type LawBottomSheetProps = {
   agreements: { [key: string]: boolean };
   onCheck: (id: string, checked: boolean) => void;
   onClickLawDetail: (id: string) => void;
+  allAgreed: boolean;
 };
 
 export function LawBottomSheet({
@@ -19,6 +20,7 @@ export function LawBottomSheet({
   onCheck,
   onClickPrimaryBtn,
   onClickLawDetail,
+  allAgreed,
 }: LawBottomSheetProps) {
   if (!isOpen) return null;
 
@@ -38,7 +40,7 @@ export function LawBottomSheet({
             primaryBtn={{
               label: '동의하고 시작하기',
               onClick: onClickPrimaryBtn,
-              disabled: LAW_LIST.some((law) => law.required && !agreements[law.id]),
+              disabled: allAgreed === false,
             }}
           >
             <div className="flex w-full flex-col gap-8 py-10">

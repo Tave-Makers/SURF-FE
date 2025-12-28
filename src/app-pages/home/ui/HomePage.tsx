@@ -23,6 +23,7 @@ export const HomePage = () => {
           }
         }}
         onClickLawDetail={onClickLawDetail}
+        allAgreed={isAllRequiredChecked}
       />
     </div>
   );

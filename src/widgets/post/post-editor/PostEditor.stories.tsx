@@ -45,6 +45,7 @@ export const Empty: Story = {
     </div>
   ),
   args: {
+    mode: 'create',
     initialContent: '',
     initialImages: [],
     onChange: onChangeMock,

@@ -1,4 +1,4 @@
-import { Controller, useFormContext } from 'react-hook-form';
+import { Controller, useFormContext, useWatch } from 'react-hook-form';
 import { OnBoardingFormData } from '@/features/onboarding/model/types';
 import { ProfileImageUploader } from '@/features/profile/ui/upload-profile-image/ProfileImageUploader';
 import { TextArea } from '@/shared/ui/text-area/TextArea';
@@ -6,16 +6,25 @@ import { FieldGroup } from '@/shared/ui/field-group/FieldGroup';
 
 export function ProfileStep() {
   const { control } = useFormContext<OnBoardingFormData>();
+  const profileImageUrl = useWatch({
+    control,
+    name: 'profileImageUrl',
+  });
 
+  console.log('[ProfileStep] profileImageUrl:', profileImageUrl);
   return (
     <>
       {/* 프로필 이미지 업로더 */}
       <div className="flex items-center justify-center gap-10 self-stretch pt-19 pb-10">
         <Controller
-          name="profileImageUrl"
+          name="profileImage"
           control={control}
           render={({ field }) => (
-            <ProfileImageUploader value={field.value} onChange={field.onChange} />
+            <ProfileImageUploader
+              file={field.value}
+              onChange={field.onChange}
+              initialImageUrl={profileImageUrl}
+            />
           )}
         />
       </div>

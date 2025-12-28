@@ -5,14 +5,15 @@ import { OnBoardingFormData } from '@/features/onboarding/model/types';
 import OnBoardingForm from '@/widgets/onboarding/ui/OnBoardingForm';
 import { useEffect } from 'react';
 import { FormProvider, useForm } from 'react-hook-form';
+import { kakaoImgNormalize } from '@/shared/lib/kakaoImgNormalize';
 
 export default function OnBoardingPage() {
-  const profileImageUrl = useAuthStore((state) => state.profileImageUrl);
+  const profileImageUrl = kakaoImgNormalize(useAuthStore((state) => state.profileImageUrl));
 
   const methods = useForm<OnBoardingFormData>({
     defaultValues: {
       name: '',
-      profileImageUrl: undefined,
+      profileImage: undefined,
       tracks: [{ generation: null, part: null }],
       university: '',
       graduateSchool: '',

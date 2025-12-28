@@ -1,47 +1,50 @@
 'use client';
 
-import { useRef, useState } from 'react';
+import { useEffect, useMemo, useRef } from 'react';
 import { Avatar } from '@/shared/ui/avatar/Avatar';
 
 type Props = {
-  value?: string;
-  onChange: (value: string) => void;
+  file?: File;
+  initialImageUrl?: string;
+  onChange: (file: File) => void;
 };
 
-export const ProfileImageUploader = ({ value, onChange }: Props) => {
+export const ProfileImageUploader = ({ file, initialImageUrl, onChange }: Props) => {
   const inputRef = useRef<HTMLInputElement>(null);
-  const [previewUrl, setPreviewUrl] = useState<string | null>(null);
+
+  /** File → preview URL */
+  const previewUrl = useMemo(() => {
+    if (!file) return null;
+    return URL.createObjectURL(file);
+  }, [file]);
+
+  /** preview URL 메모리 해제 */
+  useEffect(() => {
+    return () => {
+      if (previewUrl) URL.revokeObjectURL(previewUrl);
+    };
+  }, [previewUrl]);
 
   const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    if (e.target.files && e.target.files[0]) {
-      const file = e.target.files[0];
-      const url = URL.createObjectURL(file);
-
-      setPreviewUrl(url);
-      onChange(url);
-    }
+    const selected = e.target.files?.[0];
+    if (!selected) return;
+    onChange(selected);
   };
+
+  const displayImageUrl = previewUrl ?? initialImageUrl;
+  console.log('[ProfileImageUploader]', {
+    file,
+    previewUrl,
+    initialImageUrl,
+    displayImageUrl,
+  });
 
   return (
     <div>
-      <input
-        type="file"
-        accept="image/*"
-        ref={inputRef}
-        onChange={handleImageChange}
-        style={{ display: 'none' }}
-      />
+      <input ref={inputRef} type="file" accept="image/*" onChange={handleImageChange} hidden />
 
       <button type="button" onClick={() => inputRef.current?.click()}>
-        {previewUrl || value ? (
-          <img
-            src={previewUrl || value}
-            alt="프로필 이미지"
-            className="rounded-4 aspect-square h-[6rem] w-[6rem] object-cover"
-          />
-        ) : (
-          <Avatar size="xl" />
-        )}
+        {displayImageUrl ? <Avatar src={displayImageUrl} size="xl" /> : <Avatar size="xl" />}
       </button>
     </div>
   );

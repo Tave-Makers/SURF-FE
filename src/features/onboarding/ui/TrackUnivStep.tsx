@@ -32,8 +32,25 @@ export function TrackUnivStep() {
 
   const [isGraduateStudent, setIsGraduateStudent] = useState(false);
 
+  function isDuplicateTrack(
+    tracks: { generation: number | null; part: TrackPart | null }[],
+    target: { generation: number; part: TrackPart },
+    editingIndex: number | null,
+  ) {
+    return tracks.some((t, idx) => {
+      if (editingIndex !== null && idx === editingIndex) return false;
+      return t.generation === target.generation && t.part === target.part;
+    });
+  }
+
   function handleSelectTrack() {
     if (!tempTrack) return;
+    const isDuplicate = isDuplicateTrack(fields, tempTrack, editingIndex);
+
+    if (isDuplicate) {
+      return;
+    }
+
     if (editingIndex === null) {
       append(tempTrack);
     } else {
@@ -139,27 +156,31 @@ export function TrackUnivStep() {
 
       {/* 피커 모달 */}
       <ModalSheet isOpen={isSheetOpen} onClose={() => setIsSheetOpen(false)}>
-        <ModalSheet.Container>
-          <ModalSheet.Header />
+        <ModalSheet.Container className="!right-0 !left-0 mx-auto w-full sm:max-w-[360px]">
           <ModalSheet.Content>
-            <Sheet primaryBtn={{ label: '선택하기', onClick: handleSelectTrack }}>
-              <WheelPicker
-                initPeriodIdx={0}
-                initPartIdx={0}
-                onChange={({ period, part }) => {
-                  try {
-                    const track = mapToApiTrack(period, part);
-                    setTempTrack((prev) => {
-                      if (prev?.generation === track.generation && prev?.part === track.part) {
-                        return prev;
-                      }
-                      return track;
-                    });
-                  } catch (err) {
-                    console.error(err);
-                  }
-                }}
-              />
+            <Sheet>
+              <div className="flex flex-col gap-[1.25rem]">
+                <WheelPicker
+                  initPeriodIdx={0}
+                  initPartIdx={0}
+                  onChange={({ period, part }) => {
+                    try {
+                      const track = mapToApiTrack(period, part);
+                      setTempTrack((prev) => {
+                        if (prev?.generation === track.generation && prev?.part === track.part) {
+                          return prev;
+                        }
+                        return track;
+                      });
+                    } catch (err) {
+                      console.error(err);
+                    }
+                  }}
+                />
+                <SolidButton type="button" size="l" variant="primary" onClick={handleSelectTrack}>
+                  선택하기
+                </SolidButton>
+              </div>
             </Sheet>
           </ModalSheet.Content>
         </ModalSheet.Container>

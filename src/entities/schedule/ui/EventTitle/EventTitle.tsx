@@ -56,7 +56,7 @@ export function EventTitle({ placeholder, title, onChange }: EventTitleProps) {
 
   if (isEditing) {
     return (
-      <div className="text-body-body3 flex w-full flex-col gap-10 self-stretch">
+      <div className="text-body-body4 flex w-full flex-col gap-10 self-stretch">
         <textarea
           ref={inputRef}
           placeholder={placeholder}
@@ -85,14 +85,14 @@ export function EventTitle({ placeholder, title, onChange }: EventTitleProps) {
   return (
     <button
       type="button"
-      className="text-body-body3 flex w-full cursor-pointer flex-col gap-10 self-stretch text-left"
+      className="text-body-body4 flex w-full cursor-pointer flex-col gap-10 self-stretch text-left"
       onClick={handleClick}
       onKeyDown={handleKeyDown}
     >
       {hasValue ? (
         <div className="text-foreground-normal">{displayValue}</div>
       ) : (
-        <div className="text-foreground-quaternary">{placeholder}</div>
+        <div className="text-foreground-tertiary-lighter">{placeholder}</div>
       )}
     </button>
   );

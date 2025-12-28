@@ -14,6 +14,9 @@ export type SettingsItemProps = Omit<ButtonHTMLAttributes<HTMLButtonElement>, 'd
   onClick?: (e: MouseEvent<HTMLButtonElement>) => void;
 };
 
+const baseStyle =
+  'flex flex-1 w-full self-stretch items-center justify-between px-13 py-12 gap-1 bg-background-normal';
+
 export const SettingsItem = forwardRef<HTMLButtonElement, SettingsItemProps>(
   (
     {
@@ -27,9 +30,6 @@ export const SettingsItem = forwardRef<HTMLButtonElement, SettingsItemProps>(
     },
     ref,
   ) => {
-    const baseClass =
-      'flex flex-1 w-full self-stretch items-center justify-between px-13 py-12 gap-1 bg-background-normal';
-
     return (
       <button
         ref={ref}
@@ -37,7 +37,7 @@ export const SettingsItem = forwardRef<HTMLButtonElement, SettingsItemProps>(
         disabled={isDisabled}
         onClick={onClick}
         {...rest}
-        className={baseClass}
+        className={baseStyle}
       >
         <div className="flex w-full items-center gap-13">
           {leftIconName && (
@@ -48,7 +48,7 @@ export const SettingsItem = forwardRef<HTMLButtonElement, SettingsItemProps>(
               className="text-foreground-normal"
             />
           )}
-          {children && <span className="text-body-body8 text-foreground-normal">{children}</span>}
+          {children && <span className="text-body-body9 text-foreground-normal">{children}</span>}
         </div>
         {rightIconName && (
           <SurfIcon

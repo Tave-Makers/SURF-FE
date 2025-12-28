@@ -1,5 +1,10 @@
 import { SendMessagePage } from '@/app-pages/message/ui/SendMessagePage';
+import { Suspense } from 'react';
 
 export default function Page() {
-  return <SendMessagePage />;
+  return (
+    <Suspense fallback={null}>
+      <SendMessagePage />
+    </Suspense>
+  );
 }

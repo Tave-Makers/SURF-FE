@@ -14,21 +14,9 @@ const meta: Meta<typeof AnnouncementBar> = {
       control: 'select',
       options: CATEGORY_OPTIONS,
     },
-    date: { control: 'date' },
+    date: { control: 'text' },
     title: { control: 'text' },
   },
-
-  decorators: [
-    (Story, context) => {
-      const dateArg = context.args.date;
-
-      if (!(dateArg instanceof Date)) {
-        context.args.date = new Date(dateArg);
-      }
-
-      return <Story {...context} />;
-    },
-  ],
 };
 
 export default meta;
@@ -37,7 +25,7 @@ type Story = StoryObj<typeof AnnouncementBar>;
 export const Default: Story = {
   args: {
     title: '후반기 만남의 장 공지',
-    date: new Date(),
+    date: '12.31',
     category: 'official',
   },
 };

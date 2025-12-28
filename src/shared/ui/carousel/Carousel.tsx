@@ -1,12 +1,14 @@
 'use client';
 
-import { useCallback, useEffect, useRef, useState } from 'react';
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { Pagenation } from '../pagenation/Pagenation';
 import { Control } from './Control';
 
 interface CarouselImage {
   src: string;
   alt: string;
+  linkUrl?: string;
+  displayOrder?: number;
 }
 
 interface CarouselProps {
@@ -21,7 +23,16 @@ export const Carousel = ({ images, className = '' }: CarouselProps) => {
   const [current, setCurrent] = useState(0);
   const timerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
 
-  const length = images.length;
+  const sortedImages = useMemo(() => {
+    return [...images].sort((a, b) => {
+      // displayOrder 없는 경우는 뒤로
+      if (a.displayOrder == null && b.displayOrder == null) return 0;
+      if (a.displayOrder == null) return 1;
+      if (b.displayOrder == null) return -1;
+      return a.displayOrder - b.displayOrder;
+    });
+  }, [images]);
+  const length = sortedImages.length;
 
   const resetTimer = useCallback(() => {
     // 이전 타미어 존재하면 제거
@@ -47,12 +58,12 @@ export const Carousel = ({ images, className = '' }: CarouselProps) => {
   // 좌측 버튼
   const handlePrev = () => {
     // 음수 인덱스 방지하여 이동
-    setCurrent((prev) => (prev - 1 + images.length) % images.length);
+    setCurrent((prev) => (prev - 1 + length) % length);
   };
 
   // 우측 버튼
   const handleNext = () => {
-    setCurrent((prev) => (prev + 1) % images.length);
+    setCurrent((prev) => (prev + 1) % length);
   };
 
   if (length === 0) {
@@ -65,13 +76,17 @@ export const Carousel = ({ images, className = '' }: CarouselProps) => {
         className="flex h-full transition-transform duration-500 ease-in-out"
         style={{ transform: `translateX(-${current * 100}%)` }}
       >
-        {images.map((img, idx) => (
-          <img
+        {sortedImages.map((img, idx) => (
+          <button
             key={idx}
-            src={img.src}
-            alt={img.alt}
-            className="h-full w-full flex-shrink-0 object-cover"
-          />
+            onClick={() => {
+              if (!img.linkUrl) return;
+              window.open(img.linkUrl, '_blank');
+            }}
+            className="h-full w-full flex-shrink-0 cursor-pointer"
+          >
+            <img src={img.src} alt={img.alt} className="h-full w-full object-cover" />
+          </button>
         ))}
       </div>
 
@@ -96,7 +111,7 @@ export const Carousel = ({ images, className = '' }: CarouselProps) => {
       {/* 페이지네이션 */}
       <Pagenation
         currentPage={current + 1}
-        totalPages={images.length}
+        totalPages={length}
         className="absolute right-[10px] bottom-[10px]"
       />
     </div>

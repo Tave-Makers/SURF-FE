@@ -48,3 +48,30 @@ export const Single: Story = {
     className: 'w-[300px] h-[150px]',
   },
 };
+
+export const WithOrderAndLink: Story = {
+  name: 'With Order & Link',
+  args: {
+    images: [
+      {
+        src: 'https://public.mujikorea.co.kr/images/products/categories/mjPpw4Qa3Ds4faXJOmFhHIhD83YQqC88jPFYxbFZ.jpg',
+        alt: '1번 이미지 (order 1)',
+        displayOrder: 1,
+        linkUrl: 'https://www.google.com/',
+      },
+      {
+        src: 'https://public.mujikorea.co.kr/images/plans/2510_men_bn_pc.jpg',
+        alt: '2번 이미지 (order 2)',
+        displayOrder: 2,
+        linkUrl: 'https://www.naver.com/',
+      },
+      {
+        src: 'https://public.mujikorea.co.kr/images/products/categories/kPekPdSyST6wgk6RqUVZz0JnquFG6rhmTmEjJL5H.jpg',
+        alt: '3번 이미지 (order 3)',
+        displayOrder: 3,
+        linkUrl: 'https://www.mujikorea.co.kr/product',
+      },
+    ],
+    className: 'w-[300px] h-[150px]',
+  },
+};

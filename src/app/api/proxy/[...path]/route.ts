@@ -1,7 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
 
-const BACKEND = process.env.API_BASE_URL;
-if (!BACKEND) throw new Error('API_BASE_URL is not set');
+const BACKEND = process.env.API_BASE_URL!;
 
 const HOP_BY_HOP = new Set([
   'connection',
@@ -69,9 +68,6 @@ async function proxy(req: NextRequest, path: string[]) {
   }
 
   for (const c of getSetCookies(upstream)) res.headers.append('set-cookie', c);
-
-  console.log('[proxy] incoming', req.method, req.nextUrl.pathname, req.nextUrl.search);
-  console.log('[proxy] target', targetUrl.toString());
 
   return res;
 }

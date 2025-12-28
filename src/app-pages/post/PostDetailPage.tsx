@@ -195,8 +195,7 @@ export default function PostDetailPage({ postId }: PostDetailPageProps) {
       {/* 삭제/수정/신고 Sheet*/}
       {/* ============================= */}
       <ModalSheet isOpen={open} onClose={() => setOpen(false)}>
-        <ModalSheet.Container className="!right-0 !left-0 mx-auto max-w-[360px]">
-          <ModalSheet.Header />
+        <ModalSheet.Container className="!right-0 !left-0 mx-auto w-full sm:max-w-[360px]">
           <ModalSheet.Content>
             <Sheet title="게시글 옵션">
               <div className="flex flex-col">

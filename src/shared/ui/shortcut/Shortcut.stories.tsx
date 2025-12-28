@@ -35,6 +35,7 @@ export const Circle: Story = {
     label: 'Label',
     imageSrc:
       'https://product.mujikorea.co.kr/images/products/8809191730770/NEW/8809191730770.jpg?w=960&f=webp',
+    onClick: () => alert('Circle shortcut 클릭됨'),
   },
 };
 
@@ -44,5 +45,6 @@ export const Rectangle: Story = {
     label: 'Label',
     imageSrc:
       'https://product.mujikorea.co.kr/images/products/8809191730770/NEW/8809191730770.jpg?w=960&f=webp',
+    onClick: () => alert('Rectangle shortcut 클릭됨'),
   },
 };

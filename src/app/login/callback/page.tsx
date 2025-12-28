@@ -1,4 +1,4 @@
-import { KakaoCallBackPage } from '@/app-pages/login/ui/KakaoCallBackPage';
+import KakaoCallBackPage from '@/app-pages/login/ui/KakaoCallBackPage';
 import { Suspense } from 'react';
 
 export default function Page() {

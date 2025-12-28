@@ -66,59 +66,75 @@ function getSetCookies(res: Response): string[] {
 }
 
 export const verifySession = cache(async () => {
-  const cookieStore = await cookies();
-  const cookieHeader0 = buildCookieHeader(cookieStore);
+  try {
+    const cookieStore = await cookies();
+    const cookieHeader0 = buildCookieHeader(cookieStore);
 
-  const validUrl = `${BACKEND}/v1/user/members/valid-status`;
+    const validUrl = `${BACKEND}/v1/user/members/valid-status`;
 
-  const res = await fetchWithTimeout(validUrl, {
-    cache: 'no-store',
-    redirect: 'manual',
-    headers: cookieHeader0 ? { cookie: cookieHeader0 } : {},
-  });
-
-  if (res.status !== 401 && res.ok) {
-    const json = (await res.json()) as ValidStatusResponse;
-    return handleBusinessRedirect(json);
-  }
-
-  if (res.status === 401) {
-    const refreshUrl = `${BACKEND}${REFRESH_PATH}`;
-
-    const refresh = await fetchWithTimeout(refreshUrl, {
-      method: 'POST',
+    const res = await fetchWithTimeout(validUrl, {
       cache: 'no-store',
       redirect: 'manual',
       headers: cookieHeader0 ? { cookie: cookieHeader0 } : {},
     });
 
-    if (!refresh.ok) redirect('/login');
+    if (res.status !== 401 && res.ok) {
+      const json = (await res.json()) as ValidStatusResponse;
+      return handleBusinessRedirect(json);
+    }
 
-    const setCookies = getSetCookies(refresh);
-    const cookieHeader1 = mergeCookies(cookieHeader0, setCookies);
+    if (res.status === 401) {
+      const refreshUrl = `${BACKEND}${REFRESH_PATH}`;
 
-    const retry = await fetchWithTimeout(validUrl, {
-      cache: 'no-store',
-      redirect: 'manual',
-      headers: cookieHeader1 ? { cookie: cookieHeader1 } : {},
-    });
+      const refresh = await fetchWithTimeout(refreshUrl, {
+        method: 'POST',
+        cache: 'no-store',
+        redirect: 'manual',
+        headers: cookieHeader0 ? { cookie: cookieHeader0 } : {},
+      });
 
-    if (!retry.ok) redirect('/login');
+      if (!refresh.ok) redirect('/login');
 
-    const json = (await retry.json()) as ValidStatusResponse;
-    return handleBusinessRedirect(json);
+      const setCookies = getSetCookies(refresh);
+      const cookieHeader1 = mergeCookies(cookieHeader0, setCookies);
+
+      const retry = await fetchWithTimeout(validUrl, {
+        cache: 'no-store',
+        redirect: 'manual',
+        headers: cookieHeader1 ? { cookie: cookieHeader1 } : {},
+      });
+
+      if (!retry.ok) redirect('/login');
+
+      const json = (await retry.json()) as ValidStatusResponse;
+      return handleBusinessRedirect(json);
+    }
+
+    // 401이 아닌 실패
+    redirect('/login');
+  } catch (error) {
+    // timeout 또는 network error 처리
+    if (error instanceof Error && error.name === 'AbortError') {
+      console.error('Session verification timeout');
+    } else {
+      console.error('Session verification failed:', error);
+    }
+    redirect('/login');
   }
-
-  // 401이 아닌 실패
-  redirect('/login');
 });
-
 function handleBusinessRedirect(json: ValidStatusResponse) {
   const user = json.data;
 
-  if (user.memberStatus === 'WAITING') redirect('/login?msg=pending');
-  if (user.memberStatus === 'REJECTED') redirect('/login?msg=rejected');
-  if (user.needOnboarding) redirect('/onboarding?msg=incomplete');
-
-  return user;
+  switch (user.memberStatus) {
+    case 'WAITING':
+      return redirect('/login?msg=pending');
+    case 'REJECTED':
+      return redirect('/login?msg=rejected');
+    case 'REGISTERING':
+      return redirect('/onboarding?msg=incomplete');
+    case 'APPROVED':
+      return user;
+    default:
+      return redirect('/login');
+  }
 }

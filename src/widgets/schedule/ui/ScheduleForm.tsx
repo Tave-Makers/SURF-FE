@@ -83,27 +83,28 @@ export default function ScheduleForm({ onSubmit, initialData }: ScheduleFormProp
               className="mx-auto flex w-full sm:w-[360px]"
             >
               <ModalSheet.Container>
-                <ModalSheet.Header />
                 <ModalSheet.Content>
-                  <div className="rounded-4 flex flex-col gap-4 px-15 pt-16 pb-15">
-                    {SCHEDULE_CATEGORIES.map((option) => (
-                      <button
-                        key={option.value}
-                        type="button"
-                        onClick={() => {
-                          field.onChange(option.value);
-                          handleCloseModal();
-                        }}
-                        className={`text-foreground-normal text-body-body5 flex w-full flex-1 items-center px-12 py-10 ${
-                          field.value === option.value
-                            ? 'bg-background-secondary'
-                            : 'hover:bg-background-secondary'
-                        }`}
-                      >
-                        {option.label}
-                      </button>
-                    ))}
-                  </div>
+                  <Sheet>
+                    <div className="rounded-4 flex flex-col gap-4 px-15 pt-16 pb-15">
+                      {SCHEDULE_CATEGORIES.map((option) => (
+                        <button
+                          key={option.value}
+                          type="button"
+                          onClick={() => {
+                            field.onChange(option.value);
+                            handleCloseModal();
+                          }}
+                          className={`text-foreground-normal text-body-body5 flex w-full flex-1 items-center px-12 py-10 ${
+                            field.value === option.value
+                              ? 'bg-background-secondary'
+                              : 'hover:bg-background-secondary'
+                          }`}
+                        >
+                          {option.label}
+                        </button>
+                      ))}
+                    </div>
+                  </Sheet>
                 </ModalSheet.Content>
               </ModalSheet.Container>
               <ModalSheet.Backdrop
@@ -150,7 +151,6 @@ export default function ScheduleForm({ onSubmit, initialData }: ScheduleFormProp
                 className="mx-auto flex w-full sm:w-[360px]"
               >
                 <ModalSheet.Container>
-                  <ModalSheet.Header />
                   <ModalSheet.Content>
                     <Sheet
                       title="일정 시작 설정"
@@ -198,7 +198,6 @@ export default function ScheduleForm({ onSubmit, initialData }: ScheduleFormProp
                 className="mx-auto flex w-full sm:w-[360px]"
               >
                 <ModalSheet.Container>
-                  <ModalSheet.Header />
                   <ModalSheet.Content>
                     <Sheet
                       title="일정 종료 설정"

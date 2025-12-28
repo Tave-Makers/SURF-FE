@@ -62,8 +62,9 @@ export const usePostForm = ({ mode, boardId, postId }: Props) => {
   // 일정 조회 API
   const scheduleId = postDetail?.scheduleId;
   const shouldFetchSchedule = !!scheduleId;
-  const { data: postSchedule } = useGetSingleSchedule(scheduleId, {
+  const { data: postSchedule, isFetching: isScheduleFetching } = useGetSingleSchedule(scheduleId, {
     enabled: shouldFetchSchedule,
+    staleTime: 0,
   });
 
   // 생성/수정 뮤테이션
@@ -84,6 +85,7 @@ export const usePostForm = ({ mode, boardId, postId }: Props) => {
     setEditorState,
     setLinkedSchedule,
     isInitializedRef: isScheduleInitializedRef,
+    isScheduleFetching,
   });
 
   // 변경 사항 감지
@@ -240,6 +242,7 @@ export const usePostForm = ({ mode, boardId, postId }: Props) => {
     showExitAlert,
     isReservationModalOpen,
     isSubmitDisabled,
+    isScheduleFetching,
 
     // Actions
     openCategory,

@@ -1,4 +1,4 @@
-import FeedbackPage from '@/app-pages/settings/feedback/ui/FeedbackPage';
+import FeedbackPage from '@/app-pages/mypage/settings/feedback/ui/FeedbackPage';
 
 export default function Page() {
   return <FeedbackPage />;

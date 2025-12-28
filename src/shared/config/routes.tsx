@@ -30,13 +30,13 @@ export const createRouteConfig = (router: RouterInstance): RouteConfig[] => [
   {
     id: 'mypage',
     path: '/mypage',
-    backPath: '/home',
+    backPath: '/',
     header: {
       icons: [
         {
           label: 'Cog',
           onClickIcon: () => {
-            router.push('/mypage/settings');
+            router.push('/settings');
           },
         },
       ],
@@ -84,7 +84,7 @@ export const createRouteConfig = (router: RouterInstance): RouteConfig[] => [
   },
   {
     id: 'mypage-settings',
-    path: '/mypage/settings',
+    path: '/settings',
     backPath: '/mypage',
     header: {
       mode: HeaderMode.Default,
@@ -94,8 +94,8 @@ export const createRouteConfig = (router: RouterInstance): RouteConfig[] => [
   },
   {
     id: 'mypage-scraps',
-    path: '/mypage/settings/scraps',
-    backPath: '/mypage/settings',
+    path: '/settings/scraps',
+    backPath: '/settings',
     header: {
       mode: HeaderMode.Default,
       title: '내가 스크랩한 게시글',
@@ -104,8 +104,8 @@ export const createRouteConfig = (router: RouterInstance): RouteConfig[] => [
   },
   {
     id: 'mypage-my-posts',
-    path: '/mypage/settings/my-posts',
-    backPath: '/mypage/settings',
+    path: '/settings/my-posts',
+    backPath: '/settings',
     header: {
       mode: HeaderMode.Default,
       title: '내가 작성한 게시글',
@@ -114,8 +114,8 @@ export const createRouteConfig = (router: RouterInstance): RouteConfig[] => [
   },
   {
     id: 'mypage-feedback',
-    path: '/mypage/settings/feedback',
-    backPath: '/mypage/settings',
+    path: '/settings/feedback',
+    backPath: '/settings',
     header: {
       mode: HeaderMode.Default,
       title: '피드백 보내기',
@@ -124,8 +124,8 @@ export const createRouteConfig = (router: RouterInstance): RouteConfig[] => [
   },
   {
     id: 'mypage-policy',
-    path: '/mypage/settings/policy',
-    backPath: '/mypage/settings',
+    path: '/settings/policy',
+    backPath: '/settings',
     header: {
       mode: HeaderMode.Default,
       title: '이용약관',
@@ -136,8 +136,8 @@ export const createRouteConfig = (router: RouterInstance): RouteConfig[] => [
   // 약관 상세 페이지
   {
     id: 'mypage-policy-service-policy',
-    path: '/mypage/settings/policy/service',
-    backPath: '/mypage/settings/policy',
+    path: '/settings/policy/service',
+    backPath: '/settings/policy',
     header: {
       mode: HeaderMode.Default,
       title: 'SURF 서비스 이용약관',
@@ -146,8 +146,8 @@ export const createRouteConfig = (router: RouterInstance): RouteConfig[] => [
   },
   {
     id: 'mypage-policy-personal-info-policy',
-    path: '/mypage/settings/policy/personal-info',
-    backPath: '/mypage/settings/policy',
+    path: '/settings/policy/personal-info',
+    backPath: '/settings/policy',
     header: {
       mode: HeaderMode.Default,
       title: '개인정보 수집·이용 동의서',
@@ -156,8 +156,8 @@ export const createRouteConfig = (router: RouterInstance): RouteConfig[] => [
   },
   {
     id: 'mypage-policy-marketing-info-policy',
-    path: '/mypage/settings/policy/marketing-info',
-    backPath: '/mypage/settings/policy',
+    path: '/settings/policy/marketing-info',
+    backPath: '/settings/policy',
     header: {
       mode: HeaderMode.Default,
       title: '[선택] 마케팅 정보 수신 동의',
@@ -186,7 +186,7 @@ export const createRouteConfig = (router: RouterInstance): RouteConfig[] => [
   {
     id: 'board',
     path: '/board',
-    backPath: '/home', // 임시
+    backPath: '/', // 임시
     header: {
       mode: HeaderMode.Default,
       title: '공지사항',
@@ -216,7 +216,7 @@ export const createRouteConfig = (router: RouterInstance): RouteConfig[] => [
   {
     id: 'home-calendar',
     path: '/home/calendar',
-    backPath: '/home',
+    backPath: '/',
     header: {
       mode: HeaderMode.Default,
       title: '일정',

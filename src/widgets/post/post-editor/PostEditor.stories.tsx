@@ -8,6 +8,9 @@ const meta: Meta<typeof PostEditor> = {
   tags: ['autodocs'],
   parameters: {
     layout: 'fullscreen',
+    nextjs: {
+      appDirectory: true,
+    },
   },
 };
 
@@ -27,6 +30,7 @@ export const Default: Story = {
     </div>
   ),
   args: {
+    mode: 'create',
     initialContent: `<p>이곳에 게시글을 작성하세요 ✍️</p>`,
     initialImages: [],
     onChange: onChangeMock,

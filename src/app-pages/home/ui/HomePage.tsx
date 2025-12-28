@@ -5,8 +5,8 @@ import { useLawAgreement } from '@/features/laws/model/useLawAgreement';
 import { useState } from 'react';
 
 export const HomePage = () => {
-  const [isOpen, setIsOpen] = useState(true);
   const { agreements, handleCheck, isAllRequiredChecked, onClickLawDetail } = useLawAgreement();
+  const [isOpen, setIsOpen] = useState(!agreements.laws1 || !agreements.laws2 || !agreements.laws3);
 
   return (
     <div>

@@ -9,30 +9,15 @@ export default function PolicyPage() {
 
   return (
     <div className="flex flex-col">
-      <PolicyItem
-        rightIconName="ChevronRight"
-        onClick={() => {
-          router.push('/settings/policy/service');
-        }}
-      >
-        {LAW_LIST[0].title}
-      </PolicyItem>
-      <PolicyItem
-        rightIconName="ChevronRight"
-        onClick={() => {
-          router.push('/settings/policy/personal-info');
-        }}
-      >
-        {LAW_LIST[1].title}
-      </PolicyItem>
-      <PolicyItem
-        rightIconName="ChevronRight"
-        onClick={() => {
-          router.push('/settings/policy/marketing-info');
-        }}
-      >
-        {LAW_LIST[2].title}
-      </PolicyItem>
+      {LAW_LIST.map((law) => (
+        <PolicyItem
+          key={law.id}
+          rightIconName="ChevronRight"
+          onClick={() => router.push(law.route)}
+        >
+          {law.title}
+        </PolicyItem>
+      ))}
     </div>
   );
 }

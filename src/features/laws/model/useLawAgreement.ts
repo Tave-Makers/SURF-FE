@@ -14,11 +14,11 @@ export const useLawAgreement = () => {
 
   const onClickLawDetail = (id: string) => {
     if (id === 'laws1') {
-      router.push('/mypage/settings/policy/service');
+      router.push('/settings/policy/service');
     } else if (id === 'laws2') {
-      router.push('/mypage/settings/policy/personal-info');
+      router.push('/settings/policy/personal-info');
     } else if (id === 'laws3') {
-      router.push('/mypage/settings/policy/marketing-info');
+      router.push('/settings/policy/marketing-info');
     }
   };
 

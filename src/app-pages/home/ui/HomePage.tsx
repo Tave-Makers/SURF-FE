@@ -1,39 +1,30 @@
 'use client';
 
-import { SolidButton } from '@/shared/ui/button/solid-button/SolidButton';
-import * as amplitude from '@amplitude/analytics-browser';
-import { useRouter } from 'next/navigation';
-import { useToastStore } from '@/shared/store/toastStore';
-
-const handleToast = () => {
-  useToastStore.getState().show('성공');
-};
+import { LawBottomSheet } from '@/features/laws/ui/LawBottomSheet';
+import { useLawAgreement } from '@/features/laws/model/useLawAgreement';
+import { useState } from 'react';
 
 export const HomePage = () => {
-  const router = useRouter();
-
-  const handleTestEvent = () => {
-    amplitude.track('TEST_EVENT', {
-      page: 'HomePage',
-      clickedAt: new Date().toISOString(),
-    });
-    console.info('[Amplitude] TEST_EVENT 전송 완료');
-  };
-
-  const handleCalendarClick = () => {
-    router.push('/home/calendar');
-  };
+  const { agreements, handleCheck, isAllRequiredChecked, onClickLawDetail } = useLawAgreement();
+  const [isOpen, setIsOpen] = useState(!agreements.laws1 || !agreements.laws2 || !agreements.laws3);
 
   return (
     <div>
-      <SolidButton size="s" variant="primary" onClick={handleTestEvent}>
-        Amplitude 이벤트 테스트
-      </SolidButton>
-
-      <button className="bg-amber-300" onClick={handleCalendarClick}>
-        캘린더 화면 보기 클릭!
-      </button>
-      <button onClick={handleToast}>토스트</button>
+      <LawBottomSheet
+        isOpen={isOpen}
+        onClose={() => setIsOpen(false)}
+        agreements={agreements}
+        onCheck={handleCheck}
+        onClickPrimaryBtn={() => {
+          if (isAllRequiredChecked) {
+            setIsOpen(false);
+          } else {
+            alert('필수 약관에 모두 동의해 주세요.');
+          }
+        }}
+        onClickLawDetail={onClickLawDetail}
+        allAgreed={isAllRequiredChecked}
+      />
     </div>
   );
 };

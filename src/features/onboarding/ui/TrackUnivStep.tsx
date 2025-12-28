@@ -115,7 +115,6 @@ export function TrackUnivStep() {
             <Controller
               name="graduateSchool"
               control={control}
-              //   rules={{ required: '대학원은 필수 입력값입니다.' }}
               render={({ field, fieldState }) => (
                 <TextArea
                   {...field}

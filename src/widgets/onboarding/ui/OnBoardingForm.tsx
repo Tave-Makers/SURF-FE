@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { useFormContext } from 'react-hook-form';
+import { useFormContext, useFormState } from 'react-hook-form';
 import OnBoardingLayout from './OnBoardingLayout';
 import { ONBOARDING_EVENTS, OnBoardingFormData } from '@/features/onboarding/model/types';
 import { ProfileStep } from '@/features/onboarding/ui/ProfileStep';
@@ -25,7 +25,7 @@ export default function OnBoardingForm() {
     component: React.FC;
     title: string;
     description: string;
-    fields: (keyof OnBoardingFormData)[];
+    validationFields: (keyof OnBoardingFormData)[];
   };
 
   const steps: StepConfig[] = [
@@ -33,22 +33,43 @@ export default function OnBoardingForm() {
       component: ProfileStep,
       title: '프로필을 만들어봐요',
       description: '성함과 프로필 사진을 등록해주세요.',
-      fields: ['name', 'profileImageUrl'],
+      validationFields: ['name'],
     },
     {
       component: TrackUnivStep,
       title: '필수 정보를 입력해주세요.',
       description: '기존 TAVE 활동 정보를 입력해주세요.',
-      fields: ['tracks', 'university', 'graduateSchool'],
+      validationFields: ['tracks', 'university'],
     },
     {
       component: EmailPhoneStep,
       title: '필수 정보를 입력해주세요.',
       description: '기존 TAVE 활동 정보를 입력해주세요.',
-      fields: ['email', 'phoneNumber'],
+      validationFields: ['email', 'phoneNumber'],
     },
   ];
   const StepComponent = steps[step].component;
+
+  const { control, getValues } = methods;
+
+  const { errors, touchedFields } = useFormState({
+    control,
+  });
+
+  const currentValidationFields = steps[step].validationFields;
+
+  const isNextBtnDisabled = currentValidationFields.some((field) => {
+    if (field === 'tracks') {
+      const tracks = getValues('tracks');
+
+      const hasValidTrack =
+        Array.isArray(tracks) && tracks.some((t) => t?.generation != null && t?.part != null);
+
+      return !hasValidTrack || !!errors.tracks;
+    }
+
+    return !touchedFields[field] || !!errors[field];
+  });
 
   // step이 바뀔 때마다 signup_page_view 트래킹
   useEffect(() => {
@@ -58,7 +79,7 @@ export default function OnBoardingForm() {
   }, [step]);
 
   async function handleNext() {
-    const isValid = await methods.trigger(steps[step].fields);
+    const isValid = await methods.trigger(steps[step].validationFields);
     if (!isValid) return;
 
     if (step < steps.length - 1) {
@@ -104,6 +125,7 @@ export default function OnBoardingForm() {
       })();
     }
   }
+
   return (
     <OnBoardingLayout
       step={step}
@@ -114,7 +136,7 @@ export default function OnBoardingForm() {
         void handleNext();
       }}
       isFinalStep={step === steps.length - 1}
-      isNextBtnDisabled={!methods.formState.isValid}
+      isNextBtnDisabled={isNextBtnDisabled}
     >
       <StepComponent />
     </OnBoardingLayout>

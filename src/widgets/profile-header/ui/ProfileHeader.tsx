@@ -1,33 +1,89 @@
 'use client';
 
+import Link from 'next/link';
+
 import { Avatar } from '@/shared/ui/avatar/Avatar';
 import { InfoBadge } from '@/shared/ui/info-badge/InfoBadge';
-import type { UserLevel } from '@/entities/user/model/types';
 import { USER_LEVEL_BADGE } from '@/entities/user/ui/user-level/UserLevelBadges';
+import { SurfIcon } from '@/shared/ui/icon/SurfIcon';
+import { kakaoImgNormalize } from '@/shared/lib/kakaoImgNormalize';
+import type { UserProfile } from '@/entities/user/model/types';
 
-type Props = {
-  name: string;
-  level: UserLevel;
-  chips: string[];
-};
+const infoRow = 'text-caption-caption6 text-foreground-normal flex flex-row items-center gap-5';
 
-export function ProfileHeader({ name, level, chips }: Props) {
-  const BadgeIcon = USER_LEVEL_BADGE[level];
+interface Props {
+  userProfile: UserProfile;
+}
+
+export function ProfileHeader({ userProfile }: Props) {
+  const BadgeIcon = USER_LEVEL_BADGE[userProfile.level];
+  const showBadge = userProfile.level !== 'member' && !!BadgeIcon;
+
+  const profileImg = kakaoImgNormalize(userProfile.profileImgUrl);
+
+  const universityText = [
+    userProfile.university,
+    userProfile.graduateSchool ? `· ${userProfile.graduateSchool}` : null,
+  ]
+    .filter(Boolean)
+    .join(' ');
 
   return (
-    <div className="flex flex-row gap-13 px-13 py-15">
-      <Avatar size="l" />
-      <div className="flex flex-col gap-8">
-        <div className="flex flex-row items-center gap-7">
-          <div className="text-body-body2 text-foreground-normal">{name}</div>
-          <BadgeIcon width={20} height={20} />
+    <section className="flex flex-col gap-11 px-13 pt-13 pb-11">
+      <div className="flex flex-row items-end justify-between gap-8">
+        <div className="flex flex-col gap-7">
+          <div className="flex flex-row items-center gap-7">
+            <div className="text-body-body2 text-foreground-normal">{userProfile.username}</div>
+            {showBadge && <BadgeIcon width={20} height={20} />}
+          </div>
+
+          <div className="flex flex-row flex-wrap gap-5">
+            {userProfile.chips.map((chip, idx) => (
+              <InfoBadge key={`${chip}-${idx}`} text={chip} />
+            ))}
+          </div>
         </div>
-        <div className="flex flex-row flex-wrap gap-5">
-          {chips.map((chip, idx) => (
-            <InfoBadge key={`${chip}-${idx}`} text={chip} />
-          ))}
+        <Avatar size="l" src={profileImg} />
+      </div>
+
+      <div className="flex flex-col gap-10">
+        <span className="text-caption-caption2 text-foreground-secondary">
+          {userProfile.selfIntroduction}
+        </span>
+
+        {userProfile.link ? (
+          <div className="text-foreground-quaternary flex flex-row items-center gap-5">
+            <SurfIcon name="Link" size="s" />
+            <Link
+              className="text-caption-caption4 break-all"
+              href={userProfile.link}
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              {userProfile.link}
+            </Link>
+          </div>
+        ) : null}
+      </div>
+
+      <div className="flex flex-col gap-8">
+        <div className={infoRow}>
+          <SurfIcon name="Envelope" size="s" />
+          <span>{userProfile.email}</span>
+        </div>
+
+        {userProfile.phoneNumberPublic === true ? (
+          <div className={infoRow}>
+            <SurfIcon name="Telephone" size="s" />
+            <span>{userProfile.phoneNumber}</span>
+          </div>
+        ) : null}
+
+        <div className={infoRow}>
+          <SurfIcon name="AcademicHat" size="s" />
+          <span>{universityText}</span>
         </div>
       </div>
-    </div>
+    </section>
   );
 }

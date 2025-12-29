@@ -21,7 +21,6 @@ export function SendMessagePage() {
   const rawProfileImageUrl = searchParams.get('profileImageUrl') ?? undefined;
   const profileImageUrl = kakaoImgNormalize(rawProfileImageUrl);
 
-  // 폼 상태
   const [senderEmail, setSenderEmail] = useState<string>('');
   const [additionalSns, setAdditionalSns] = useState<string>('');
   const [title, setTitle] = useState<string>('');

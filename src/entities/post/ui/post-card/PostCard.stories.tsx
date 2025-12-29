@@ -29,7 +29,7 @@ const mockPost: Post = {
   scrapCount: 0,
   commentCount: 8,
   categoryName: '행사',
-  thumbnailUrl: 'https://images.unsplash.com/photo-1522204507765-4b9e8f69e4f1?w=200&h=200&fit=crop',
+  thumbnailUrl: 'https://picsum.photos/200/300',
 };
 
 export const Default: Story = {

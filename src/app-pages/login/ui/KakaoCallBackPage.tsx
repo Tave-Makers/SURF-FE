@@ -2,9 +2,9 @@
 
 import { useEffect, useRef } from 'react';
 import { useSearchParams, useRouter } from 'next/navigation';
-import { handleKakaoLoginCallback } from '@/features/auth/model/authLogic';
+import { getKakaoLoginCallback } from '@/features/auth/api/getKakaoLoginCallback';
 
-export function KakaoCallBackPage() {
+export default function KakaoCallBackPage() {
   const searchParams = useSearchParams();
   const router = useRouter();
   const didRun = useRef(false);
@@ -21,22 +21,19 @@ export function KakaoCallBackPage() {
       return;
     }
 
-    const fetchLogin = async () => {
+    void (async () => {
       try {
-        const redirectPath = await handleKakaoLoginCallback(code);
-        router.replace(redirectPath);
+        await getKakaoLoginCallback(code);
+        router.replace('/');
       } catch (err) {
         const message =
           err instanceof Error
             ? err.message
             : '로그인 중 문제가 발생했어요. 잠시 후 다시 시도해주세요.';
         alert(message);
-
         router.push('/login');
       }
-    };
-
-    void fetchLogin();
+    })();
   }, [code, router]);
 
   return <div>로그인 처리중...</div>;

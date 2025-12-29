@@ -14,8 +14,12 @@ export function AppNavigation() {
   const pathname = usePathname();
 
   const activeId: TabId =
-    BOTTOM_NAV_ITEMS.find((item) => item.relatedRoots.some((root) => pathname?.startsWith(root)))
-      ?.id ?? 'home';
+    BOTTOM_NAV_ITEMS.find((item) =>
+      item.relatedRoots.some((root) => {
+        if (root === '/') return pathname === '/';
+        return pathname?.startsWith(root);
+      }),
+    )?.id ?? 'home';
 
   return (
     <nav aria-label="하단 네비게이션" className={navStyle}>

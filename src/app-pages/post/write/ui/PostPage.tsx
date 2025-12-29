@@ -96,7 +96,7 @@ export default function PostPage(props: PostPageProps) {
       {/* 2. 카테고리 선택 */}
       <div className="px-13">
         <AccordionSelect
-          title={POST_CATEGORIES[category!].label}
+          title={POST_CATEGORIES[category].label}
           isOpen={isCategoryOpen}
           onClick={openCategory}
           controlsId={categorySheetId}
@@ -159,11 +159,11 @@ export default function PostPage(props: PostPageProps) {
       {/* 5. 본문 에디터 */}
       <div className="flex h-full flex-1 overflow-auto">
         <PostEditor
+          mode={mode}
           initialContent={initialContent}
           initialImages={initialImages}
           linkedSchedule={linkedSchedule}
           onChange={handleEditorChange}
-          onInitialized={() => {}}
           onScheduleRemove={handleScheduleRemove}
           onReservationClick={openReservationModal}
         />

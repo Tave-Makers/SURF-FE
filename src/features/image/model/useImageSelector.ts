@@ -57,11 +57,15 @@ export function useImageSelector() {
     imagesRef.current = images;
   }, [images]);
 
-  /** 언마운트 시 preview URL 정리 */
+  /** 언마운트 시 preview URL 정리 (단, 업로드된 이미지는 유지) */
   useEffect(() => {
     return () => {
+      // 로컬 preview URL만 revoke (파일 선택으로 생성된 것)
+      // 서버에서 받은 이미지는 preview === uploadUrl이므로 유지됨
       imagesRef.current.forEach((img) => {
-        if (img.preview) URL.revokeObjectURL(img.preview);
+        // 파일이 있으면 로컬 preview -> revoke 안전
+        // 파일이 없으면 서버 이미지 -> revoke 금지 (전역 스토어에서 여전히 사용중일 수 있음)
+        if (img.preview && img.file) URL.revokeObjectURL(img.preview);
       });
     };
   }, []);

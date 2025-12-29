@@ -3,10 +3,8 @@
 import { useMemo, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { Controller, useFieldArray, useForm } from 'react-hook-form';
-
 import type { DateString, UpdateProfileRequestDTO, UserProfile } from '@/entities/user/model/types';
 import { updateMyProfile } from '@/entities/user/api/updateMyProfile.client';
-
 import { AppHeader } from '@/widgets/header/ui/AppHeader';
 import { HeaderMode } from '@/shared/ui/header/Header';
 import { FieldGroup } from '@/shared/ui/field-group/FieldGroup';
@@ -415,7 +413,6 @@ export default function MyEditPage({ initialProfile }: Props) {
                           onChange={field.onChange}
                           placeholder="2025-12-29"
                           className="flex-1"
-                          errorMessage={errors.careers?.[index]?.startDate?.message}
                         />
                       )}
                     />
@@ -441,7 +438,6 @@ export default function MyEditPage({ initialProfile }: Props) {
                           placeholder={isWorking ? '재직 중' : '2025-12-29'}
                           isDisabled={isWorking}
                           className="flex-1"
-                          errorMessage={errors.careers?.[index]?.endDate?.message}
                         />
                       )}
                     />

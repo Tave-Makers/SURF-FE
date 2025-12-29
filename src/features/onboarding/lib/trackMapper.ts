@@ -11,7 +11,7 @@ const toEnumPartMap: Record<string, TrackPart> = {
 };
 
 // 백엔드 enum → 한글
-const toLabelPartMap: Record<TrackPart, string> = {
+export const toLabelPartMap: Record<TrackPart, string> = {
   BACKEND: '백엔드',
   WEB_FRONTEND: '웹 프론트엔드',
   APP_FRONTEND: '앱 프론트엔드',

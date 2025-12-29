@@ -7,6 +7,7 @@ import type {
   UserLevel,
   ServerUserLevel,
 } from './types';
+import { toLabelPartMap } from '@/features/onboarding/lib/trackMapper';
 
 export function mapUserLevel(role: ServerUserLevel | UserLevel): UserLevel {
   const map: Record<ServerUserLevel, UserLevel> = {
@@ -33,15 +34,9 @@ export function mapPartToBanner(partKo: string): BannerPart | null {
 }
 
 export function mapMemberPartToBatch(memberPart: string): string {
-  const batchMap: Record<string, string> = {
-    WEB_FRONTEND: '웹 프론트엔드',
-    APP_FRONTEND: '앱 프론트엔드',
-    BACKEND: '백엔드',
-    DESIGN: '디자인',
-    DATA_ANALYSIS: '데이터 분석',
-    DEEP_LEARNING: '딥러닝',
-  };
-  return batchMap[memberPart] ?? null;
+  const map: Record<string, string> = toLabelPartMap;
+  const label = map[memberPart];
+  return label ?? '미정';
 }
 
 export function mapUserProfile(dto: UserProfileApiResponse['data']): UserProfile {

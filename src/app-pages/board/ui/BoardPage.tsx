@@ -8,6 +8,7 @@ import { TAB_CATEGORIES, TAB_CATEGORY_LIST } from '@/entities/post/model/tab';
 import { AppHeader } from '@/widgets/header/ui/AppHeader';
 import { HeaderMode } from '@/shared/ui/header/Header';
 import { POST_BOARDS } from '@/entities/post/model/board';
+import { PostFab } from '@/entities/post/ui/post-fab/PostFab';
 
 const BoardPage = ({ boardId: boardIdProp }: { boardId: string }) => {
   const router = useRouter();
@@ -57,6 +58,15 @@ const BoardPage = ({ boardId: boardIdProp }: { boardId: string }) => {
           <PostListContainer boardId={boardId} category={categoryKey} userLevel={userLevel} />
         </div>
       </div>
+      {userLevel !== 'member' && (
+        <div className="pointer-events-none fixed inset-0 z-50">
+          <div className="relative mx-auto h-full sm:max-w-[360px]">
+            <div className="pointer-events-auto absolute right-15 bottom-15">
+              <PostFab onClick={() => router.push(`/board/${boardId}/post/create`)} />
+            </div>
+          </div>
+        </div>
+      )}
     </>
   );
 };

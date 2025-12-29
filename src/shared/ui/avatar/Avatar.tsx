@@ -14,6 +14,7 @@ import DEFAULT_PROFILE_IMAGE from '@/shared/assets/icons/profile/profile-default
  * @param onClick - 클릭 핸들러. 제공 시 button 요소로 렌더링되어 접근성 향상
  *
  */
+import { kakaoImgNormalize } from '@/shared/lib/kakaoImgNormalize';
 
 export type AvatarSize = 'xs' | 's' | 'm' | 'l' | 'xl';
 
@@ -46,7 +47,8 @@ export function Avatar({
 
   const base = `relative flex items-center justify-center flex-shrink-0 aspect-square ${sizesStyle[size].rounded} overflow-hidden ${sizesStyle[size].cls}`;
 
-  const imageSrc = !error && src ? src : DEFAULT_PROFILE_IMAGE;
+  const normalizedSrc = kakaoImgNormalize(src);
+  const imageSrc = !error && normalizedSrc ? normalizedSrc : DEFAULT_PROFILE_IMAGE;
 
   // interactive 여부에 따라 wrapper element 결정
   const Wrapper = onClick ? 'button' : 'div';

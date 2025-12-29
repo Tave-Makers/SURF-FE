@@ -8,6 +8,9 @@ const meta: Meta<typeof PostEditor> = {
   tags: ['autodocs'],
   parameters: {
     layout: 'fullscreen',
+    nextjs: {
+      appDirectory: true,
+    },
   },
 };
 
@@ -19,10 +22,6 @@ const onChangeMock = (data: { content: string; images: UploadImage[] }) => {
   console.log('onChange', data);
 };
 
-const onInitializedMock = () => {
-  console.log('PostEditor initialized');
-};
-
 // 기본 예시
 export const Default: Story = {
   render: (args) => (
@@ -31,10 +30,10 @@ export const Default: Story = {
     </div>
   ),
   args: {
+    mode: 'create',
     initialContent: `<p>이곳에 게시글을 작성하세요 ✍️</p>`,
     initialImages: [],
     onChange: onChangeMock,
-    onInitialized: onInitializedMock,
   },
 };
 
@@ -46,9 +45,9 @@ export const Empty: Story = {
     </div>
   ),
   args: {
+    mode: 'create',
     initialContent: '',
     initialImages: [],
     onChange: onChangeMock,
-    onInitialized: onInitializedMock,
   },
 };

@@ -1,44 +1,30 @@
 'use client';
 
-import { useToastStore } from '@/shared/store/toastStore';
-
-import { useEffect } from 'react';
-import { getFcmToken } from '@/shared/lib/fcm';
-import { useRegisterToken } from '@/entities/notification/model/useRegisterToken';
-
-// TODO: 추후 삭제
-const handleToast = () => {
-  useToastStore.getState().show('성공');
-};
+import { LawBottomSheet } from '@/features/laws/ui/LawBottomSheet';
+import { useLawAgreement } from '@/features/laws/model/useLawAgreement';
+import { useState } from 'react';
 
 export const HomePage = () => {
-  const { mutate: registerToken } = useRegisterToken();
-
-  useEffect(() => {
-    const isRegistered = sessionStorage.getItem('isFcmRegistered');
-    if (isRegistered) return;
-
-    const handleFcmRegistration = async () => {
-      try {
-        const token = await getFcmToken();
-
-        if (token) {
-          registerToken({
-            token: token,
-            platform: 'WEB',
-          });
-        }
-      } catch (error) {
-        console.error('FCM 설정 실패:', error);
-      }
-    };
-
-    void handleFcmRegistration();
-  }, [registerToken]);
+  const { agreements, handleCheck, isAllRequiredChecked, onClickLawDetail } = useLawAgreement();
+  const [isOpen, setIsOpen] = useState(!agreements.laws1 || !agreements.laws2 || !agreements.laws3);
 
   return (
     <div>
-      <button onClick={handleToast}>토스트</button>
+      <LawBottomSheet
+        isOpen={isOpen}
+        onClose={() => setIsOpen(false)}
+        agreements={agreements}
+        onCheck={handleCheck}
+        onClickPrimaryBtn={() => {
+          if (isAllRequiredChecked) {
+            setIsOpen(false);
+          } else {
+            alert('필수 약관에 모두 동의해 주세요.');
+          }
+        }}
+        onClickLawDetail={onClickLawDetail}
+        allAgreed={isAllRequiredChecked}
+      />
     </div>
   );
 };

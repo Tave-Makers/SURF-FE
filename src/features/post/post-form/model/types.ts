@@ -1,21 +1,34 @@
 import { PostCategoryKey } from '@/entities/post/model/category';
 import { UploadImage } from '@/entities/image/model/types';
+import { ScheduleFormData } from '@/features/schedule/create/model/types';
 
-// 비교를 위한 스냅샷 타입
-export type PostSnapshot = {
+export type PostPageMode = 'create' | 'edit';
+
+export interface PostFormState {
   title: string;
   category: PostCategoryKey;
   content: string;
-  imageUrls: (string | null)[];
+  images: UploadImage[];
   reserved: boolean;
   reservedAt: Date | null;
-  scheduleId: number | null;
-};
+  initialSnapshot: PostSnapshot | null;
+  isEditorInitialized: boolean;
 
-// 에디터 내부 상태 타입
-export type EditorState = {
-  content: string;
-  images: UploadImage[];
-};
+  // Actions
+  setField: <K extends keyof PostFormState>(field: K, value: PostFormState[K]) => void;
+  setEditorState: (content: string, images: UploadImage[]) => void;
+  setIsEditorInitialized: (isInit: boolean) => void;
+  resetForm: () => void;
+  setSnapshot: (snapshot: PostSnapshot) => void;
+}
 
-export type PostPageMode = 'create' | 'edit';
+export type EditorState = Pick<PostFormState, 'content' | 'images'>;
+
+export type PostSnapshot = Pick<
+  PostFormState,
+  'title' | 'category' | 'content' | 'reserved' | 'reservedAt'
+> & {
+  imageUrls: (string | null)[]; // UploadImage 객체 대신 URL 문자열 배열로 비교
+  scheduleId: number | null; // 게시글 외적 요소이므로 별도 추가
+  initialSchedule: ScheduleFormData | null;
+};

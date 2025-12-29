@@ -1,52 +1,48 @@
 'use client';
 
 import { useEffect, useRef } from 'react';
-import { useMyProfileQuery } from '@/entities/user/model/profileQueries';
 import { useAuthStore } from '@/features/auth/model/useAuthStore';
 import { MyPageActions } from '@/widgets/mypage-actions/ui/MyPageActions';
-import { ProfileTabs } from '@/widgets/profile-tabs/ui/ProfileTabs';
+import { ProfileCareer } from '@/widgets/profile-career/ui/ProfileCareer';
 import { ProfileHeader } from '@/widgets/profile-header/ui/ProfileHeader';
 import { PROFILE_EVENTS } from '@/features/profile/model/types';
 import { trackProfileEvent } from '@/features/profile/lib/trackProfileEvent';
+import type { UserProfile } from '@/entities/user/model/types';
 
-export function MyPage() {
-  const { data: profile, isLoading, isError } = useMyProfileQuery();
+interface Props {
+  userProfile: UserProfile;
+}
+
+export function MyPage({ userProfile }: Props) {
   const memberId = useAuthStore((s) => s.memberId);
 
-  // 중복 로그 방지
+  // 중복 로그 방지 (StrictMode에서 useEffect 2번 도는 것 대비)
   const fired = useRef(false);
 
   useEffect(() => {
     if (fired.current) return;
-    if (!profile) return;
+    if (!userProfile) return;
 
     fired.current = true;
 
     trackProfileEvent(PROFILE_EVENTS.VIEW_PROFILE, {
       member_id: memberId != null ? String(memberId) : 'anonymous',
     });
-  }, [profile, memberId]);
+  }, [userProfile, memberId]);
 
-  if (isLoading) return <div className="p-4">로딩...</div>;
-  if (isError || !profile) return <div className="p-4">프로필을 불러오지 못했어요.</div>;
+  if (!userProfile) return <div className="p-4">프로필을 불러오지 못했어요.</div>;
 
   return (
-    <div className="flex h-full min-h-0 flex-col">
-      <ProfileHeader name={profile.name} level={profile.level} chips={profile.chips} />
+    <div className="flex h-dvh flex-col overflow-y-auto">
+      <ProfileHeader userProfile={userProfile} />
+
       <MyPageActions
-        isActive={profile.isActive}
-        bannerPart={profile.bannerPart}
-        bannerScore={profile.activityScore}
+        isActive={userProfile.isActive}
+        bannerPart={userProfile.bannerPart}
+        bannerScore={userProfile.activityScore}
       />
-      <div className="min-h-0 flex-1">
-        <ProfileTabs
-          phoneNumber={profile.phoneNumber ?? ''}
-          email={profile.email ?? ''}
-          university={profile.university ?? ''}
-          graduateSchool={profile.graduateSchool ?? ''}
-          careers={profile.careers ?? []}
-        />
-      </div>
+
+      {userProfile.careers && <ProfileCareer careers={userProfile.careers} />}
     </div>
   );
 }

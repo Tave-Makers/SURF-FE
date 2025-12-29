@@ -6,7 +6,7 @@ import { mapHomeDataToHomeUI } from '../model/mappers';
 
 export const useGetHome = () => {
   return useQuery({
-    queryKey: homeQueryKeys.home(),
+    queryKey: homeQueryKeys.all,
     queryFn: getHome,
     select: (data: HomeApiResponseData) => {
       return mapHomeDataToHomeUI(data);

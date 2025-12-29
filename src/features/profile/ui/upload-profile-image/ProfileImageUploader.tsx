@@ -32,12 +32,6 @@ export const ProfileImageUploader = ({ file, initialImageUrl, onChange }: Props)
   };
 
   const displayImageUrl = previewUrl ?? initialImageUrl;
-  console.log('[ProfileImageUploader]', {
-    file,
-    previewUrl,
-    initialImageUrl,
-    displayImageUrl,
-  });
 
   return (
     <div>

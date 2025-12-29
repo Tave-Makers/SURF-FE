@@ -19,6 +19,7 @@ const mockData: NotificationItemProps[] = [
     time: new Date('2025-01-15T09:30:00Z'),
     badge: 'LIKE',
     isRead: false,
+    deepLink: '/notification',
   },
   {
     id: 2,
@@ -28,12 +29,14 @@ const mockData: NotificationItemProps[] = [
     time: new Date('2025-01-15T09:30:00Z'),
     badge: 'MENTION',
     isRead: true,
+    deepLink: '/notification',
   },
   {
     id: 3,
     title: '새로운 공지사항이 있습니다',
     time: new Date('2025-01-15T09:30:00Z'),
     isRead: false,
+    deepLink: '/notification',
   },
 ];
 

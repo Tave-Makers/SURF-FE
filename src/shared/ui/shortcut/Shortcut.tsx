@@ -10,7 +10,7 @@ interface ShortcutProps {
 export const Shortcut = ({ type, label, imageSrc, onClick }: ShortcutProps) => {
   if (type === 'circle') {
     return (
-      <button className="flex flex-col items-center gap-7" onClick={onClick}>
+      <button className="flex w-full flex-col items-center gap-7" onClick={onClick}>
         <div className="h-[2.5rem] w-[2.5rem] overflow-hidden rounded-full bg-gray-200">
           {imageSrc && (
             <Image src={imageSrc} alt={label} width={40} height={40} className="object-cover" />

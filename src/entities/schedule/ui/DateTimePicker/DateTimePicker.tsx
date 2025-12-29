@@ -38,10 +38,10 @@ export function DateTimePicker({ value, onChange, mode = 'all' }: DateTimePicker
         TOTAL_DAYS: 365 * 3,
       };
     } else {
-      // 전체 모드: 과거 50년 ~ 미래 50년 (총 100년 범위)
-      // Index 0 = 50년 전
-      const pastDate = subYears(today, 50);
-      const futureDate = addYears(today, 50);
+      // 전체 모드: 과거 3년 ~ 미래 3년 (총 6년 범위)
+      // Index 0 = 3년 전
+      const pastDate = subYears(today, 3);
+      const futureDate = addYears(today, 3);
 
       return {
         BASE_DATE: pastDate,

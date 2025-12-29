@@ -19,6 +19,9 @@ import { usePostInitialization } from '@/features/post/post-form/model/usePostIn
 import { usePostDirtyCheck } from '@/features/post/post-form/model/useDirtyCheck';
 
 import { EditorState, PostPageMode } from './types';
+import { useQueryClient } from '@tanstack/react-query';
+import { postQueryKeys } from '@/entities/post/api/queryKeys';
+import { scheduleQueryKeys } from '@/features/calendar/api/queryKeys';
 
 type Props = {
   mode: PostPageMode;
@@ -138,6 +141,8 @@ export const usePostForm = ({ mode, boardId, postId }: Props) => {
     }
   };
 
+  const queryClient = useQueryClient();
+
   const handleSubmit = async () => {
     if (isCreating || isUpdating) return;
 
@@ -201,19 +206,60 @@ export const usePostForm = ({ mode, boardId, postId }: Props) => {
           hasSchedule: !!linkedSchedule,
         });
 
-        if (linkedSchedule?.id) {
-          await editScheduleMutate({
-            scheduleId: linkedSchedule.id,
-            data: {
-              category: linkedSchedule.category,
-              title: linkedSchedule.title,
-              startAt: linkedSchedule.startDate.toISOString(),
-              endAt: linkedSchedule.endDate.toISOString(),
-              location: linkedSchedule.location ?? '미정',
-            },
-          });
+        if (linkedSchedule) {
+          if (linkedSchedule.id) {
+            // 기존에 일정이 있었던 경우 -> 수정 훅 호출
+            await editScheduleMutate({
+              scheduleId: linkedSchedule.id,
+              data: {
+                category: linkedSchedule.category,
+                title: linkedSchedule.title,
+                startAt: linkedSchedule.startDate.toISOString(),
+                endAt: linkedSchedule.endDate.toISOString(),
+                location: linkedSchedule.location ?? '미정',
+              },
+            });
+          } else if (targetPostId) {
+            // 기존에 일정이 없었는데 새로 추가한 경우 (id가 없음) -> 생성 훅 호출
+            await createScheduleMutate({
+              postId: targetPostId, // 수정 중인 현재 게시글 ID
+              data: {
+                title: linkedSchedule.title,
+                startAt: linkedSchedule.startDate.toISOString(),
+                endAt: linkedSchedule.endDate.toISOString(),
+                location: linkedSchedule.location ?? '미정',
+                category: linkedSchedule.category,
+              },
+            });
+          }
         }
       }
+
+      // 캐시 무효화 작업
+      // 수정이 완료된 후, 상세 페이지 진입 시 새 데이터를 받도록 캐시를 날립니다.
+      const invalidatePromises = [
+        // 게시글 상세 정보 캐시 무효화
+        queryClient.invalidateQueries({
+          queryKey: postQueryKeys.detail(targetPostId!),
+        }),
+        // 게시글 목록 캐시 무효화 (필요시)
+        queryClient.invalidateQueries({
+          queryKey: postQueryKeys.lists(),
+        }),
+      ];
+
+      // 만약 일정이 존재한다면 일정 관련 캐시도 모두 무효화
+      if (linkedSchedule) {
+        invalidatePromises.push(
+          // 모든 일정 목록 및 달력 캐시 무효화
+          queryClient.invalidateQueries({
+            queryKey: scheduleQueryKeys.all,
+          }),
+        );
+      }
+
+      // 모든 무효화 작업이 완료될 때까지 대기
+      await Promise.all(invalidatePromises);
 
       resetPostState();
       if (targetPostId) router.replace(`/board/${boardId}/post/${targetPostId}`);

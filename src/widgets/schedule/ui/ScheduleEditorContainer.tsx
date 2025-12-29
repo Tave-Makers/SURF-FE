@@ -113,7 +113,7 @@ export default function ScheduleEditorContainer({ entryPoint }: Props) {
       endDate: new Date(),
       location: '미정',
     },
-    values: activeInitialData ?? undefined, // 비동기 데이터 주입 (reset 대신 values 사용 권장)
+    values: activeInitialData ?? undefined,
     mode: 'onChange',
   });
 
@@ -139,7 +139,7 @@ export default function ScheduleEditorContainer({ entryPoint }: Props) {
     if (entryPoint === 'post') {
       setLinkedSchedule({
         ...data,
-        id: currentScheduleId, // 여기서 ID를 꼭 넣어줘야 합니다!
+        id: currentScheduleId,
       });
       if (process.env.NODE_ENV === 'development') console.log('Store 저장 완료');
       router.back();

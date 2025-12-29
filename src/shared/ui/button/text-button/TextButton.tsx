@@ -21,6 +21,7 @@ export type TextButtonProps = Omit<
   children: ReactNode;
   type?: 'button' | 'submit' | 'reset';
   onClick?: (e: React.MouseEvent<HTMLButtonElement>) => void;
+  className?: string;
 };
 
 const sizePaddingMap: Record<ButtonSize, string> = {
@@ -60,6 +61,7 @@ export const TextButton = forwardRef<HTMLButtonElement, TextButtonProps>(
       children,
       type = 'button',
       onClick,
+      className,
       ...rest
     },
     ref,
@@ -76,6 +78,7 @@ export const TextButton = forwardRef<HTMLButtonElement, TextButtonProps>(
           sizePaddingMap[size],
           sizeTextMap[size],
           isDisabled ? disabledMap[variant] : variantMap[variant],
+          className,
         ].join(' ')}
       >
         {leftIconName && (

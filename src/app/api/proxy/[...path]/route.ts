@@ -32,7 +32,6 @@ export const HEAD = handler;
 async function proxy(req: NextRequest, path: string[]) {
   const base = BACKEND.replace(/\/+$/, '');
   const targetUrl = new URL(`${base}/${path.join('/')}`);
-
   targetUrl.search = req.nextUrl.search;
 
   const body = req.method === 'GET' || req.method === 'HEAD' ? undefined : await req.arrayBuffer();
@@ -47,27 +46,28 @@ async function proxy(req: NextRequest, path: string[]) {
     redirect: 'manual',
   });
 
+  const res = new NextResponse(upstream.body, {
+    status: upstream.status,
+    headers: {
+      'content-type': upstream.headers.get('content-type') || '',
+      'cache-control': upstream.headers.get('cache-control') || '',
+    },
+  });
+
   const location = upstream.headers.get('location');
-  if (location) {
-    const res = new NextResponse(null, { status: upstream.status });
-    res.headers.set('location', location);
+  if (location) res.headers.set('location', location);
 
-    for (const c of getSetCookies(upstream)) res.headers.append('set-cookie', c);
+  // 모든 Set-Cookie 헤더 처리
+  const rawCookies = getSetCookies(upstream);
 
-    const cc = upstream.headers.get('cache-control');
-    if (cc) res.headers.set('cache-control', cc);
+  rawCookies.forEach((cookieStr) => {
+    // 로컬 개발 환경에서 저장이 가능하도록 속성 변경
+    const modifiedCookie = cookieStr
+      .replace(/Domain=[^;]+;?\s*/gi, '') // 백엔드 도메인 설정 제거
+      .replace(/Secure;?\s*/gi, ''); // http 환경에서도 저장 가능하도록 제거
 
-    return res;
-  }
-
-  const res = new NextResponse(upstream.body, { status: upstream.status });
-
-  for (const h of ['content-type', 'cache-control']) {
-    const v = upstream.headers.get(h);
-    if (v) res.headers.set(h, v);
-  }
-
-  for (const c of getSetCookies(upstream)) res.headers.append('set-cookie', c);
+    res.headers.append('set-cookie', modifiedCookie);
+  });
 
   return res;
 }
@@ -75,7 +75,6 @@ async function proxy(req: NextRequest, path: string[]) {
 function getSetCookies(res: Response): string[] {
   const headers = res.headers as Headers & { getSetCookie?: () => string[] };
   if (typeof headers.getSetCookie === 'function') return headers.getSetCookie() ?? [];
-
   const single = res.headers.get('set-cookie');
   return single ? [single] : [];
 }

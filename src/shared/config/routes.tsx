@@ -215,7 +215,7 @@ export const createRouteConfig = (router: RouterInstance): RouteConfig[] => [
   },
   {
     id: 'home-calendar',
-    path: '/home/calendar',
+    path: '/calendar',
     backPath: '/',
     header: {
       mode: HeaderMode.Default,

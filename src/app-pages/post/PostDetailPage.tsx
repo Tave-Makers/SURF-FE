@@ -36,10 +36,12 @@ export default function PostDetailPage({ postId }: PostDetailPageProps) {
   // 일정 조회 API
   const scheduleId = post?.scheduleId;
 
-  const shouldFetchSchedule = !!scheduleId;
-
-  const { data: schedule } = useGetSingleSchedule(scheduleId, {
-    enabled: shouldFetchSchedule,
+  const {
+    data: schedule,
+    isLoading: isScheduleLoading,
+    isError: isScheduleError,
+  } = useGetSingleSchedule(scheduleId, {
+    enabled: !!scheduleId,
   });
 
   // 좋아요 누른 사람 목록 API
@@ -56,7 +58,7 @@ export default function PostDetailPage({ postId }: PostDetailPageProps) {
   const [showDeleteAlert, setShowDeleteAlert] = useState(false);
 
   // 로딩/에러 처리
-  if (isLoading)
+  if (isLoading || (scheduleId && isScheduleLoading))
     return (
       <div className="flex h-full w-full items-center justify-center">
         <span>불러오는 중...</span>
@@ -69,6 +71,12 @@ export default function PostDetailPage({ postId }: PostDetailPageProps) {
         <span>게시글을 불러오지 못했습니다.</span>
       </div>
     );
+
+  if (scheduleId && isScheduleError) {
+    if (process.env.NODE_ENV === 'development') {
+      console.warn(`일정 정보(ID: ${scheduleId})를 불러올 수 없습니다.`);
+    }
+  }
 
   const likedUsers = likedUsersData ?? [];
 

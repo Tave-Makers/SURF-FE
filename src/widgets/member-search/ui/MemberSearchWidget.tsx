@@ -42,7 +42,7 @@ export const MemberSearchWidget = ({ filters, totalCount }: MemberSearchWidgetPr
 
   return (
     <div className="flex flex-col">
-      <div className="">
+      <div className="px-13 py-10">
         <TextInput
           mode="search"
           value={keyword}
@@ -52,7 +52,7 @@ export const MemberSearchWidget = ({ filters, totalCount }: MemberSearchWidgetPr
         />
       </div>
 
-      <div className="flex justify-between">
+      <div className="flex justify-between px-13 pt-10">
         <span>전체 {totalCount}명</span>
         <div className="flex flex-row">
           <Menu label={generation ? `${generation}기` : '기수'} itemList={generationItems} />

@@ -7,12 +7,13 @@ export const useToggleScrapMutation = () => {
   const queryClient = useQueryClient();
 
   return useMutation({
+    mutationKey: ['post', 'toggleScrap'],
     mutationFn: ({ postId, scrapped }: { postId: number; scrapped: boolean }) =>
       toggleScrap(postId, scrapped),
 
     // Optimistic update
     onMutate: async ({ postId, scrapped }) => {
-      const queryKey = postQueryKeys.postDetail(postId);
+      const queryKey = postQueryKeys.detail(postId);
 
       // 1) 기존 요청 취소
       await queryClient.cancelQueries({ queryKey });
@@ -36,7 +37,7 @@ export const useToggleScrapMutation = () => {
 
     // 실패 시 롤백
     onError: (_err, variables, context) => {
-      const queryKey = postQueryKeys.postDetail(variables.postId);
+      const queryKey = postQueryKeys.detail(variables.postId);
 
       if (context?.prevData) {
         queryClient.setQueryData(queryKey, context.prevData);
@@ -45,7 +46,7 @@ export const useToggleScrapMutation = () => {
 
     // 성공/실패 관계없이 최종 서버 상태로 동기화
     onSettled: (_data, _error, variables) => {
-      const queryKey = postQueryKeys.postDetail(variables.postId);
+      const queryKey = postQueryKeys.detail(variables.postId);
 
       void queryClient.invalidateQueries({ queryKey });
     },

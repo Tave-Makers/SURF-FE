@@ -4,7 +4,11 @@ import type { ServerUserLevel } from '../model/types';
 // 프로필 API response 원본
 export type UserProfileApiResponse = CommonResponse<{
   username: string;
+  profileImageUrl: string;
   phoneNumber: string;
+  phoneNumberPublic: boolean;
+  selfIntroduction: string;
+  link: string;
   email: string;
   university: string | null;
   graduateSchool: string | null;

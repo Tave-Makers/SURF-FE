@@ -1,4 +1,5 @@
 export type YearMonth = `${number}-${number}`;
+export type DateString = `${number}-${number}-${number}`;
 
 export const SERVER_USER_LEVELS = [
   'SUPER_MANAGER',
@@ -20,41 +21,47 @@ export const BANNER_PARTS = [
 ] as const;
 export type BannerPart = (typeof BANNER_PARTS)[number];
 
-export type CareerBase = {
+export interface CareerBase {
   companyName: string;
   position: string;
-  startDate: YearMonth;
-  endDate?: YearMonth | null;
+  startDate: DateString;
+  endDate?: DateString | null;
   isWorking?: boolean;
-};
+}
 
 export type CareerDTO = CareerBase & { careerId: number };
 export type CareerCreateDTO = CareerBase;
 export type CareerUpdateDTO = Partial<CareerBase> & { careerId: number };
 
-export type UserProfile = {
-  userId: number;
-  name: string;
-  bio: string | null;
-  avatarUrl: string | null;
+export interface UserProfile {
+  username: string;
+  selfIntroduction: string;
+  link: string | null;
+  profileImgUrl: string;
   phoneNumber: string;
+  phoneNumberPublic: boolean;
   email: string;
   university: string | null;
   graduateSchool: string | null;
   level: UserLevel;
   activityScore: number;
   isActive: boolean;
-
   bannerPart: BannerPart | null;
   chips: string[];
   careers: CareerDTO[];
-};
+}
 
-export type UpdateProfileRequestDTO = {
+export interface UpdateProfileRequestDTO {
+  email?: string;
+  university?: string;
+  graduateSchool?: string;
+  selfIntroduction?: string;
+  link?: string | null;
   phoneNumber?: string;
   phoneNumberPublic?: boolean;
-  email?: string;
-  careersToCreate?: CareerCreateDTO[];
-  careersToUpdate?: CareerUpdateDTO[];
-  careerIdsToDelete?: number[];
-};
+  profileImageUrl?: string;
+  isProfileImageChanged?: boolean;
+  careersToCreate?: CareerCreateDTO[] | null;
+  careersToUpdate?: CareerUpdateDTO[] | null;
+  careerIdsToDelete?: number[] | null;
+}

@@ -46,13 +46,14 @@ export function mapUserProfile(dto: UserProfileApiResponse['data']): UserProfile
   }));
 
   return {
-    userId: 1, // TODO: API에서 userId 받아오도록 수정 필요
-    name: dto.username,
-    bio: null, // TODO: API에서 bio 받아오도록 수정 필요
-    avatarUrl: null, // TODO: API에서 avatarUrl 받아오도록 수정 필요
+    username: dto.username,
+    selfIntroduction: dto.selfIntroduction,
+    link: dto.link ?? null,
+    profileImgUrl: dto.profileImageUrl,
     phoneNumber: dto.phoneNumber,
+    phoneNumberPublic: dto.phoneNumberPublic,
     email: dto.email,
-    university: dto.university,
+    university: dto.university ?? null,
     graduateSchool: dto.graduateSchool,
     level: mapUserLevel(dto.role),
     activityScore: dto.activityScore,

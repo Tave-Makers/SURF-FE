@@ -18,6 +18,7 @@ import { Alert } from '@/shared/ui/alert/Alert';
 import { usePathname, useRouter } from 'next/navigation';
 import { Avatar } from '@/shared/ui/avatar/Avatar';
 import { categoryIdToKey } from '@/entities/post/model/category';
+import { useGetSingleSchedule } from '@/features/schedule/edit/model/useGetSingleSchedule';
 
 type PostDetailPageProps = {
   postId: string;
@@ -30,7 +31,18 @@ export default function PostDetailPage({ postId }: PostDetailPageProps) {
   const keyboardOffset = useKeyboardOffset();
 
   // 게시글 상세 조회 API
-  const { data, isLoading, isError } = usePostDetail(numericPostId);
+  const { data: post, isLoading, isError } = usePostDetail(numericPostId);
+
+  // 일정 조회 API
+  const scheduleId = post?.scheduleId;
+
+  const {
+    data: schedule,
+    isLoading: isScheduleLoading,
+    isError: isScheduleError,
+  } = useGetSingleSchedule(scheduleId, {
+    enabled: !!scheduleId,
+  });
 
   // 좋아요 누른 사람 목록 API
   const {
@@ -46,21 +58,25 @@ export default function PostDetailPage({ postId }: PostDetailPageProps) {
   const [showDeleteAlert, setShowDeleteAlert] = useState(false);
 
   // 로딩/에러 처리
-  if (isLoading)
+  if (isLoading || (scheduleId && isScheduleLoading))
     return (
       <div className="flex h-full w-full items-center justify-center">
         <span>불러오는 중...</span>
       </div>
     );
 
-  if (isError || !data)
+  if (isError || !post)
     return (
       <div className="flex h-full w-full items-center justify-center">
         <span>게시글을 불러오지 못했습니다.</span>
       </div>
     );
 
-  const post = data;
+  if (scheduleId && isScheduleError) {
+    if (process.env.NODE_ENV === 'development') {
+      console.warn(`일정 정보(ID: ${scheduleId})를 불러올 수 없습니다.`);
+    }
+  }
 
   const likedUsers = likedUsersData ?? [];
 
@@ -116,7 +132,7 @@ export default function PostDetailPage({ postId }: PostDetailPageProps) {
               }}
             />
 
-            <PostBodySection post={post} onClickLikeCount={openLikedUsers} />
+            <PostBodySection post={post} schedule={schedule} onClickLikeCount={openLikedUsers} />
           </main>
         </div>
 

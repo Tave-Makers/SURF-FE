@@ -10,7 +10,7 @@ import { useScheduleFormInit } from '@/features/schedule/model/useScheduleFormIn
 import { useCreateSchedule } from '@/features/schedule/create/model/useCreateSchedule';
 import { useEditSchedule } from '@/features/schedule/edit/model/useEditSchedule';
 import { useCreatePostScheduleStore } from '@/features/schedule/create-post-schedule/model/useCreatePostScheduleStore';
-import { useGetPostScheduleQuery } from '@/features/post/model/useGetPostScheduleQuery'; // ✅ 추가된 쿼리
+import { useGetSingleSchedule } from '@/features/schedule/edit/model/useGetSingleSchedule';
 
 // UI & Types
 import { mapScheduleFormToRequest } from '@/features/schedule/create/api/mapper';
@@ -35,10 +35,6 @@ export default function ScheduleEditorContainer({ entryPoint }: Props) {
   // [Calendar] ID는 URL Path
   const paramId = Array.isArray(params?.id) ? params.id[0] : params?.id;
   const scheduleId = paramId ? Number(paramId) : undefined;
-
-  // [Post] ID는 Query String
-  const queryPostId = searchParams.get('postId');
-  const postId = queryPostId ? Number(queryPostId) : undefined;
 
   // 모드 설정
   let calendarMode: 'create' | 'edit' = 'create';
@@ -66,10 +62,14 @@ export default function ScheduleEditorContainer({ entryPoint }: Props) {
   const { linkedSchedule, setLinkedSchedule } = useCreatePostScheduleStore();
 
   // C. [Post Mode] 서버 데이터 패칭 (2순위 - 새로고침 대비용)
-  // postId가 있고, 게시글 모드일 때만 호출 (API: getPostSchedule 사용)
-  const { data: serverPostSchedule, isLoading: isPostScheduleLoading } = useGetPostScheduleQuery(
-    postId!,
-    entryPoint === 'post' && !!postId,
+  const resolvedScheduleId = entryPoint === 'calendar' ? scheduleId : linkedSchedule?.id;
+
+  const { data: serverSchedule, isLoading: isScheduleLoading } = useGetSingleSchedule(
+    resolvedScheduleId,
+    {
+      enabled:
+        !!resolvedScheduleId && entryPoint === 'post' && postMode === 'edit' && !linkedSchedule,
+    },
   );
 
   // --- 3. 최종 초기 데이터 결정 (Merge Logic) ---
@@ -80,24 +80,24 @@ export default function ScheduleEditorContainer({ entryPoint }: Props) {
     }
 
     // Case 2: 게시글 모드 - Store는 비었지만 서버 데이터 있음 (새로고침)
-    if (entryPoint === 'post' && serverPostSchedule) {
+    if (entryPoint === 'post' && serverSchedule) {
       const category =
-        serverPostSchedule.category === 'operation' || serverPostSchedule.category === 'other'
-          ? serverPostSchedule.category
+        serverSchedule.category === 'operation' || serverSchedule.category === 'other'
+          ? serverSchedule.category
           : 'regular';
 
       return {
         category: category as ScheduleCategory,
-        title: serverPostSchedule.title,
-        startDate: new Date(serverPostSchedule.startAt),
-        endDate: new Date(serverPostSchedule.endAt),
-        location: serverPostSchedule.location ?? '미정',
+        title: serverSchedule.title,
+        startDate: new Date(serverSchedule.startAt),
+        endDate: new Date(serverSchedule.endAt),
+        location: serverSchedule.location ?? '미정',
       } as ScheduleFormData;
     }
 
     // Case 3: 캘린더 모드 - 기존 훅 데이터 사용
     return calendarInitialData;
-  }, [entryPoint, linkedSchedule, serverPostSchedule, calendarInitialData]);
+  }, [entryPoint, linkedSchedule, serverSchedule, calendarInitialData]);
 
   // --- 4. API Mutations ---
   const { mutate: createSchedule, isPending: isCreating } = useCreateSchedule();
@@ -113,7 +113,7 @@ export default function ScheduleEditorContainer({ entryPoint }: Props) {
       endDate: new Date(),
       location: '미정',
     },
-    values: activeInitialData ?? undefined, // 비동기 데이터 주입 (reset 대신 values 사용 권장)
+    values: activeInitialData ?? undefined,
     mode: 'onChange',
   });
 
@@ -130,7 +130,7 @@ export default function ScheduleEditorContainer({ entryPoint }: Props) {
     return '완료';
   };
 
-  const currentScheduleId = linkedSchedule?.id || serverPostSchedule?.scheduleId;
+  const currentScheduleId = linkedSchedule?.id || resolvedScheduleId;
 
   const handleSubmit = (data: ScheduleFormData) => {
     if (!isFormValid || isPending) return;
@@ -139,9 +139,8 @@ export default function ScheduleEditorContainer({ entryPoint }: Props) {
     if (entryPoint === 'post') {
       setLinkedSchedule({
         ...data,
-        id: currentScheduleId, // 여기서 ID를 꼭 넣어줘야 합니다!
+        id: currentScheduleId,
       });
-      if (process.env.NODE_ENV === 'development') console.log('Store 저장 완료');
       router.back();
       return;
     }
@@ -181,9 +180,7 @@ export default function ScheduleEditorContainer({ entryPoint }: Props) {
 
   // --- 7. 로딩 처리 ---
   const isLoading =
-    entryPoint === 'post'
-      ? !linkedSchedule && isPostScheduleLoading // 게시글 모드 로딩 조건
-      : isCalendarLoading; // 캘린더 모드 로딩 조건
+    entryPoint === 'post' ? !linkedSchedule && isScheduleLoading : isCalendarLoading;
 
   if (isLoading) return <div>Loading...</div>;
 

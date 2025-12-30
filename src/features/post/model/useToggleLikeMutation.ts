@@ -7,12 +7,13 @@ export const useToggleLikeMutation = () => {
   const queryClient = useQueryClient();
 
   return useMutation({
+    mutationKey: ['post', 'toggleLike'],
     mutationFn: ({ postId, liked }: { postId: number; liked: boolean }) =>
       toggleLike(postId, liked),
 
     // optimistic update
     onMutate: async ({ postId, liked }) => {
-      const queryKey = postQueryKeys.postDetail(postId);
+      const queryKey = postQueryKeys.detail(postId);
 
       // 1) 기존 요청 취소
       await queryClient.cancelQueries({ queryKey });
@@ -36,16 +37,16 @@ export const useToggleLikeMutation = () => {
 
     // 실패 시 롤백
     onError: (_err, variables, context) => {
-      const queryKey = postQueryKeys.postDetail(variables.postId);
+      const queryKey = postQueryKeys.detail(variables.postId);
 
       if (context?.prevData) {
         queryClient.setQueryData(queryKey, context.prevData);
       }
     },
 
-    // 성공/실패 상관없이 최종 서버 상태로 동기화
+    // 최종 서버 상태로 동기화
     onSettled: (_data, _error, variables) => {
-      const queryKey = postQueryKeys.postDetail(variables.postId);
+      const queryKey = postQueryKeys.detail(variables.postId);
 
       void queryClient.invalidateQueries({ queryKey });
     },

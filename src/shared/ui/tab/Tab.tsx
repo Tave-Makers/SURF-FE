@@ -55,7 +55,7 @@ export function Tab({ items, value, defaultValue, onValueChange }: TabProps) {
 
   return (
     <div className={baseStyle}>
-      <div className="flex w-full px-[1rem]" role="tablist" aria-orientation="horizontal">
+      <div className="flex w-full" role="tablist" aria-orientation="horizontal">
         {items.map((item) => {
           const isActive = item.value === activeValue;
 

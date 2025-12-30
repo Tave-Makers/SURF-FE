@@ -1,4 +1,5 @@
 'use client';
+
 import { KakaoLoginButton } from '@/features/auth/ui/KakaoLoginButton';
 import Logo from '../../../../public/logo.svg';
 

@@ -1,11 +1,11 @@
 import type { UserProfileApiResponse } from '@/entities/user/api/types';
 import type {
-  YearMonth,
   CareerDTO,
   UserProfile,
   BannerPart,
   UserLevel,
   ServerUserLevel,
+  DateString,
 } from './types';
 
 export function mapUserLevel(role: ServerUserLevel | UserLevel): UserLevel {
@@ -40,8 +40,8 @@ export function mapUserProfile(dto: UserProfileApiResponse['data']): UserProfile
     careerId: c.careerId,
     companyName: c.companyName,
     position: c.position,
-    startDate: c.startDate as YearMonth,
-    endDate: (c.endDate ?? null) as YearMonth | null,
+    startDate: c.startDate as DateString,
+    endDate: (c.endDate ?? null) as DateString | null,
     isWorking: c.isWorking,
   }));
 

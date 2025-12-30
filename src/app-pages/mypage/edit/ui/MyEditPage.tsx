@@ -2,7 +2,15 @@
 
 import { useMemo, useState } from 'react';
 import { useRouter } from 'next/navigation';
-import { Controller, useFieldArray, useForm } from 'react-hook-form';
+import {
+  Controller,
+  FieldValues,
+  useFieldArray,
+  useForm,
+  useWatch,
+  type FieldErrors,
+  type FieldPath,
+} from 'react-hook-form';
 import type { DateString, UpdateProfileRequestDTO, UserProfile } from '@/entities/user/model/types';
 import { updateMyProfile } from '@/entities/user/api/updateMyProfile.client';
 import { AppHeader } from '@/widgets/header/ui/AppHeader';
@@ -12,21 +20,26 @@ import { TextArea } from '@/shared/ui/text-area/TextArea';
 import { Toggle } from '@/shared/ui/toggle/Toggle';
 import { TextButton } from '@/shared/ui/button/text-button/TextButton';
 import { Checkbox } from '@/shared/ui/checkbox/Checkbox';
+import { ProfileImageUploader } from '@/features/profile/ui/upload-profile-image/ProfileImageUploader';
+import { useImageUploader } from '@/entities/image/model/useImageUploader';
+import type { UploadImage } from '@/entities/image/model/types';
 
 interface Props {
   initialProfile: UserProfile;
 }
 
-type CareerForm = {
+interface CareerForm {
   careerId: number;
   companyName: string;
   position: string;
   startDate: string;
   endDate: string;
   isWorking: boolean;
-};
+}
 
-type FormValues = {
+interface FormValues {
+  profileImage?: File;
+  profileImageUrl?: string;
   selfIntroduction: string;
   link: string;
   email: string;
@@ -35,9 +48,8 @@ type FormValues = {
   university: string;
   hasGraduateSchool: boolean;
   graduateSchool: string;
-
   careers: CareerForm[];
-};
+}
 
 function makeTempCareerId() {
   return -Date.now();
@@ -45,12 +57,6 @@ function makeTempCareerId() {
 
 function isDateString(value: string): value is DateString {
   return /^\d{4}-\d{2}-\d{2}$/.test(value);
-}
-
-function normalizeLink(v: string) {
-  const trimmed = v.trim();
-  if (!trimmed) return null;
-  return trimmed;
 }
 
 function toCareerCreateDTO(c: CareerForm) {
@@ -74,8 +80,32 @@ function toCareerUpdateDTO(c: CareerForm) {
   };
 }
 
+function findFirstErrorPath<TFieldValues extends FieldValues>(
+  err: FieldErrors<TFieldValues>,
+): FieldPath<TFieldValues> | null {
+  const walk = (node: unknown, base = ''): string | null => {
+    if (!node || typeof node !== 'object') return null;
+
+    if ('message' in node && typeof (node as { message?: unknown }).message === 'string') {
+      return base || null;
+    }
+
+    for (const key of Object.keys(node)) {
+      const nextBase = base ? `${base}.${key}` : key;
+      const child = (node as Record<string, unknown>)[key];
+      const found = walk(child, nextBase);
+      if (found) return found;
+    }
+    return null;
+  };
+
+  const path = walk(err);
+  return path ? (path as FieldPath<TFieldValues>) : null;
+}
+
 export default function MyEditPage({ initialProfile }: Props) {
   const router = useRouter();
+  const { uploadImages } = useImageUploader();
 
   const defaultCareers: CareerForm[] = useMemo(() => {
     const src = initialProfile.careers ?? [];
@@ -96,32 +126,38 @@ export default function MyEditPage({ initialProfile }: Props) {
     handleSubmit,
     watch,
     setValue,
-    formState: { isSubmitting, isValid, errors, dirtyFields },
+    getValues,
+    setFocus,
+    trigger,
+    formState: { isSubmitting, errors, isDirty },
   } = useForm<FormValues>({
     mode: 'onChange',
+    reValidateMode: 'onChange',
+    shouldFocusError: false,
     defaultValues: {
+      profileImage: undefined,
+      profileImageUrl: initialProfile.profileImgUrl ?? '',
       selfIntroduction: initialProfile.selfIntroduction ?? '',
       link: initialProfile.link ?? '',
       email: initialProfile.email ?? '',
       phoneNumber: initialProfile.phoneNumber ?? '',
       phoneNumberPublic: !!initialProfile.phoneNumberPublic,
       university: initialProfile.university ?? '',
-
       hasGraduateSchool: !!initialProfile.graduateSchool,
       graduateSchool: initialProfile.graduateSchool ?? '',
-
       careers: defaultCareers,
     },
   });
+
+  const profileImageUrl = useWatch({ control, name: 'profileImageUrl' });
+  const careers = watch('careers');
+  const hasGraduateSchool = watch('hasGraduateSchool');
 
   const { fields, append, remove } = useFieldArray({
     control,
     name: 'careers',
     keyName: 'rhfId',
   });
-
-  const careers = watch('careers');
-  const hasGraduateSchool = watch('hasGraduateSchool');
 
   const onAddCareer = () => {
     append({
@@ -143,22 +179,11 @@ export default function MyEditPage({ initialProfile }: Props) {
   };
 
   const canSubmit = useMemo(() => {
-    const hasAnyDirty = Object.keys(dirtyFields ?? {}).length > 0 || careerIdsToDelete.length > 0;
-    return isValid && hasAnyDirty && !isSubmitting;
-  }, [isValid, dirtyFields, careerIdsToDelete.length, isSubmitting]);
+    const hasAnyChange = isDirty || careerIdsToDelete.length > 0;
+    return hasAnyChange && !isSubmitting;
+  }, [isDirty, careerIdsToDelete.length, isSubmitting]);
 
   const onSubmit = async (values: FormValues) => {
-    for (const c of values.careers) {
-      if (!isDateString(c.startDate)) {
-        alert('시작일은 YYYY-MM-DD 형식으로 입력해주세요.');
-        return;
-      }
-      if (!c.isWorking && c.endDate && !isDateString(c.endDate)) {
-        alert('종료일은 YYYY-MM-DD 형식으로 입력해주세요.');
-        return;
-      }
-    }
-
     const careersToCreate = values.careers.filter((c) => c.careerId < 0).map(toCareerCreateDTO);
     const careersToUpdate = values.careers.filter((c) => c.careerId > 0).map(toCareerUpdateDTO);
 
@@ -167,22 +192,55 @@ export default function MyEditPage({ initialProfile }: Props) {
       university: values.university.trim(),
       graduateSchool: values.hasGraduateSchool ? values.graduateSchool.trim() : undefined,
       selfIntroduction: values.selfIntroduction.trim(),
-      link: normalizeLink(values.link),
+      link: values.link.trim(),
       phoneNumber: values.phoneNumber.trim(),
       phoneNumberPublic: values.phoneNumberPublic,
+      profileImageUrl: undefined,
+      isProfileImageChanged: false,
       careersToCreate: careersToCreate.length ? careersToCreate : null,
       careersToUpdate: careersToUpdate.length ? careersToUpdate : null,
       careerIdsToDelete: careerIdsToDelete.length ? careerIdsToDelete : null,
     };
 
     try {
+      if (values.profileImage) {
+        const uploadTarget: UploadImage = {
+          id: 'profile',
+          file: values.profileImage,
+          preview: '',
+          status: 'pending',
+        };
+
+        const [result] = await uploadImages([uploadTarget]);
+
+        if (result.status !== 'uploaded' || !result.uploadedUrl) {
+          alert('프로필 이미지 업로드에 실패했습니다.');
+          return;
+        }
+
+        payload.isProfileImageChanged = true;
+        payload.profileImageUrl = result.uploadedUrl;
+      }
+
       await updateMyProfile(payload);
       router.refresh();
       router.back();
-    } catch (e) {
+    } catch (e: unknown) {
       console.error(e);
       alert('프로필 수정 중 오류가 발생했습니다.');
     }
+  };
+
+  const onInvalid = () => {
+    const first = findFirstErrorPath<FormValues>(errors);
+    if (!first) return;
+
+    setFocus(first);
+
+    requestAnimationFrame(() => {
+      const el = document.getElementById(first);
+      el?.scrollIntoView({ behavior: 'smooth', block: 'center' });
+    });
   };
 
   return (
@@ -195,9 +253,26 @@ export default function MyEditPage({ initialProfile }: Props) {
           text: '저장',
           btnVariant: 'secondary',
           isDisabled: !canSubmit,
-          onClickTextBtn: () => void handleSubmit(onSubmit)(),
+          onClickTextBtn: () => void handleSubmit(onSubmit, onInvalid)(),
         }}
       />
+
+      <div className="flex items-center justify-center gap-10 self-stretch pt-19 pb-10">
+        <Controller
+          name="profileImage"
+          control={control}
+          render={({ field }) => (
+            <ProfileImageUploader
+              file={field.value}
+              onChange={(file) => {
+                field.onChange(file);
+                void trigger('profileImage');
+              }}
+              initialImageUrl={profileImageUrl}
+            />
+          )}
+        />
+      </div>
 
       <div className="flex flex-col gap-16 px-13 pb-16">
         <FieldGroup title="자기소개">
@@ -207,10 +282,12 @@ export default function MyEditPage({ initialProfile }: Props) {
             rules={{ maxLength: { value: 60, message: '최대 60자까지 입력할 수 있어요.' } }}
             render={({ field }) => (
               <TextArea
+                id={field.name}
                 mode="multiLine"
                 textLimit={60}
                 value={field.value}
                 onChange={field.onChange}
+                onBlur={field.onBlur}
                 placeholder="자기소개를 입력해주세요"
                 errorMessage={errors.selfIntroduction?.message}
               />
@@ -224,9 +301,11 @@ export default function MyEditPage({ initialProfile }: Props) {
             name="link"
             render={({ field }) => (
               <TextArea
+                id={field.name}
                 mode="oneLine"
                 value={field.value}
                 onChange={field.onChange}
+                onBlur={field.onBlur}
                 placeholder="블로그, 포트폴리오 등 링크"
               />
             )}
@@ -246,9 +325,11 @@ export default function MyEditPage({ initialProfile }: Props) {
             }}
             render={({ field }) => (
               <TextArea
+                id={field.name}
                 mode="oneLine"
                 value={field.value}
                 onChange={field.onChange}
+                onBlur={field.onBlur}
                 placeholder="email@example.com"
                 errorMessage={errors.email?.message}
               />
@@ -274,16 +355,15 @@ export default function MyEditPage({ initialProfile }: Props) {
             name="phoneNumber"
             rules={{
               required: '전화번호는 필수예요.',
-              pattern: {
-                value: /^[0-9-]+$/,
-                message: '전화번호 형식이 올바르지 않아요.',
-              },
+              pattern: { value: /^[0-9-]+$/, message: '전화번호 형식이 올바르지 않아요.' },
             }}
             render={({ field }) => (
               <TextArea
+                id={field.name}
                 mode="oneLine"
                 value={field.value}
                 onChange={field.onChange}
+                onBlur={field.onBlur}
                 placeholder="010-0000-0000"
                 errorMessage={errors.phoneNumber?.message}
               />
@@ -299,14 +379,17 @@ export default function MyEditPage({ initialProfile }: Props) {
               rules={{ required: '학교는 필수예요.' }}
               render={({ field }) => (
                 <TextArea
+                  id={field.name}
                   mode="oneLine"
                   value={field.value}
                   onChange={field.onChange}
+                  onBlur={field.onBlur}
                   placeholder="학교"
                   errorMessage={errors.university?.message}
                 />
               )}
             />
+
             {hasGraduateSchool && (
               <Controller
                 control={control}
@@ -314,15 +397,18 @@ export default function MyEditPage({ initialProfile }: Props) {
                 rules={{ required: '대학원을 입력해주세요.' }}
                 render={({ field }) => (
                   <TextArea
+                    id={field.name}
                     mode="oneLine"
                     value={field.value}
                     onChange={field.onChange}
+                    onBlur={field.onBlur}
                     placeholder="대학원"
                     errorMessage={errors.graduateSchool?.message}
                   />
                 )}
               />
             )}
+
             <Controller
               control={control}
               name="hasGraduateSchool"
@@ -332,7 +418,10 @@ export default function MyEditPage({ initialProfile }: Props) {
                   isChecked={field.value}
                   onChange={(checked) => {
                     field.onChange(checked);
-                    if (!checked) setValue('graduateSchool', '');
+                    if (!checked) {
+                      setValue('graduateSchool', '', { shouldDirty: true, shouldValidate: true });
+                      void trigger('graduateSchool');
+                    }
                   }}
                 />
               )}
@@ -344,6 +433,9 @@ export default function MyEditPage({ initialProfile }: Props) {
           {fields.map((f, index) => {
             const isWorking = careers?.[index]?.isWorking ?? false;
 
+            const startErr = errors.careers?.[index]?.startDate?.message;
+            const endErr = errors.careers?.[index]?.endDate?.message;
+
             return (
               <div key={f.rhfId} className="flex w-full flex-col gap-16">
                 <FieldGroup title={`회사명 ${index + 1}`}>
@@ -353,9 +445,11 @@ export default function MyEditPage({ initialProfile }: Props) {
                     rules={{ required: '회사명은 필수예요.' }}
                     render={({ field }) => (
                       <TextArea
+                        id={field.name}
                         mode="oneLine"
                         value={field.value}
                         onChange={field.onChange}
+                        onBlur={field.onBlur}
                         placeholder="회사명을 입력하세요"
                         errorMessage={errors.careers?.[index]?.companyName?.message}
                       />
@@ -370,9 +464,11 @@ export default function MyEditPage({ initialProfile }: Props) {
                     rules={{ required: '직책은 필수예요.' }}
                     render={({ field }) => (
                       <TextArea
+                        id={field.name}
                         mode="oneLine"
                         value={field.value}
                         onChange={field.onChange}
+                        onBlur={field.onBlur}
                         placeholder="직책 (예: 프론트엔드 개발자)"
                         errorMessage={errors.careers?.[index]?.position?.message}
                       />
@@ -391,14 +487,20 @@ export default function MyEditPage({ initialProfile }: Props) {
                           isChecked={!!field.value}
                           onChange={(checked) => {
                             field.onChange(checked);
-                            if (checked) setValue(`careers.${index}.endDate`, '');
+                            if (checked) {
+                              setValue(`careers.${index}.endDate`, '', {
+                                shouldDirty: true,
+                                shouldValidate: true,
+                              });
+                              void trigger([`careers.${index}.endDate`]);
+                            }
                           }}
                         />
                       )}
                     />
                   }
                 >
-                  <div className="flex items-center gap-4">
+                  <div className="flex flex-row items-center gap-4">
                     <Controller
                       control={control}
                       name={`careers.${index}.startDate`}
@@ -408,9 +510,14 @@ export default function MyEditPage({ initialProfile }: Props) {
                       }}
                       render={({ field }) => (
                         <TextArea
+                          id={field.name}
                           mode="oneLine"
                           value={field.value}
-                          onChange={field.onChange}
+                          onChange={(v) => {
+                            field.onChange(v);
+                            void trigger(field.name);
+                          }}
+                          onBlur={field.onBlur}
                           placeholder="2025-12-29"
                           className="flex-1"
                         />
@@ -423,18 +530,23 @@ export default function MyEditPage({ initialProfile }: Props) {
                       control={control}
                       name={`careers.${index}.endDate`}
                       rules={{
-                        validate: (v, all) => {
-                          const w = all.careers?.[index]?.isWorking;
-                          if (w) return true;
+                        validate: (v) => {
+                          const working = getValues(`careers.${index}.isWorking`);
+                          if (working) return true;
                           if (!v) return true;
                           return isDateString(v) || 'YYYY-MM-DD 형식으로 입력해주세요.';
                         },
                       }}
                       render={({ field }) => (
                         <TextArea
+                          id={field.name}
                           mode="oneLine"
                           value={isWorking ? '' : field.value}
-                          onChange={field.onChange}
+                          onChange={(v) => {
+                            field.onChange(v);
+                            void trigger(field.name);
+                          }}
+                          onBlur={field.onBlur}
                           placeholder={isWorking ? '재직 중' : '2025-12-29'}
                           isDisabled={isWorking}
                           className="flex-1"
@@ -442,17 +554,26 @@ export default function MyEditPage({ initialProfile }: Props) {
                       )}
                     />
                   </div>
+
+                  {(startErr || endErr) && (
+                    <div className="px-10">
+                      <span className="text-caption-caption6 text-foreground-danger">
+                        {startErr ?? endErr}
+                      </span>
+                    </div>
+                  )}
                 </FieldGroup>
 
-                <button className="flex w-full justify-end" onClick={() => onDeleteCareer(index)}>
-                  <span
-                    className="text-body-body8 text-foreground-normal"
-                    role="button"
+                <div className="flex w-full justify-end">
+                  <button
+                    className="text-body-body8 text-foreground-normal flex h-[2rem] w-[4rem] items-center justify-center"
+                    onClick={() => onDeleteCareer(index)}
                     tabIndex={0}
+                    type="button"
                   >
                     삭제하기
-                  </span>
-                </button>
+                  </button>
+                </div>
               </div>
             );
           })}
@@ -463,6 +584,7 @@ export default function MyEditPage({ initialProfile }: Props) {
           variant="secondary"
           onClick={onAddCareer}
           className="border-border-quaternary border"
+          type="button"
         >
           경력 추가하기
         </TextButton>

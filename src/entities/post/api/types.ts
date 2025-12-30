@@ -72,7 +72,7 @@ export type PostDetailData = {
   scheduleId: number | null;
   profileImageUrl?: string;
   isReserved: boolean;
-  reservedAt: string;
+  reservedAt: string | null;
 };
 
 // 상세 API 응답 타입

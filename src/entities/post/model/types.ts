@@ -32,7 +32,7 @@ export type PostDetail = {
   profileImageUrl?: string;
   postedAt: string;
   isReserved: boolean;
-  reservedAt: string;
+  reservedAt: string | null;
 };
 
 // 게시판

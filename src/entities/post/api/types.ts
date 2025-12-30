@@ -71,6 +71,8 @@ export type PostDetailData = {
   hasSchedule: boolean;
   scheduleId: number | null;
   profileImageUrl?: string;
+  isReserved: boolean;
+  reservedAt: string;
 };
 
 // 상세 API 응답 타입

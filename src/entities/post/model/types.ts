@@ -31,6 +31,8 @@ export type PostDetail = {
   scheduleId: number | null;
   profileImageUrl?: string;
   postedAt: string;
+  isReserved: boolean;
+  reservedAt: string;
 };
 
 // 게시판

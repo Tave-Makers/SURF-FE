@@ -60,7 +60,7 @@ export function ProfileHeader({ userProfile }: Props) {
               target="_blank"
               rel="noopener noreferrer"
             >
-              https://tavesurf.site/swagger-ui/index.html#/회원%20정보%20수정/updateProfile
+              {userProfile.link}
             </Link>
           </div>
         ) : null}

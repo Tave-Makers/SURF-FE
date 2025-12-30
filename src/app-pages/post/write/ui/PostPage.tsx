@@ -58,6 +58,7 @@ export default function PostPage(props: PostPageProps) {
 
   // 예약 시간 임시 저장용 state (취소 시 롤백 위함)
   const [tempDate, setTempDate] = useState<Date>(new Date());
+  const [showRemoveReservationAlert, setShowRemoveReservationAlert] = useState(false);
 
   // 모달 열릴 때 현재 예약 시간으로 초기화
   useEffect(() => {
@@ -67,9 +68,25 @@ export default function PostPage(props: PostPageProps) {
   }, [isReservationModalOpen, reservedAt]);
 
   const handleSaveReservation = () => {
-    setReservedAt(tempDate);
-    setReserved(true);
+    if (tempDate > new Date()) {
+      setReservedAt(tempDate);
+      setReserved(true);
+      closeReservationModal();
+    } else {
+      alert('현재 시간 이후로만 예약할 수 있습니다.');
+    }
+  };
+
+  const handleRemoveReservation = () => {
     closeReservationModal();
+    setTimeout(() => setShowRemoveReservationAlert(true), 100);
+  };
+
+  // 실제 예약 취소
+  const handleConfirmRemove = () => {
+    setReserved(false);
+    setReservedAt(null);
+    setShowRemoveReservationAlert(false);
   };
 
   const board = POST_BOARDS.find((b) => b.id === Number(boardId));
@@ -170,23 +187,42 @@ export default function PostPage(props: PostPageProps) {
       </div>
 
       {/* 6. 예약 설정 모달 */}
-      {/* TODO: 리팩토링 필요 */}
       <ModalSheet
         isOpen={isReservationModalOpen}
         onClose={closeReservationModal}
         className="mx-auto flex w-full sm:w-[360px]"
       >
         <ModalSheet.Container>
-          <ModalSheet.Header />
           <ModalSheet.Content>
             <Sheet
               title="게시글 예약 설정"
               description="해당 시간에 맞춰 게시글이 예약됩니다"
-              primaryBtn={{ label: '예약하기', onClick: handleSaveReservation }}
-              secondaryBtn={{ label: '취소하기', onClick: closeReservationModal }}
+              primaryBtn={
+                reserved
+                  ? {
+                      label: '수정하기',
+                      onClick: handleSaveReservation,
+                    }
+                  : {
+                      label: '예약하기',
+                      onClick: handleSaveReservation,
+                    }
+              }
+              secondaryBtn={
+                reserved
+                  ? {
+                      label: '예약 취소하기',
+                      onClick: handleRemoveReservation,
+                      variant: 'warning',
+                    }
+                  : {
+                      label: '취소하기',
+                      onClick: closeReservationModal,
+                    }
+              }
             >
-              <div>
-                <DateTimePicker value={tempDate} onChange={setTempDate} />
+              <div className="py-15">
+                <DateTimePicker mode="future" value={tempDate} onChange={setTempDate} />
               </div>
             </Sheet>
           </ModalSheet.Content>
@@ -194,7 +230,30 @@ export default function PostPage(props: PostPageProps) {
         <ModalSheet.Backdrop onTap={closeReservationModal} />
       </ModalSheet>
 
-      {/* 7. 뒤로가기 경고 모달 */}
+      {/* 7. 실제 예약 취소 확인 모달 */}
+      <Alert
+        state="default"
+        title="설정한 예약이 취소됩니다"
+        infoText="예약 취소하기를 누를 경우 게시글 내 설정된 예약이 삭제됩니다."
+        isOpen={showRemoveReservationAlert}
+        onClose={() => setShowRemoveReservationAlert(false)}
+        actions={[
+          {
+            type: 'solid',
+            label: '취소',
+            variant: 'secondary',
+            onClick: () => setShowRemoveReservationAlert(false),
+          },
+          {
+            type: 'solid',
+            label: '삭제하기',
+            variant: 'danger',
+            onClick: handleConfirmRemove,
+          },
+        ]}
+      />
+
+      {/* 8. 뒤로가기 경고 모달 */}
       <Alert
         state="default"
         title="변경 내용을 저장하지 않고 나가시겠습니까?"

@@ -69,6 +69,7 @@ export type PostDetailData = {
   imageUrlList: ImageItemResponse[];
   viewCount: number;
   hasSchedule: boolean;
+  scheduleId: number | null;
   profileImageUrl?: string;
 };
 

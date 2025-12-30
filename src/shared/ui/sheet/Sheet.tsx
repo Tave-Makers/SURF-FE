@@ -24,6 +24,7 @@ interface SheetButton {
   label: string;
   onClick?: () => void;
   disabled?: boolean;
+  variant?: 'primary' | 'secondary' | 'danger' | 'warning';
 }
 
 interface SheetProps {
@@ -66,7 +67,7 @@ export function Sheet({
               <SolidButton
                 type="button"
                 size="l"
-                variant="secondary"
+                variant={secondaryBtn.variant || 'secondary'}
                 isDisabled={secondaryBtn.disabled}
                 onClick={secondaryBtn.onClick}
               >
@@ -77,7 +78,7 @@ export function Sheet({
               <SolidButton
                 type="button"
                 size="l"
-                variant="primary"
+                variant={primaryBtn.variant || 'primary'}
                 isDisabled={primaryBtn.disabled}
                 onClick={primaryBtn.onClick}
               >

@@ -4,12 +4,13 @@ import { scheduleQueryKeys } from '@/features/calendar/api/queryKeys';
 import { SingleSchedule } from '../api/types';
 
 export const useGetSingleSchedule = (
-  scheduleId?: number,
+  scheduleId?: number | null,
   options?: Omit<UseQueryOptions<SingleSchedule>, 'queryKey' | 'queryFn'>,
 ) => {
   return useQuery({
-    queryKey: scheduleQueryKeys.detail(scheduleId as number),
+    queryKey: scheduleQueryKeys.detail(scheduleId ?? -1),
     queryFn: () => getSingleSchedule(scheduleId as number),
+    enabled: !!scheduleId,
     ...options,
   });
 };

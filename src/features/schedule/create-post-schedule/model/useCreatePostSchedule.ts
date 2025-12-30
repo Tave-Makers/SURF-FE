@@ -12,11 +12,19 @@ export const useCreatePostSchedule = () => {
   const queryClient = useQueryClient();
 
   return useMutation<ScheduleCreateResponse, Error, CreateScheduleVariables>({
-    mutationKey: ['schedule', 'create'],
+    mutationKey: ['schedule', 'create', 'post'],
     mutationFn: ({ postId, data }) => createPostSchedule(postId, data),
 
     onSuccess: () => {
-      void queryClient.invalidateQueries({ queryKey: scheduleQueryKeys.all });
+      // 1) 단건 일정들
+      void queryClient.invalidateQueries({
+        queryKey: scheduleQueryKeys.details(),
+      });
+
+      // 2) 일정 목록 (캘린더)
+      void queryClient.invalidateQueries({
+        queryKey: scheduleQueryKeys.lists(),
+      });
     },
 
     onError: (error) => {

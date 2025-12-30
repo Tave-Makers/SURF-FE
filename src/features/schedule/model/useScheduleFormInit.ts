@@ -25,7 +25,7 @@ export const useScheduleFormInit = ({
     ((entryPoint === 'calendar' && calendarMode === 'edit') ||
       (entryPoint === 'post' && postMode === 'edit' && !linkedSchedule));
 
-  const { data: serverData, isLoading } = useGetSingleSchedule(scheduleId || 0, {
+  const { data: serverData, isLoading } = useGetSingleSchedule(scheduleId, {
     enabled: shouldFetch,
   });
 

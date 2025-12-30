@@ -103,6 +103,7 @@ export function SendMessagePage() {
             placeholder="ex. tavemakers@gmail.com"
             value={senderEmail}
             onChange={setSenderEmail}
+            readOnly={isPending}
           />
         </FieldGroup>
         <FieldGroup title="추가로 연락받고 싶은 SNS">
@@ -110,6 +111,7 @@ export function SendMessagePage() {
             placeholder="ex) 인스타그램/ @tavemakers"
             value={additionalSns}
             onChange={setAdditionalSns}
+            readOnly={isPending}
           />
         </FieldGroup>
         <FieldGroup title="제목" isRequired>
@@ -117,6 +119,8 @@ export function SendMessagePage() {
             placeholder="쪽지를 보내는 경위를 간략하게 작성해주세요!"
             value={title}
             onChange={setTitle}
+            guideMessage={`${MIN_LENGTH}자 이상 작성해주세요.`}
+            readOnly={isPending}
           />
         </FieldGroup>
         <FieldGroup title="본문" isRequired>
@@ -125,6 +129,8 @@ export function SendMessagePage() {
             value={content}
             onChange={setContent}
             mode="multiLine"
+            guideMessage={`${MIN_LENGTH}자 이상 작성해주세요.`}
+            readOnly={isPending}
           />
         </FieldGroup>
       </div>
@@ -140,7 +146,7 @@ export function SendMessagePage() {
         </SolidButton>
       </div>
 
-      {/* 삭제 Alert */}
+      {/* 나가기 Alert */}
       <Alert
         state="default"
         title="정말로 나가시겠습니까?"

@@ -123,6 +123,15 @@ export const usePostForm = ({ mode, boardId, postId }: Props) => {
     return !title.trim() || isEmpty;
   }, [title, checkHasChanges]);
 
+  // 이미 발행된 글인지 판단 (툴바 비활성화용)
+  // 수정 모드이고 서버 데이터상 예약 중이 아닌 경우
+  const isPublished = !!(mode === 'edit' && postDetail && !postDetail.isReserved);
+
+  // 현재 예약 중인지 판단 (배지 노출용)
+  // 클라이언트에서 새로 예약 설정을 했거나(reserved),
+  // 서버 데이터상 이미 예약 상태(postDetail.isReserved)인 경우
+  const isReserved = !!(reserved || (mode === 'edit' && postDetail?.isReserved));
+
   // 5. Event Handlers
   const handleEditorChange = useCallback(
     (updatedData: EditorState) => {
@@ -305,6 +314,8 @@ export const usePostForm = ({ mode, boardId, postId }: Props) => {
     isReservationModalOpen,
     isSubmitDisabled,
     isScheduleFetching,
+    isPublished,
+    isReserved,
 
     // Actions
     openCategory,

@@ -55,12 +55,12 @@ export function ProfileHeader({ userProfile }: Props) {
           <div className="text-foreground-quaternary flex flex-row items-center gap-5">
             <SurfIcon name="Link" size="s" />
             <Link
-              className="text-caption-caption4 break-all"
+              className="text-caption-caption4 truncate"
               href={userProfile.link}
               target="_blank"
               rel="noopener noreferrer"
             >
-              {userProfile.link}
+              https://tavesurf.site/swagger-ui/index.html#/회원%20정보%20수정/updateProfile
             </Link>
           </div>
         ) : null}

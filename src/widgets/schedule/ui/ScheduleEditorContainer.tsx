@@ -3,7 +3,7 @@
 import { useState, useMemo, useEffect } from 'react';
 import { useRouter, useParams, useSearchParams } from 'next/navigation';
 import { useForm, FormProvider } from 'react-hook-form';
-import { format } from 'date-fns';
+import { format, roundToNearestMinutes } from 'date-fns';
 
 // Hooks & Store
 import { useScheduleFormInit } from '@/features/schedule/model/useScheduleFormInit';
@@ -149,9 +149,14 @@ export default function ScheduleEditorContainer({ entryPoint }: Props) {
 
     // [Post Mode] Zustand 저장 후 복귀
     if (entryPoint === 'post') {
+      const roundedStartDate = roundToNearestMinutes(data.startDate, { nearestTo: 30 });
+      const roundedEndDate = roundToNearestMinutes(data.endDate, { nearestTo: 30 });
+
       setLinkedSchedule({
         ...data,
         id: currentScheduleId,
+        startDate: roundedStartDate,
+        endDate: roundedEndDate,
       });
       router.back();
       return;

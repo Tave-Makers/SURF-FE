@@ -18,6 +18,14 @@ export const useCreatePostScheduleStore = create<CreatePostScheduleState>()(
     {
       name: 'post-schedule-storage',
       storage: createJSONStorage(() => localStorage),
+      // 저장된 데이터를 읽어올 때 실행되는 함수
+      onRehydrateStorage: () => (state) => {
+        if (state?.linkedSchedule) {
+          // 문자열 날짜 -> Date 객체 복원
+          state.linkedSchedule.startDate = new Date(state.linkedSchedule.startDate);
+          state.linkedSchedule.endDate = new Date(state.linkedSchedule.endDate);
+        }
+      },
     },
   ),
 );

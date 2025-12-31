@@ -22,6 +22,7 @@ import { EditorState, PostPageMode } from './types';
 import { useQueryClient } from '@tanstack/react-query';
 import { postQueryKeys } from '@/entities/post/api/queryKeys';
 import { scheduleQueryKeys } from '@/features/calendar/api/queryKeys';
+import { format } from 'date-fns';
 
 type Props = {
   mode: PostPageMode;
@@ -173,7 +174,7 @@ export const usePostForm = ({ mode, boardId, postId }: Props) => {
           title,
           content,
           pinned: false,
-          reservedAt: reservedAt ? reservedAt.toISOString() : '',
+          reservedAt: reservedAt ? format(reservedAt, "yyyy-MM-dd'T'HH:mm:ss") : '',
           imageUrlList,
           hasSchedule: !!linkedSchedule,
           reserved,
@@ -199,7 +200,7 @@ export const usePostForm = ({ mode, boardId, postId }: Props) => {
           categoryId,
           pinned: false,
           isReservationChanged,
-          reservedAt: reservedAt ? reservedAt.toISOString() : '',
+          reservedAt: reservedAt ? format(reservedAt, "yyyy-MM-dd'T'HH:mm:ss") : '',
           isContentChanged,
           isImageChanged: isImagesChanged,
           imageUrlList,

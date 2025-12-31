@@ -249,7 +249,7 @@ export const usePostForm = ({ mode, boardId, postId }: Props) => {
               scheduleId: postSchedule.scheduleId,
             });
             if (process.env.NODE_ENV === 'development') {
-              console.warn(`게시글 화면 일정 -> 삭제 성공: ${postSchedule.scheduleId}`);
+              console.log(`게시글 화면 일정 -> 삭제 성공: ${postSchedule.scheduleId}`);
             }
           }
         }

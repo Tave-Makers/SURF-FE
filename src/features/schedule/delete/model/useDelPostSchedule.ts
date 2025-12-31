@@ -12,6 +12,7 @@ export const useDeletePostSchedule = () => {
   const queryClient = useQueryClient();
 
   return useMutation({
+    mutationKey: ['schedule', 'delete', 'post'],
     mutationFn: ({ postId, scheduleId }: DeletePostScheduleParams) =>
       deletePostSchedule(postId, scheduleId),
 

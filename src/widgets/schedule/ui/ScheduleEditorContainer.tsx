@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useMemo } from 'react';
+import { useState, useMemo, useEffect } from 'react';
 import { useRouter, useParams, useSearchParams } from 'next/navigation';
 import { useForm, FormProvider } from 'react-hook-form';
 import { format } from 'date-fns';
@@ -48,6 +48,12 @@ export default function ScheduleEditorContainer({ entryPoint }: Props) {
 
   const isCalendarEdit = entryPoint === 'calendar' && calendarMode === 'edit';
 
+  const [isHydrated, setIsHydrated] = useState(false);
+
+  useEffect(() => {
+    setIsHydrated(true);
+  }, []);
+
   // --- 2. 데이터 패칭 (이원화 전략) ---
 
   // A. [Calendar Mode] 기존 훅 그대로 사용 (캘린더 수정 시 동작)
@@ -68,12 +74,18 @@ export default function ScheduleEditorContainer({ entryPoint }: Props) {
     resolvedScheduleId,
     {
       enabled:
-        !!resolvedScheduleId && entryPoint === 'post' && postMode === 'edit' && !linkedSchedule,
+        isHydrated &&
+        !!resolvedScheduleId &&
+        entryPoint === 'post' &&
+        postMode === 'edit' &&
+        !linkedSchedule,
     },
   );
 
   // --- 3. 최종 초기 데이터 결정 (Merge Logic) ---
   const activeInitialData = useMemo(() => {
+    if (!isHydrated) return null;
+
     // Case 1: 게시글 모드 - Store에 데이터가 있음 (수정 중) -> 최우선
     if (entryPoint === 'post' && linkedSchedule) {
       return linkedSchedule;
@@ -97,7 +109,7 @@ export default function ScheduleEditorContainer({ entryPoint }: Props) {
 
     // Case 3: 캘린더 모드 - 기존 훅 데이터 사용
     return calendarInitialData;
-  }, [entryPoint, linkedSchedule, serverSchedule, calendarInitialData]);
+  }, [entryPoint, linkedSchedule, serverSchedule, calendarInitialData, isHydrated]);
 
   // --- 4. API Mutations ---
   const { mutate: createSchedule, isPending: isCreating } = useCreateSchedule();
@@ -179,8 +191,10 @@ export default function ScheduleEditorContainer({ entryPoint }: Props) {
   };
 
   // --- 7. 로딩 처리 ---
-  const isLoading =
-    entryPoint === 'post' ? !linkedSchedule && isScheduleLoading : isCalendarLoading;
+  const isLoading = useMemo(() => {
+    if (!isHydrated) return true;
+    return entryPoint === 'post' ? !linkedSchedule && isScheduleLoading : isCalendarLoading;
+  }, [isHydrated, entryPoint, linkedSchedule, isScheduleLoading, isCalendarLoading]);
 
   if (isLoading) return <div>Loading...</div>;
 

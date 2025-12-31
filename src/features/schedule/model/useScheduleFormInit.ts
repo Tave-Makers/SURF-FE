@@ -1,4 +1,4 @@
-import { useMemo } from 'react';
+import { useMemo, useState, useEffect } from 'react';
 import { useCreatePostScheduleStore } from '../create-post-schedule/model/useCreatePostScheduleStore';
 import { useGetSingleSchedule } from '../edit/model/useGetSingleSchedule';
 import { ScheduleFormData } from '../create/model/types';
@@ -17,20 +17,29 @@ export const useScheduleFormInit = ({
   calendarMode,
   scheduleId,
 }: InitProps) => {
+  // 1. Zustand 데이터 복구 완료 상태 관리
+  const [isHydrated, setIsHydrated] = useState(false);
   const { linkedSchedule } = useCreatePostScheduleStore();
 
-  // 1. 서버 데이터 Fetch 여부 (캘린더 수정 OR 게시글 수정 초기 진입)
+  // 2. 컴포넌트 마운트 시점에 Hydration 완료 체크
+  useEffect(() => {
+    setIsHydrated(true);
+  }, []);
+
+  // 3. 서버 데이터 Fetch 여부 (캘린더 수정 OR 게시글 수정 초기 진입)
   const shouldFetch =
     !!scheduleId &&
     ((entryPoint === 'calendar' && calendarMode === 'edit') ||
       (entryPoint === 'post' && postMode === 'edit' && !linkedSchedule));
 
-  const { data: serverData, isLoading } = useGetSingleSchedule(scheduleId, {
-    enabled: shouldFetch,
+  const { data: serverData, isLoading: isServerLoading } = useGetSingleSchedule(scheduleId, {
+    enabled: shouldFetch && isHydrated,
   });
 
-  // 2. 초기 데이터 결정 (Zustand > Server > null)
+  // 4. 초기 데이터 결정 (Zustand > Server > null)
   const initialData = useMemo(() => {
+    if (!isHydrated) return null;
+
     if (entryPoint === 'post' && linkedSchedule) return linkedSchedule;
 
     if (serverData) {
@@ -43,7 +52,9 @@ export const useScheduleFormInit = ({
       } as ScheduleFormData;
     }
     return null;
-  }, [entryPoint, linkedSchedule, serverData]);
+  }, [entryPoint, linkedSchedule, serverData, isHydrated]);
+
+  const isLoading = !isHydrated || isServerLoading;
 
   return { initialData, isLoading };
 };

@@ -1,7 +1,7 @@
 'use client';
 
 import { useRouter, useSearchParams } from 'next/navigation';
-import { Callout } from '@/entities/note/ui/callout/Callout';
+import { Callout } from '@/entities/message/ui/callout/Callout';
 import { FieldGroup } from '@/shared/ui/field-group/FieldGroup';
 import { TextArea } from '@/shared/ui/text-area/TextArea';
 import { SolidButton } from '@/shared/ui/button/solid-button/SolidButton';

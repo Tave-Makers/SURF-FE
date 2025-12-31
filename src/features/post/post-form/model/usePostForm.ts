@@ -245,7 +245,7 @@ export const usePostForm = ({ mode, boardId, postId }: Props) => {
         } else {
           if (postSchedule?.scheduleId) {
             await deleteScheduleMutate({
-              postId: numericPostId!,
+              postId: targetPostId!,
               scheduleId: postSchedule.scheduleId,
             });
             if (process.env.NODE_ENV === 'development') {

@@ -23,6 +23,7 @@ import { useQueryClient } from '@tanstack/react-query';
 import { postQueryKeys } from '@/entities/post/api/queryKeys';
 import { scheduleQueryKeys } from '@/features/calendar/api/queryKeys';
 import { format } from 'date-fns';
+import { useDeleteSchedule } from '@/features/schedule/delete/model/useDelSchedule';
 
 type Props = {
   mode: PostPageMode;
@@ -76,6 +77,7 @@ export const usePostForm = ({ mode, boardId, postId }: Props) => {
   const { mutateAsync: updateMutate, isPending: isUpdating } = useUpdatePost(numericPostId!);
   const { mutateAsync: createScheduleMutate } = useCreatePostSchedule();
   const { mutateAsync: editScheduleMutate } = useEditSchedule();
+  const { mutateAsync: delScheduleMutate } = useDeleteSchedule();
 
   // 3. Logic Hooks (Initialization & Dirty Check)
 
@@ -186,8 +188,8 @@ export const usePostForm = ({ mode, boardId, postId }: Props) => {
             postId: targetPostId,
             data: {
               title: linkedSchedule.title,
-              startAt: linkedSchedule.startDate.toISOString(),
-              endAt: linkedSchedule.endDate.toISOString(),
+              startAt: format(new Date(linkedSchedule.startDate), "yyyy-MM-dd'T'HH:mm:ss"),
+              endAt: format(new Date(linkedSchedule.endDate), "yyyy-MM-dd'T'HH:mm:ss"),
               location: linkedSchedule.location ?? '미정',
               category: linkedSchedule.category,
             },
@@ -216,8 +218,8 @@ export const usePostForm = ({ mode, boardId, postId }: Props) => {
                 data: {
                   category: linkedSchedule.category,
                   title: linkedSchedule.title,
-                  startAt: linkedSchedule.startDate.toISOString(),
-                  endAt: linkedSchedule.endDate.toISOString(),
+                  startAt: format(new Date(linkedSchedule.startDate), "yyyy-MM-dd'T'HH:mm:ss"),
+                  endAt: format(new Date(linkedSchedule.endDate), "yyyy-MM-dd'T'HH:mm:ss"),
                   location: linkedSchedule.location ?? '미정',
                 },
               });
@@ -231,8 +233,8 @@ export const usePostForm = ({ mode, boardId, postId }: Props) => {
                 postId: targetPostId, // 수정 중인 현재 게시글 ID
                 data: {
                   title: linkedSchedule.title,
-                  startAt: linkedSchedule.startDate.toISOString(),
-                  endAt: linkedSchedule.endDate.toISOString(),
+                  startAt: format(new Date(linkedSchedule.startDate), "yyyy-MM-dd'T'HH:mm:ss"),
+                  endAt: format(new Date(linkedSchedule.endDate), "yyyy-MM-dd'T'HH:mm:ss"),
                   location: linkedSchedule.location ?? '미정',
                   category: linkedSchedule.category,
                 },
@@ -240,6 +242,13 @@ export const usePostForm = ({ mode, boardId, postId }: Props) => {
             } catch (err) {
               console.error('일정 생성 실패:', err);
             }
+          }
+        } else if (scheduleId) {
+          try {
+            await delScheduleMutate(scheduleId);
+            console.log('연결된 일정 삭제 완료');
+          } catch (err) {
+            console.error('일정 삭제 실패:', err);
           }
         }
       }

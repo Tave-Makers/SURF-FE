@@ -3,7 +3,7 @@ import { getRecentSearches } from '@/features/recent-search/api/getRecentSearch.
 
 type SearchParams = Promise<{ keyword?: string; category?: string }>;
 
-export default async function Page({ searchParams }: { searchParams: SearchParams }) {
+const Page = async ({ searchParams }: { searchParams: SearchParams }) => {
   const sp = await searchParams;
 
   let recent: string[] = [];
@@ -22,4 +22,6 @@ export default async function Page({ searchParams }: { searchParams: SearchParam
       keywordFromQuery={keywordFromQuery}
     />
   );
-}
+};
+
+export default Page;

@@ -19,6 +19,7 @@ import { usePostInitialization } from '@/features/post/post-form/model/usePostIn
 import { usePostDirtyCheck } from '@/features/post/post-form/model/useDirtyCheck';
 
 import { EditorState, PostPageMode } from './types';
+import { useDeletePostSchedule } from '@/features/schedule/delete/model/useDelPostSchedule';
 import { useQueryClient } from '@tanstack/react-query';
 import { postQueryKeys } from '@/entities/post/api/queryKeys';
 import { scheduleQueryKeys } from '@/features/calendar/api/queryKeys';
@@ -75,6 +76,7 @@ export const usePostForm = ({ mode, boardId, postId }: Props) => {
   const { mutateAsync: updateMutate, isPending: isUpdating } = useUpdatePost(numericPostId!);
   const { mutateAsync: createScheduleMutate } = useCreatePostSchedule();
   const { mutateAsync: editScheduleMutate } = useEditSchedule();
+  const { mutateAsync: deleteScheduleMutate } = useDeletePostSchedule();
 
   // 3. Logic Hooks (Initialization & Dirty Check)
 
@@ -238,6 +240,16 @@ export const usePostForm = ({ mode, boardId, postId }: Props) => {
               });
             } catch (err) {
               console.error('일정 생성 실패:', err);
+            }
+          }
+        } else {
+          if (postSchedule?.scheduleId) {
+            await deleteScheduleMutate({
+              postId: targetPostId!,
+              scheduleId: postSchedule.scheduleId,
+            });
+            if (process.env.NODE_ENV === 'development') {
+              console.log(`게시글 화면 일정 -> 삭제 성공: ${postSchedule.scheduleId}`);
             }
           }
         }

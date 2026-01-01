@@ -4,7 +4,7 @@ import { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import SearchHistoryItem from '@/shared/ui/search-history-item/SearchHistoryItem';
 import { deleteAllRecentSearches } from '../api/deleteAllRecentSearches.client';
-import { deleteOneRecentSearch } from '../api/deleteOneRecentSearches.client';
+import { deleteOneRecentSearch } from '../api/deleteOneRecentSearch.client';
 import { useAlertStore } from '@/shared/store/alertStore';
 
 const textStyle = 'text-body-body6 text-foreground-normal';
@@ -27,12 +27,27 @@ export default function RecentSearch({ recentKeywords }: RecentSearchProps) {
   const deleteAll = () => {
     void (async () => {
       try {
-        await deleteAllRecentSearches();
+        const ok = await deleteAllRecentSearches();
+        if (!ok) throw new Error('deleteAll failed');
+
         setItems([]);
         closeAlert();
         router.refresh();
       } catch (e) {
         console.error(e);
+        openAlert({
+          state: 'error',
+          title: '삭제 실패',
+          infoText: '최근 검색어 삭제 중 오류가 발생했습니다. 다시 시도해주세요.',
+          actions: [
+            {
+              type: 'solid',
+              label: '확인',
+              variant: 'primary',
+              onClick: closeAlert,
+            },
+          ],
+        });
       }
     })();
   };
@@ -61,13 +76,12 @@ export default function RecentSearch({ recentKeywords }: RecentSearchProps) {
 
   const handleDeleteOne = (k: string) => {
     void (async () => {
-      try {
-        await deleteOneRecentSearch(k);
-        setItems((prev) => prev.filter((x) => x !== k));
-        router.refresh();
-      } catch (e) {
-        console.error(e);
+      const ok = await deleteOneRecentSearch(k);
+      if (!ok) {
+        return;
       }
+      setItems((prev) => prev.filter((x) => x !== k));
+      router.refresh();
     })();
   };
 

@@ -1,8 +1,5 @@
+import type { ServerFetchOptions } from './types';
 import { serverFetchWithCookies } from './serverFetchWithCookies';
-
-type ServerFetchOptions = Omit<globalThis.RequestInit, 'headers'> & {
-  headers?: Record<string, string>;
-};
 
 export type Guard<T> = (x: unknown) => x is T;
 

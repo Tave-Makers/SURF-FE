@@ -11,6 +11,10 @@ export interface PageMeta {
   isLast: boolean;
 }
 
+export type ServerFetchOptions = Omit<globalThis.RequestInit, 'headers'> & {
+  headers?: Record<string, string>;
+};
+
 export type Guard<T> = (x: unknown) => x is T;
 
 export function commonResponseGuard<T>(dataGuard: Guard<T>): Guard<CommonResponse<T>> {

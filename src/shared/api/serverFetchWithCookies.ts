@@ -1,8 +1,5 @@
 import { cookies } from 'next/headers';
-
-type ServerFetchOptions = Omit<globalThis.RequestInit, 'headers'> & {
-  headers?: Record<string, string>;
-};
+import type { ServerFetchOptions } from './types';
 
 function buildCookieHeader(cookieStore: { getAll(): { name: string; value: string }[] }) {
   return cookieStore

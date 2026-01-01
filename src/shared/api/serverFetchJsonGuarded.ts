@@ -11,8 +11,8 @@ export async function serverFetchJsonGuarded<T>(
   const url = `${process.env.API_BASE_URL}${path}`;
 
   const res = await serverFetchWithCookies(url, {
+    cache: init.cache ?? 'no-store',
     ...init,
-    cache: 'no-store',
   });
 
   if (!res.ok) {

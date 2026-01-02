@@ -8,6 +8,7 @@ import { USER_LEVEL_BADGE } from '@/entities/user/ui/user-level/UserLevelBadges'
 import { SurfIcon } from '@/shared/ui/icon/SurfIcon';
 import { kakaoImgNormalize } from '@/shared/lib/kakaoImgNormalize';
 import type { UserProfile } from '@/entities/user/model/types';
+import { normalizeUrl } from '@/shared/lib/validator';
 
 const infoRow = 'text-caption-caption6 text-foreground-normal flex flex-row items-center gap-5';
 
@@ -68,7 +69,7 @@ export function ProfileHeader({ userProfile }: Props) {
               <SurfIcon name="Link" size="s" />
               <Link
                 className="text-caption-caption4 truncate"
-                href={linkText}
+                href={normalizeUrl(linkText)}
                 target="_blank"
                 rel="noopener noreferrer"
               >

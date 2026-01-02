@@ -88,7 +88,7 @@ export default function RecentSearch({ recentKeywords }: RecentSearchProps) {
   return (
     <section className="flex w-full flex-col gap-13 px-13 pt-16">
       <div className="flex w-full flex-row justify-between">
-        <span className={textStyle} aria-label="최근 검색어 전체 삭제">
+        <span className={textStyle} aria-label="최근 검색어">
           최근 검색어
         </span>
 

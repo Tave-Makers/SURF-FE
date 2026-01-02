@@ -6,7 +6,7 @@ export async function deleteOneRecentSearch(keyword: string): Promise<boolean> {
     const res = await axiosInstance.delete<CommonResponse<null>>(
       `/v1/user/search/recent/${encodeURIComponent(keyword)}`,
     );
-    return res.data.code === 200;
+    return res.data.code === 204;
   } catch (error) {
     console.error('Failed to delete recent search:', error);
     return false;

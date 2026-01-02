@@ -78,14 +78,15 @@ export default function RecentSearch({ recentKeywords }: RecentSearchProps) {
     });
   };
 
-  const handleDeleteOne = async (k: string) => {
-    const ok = await deleteOneRecentSearch(k);
-    if (!ok) {
-      console.error(`Failed to delete recent search: ${k}`);
-      return;
-    }
-    setItems((prev) => prev.filter((x) => x !== k));
-    router.refresh();
+  const handleDeleteOne = (k: string) => {
+    void (async () => {
+      const ok = await deleteOneRecentSearch(k);
+      if (!ok) {
+        return;
+      }
+      setItems((prev) => prev.filter((x) => x !== k));
+      router.refresh();
+    })();
   };
 
   return (
@@ -113,10 +114,8 @@ export default function RecentSearch({ recentKeywords }: RecentSearchProps) {
           <SearchHistoryItem
             key={k}
             keyword={k}
-            onSelect={() => handleSelect(k)}
-            onDelete={() => {
-              void handleDeleteOne(k);
-            }}
+            onSelect={handleSelect}
+            onDelete={() => handleDeleteOne(k)}
           />
         ))}
       </div>

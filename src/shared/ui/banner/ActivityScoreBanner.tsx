@@ -1,17 +1,24 @@
 'use client';
 
-import { FC, SVGProps } from 'react';
-import FrontendIcon from '@/shared/assets/icons/banner/banner-frontend.svg';
-import BackendIcon from '@/shared/assets/icons/banner/banner-backend.svg';
-import DesignIcon from '@/shared/assets/icons/banner/banner-design.svg';
-import DataIcon from '@/shared/assets/icons/banner/banner-data-analysis.svg';
-import DeepLearningIcon from '@/shared/assets/icons/banner/banner-deep-learning.svg';
+import { FC, lazy, SVGProps } from 'react';
 
 type ActivityScoreBannerProps = {
   part: 'frontend' | 'backend' | 'design' | 'data-analysis' | 'deep-learning';
   score: number;
   onClickMore: () => void;
 };
+
+const FrontendIcon = lazy(
+  () => import('@/shared/assets/icons/activity-banner/banner-frontend.svg'),
+);
+const BackendIcon = lazy(() => import('@/shared/assets/icons/activity-banner/banner-backend.svg'));
+const DesignIcon = lazy(() => import('@/shared/assets/icons/activity-banner/banner-design.svg'));
+const DataIcon = lazy(
+  () => import('@/shared/assets/icons/activity-banner/banner-data-analysis.svg'),
+);
+const DeepLearningIcon = lazy(
+  () => import('@/shared/assets/icons/activity-banner/banner-deep-learning.svg'),
+);
 
 export const ActivityScoreBanner = ({ part, score, onClickMore }: ActivityScoreBannerProps) => {
   const iconMap: Record<ActivityScoreBannerProps['part'], FC<SVGProps<SVGSVGElement>>> = {
@@ -28,7 +35,7 @@ export const ActivityScoreBanner = ({ part, score, onClickMore }: ActivityScoreB
     <div className="rounded-4 relative flex h-[8.125rem] w-full flex-col justify-center px-12 py-11 opacity-100">
       {/* 1. 메인 배경 */}
       <img
-        src="/icons/banner/banner-background.svg"
+        src="/images/banner-background.svg"
         alt=""
         aria-hidden="true"
         className="rounded-4 absolute inset-0 h-full w-full object-cover"

@@ -57,9 +57,9 @@ export function ProfileBadge({ careers, memberId }: Props) {
           <>
             {badges.length > 0 ? (
               <div className="grid grid-cols-3 gap-20 p-6">
-                {badges.map((b, i) => (
+                {badges.map((b) => (
                   <ActivityBadge
-                    key={`${b.badgeName}-${b.generation}-${b.awardedAt}-${i}`}
+                    key={`${b.badgeName}-${b.generation}-${b.awardedAt}`}
                     badgeName={b.badgeName}
                     timestamp={b.awardedAt}
                   />

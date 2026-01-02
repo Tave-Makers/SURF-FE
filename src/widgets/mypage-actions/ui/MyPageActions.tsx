@@ -19,7 +19,7 @@ export function MyPageActions({ isActive, bannerPart, bannerScore }: Props) {
   const handleRouter = () => router.push(ROUTE_MYPAGE_EDIT);
 
   return (
-    <section className="flex flex-col gap-13 px-13 pb-13">
+    <section className="flex flex-col gap-13 px-13 pt-11 pb-13">
       {isActive && bannerPart && (
         <ActivityScoreBanner
           part={bannerPart}

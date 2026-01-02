@@ -45,7 +45,7 @@ export default function BoardSearchPage({ initialRecent, keywordFromQuery }: Boa
   };
 
   return (
-    <div className="flex w-full flex-col">
+    <div className="flex h-full w-full flex-col">
       <AppHeader
         overrideHeader={{
           mode: HeaderMode.SearchBar,

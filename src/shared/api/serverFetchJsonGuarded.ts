@@ -1,10 +1,6 @@
+import type { ServerFetchOptions } from './types';
+import type { Guard } from './types';
 import { serverFetchWithCookies } from './serverFetchWithCookies';
-
-type ServerFetchOptions = Omit<globalThis.RequestInit, 'headers'> & {
-  headers?: Record<string, string>;
-};
-
-export type Guard<T> = (x: unknown) => x is T;
 
 export async function serverFetchJsonGuarded<T>(
   path: string,
@@ -14,8 +10,8 @@ export async function serverFetchJsonGuarded<T>(
   const url = `${process.env.API_BASE_URL}${path}`;
 
   const res = await serverFetchWithCookies(url, {
+    cache: init.cache ?? 'no-store',
     ...init,
-    cache: 'no-store',
   });
 
   if (!res.ok) {

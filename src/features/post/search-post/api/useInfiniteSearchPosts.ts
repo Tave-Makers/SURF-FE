@@ -23,6 +23,6 @@ export function useInfiniteSearchPosts(param: string, size = 10) {
       return res.data.data;
     },
     getNextPageParam: (lastPage) => (lastPage.last ? undefined : lastPage.number + 1),
-    enabled: !!param,
+    enabled: !!param && param.trim().length > 0,
   });
 }

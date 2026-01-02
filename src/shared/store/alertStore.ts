@@ -2,7 +2,7 @@
 
 import { create } from 'zustand';
 
-type BaseAction = {
+export type BaseAction = {
   label: string;
   onClick: () => void;
   isDisabled?: boolean;
@@ -10,12 +10,12 @@ type BaseAction = {
   testId?: string;
 };
 
-type SolidAction = BaseAction & {
+export type SolidAction = BaseAction & {
   type: 'solid';
   variant?: 'primary' | 'secondary' | 'danger' | 'warning';
 };
 
-type TextAction = BaseAction & {
+export type TextAction = BaseAction & {
   type: 'text';
   variant?: 'primary' | 'secondary' | 'warning';
 };

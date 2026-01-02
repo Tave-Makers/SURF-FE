@@ -58,3 +58,11 @@ export type UpdateProfileRequestDTO = {
   careersToUpdate?: CareerUpdateDTO[];
   careerIdsToDelete?: number[];
 };
+
+export type TrackPart =
+  | 'BACKEND'
+  | 'WEB_FRONTEND'
+  | 'APP_FRONTEND'
+  | 'DESIGN'
+  | 'DATA_ANALYSIS'
+  | 'DEEP_LEARNING';

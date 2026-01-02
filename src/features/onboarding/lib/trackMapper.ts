@@ -1,4 +1,4 @@
-import { TrackPart } from '../model/types';
+import { TrackPart } from '@/entities/user/model/types';
 
 // 한글 → 백엔드 enum
 export const toEnumPartMap: Record<string, TrackPart> = {

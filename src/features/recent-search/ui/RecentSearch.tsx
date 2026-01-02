@@ -16,6 +16,7 @@ interface RecentSearchProps {
 export default function RecentSearch({ recentKeywords }: RecentSearchProps) {
   const router = useRouter();
   const [items, setItems] = useState(recentKeywords);
+  const [isDeleting, setIsDeleting] = useState(false);
 
   const handleSelect = (k: string) => {
     router.push(`/board/search?keyword=${encodeURIComponent(k)}`);
@@ -24,32 +25,33 @@ export default function RecentSearch({ recentKeywords }: RecentSearchProps) {
   const openAlert = useAlertStore((s) => s.open);
   const closeAlert = useAlertStore((s) => s.close);
 
-  const deleteAll = () => {
-    void (async () => {
-      try {
-        const ok = await deleteAllRecentSearches();
-        if (!ok) throw new Error('deleteAll failed');
+  const deleteAll = async () => {
+    setIsDeleting(true);
+    try {
+      const ok = await deleteAllRecentSearches();
+      if (!ok) throw new Error('deleteAll failed');
 
-        setItems([]);
-        closeAlert();
-        router.refresh();
-      } catch (e) {
-        console.error(e);
-        openAlert({
-          state: 'error',
-          title: '삭제 실패',
-          infoText: '최근 검색어 삭제 중 오류가 발생했습니다. 다시 시도해주세요.',
-          actions: [
-            {
-              type: 'solid',
-              label: '확인',
-              variant: 'primary',
-              onClick: closeAlert,
-            },
-          ],
-        });
-      }
-    })();
+      setItems([]);
+      closeAlert();
+      router.refresh();
+    } catch (e) {
+      console.error(e);
+      openAlert({
+        state: 'error',
+        title: '삭제 실패',
+        infoText: '최근 검색어 삭제 중 오류가 발생했습니다. 다시 시도해주세요.',
+        actions: [
+          {
+            type: 'solid',
+            label: '확인',
+            variant: 'primary',
+            onClick: closeAlert,
+          },
+        ],
+      });
+    } finally {
+      setIsDeleting(false);
+    }
   };
 
   const handleDeleteAll = () => {
@@ -68,21 +70,22 @@ export default function RecentSearch({ recentKeywords }: RecentSearchProps) {
           type: 'solid',
           label: '삭제하기',
           variant: 'danger',
-          onClick: deleteAll,
+          onClick: () => {
+            void deleteAll();
+          },
         },
       ],
     });
   };
 
-  const handleDeleteOne = (k: string) => {
-    void (async () => {
-      const ok = await deleteOneRecentSearch(k);
-      if (!ok) {
-        return;
-      }
-      setItems((prev) => prev.filter((x) => x !== k));
-      router.refresh();
-    })();
+  const handleDeleteOne = async (k: string) => {
+    const ok = await deleteOneRecentSearch(k);
+    if (!ok) {
+      console.error(`Failed to delete recent search: ${k}`);
+      return;
+    }
+    setItems((prev) => prev.filter((x) => x !== k));
+    router.refresh();
   };
 
   return (
@@ -98,6 +101,7 @@ export default function RecentSearch({ recentKeywords }: RecentSearchProps) {
             type="button"
             onClick={handleDeleteAll}
             aria-label="최근 검색어 전체 삭제"
+            disabled={isDeleting}
           >
             전체 삭제
           </button>
@@ -109,8 +113,10 @@ export default function RecentSearch({ recentKeywords }: RecentSearchProps) {
           <SearchHistoryItem
             key={k}
             keyword={k}
-            onSelect={handleSelect}
-            onDelete={() => handleDeleteOne(k)}
+            onSelect={() => handleSelect(k)}
+            onDelete={() => {
+              void handleDeleteOne(k);
+            }}
           />
         ))}
       </div>

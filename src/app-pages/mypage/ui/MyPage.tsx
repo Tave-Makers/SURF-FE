@@ -21,7 +21,6 @@ export function MyPage({ userProfile }: Props) {
 
   useEffect(() => {
     if (fired.current) return;
-    if (!userProfile) return;
 
     fired.current = true;
 
@@ -29,8 +28,6 @@ export function MyPage({ userProfile }: Props) {
       member_id: memberId != null ? String(memberId) : 'anonymous',
     });
   }, [userProfile, memberId]);
-
-  if (!userProfile) return <div className="p-4">프로필을 불러오지 못했어요.</div>;
 
   return (
     <div className="flex h-dvh flex-col overflow-y-auto">

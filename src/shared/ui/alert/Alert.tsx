@@ -49,6 +49,22 @@ export const Alert = ({
         e.preventDefault();
         onClose();
       }
+      // 포커스 트랩
+      if (e.key === 'Tab' && dialogRef.current) {
+        const focusableEls = dialogRef.current.querySelectorAll<HTMLElement>(
+          'button:not([disabled]), [href], input:not([disabled]), select:not([disabled]), textarea:not([disabled]), [tabindex]:not([tabindex="-1"])',
+        );
+        const firstEl = focusableEls[0];
+        const lastEl = focusableEls[focusableEls.length - 1];
+
+        if (e.shiftKey && document.activeElement === firstEl) {
+          e.preventDefault();
+          lastEl?.focus();
+        } else if (!e.shiftKey && document.activeElement === lastEl) {
+          e.preventDefault();
+          firstEl?.focus();
+        }
+      }
     };
 
     window.addEventListener('keydown', onKeyDown);

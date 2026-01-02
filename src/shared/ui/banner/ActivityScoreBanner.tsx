@@ -1,6 +1,6 @@
 'use client';
 
-import { FC, lazy, SVGProps } from 'react';
+import { FC, lazy, Suspense, SVGProps } from 'react';
 
 type ActivityScoreBannerProps = {
   part: 'frontend' | 'backend' | 'design' | 'data-analysis' | 'deep-learning';
@@ -33,24 +33,27 @@ export const ActivityScoreBanner = ({ part, score, onClickMore }: ActivityScoreB
 
   return (
     <div className="rounded-4 relative flex h-[8.125rem] w-full flex-col justify-center px-12 py-11 opacity-100">
-      {/* 1. 메인 배경 */}
+      {/* 메인 배경 */}
       <img
         src="/images/banner-background.svg"
         alt=""
         aria-hidden="true"
         className="rounded-4 absolute inset-0 h-full w-full object-cover"
       />
-      {/* 2. 캐릭터 아이콘 (제2의 배경) */}
+      {/* 캐릭터 아이콘 */}
+
       {IconComponent && (
-        <IconComponent
-          aria-hidden="true"
-          focusable="false"
-          className="pointer-events-none absolute inset-0 h-full w-full object-cover select-none"
-        />
+        <Suspense fallback={<div className="absolute inset-0" />}>
+          <IconComponent
+            aria-hidden="true"
+            focusable="false"
+            className="pointer-events-none absolute inset-0 h-full w-full object-cover select-none"
+          />
+        </Suspense>
       )}
       <div className="rounded-4 bg-background-normal-alpha-accent absolute inset-0 flex h-full w-full flex-col" />
 
-      {/* 3. 텍스트/UI */}
+      {/* 텍스트 */}
       <div className="text-foreground-static-white z-10 flex h-full w-full flex-col gap-15">
         <div className="text-body-body8 flex w-full flex-row items-center justify-between p-7">
           <span>현재 내 활동점수는?</span>

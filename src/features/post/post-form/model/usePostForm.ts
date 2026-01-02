@@ -23,6 +23,7 @@ import { useDeletePostSchedule } from '@/features/schedule/delete/model/useDelPo
 import { useQueryClient } from '@tanstack/react-query';
 import { postQueryKeys } from '@/entities/post/api/queryKeys';
 import { scheduleQueryKeys } from '@/features/calendar/api/queryKeys';
+import { format } from 'date-fns';
 
 type Props = {
   mode: PostPageMode;
@@ -175,7 +176,7 @@ export const usePostForm = ({ mode, boardId, postId }: Props) => {
           title,
           content,
           pinned: false,
-          reservedAt: reservedAt ? reservedAt.toISOString() : '',
+          reservedAt: reservedAt ? format(reservedAt, "yyyy-MM-dd'T'HH:mm:ss") : '',
           imageUrlList,
           hasSchedule: !!linkedSchedule,
           reserved,
@@ -187,8 +188,8 @@ export const usePostForm = ({ mode, boardId, postId }: Props) => {
             postId: targetPostId,
             data: {
               title: linkedSchedule.title,
-              startAt: linkedSchedule.startDate.toISOString(),
-              endAt: linkedSchedule.endDate.toISOString(),
+              startAt: format(new Date(linkedSchedule.startDate), "yyyy-MM-dd'T'HH:mm:ss"),
+              endAt: format(new Date(linkedSchedule.endDate), "yyyy-MM-dd'T'HH:mm:ss"),
               location: linkedSchedule.location ?? '미정',
               category: linkedSchedule.category,
             },
@@ -201,7 +202,7 @@ export const usePostForm = ({ mode, boardId, postId }: Props) => {
           categoryId,
           pinned: false,
           isReservationChanged,
-          reservedAt: reservedAt ? reservedAt.toISOString() : '',
+          reservedAt: reservedAt ? format(reservedAt, "yyyy-MM-dd'T'HH:mm:ss") : '',
           isContentChanged,
           isImageChanged: isImagesChanged,
           imageUrlList,
@@ -217,8 +218,8 @@ export const usePostForm = ({ mode, boardId, postId }: Props) => {
                 data: {
                   category: linkedSchedule.category,
                   title: linkedSchedule.title,
-                  startAt: linkedSchedule.startDate.toISOString(),
-                  endAt: linkedSchedule.endDate.toISOString(),
+                  startAt: format(new Date(linkedSchedule.startDate), "yyyy-MM-dd'T'HH:mm:ss"),
+                  endAt: format(new Date(linkedSchedule.endDate), "yyyy-MM-dd'T'HH:mm:ss"),
                   location: linkedSchedule.location ?? '미정',
                 },
               });
@@ -232,8 +233,8 @@ export const usePostForm = ({ mode, boardId, postId }: Props) => {
                 postId: targetPostId, // 수정 중인 현재 게시글 ID
                 data: {
                   title: linkedSchedule.title,
-                  startAt: linkedSchedule.startDate.toISOString(),
-                  endAt: linkedSchedule.endDate.toISOString(),
+                  startAt: format(new Date(linkedSchedule.startDate), "yyyy-MM-dd'T'HH:mm:ss"),
+                  endAt: format(new Date(linkedSchedule.endDate), "yyyy-MM-dd'T'HH:mm:ss"),
                   location: linkedSchedule.location ?? '미정',
                   category: linkedSchedule.category,
                 },

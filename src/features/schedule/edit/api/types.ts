@@ -5,8 +5,8 @@ import { CommonResponse } from '@/shared/api/types';
 export type EditScheduleRequest = {
   category: ScheduleCategory;
   title: string;
-  startAt: string; // ISO 8601 형식의 날짜 문자열
-  endAt: string; // ISO 8601 형식의 날짜 문자열
+  startAt: string; // 날짜 문자열 "yyyy-MM-dd'T'HH:mm:ss" 형식
+  endAt: string; // 날짜 문자열 "yyyy-MM-dd'T'HH:mm:ss" 형식
   location: string;
 };
 

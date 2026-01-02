@@ -189,18 +189,6 @@ export const createRouteConfig = (router: RouterInstance): RouteConfig[] => [
     },
   },
   {
-    id: 'board-search',
-    path: '/board/search',
-    backPath: '/board',
-    header: {
-      mode: HeaderMode.SearchBar,
-      hasLeftIcon: true,
-      value: '',
-      onChange: () => {},
-      onSubmit: () => {},
-    },
-  },
-  {
     id: 'home-calendar',
     path: '/calendar',
     backPath: '/',

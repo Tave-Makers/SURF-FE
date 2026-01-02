@@ -45,7 +45,7 @@ export type Post = {
   date: string;
   pinned: boolean;
   isReserved: boolean;
-  boardId: number | null;
+  boardId: number;
   likeCount: number;
   isLiked: boolean;
   scrappedByMe: boolean;

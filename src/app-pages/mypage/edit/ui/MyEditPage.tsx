@@ -53,8 +53,10 @@ interface FormValues {
   careers: CareerForm[];
 }
 
+let tempCareerIdCounter = 0;
 function makeTempCareerId() {
-  return -Date.now();
+  // 음수 ID: 새로 생성된 경력 (서버 미저장 상태)
+  return -++tempCareerIdCounter;
 }
 
 function isYearMonth(value: string): value is DateString {
@@ -245,8 +247,8 @@ export default function MyEditPage({ initialProfile }: Props) {
       }
 
       await updateMyProfile(payload);
+      router.push('/mypage');
       router.refresh();
-      router.back();
     } catch (e: unknown) {
       console.error(e);
       alert('프로필 수정 중 오류가 발생했습니다.');

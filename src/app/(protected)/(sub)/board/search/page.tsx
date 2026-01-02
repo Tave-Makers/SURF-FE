@@ -5,13 +5,7 @@ type SearchParams = Promise<{ keyword?: string; category?: string }>;
 
 const Page = async ({ searchParams }: { searchParams: SearchParams }) => {
   const sp = await searchParams;
-
-  let recent: string[] = [];
-  try {
-    recent = await getRecentSearches();
-  } catch (error) {
-    console.error('Failed to fetch recent searches:', error);
-  }
+  const recent = await getRecentSearches();
 
   const keywordFromQuery = sp.keyword?.trim() || null;
 

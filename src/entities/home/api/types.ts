@@ -1,21 +1,22 @@
-import { CommonResponse } from '@/shared/api/types';
+import type { CommonResponse } from '@/shared/api/types';
 
 export interface HomeBanner {
   id: number;
   imageUrl: string;
-  linkUrl: string;
+  linkUrl: string | null;
   displayOrder: number;
 }
 
 export interface HomeApiResponseData {
   mainText: string;
-  sender: string;
+  sender?: string | null;
   banners: HomeBanner[];
   memberName: string;
   memberGeneration: number;
   memberPart: string;
-  nextScheduleTitle: string;
-  nextScheduleDate: string;
+  nextScheduleTitle: string | null;
+  nextScheduleDate: string | null;
+  nextScheduleDeepLink: string | null;
 }
 
 export type HomeApiResponse = CommonResponse<HomeApiResponseData>;

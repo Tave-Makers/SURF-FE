@@ -1,6 +1,6 @@
 'use client';
 
-import { FC, lazy, Suspense, SVGProps } from 'react';
+import { lazy, Suspense } from 'react';
 
 type ActivityScoreBannerProps = {
   part: 'frontend' | 'backend' | 'design' | 'data-analysis' | 'deep-learning';
@@ -21,13 +21,13 @@ const DeepLearningIcon = lazy(
 );
 
 export const ActivityScoreBanner = ({ part, score, onClickMore }: ActivityScoreBannerProps) => {
-  const iconMap: Record<ActivityScoreBannerProps['part'], FC<SVGProps<SVGSVGElement>>> = {
+  const iconMap = {
     frontend: FrontendIcon,
     backend: BackendIcon,
     design: DesignIcon,
     'data-analysis': DataIcon,
     'deep-learning': DeepLearningIcon,
-  };
+  } satisfies Record<ActivityScoreBannerProps['part'], typeof FrontendIcon>;
 
   const IconComponent = iconMap[part];
 

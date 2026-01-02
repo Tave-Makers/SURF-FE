@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useMemo, useEffect } from 'react';
+import { useState, useMemo } from 'react';
 import { useRouter, useParams, useSearchParams } from 'next/navigation';
 import { useForm, FormProvider } from 'react-hook-form';
 import { format, roundToNearestMinutes } from 'date-fns';
@@ -48,16 +48,14 @@ export default function ScheduleEditorContainer({ entryPoint }: Props) {
 
   const isCalendarEdit = entryPoint === 'calendar' && calendarMode === 'edit';
 
-  const [isHydrated, setIsHydrated] = useState(false);
-
-  useEffect(() => {
-    setIsHydrated(true);
-  }, []);
-
   // --- 2. 데이터 패칭 (이원화 전략) ---
 
   // A. [Calendar Mode] 기존 훅 그대로 사용 (캘린더 수정 시 동작)
-  const { initialData: calendarInitialData, isLoading: isCalendarLoading } = useScheduleFormInit({
+  const {
+    initialData: calendarInitialData,
+    isLoading: isCalendarLoading,
+    isHydrated,
+  } = useScheduleFormInit({
     entryPoint,
     postMode,
     calendarMode,

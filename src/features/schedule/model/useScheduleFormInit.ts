@@ -56,5 +56,5 @@ export const useScheduleFormInit = ({
 
   const isLoading = !isHydrated || isServerLoading;
 
-  return { initialData, isLoading };
+  return { initialData, isLoading, isHydrated };
 };

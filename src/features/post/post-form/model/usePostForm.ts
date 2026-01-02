@@ -24,7 +24,6 @@ import { useQueryClient } from '@tanstack/react-query';
 import { postQueryKeys } from '@/entities/post/api/queryKeys';
 import { scheduleQueryKeys } from '@/features/calendar/api/queryKeys';
 import { format } from 'date-fns';
-import { useDeleteSchedule } from '@/features/schedule/delete/model/useDelSchedule';
 
 type Props = {
   mode: PostPageMode;
@@ -78,7 +77,7 @@ export const usePostForm = ({ mode, boardId, postId }: Props) => {
   const { mutateAsync: updateMutate, isPending: isUpdating } = useUpdatePost(numericPostId!);
   const { mutateAsync: createScheduleMutate } = useCreatePostSchedule();
   const { mutateAsync: editScheduleMutate } = useEditSchedule();
-  const { mutateAsync: delScheduleMutate } = useDeleteSchedule();
+  const { mutateAsync: deleteScheduleMutate } = useDeletePostSchedule();
 
   // 3. Logic Hooks (Initialization & Dirty Check)
 
@@ -244,12 +243,15 @@ export const usePostForm = ({ mode, boardId, postId }: Props) => {
               console.error('일정 생성 실패:', err);
             }
           }
-        } else if (scheduleId) {
-          try {
-            await delScheduleMutate(scheduleId);
-            console.log('연결된 일정 삭제 완료');
-          } catch (err) {
-            console.error('일정 삭제 실패:', err);
+        } else {
+          if (postSchedule?.scheduleId) {
+            await deleteScheduleMutate({
+              postId: targetPostId!,
+              scheduleId: postSchedule.scheduleId,
+            });
+            if (process.env.NODE_ENV === 'development') {
+              console.log(`게시글 화면 일정 -> 삭제 성공: ${postSchedule.scheduleId}`);
+            }
           }
         }
       }

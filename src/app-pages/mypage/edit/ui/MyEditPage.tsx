@@ -24,6 +24,7 @@ import { ProfileImageUploader } from '@/features/profile/ui/upload-profile-image
 import { useImageUploader } from '@/entities/image/model/useImageUploader';
 import type { UploadImage } from '@/entities/image/model/types';
 import { isValidUrl } from '@/shared/lib/validator';
+import { normalizeTextString } from '@/entities/user/model/normalize';
 
 interface Props {
   initialProfile: UserProfile;
@@ -56,27 +57,44 @@ function makeTempCareerId() {
   return -Date.now();
 }
 
-function isDateString(value: string): value is DateString {
-  return /^\d{4}-\d{2}-\d{2}$/.test(value);
+function isYearMonth(value: string): value is DateString {
+  return /^\d{4}-\d{2}$/.test(value);
+}
+
+function toLocalDateOrNull(value: string): DateString | null {
+  const t = value.trim();
+  if (!t) return null;
+  if (!isYearMonth(t)) return null;
+  return `${t}-01` as DateString;
 }
 
 function toCareerCreateDTO(c: CareerForm) {
+  const start = toLocalDateOrNull(c.startDate);
+  if (!start) throw new Error(`시작일 형식이 올바르지 않아요. (YYYY-MM) 현재: ${c.startDate}`);
+
+  const end = c.isWorking ? null : toLocalDateOrNull(c.endDate);
+
   return {
     companyName: c.companyName.trim(),
     position: c.position.trim(),
-    startDate: c.startDate as DateString,
-    endDate: c.isWorking ? null : ((c.endDate || null) as DateString | null),
+    startDate: start,
+    endDate: end,
     isWorking: c.isWorking,
   };
 }
 
 function toCareerUpdateDTO(c: CareerForm) {
+  const start = toLocalDateOrNull(c.startDate);
+  if (!start) throw new Error(`시작일 형식이 올바르지 않아요. (YYYY-MM) 현재: ${c.startDate}`);
+
+  const end = c.isWorking ? null : toLocalDateOrNull(c.endDate);
+
   return {
     careerId: c.careerId,
     companyName: c.companyName.trim(),
     position: c.position.trim(),
-    startDate: c.startDate as DateString,
-    endDate: c.isWorking ? null : ((c.endDate || null) as DateString | null),
+    startDate: start,
+    endDate: end,
     isWorking: c.isWorking,
   };
 }
@@ -189,12 +207,15 @@ export default function MyEditPage({ initialProfile }: Props) {
     const careersToUpdate = values.careers.filter((c) => c.careerId > 0).map(toCareerUpdateDTO);
 
     const payload: UpdateProfileRequestDTO = {
-      email: values.email.trim(),
-      university: values.university.trim(),
-      graduateSchool: values.hasGraduateSchool ? values.graduateSchool.trim() : undefined,
-      selfIntroduction: values.selfIntroduction.trim(),
-      link: values.link.trim(),
-      phoneNumber: values.phoneNumber.trim(),
+      email: normalizeTextString(values.email),
+      university: normalizeTextString(values.university),
+      graduateSchool: values.hasGraduateSchool
+        ? normalizeTextString(values.graduateSchool)
+        : undefined,
+
+      selfIntroduction: normalizeTextString(values.selfIntroduction),
+      link: normalizeTextString(values.link),
+      phoneNumber: normalizeTextString(values.phoneNumber),
       phoneNumberPublic: values.phoneNumberPublic,
       profileImageUrl: undefined,
       isProfileImageChanged: false,
@@ -514,7 +535,7 @@ export default function MyEditPage({ initialProfile }: Props) {
                       name={`careers.${index}.startDate`}
                       rules={{
                         required: '시작일은 필수예요.',
-                        validate: (v) => isDateString(v) || 'YYYY-MM-DD 형식으로 입력해주세요.',
+                        validate: (v) => isYearMonth(v) || 'YYYY-MM 형식으로 입력해주세요.',
                       }}
                       render={({ field }) => (
                         <TextArea
@@ -526,7 +547,7 @@ export default function MyEditPage({ initialProfile }: Props) {
                             void trigger(field.name);
                           }}
                           onBlur={field.onBlur}
-                          placeholder="2025-12-29"
+                          placeholder="2025-01"
                           className="flex-1"
                         />
                       )}
@@ -542,7 +563,7 @@ export default function MyEditPage({ initialProfile }: Props) {
                           const working = getValues(`careers.${index}.isWorking`);
                           if (working) return true;
                           if (!v) return true;
-                          return isDateString(v) || 'YYYY-MM-DD 형식으로 입력해주세요.';
+                          return isYearMonth(v) || 'YYYY-MM 형식으로 입력해주세요.';
                         },
                       }}
                       render={({ field }) => (
@@ -555,7 +576,7 @@ export default function MyEditPage({ initialProfile }: Props) {
                             void trigger(field.name);
                           }}
                           onBlur={field.onBlur}
-                          placeholder={isWorking ? '재직 중' : '2025-12-29'}
+                          placeholder={isWorking ? '재직 중' : '2025-01'}
                           isDisabled={isWorking}
                           className="flex-1"
                         />

@@ -19,6 +19,7 @@ import { usePostInitialization } from '@/features/post/post-form/model/usePostIn
 import { usePostDirtyCheck } from '@/features/post/post-form/model/useDirtyCheck';
 
 import { EditorState, PostPageMode } from './types';
+import { useDeletePostSchedule } from '@/features/schedule/delete/model/useDelPostSchedule';
 import { useQueryClient } from '@tanstack/react-query';
 import { postQueryKeys } from '@/entities/post/api/queryKeys';
 import { scheduleQueryKeys } from '@/features/calendar/api/queryKeys';

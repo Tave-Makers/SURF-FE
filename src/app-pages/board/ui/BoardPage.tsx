@@ -30,9 +30,9 @@ const BoardPage = ({ boardId: boardIdProp }: { boardId: string }) => {
 
   const handleCategoryChange = (nextCategoryKey: string) => {
     if (nextCategoryKey === 'all') {
-      router.push(`/board/${boardId}`);
+      router.replace(`/board/${boardId}`);
     } else {
-      router.push(`/board/${boardId}?category=${nextCategoryKey}`);
+      router.replace(`/board/${boardId}?category=${nextCategoryKey}`);
     }
   };
 
@@ -46,7 +46,7 @@ const BoardPage = ({ boardId: boardIdProp }: { boardId: string }) => {
           icons: [
             {
               label: 'Search',
-              // onClickIcon: () => router.push('/board/search'),
+              onClickIcon: () => router.push('/board/search'),
             },
           ],
         }}

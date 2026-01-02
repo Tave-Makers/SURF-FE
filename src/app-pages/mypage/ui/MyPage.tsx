@@ -3,7 +3,7 @@
 import { useEffect, useRef } from 'react';
 import { useAuthStore } from '@/features/auth/model/useAuthStore';
 import { MyPageActions } from '@/widgets/mypage-actions/ui/MyPageActions';
-import { ProfileCareer } from '@/widgets/profile-career/ui/ProfileCareer';
+import { ProfileBadge } from '@/widgets/profile-badge/ui/ProfileBadge';
 import { ProfileHeader } from '@/widgets/profile-header/ui/ProfileHeader';
 import { PROFILE_EVENTS } from '@/features/profile/model/types';
 import { trackProfileEvent } from '@/features/profile/lib/trackProfileEvent';
@@ -39,7 +39,7 @@ export function MyPage({ userProfile }: Props) {
         bannerScore={userProfile.activityScore}
       />
 
-      {userProfile.careers && <ProfileCareer careers={userProfile.careers} />}
+      {userProfile.careers && <ProfileBadge careers={userProfile.careers} />}
     </div>
   );
 }

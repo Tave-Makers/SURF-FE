@@ -1,29 +1,9 @@
 'use client';
 
 import { useEffect, useId, useRef } from 'react';
-import { SolidButton, SolidButtonProps } from '../button/solid-button/SolidButton';
-import { TextButton, TextButtonProps } from '../button/text-button/TextButton';
-
-type BaseAction = {
-  label: string;
-  onClick: () => void;
-  isDisabled?: boolean;
-  className?: string;
-  testId?: string;
-};
-
-type SolidAction = BaseAction & {
-  type: 'solid';
-  variant?: SolidButtonProps['variant'];
-};
-
-type TextAction = BaseAction & {
-  type: 'text';
-  variant?: TextButtonProps['variant'];
-};
-
-type AlertAction = SolidAction | TextAction;
-type AlertState = 'default' | 'error';
+import { SolidButton } from '../button/solid-button/SolidButton';
+import { TextButton } from '../button/text-button/TextButton';
+import { AlertAction, AlertState } from '@/shared/store/alertStore';
 
 type AlertProps = {
   state: AlertState;

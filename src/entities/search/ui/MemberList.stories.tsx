@@ -1,7 +1,7 @@
 import type { Meta, StoryObj } from '@storybook/nextjs';
 
 import { MemberList } from './MemberList';
-import type { MemberItemUser } from '../model/types';
+import type { MemberSearchItem } from '../model/types';
 
 const meta: Meta<typeof MemberList> = {
   title: 'Entities/UI/Search/MemberList',
@@ -15,10 +15,11 @@ export default meta;
 
 type Story = StoryObj<typeof MemberList>;
 
-const mockMembers: MemberItemUser[] = [
+const mockMembers: MemberSearchItem[] = [
   {
     userId: 1,
     name: '테이브',
+    university: '홍익대학교',
     bio: '프론트엔드와 블록체인을 좋아합니다',
     level: 'superManager',
     chips: ['15기 디자인', '15기 프론트엔드'],
@@ -27,6 +28,7 @@ const mockMembers: MemberItemUser[] = [
   {
     userId: 2,
     name: '짱구',
+    university: '홍익대학교',
     bio: '디자인 시스템에 관심이 많아요',
     level: 'executiveManager',
     chips: ['15기 디자인', '15기 백엔드'],
@@ -35,6 +37,7 @@ const mockMembers: MemberItemUser[] = [
   {
     userId: 3,
     name: '도라에몽',
+    university: '홍익대학교',
     bio: null,
     level: 'manager',
     chips: ['15기 프론트엔드', '15기 백엔드'],
@@ -43,6 +46,8 @@ const mockMembers: MemberItemUser[] = [
   {
     userId: 4,
     name: '스펀지밥',
+    university: '홍익대학교',
+
     bio: null,
     level: 'member',
     chips: ['15기 딥러닝', '15기 데이터분석'],

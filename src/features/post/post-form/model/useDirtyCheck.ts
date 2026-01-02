@@ -1,58 +1,49 @@
 import { useCallback } from 'react';
 import { stripHtml } from '@/shared/lib/stripHtml';
 import { isSameSchedule } from '@/features/schedule/lib/scheduleUtils';
-import { EditorState, PostSnapshot } from '@/features/post/post-form/model/types';
-import { ScheduleFormData } from '@/features/schedule/create/model/types';
+import { usePostFormStore } from './usePostFormStore';
+import { useCreatePostScheduleStore } from '@/features/schedule/create-post-schedule/model/useCreatePostScheduleStore';
 
-type Props = {
-  title: string;
-  category: string;
-  editorStateRef: React.MutableRefObject<EditorState>;
-  linkedSchedule: ScheduleFormData | null;
-  reserved: boolean;
-  reservedAt: Date | null;
-  initialSnapshot: React.MutableRefObject<
-    PostSnapshot & { initialSchedule: ScheduleFormData | null }
-  >;
-};
+export const usePostDirtyCheck = () => {
+  const { title, category, content, images, initialSnapshot, reserved, reservedAt } =
+    usePostFormStore();
+  const { linkedSchedule } = useCreatePostScheduleStore();
 
-export const usePostDirtyCheck = ({
-  title,
-  category,
-  editorStateRef,
-  linkedSchedule,
-  reserved,
-  reservedAt,
-  initialSnapshot,
-}: Props) => {
   const checkHasChanges = useCallback(() => {
-    const init = initialSnapshot.current;
+    // 공통: 현재 에디터가 비어있는지 판단
+    const isEmpty = !title.trim() && stripHtml(content).trim() === '' && images.length === 0;
 
-    // 현재 상태 구성
-    const current = {
-      title,
-      category,
-      content: editorStateRef.current.content,
-      imageUrls: editorStateRef.current.images.map((img) => img.uploadedUrl ?? null),
-      reserved,
-      reservedAt,
-    };
+    // 생성 모드: 스냅샷이 없는 경우
+    if (!initialSnapshot) {
+      return {
+        hasChanges: !isEmpty,
+        isEmpty,
+        isImagesChanged: images.length > 0,
+        isReservationChanged: reserved || !!reservedAt,
+        isScheduleChanged: !!linkedSchedule,
+      };
+    }
+
+    // 수정 모드: 스냅샷이 있는 경우
+    // 현재 이미지 URL 리스트 가공 (uploadedUrl만 추출)
+    const currentImageUrls = images.map((img) => img.uploadedUrl ?? null);
 
     // 1. 기본 필드 비교
-    const isTitleChanged = current.title !== init.title;
-    const isCategoryChanged = current.category !== init.category;
-    const isContentChanged = current.content !== init.content;
-    const isImagesChanged = JSON.stringify(current.imageUrls) !== JSON.stringify(init.imageUrls);
+    const isTitleChanged = title !== initialSnapshot.title;
+    const isCategoryChanged = category !== initialSnapshot.category;
+    const isContentChanged = content !== initialSnapshot.content;
+    const isImagesChanged =
+      JSON.stringify(currentImageUrls) !== JSON.stringify(initialSnapshot.imageUrls);
 
     // 2. 예약 정보 비교
-    const isReservedToggleChanged = current.reserved !== init.reserved;
-    const currentTime = current.reservedAt?.getTime() ?? null;
-    const initTime = init.reservedAt?.getTime() ?? null;
+    const isReservedToggleChanged = reserved !== initialSnapshot.reserved;
+    const currentTime = reservedAt?.getTime() ?? null;
+    const initTime = initialSnapshot.reservedAt?.getTime() ?? null;
     const isReservationChanged = isReservedToggleChanged || currentTime !== initTime;
 
     // 3. 일정 정보 비교 (유틸 함수 사용)
     let isScheduleChanged = false;
-    const initialSchedule = init.initialSchedule;
+    const initialSchedule = initialSnapshot.initialSchedule;
 
     if (!linkedSchedule && !initialSchedule) {
       isScheduleChanged = false;
@@ -62,9 +53,6 @@ export const usePostDirtyCheck = ({
       isScheduleChanged = !isSameSchedule(linkedSchedule, initialSchedule);
     }
 
-    const isEmpty =
-      !current.title && stripHtml(current.content) === '' && current.imageUrls.length === 0;
-
     return {
       hasChanges:
         isTitleChanged ||
@@ -73,11 +61,13 @@ export const usePostDirtyCheck = ({
         isImagesChanged ||
         isReservationChanged ||
         isScheduleChanged,
+      isContentChanged,
       isImagesChanged,
       isReservationChanged,
+      isScheduleChanged,
       isEmpty,
     };
-  }, [title, category, reserved, reservedAt, linkedSchedule, editorStateRef, initialSnapshot]);
+  }, [title, category, content, images, linkedSchedule, reserved, reservedAt, initialSnapshot]);
 
   return { checkHasChanges };
 };

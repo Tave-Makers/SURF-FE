@@ -7,6 +7,7 @@ import type {
   UserLevel,
   ServerUserLevel,
 } from './types';
+import { toLabelPartMap } from '@/features/onboarding/lib/trackMapper';
 
 export function mapUserLevel(role: ServerUserLevel | UserLevel): UserLevel {
   const map: Record<ServerUserLevel, UserLevel> = {
@@ -30,6 +31,12 @@ export function mapPartToBanner(partKo: string): BannerPart | null {
     딥러닝: 'deep-learning',
   };
   return partMap[norm] ?? null;
+}
+
+export function mapMemberPartToBatch(memberPart: string): string {
+  const map: Record<string, string> = toLabelPartMap;
+  const label = map[memberPart];
+  return label ?? '미정';
 }
 
 export function mapUserProfile(dto: UserProfileApiResponse['data']): UserProfile {

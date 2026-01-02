@@ -23,6 +23,8 @@ import { TextButton } from '../button/text-button/TextButton';
 interface SheetButton {
   label: string;
   onClick?: () => void;
+  disabled?: boolean;
+  variant?: 'primary' | 'secondary' | 'danger' | 'warning';
 }
 
 interface SheetProps {
@@ -65,21 +67,34 @@ export function Sheet({
               <SolidButton
                 type="button"
                 size="l"
-                variant="secondary"
+                variant={secondaryBtn.variant || 'secondary'}
+                isDisabled={secondaryBtn.disabled}
                 onClick={secondaryBtn.onClick}
               >
                 {secondaryBtn.label}
               </SolidButton>
             )}
             {primaryBtn && (
-              <SolidButton type="button" size="l" variant="primary" onClick={primaryBtn.onClick}>
+              <SolidButton
+                type="button"
+                size="l"
+                variant={primaryBtn.variant || 'primary'}
+                isDisabled={primaryBtn.disabled}
+                onClick={primaryBtn.onClick}
+              >
                 {primaryBtn.label}
               </SolidButton>
             )}
           </div>
         )}
         {textBtn && (
-          <TextButton type="button" size="m" variant="secondary" onClick={textBtn.onClick}>
+          <TextButton
+            type="button"
+            size="m"
+            variant="secondary"
+            isDisabled={textBtn.disabled}
+            onClick={textBtn.onClick}
+          >
             {textBtn.label}
           </TextButton>
         )}
@@ -95,13 +110,13 @@ export function Sheet({
       aria-describedby={description}
       className="rounded-t-4 bg-background-normal flex w-full flex-col items-start"
     >
-      <header className="flex w-full justify-center pt-9" aria-label="드래그 핸들">
+      <header className="flex w-full justify-center pt-11" aria-label="드래그 핸들">
         <div
           className="bg-foreground-tertiary rounded-max h-[0.3125rem] w-[2.25rem]"
           aria-hidden="true"
         />
       </header>
-      <div className="flex w-full flex-col px-15 pt-11 pb-15">
+      <div className="flex w-full flex-col px-15 pt-11">
         {renderTitleSection()}
         <div
           className="scroll-hide max-h-[308px] w-full overflow-y-auto"
@@ -111,7 +126,7 @@ export function Sheet({
           {children}
         </div>
       </div>
-      {renderButtons()}
+      <div className="w-full px-15 pb-15">{renderButtons()}</div>
     </div>
   );
 }

@@ -1,56 +1,159 @@
 'use client';
 
-import { SurfIcon } from '@/shared/ui/icon/SurfIcon';
-import { SolidButton } from '@/shared/ui/button/solid-button/SolidButton';
-import * as amplitude from '@amplitude/analytics-browser';
-import { useRouter } from 'next/navigation';
-import { useToastStore } from '@/shared/store/toastStore';
-
-const handleToast = () => {
-  useToastStore.getState().show('성공');
-};
+import { useGetHome } from '@/entities/home/api/useGetHome';
+import { AnnouncementBar } from '@/entities/schedule/ui/announcement-bar/AnnouncementBar';
+import { Carousel } from '@/shared/ui/carousel/Carousel';
+import { HeaderMode } from '@/shared/ui/header/Header';
+import { Shortcut } from '@/shared/ui/shortcut/Shortcut';
+import { AppHeader } from '@/widgets/header/ui/AppHeader';
+import { LawBottomSheet } from '@/features/laws/ui/LawBottomSheet';
+import { useLawAgreement } from '@/features/laws/model/useLawAgreement';
+import { useState } from 'react';
+import { TAVE_CHANNEL_LINKS, SPONSOR_LINKS } from '@/entities/home/model/constants';
 
 export const HomePage = () => {
-  const router = useRouter();
+  const { agreements, handleCheck, isAllRequiredChecked, onClickLawDetail } = useLawAgreement();
+  const [isOpen, setIsOpen] = useState(!agreements.laws1 || !agreements.laws2 || !agreements.laws3);
+  const { data: homeData } = useGetHome();
 
-  const handleTestEvent = () => {
-    amplitude.track('TEST_EVENT', {
-      page: 'HomePage',
-      clickedAt: new Date().toISOString(),
-    });
-    console.info('[Amplitude] TEST_EVENT 전송 완료');
-  };
-
-  const handleCalendarClick = () => {
-    router.push('/home/calendar');
+  const handleShortcutClick = (link: string, label: string) => {
+    console.log(`${label} 클릭 - ${link}로 이동`);
+    // window.open(link, '_blank'); // 실제 구현 시 주석 해제
   };
 
   return (
-    <div>
-      <h1 className="text-head-26-700--1 text-background-primary">안녕하세요 hello world</h1>
-      <h1 className="text-caption-9-600--4 text-foreground-success">안녕하세요 hello world</h1>
-      {/* 기본(stroke) 아이콘 */}
-      <SurfIcon
-        name="SmileCircle"
-        size="m"
-        className="cursor-pointer text-[color:var(--color-foreground-success)] hover:text-[color:var(--color-foreground-danger)]"
-      />
+    <div className="overflow-y-auto pb-[1.61rem]">
+      <div className="absolute z-10 w-full sm:w-[360px]">
+        {/* AppHeader */}
+        <AppHeader
+          overrideHeader={{
+            mode: HeaderMode.Logo,
+            logo: <div>Custom Logo</div>,
+            icons: [
+              {
+                label: 'Bell',
+                onClickIcon: () => {
+                  console.log('알림 창으로 이동');
+                },
+              },
+            ],
+          }}
+          className="bg-transparent"
+        />
+      </div>
 
-      {/* Solid 아이콘 */}
-      <SurfIcon
-        name="SmileCircleSolid"
-        size="l"
-        className="cursor-pointer text-[color:var(--color-foreground-primary)] hover:text-[color:var(--color-foreground-warning)]"
-      />
+      <div>
+        {/* Hero Card */}
+        <div className="bg-foreground-badge-pink h-85 w-full">
+          {/* <HeroCard
+            userData={{
+              name: homeData?.userName,
+              batch: homeData?.userBatch,
+              part: homeData?.userPart,
+            }}
+            noticeData={{
+              title: homeData?.noticeDataMainText,
+              // sender: homeData?.noticeDataSender,
+            }}
+            imgData={[]} // 프론트엔드에서 결정할 부분
+          /> */}
+        </div>
 
-      <SolidButton size="s" variant="primary" onClick={handleTestEvent}>
-        Amplitude 이벤트 테스트
-      </SolidButton>
+        <div className="flex flex-col gap-16 px-13 pt-15">
+          {/* Announcement Bar */}
+          <AnnouncementBar
+            title={homeData?.announcementTitle ?? '타이틀 제목 없음'}
+            date={homeData?.announcementDate ?? '날짜없음'}
+            category="official" // 카테고리 데이터 필요 {homeData?.announcementCategory ?? 'official'}
+            onClick={() => {
+              console.log('공지사항 클릭');
+              // router.push(deepLink)
+            }}
+          />
 
-      <button className="bg-amber-300" onClick={handleCalendarClick}>
-        캘린더 화면 보기 클릭!
-      </button>
-      <button onClick={handleToast}>토스트</button>
+          {/* Carousel */}
+          <Carousel images={homeData?.carouselImages ?? []} />
+
+          {/* Shortcut Buttons */}
+          {/* 기획 측 정리 문서 필요 */}
+          <div className="flex flex-row gap-11">
+            <Shortcut
+              type="rectangle"
+              label="바로가기 1"
+              imageSrc="/path/to/image1.png"
+              onClick={() => {
+                console.log('바로가기 1 클릭');
+              }}
+            />
+            <Shortcut
+              type="rectangle"
+              label="바로가기 2"
+              imageSrc="/path/to/image2.png"
+              onClick={() => {
+                console.log('바로가기 2 클릭');
+              }}
+            />
+            <Shortcut
+              type="rectangle"
+              label="바로가기 3"
+              imageSrc="/path/to/image3.png"
+              onClick={() => {
+                console.log('바로가기 3 클릭');
+              }}
+            />
+          </div>
+
+          {/* 테이브 채널 바로가기 */}
+          <div className="flex flex-col gap-11">
+            <div className="text-body-body7 text-black">TAVE 채널 바로가기</div>
+            <div className="flex w-full flex-row gap-11">
+              {TAVE_CHANNEL_LINKS.map((channel) => (
+                <Shortcut
+                  key={channel.id}
+                  type="circle"
+                  label={channel.label}
+                  imageSrc={channel.imageSrc}
+                  onClick={() => handleShortcutClick(channel.link, channel.label)}
+                />
+              ))}
+            </div>
+          </div>
+
+          {/* 후원사 바로가기 */}
+          <div className="flex flex-col gap-11">
+            <div className="text-body-body7 text-black">후원사 바로가기</div>
+            <div className="grid grid-cols-4 gap-11">
+              {SPONSOR_LINKS.map((sponsor) => (
+                <Shortcut
+                  key={sponsor.id}
+                  type="circle"
+                  label={sponsor.label}
+                  imageSrc={sponsor.imageSrc}
+                  onClick={() => handleShortcutClick(sponsor.link, sponsor.label)}
+                />
+              ))}
+            </div>
+          </div>
+        </div>
+      </div>
+
+      {isAllRequiredChecked ? null : (
+        <LawBottomSheet
+          isOpen={isOpen}
+          onClose={() => setIsOpen(false)}
+          agreements={agreements}
+          onCheck={handleCheck}
+          onClickPrimaryBtn={() => {
+            if (isAllRequiredChecked) {
+              setIsOpen(false);
+            } else {
+              alert('필수 약관에 모두 동의해 주세요.');
+            }
+          }}
+          onClickLawDetail={onClickLawDetail}
+          allAgreed={isAllRequiredChecked}
+        />
+      )}
     </div>
   );
 };

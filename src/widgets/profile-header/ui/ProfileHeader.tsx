@@ -15,14 +15,24 @@ interface Props {
   userProfile: UserProfile;
 }
 
+function nonEmptyText(value: unknown): string | null {
+  if (typeof value !== 'string') return null;
+  const v = value.trim();
+  return v.length > 0 ? v : null;
+}
+
 export function ProfileHeader({ userProfile }: Props) {
   const BadgeIcon = USER_LEVEL_BADGE[userProfile.level];
   const showBadge = userProfile.level !== 'member' && !!BadgeIcon;
 
   const profileImg = kakaoImgNormalize(userProfile.profileImgUrl);
 
+  const introText = nonEmptyText(userProfile.selfIntroduction);
+  const linkText = nonEmptyText(userProfile.link);
+  const hasIntroOrLink = !!introText || !!linkText;
+
   const universityText = [
-    userProfile.university,
+    nonEmptyText(userProfile.university),
     userProfile.graduateSchool ? `· ${userProfile.graduateSchool}` : null,
   ]
     .filter(Boolean)
@@ -43,28 +53,31 @@ export function ProfileHeader({ userProfile }: Props) {
             ))}
           </div>
         </div>
+
         <Avatar size="l" src={profileImg} />
       </div>
 
-      <div className="flex flex-col gap-10">
-        <span className="text-caption-caption2 text-foreground-secondary">
-          {userProfile.selfIntroduction}
-        </span>
+      {hasIntroOrLink ? (
+        <div className="flex flex-col gap-10">
+          {introText ? (
+            <span className="text-caption-caption2 text-foreground-secondary">{introText}</span>
+          ) : null}
 
-        {userProfile.link ? (
-          <div className="text-foreground-quaternary flex flex-row items-center gap-5">
-            <SurfIcon name="Link" size="s" />
-            <Link
-              className="text-caption-caption4 truncate"
-              href={userProfile.link}
-              target="_blank"
-              rel="noopener noreferrer"
-            >
-              {userProfile.link}
-            </Link>
-          </div>
-        ) : null}
-      </div>
+          {linkText ? (
+            <div className="text-foreground-quaternary flex flex-row items-center gap-5">
+              <SurfIcon name="Link" size="s" />
+              <Link
+                className="text-caption-caption4 truncate"
+                href={linkText}
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                {linkText}
+              </Link>
+            </div>
+          ) : null}
+        </div>
+      ) : null}
 
       <div className="flex flex-col gap-8">
         <div className={infoRow}>
@@ -72,17 +85,19 @@ export function ProfileHeader({ userProfile }: Props) {
           <span>{userProfile.email}</span>
         </div>
 
-        {userProfile.phoneNumberPublic === true ? (
+        {userProfile.phoneNumberPublic === true && nonEmptyText(userProfile.phoneNumber) ? (
           <div className={infoRow}>
             <SurfIcon name="Telephone" size="s" />
             <span>{userProfile.phoneNumber}</span>
           </div>
         ) : null}
 
-        <div className={infoRow}>
-          <SurfIcon name="AcademicHat" size="s" />
-          <span>{universityText}</span>
-        </div>
+        {universityText ? (
+          <div className={infoRow}>
+            <SurfIcon name="AcademicHat" size="s" />
+            <span>{universityText}</span>
+          </div>
+        ) : null}
       </div>
     </section>
   );

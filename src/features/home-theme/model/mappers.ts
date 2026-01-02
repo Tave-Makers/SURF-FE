@@ -19,3 +19,12 @@ const PART_TO_CHARACTER_KEY: Record<TrackPart, ThemeCharacterKey> = {
 export function getCharacterKeyByPart(part: string): ThemeCharacterKey {
   return PART_TO_CHARACTER_KEY[part as TrackPart] ?? 'feCharacter';
 }
+
+export const PART_LABEL: Record<string, string> = {
+  BACKEND: '백엔드',
+  WEB_FRONTEND: '웹 프론트엔드',
+  APP_FRONTEND: '앱 프론트엔드',
+  DESIGN: '디자인',
+  DATA_ANALYSIS: '데이터 분석',
+  DEEP_LEARNING: '딥러닝',
+};

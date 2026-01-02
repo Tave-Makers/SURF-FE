@@ -599,6 +599,7 @@ export default function MyEditPage({ initialProfile }: Props) {
                     onClick={() => onDeleteCareer(index)}
                     tabIndex={0}
                     type="button"
+                    aria-label={`경력 ${index + 1} 삭제`}
                   >
                     삭제하기
                   </button>
@@ -614,6 +615,7 @@ export default function MyEditPage({ initialProfile }: Props) {
           onClick={onAddCareer}
           className="border-border-quaternary border"
           type="button"
+          aria-label="경력 추가하기"
         >
           경력 추가하기
         </TextButton>

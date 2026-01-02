@@ -1,6 +1,6 @@
 'use client';
 
-import { useMemo, useState } from 'react';
+import { useMemo, useRef, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import {
   Controller,
@@ -51,12 +51,6 @@ interface FormValues {
   hasGraduateSchool: boolean;
   graduateSchool: string;
   careers: CareerForm[];
-}
-
-let tempCareerIdCounter = 0;
-function makeTempCareerId() {
-  // 음수 ID: 새로 생성된 경력 (서버 미저장 상태)
-  return -++tempCareerIdCounter;
 }
 
 function isYearMonth(value: string): value is DateString {
@@ -127,7 +121,12 @@ function findFirstErrorPath<TFieldValues extends FieldValues>(
 export default function MyEditPage({ initialProfile }: Props) {
   const router = useRouter();
   const { uploadImages } = useImageUploader();
+  const tempCareerIdCounter = useRef(0);
 
+  const makeTempCareerId = () => {
+    // 새로 생성된 경력 음수 ID로 임시저장
+    return -++tempCareerIdCounter.current;
+  };
   const defaultCareers: CareerForm[] = useMemo(() => {
     const src = initialProfile.careers ?? [];
     return src.map((c) => ({

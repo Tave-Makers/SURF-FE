@@ -8,6 +8,7 @@ import type {
   DateString,
 } from './types';
 import { toLabelPartMap } from '@/features/onboarding/lib/trackMapper';
+import { normalizeTextNullable } from './normalize';
 
 export function mapUserLevel(role: ServerUserLevel | UserLevel): UserLevel {
   const map: Record<ServerUserLevel, UserLevel> = {
@@ -54,14 +55,14 @@ export function mapUserProfile(dto: UserProfileApiResponse['data']): UserProfile
 
   return {
     username: dto.username,
-    selfIntroduction: dto.selfIntroduction,
-    link: dto.link ?? null,
+    selfIntroduction: normalizeTextNullable(dto.selfIntroduction) ?? '',
+    link: normalizeTextNullable(dto.link),
     profileImgUrl: dto.profileImageUrl,
     phoneNumber: dto.phoneNumber,
     phoneNumberPublic: dto.phoneNumberPublic,
     email: dto.email,
     university: dto.university ?? null,
-    graduateSchool: dto.graduateSchool,
+    graduateSchool: dto.graduateSchool ?? null,
     level: mapUserLevel(dto.role),
     activityScore: dto.activityScore,
     isActive: dto.isActive,

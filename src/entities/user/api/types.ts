@@ -7,8 +7,8 @@ export type UserProfileApiResponse = CommonResponse<{
   profileImageUrl: string;
   phoneNumber: string;
   phoneNumberPublic: boolean;
-  selfIntroduction: string;
-  link: string;
+  selfIntroduction: string | null;
+  link: string | null;
   email: string;
   university: string | null;
   graduateSchool: string | null;

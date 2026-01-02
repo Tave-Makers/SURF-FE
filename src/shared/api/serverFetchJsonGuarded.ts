@@ -1,7 +1,6 @@
 import type { ServerFetchOptions } from './types';
+import type { Guard } from './types';
 import { serverFetchWithCookies } from './serverFetchWithCookies';
-
-export type Guard<T> = (x: unknown) => x is T;
 
 export async function serverFetchJsonGuarded<T>(
   path: string,

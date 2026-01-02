@@ -1,5 +1,4 @@
 import { useId } from 'react';
-import { mapPartToImageMap } from '../../model/mappers';
 
 interface UserData {
   name: string;
@@ -9,12 +8,12 @@ interface UserData {
 
 interface NoticeData {
   title: string;
-  description: string;
+  sender: string;
 }
 
 interface ImgData {
   bgImgUrl: string;
-  charImgUrl: string[];
+  charImgUrl: string;
   isDark: boolean;
 }
 
@@ -42,10 +41,6 @@ export function HeroCard({ userData, noticeData, imgData }: HeroCardProps) {
     ? 'text-foreground-static-white'
     : 'text-foreground-static-black';
 
-  const selectedCharImgUrl = imgData.charImgUrl.find((img) =>
-    img.includes(mapPartToImageMap[userData.part]),
-  );
-
   return (
     <div className="relative w-full overflow-hidden bg-transparent">
       <svg
@@ -55,6 +50,7 @@ export function HeroCard({ userData, noticeData, imgData }: HeroCardProps) {
       >
         <defs>
           {/* 배경 이미지 */}
+
           <pattern
             id={`bg-pattern-${id}`}
             patternUnits="userSpaceOnUse"
@@ -90,7 +86,7 @@ export function HeroCard({ userData, noticeData, imgData }: HeroCardProps) {
         {/* 캐릭터 이미지 */}
         <g clipPath={`url(#arc-clip-${id})`}>
           <image
-            href={selectedCharImgUrl}
+            href={imgData.charImgUrl}
             x={charX}
             y={charY}
             width={charSize}
@@ -102,12 +98,12 @@ export function HeroCard({ userData, noticeData, imgData }: HeroCardProps) {
 
       {/* 텍스트 레이어 */}
       <div className="pointer-events-none absolute inset-0 z-10 flex flex-col">
-        <div className="mt-[1.875rem] flex flex-col gap-1 px-15">
+        <div className="mt-[4.875rem] flex flex-col gap-1 px-15">
           <h1 className={`text-body-body5 ${textColor} truncate`}>{noticeData.title}</h1>
-          <h2 className={`text-body-body9 ${textColor} truncate`}>{noticeData.description}</h2>
+          <h2 className={`text-body-body9 ${textColor} truncate`}>{noticeData.sender}</h2>
         </div>
 
-        <div className="mt-auto mb-[2.5rem] ml-15 flex flex-col">
+        <div className="mt-auto mb-[2.5rem] ml-15 flex w-fit flex-col">
           <span className={`text-body-body8 ${textColor} truncate`}>{userData.name}</span>
           <span className={`text-body-body9 ${textColor} truncate`}>{userData.batch}기</span>
           <span className={`text-body-body9 ${textColor} truncate`}>{userData.part}</span>

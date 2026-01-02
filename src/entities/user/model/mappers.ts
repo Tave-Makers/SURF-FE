@@ -69,11 +69,3 @@ export function mapUserProfile(dto: UserProfileApiResponse['data']): UserProfile
     careers,
   };
 }
-
-export const mapPartToImageMap: Record<string, string> = {
-  BACKEND: 'be-character',
-  FRONTEND: 'fe-character',
-  DESIGN: 'design-character',
-  DATA_ANALYSIS: 'data-analysis-character',
-  DEEP_LEARNING: 'deep-learning-character',
-};

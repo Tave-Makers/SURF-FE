@@ -9,6 +9,7 @@ export interface HomeBanner {
 
 export interface HomeApiResponseData {
   mainText: string;
+  sender: string;
   banners: HomeBanner[];
   memberName: string;
   memberGeneration: number;

@@ -23,6 +23,7 @@ import { Checkbox } from '@/shared/ui/checkbox/Checkbox';
 import { ProfileImageUploader } from '@/features/profile/ui/upload-profile-image/ProfileImageUploader';
 import { useImageUploader } from '@/entities/image/model/useImageUploader';
 import type { UploadImage } from '@/entities/image/model/types';
+import { isValidUrl } from '@/shared/lib/validator';
 
 interface Props {
   initialProfile: UserProfile;
@@ -299,6 +300,12 @@ export default function MyEditPage({ initialProfile }: Props) {
           <Controller
             control={control}
             name="link"
+            rules={{
+              validate: (value) => {
+                if (!value || !value.trim()) return true;
+                return isValidUrl(value) || 'URL 형식이 올바르지 않아요.';
+              },
+            }}
             render={({ field }) => (
               <TextArea
                 id={field.name}
@@ -307,6 +314,7 @@ export default function MyEditPage({ initialProfile }: Props) {
                 onChange={field.onChange}
                 onBlur={field.onBlur}
                 placeholder="블로그, 포트폴리오 등 링크"
+                errorMessage={errors.link?.message}
               />
             )}
           />

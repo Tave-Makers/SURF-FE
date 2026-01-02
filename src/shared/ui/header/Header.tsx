@@ -132,15 +132,17 @@ export function Header({ className, ...props }: HeaderProps) {
       content = (
         <>
           {renderLeftIcon(hasLeftIcon, onClickBack)}
-          <TextInput
-            mode="search"
-            value={value}
-            onChange={onChange}
-            onEnter={onSubmit}
-            placeholder="검색어를 입력하세요"
-            iconName="Search"
-            onIconClick={() => onSubmit(value)}
-          />
+          <div className="min-w-0 flex-1">
+            <TextInput
+              mode="search"
+              value={value}
+              onChange={onChange}
+              onEnter={onSubmit}
+              placeholder="검색어를 입력하세요"
+              iconName="Search"
+              onIconClick={() => onSubmit(value)}
+            />
+          </div>
         </>
       );
       break;

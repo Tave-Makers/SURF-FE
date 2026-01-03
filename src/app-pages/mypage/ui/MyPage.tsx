@@ -39,7 +39,7 @@ export function MyPage({ userProfile }: Props) {
         bannerScore={userProfile.activityScore}
       />
 
-      {userProfile.careers && <ProfileBadge careers={userProfile.careers} />}
+      {userProfile.careers.length > 0 && <ProfileBadge careers={userProfile.careers} />}
     </div>
   );
 }

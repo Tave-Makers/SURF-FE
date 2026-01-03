@@ -1,4 +1,4 @@
-import { ImageItemResponse, PostScheduleData } from '../api/types';
+import { ImageItemResponse } from '../api/types';
 import { POST_BOARDS } from './board';
 import { PostCategoryLabel } from './category';
 
@@ -28,7 +28,7 @@ export type PostDetail = {
   isMine: boolean;
   categoryId: number;
   categoryLabel: string | null;
-  schedule?: PostScheduleData | null;
+  scheduleId: number | null;
   profileImageUrl?: string;
   postedAt: string;
 };
@@ -45,7 +45,7 @@ export type Post = {
   date: string;
   pinned: boolean;
   isReserved: boolean;
-  boardId: number | null;
+  boardId: number;
   likeCount: number;
   isLiked: boolean;
   scrappedByMe: boolean;

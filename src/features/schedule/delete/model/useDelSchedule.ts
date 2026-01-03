@@ -6,8 +6,22 @@ export const useDeleteSchedule = () => {
   const queryClient = useQueryClient();
 
   return useMutation({
+    mutationKey: ['schedule', 'delete', 'calendar'],
     mutationFn: delSchedule,
-    onSuccess: () => queryClient.invalidateQueries({ queryKey: scheduleQueryKeys.all }),
+
+    onSuccess: () => {
+      // 1) 캘린더 목록 (월별 포함)
+      void queryClient.invalidateQueries({
+        queryKey: scheduleQueryKeys.lists(),
+      });
+
+      // 2) 일정 단건 캐시들
+      void queryClient.invalidateQueries({
+        queryKey: scheduleQueryKeys.details(),
+      });
+      console.log('일정 삭제 성공');
+    },
+
     onError: (error) => {
       if (process.env.NODE_ENV === 'development') {
         console.error('일정 삭제 실패', error);

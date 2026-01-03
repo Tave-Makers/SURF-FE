@@ -1,129 +1,149 @@
 import { useEffect } from 'react';
 import { POST_CATEGORIES, PostCategoryKey } from '@/entities/post/model/category';
 import { ScheduleCategory } from '@/entities/schedule/model/types';
-import { isSameSchedule } from '@/features/schedule/lib/scheduleUtils';
-import { PostPageMode, PostSnapshot } from '@/features/post/post-form/model/types';
+import { PostFormState, PostPageMode } from '@/features/post/post-form/model/types';
 import { ScheduleFormData } from '@/features/schedule/create/model/types';
 import { PostDetail } from '@/entities/post/model/types';
 import { PostScheduleData } from '@/entities/post/api/types';
+import { UploadImage } from '@/entities/image/model/types';
+import { usePostFormStore } from './usePostFormStore';
 
-// 필요한 타입 정의 (너무 길면 별도 interface로 분리)
-type Props = {
+type PostFormActions = Pick<PostFormState, 'setField' | 'setEditorState'>;
+
+interface Props extends PostFormActions {
   mode: PostPageMode;
   postDetail: PostDetail | undefined;
   postSchedule: PostScheduleData | undefined;
   linkedSchedule: ScheduleFormData | null;
   setLinkedSchedule: (data: ScheduleFormData) => void;
-  setTitle: (title: string) => void;
-  selectCategory: (key: PostCategoryKey) => void;
-  setReserved: (val: boolean) => void;
-  setReservedAt: (date: Date | null) => void;
-  initialSnapshot: React.MutableRefObject<
-    PostSnapshot & { initialSchedule: ScheduleFormData | null }
-  >;
-  isScheduleInitializedRef: React.MutableRefObject<boolean>;
-};
+  isInitializedRef: React.RefObject<boolean>;
+  isScheduleFetching: boolean;
+}
 
 export const usePostInitialization = ({
   mode,
   postDetail,
   postSchedule,
   linkedSchedule,
+  setField,
+  setEditorState,
   setLinkedSchedule,
-  setTitle,
-  selectCategory,
-  setReserved,
-  setReservedAt,
-  initialSnapshot,
-  isScheduleInitializedRef,
+  isInitializedRef,
+  isScheduleFetching,
 }: Props) => {
-  useEffect(() => {
-    // 1. 가드 절
-    if (mode === 'create' || isScheduleInitializedRef.current) return;
+  const { initialSnapshot, setSnapshot, content, images } = usePostFormStore();
 
-    // 이미 스토어에 데이터가 있으면(수정 후 복귀) 초기화 건너뜀
-    if (linkedSchedule) {
-      isScheduleInitializedRef.current = true;
+  useEffect(() => {
+    // 1. 초기화 가드
+    if (mode === 'create' || isInitializedRef.current) return;
+    if (mode === 'edit' && !postDetail) return;
+    // 일정이 있는 게시글인데, 일정을 아직 가져오지 못했거나 '새로 가져오는 중(Fetching)'이면 대기
+    if (postDetail?.hasSchedule && (postSchedule === undefined || isScheduleFetching)) {
       return;
     }
 
-    if (mode === 'edit' && postDetail) {
-      // 2. 기본 정보 초기화
-      setTitle(postDetail.title);
-      const matchedEntry = Object.entries(POST_CATEGORIES).find(
-        ([_, value]) => value.label === postDetail.categoryLabel,
-      );
-      const initialCategory = matchedEntry ? (matchedEntry[0] as PostCategoryKey) : 'event';
-      selectCategory(initialCategory);
+    // 이미 스냅샷이 있는 경우 (뒤로가기 등 세션 유지 상황)
+    if (initialSnapshot) {
+      setEditorState(content, images);
+      isInitializedRef.current = true;
+      return;
+    }
 
-      // 3. 예약 정보 초기화
-      let initialReserved = false;
-      let initialReservedAt: Date | null = null;
-      if (postDetail.postedAt) {
-        const postedDate = new Date(postDetail.postedAt);
-        if (postedDate > new Date()) {
-          initialReserved = true;
-          initialReservedAt = postedDate;
-        }
+    // 게시글에 연동된 일정이 있으나, 일정 데이터가 아직 로딩 중인 경우 대기
+    if (postDetail?.hasSchedule && postSchedule === undefined) {
+      return;
+    }
+
+    // 2. 데이터 매핑
+
+    // 카테고리 매핑
+    const matchedEntry = Object.entries(POST_CATEGORIES).find(
+      ([_, value]) => value.label === postDetail?.categoryLabel,
+    );
+    const initialCategory = matchedEntry ? (matchedEntry[0] as PostCategoryKey) : 'event';
+
+    // 예약 정보 계산
+    let initialReserved = false;
+    let initialReservedAt: Date | null = null;
+    if (postDetail?.postedAt) {
+      const postedDate = new Date(postDetail.postedAt);
+      if (postedDate > new Date()) {
+        initialReserved = true;
+        initialReservedAt = postedDate;
       }
-      setReserved(initialReserved);
-      setReservedAt(initialReservedAt);
+    }
 
-      // 4. 일정 정보 초기화
-      let initialScheduleData: ScheduleFormData | null = null;
+    // 일정 정보 매핑
+    let initialScheduleData: ScheduleFormData | null = null;
+    if (postSchedule) {
+      const mappedCategory =
+        postSchedule.category === 'operation' || postSchedule.category === 'other'
+          ? postSchedule.category
+          : 'regular';
 
-      if (postSchedule) {
-        const mappedCategory =
-          postSchedule.category === 'operation' || postSchedule.category === 'other'
-            ? postSchedule.category
-            : 'regular';
-
-        const newScheduleData = {
-          id: postSchedule.scheduleId,
-          title: postSchedule.title,
-          startDate: new Date(postSchedule.startAt),
-          endDate: new Date(postSchedule.endAt),
-          location: postSchedule.location ?? '미정',
-          category: mappedCategory as ScheduleCategory,
-        };
-
-        initialScheduleData = newScheduleData;
-
-        // 동기화 필요 여부 확인 (유틸 사용)
-        const shouldSyncStore = !isSameSchedule(linkedSchedule, newScheduleData);
-        if (shouldSyncStore) {
-          console.log('초기 데이터 동기화 수행');
-          setLinkedSchedule(newScheduleData);
-          isScheduleInitializedRef.current = true;
-        }
-      }
-
-      // 5. 스냅샷 저장
-      initialSnapshot.current = {
-        title: postDetail.title,
-        category: initialCategory,
-        content: postDetail.content ?? '',
-        imageUrls: (postDetail.imageUrlList || [])
-          .sort((a, b) => a.sequence - b.sequence)
-          .map((img) => img.originalUrl),
-        reserved: initialReserved,
-        reservedAt: initialReservedAt,
-        scheduleId: postSchedule?.scheduleId ?? null,
-        initialSchedule: initialScheduleData,
+      initialScheduleData = {
+        id: postSchedule.scheduleId,
+        title: postSchedule.title,
+        startDate: new Date(postSchedule.startAt),
+        endDate: new Date(postSchedule.endAt),
+        location: postSchedule.location ?? '미정',
+        category: mappedCategory as ScheduleCategory,
       };
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+
+    // 이미지 리스트 매핑
+    const mappedImages: UploadImage[] = (postDetail?.imageUrlList || [])
+      .sort((a, b) => a.sequence - b.sequence)
+      .map((img) => ({
+        id: img.originalUrl,
+        preview: img.originalUrl,
+        status: 'uploaded' as const,
+        uploadedUrl: img.originalUrl,
+        file: null,
+      }));
+
+    // 3. 상태 주입
+    const contentValue = postDetail?.content ?? '';
+
+    setField('title', postDetail?.title ?? '');
+    setField('content', contentValue);
+    setField('category', initialCategory);
+    setField('reserved', initialReserved);
+    setField('reservedAt', initialReservedAt);
+
+    if (initialScheduleData && !linkedSchedule) {
+      setLinkedSchedule(initialScheduleData);
+    }
+
+    // 에디터 엔진에 데이터 주입
+    setEditorState(contentValue, mappedImages);
+
+    // 4. 완료 및 스냅샷 저장
+    setSnapshot({
+      title: postDetail?.title ?? '',
+      category: initialCategory,
+      content: contentValue,
+      imageUrls: mappedImages.map((img) => img.uploadedUrl!),
+      reserved: initialReserved,
+      reservedAt: initialReservedAt,
+      scheduleId: postSchedule?.scheduleId ?? null,
+      initialSchedule: initialScheduleData,
+    });
+
+    isInitializedRef.current = true;
   }, [
     mode,
     postDetail,
     postSchedule,
-    linkedSchedule,
-    // 의존성 배열에 Setter들은 안전하므로 생략 가능하지만, 명시해도 됨
+    initialSnapshot,
+    setSnapshot,
+    setField,
+    setEditorState,
     setLinkedSchedule,
-    setTitle,
-    selectCategory,
-    setReserved,
-    setReservedAt,
-    // Ref는 의존성 배열에 넣지 않아도 됨
+    isInitializedRef,
+    linkedSchedule,
+    content,
+    images,
+    isScheduleFetching,
   ]);
 };

@@ -3,14 +3,14 @@
 import { useState, useMemo } from 'react';
 import { useRouter, useParams, useSearchParams } from 'next/navigation';
 import { useForm, FormProvider } from 'react-hook-form';
-import { format } from 'date-fns';
+import { format, roundToNearestMinutes } from 'date-fns';
 
 // Hooks & Store
 import { useScheduleFormInit } from '@/features/schedule/model/useScheduleFormInit';
 import { useCreateSchedule } from '@/features/schedule/create/model/useCreateSchedule';
 import { useEditSchedule } from '@/features/schedule/edit/model/useEditSchedule';
 import { useCreatePostScheduleStore } from '@/features/schedule/create-post-schedule/model/useCreatePostScheduleStore';
-import { useGetPostScheduleQuery } from '@/features/post/model/useGetPostScheduleQuery'; // ✅ 추가된 쿼리
+import { useGetSingleSchedule } from '@/features/schedule/edit/model/useGetSingleSchedule';
 
 // UI & Types
 import { mapScheduleFormToRequest } from '@/features/schedule/create/api/mapper';
@@ -36,10 +36,6 @@ export default function ScheduleEditorContainer({ entryPoint }: Props) {
   const paramId = Array.isArray(params?.id) ? params.id[0] : params?.id;
   const scheduleId = paramId ? Number(paramId) : undefined;
 
-  // [Post] ID는 Query String
-  const queryPostId = searchParams.get('postId');
-  const postId = queryPostId ? Number(queryPostId) : undefined;
-
   // 모드 설정
   let calendarMode: 'create' | 'edit' = 'create';
   let postMode: 'create' | 'edit' = 'create';
@@ -55,7 +51,11 @@ export default function ScheduleEditorContainer({ entryPoint }: Props) {
   // --- 2. 데이터 패칭 (이원화 전략) ---
 
   // A. [Calendar Mode] 기존 훅 그대로 사용 (캘린더 수정 시 동작)
-  const { initialData: calendarInitialData, isLoading: isCalendarLoading } = useScheduleFormInit({
+  const {
+    initialData: calendarInitialData,
+    isLoading: isCalendarLoading,
+    isHydrated,
+  } = useScheduleFormInit({
     entryPoint,
     postMode,
     calendarMode,
@@ -66,38 +66,48 @@ export default function ScheduleEditorContainer({ entryPoint }: Props) {
   const { linkedSchedule, setLinkedSchedule } = useCreatePostScheduleStore();
 
   // C. [Post Mode] 서버 데이터 패칭 (2순위 - 새로고침 대비용)
-  // postId가 있고, 게시글 모드일 때만 호출 (API: getPostSchedule 사용)
-  const { data: serverPostSchedule, isLoading: isPostScheduleLoading } = useGetPostScheduleQuery(
-    postId!,
-    entryPoint === 'post' && !!postId,
+  const resolvedScheduleId = entryPoint === 'calendar' ? scheduleId : linkedSchedule?.id;
+
+  const { data: serverSchedule, isLoading: isScheduleLoading } = useGetSingleSchedule(
+    resolvedScheduleId,
+    {
+      enabled:
+        isHydrated &&
+        !!resolvedScheduleId &&
+        entryPoint === 'post' &&
+        postMode === 'edit' &&
+        !linkedSchedule,
+    },
   );
 
   // --- 3. 최종 초기 데이터 결정 (Merge Logic) ---
   const activeInitialData = useMemo(() => {
+    if (!isHydrated) return null;
+
     // Case 1: 게시글 모드 - Store에 데이터가 있음 (수정 중) -> 최우선
     if (entryPoint === 'post' && linkedSchedule) {
       return linkedSchedule;
     }
 
     // Case 2: 게시글 모드 - Store는 비었지만 서버 데이터 있음 (새로고침)
-    if (entryPoint === 'post' && serverPostSchedule) {
+    if (entryPoint === 'post' && serverSchedule) {
       const category =
-        serverPostSchedule.category === 'operation' || serverPostSchedule.category === 'other'
-          ? serverPostSchedule.category
+        serverSchedule.category === 'operation' || serverSchedule.category === 'other'
+          ? serverSchedule.category
           : 'regular';
 
       return {
         category: category as ScheduleCategory,
-        title: serverPostSchedule.title,
-        startDate: new Date(serverPostSchedule.startAt),
-        endDate: new Date(serverPostSchedule.endAt),
-        location: serverPostSchedule.location ?? '미정',
+        title: serverSchedule.title,
+        startDate: new Date(serverSchedule.startAt),
+        endDate: new Date(serverSchedule.endAt),
+        location: serverSchedule.location ?? '미정',
       } as ScheduleFormData;
     }
 
     // Case 3: 캘린더 모드 - 기존 훅 데이터 사용
     return calendarInitialData;
-  }, [entryPoint, linkedSchedule, serverPostSchedule, calendarInitialData]);
+  }, [entryPoint, linkedSchedule, serverSchedule, calendarInitialData, isHydrated]);
 
   // --- 4. API Mutations ---
   const { mutate: createSchedule, isPending: isCreating } = useCreateSchedule();
@@ -113,7 +123,7 @@ export default function ScheduleEditorContainer({ entryPoint }: Props) {
       endDate: new Date(),
       location: '미정',
     },
-    values: activeInitialData ?? undefined, // 비동기 데이터 주입 (reset 대신 values 사용 권장)
+    values: activeInitialData ?? undefined,
     mode: 'onChange',
   });
 
@@ -130,18 +140,22 @@ export default function ScheduleEditorContainer({ entryPoint }: Props) {
     return '완료';
   };
 
-  const currentScheduleId = linkedSchedule?.id || serverPostSchedule?.scheduleId;
+  const currentScheduleId = linkedSchedule?.id || resolvedScheduleId;
 
   const handleSubmit = (data: ScheduleFormData) => {
     if (!isFormValid || isPending) return;
 
     // [Post Mode] Zustand 저장 후 복귀
     if (entryPoint === 'post') {
+      const roundedStartDate = roundToNearestMinutes(data.startDate, { nearestTo: 30 });
+      const roundedEndDate = roundToNearestMinutes(data.endDate, { nearestTo: 30 });
+
       setLinkedSchedule({
         ...data,
-        id: currentScheduleId, // 여기서 ID를 꼭 넣어줘야 합니다!
+        id: currentScheduleId,
+        startDate: roundedStartDate,
+        endDate: roundedEndDate,
       });
-      if (process.env.NODE_ENV === 'development') console.log('Store 저장 완료');
       router.back();
       return;
     }
@@ -180,10 +194,10 @@ export default function ScheduleEditorContainer({ entryPoint }: Props) {
   };
 
   // --- 7. 로딩 처리 ---
-  const isLoading =
-    entryPoint === 'post'
-      ? !linkedSchedule && isPostScheduleLoading // 게시글 모드 로딩 조건
-      : isCalendarLoading; // 캘린더 모드 로딩 조건
+  const isLoading = useMemo(() => {
+    if (!isHydrated) return true;
+    return entryPoint === 'post' ? !linkedSchedule && isScheduleLoading : isCalendarLoading;
+  }, [isHydrated, entryPoint, linkedSchedule, isScheduleLoading, isCalendarLoading]);
 
   if (isLoading) return <div>Loading...</div>;
 

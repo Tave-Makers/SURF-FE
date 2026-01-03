@@ -57,11 +57,14 @@ export type SearchBarHeaderProps = {
   onSubmit: (value: string) => void;
 };
 
-export type HeaderProps =
+export type HeaderProps = (
   | DefaultHeaderProps
   | LogoHeaderProps
   | TextBtnHeaderProps
-  | SearchBarHeaderProps;
+  | SearchBarHeaderProps
+) & {
+  className?: string;
+};
 
 const renderLeftIcon = (hasLeftIcon?: boolean, onClickBack?: () => void) =>
   hasLeftIcon && (
@@ -97,7 +100,7 @@ const renderRightIcons = (icons: MaxThree<HeaderIcon> = []) => (
   </div>
 );
 
-export function Header(props: HeaderProps) {
+export function Header({ className, ...props }: HeaderProps) {
   let content: React.ReactNode;
 
   switch (props.mode) {
@@ -117,7 +120,7 @@ export function Header(props: HeaderProps) {
       const { logo, icons } = props;
       content = (
         <>
-          <div className="h-full flex-1">{logo}</div>
+          <div className="flex h-full flex-1">{logo}</div>
           {renderRightIcons(icons ?? [])}
         </>
       );
@@ -129,15 +132,17 @@ export function Header(props: HeaderProps) {
       content = (
         <>
           {renderLeftIcon(hasLeftIcon, onClickBack)}
-          <TextInput
-            mode="search"
-            value={value}
-            onChange={onChange}
-            onEnter={onSubmit}
-            placeholder="검색어를 입력하세요"
-            iconName="Search"
-            onIconClick={() => onSubmit(value)}
-          />
+          <div className="min-w-0 flex-1">
+            <TextInput
+              mode="search"
+              value={value}
+              onChange={onChange}
+              onEnter={onSubmit}
+              placeholder="검색어를 입력하세요"
+              iconName="Search"
+              onIconClick={() => onSubmit(value)}
+            />
+          </div>
         </>
       );
       break;
@@ -177,7 +182,9 @@ export function Header(props: HeaderProps) {
   }
 
   return (
-    <header className="bg-background-normal-lighter top-0 flex h-[3rem] w-full items-center justify-between px-8 py-5">
+    <header
+      className={`top-0 flex h-[3rem] w-full items-center justify-between px-13 py-11 ${className ?? 'bg-background-normal-lighter'}`}
+    >
       {content}
     </header>
   );

@@ -12,21 +12,21 @@ export type RouteConfig = {
 };
 
 export const createRouteConfig = (router: RouterInstance): RouteConfig[] => [
-  {
-    id: 'home',
-    path: '/',
-    backPath: '/',
-    header: {
-      mode: HeaderMode.Default,
-      title: '홈',
-      hasLeftIcon: true,
-      icons: [
-        { label: 'Search', onClickIcon: () => alert('검색') },
-        { label: 'Share', onClickIcon: () => alert('공유') },
-        { label: 'DotsVertical', onClickIcon: () => alert('메뉴') },
-      ],
-    },
-  },
+  // {
+  //   id: 'home',
+  //   path: '/home',
+  //   backPath: '/home',
+  //   header: {
+  //     mode: HeaderMode.Default,
+  //     title: '홈',
+  //     hasLeftIcon: true,
+  //     icons: [
+  //       { label: 'Search', onClickIcon: () => alert('검색') },
+  //       { label: 'Share', onClickIcon: () => alert('공유') },
+  //       { label: 'DotsVertical', onClickIcon: () => alert('메뉴') },
+  //     ],
+  //   },
+  // },
   {
     id: 'mypage',
     path: '/mypage',
@@ -202,20 +202,8 @@ export const createRouteConfig = (router: RouterInstance): RouteConfig[] => [
     },
   },
   {
-    id: 'board-search',
-    path: '/board/search',
-    backPath: '/board',
-    header: {
-      mode: HeaderMode.SearchBar,
-      hasLeftIcon: true,
-      value: '',
-      onChange: () => {},
-      onSubmit: () => {},
-    },
-  },
-  {
     id: 'home-calendar',
-    path: '/home/calendar',
+    path: '/calendar',
     backPath: '/',
     header: {
       mode: HeaderMode.Default,

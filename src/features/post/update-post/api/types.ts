@@ -7,6 +7,7 @@ export type UpdatePostRequest = {
   pinned?: boolean;
   isReservationChanged?: boolean;
   reservedAt?: string | null;
+  isContentChanged?: boolean;
   isImageChanged?: boolean;
   imageUrlList?: ImageItem[];
   hasSchedule?: boolean;

@@ -24,7 +24,7 @@ export default function KakaoCallBackPage() {
     void (async () => {
       try {
         await getKakaoLoginCallback(code);
-        router.replace('/');
+        window.location.href = '/';
       } catch (err) {
         const message =
           err instanceof Error
@@ -36,5 +36,5 @@ export default function KakaoCallBackPage() {
     })();
   }, [code, router]);
 
-  return <div>로그인 처리중...</div>;
+  return <div>로그인 콜백 처리중...</div>;
 }

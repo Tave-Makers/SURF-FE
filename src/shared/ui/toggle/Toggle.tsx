@@ -81,9 +81,6 @@ export const Toggle = forwardRef<HTMLInputElement, ToggleProps>(
     const autoId = useId();
     const inputId = id ?? autoId;
 
-    const isControlled = typeof isChecked === 'boolean';
-    const ariaChecked = isControlled ? isChecked : undefined;
-
     return (
       <label
         htmlFor={inputId}
@@ -92,12 +89,12 @@ export const Toggle = forwardRef<HTMLInputElement, ToggleProps>(
           isDisabled ? labelDisabledStyle : labelEnabledStyle,
           className,
         ].join(' ')}
-        aria-checked={ariaChecked}
       >
         <input
           id={inputId}
           ref={ref}
           type="checkbox"
+          role="switch"
           name={name}
           value={value}
           checked={isChecked}

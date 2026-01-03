@@ -27,7 +27,7 @@ export function MyPage({ userProfile }: Props) {
     trackProfileEvent(PROFILE_EVENTS.VIEW_PROFILE, {
       member_id: memberId != null ? String(memberId) : 'anonymous',
     });
-  }, [userProfile, memberId]);
+  }, [memberId]);
 
   return (
     <div className="flex h-dvh flex-col overflow-y-auto">

@@ -20,7 +20,7 @@ export const FieldGroup = ({
   return (
     <fieldset className={`m-0 flex flex-col border-0 p-0 ${className}`} role="group">
       <div className="flex flex-row gap-5 pb-10">
-        <legend className="text-title-title2 text-foreground-normal flex flex-row gap-5">
+        <span className="text-title-title2 text-foreground-normal flex flex-row gap-5">
           {title}
           {isRequired && (
             <>
@@ -30,7 +30,7 @@ export const FieldGroup = ({
               <span className="sr-only">(필수)</span>
             </>
           )}
-        </legend>
+        </span>
         {headerRight}
       </div>
       <div className="flex flex-col gap-5">{children}</div>

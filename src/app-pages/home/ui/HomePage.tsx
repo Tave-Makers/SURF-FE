@@ -10,15 +10,17 @@ import { LawBottomSheet } from '@/features/laws/ui/LawBottomSheet';
 import { useLawAgreement } from '@/features/laws/model/useLawAgreement';
 import { useState } from 'react';
 import { TAVE_CHANNEL_LINKS, SPONSOR_LINKS } from '@/entities/home/model/constants';
+import { useRouter } from 'next/navigation';
 
 export const HomePage = () => {
+  const router = useRouter();
   const { agreements, handleCheck, isAllRequiredChecked, onClickLawDetail } = useLawAgreement();
   const [isOpen, setIsOpen] = useState(!agreements.laws1 || !agreements.laws2 || !agreements.laws3);
   const { data: homeData } = useGetHome();
 
   const handleShortcutClick = (link: string, label: string) => {
     console.log(`${label} 클릭 - ${link}로 이동`);
-    // window.open(link, '_blank'); // 실제 구현 시 주석 해제
+    // window.open(link, '_blank'); // TODO: 실제 구현 시 주석 해제
   };
 
   return (
@@ -33,7 +35,7 @@ export const HomePage = () => {
               {
                 label: 'Bell',
                 onClickIcon: () => {
-                  console.log('알림 창으로 이동');
+                  router.push('/notification');
                 },
               },
             ],

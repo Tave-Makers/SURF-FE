@@ -1,37 +1,60 @@
 'use client';
 
-import { useEffect } from 'react';
+import { useEffect, useRef } from 'react';
 import { getFcmToken } from '@/shared/lib/fcm';
 import { getValidStatus } from '@/features/auth/api/getValidStatus';
+import { useRegisterToken } from '@/entities/notification/model/useRegisterToken';
+import { isAxiosError } from 'axios';
 
 export default function FCMInitializer() {
+  const { mutate: registerToken } = useRegisterToken();
+  const initRef = useRef(false);
+
   useEffect(() => {
+    if (initRef.current) return;
+    initRef.current = true;
+
     async function init() {
       try {
         // 1. 로그인 상태 확인 (API 호출)
         await getValidStatus();
 
-        // 2. 로그인 성공 시에만 FCM 토큰 발급 및 권한 요청
         if (process.env.NODE_ENV === 'development') {
           console.log('[FCMInitializer] User is logged in. Requesting FCM token...');
         }
 
+        // 2. FCM 토큰 발급 및 권한 요청
         const token = await getFcmToken();
-        if (token) {
+
+        if (!token) {
           if (process.env.NODE_ENV === 'development') {
-            console.log('FCM Initialized with token:', token);
+            console.log('[FCMInitializer] Failed to get FCM token or permission denied.');
           }
+          return;
         }
-      } catch (error) {
-        // 401, 403 등 로그인 실패 시 아무것도 하지 않음
+
+        // 3. 서버에 토큰 등록
         if (process.env.NODE_ENV === 'development') {
-          console.log('[FCMInitializer] User not logged in or auth failed.', error);
+          console.log('[FCMInitializer] Registering token to server');
+        }
+
+        registerToken({ token, platform: 'WEB' });
+      } catch (error) {
+        if (
+          isAxiosError(error) &&
+          (error.response?.status === 401 || error.response?.status === 403)
+        ) {
+          if (process.env.NODE_ENV === 'development') {
+            console.log('[FCMInitializer] User not logged in (Auth failed). Skipping FCM.');
+          }
+        } else {
+          console.error('[FCMInitializer] Unexpected error during initialization:', error);
         }
       }
     }
 
     void init();
-  }, []);
+  }, [registerToken]);
 
   return null;
 }

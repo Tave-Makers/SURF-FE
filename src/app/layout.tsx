@@ -26,9 +26,9 @@ export default function RootLayout({ children }: { children: ReactNode }) {
         />
       </head>
       <body className="flex min-h-screen items-center justify-center bg-gray-100">
-        <FCMInitializer />
         <AnalyticsProvider />
         <QueryProvider>
+          <FCMInitializer />
           <PageTrackingProvider>
             <main className="bg-background-tertiary box-content flex h-full w-dvw sm:w-[360px]">
               {children}

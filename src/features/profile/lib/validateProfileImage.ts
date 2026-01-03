@@ -12,24 +12,27 @@ async function validateProfileImage(file: File): Promise<void> {
   const img = new Image();
 
   await new Promise<void>((resolve, reject) => {
+    const objectUrl = URL.createObjectURL(file);
+
     img.onload = () => {
       const { width, height } = img;
+
+      URL.revokeObjectURL(objectUrl);
 
       if (width < MIN_SIZE || height < MIN_SIZE || width > MAX_SIZE || height > MAX_SIZE) {
         reject(new Error('이미지 크기는 200×200 이상, 4096×4096 이하여야 합니다.'));
         return;
       }
 
-      //   if (width !== height) {
-      //     reject(new Error('프로필 이미지는 1:1 비율이어야 합니다.'));
-      //     return;
-      //   }
-
       resolve();
     };
 
-    img.onerror = () => reject(new Error('이미지를 불러올 수 없습니다.'));
-    img.src = URL.createObjectURL(file);
+    img.onerror = () => {
+      URL.revokeObjectURL(objectUrl);
+      reject(new Error('이미지를 불러올 수 없습니다.'));
+    };
+
+    img.src = objectUrl;
   });
 }
 

@@ -31,7 +31,7 @@ export const ProfileImageUploader = ({ file, initialImageUrl, onChange }: Props)
       <input ref={inputRef} type="file" accept="image/*" onChange={handleImageChange} hidden />
 
       <button type="button" onClick={() => inputRef.current?.click()}>
-        {displayImageUrl ? <Avatar src={displayImageUrl} size="xl" /> : <Avatar size="xl" />}
+        <Avatar src={displayImageUrl} size="xl" />
       </button>
     </div>
   );

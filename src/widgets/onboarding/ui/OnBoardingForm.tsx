@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { useFormContext, useFormState } from 'react-hook-form';
+import { useFormContext, useWatch } from 'react-hook-form';
 import OnBoardingLayout from './OnBoardingLayout';
 import { ONBOARDING_EVENTS, OnBoardingFormData } from '@/features/onboarding/model/types';
 import { ProfileStep } from '@/features/onboarding/ui/ProfileStep';
@@ -52,28 +52,35 @@ export default function OnBoardingForm() {
       validationFields: ['email', 'phoneNumber'],
     },
   ];
+
   const StepComponent = steps[step].component;
 
-  const { control, getValues } = methods;
+  const { control } = methods;
 
-  const { errors, touchedFields } = useFormState({
-    control,
-  });
+  const watchedName = useWatch({ control, name: 'name' });
+  const watchedUniversity = useWatch({ control, name: 'university' });
+  const watchedTracks = useWatch({ control, name: 'tracks' });
+  const watchedEmail = useWatch({ control, name: 'email' });
+  const watchedPhoneNumber = useWatch({ control, name: 'phoneNumber' });
+
+  const isValidEmail = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(watchedEmail ?? '');
+  const isValidPhone = /^[0-9]{10,11}$/.test(watchedPhoneNumber ?? '');
+
+  const hasValidTrack =
+    Array.isArray(watchedTracks) &&
+    watchedTracks.some((t) => t?.generation != null && t?.part != null);
+
+  const canProceedByField: Partial<Record<keyof OnBoardingFormData, boolean>> = {
+    name: (watchedName?.trim().length ?? 0) >= 2,
+    university: (watchedUniversity?.trim().length ?? 0) >= 1,
+    tracks: hasValidTrack,
+    email: isValidEmail,
+    phoneNumber: isValidPhone,
+  };
 
   const currentValidationFields = steps[step].validationFields;
 
-  const isNextBtnDisabled = currentValidationFields.some((field) => {
-    if (field === 'tracks') {
-      const tracks = getValues('tracks');
-
-      const hasValidTrack =
-        Array.isArray(tracks) && tracks.some((t) => t?.generation != null && t?.part != null);
-
-      return !hasValidTrack || !!errors.tracks;
-    }
-
-    return !touchedFields[field] || !!errors[field];
-  });
+  const isNextBtnDisabled = currentValidationFields.some((field) => !canProceedByField[field]);
 
   // step이 바뀔 때마다 signup_page_view 트래킹
   useEffect(() => {
@@ -108,7 +115,7 @@ export default function OnBoardingForm() {
     let finalProfileImageUrl = data.profileImageUrl;
 
     // 1. 새로 선택한 이미지가 있으면 S3 업로드
-    if (data.profileImage) {
+    if (data.profileImage instanceof File) {
       finalProfileImageUrl = await uploadProfileImage(data.profileImage);
     }
     // 2. 서버로 보낼 payload 구성

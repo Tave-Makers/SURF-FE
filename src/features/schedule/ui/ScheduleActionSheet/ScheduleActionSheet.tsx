@@ -1,5 +1,3 @@
-'use client';
-
 import { useState } from 'react';
 import { createPortal } from 'react-dom';
 import { useRouter } from 'next/navigation';
@@ -9,6 +7,7 @@ import { SurfIcon } from '@/shared/ui/icon/SurfIcon';
 import { Sheet } from '@/shared/ui/sheet/Sheet';
 import { useDeleteSchedule } from '@/features/schedule/delete/model/useDelSchedule';
 import { useEditSchedule } from '@/features/schedule/edit/model/useEditSchedule';
+import { useToastStore } from '@/shared/store/toastStore';
 
 type ScheduleActionSheetProps = {
   scheduleId: string | number;
@@ -29,6 +28,7 @@ export function ScheduleActionSheet({
   const router = useRouter();
   const [showDeleteAlert, setShowDeleteAlert] = useState(false);
   const scheduleIdNum = typeof scheduleId === 'string' ? parseInt(scheduleId, 10) : scheduleId;
+  const showToast = useToastStore((state) => state.show);
 
   // 삭제 훅 사용
   const deleteScheduleMutation = useDeleteSchedule();
@@ -39,7 +39,7 @@ export function ScheduleActionSheet({
   const handleEditClick = () => {
     // 수정 폼 페이지로 이동
     onClose();
-    router.push(`/home/calendar/schedule/${scheduleId}/edit`);
+    router.push(`/calendar/schedule/${scheduleId}/edit`);
   };
 
   const handleDeleteConfirm = () => {
@@ -47,6 +47,11 @@ export function ScheduleActionSheet({
     deleteScheduleMutation.mutate(scheduleIdNum, {
       onSuccess: () => {
         onDeleteSuccess?.();
+        showToast('일정이 삭제되었습니다.');
+        onClose();
+      },
+      onError: () => {
+        showToast('일정 삭제에 실패했습니다.');
         onClose();
       },
     });
@@ -62,7 +67,6 @@ export function ScheduleActionSheet({
     <>
       <ModalSheet isOpen={isOpen} onClose={onClose} className="mx-auto flex w-full sm:w-[360px]">
         <ModalSheet.Container>
-          <ModalSheet.Header />
           <ModalSheet.Content>
             <Sheet>
               <div>
@@ -89,7 +93,7 @@ export function ScheduleActionSheet({
             </Sheet>
           </ModalSheet.Content>
         </ModalSheet.Container>
-        <ModalSheet.Backdrop onClick={onClose} className="bg-black/70" />
+        <ModalSheet.Backdrop onClick={onClose} className="bg-effect-overlay-dim-normal" />
       </ModalSheet>
 
       {createPortal(

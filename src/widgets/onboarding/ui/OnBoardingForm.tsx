@@ -82,27 +82,35 @@ export default function OnBoardingForm() {
     });
   }, [step]);
 
-  async function onSubmit(data: OnBoardingFormData) {
-    let finalProfileImageUrl = data.profileImageUrl;
-
-    // 1. 새로 선택한 이미지가 있으면 S3 업로드
-    if (data.profileImage) {
+  // 프로필 이미지 업로드
+  async function uploadProfileImage(file: File) {
+    try {
       const [result] = await uploadImages([
         {
           id: safeUUID(),
-          file: data.profileImage,
+          file,
           preview: '',
           status: 'pending',
         },
       ]);
 
       if (!result || result.status === 'error' || !result.uploadedUrl) {
-        throw new Error('PROFILE_IMAGE_UPLOAD_FAILED');
+        throw new Error();
       }
 
-      finalProfileImageUrl = result.uploadedUrl;
+      return result.uploadedUrl;
+    } catch {
+      throw new Error('PROFILE_IMAGE_UPLOAD_FAILED');
     }
+  }
 
+  async function onSubmit(data: OnBoardingFormData) {
+    let finalProfileImageUrl = data.profileImageUrl;
+
+    // 1. 새로 선택한 이미지가 있으면 S3 업로드
+    if (data.profileImage) {
+      finalProfileImageUrl = await uploadProfileImage(data.profileImage);
+    }
     // 2. 서버로 보낼 payload 구성
     const submitData = {
       ...data,

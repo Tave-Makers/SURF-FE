@@ -1,6 +1,14 @@
 export type YearMonth = `${number}-${number}`;
 export type DateString = `${number}-${number}-${number}`;
 
+export type TrackPart =
+  | 'BACKEND'
+  | 'WEB_FRONTEND'
+  | 'APP_FRONTEND'
+  | 'DESIGN'
+  | 'DATA_ANALYSIS'
+  | 'DEEP_LEARNING';
+
 export const SERVER_USER_LEVELS = [
   'SUPER_MANAGER',
   'EXECUTIVE_MANAGER',

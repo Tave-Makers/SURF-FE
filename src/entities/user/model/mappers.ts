@@ -6,9 +6,29 @@ import type {
   UserLevel,
   ServerUserLevel,
   DateString,
+  TrackPart,
 } from './types';
-import { toLabelPartMap } from '@/features/onboarding/lib/trackMapper';
 import { normalizeTextNullable } from './normalize';
+
+// 한글 → 백엔드 enum
+export const toEnumPartMap: Record<string, TrackPart> = {
+  백엔드: 'BACKEND',
+  '웹 프론트엔드': 'WEB_FRONTEND',
+  '앱 프론트엔드': 'APP_FRONTEND',
+  디자인: 'DESIGN',
+  '데이터 분석': 'DATA_ANALYSIS',
+  딥러닝: 'DEEP_LEARNING',
+};
+
+// 백엔드 enum → 한글
+export const toLabelPartMap: Record<TrackPart, string> = {
+  BACKEND: '백엔드',
+  WEB_FRONTEND: '웹 프론트엔드',
+  APP_FRONTEND: '앱 프론트엔드',
+  DESIGN: '디자인',
+  DATA_ANALYSIS: '데이터 분석',
+  DEEP_LEARNING: '딥러닝',
+};
 
 export function mapUserLevel(role: ServerUserLevel | UserLevel): UserLevel {
   const map: Record<ServerUserLevel, UserLevel> = {

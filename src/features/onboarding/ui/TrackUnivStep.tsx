@@ -11,13 +11,10 @@ import { TextArea } from '@/shared/ui/text-area/TextArea';
 import { FieldGroup } from '@/shared/ui/field-group/FieldGroup';
 import { SolidButton } from '@/shared/ui/button/solid-button/SolidButton';
 import { useState } from 'react';
-import {
-  ONBOARDING_EVENTS,
-  OnBoardingFormData,
-  TrackPart,
-} from '@/features/onboarding/model/types';
+import { ONBOARDING_EVENTS, OnBoardingFormData } from '@/features/onboarding/model/types';
 import { formatTrackLabel, mapToApiTrack } from '../lib/trackMapper';
 import { trackOnBoardingEvent } from '../lib/trackOnBoardingEvent';
+import { TrackPart } from '@/entities/user/model/types';
 
 export function TrackUnivStep() {
   const { control, setValue } = useFormContext<OnBoardingFormData>();

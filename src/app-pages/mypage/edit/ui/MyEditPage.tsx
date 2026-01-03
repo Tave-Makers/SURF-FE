@@ -204,28 +204,28 @@ export default function MyEditPage({ initialProfile }: Props) {
   }, [isDirty, careerIdsToDelete.length, isSubmitting]);
 
   const onSubmit = async (values: FormValues) => {
-    const careersToCreate = values.careers.filter((c) => c.careerId < 0).map(toCareerCreateDTO);
-    const careersToUpdate = values.careers.filter((c) => c.careerId > 0).map(toCareerUpdateDTO);
-
-    const payload: UpdateProfileRequestDTO = {
-      email: normalizeTextString(values.email),
-      university: normalizeTextString(values.university),
-      graduateSchool: values.hasGraduateSchool
-        ? normalizeTextString(values.graduateSchool)
-        : undefined,
-
-      selfIntroduction: normalizeTextString(values.selfIntroduction),
-      link: normalizeTextString(values.link),
-      phoneNumber: normalizeTextString(values.phoneNumber),
-      phoneNumberPublic: values.phoneNumberPublic,
-      profileImageUrl: undefined,
-      isProfileImageChanged: false,
-      careersToCreate: careersToCreate.length ? careersToCreate : null,
-      careersToUpdate: careersToUpdate.length ? careersToUpdate : null,
-      careerIdsToDelete: careerIdsToDelete.length ? careerIdsToDelete : null,
-    };
-
     try {
+      const careersToCreate = values.careers.filter((c) => c.careerId < 0).map(toCareerCreateDTO);
+      const careersToUpdate = values.careers.filter((c) => c.careerId > 0).map(toCareerUpdateDTO);
+
+      const payload: UpdateProfileRequestDTO = {
+        email: normalizeTextString(values.email),
+        university: normalizeTextString(values.university),
+        graduateSchool: values.hasGraduateSchool
+          ? normalizeTextString(values.graduateSchool)
+          : undefined,
+
+        selfIntroduction: normalizeTextString(values.selfIntroduction),
+        link: normalizeTextString(values.link),
+        phoneNumber: normalizeTextString(values.phoneNumber),
+        phoneNumberPublic: values.phoneNumberPublic,
+        profileImageUrl: undefined,
+        isProfileImageChanged: false,
+        careersToCreate: careersToCreate.length ? careersToCreate : null,
+        careersToUpdate: careersToUpdate.length ? careersToUpdate : null,
+        careerIdsToDelete: careerIdsToDelete.length ? careerIdsToDelete : null,
+      };
+
       if (values.profileImage) {
         const uploadTarget: UploadImage = {
           id: 'profile',

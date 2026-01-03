@@ -3,7 +3,7 @@
 import { useState, useMemo } from 'react';
 import { useRouter, useParams, useSearchParams } from 'next/navigation';
 import { useForm, FormProvider } from 'react-hook-form';
-import { format } from 'date-fns';
+import { format, roundToNearestMinutes } from 'date-fns';
 
 // Hooks & Store
 import { useScheduleFormInit } from '@/features/schedule/model/useScheduleFormInit';
@@ -51,7 +51,11 @@ export default function ScheduleEditorContainer({ entryPoint }: Props) {
   // --- 2. 데이터 패칭 (이원화 전략) ---
 
   // A. [Calendar Mode] 기존 훅 그대로 사용 (캘린더 수정 시 동작)
-  const { initialData: calendarInitialData, isLoading: isCalendarLoading } = useScheduleFormInit({
+  const {
+    initialData: calendarInitialData,
+    isLoading: isCalendarLoading,
+    isHydrated,
+  } = useScheduleFormInit({
     entryPoint,
     postMode,
     calendarMode,
@@ -68,12 +72,18 @@ export default function ScheduleEditorContainer({ entryPoint }: Props) {
     resolvedScheduleId,
     {
       enabled:
-        !!resolvedScheduleId && entryPoint === 'post' && postMode === 'edit' && !linkedSchedule,
+        isHydrated &&
+        !!resolvedScheduleId &&
+        entryPoint === 'post' &&
+        postMode === 'edit' &&
+        !linkedSchedule,
     },
   );
 
   // --- 3. 최종 초기 데이터 결정 (Merge Logic) ---
   const activeInitialData = useMemo(() => {
+    if (!isHydrated) return null;
+
     // Case 1: 게시글 모드 - Store에 데이터가 있음 (수정 중) -> 최우선
     if (entryPoint === 'post' && linkedSchedule) {
       return linkedSchedule;
@@ -97,7 +107,7 @@ export default function ScheduleEditorContainer({ entryPoint }: Props) {
 
     // Case 3: 캘린더 모드 - 기존 훅 데이터 사용
     return calendarInitialData;
-  }, [entryPoint, linkedSchedule, serverSchedule, calendarInitialData]);
+  }, [entryPoint, linkedSchedule, serverSchedule, calendarInitialData, isHydrated]);
 
   // --- 4. API Mutations ---
   const { mutate: createSchedule, isPending: isCreating } = useCreateSchedule();
@@ -137,9 +147,14 @@ export default function ScheduleEditorContainer({ entryPoint }: Props) {
 
     // [Post Mode] Zustand 저장 후 복귀
     if (entryPoint === 'post') {
+      const roundedStartDate = roundToNearestMinutes(data.startDate, { nearestTo: 30 });
+      const roundedEndDate = roundToNearestMinutes(data.endDate, { nearestTo: 30 });
+
       setLinkedSchedule({
         ...data,
         id: currentScheduleId,
+        startDate: roundedStartDate,
+        endDate: roundedEndDate,
       });
       router.back();
       return;
@@ -179,8 +194,10 @@ export default function ScheduleEditorContainer({ entryPoint }: Props) {
   };
 
   // --- 7. 로딩 처리 ---
-  const isLoading =
-    entryPoint === 'post' ? !linkedSchedule && isScheduleLoading : isCalendarLoading;
+  const isLoading = useMemo(() => {
+    if (!isHydrated) return true;
+    return entryPoint === 'post' ? !linkedSchedule && isScheduleLoading : isCalendarLoading;
+  }, [isHydrated, entryPoint, linkedSchedule, isScheduleLoading, isCalendarLoading]);
 
   if (isLoading) return <div>Loading...</div>;
 

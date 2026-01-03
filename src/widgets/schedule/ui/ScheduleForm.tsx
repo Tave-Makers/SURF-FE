@@ -13,6 +13,7 @@ import { getInitialDate } from '@/entities/calendar/utils/getInitialDate';
 import { CATEGORY_LABELS } from '@/entities/schedule/model/constants';
 import { SCHEDULE_CATEGORIES } from '@/entities/schedule/model/constants';
 import { ScheduleFormData } from '@/features/schedule/create/model/types';
+import { ensureUtcDate } from '@/features/schedule/lib/ensureUtcDate';
 
 export type ScheduleFormProps = {
   onSubmit: (data: ScheduleFormData) => void;
@@ -29,8 +30,8 @@ export default function ScheduleForm({ onSubmit, initialData }: ScheduleFormProp
       reset({
         category: initialData.category || 'regular',
         title: initialData.title ?? '',
-        startDate: initialData.startDate ? new Date(initialData.startDate) : new Date(),
-        endDate: initialData.endDate ? new Date(initialData.endDate) : new Date(),
+        startDate: ensureUtcDate(initialData.startDate),
+        endDate: ensureUtcDate(initialData.endDate),
         location: initialData.location ?? '',
       });
     }

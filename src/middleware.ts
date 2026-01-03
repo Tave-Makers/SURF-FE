@@ -23,9 +23,8 @@ export function middleware(req: NextRequest) {
 
   // optimistic 통과
   const hasAccess = req.cookies.has('accessToken');
-  const hasRefresh = req.cookies.has('refreshToken');
 
-  if (!hasAccess && !hasRefresh) {
+  if (!hasAccess) {
     return NextResponse.redirect(new URL('/login', req.url));
   }
 

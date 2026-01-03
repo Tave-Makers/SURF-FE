@@ -19,6 +19,7 @@ export const useDeleteSchedule = () => {
       void queryClient.invalidateQueries({
         queryKey: scheduleQueryKeys.details(),
       });
+      console.log('일정 삭제 성공');
     },
 
     onError: (error) => {

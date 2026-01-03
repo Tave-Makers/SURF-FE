@@ -3,8 +3,13 @@ export function isValidUrl(url: string): boolean {
     new URL(url);
     return true;
   } catch {
-    // 프로토콜 없는 경우 https://를 앞에 붙여서 재시도
-    return /^https?:\/\//.test(`https://${url.trim()}`);
+    try {
+      // 프로토콜이 없는 경우 https://를 붙여 재검증
+      new URL(`https://${url.trim()}`);
+      return true;
+    } catch {
+      return false;
+    }
   }
 }
 

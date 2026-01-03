@@ -10,7 +10,7 @@ import { SelectField } from '@/shared/ui/select-field/SelectField';
 import { TextArea } from '@/shared/ui/text-area/TextArea';
 import { FieldGroup } from '@/shared/ui/field-group/FieldGroup';
 import { SolidButton } from '@/shared/ui/button/solid-button/SolidButton';
-import { useState } from 'react';
+import { useCallback, useState } from 'react';
 import {
   ONBOARDING_EVENTS,
   OnBoardingFormData,
@@ -48,6 +48,7 @@ export function TrackUnivStep() {
     const isDuplicate = isDuplicateTrack(fields, tempTrack, editingIndex);
 
     if (isDuplicate) {
+      // TODO: 이미 선택된 기수 및 파트임을 안내하는 문구 추가
       return;
     }
 
@@ -60,6 +61,21 @@ export function TrackUnivStep() {
     setEditingIndex(null);
     setIsSheetOpen(false);
   }
+
+  const handlePickerChange = useCallback(({ period, part }: { period: string; part: string }) => {
+    try {
+      const track = mapToApiTrack(period, part);
+
+      setTempTrack((prev) => {
+        if (prev?.generation === track.generation && prev?.part === track.part) {
+          return prev;
+        }
+        return track;
+      });
+    } catch (err) {
+      console.error(err);
+    }
+  }, []);
 
   return (
     <>
@@ -160,23 +176,7 @@ export function TrackUnivStep() {
           <ModalSheet.Content>
             <Sheet>
               <div className="flex flex-col gap-[1.25rem]">
-                <WheelPicker
-                  initPeriodIdx={0}
-                  initPartIdx={0}
-                  onChange={({ period, part }) => {
-                    try {
-                      const track = mapToApiTrack(period, part);
-                      setTempTrack((prev) => {
-                        if (prev?.generation === track.generation && prev?.part === track.part) {
-                          return prev;
-                        }
-                        return track;
-                      });
-                    } catch (err) {
-                      console.error(err);
-                    }
-                  }}
-                />
+                <WheelPicker initPeriodIdx={0} initPartIdx={0} onChange={handlePickerChange} />
                 <SolidButton type="button" size="l" variant="primary" onClick={handleSelectTrack}>
                   선택하기
                 </SolidButton>

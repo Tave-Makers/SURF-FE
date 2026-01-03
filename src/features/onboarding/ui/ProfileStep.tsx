@@ -11,7 +11,6 @@ export function ProfileStep() {
     name: 'profileImageUrl',
   });
 
-  console.log('[ProfileStep] profileImageUrl:', profileImageUrl);
   return (
     <>
       {/* 프로필 이미지 업로더 */}

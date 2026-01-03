@@ -133,7 +133,6 @@ export default function OnBoardingForm() {
     trackOnBoardingEvent(ONBOARDING_EVENTS.SUBMIT_SIGNUP_FORM, {
       input_count: filledCount,
     });
-
     await submitOnBoarding(submitData);
   }
 

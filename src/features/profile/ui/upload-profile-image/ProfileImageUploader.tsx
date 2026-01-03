@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useMemo, useRef } from 'react';
+import { useMemo, useRef } from 'react';
 import { Avatar } from '@/shared/ui/avatar/Avatar';
 
 type Props = {
@@ -17,13 +17,6 @@ export const ProfileImageUploader = ({ file, initialImageUrl, onChange }: Props)
     if (!file) return null;
     return URL.createObjectURL(file);
   }, [file]);
-
-  /** preview URL 메모리 해제 */
-  useEffect(() => {
-    return () => {
-      if (previewUrl) URL.revokeObjectURL(previewUrl);
-    };
-  }, [previewUrl]);
 
   const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const selected = e.target.files?.[0];

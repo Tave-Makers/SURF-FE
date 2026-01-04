@@ -12,15 +12,15 @@ export default function OnBoardingPage() {
   const methods = useForm<OnBoardingFormData>({
     defaultValues: {
       name: '',
-      profileImageUrl: '',
+      profileImage: undefined,
       tracks: [{ generation: null, part: null }],
       university: '',
       graduateSchool: '',
       email: '',
       phoneNumber: '',
     },
-    mode: 'onChange',
-    reValidateMode: 'onChange',
+    mode: 'onBlur',
+    reValidateMode: 'onBlur',
   });
   useEffect(() => {
     if (profileImageUrl) {

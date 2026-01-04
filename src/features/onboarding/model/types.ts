@@ -1,6 +1,7 @@
 export type OnBoardingFormData = {
   name: string;
-  profileImageUrl: string;
+  profileImage?: File;
+  profileImageUrl?: string;
   tracks: TrackInfo[];
   university: string;
   graduateSchool?: string;

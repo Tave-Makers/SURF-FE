@@ -40,7 +40,7 @@ export function ScheduleActionSheet({
   const handleEditClick = () => {
     // 수정 폼 페이지로 이동
     onClose();
-    router.push(PAGE_ROUTES.CALENDAR.edit(scheduleId));
+    router.push(PAGE_ROUTES.CALENDAR.SCHEDULE_EDIT(scheduleId));
   };
 
   const handleDeleteConfirm = () => {

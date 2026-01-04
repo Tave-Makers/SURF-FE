@@ -8,8 +8,8 @@ export const PAGE_ROUTES = {
   CALENDAR: {
     MAIN: '/calendar',
     CREATE: '/calendar/schedule/create',
-    detail: (id: string | number) => `/calendar/schedule/${id}`,
-    edit: (id: string | number) => `/calendar/schedule/${id}/edit`,
+    SCHEDULE_DETAIL: (id: string | number) => `/calendar/schedule/${id}`,
+    SCHEDULE_EDIT: (id: string | number) => `/calendar/schedule/${id}/edit`,
   },
 
   // 게시판 관련

@@ -117,13 +117,15 @@ export default function ScheduleEditorContainer({ entryPoint }: Props) {
   const isPending = isCreating || isEditing;
 
   // --- 5. React Hook Form ---
+  const defaultDate = roundToNearestMinutes(new Date(), { nearestTo: 30, roundingMethod: 'ceil' });
+
   const methods = useForm<ScheduleFormData>({
     defaultValues: {
       category: 'regular',
       title: '',
-      startDate: new Date(),
-      endDate: new Date(),
-      location: '미정',
+      startDate: defaultDate,
+      endDate: defaultDate,
+      location: '',
     },
     values: activeInitialData ?? undefined,
     mode: 'onChange',
@@ -147,13 +149,18 @@ export default function ScheduleEditorContainer({ entryPoint }: Props) {
   const handleSubmit = (data: ScheduleFormData) => {
     if (!isFormValid || isPending) return;
 
+    const safeData = {
+      ...data,
+      location: data.location?.trim() ? data.location : '미정',
+    };
+
     // [Post Mode] Zustand 저장 후 복귀
     if (entryPoint === 'post') {
-      const roundedStartDate = roundToNearestMinutes(data.startDate, { nearestTo: 30 });
-      const roundedEndDate = roundToNearestMinutes(data.endDate, { nearestTo: 30 });
+      const roundedStartDate = roundToNearestMinutes(safeData.startDate, { nearestTo: 30 });
+      const roundedEndDate = roundToNearestMinutes(safeData.endDate, { nearestTo: 30 });
 
       setLinkedSchedule({
-        ...data,
+        ...safeData,
         id: currentScheduleId,
         startDate: roundedStartDate,
         endDate: roundedEndDate,
@@ -163,11 +170,11 @@ export default function ScheduleEditorContainer({ entryPoint }: Props) {
     }
 
     // [Calendar Mode] API 호출
-    const baseRequestData = mapScheduleFormToRequest(data);
+    const baseRequestData = mapScheduleFormToRequest(safeData);
     const requestData = {
       ...baseRequestData,
-      startAt: format(data.startDate, "yyyy-MM-dd'T'HH:mm:ss"),
-      endAt: format(data.endDate, "yyyy-MM-dd'T'HH:mm:ss"),
+      startAt: format(safeData.startDate, "yyyy-MM-dd'T'HH:mm:ss"),
+      endAt: format(safeData.endDate, "yyyy-MM-dd'T'HH:mm:ss"),
     };
 
     if (isCalendarEdit && scheduleId) {

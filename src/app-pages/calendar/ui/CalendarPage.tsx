@@ -12,8 +12,14 @@ export function CalendarPage() {
   const router = useRouter();
   const [month, setMonth] = useState<Date>(new Date());
 
-  const { data: userData } = useGetValidStatus();
+  const { data: userData, isLoading, isError } = useGetValidStatus();
   const memberRole = userData?.memberRole || 'member';
+
+  if (isError) {
+    if (process.env.NODE_ENV === 'development') {
+      console.error('Failed to fetch user status');
+    }
+  }
 
   const { data: schedules = {} } = useGetCalendarSchedule(
     month.getFullYear(),
@@ -30,7 +36,7 @@ export function CalendarPage() {
         <Calendar month={month} onMonthChange={setMonth} schedules={schedules} />
       </div>
 
-      {memberRole !== 'member' && (
+      {!isLoading && memberRole !== 'member' && (
         <div className="absolute right-15 bottom-15 z-50">
           <PostFab onClick={handleCreateSchedule} />
         </div>

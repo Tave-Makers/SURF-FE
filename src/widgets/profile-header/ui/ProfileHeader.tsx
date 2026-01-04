@@ -8,7 +8,7 @@ import { USER_LEVEL_BADGE } from '@/entities/user/ui/user-level/UserLevelBadges'
 import { SurfIcon } from '@/shared/ui/icon/SurfIcon';
 import { kakaoImgNormalize } from '@/shared/lib/kakaoImgNormalize';
 import type { UserProfile } from '@/entities/user/model/types';
-import { normalizeUrl } from '@/shared/lib/validator';
+import { normalizeUrl, formatPhoneNumber } from '@/shared/lib/validator';
 
 const infoRow = 'text-caption-caption6 text-foreground-normal flex flex-row items-center gap-5';
 
@@ -40,7 +40,7 @@ export function ProfileHeader({ userProfile }: Props) {
     .join(' ');
 
   return (
-    <section className="flex flex-col gap-11 px-13 pt-13 pb-11">
+    <section className="flex w-full flex-col gap-11 px-13 pt-13 pb-11">
       <div className="flex flex-row items-end justify-between gap-8">
         <div className="flex flex-col gap-7">
           <div className="flex flex-row items-center gap-7">
@@ -59,13 +59,13 @@ export function ProfileHeader({ userProfile }: Props) {
       </div>
 
       {hasIntroOrLink ? (
-        <div className="flex flex-col gap-10">
+        <div className="flex w-full flex-col gap-10">
           {introText ? (
             <span className="text-caption-caption2 text-foreground-secondary">{introText}</span>
           ) : null}
 
           {linkText ? (
-            <div className="text-foreground-quaternary flex flex-row items-center gap-5">
+            <div className="text-foreground-quaternary flex w-full flex-row gap-5">
               <SurfIcon name="Link" size="s" />
               <Link
                 className="text-caption-caption4 truncate"
@@ -89,7 +89,7 @@ export function ProfileHeader({ userProfile }: Props) {
         {userProfile.phoneNumberPublic === true && nonEmptyText(userProfile.phoneNumber) ? (
           <div className={infoRow}>
             <SurfIcon name="Telephone" size="s" />
-            <span>{userProfile.phoneNumber}</span>
+            <span>{formatPhoneNumber(userProfile.phoneNumber)}</span>
           </div>
         ) : null}
 

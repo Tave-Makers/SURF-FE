@@ -1,3 +1,4 @@
+/* eslint-disable jsx-a11y/no-noninteractive-element-interactions */
 'use client';
 
 import { forwardRef, useId, type ChangeEvent, type InputHTMLAttributes } from 'react';
@@ -6,7 +7,7 @@ const labelBaseStyle = 'inline-flex w-fit items-center gap-10 group';
 const labelEnabledStyle = 'cursor-pointer';
 const labelDisabledStyle = 'cursor-not-allowed!';
 
-const inputHiddenStyle = 'sr-only';
+const inputHiddenStyle = 'absolute inset-0 opacity-0 cursor-pointer';
 
 const trackStyle = `relative h-[1.1875rem] w-[1.875rem] rounded-full
   bg-background-secondary transition-colors duration-300
@@ -82,13 +83,15 @@ export const Toggle = forwardRef<HTMLInputElement, ToggleProps>(
     const inputId = id ?? autoId;
 
     return (
+      // eslint-disable-next-line jsx-a11y/click-events-have-key-events
       <label
-        htmlFor={inputId}
         className={[
           labelBaseStyle,
           isDisabled ? labelDisabledStyle : labelEnabledStyle,
           className,
+          'relative',
         ].join(' ')}
+        onClick={(e) => e.stopPropagation()}
       >
         <input
           id={inputId}

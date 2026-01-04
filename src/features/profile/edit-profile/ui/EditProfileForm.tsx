@@ -143,7 +143,7 @@ export const EditProfileForm = forwardRef<EditProfileFormHandle, Props>(function
 ) {
   const router = useRouter();
   const toast = useToastStore((s) => s.show);
-  const { isAlive, getSignal } = useAbortableLifeCycle();
+  const { isAlive, startRequest } = useAbortableLifeCycle();
 
   const { uploadImages } = useImageUploader();
 
@@ -231,7 +231,7 @@ export const EditProfileForm = forwardRef<EditProfileFormHandle, Props>(function
 
   const onSubmit = useCallback(
     async (values: FormValues) => {
-      const signal = getSignal();
+      const signal = startRequest();
 
       try {
         const careersToCreate = values.careers.filter((c) => c.careerId < 0).map(toCareerCreateDTO);
@@ -303,7 +303,7 @@ export const EditProfileForm = forwardRef<EditProfileFormHandle, Props>(function
         toast(e instanceof Error ? e.message : '프로필 수정 중 오류가 발생했습니다.');
       }
     },
-    [careerIdsToDelete, uploadImages, toast, router, getSignal, isAlive],
+    [careerIdsToDelete, uploadImages, toast, router, startRequest, isAlive],
   );
 
   const onInvalid = useCallback(() => {

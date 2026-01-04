@@ -6,24 +6,23 @@ export function useAbortableLifeCycle() {
 
   useEffect(() => {
     mountedRef.current = true;
-    if (!abortRef.current) {
-      abortRef.current = new AbortController();
-    }
-
     return () => {
       mountedRef.current = false;
       abortRef.current?.abort();
     };
   }, []);
 
-  const isAlive = useCallback(() => mountedRef.current && !abortRef.current?.signal.aborted, []);
+  const isAlive = useCallback(() => {
+    return mountedRef.current && !abortRef.current?.signal.aborted;
+  }, []);
 
-  const getSignal = useCallback(() => {
-    if (!abortRef.current) abortRef.current = new AbortController();
+  const startRequest = useCallback(() => {
+    abortRef.current?.abort();
+    abortRef.current = new AbortController();
     return abortRef.current.signal;
   }, []);
 
   const abort = useCallback(() => abortRef.current?.abort(), []);
 
-  return { isAlive, getSignal, abort };
+  return { isAlive, startRequest, abort };
 }

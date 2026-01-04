@@ -6,7 +6,9 @@ export function useAbortableLifeCycle() {
 
   useEffect(() => {
     mountedRef.current = true;
-    abortRef.current = new AbortController();
+    if (!abortRef.current) {
+      abortRef.current = new AbortController();
+    }
 
     return () => {
       mountedRef.current = false;

@@ -1,7 +1,8 @@
 'use client';
 
-import { useEffect, useMemo, useRef } from 'react';
+import { useMemo, useRef } from 'react';
 import { Avatar } from '@/shared/ui/avatar/Avatar';
+import { validateProfileImage } from '@/features/profile/lib/validateProfileImage';
 
 type Props = {
   file?: File;
@@ -18,24 +19,33 @@ export const ProfileImageUploader = ({ file, initialImageUrl, onChange }: Props)
     return URL.createObjectURL(file);
   }, [file]);
 
-  /** preview URL 메모리 해제 */
-  useEffect(() => {
-    return () => {
-      if (previewUrl) URL.revokeObjectURL(previewUrl);
-    };
-  }, [previewUrl]);
-
-  const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const handleImageChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
     const selected = e.target.files?.[0];
     if (!selected) return;
-    onChange(selected);
+    try {
+      await validateProfileImage(selected);
+      onChange(selected);
+    } catch (error) {
+      if (error instanceof Error) {
+        alert(error.message);
+      }
+      e.target.value = '';
+    }
   };
 
   const displayImageUrl = previewUrl ?? initialImageUrl;
 
   return (
     <div>
-      <input ref={inputRef} type="file" accept="image/*" onChange={handleImageChange} hidden />
+      <input
+        ref={inputRef}
+        type="file"
+        accept="image/*"
+        onChange={(e) => {
+          void handleImageChange(e);
+        }}
+        hidden
+      />
 
       <button type="button" onClick={() => inputRef.current?.click()}>
         <Avatar src={displayImageUrl} size="xl" />

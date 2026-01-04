@@ -54,6 +54,8 @@ export default function PostPage(props: PostPageProps) {
     handleBack,
     handleSubmit,
     resetPostState,
+    isPublished,
+    isReserved,
   } = usePostForm({ mode, boardId, postId });
 
   // 예약 시간 임시 저장용 state (취소 시 롤백 위함)
@@ -121,7 +123,7 @@ export default function PostPage(props: PostPageProps) {
       </div>
 
       {/* 예약중 태그 */}
-      {reserved && reservedAt && (
+      {isReserved && (
         <div className="px-13 pt-10">
           <PostBadge type="reservation" />
         </div>
@@ -183,6 +185,7 @@ export default function PostPage(props: PostPageProps) {
           onChange={handleEditorChange}
           onScheduleRemove={handleScheduleRemove}
           onReservationClick={openReservationModal}
+          isPublished={isPublished}
         />
       </div>
 

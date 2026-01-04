@@ -588,6 +588,13 @@ export const EditProfileForm = forwardRef<EditProfileFormHandle, Props>(function
                     <Controller
                       control={control}
                       name={`careers.${index}.endDate`}
+                      rules={{
+                        validate: (value) => {
+                          if (isWorking) return true;
+                          if (!value || !value.trim()) return '종료일은 필수에요.';
+                          return true;
+                        },
+                      }}
                       render={({ field }) => (
                         <TextArea
                           id={field.name}

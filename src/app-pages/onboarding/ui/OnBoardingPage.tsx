@@ -14,7 +14,8 @@ export default function OnBoardingPage() {
   const methods = useForm<OnBoardingFormData>({
     defaultValues: {
       name: '',
-      profileImage: undefined,
+      profileImage: undefined, // File 객체용
+      profileImageUrl: '', // 카카오 URL용
       tracks: [{ generation: null, part: null }],
       university: '',
       graduateSchool: '',

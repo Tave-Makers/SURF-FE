@@ -14,7 +14,11 @@ import { useGetSingleSchedule } from '@/features/schedule/edit/model/useGetSingl
 import { useToastStore } from '@/shared/store/toastStore';
 
 // UI & Types
-import { mapScheduleFormToRequest } from '@/features/schedule/create/api/mapper';
+import {
+  mapScheduleFormToRequest,
+  toFormLocation,
+  toServerLocation,
+} from '@/features/schedule/create/api/mapper';
 import { AppHeader } from '@/widgets/header/ui/AppHeader';
 import { HeaderMode } from '@/shared/ui/header/Header';
 import { Alert } from '@/shared/ui/alert/Alert';
@@ -103,7 +107,7 @@ export default function ScheduleEditorContainer({ entryPoint }: Props) {
         title: serverSchedule.title,
         startDate: new Date(serverSchedule.startAt),
         endDate: new Date(serverSchedule.endAt),
-        location: serverSchedule.location === '미정' ? '' : (serverSchedule.location ?? ''),
+        location: toFormLocation(serverSchedule.location),
       } as ScheduleFormData;
     }
 
@@ -111,8 +115,7 @@ export default function ScheduleEditorContainer({ entryPoint }: Props) {
     if (calendarInitialData) {
       return {
         ...calendarInitialData,
-        location:
-          calendarInitialData.location === '미정' ? '' : (calendarInitialData.location ?? ''),
+        location: toFormLocation(calendarInitialData.location),
       };
     }
     return null;
@@ -159,7 +162,7 @@ export default function ScheduleEditorContainer({ entryPoint }: Props) {
 
     const safeData = {
       ...data,
-      location: data.location?.trim() ? data.location : '미정',
+      location: toServerLocation(data.location),
     };
 
     // [Post Mode] Zustand 저장 후 복귀

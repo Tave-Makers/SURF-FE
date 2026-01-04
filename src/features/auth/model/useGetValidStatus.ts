@@ -8,6 +8,5 @@ export function useGetValidStatus() {
     queryKey: GET_VALID_STATUS_KEY,
     queryFn: getValidStatus,
     retry: false,
-    staleTime: 1000 * 60 * 5,
   });
 }

@@ -12,6 +12,7 @@ import { DefaultError } from '@/shared/lib/handleApiError';
 import { trackOnBoardingEvent } from '@/features/onboarding/lib/trackOnBoardingEvent';
 import { useImageUploader } from '@/entities/image/model/useImageUploader';
 import { safeUUID } from '@/shared/utils/uuid';
+import { Alert } from '@/shared/ui/alert/Alert';
 
 const STEP_ANALYTICS_NAMES: Record<number, 'nickname' | 'track' | 'contact'> = {
   0: 'nickname',
@@ -22,6 +23,7 @@ const STEP_ANALYTICS_NAMES: Record<number, 'nickname' | 'track' | 'contact'> = {
 export default function OnBoardingForm() {
   const [step, setStep] = useState(0);
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [isAlertOpen, setIsAlertOpen] = useState(false);
   const methods = useFormContext<OnBoardingFormData>();
   const router = useRouter();
   type StepConfig = {
@@ -134,6 +136,7 @@ export default function OnBoardingForm() {
       input_count: filledCount,
     });
     await submitOnBoarding(submitData);
+    setIsAlertOpen(true);
   }
 
   async function handleNext() {
@@ -148,7 +151,6 @@ export default function OnBoardingForm() {
     try {
       setIsSubmitting(true);
       await methods.handleSubmit(onSubmit)();
-      router.push('/home');
     } catch (error) {
       if (error instanceof Error && error.message === 'PROFILE_IMAGE_UPLOAD_FAILED') {
         alert('프로필 이미지 업로드에 실패했습니다.');
@@ -179,19 +181,39 @@ export default function OnBoardingForm() {
   }
 
   return (
-    <OnBoardingLayout
-      step={step}
-      setStep={setStep}
-      title={steps[step].title}
-      description={steps[step].description}
-      onNextBtnClick={() => {
-        void handleNext();
-      }}
-      isFinalStep={step === steps.length - 1}
-      isNextBtnDisabled={isNextBtnDisabled}
-      isSubmitting={isSubmitting}
-    >
-      <StepComponent />
-    </OnBoardingLayout>
+    <>
+      <OnBoardingLayout
+        step={step}
+        setStep={setStep}
+        title={steps[step].title}
+        description={steps[step].description}
+        onNextBtnClick={() => {
+          void handleNext();
+        }}
+        isFinalStep={step === steps.length - 1}
+        isNextBtnDisabled={isNextBtnDisabled}
+        isSubmitting={isSubmitting}
+      >
+        <StepComponent />
+      </OnBoardingLayout>
+      <Alert
+        state="default"
+        title="회원가입이 완료되었어요!"
+        infoText="회원가입이 완료되었습니다. 회원 승인 절차가 완료되면 정상적으로 SURF를 이용하실 수 있습니다."
+        isOpen={isAlertOpen}
+        onClose={() => setIsAlertOpen(false)}
+        actions={[
+          {
+            type: 'text',
+            variant: 'primary',
+            label: '확인',
+            onClick: () => {
+              setIsAlertOpen(false);
+              router.push('/login');
+            },
+          },
+        ]}
+      />
+    </>
   );
 }

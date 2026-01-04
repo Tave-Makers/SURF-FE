@@ -11,6 +11,7 @@ import { useCreateSchedule } from '@/features/schedule/create/model/useCreateSch
 import { useEditSchedule } from '@/features/schedule/edit/model/useEditSchedule';
 import { useCreatePostScheduleStore } from '@/features/schedule/create-post-schedule/model/useCreatePostScheduleStore';
 import { useGetSingleSchedule } from '@/features/schedule/edit/model/useGetSingleSchedule';
+import { useToastStore } from '@/shared/store/toastStore';
 
 // UI & Types
 import { mapScheduleFormToRequest } from '@/features/schedule/create/api/mapper';
@@ -27,6 +28,7 @@ type Props = {
 
 export default function ScheduleEditorContainer({ entryPoint }: Props) {
   const router = useRouter();
+  const showToast = useToastStore((state) => state.show);
   const params = useParams();
   const searchParams = useSearchParams();
   const [showExitAlert, setShowExitAlert] = useState(false);
@@ -173,7 +175,7 @@ export default function ScheduleEditorContainer({ entryPoint }: Props) {
         { scheduleId, data: requestData },
         {
           onSuccess: () => {
-            alert('일정 수정 완료');
+            showToast('일정이 수정되었습니다.');
             router.back();
           },
         },
@@ -181,7 +183,7 @@ export default function ScheduleEditorContainer({ entryPoint }: Props) {
     } else {
       createSchedule(requestData, {
         onSuccess: () => {
-          alert('일정 생성 완료');
+          showToast('일정이 생성되었습니다.');
           router.back();
         },
       });

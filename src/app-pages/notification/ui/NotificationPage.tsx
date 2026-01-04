@@ -21,7 +21,7 @@ export function NotificationPage() {
   const [currentTab, setCurrentTab] = useState<NotificationTab>('ALL');
 
   const { data, isLoading } = useGetNotifications(currentTab);
-  const { mutate: readNotification } = useReadNotification();
+  const { mutate: readNotification, isPending } = useReadNotification();
 
   const handleBack = () => {
     router.back();
@@ -57,6 +57,10 @@ export function NotificationPage() {
         SCHEDULE: '새로운 일정 알림이 없습니다.',
       };
       return <div className="p-20 text-center text-gray-500">{emptyMessages[currentTab]}</div>;
+    }
+
+    if (isPending) {
+      return <div className="p-20 text-center text-gray-500">로딩 중...</div>;
     }
 
     // 데이터가 있을 때

@@ -326,7 +326,12 @@ export const EditProfileForm = forwardRef<EditProfileFormHandle, Props>(function
   );
 
   return (
-    <div>
+    <form
+      onSubmit={(e) => {
+        e.preventDefault();
+      }}
+      aria-label="프로필 편집 폼"
+    >
       <div className="flex items-center justify-center gap-10 self-stretch pt-19 pb-10">
         <Controller
           name="profileImage"
@@ -673,6 +678,6 @@ export const EditProfileForm = forwardRef<EditProfileFormHandle, Props>(function
           경력 추가하기
         </TextButton>
       </div>
-    </div>
+    </form>
   );
 });

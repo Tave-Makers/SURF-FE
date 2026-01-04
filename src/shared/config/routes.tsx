@@ -186,7 +186,7 @@ export const createRouteConfig = (router: RouterInstance): RouteConfig[] => [
   },
   {
     id: 'board',
-    path: PAGE_ROUTES.BOARD.MAIN('[boardId]'),
+    path: PAGE_ROUTES.BOARD.MAIN,
     backPath: PAGE_ROUTES.HOME, // 임시
     header: {
       mode: HeaderMode.Default,
@@ -216,7 +216,7 @@ export const createRouteConfig = (router: RouterInstance): RouteConfig[] => [
     id: 'post-detail',
     // 게시글 목록이랑 합친 후 동적 세그먼트로 변경 예정
     path: PAGE_ROUTES.BOARD.POST_DETAIL('[boardId]', '[postId]'),
-    backPath: PAGE_ROUTES.BOARD.MAIN('[boardId]'),
+    backPath: PAGE_ROUTES.BOARD.MAIN,
     header: {
       mode: HeaderMode.Default,
       title: '공지사항',

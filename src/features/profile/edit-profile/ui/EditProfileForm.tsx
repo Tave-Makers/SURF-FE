@@ -241,7 +241,7 @@ export const EditProfileForm = forwardRef<EditProfileFormHandle, Props>(function
 
           selfIntroduction: normalizeTextString(values.selfIntroduction),
           link: normalizeTextString(values.link),
-          phoneNumber: normalizeTextString(values.phoneNumber),
+          phoneNumber: values.phoneNumber,
           phoneNumberPublic: values.phoneNumberPublic,
 
           isProfileImageChanged: false,
@@ -426,7 +426,7 @@ export const EditProfileForm = forwardRef<EditProfileFormHandle, Props>(function
                   field.onChange(digits);
                 }}
                 onBlur={field.onBlur}
-                placeholder="010-0000-0000"
+                placeholder="01012345678"
                 errorMessage={errors.phoneNumber?.message}
               />
             )}

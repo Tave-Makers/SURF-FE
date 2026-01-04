@@ -142,9 +142,8 @@ export default function Calendar({ month, onMonthChange, schedules }: CalendarPr
                 hasNotice={_ev.hasNotice}
                 postId={_ev.postId}
                 isAdmin={memberRole !== 'member'}
-                onClickCard={() =>
-                  router.push(PAGE_ROUTES.BOARD.POST_DETAIL('null', _ev.postId || ''))
-                }
+                onClickCard={() => router.push(PAGE_ROUTES.BOARD.POST_DETAIL(1, _ev.postId || ''))}
+                // 캘린더 일정 카드는 공지사항(boarId: 1)으로만 이동
               />
             )}
           />

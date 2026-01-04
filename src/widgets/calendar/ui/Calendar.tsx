@@ -5,6 +5,7 @@ import { DayPicker } from 'react-day-picker';
 import type { DayButtonProps, NavProps, MonthProps } from 'react-day-picker';
 import { ko } from 'react-day-picker/locale';
 import 'react-day-picker/style.css';
+import { PAGE_ROUTES } from '@/shared/config/path';
 import { useRouter } from 'next/navigation';
 
 import { MonthNavigator } from '@/entities/calendar/ui/MonthNavigator/MonthNavigator';
@@ -141,7 +142,9 @@ export default function Calendar({ month, onMonthChange, schedules }: CalendarPr
                 hasNotice={_ev.hasNotice}
                 postId={_ev.postId}
                 isAdmin={memberRole !== 'member'}
-                onClickCard={() => router.push(`/board/${null}/post/${_ev.postId}`)}
+                onClickCard={() =>
+                  router.push(PAGE_ROUTES.BOARD.POST_DETAIL('null', _ev.postId || ''))
+                }
               />
             )}
           />

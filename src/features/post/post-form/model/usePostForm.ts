@@ -1,5 +1,6 @@
 import { useCallback, useMemo, useRef, useState } from 'react';
 import { useRouter } from 'next/navigation';
+import { PAGE_ROUTES } from '@/shared/config/path';
 
 import { stripHtml } from '@/shared/lib/stripHtml';
 import { usePicker } from '@/shared/hooks/usePicker';
@@ -291,7 +292,7 @@ export const usePostForm = ({ mode, boardId, postId }: Props) => {
       await Promise.all(invalidatePromises);
 
       resetPostState();
-      if (targetPostId) router.replace(`/board/${boardId}/post/${targetPostId}`);
+      if (targetPostId) router.replace(PAGE_ROUTES.BOARD.POST_DETAIL(boardId, targetPostId));
     } catch (err) {
       console.error('게시글 처리 실패', err);
       alert('게시글 저장 중 오류가 발생했습니다.');

@@ -31,18 +31,13 @@ import { Checkbox } from '@/shared/ui/checkbox/Checkbox';
 
 import { ProfileImageUploader } from '@/features/profile/ui/upload-profile-image/ProfileImageUploader';
 import { useImageUploader } from '@/entities/image/model/useImageUploader';
-import type { UploadImage } from '@/entities/image/model/types';
 
-import {
-  formatPhoneNumber,
-  formatYearMonth,
-  isYearMonth,
-  isValidUrl,
-  onlyDigits,
-} from '@/shared/lib/validator';
+import { formatPhoneNumber, isYearMonth, isValidUrl, onlyDigits } from '@/shared/lib/validator';
 import { normalizeTextString } from '@/entities/user/model/normalize';
 import { useToastStore } from '@/shared/store/toastStore';
 import { useAbortableLifeCycle } from '@/shared/hooks/useAbortableLifeCycle';
+import { CareerItem } from './CareerItem';
+import type { CareerForm, FormValues } from '../model/types';
 
 export type EditProfileFormHandle = {
   submit: () => void;
@@ -52,29 +47,6 @@ type Props = {
   initialProfile: UserProfile;
   onCanSubmitChange?: (canSubmit: boolean) => void;
 };
-
-interface CareerForm {
-  careerId: number;
-  companyName: string;
-  position: string;
-  startDate: string;
-  endDate: string;
-  isWorking: boolean;
-}
-
-interface FormValues {
-  profileImage?: File;
-  profileImageUrl?: string;
-  selfIntroduction: string;
-  link: string;
-  email: string;
-  phoneNumber: string;
-  phoneNumberPublic: boolean;
-  university: string;
-  hasGraduateSchool: boolean;
-  graduateSchool: string;
-  careers: CareerForm[];
-}
 
 function toLocalDateOrNull(value: string): DateString | null {
   const t = value.trim();
@@ -86,9 +58,7 @@ function toLocalDateOrNull(value: string): DateString | null {
 function toCareerCreateDTO(c: CareerForm) {
   const start = toLocalDateOrNull(c.startDate);
   if (!start) throw new Error(`시작일 형식이 올바르지 않아요.`);
-
   const end = c.isWorking ? null : toLocalDateOrNull(c.endDate);
-
   return {
     companyName: c.companyName.trim(),
     position: c.position.trim(),
@@ -101,9 +71,7 @@ function toCareerCreateDTO(c: CareerForm) {
 function toCareerUpdateDTO(c: CareerForm) {
   const start = toLocalDateOrNull(c.startDate);
   if (!start) throw new Error(`시작일 형식이 올바르지 않아요.`);
-
   const end = c.isWorking ? null : toLocalDateOrNull(c.endDate);
-
   return {
     careerId: c.careerId,
     companyName: c.companyName.trim(),
@@ -119,11 +87,9 @@ function findFirstErrorPath<TFieldValues extends FieldValues>(
 ): FieldPath<TFieldValues> | null {
   const walk = (node: unknown, base = ''): string | null => {
     if (!node || typeof node !== 'object') return null;
-
     if ('message' in node && typeof (node as { message?: unknown }).message === 'string') {
       return base || null;
     }
-
     for (const key of Object.keys(node)) {
       const nextBase = base ? `${base}.${key}` : key;
       const child = (node as Record<string, unknown>)[key];
@@ -132,7 +98,6 @@ function findFirstErrorPath<TFieldValues extends FieldValues>(
     }
     return null;
   };
-
   const path = walk(err);
   return path ? (path as FieldPath<TFieldValues>) : null;
 }
@@ -144,10 +109,8 @@ export const EditProfileForm = forwardRef<EditProfileFormHandle, Props>(function
   const router = useRouter();
   const toast = useToastStore((s) => s.show);
   const { isActive, startRequest } = useAbortableLifeCycle();
-
   const { uploadImages } = useImageUploader();
 
-  // 새로 만든 career의 임시 id
   const tempCareerIdCounter = useRef(0);
   const makeTempCareerId = () => -++tempCareerIdCounter.current;
 
@@ -168,10 +131,11 @@ export const EditProfileForm = forwardRef<EditProfileFormHandle, Props>(function
   const {
     control,
     handleSubmit,
-    watch,
     setValue,
     setFocus,
+    clearErrors,
     trigger,
+    watch,
     formState: { isSubmitting, errors, isDirty },
   } = useForm<FormValues>({
     mode: 'onChange',
@@ -192,9 +156,9 @@ export const EditProfileForm = forwardRef<EditProfileFormHandle, Props>(function
     },
   });
 
-  const careers = watch('careers');
   const profileImageUrl = useWatch({ control, name: 'profileImageUrl' });
-  const hasGraduateSchool = watch('hasGraduateSchool');
+  const hasGraduateSchool = useWatch({ control, name: 'hasGraduateSchool' });
+  const currentCareers = watch('careers');
 
   const { fields, append, remove } = useFieldArray({
     control,
@@ -212,13 +176,16 @@ export const EditProfileForm = forwardRef<EditProfileFormHandle, Props>(function
       isWorking: false,
     });
 
-  const onDeleteCareer = (index: number) => {
-    const id = careers?.[index]?.careerId;
-    if (typeof id === 'number' && id > 0) {
-      setCareerIdsToDelete((prev) => (prev.includes(id) ? prev : [...prev, id]));
-    }
-    remove(index);
-  };
+  const onDeleteCareer = useCallback(
+    (index: number) => {
+      const id = currentCareers?.[index]?.careerId;
+      if (typeof id === 'number' && id > 0) {
+        setCareerIdsToDelete((prev) => (prev.includes(id) ? prev : [...prev, id]));
+      }
+      remove(index);
+    },
+    [currentCareers, remove],
+  );
 
   const canSubmit = useMemo(() => {
     const hasAnyChange = isDirty || careerIdsToDelete.length > 0;
@@ -232,7 +199,6 @@ export const EditProfileForm = forwardRef<EditProfileFormHandle, Props>(function
   const onSubmit = useCallback(
     async (values: FormValues) => {
       const signal = startRequest();
-
       try {
         const careersToCreate = values.careers.filter((c) => c.careerId < 0).map(toCareerCreateDTO);
         const careersToUpdate = values.careers.filter((c) => c.careerId > 0).map(toCareerUpdateDTO);
@@ -243,62 +209,36 @@ export const EditProfileForm = forwardRef<EditProfileFormHandle, Props>(function
           graduateSchool: values.hasGraduateSchool
             ? normalizeTextString(values.graduateSchool)
             : undefined,
-
           selfIntroduction: normalizeTextString(values.selfIntroduction),
           link: normalizeTextString(values.link),
           phoneNumber: values.phoneNumber,
           phoneNumberPublic: values.phoneNumberPublic,
-
           isProfileImageChanged: false,
-          profileImageUrl: undefined,
-
           careersToCreate: careersToCreate.length ? careersToCreate : null,
           careersToUpdate: careersToUpdate.length ? careersToUpdate : null,
           careerIdsToDelete: careerIdsToDelete.length ? careerIdsToDelete : null,
         };
 
         if (values.profileImage) {
-          const uploadTarget: UploadImage = {
-            id: 'profile',
-            file: values.profileImage,
-            preview: '',
-            status: 'pending',
-          };
-
-          const [result] = await uploadImages([uploadTarget]);
-
+          const [result] = await uploadImages([
+            { id: 'profile', file: values.profileImage, preview: '', status: 'pending' },
+          ]);
           if (!isActive()) return;
-
           if (result.status !== 'uploaded' || !result.uploadedUrl) {
             toast('프로필 이미지 업로드에 실패했습니다.');
             return;
           }
-
           payload.isProfileImageChanged = true;
           payload.profileImageUrl = result.uploadedUrl;
         }
 
         await updateMyProfile(payload, signal);
-
         if (!isActive()) return;
-
         toast('정보 수정이 완료되었습니다.', 1000);
         router.replace('/mypage');
         router.refresh();
       } catch (e: unknown) {
-        const error =
-          typeof e === 'object' && e !== null
-            ? (e as { name?: unknown; code?: unknown; message?: unknown })
-            : {};
-
-        const aborted =
-          error.name === 'CanceledError' ||
-          error.code === 'ERR_CANCELED' ||
-          (typeof error.message === 'string' &&
-            (error.message.includes('canceled') || error.message.includes('aborted')));
-
-        if (aborted || !isActive()) return;
-
+        if (!isActive()) return;
         console.error(e);
         toast(e instanceof Error ? e.message : '프로필 수정 중 오류가 발생했습니다.');
       }
@@ -308,30 +248,28 @@ export const EditProfileForm = forwardRef<EditProfileFormHandle, Props>(function
 
   const onInvalid = useCallback(() => {
     const first = findFirstErrorPath<FormValues>(errors);
-    if (!first) return;
-
-    setFocus(first);
-
-    requestAnimationFrame(() => {
-      document.getElementById(first)?.scrollIntoView({ behavior: 'smooth', block: 'center' });
-    });
+    if (first) {
+      setFocus(first);
+      requestAnimationFrame(() => {
+        document.getElementById(first)?.scrollIntoView({ behavior: 'smooth', block: 'center' });
+      });
+    }
   }, [errors, setFocus]);
 
-  useImperativeHandle(
-    ref,
-    () => ({
-      submit: () => void handleSubmit(onSubmit, onInvalid)(),
-    }),
-    [handleSubmit, onInvalid, onSubmit],
+  const handleProfileImageChange = useCallback(
+    (file: File) => {
+      setValue('profileImage', file, { shouldDirty: true });
+      void trigger('profileImage');
+    },
+    [setValue, trigger],
   );
 
+  useImperativeHandle(ref, () => ({
+    submit: () => void handleSubmit(onSubmit, onInvalid)(),
+  }));
+
   return (
-    <form
-      onSubmit={(e) => {
-        e.preventDefault();
-      }}
-      aria-label="프로필 편집 폼"
-    >
+    <form onSubmit={(e) => e.preventDefault()} aria-label="프로필 편집 폼">
       <div className="flex items-center justify-center gap-10 self-stretch pt-19 pb-10">
         <Controller
           name="profileImage"
@@ -339,12 +277,8 @@ export const EditProfileForm = forwardRef<EditProfileFormHandle, Props>(function
           render={({ field }) => (
             <ProfileImageUploader
               file={field.value}
-              onChange={(file) => {
-                field.onChange(file);
-                void trigger('profileImage');
-              }}
+              onChange={handleProfileImageChange}
               initialImageUrl={profileImageUrl}
-              aria-label="프로필 이미지 변경"
               imageSize="l"
             />
           )}
@@ -359,12 +293,9 @@ export const EditProfileForm = forwardRef<EditProfileFormHandle, Props>(function
             rules={{ maxLength: { value: 60, message: '최대 60자까지 입력할 수 있어요.' } }}
             render={({ field }) => (
               <TextArea
-                id={field.name}
+                {...field}
                 mode="multiLine"
                 textLimit={60}
-                value={field.value}
-                onChange={field.onChange}
-                onBlur={field.onBlur}
                 placeholder="자기소개를 입력해주세요."
                 errorMessage={errors.selfIntroduction?.message}
               />
@@ -377,18 +308,13 @@ export const EditProfileForm = forwardRef<EditProfileFormHandle, Props>(function
             control={control}
             name="link"
             rules={{
-              validate: (value) => {
-                if (!value || !value.trim()) return true;
-                return isValidUrl(value) || 'URL 형식이 올바르지 않아요.';
-              },
+              validate: (value) =>
+                !value || !value.trim() || isValidUrl(value) || 'URL 형식이 올바르지 않아요.',
             }}
             render={({ field }) => (
               <TextArea
-                id={field.name}
+                {...field}
                 mode="oneLine"
-                value={field.value}
-                onChange={field.onChange}
-                onBlur={field.onBlur}
                 placeholder="블로그, 포트폴리오 등 링크"
                 errorMessage={errors.link?.message}
               />
@@ -409,11 +335,8 @@ export const EditProfileForm = forwardRef<EditProfileFormHandle, Props>(function
             }}
             render={({ field }) => (
               <TextArea
-                id={field.name}
+                {...field}
                 mode="oneLine"
-                value={field.value}
-                onChange={field.onChange}
-                onBlur={field.onBlur}
                 placeholder="email@example.com"
                 errorMessage={errors.email?.message}
               />
@@ -439,20 +362,14 @@ export const EditProfileForm = forwardRef<EditProfileFormHandle, Props>(function
             name="phoneNumber"
             rules={{
               required: '전화번호는 필수에요.',
-              pattern: {
-                value: /^01[0-9]\d{7,8}$/,
-                message: '숫자만 10~11자리로 입력해주세요.',
-              },
+              pattern: { value: /^01[0-9]\d{7,8}$/, message: '숫자만 10~11자리로 입력해주세요.' },
             }}
             render={({ field }) => (
               <TextArea
                 id={field.name}
                 mode="oneLine"
                 value={formatPhoneNumber(field.value ?? '')}
-                onChange={(value: string) => {
-                  const digits = onlyDigits(value);
-                  field.onChange(digits);
-                }}
+                onChange={(v) => field.onChange(onlyDigits(v))}
                 onBlur={field.onBlur}
                 placeholder="01012345678"
                 errorMessage={errors.phoneNumber?.message}
@@ -469,17 +386,13 @@ export const EditProfileForm = forwardRef<EditProfileFormHandle, Props>(function
               rules={{ required: '학교는 필수에요.' }}
               render={({ field }) => (
                 <TextArea
-                  id={field.name}
+                  {...field}
                   mode="oneLine"
-                  value={field.value}
-                  onChange={field.onChange}
-                  onBlur={field.onBlur}
                   placeholder="학교"
                   errorMessage={errors.university?.message}
                 />
               )}
             />
-
             {hasGraduateSchool && (
               <Controller
                 control={control}
@@ -487,18 +400,14 @@ export const EditProfileForm = forwardRef<EditProfileFormHandle, Props>(function
                 rules={{ required: '대학원을 입력해주세요.' }}
                 render={({ field }) => (
                   <TextArea
-                    id={field.name}
+                    {...field}
                     mode="oneLine"
-                    value={field.value}
-                    onChange={field.onChange}
-                    onBlur={field.onBlur}
                     placeholder="대학원"
                     errorMessage={errors.graduateSchool?.message}
                   />
                 )}
               />
             )}
-
             <Controller
               control={control}
               name="hasGraduateSchool"
@@ -508,9 +417,7 @@ export const EditProfileForm = forwardRef<EditProfileFormHandle, Props>(function
                   isChecked={field.value}
                   onChange={(checked) => {
                     field.onChange(checked);
-                    if (!checked) {
-                      setValue('graduateSchool', '', { shouldDirty: true, shouldValidate: true });
-                    }
+                    if (!checked) setValue('graduateSchool', '', { shouldDirty: true });
                   }}
                 />
               )}
@@ -519,152 +426,18 @@ export const EditProfileForm = forwardRef<EditProfileFormHandle, Props>(function
         </FieldGroup>
 
         <div className="flex flex-col gap-16">
-          {fields.map((f, index) => {
-            const isWorking = careers?.[index]?.isWorking ?? false;
-
-            const startErr = errors.careers?.[index]?.startDate?.message;
-            const endErr = errors.careers?.[index]?.endDate?.message;
-
-            return (
-              <div key={f.rhfId} className="flex w-full flex-col gap-16">
-                <FieldGroup title={`회사명 ${index + 1}`}>
-                  <Controller
-                    control={control}
-                    name={`careers.${index}.companyName`}
-                    rules={{ required: '회사명은 필수에요.' }}
-                    render={({ field }) => (
-                      <TextArea
-                        id={field.name}
-                        mode="oneLine"
-                        value={field.value}
-                        onChange={field.onChange}
-                        onBlur={field.onBlur}
-                        placeholder="회사명을 입력하세요"
-                        errorMessage={errors.careers?.[index]?.companyName?.message}
-                      />
-                    )}
-                  />
-                </FieldGroup>
-
-                <FieldGroup title="직책">
-                  <Controller
-                    control={control}
-                    name={`careers.${index}.position`}
-                    rules={{ required: '직책은 필수에요.' }}
-                    render={({ field }) => (
-                      <TextArea
-                        id={field.name}
-                        mode="oneLine"
-                        value={field.value}
-                        onChange={field.onChange}
-                        onBlur={field.onBlur}
-                        placeholder="직책 (예: 프론트엔드 개발자)"
-                        errorMessage={errors.careers?.[index]?.position?.message}
-                      />
-                    )}
-                  />
-                </FieldGroup>
-
-                <FieldGroup
-                  title="현재 재직 중"
-                  headerRight={
-                    <Controller
-                      control={control}
-                      name={`careers.${index}.isWorking`}
-                      render={({ field }) => (
-                        <Toggle
-                          isChecked={!!field.value}
-                          onChange={(checked) => {
-                            field.onChange(checked);
-                            if (checked) {
-                              setValue(`careers.${index}.endDate`, '', {
-                                shouldDirty: true,
-                                shouldValidate: true,
-                              });
-                              void trigger([`careers.${index}.endDate`]);
-                            }
-                          }}
-                        />
-                      )}
-                    />
-                  }
-                >
-                  <div className="flex flex-row items-center gap-4">
-                    <Controller
-                      control={control}
-                      name={`careers.${index}.startDate`}
-                      rules={{
-                        required: '시작일은 필수에요.',
-                      }}
-                      render={({ field }) => (
-                        <TextArea
-                          id={field.name}
-                          mode="oneLine"
-                          value={formatYearMonth(field.value ?? '')}
-                          onChange={(v) => {
-                            field.onChange(formatYearMonth(v));
-                            void trigger(field.name);
-                          }}
-                          onBlur={field.onBlur}
-                          placeholder="202501"
-                          className="flex-1"
-                        />
-                      )}
-                    />
-
-                    <span className="text-foreground-tertiary">-</span>
-
-                    <Controller
-                      control={control}
-                      name={`careers.${index}.endDate`}
-                      rules={{
-                        validate: (value) => {
-                          if (isWorking) return true;
-                          if (!value || !value.trim()) return '종료일은 필수에요.';
-                          return true;
-                        },
-                      }}
-                      render={({ field }) => (
-                        <TextArea
-                          id={field.name}
-                          mode="oneLine"
-                          value={isWorking ? '' : formatYearMonth(field.value ?? '')}
-                          onChange={(v) => {
-                            field.onChange(formatYearMonth(v));
-                            void trigger(field.name);
-                          }}
-                          onBlur={field.onBlur}
-                          placeholder={isWorking ? '재직 중' : '202501'}
-                          isDisabled={isWorking}
-                          className="flex-1"
-                        />
-                      )}
-                    />
-                  </div>
-
-                  {(startErr || endErr) && (
-                    <div className="px-10">
-                      <span className="text-caption-caption6 text-foreground-danger">
-                        {startErr ?? endErr}
-                      </span>
-                    </div>
-                  )}
-                </FieldGroup>
-
-                <div className="flex w-full justify-end">
-                  <button
-                    className="text-body-body8 text-foreground-normal flex h-[2rem] w-[4rem] items-center justify-center"
-                    onClick={() => onDeleteCareer(index)}
-                    tabIndex={0}
-                    type="button"
-                    aria-label={`경력 ${index + 1} 삭제`}
-                  >
-                    삭제하기
-                  </button>
-                </div>
-              </div>
-            );
-          })}
+          {fields.map((f, index) => (
+            <CareerItem
+              key={f.rhfId}
+              index={index}
+              control={control}
+              errors={errors}
+              setValue={setValue}
+              clearErrors={clearErrors}
+              trigger={trigger}
+              onDelete={() => onDeleteCareer(index)}
+            />
+          ))}
         </div>
 
         <TextButton
@@ -673,7 +446,6 @@ export const EditProfileForm = forwardRef<EditProfileFormHandle, Props>(function
           onClick={onAddCareer}
           className="border-border-quaternary border"
           type="button"
-          aria-label="경력 추가하기"
         >
           경력 추가하기
         </TextButton>

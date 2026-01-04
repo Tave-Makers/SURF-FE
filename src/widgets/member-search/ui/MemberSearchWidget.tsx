@@ -18,7 +18,7 @@ export const MemberSearchWidget = ({ filters, totalCount }: MemberSearchWidgetPr
 
   // 1. 기수 메뉴 아이템 (id를 generation 숫자 그대로 사용)
   const generationItems = [
-    { id: 0, label: '기수', isSelected: !generation, onClick: () => setGeneration(undefined) },
+    { id: 0, label: '전체', isSelected: !generation, onClick: () => setGeneration(undefined) },
     ...Array.from({ length: TOTAL_GENERATION }, (_, i) => {
       const genValue = TOTAL_GENERATION - i;
       return {
@@ -32,7 +32,7 @@ export const MemberSearchWidget = ({ filters, totalCount }: MemberSearchWidgetPr
 
   // 2. 파트 메뉴 아이템 (id를 인덱스로 부여)
   const partItems = [
-    { id: 100, label: '파트', isSelected: !part, onClick: () => setPart(undefined) },
+    { id: 100, label: '전체', isSelected: !part, onClick: () => setPart(undefined) },
     ...Object.entries(toEnumPartMap).map(([label, value], index) => ({
       id: index + 101, // 101부터 시작하는 number 타입 id
       label: label,

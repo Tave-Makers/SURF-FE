@@ -1,4 +1,4 @@
-import MyEditPage from '@/app-pages/mypage/edit/ui/MyEditPage';
+import { MyEditPage } from '@/app-pages/mypage/edit/ui/MyEditPage';
 import { getMyProfile } from '@/entities/user/api/getMyProfile.server';
 import { mapUserProfile } from '@/entities/user/model/mappers';
 

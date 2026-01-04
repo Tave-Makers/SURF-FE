@@ -42,6 +42,7 @@ import {
 } from '@/shared/lib/validator';
 import { normalizeTextString } from '@/entities/user/model/normalize';
 import { useToastStore } from '@/shared/store/toastStore';
+import { useAbortableLifeCycle } from '@/shared/hooks/useAbortableLifeCycle';
 
 export type EditProfileFormHandle = {
   submit: () => void;
@@ -142,6 +143,8 @@ export const EditProfileForm = forwardRef<EditProfileFormHandle, Props>(function
 ) {
   const router = useRouter();
   const toast = useToastStore((s) => s.show);
+  const { isAlive, getSignal } = useAbortableLifeCycle();
+
   const { uploadImages } = useImageUploader();
 
   // 새로 만든 career의 임시 id
@@ -228,6 +231,8 @@ export const EditProfileForm = forwardRef<EditProfileFormHandle, Props>(function
 
   const onSubmit = useCallback(
     async (values: FormValues) => {
+      const signal = getSignal();
+
       try {
         const careersToCreate = values.careers.filter((c) => c.careerId < 0).map(toCareerCreateDTO);
         const careersToUpdate = values.careers.filter((c) => c.careerId > 0).map(toCareerUpdateDTO);
@@ -262,6 +267,8 @@ export const EditProfileForm = forwardRef<EditProfileFormHandle, Props>(function
 
           const [result] = await uploadImages([uploadTarget]);
 
+          if (!isAlive()) return;
+
           if (result.status !== 'uploaded' || !result.uploadedUrl) {
             toast('프로필 이미지 업로드에 실패했습니다.');
             return;
@@ -271,17 +278,32 @@ export const EditProfileForm = forwardRef<EditProfileFormHandle, Props>(function
           payload.profileImageUrl = result.uploadedUrl;
         }
 
-        await updateMyProfile(payload);
+        await updateMyProfile(payload, signal);
+
+        if (!isAlive()) return;
 
         toast('정보 수정이 완료되었습니다.', 1500);
         router.replace('/mypage');
         router.refresh();
-      } catch (e) {
+      } catch (e: unknown) {
+        const error =
+          typeof e === 'object' && e !== null
+            ? (e as { name?: unknown; code?: unknown; message?: unknown })
+            : {};
+
+        const aborted =
+          error.name === 'CanceledError' ||
+          error.code === 'ERR_CANCELED' ||
+          (typeof error.message === 'string' &&
+            (error.message.includes('canceled') || error.message.includes('aborted')));
+
+        if (aborted || !isAlive()) return;
+
         console.error(e);
         toast(e instanceof Error ? e.message : '프로필 수정 중 오류가 발생했습니다.');
       }
     },
-    [careerIdsToDelete, uploadImages, toast, router],
+    [careerIdsToDelete, uploadImages, toast, router, getSignal, isAlive],
   );
 
   const onInvalid = useCallback(() => {

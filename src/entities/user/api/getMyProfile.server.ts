@@ -1,21 +1,11 @@
-import { cookies } from 'next/headers';
 import type { UserProfileApiResponse } from '@/entities/user/api/types';
+import { serverFetchWithCookies } from '@/shared/api/serverFetchWithCookies';
 
 export async function getMyProfile(): Promise<UserProfileApiResponse> {
-  const cookieStore = await cookies();
-  const cookie = cookieStore
-    .getAll()
-    .map((c) => `${c.name}=${c.value}`)
-    .join('; ');
+  const res = await serverFetchWithCookies('/v1/user/members/profile');
 
-  const res = await fetch(`${process.env.API_BASE_URL}/v1/user/members/profile`, {
-    headers: cookie ? { cookie } : {},
-    cache: 'no-store',
-  });
+  if (!res.ok) throw new Error(`Failed to fetch profile: ${res.status}`);
 
-  if (!res.ok) {
-    throw new Error(`Failed to fetch profile: ${res.status}`);
-  }
-
-  return (await res.json()) as UserProfileApiResponse;
+  const raw: unknown = await res.json();
+  return raw as UserProfileApiResponse;
 }

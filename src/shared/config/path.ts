@@ -49,4 +49,5 @@ export const PAGE_ROUTES = {
     MSG_REJECTED: '/login?msg=rejected',
     MSG_INCOMPLETE: '/onboarding?msg=incomplete',
   },
+  NOTIFICATION: '/notification',
 } as const;

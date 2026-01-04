@@ -1,3 +1,5 @@
+import { PAGE_ROUTES } from '@/shared/config/path';
+
 export interface ShortcutItem {
   id: number;
   label: string;
@@ -5,7 +7,14 @@ export interface ShortcutItem {
   link: string; // 클릭 시 이동할 주소
 }
 
-// 1. TAVE 채널 데이터
+// 1. 앱 내 바로가기 데이터
+export const SHORTCUT_LINKS: ShortcutItem[] = [
+  { id: 1, label: '공지사항', imageSrc: '/icons/notice.png', link: PAGE_ROUTES.BOARD.MAIN(1) },
+  { id: 2, label: '일정', imageSrc: '/icons/notice.png', link: PAGE_ROUTES.CALENDAR.MAIN },
+  { id: 3, label: '주소록', imageSrc: '/icons/job.png', link: '/job' },
+];
+
+// 2. TAVE 채널 데이터
 export const TAVE_CHANNEL_LINKS: ShortcutItem[] = [
   {
     id: 1,
@@ -18,7 +27,7 @@ export const TAVE_CHANNEL_LINKS: ShortcutItem[] = [
   { id: 4, label: '공식 홈페이지', imageSrc: '/icons/homepage.png', link: 'https://tave.or.kr' },
 ];
 
-// 2. 후원사 데이터
+// 3. 후원사 데이터
 export const SPONSOR_LINKS: ShortcutItem[] = [
   { id: 1, label: '후원사 A', imageSrc: '/sponsors/sponsor-a.png', link: 'https://...' },
   { id: 2, label: '후원사 B', imageSrc: '/sponsors/sponsor-b.png', link: 'https://...' },

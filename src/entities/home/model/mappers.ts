@@ -3,7 +3,6 @@ import { mapMemberPartToBatch } from '@/entities/user/model/mappers';
 
 export const mapHomeDataToHomeUI = (data: HomeApiResponseData) => {
   return {
-    // 왼쪽 UI 모델에 맞게 수정 필요
     noticeDataMainText: data.mainText,
     //noticeDataSender: data.senderName,
     carouselImages: mapBannersToCarouselImages(data.banners),
@@ -12,7 +11,7 @@ export const mapHomeDataToHomeUI = (data: HomeApiResponseData) => {
     userPart: mapMemberPartToBatch(data.memberPart),
     announcementTitle: data.nextScheduleTitle,
     announcementDate: data.nextScheduleDate,
-    // deepLink: data.deepLink, // 필요시 추가
+    announcementDeepLink: data.nextScheduleDeepLink,
     // postId: data.postId,   // 필요시 추가
     // announcementCategory: data.announcementCategory, // 필요시 추가
   };

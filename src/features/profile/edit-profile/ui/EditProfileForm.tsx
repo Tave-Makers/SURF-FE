@@ -481,7 +481,6 @@ export const EditProfileForm = forwardRef<EditProfileFormHandle, Props>(function
                     field.onChange(checked);
                     if (!checked) {
                       setValue('graduateSchool', '', { shouldDirty: true, shouldValidate: true });
-                      void trigger('graduateSchool');
                     }
                   }}
                 />

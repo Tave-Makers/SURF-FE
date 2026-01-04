@@ -5,20 +5,13 @@ import { useRouter } from 'next/navigation';
 import Calendar from '@/widgets/calendar/ui/Calendar';
 import { useGetCalendarSchedule } from '@/features/calendar/model/useGetCalendarSchedule';
 import { PostFab } from '@/entities/post/ui/post-fab/PostFab';
-import { useGetValidStatus } from '@/features/auth/model/useGetValidStatus';
+import { useAuthStore } from '@/features/auth/model/useAuthStore';
 
 export function CalendarPage() {
   const router = useRouter();
   const [month, setMonth] = useState<Date>(new Date());
 
-  const { data: userData, isLoading, isError } = useGetValidStatus();
-  const memberRole = userData?.memberRole || 'member';
-
-  if (isError) {
-    if (process.env.NODE_ENV === 'development') {
-      console.error('Failed to fetch user status');
-    }
-  }
+  const memberRole = useAuthStore((s) => s.memberRole);
 
   const { data: schedules = {} } = useGetCalendarSchedule(
     month.getFullYear(),
@@ -35,7 +28,7 @@ export function CalendarPage() {
         <Calendar month={month} onMonthChange={setMonth} schedules={schedules} />
       </div>
 
-      {!isLoading && memberRole !== 'member' && (
+      {memberRole !== 'member' && (
         <div className="absolute right-15 bottom-15 z-50">
           <PostFab onClick={handleCreateSchedule} />
         </div>

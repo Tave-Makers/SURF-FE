@@ -13,8 +13,8 @@ import { EventDateCard } from '@/entities/calendar/ui/EventDateCard/EventDateCar
 import type { ActivityMap } from '@/entities/calendar/model/types';
 import { EventCard } from '@/entities/calendar/ui/EventCard/EventCard';
 import { format } from 'date-fns';
-import { useGetValidStatus } from '@/features/auth/model/useGetValidStatus';
 import { ensureUtcDate } from '@/features/schedule/lib/ensureUtcDate';
+import { useAuthStore } from '@/features/auth/model/useAuthStore';
 
 /**
  * calendarClassNames: DayPicker 컴포넌트의 클래스 네임 커스터마이징 객체
@@ -57,8 +57,7 @@ type CalendarProps = {
 export default function Calendar({ month, onMonthChange, schedules }: CalendarProps) {
   const router = useRouter();
   const [selectedDay, setSelectedDay] = useState<Date>(new Date());
-  const { data: userData } = useGetValidStatus();
-  const memberRole = userData?.memberRole || 'member';
+  const memberRole = useAuthStore((s) => s.memberRole);
 
   // 날짜 선택 핸들러
   const handleDaySelect = (date: Date | undefined) => {

@@ -92,7 +92,15 @@ export default function PostDetailPage({ postId }: PostDetailPageProps) {
     deletePostMutate(numericPostId, {
       onSuccess: () => {
         setShowDeleteAlert(false);
-        router.replace('/board/1');
+        const prevPath = document.referrer;
+        if (prevPath.includes('/settings/scraps')) {
+          router.push('/settings/scraps');
+        } else if (prevPath.includes('/settings/my-posts')) {
+          router.push('/settings/my-posts');
+        } else {
+          router.push('/board/1');
+        }
+
         showToast('게시글이 삭제되었습니다.');
       },
     });

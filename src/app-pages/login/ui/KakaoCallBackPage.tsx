@@ -29,9 +29,9 @@ export default function KakaoCallBackPage() {
         const { nickname, email, profileImageUrl } = response.data;
 
         setOnboarding({
-          nickname: nickname ?? null,
-          email: email ?? null,
-          profileImageUrl: profileImageUrl ?? null,
+          nickname: nickname,
+          email: email,
+          profileImageUrl: profileImageUrl,
         });
 
         router.push('/');

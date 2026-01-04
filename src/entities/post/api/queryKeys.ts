@@ -25,8 +25,24 @@ export const postQueryKeys = {
    * -------------------- */
   myPosts: () => [...postQueryKeys.lists(), 'me'] as const,
 
+  // 내 게시글 일반 페이징용
+  myPostsPaging: (page: number, size: number, sort: string) =>
+    [...postQueryKeys.myPosts(), 'paging', { page, size, sort }] as const,
+
+  // 내 게시글 무한 스크롤용
+  myPostsInfinite: (size: number, sort: string) =>
+    [...postQueryKeys.myPosts(), 'infinite', { size, sort }] as const,
+
   /* --------------------
    * 스크랩한 게시글
    * -------------------- */
   scraps: () => [...postQueryKeys.lists(), 'scraps'] as const,
+
+  // 일반 페이징 목록용
+  scrapPaging: (page: number, size: number, sort: string) =>
+    [...postQueryKeys.scraps(), 'paging', { page, size, sort }] as const,
+
+  // 무한 스크롤용
+  scrapInfinite: (size: number, sort: string) =>
+    [...postQueryKeys.scraps(), 'infinite', { size, sort }] as const,
 };

@@ -92,7 +92,7 @@ export default function PostDetailPage({ postId }: PostDetailPageProps) {
     deletePostMutate(numericPostId, {
       onSuccess: () => {
         setShowDeleteAlert(false);
-        router.back();
+        router.replace('/board/1');
         showToast('게시글이 삭제되었습니다.');
       },
     });

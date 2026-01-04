@@ -1,6 +1,12 @@
 import { useEffect, useRef, useCallback } from 'react';
 
-export function useAbortableLifeCycle() {
+interface AbortableLifeCycle {
+  isActive: () => boolean;
+  startRequest: () => AbortSignal;
+  abort: () => void;
+}
+
+export function useAbortableLifeCycle(): AbortableLifeCycle {
   const mountedRef = useRef(false);
   const abortRef = useRef<AbortController | null>(null);
 
@@ -12,7 +18,7 @@ export function useAbortableLifeCycle() {
     };
   }, []);
 
-  const isAlive = useCallback(() => {
+  const isActive = useCallback(() => {
     return mountedRef.current && !abortRef.current?.signal.aborted;
   }, []);
 
@@ -24,5 +30,5 @@ export function useAbortableLifeCycle() {
 
   const abort = useCallback(() => abortRef.current?.abort(), []);
 
-  return { isAlive, startRequest, abort };
+  return { isActive, startRequest, abort };
 }

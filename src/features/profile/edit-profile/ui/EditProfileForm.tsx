@@ -143,7 +143,7 @@ export const EditProfileForm = forwardRef<EditProfileFormHandle, Props>(function
 ) {
   const router = useRouter();
   const toast = useToastStore((s) => s.show);
-  const { isAlive, startRequest } = useAbortableLifeCycle();
+  const { isActive, startRequest } = useAbortableLifeCycle();
 
   const { uploadImages } = useImageUploader();
 
@@ -267,7 +267,7 @@ export const EditProfileForm = forwardRef<EditProfileFormHandle, Props>(function
 
           const [result] = await uploadImages([uploadTarget]);
 
-          if (!isAlive()) return;
+          if (!isActive()) return;
 
           if (result.status !== 'uploaded' || !result.uploadedUrl) {
             toast('프로필 이미지 업로드에 실패했습니다.');
@@ -280,9 +280,9 @@ export const EditProfileForm = forwardRef<EditProfileFormHandle, Props>(function
 
         await updateMyProfile(payload, signal);
 
-        if (!isAlive()) return;
+        if (!isActive()) return;
 
-        toast('정보 수정이 완료되었습니다.', 1500);
+        toast('정보 수정이 완료되었습니다.', 1000);
         router.replace('/mypage');
         router.refresh();
       } catch (e: unknown) {
@@ -297,13 +297,13 @@ export const EditProfileForm = forwardRef<EditProfileFormHandle, Props>(function
           (typeof error.message === 'string' &&
             (error.message.includes('canceled') || error.message.includes('aborted')));
 
-        if (aborted || !isAlive()) return;
+        if (aborted || !isActive()) return;
 
         console.error(e);
         toast(e instanceof Error ? e.message : '프로필 수정 중 오류가 발생했습니다.');
       }
     },
-    [careerIdsToDelete, uploadImages, toast, router, startRequest, isAlive],
+    [careerIdsToDelete, uploadImages, toast, router, startRequest, isActive],
   );
 
   const onInvalid = useCallback(() => {

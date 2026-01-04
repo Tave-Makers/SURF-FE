@@ -56,11 +56,6 @@ export function EventCard({
   const handleCardClick = () => {
     if (mode === 'calendar') {
       onClickCard?.();
-
-      // TODO: 공지사항 바로가기 로직 추가
-      if (process.env.NODE_ENV === 'development') {
-        console.log('EventCard clicked');
-      }
     }
   };
 

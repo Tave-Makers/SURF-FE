@@ -317,6 +317,7 @@ export const EditProfileForm = forwardRef<EditProfileFormHandle, Props>(function
                 void trigger('profileImage');
               }}
               initialImageUrl={profileImageUrl}
+              aria-label="프로필 이미지 변경"
             />
           )}
         />

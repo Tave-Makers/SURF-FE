@@ -8,6 +8,7 @@ export type ToolBarItem<K extends string> = {
   label: string;
   icon: IconName;
   active?: boolean;
+  disabled?: boolean;
 };
 
 type ToolBarProps<K extends string> = {
@@ -31,6 +32,7 @@ export function ToolBar<K extends string>({ items, onItemClick, className = '' }
           label={item.label}
           icon={item.icon}
           active={item.active}
+          disabled={item.disabled}
           onClick={() => {
             onItemClick?.(item.key);
           }}

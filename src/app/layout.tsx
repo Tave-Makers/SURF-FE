@@ -6,6 +6,7 @@ import { ReactQueryDevtools } from '@tanstack/react-query-devtools';
 import { AnalyticsProvider } from '@/app/providers/AnalyticsProvider';
 import { PageTrackingProvider } from '@/shared/analytics/providers/PageTrackingProvider';
 import GlobalComponents from '@/shared/ui/global-components/GlobalComponents';
+import FCMInitializer from '@/app/providers/FCMInitializer';
 
 export default function RootLayout({ children }: { children: ReactNode }) {
   return (
@@ -27,6 +28,7 @@ export default function RootLayout({ children }: { children: ReactNode }) {
       <body className="flex min-h-screen items-center justify-center bg-gray-100">
         <AnalyticsProvider />
         <QueryProvider>
+          <FCMInitializer />
           <PageTrackingProvider>
             <main className="bg-background-tertiary box-content flex h-full w-dvw sm:w-[360px]">
               {children}

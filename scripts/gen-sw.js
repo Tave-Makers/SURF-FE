@@ -64,4 +64,18 @@ self.addEventListener('notificationclick', function(event) {
 `;
 
 const publicDir = path.join(process.cwd(), 'public');
-fs.writeFileSync(path.join(publicDir, 'firebase-messaging-sw.js'), swContent);
+
+if (!fs.existsSync(publicDir)) {
+  fs.mkdirSync(publicDir, { recursive: true });
+}
+
+const targetPath = path.join(publicDir, 'firebase-messaging-sw.js');
+console.log(`[SW-Gen] Generating Service Worker at: ${targetPath}`);
+
+try {
+  fs.writeFileSync(targetPath, swContent);
+  console.log('[SW-Gen] Successfully generated firebase-messaging-sw.js');
+} catch (error) {
+  console.error('[SW-Gen] Failed to generate Service Worker:', error);
+  process.exit(1);
+}

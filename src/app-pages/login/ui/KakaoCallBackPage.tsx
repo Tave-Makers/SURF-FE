@@ -3,11 +3,13 @@
 import { useEffect, useRef } from 'react';
 import { useSearchParams, useRouter } from 'next/navigation';
 import { getKakaoLoginCallback } from '@/features/auth/api/getKakaoLoginCallback';
+import { useOnboardingStore } from '@/features/onboarding/model/useOnboardingStore';
 
 export default function KakaoCallBackPage() {
   const searchParams = useSearchParams();
   const router = useRouter();
   const didRun = useRef(false);
+  const setOnboarding = useOnboardingStore((s) => s.setOnboarding);
 
   const code = searchParams.get('code');
 
@@ -23,8 +25,16 @@ export default function KakaoCallBackPage() {
 
     void (async () => {
       try {
-        await getKakaoLoginCallback(code);
-        window.location.href = '/';
+        const response = await getKakaoLoginCallback(code);
+        const { nickname, email, profileImageUrl } = response.data;
+
+        setOnboarding({
+          nickname: nickname ?? null,
+          email: email ?? null,
+          profileImageUrl: profileImageUrl ?? null,
+        });
+
+        router.push('/');
       } catch (err) {
         const message =
           err instanceof Error
@@ -34,7 +44,7 @@ export default function KakaoCallBackPage() {
         router.push('/login');
       }
     })();
-  }, [code, router]);
+  }, [code, router, setOnboarding]);
 
   return <div>로그인 콜백 처리중...</div>;
 }

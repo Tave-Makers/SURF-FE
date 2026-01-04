@@ -8,15 +8,25 @@ import { Shortcut } from '@/shared/ui/shortcut/Shortcut';
 import { AppHeader } from '@/widgets/header/ui/AppHeader';
 import { LawBottomSheet } from '@/features/laws/ui/LawBottomSheet';
 import { useLawAgreement } from '@/features/laws/model/useLawAgreement';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { TAVE_CHANNEL_LINKS, SPONSOR_LINKS } from '@/entities/home/model/constants';
 import { useRouter } from 'next/navigation';
+import { useAuthStore } from '@/features/auth/model/useAuthStore';
 
 export const HomePage = () => {
   const router = useRouter();
   const { agreements, handleCheck, isAllRequiredChecked, onClickLawDetail } = useLawAgreement();
   const [isOpen, setIsOpen] = useState(!agreements.laws1 || !agreements.laws2 || !agreements.laws3);
   const { data: homeData } = useGetHome();
+
+  const { memberId, memberRole } = useAuthStore();
+
+  // TODO: 리뷰 반영 후 제거
+  useEffect(() => {
+    console.log('AuthStore 상태 확인');
+    console.log('memberId:', memberId);
+    console.log('memberRole:', memberRole);
+  }, [memberId, memberRole]);
 
   const handleShortcutClick = (link: string, label: string) => {
     console.log(`${label} 클릭 - ${link}로 이동`);

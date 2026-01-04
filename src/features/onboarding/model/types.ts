@@ -9,6 +9,17 @@ export type OnBoardingFormData = {
   phoneNumber: string;
 };
 
+export type OnboardingInitData = {
+  nickname: string | null;
+  email: string | null;
+  profileImageUrl: string | null;
+};
+
+export type OnboardingState = OnboardingInitData & {
+  setOnboarding: (auth: OnboardingInitData) => void;
+  clearOnboarding: () => void;
+};
+
 export type TrackPart =
   | 'BACKEND'
   | 'WEB_FRONTEND'

@@ -1,16 +1,22 @@
 'use client';
 
 import { useMemo, useRef, useEffect } from 'react';
-import { Avatar } from '@/shared/ui/avatar/Avatar';
+import { Avatar, AvatarSize } from '@/shared/ui/avatar/Avatar';
 import { validateProfileImage } from '@/features/profile/lib/validateProfileImage';
 
 type Props = {
   file?: File;
   initialImageUrl?: string;
   onChange: (file: File) => void;
+  imageSize?: AvatarSize;
 };
 
-export const ProfileImageUploader = ({ file, initialImageUrl, onChange }: Props) => {
+export const ProfileImageUploader = ({
+  file,
+  initialImageUrl,
+  onChange,
+  imageSize = 'xl',
+}: Props) => {
   const inputRef = useRef<HTMLInputElement>(null);
 
   const previewUrl = useMemo(() => {
@@ -48,7 +54,7 @@ export const ProfileImageUploader = ({ file, initialImageUrl, onChange }: Props)
         hidden
       />
       <button type="button" onClick={() => inputRef.current?.click()}>
-        <Avatar src={displayImageUrl} size="xl" />
+        <Avatar src={displayImageUrl} size={imageSize} />
       </button>
     </>
   );

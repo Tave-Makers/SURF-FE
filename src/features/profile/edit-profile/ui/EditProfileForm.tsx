@@ -340,6 +340,7 @@ export const EditProfileForm = forwardRef<EditProfileFormHandle, Props>(function
               }}
               initialImageUrl={profileImageUrl}
               aria-label="프로필 이미지 변경"
+              imageSize="l"
             />
           )}
         />

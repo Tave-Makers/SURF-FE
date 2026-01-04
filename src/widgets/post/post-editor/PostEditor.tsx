@@ -29,6 +29,7 @@ export type PostEditorProps = {
   onChange: (data: { content: string; images: UploadImage[] }) => void;
   onScheduleRemove: () => void;
   onReservationClick: () => void;
+  isPublished: boolean;
 };
 
 export const PostEditor = ({
@@ -39,6 +40,7 @@ export const PostEditor = ({
   onChange,
   onScheduleRemove,
   onReservationClick,
+  isPublished,
 }: PostEditorProps) => {
   // 1. Hooks & Refs
   const {
@@ -216,7 +218,8 @@ export const PostEditor = ({
         <PostEditorToolbar
           editor={editor}
           onCameraClick={openPicker}
-          onScheduleClick={onReservationClick}
+          onReservationClick={onReservationClick}
+          isReservationDisabled={isPublished}
         />
       </div>
 

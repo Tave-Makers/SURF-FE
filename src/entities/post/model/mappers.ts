@@ -68,5 +68,7 @@ export const transformDetailToPost = (item: PostDetailData): PostDetail => {
     scheduleId: item.scheduleId,
     profileImageUrl: item.profileImageUrl,
     postedAt: item.postedAt,
+    isReserved: item.isReserved,
+    reservedAt: item.reservedAt,
   };
 };

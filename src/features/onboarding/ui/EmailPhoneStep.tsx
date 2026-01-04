@@ -1,4 +1,3 @@
-// features/onboarding/ui/EmailPhoneStep.tsx
 import { Controller, useFormContext } from 'react-hook-form';
 import { ONBOARDING_EVENTS, OnBoardingFormData } from '@/features/onboarding/model/types';
 import { FieldGroup } from '@/shared/ui/field-group/FieldGroup';

@@ -23,17 +23,23 @@ const baseItems: ToolBarItem<ToolbarKey>[] = [
 type Props = {
   editor: Editor; // 볼드체 버튼 클릭시 굵기를 조절하는 포스트 에디터
   onCameraClick: () => void; // 파일 탐색기 여는 콜백
-  onScheduleClick: () => void; // 예약 버튼 클릭 시 예약 DateTimePicker 모달 오픈 콜백
+  onReservationClick: () => void; // 예약 버튼 클릭 시 예약 DateTimePicker 모달 오픈 콜백
+  isReservationDisabled: boolean; // 예약 비활성화 여부
 };
 
-export const PostEditorToolbar = ({ editor, onCameraClick, onScheduleClick }: Props) => {
+export const PostEditorToolbar = ({
+  editor,
+  onCameraClick,
+  onReservationClick,
+  isReservationDisabled,
+}: Props) => {
   const router = useRouter();
 
   const actionMap: Record<ToolbarKey, () => void> = {
     [TOOLBAR_KEY.BOLD]: () => editor.chain().focus().toggleBold().run(),
     [TOOLBAR_KEY.CAMERA]: onCameraClick,
     [TOOLBAR_KEY.ALARM]: () => {
-      onScheduleClick();
+      onReservationClick();
     },
     [TOOLBAR_KEY.CALENDAR]: () => {
       router.push('/post/schedule');
@@ -41,13 +47,20 @@ export const PostEditorToolbar = ({ editor, onCameraClick, onScheduleClick }: Pr
   };
 
   const handleItemClick = (key: ToolbarKey) => {
+    if (key === TOOLBAR_KEY.ALARM && isReservationDisabled) return;
     actionMap[key]?.();
   };
 
-  // bold만 active 상태 추가
-  const items: ToolBarItem<ToolbarKey>[] = baseItems.map((item) =>
-    item.key === TOOLBAR_KEY.BOLD ? { ...item, active: editor.isActive('bold') } : item,
-  );
+  const items: ToolBarItem<ToolbarKey>[] = baseItems.map((item) => {
+    const isBold = item.key === TOOLBAR_KEY.BOLD;
+    const isAlarm = item.key === TOOLBAR_KEY.ALARM;
+
+    return {
+      ...item,
+      active: isBold ? editor.isActive('bold') : false,
+      disabled: isAlarm && isReservationDisabled,
+    };
+  });
 
   return <ToolBar items={items} onItemClick={handleItemClick} />;
 };

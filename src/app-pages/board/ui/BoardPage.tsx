@@ -31,9 +31,9 @@ const BoardPage = ({ boardId: boardIdProp }: { boardId: string }) => {
 
   const handleCategoryChange = (nextCategoryKey: string) => {
     if (nextCategoryKey === 'all') {
-      router.replace(PAGE_ROUTES.BOARD.MAIN(boardId));
+      router.replace(PAGE_ROUTES.BOARD.MAIN);
     } else {
-      router.replace(`${PAGE_ROUTES.BOARD.MAIN(boardId)}?category=${nextCategoryKey}`);
+      router.replace(`${PAGE_ROUTES.BOARD.SELECT_CATEGORY(boardId)}?category=${nextCategoryKey}`);
     }
   };
 

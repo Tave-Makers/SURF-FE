@@ -9,7 +9,7 @@ export interface ShortcutItem {
 
 // 1. 앱 내 바로가기 데이터
 export const SHORTCUT_LINKS: ShortcutItem[] = [
-  { id: 1, label: '공지사항', imageSrc: '/icons/notice.png', link: PAGE_ROUTES.BOARD.MAIN(1) },
+  { id: 1, label: '공지사항', imageSrc: '/icons/notice.png', link: PAGE_ROUTES.BOARD.MAIN },
   { id: 2, label: '일정', imageSrc: '/icons/notice.png', link: PAGE_ROUTES.CALENDAR.MAIN },
   { id: 3, label: '주소록', imageSrc: '/icons/job.png', link: '/job' },
 ];

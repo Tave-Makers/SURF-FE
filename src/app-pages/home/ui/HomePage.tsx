@@ -73,6 +73,12 @@ export const HomePage = () => {
             date={homeData?.announcementDate ?? '날짜없음'}
             category="official" // 카테고리 데이터 필요 {homeData?.announcementCategory ?? 'official'}
             onClick={() => {
+              if (!deepLink) {
+                if (process.env.NODE_ENV === 'development') {
+                  console.warn('공지사항 링크가 없습니다.');
+                }
+                return;
+              }
               router.push(deepLink);
             }}
           />

@@ -14,7 +14,8 @@ export const PAGE_ROUTES = {
 
   // 게시판 관련
   BOARD: {
-    MAIN: (boardId: string | number) => `/board/${boardId}`,
+    MAIN: '/board/1',
+    SELECT_CATEGORY: (boardId: string | number) => `/board/${boardId}`,
     SEARCH: '/board/search',
     POST_DETAIL: (boardId: string | number, postId: string | number) =>
       `/board/${boardId}/post/${postId}`,

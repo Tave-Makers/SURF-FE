@@ -92,11 +92,14 @@ export default function PostDetailPage({ postId }: PostDetailPageProps) {
     deletePostMutate(numericPostId, {
       onSuccess: () => {
         setShowDeleteAlert(false);
-        const prevPath = document.referrer;
-        if (prevPath.includes('/settings/scraps')) {
-          router.push('/settings/scraps');
-        } else if (prevPath.includes('/settings/my-posts')) {
-          router.push('/settings/my-posts');
+
+        // 저장된 경로 확인
+        const entryPath = sessionStorage.getItem('entry_path');
+
+        if (entryPath) {
+          // 저장된 경로(스크랩 또는 내 게시물 목록)로 이동
+          router.replace(entryPath);
+          sessionStorage.removeItem('entry_path');
         } else {
           router.push('/board/1');
         }

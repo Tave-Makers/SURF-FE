@@ -7,6 +7,7 @@ import { AnalyticsProvider } from '@/app/providers/AnalyticsProvider';
 import { PageTrackingProvider } from '@/shared/analytics/providers/PageTrackingProvider';
 import GlobalComponents from '@/shared/ui/global-components/GlobalComponents';
 import FCMInitializer from '@/app/providers/FCMInitializer';
+import { PathWatcher } from './providers/PathWatcher';
 
 export default function RootLayout({ children }: { children: ReactNode }) {
   return (
@@ -29,6 +30,7 @@ export default function RootLayout({ children }: { children: ReactNode }) {
         <AnalyticsProvider />
         <QueryProvider>
           <FCMInitializer />
+          <PathWatcher />
           <PageTrackingProvider>
             <main className="bg-background-tertiary box-content flex h-full w-dvw sm:w-[360px]">
               {children}

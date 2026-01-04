@@ -12,6 +12,7 @@ type OnBoardingLayoutProps = {
   onNextBtnClick: () => void;
   isNextBtnDisabled?: boolean;
   isFinalStep?: boolean;
+  isSubmitting?: boolean;
 };
 export default function OnBoardingLayout({
   step,
@@ -22,6 +23,7 @@ export default function OnBoardingLayout({
   onNextBtnClick,
   isNextBtnDisabled = true,
   isFinalStep = false,
+  isSubmitting,
 }: OnBoardingLayoutProps) {
   return (
     <div className="flex h-full w-full flex-col">
@@ -51,9 +53,9 @@ export default function OnBoardingLayout({
           variant="primary"
           className="mt-auto mb-[1.25rem]"
           onClick={onNextBtnClick}
-          isDisabled={isNextBtnDisabled}
+          isDisabled={isNextBtnDisabled || isSubmitting}
         >
-          {isFinalStep ? '가입완료' : '다음'}
+          {isSubmitting ? '처리 중...' : isFinalStep ? '가입완료' : '다음'}
         </SolidButton>
       </div>
     </div>

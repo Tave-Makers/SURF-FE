@@ -53,7 +53,7 @@ export const WheelPicker = ({ onChange, initPeriodIdx = 0, initPartIdx = 0 }: Wh
   return (
     <div
       style={{
-        width: '335px',
+        width: '100%',
         height: '176px',
         display: 'flex',
         justifyContent: 'center',

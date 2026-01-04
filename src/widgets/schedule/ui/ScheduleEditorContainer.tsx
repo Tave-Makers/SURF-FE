@@ -103,12 +103,19 @@ export default function ScheduleEditorContainer({ entryPoint }: Props) {
         title: serverSchedule.title,
         startDate: new Date(serverSchedule.startAt),
         endDate: new Date(serverSchedule.endAt),
-        location: serverSchedule.location ?? '미정',
+        location: serverSchedule.location === '미정' ? '' : (serverSchedule.location ?? ''),
       } as ScheduleFormData;
     }
 
     // Case 3: 캘린더 모드 - 기존 훅 데이터 사용
-    return calendarInitialData;
+    if (calendarInitialData) {
+      return {
+        ...calendarInitialData,
+        location:
+          calendarInitialData.location === '미정' ? '' : (calendarInitialData.location ?? ''),
+      };
+    }
+    return null;
   }, [entryPoint, linkedSchedule, serverSchedule, calendarInitialData, isHydrated]);
 
   // --- 4. API Mutations ---

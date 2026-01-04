@@ -21,6 +21,6 @@ export function mapScheduleFormToRequest(form: ScheduleFormData): ScheduleCreate
     title: form.title,
     startAt: form.startDate.toISOString(),
     endAt: form.endDate.toISOString(),
-    location: form.location || '미정',
+    location: form.location || '',
   };
 }

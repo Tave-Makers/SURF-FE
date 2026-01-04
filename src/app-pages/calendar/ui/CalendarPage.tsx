@@ -13,7 +13,6 @@ export function CalendarPage() {
 
   const { data: userData } = useGetValidStatus();
   const memberRole = userData?.memberRole || 'member';
-  console.log(memberRole);
 
   const { data: schedules = {} } = useGetCalendarSchedule(
     month.getFullYear(),

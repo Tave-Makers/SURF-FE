@@ -62,7 +62,7 @@ export interface UserProfile {
 export interface UpdateProfileRequestDTO {
   email?: string;
   university?: string;
-  graduateSchool?: string;
+  graduateSchool?: string | null;
   selfIntroduction?: string;
   link?: string | null;
   phoneNumber?: string;

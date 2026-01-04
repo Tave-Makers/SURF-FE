@@ -208,7 +208,7 @@ export const EditProfileForm = forwardRef<EditProfileFormHandle, Props>(function
           university: normalizeTextString(values.university),
           graduateSchool: values.hasGraduateSchool
             ? normalizeTextString(values.graduateSchool)
-            : undefined,
+            : '',
           selfIntroduction: normalizeTextString(values.selfIntroduction),
           link: normalizeTextString(values.link),
           phoneNumber: values.phoneNumber,

@@ -172,7 +172,6 @@ export default function PostDetailPage({ postId }: PostDetailPageProps) {
       {/* ============================= */}
       <ModalSheet isOpen={likedUsersOpen} onClose={() => setLikedUsersOpen(false)}>
         <ModalSheet.Container className="!right-0 !left-0 mx-auto w-full sm:max-w-[360px]">
-          <ModalSheet.Header />
           <ModalSheet.Content>
             <Sheet title="좋아요를 누른 사람">
               <div className="flex flex-col">

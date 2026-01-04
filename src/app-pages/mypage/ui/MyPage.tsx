@@ -8,6 +8,8 @@ import { ProfileHeader } from '@/widgets/profile-header/ui/ProfileHeader';
 import { PROFILE_EVENTS } from '@/features/profile/model/types';
 import { trackProfileEvent } from '@/features/profile/lib/trackProfileEvent';
 import type { UserProfile } from '@/entities/user/model/types';
+import { FieldGroup } from '@/shared/ui/field-group/FieldGroup';
+import { CareerCard } from '@/entities/user/ui/career-card/CareerCard';
 
 interface Props {
   userProfile: UserProfile;
@@ -38,8 +40,22 @@ export function MyPage({ userProfile }: Props) {
         bannerPart={userProfile.bannerPart}
         bannerScore={userProfile.activityScore}
       />
-
-      {userProfile.careers.length > 0 && <ProfileBadge careers={userProfile.careers} />}
+      <section className="flex flex-col gap-16 px-13 pt-16">
+        <div className="flex flex-col gap-10">
+          <FieldGroup title="경력">
+            {userProfile.careers.length > 0 && (
+              <ul className="flex flex-col gap-10">
+                {userProfile.careers.map((c) => (
+                  <li key={c.careerId ?? `${c.companyName}-${c.startDate}`}>
+                    <CareerCard item={c} />
+                  </li>
+                ))}
+              </ul>
+            )}
+          </FieldGroup>
+        </div>
+      </section>
+      <ProfileBadge />
     </div>
   );
 }

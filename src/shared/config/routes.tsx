@@ -184,24 +184,24 @@ export const createRouteConfig = (router: RouterInstance): RouteConfig[] => [
       hasLeftIcon: true,
     },
   },
-  {
-    id: 'board',
-    path: PAGE_ROUTES.BOARD.MAIN,
-    backPath: PAGE_ROUTES.HOME, // 임시
-    header: {
-      mode: HeaderMode.Default,
-      title: '공지사항',
-      hasLeftIcon: true,
-      icons: [
-        {
-          label: 'Search',
-          onClickIcon: () => {
-            router.push(PAGE_ROUTES.BOARD.SEARCH);
-          },
-        },
-      ],
-    },
-  },
+  // {
+  //   id: 'board',
+  //   path: PAGE_ROUTES.BOARD.MAIN,
+  //   backPath: PAGE_ROUTES.HOME, // 임시
+  //   header: {
+  //     mode: HeaderMode.Default,
+  //     title: '공지사항',
+  //     hasLeftIcon: true,
+  //     icons: [
+  //       {
+  //         label: 'Search',
+  //         onClickIcon: () => {
+  //           router.push(PAGE_ROUTES.BOARD.SEARCH);
+  //         },
+  //       },
+  //     ],
+  //   },
+  // },
   {
     id: 'home-calendar',
     path: PAGE_ROUTES.CALENDAR.MAIN,

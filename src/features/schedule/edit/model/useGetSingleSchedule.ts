@@ -8,7 +8,7 @@ export const useGetSingleSchedule = (
   options?: Omit<UseQueryOptions<SingleSchedule>, 'queryKey' | 'queryFn'>,
 ) => {
   return useQuery({
-    queryKey: scheduleId ? scheduleQueryKeys.detail(scheduleId) : scheduleQueryKeys.details(),
+    queryKey: scheduleQueryKeys.detail(scheduleId ?? -1),
     queryFn: () => getSingleSchedule(scheduleId as number),
     enabled: !!scheduleId,
     ...options,

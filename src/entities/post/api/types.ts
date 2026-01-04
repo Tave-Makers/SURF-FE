@@ -69,8 +69,10 @@ export type PostDetailData = {
   imageUrlList: ImageItemResponse[];
   viewCount: number;
   hasSchedule: boolean;
-  scheduleId: number;
+  scheduleId: number | null;
   profileImageUrl?: string;
+  isReserved: boolean;
+  reservedAt: string | null;
 };
 
 // 상세 API 응답 타입

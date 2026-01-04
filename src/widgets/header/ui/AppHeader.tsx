@@ -8,9 +8,10 @@ import { createRouteConfig } from '@/shared/config/routes';
 type AppHeaderProps = {
   customBack?: () => void;
   overrideHeader?: HeaderProps | null;
+  className?: string;
 };
 
-export function AppHeader({ customBack, overrideHeader }: AppHeaderProps) {
+export function AppHeader({ customBack, overrideHeader, className }: AppHeaderProps) {
   const pathname = usePathname();
   const router = useRouter();
   const routeConfig = useMemo(() => createRouteConfig(router), [router]);
@@ -47,5 +48,5 @@ export function AppHeader({ customBack, overrideHeader }: AppHeaderProps) {
 
   const headerProps = getHeaderProps(baseHeader, handleBack);
 
-  return <Header {...headerProps} />;
+  return <Header {...headerProps} className={className} />;
 }

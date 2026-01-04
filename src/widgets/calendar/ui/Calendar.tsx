@@ -14,6 +14,7 @@ import type { ActivityMap } from '@/entities/calendar/model/types';
 import { EventCard } from '@/entities/calendar/ui/EventCard/EventCard';
 import { format } from 'date-fns';
 import { useAuthStore } from '@/features/auth/model/useAuthStore';
+import { ensureUtcDate } from '@/features/schedule/lib/ensureUtcDate';
 
 /**
  * calendarClassNames: DayPicker 컴포넌트의 클래스 네임 커스터마이징 객체
@@ -133,8 +134,8 @@ export default function Calendar({ month, onMonthChange, schedules }: CalendarPr
                 title={_ev.title}
                 category={_ev.category}
                 mode="calendar"
-                startDate={_ev.startDate || null}
-                endDate={_ev.endDate || null}
+                startDate={ensureUtcDate(_ev.startDate)}
+                endDate={ensureUtcDate(_ev.endDate)}
                 location={_ev.location || '미정'}
                 hasNotice={_ev.hasNotice}
                 postId={_ev.postId}

@@ -1,55 +1,17 @@
 import 'server-only';
-
 import { cache } from 'react';
-import { cookies } from 'next/headers';
+import { cookies, headers } from 'next/headers';
 import { redirect } from 'next/navigation';
 import type { ValidStatusResponse } from '@/features/auth/api/types';
 
-const BACKEND = (() => {
-  const url = process.env.API_BASE_URL;
-  if (!url) throw new Error('API_BASE_URL is not set');
-  return url.replace(/\/+$/, '');
-})();
-
-const REFRESH_PATH = '/v1/auth/refresh'; // TODO: refresh 로직 변경
 const TIMEOUT_MS = 15_000;
 
-function buildCookieHeader(cookieStore: Awaited<ReturnType<typeof cookies>>) {
-  const parts: string[] = [];
-  for (const c of cookieStore.getAll()) {
-    parts.push(`${c.name}=${c.value}`);
-  }
-  return parts.join('; ');
-}
-
-function mergeCookies(originalCookieHeader: string, setCookies: string[]) {
-  const jar = new Map<string, string>();
-
-  for (const part of originalCookieHeader.split(';')) {
-    const p = part.trim();
-    if (!p) continue;
-    const idx = p.indexOf('=');
-    if (idx <= 0) continue;
-    jar.set(p.slice(0, idx), p.slice(idx + 1));
-  }
-
-  for (const sc of setCookies) {
-    const first = sc.split(';', 1)[0]?.trim();
-    if (!first) continue;
-    const idx = first.indexOf('=');
-    if (idx <= 0) continue;
-    jar.set(first.slice(0, idx), first.slice(idx + 1));
-  }
-
-  return Array.from(jar.entries())
-    .map(([k, v]) => `${k}=${v}`)
-    .join('; ');
-}
+const VALID_PATH = '/api/proxy/v1/user/members/valid-status';
+const REFRESH_PATH = '/api/proxy/auth/refresh';
 
 async function fetchWithTimeout(url: string, init: RequestInit) {
   const controller = new AbortController();
   const t = setTimeout(() => controller.abort(), TIMEOUT_MS);
-
   try {
     return await fetch(url, { ...init, signal: controller.signal });
   } finally {
@@ -57,71 +19,82 @@ async function fetchWithTimeout(url: string, init: RequestInit) {
   }
 }
 
-function getSetCookies(res: Response): string[] {
-  const headers = res.headers as Headers & { getSetCookie?: () => string[] };
-  if (typeof headers.getSetCookie === 'function') return headers.getSetCookie() ?? [];
+function isNextRedirectError(error: unknown): boolean {
+  if (typeof error !== 'object' || error === null) return false;
+  if (!('digest' in error)) return false;
 
-  const single = res.headers.get('set-cookie');
-  return single ? [single] : [];
+  const digest = (error as { digest?: unknown }).digest;
+  return typeof digest === 'string' && digest.startsWith('NEXT_REDIRECT');
+}
+
+function safeErrorMessage(e: unknown): string {
+  if (e instanceof Error) return e.message;
+  if (typeof e === 'string') return e;
+  try {
+    return JSON.stringify(e);
+  } catch {
+    return String(e);
+  }
+}
+
+async function getBaseUrl(): Promise<string> {
+  const h = await headers();
+  const host = h.get('host');
+  const proto = h.get('x-forwarded-proto') ?? 'http';
+  return host ? `${proto}://${host}` : 'http://localhost:3000';
 }
 
 export const verifySession = cache(async () => {
   try {
-    const cookieStore = await cookies();
-    const cookieHeader0 = buildCookieHeader(cookieStore);
+    const baseUrl = await getBaseUrl();
 
-    const validUrl = `${BACKEND}/v1/user/members/valid-status`;
+    const cookieHeader = (await cookies())
+      .getAll()
+      .map((c) => `${c.name}=${c.value}`)
+      .join('; ');
 
-    const res = await fetchWithTimeout(validUrl, {
+    const res = await fetchWithTimeout(`${baseUrl}${VALID_PATH}`, {
       cache: 'no-store',
-      redirect: 'manual',
-      headers: cookieHeader0 ? { cookie: cookieHeader0 } : {},
+      headers: cookieHeader ? { cookie: cookieHeader } : {},
     });
 
-    if (res.status !== 401 && res.ok) {
-      const json = (await res.json()) as ValidStatusResponse;
+    if (res.ok) {
+      const raw: unknown = await res.json();
+      const json = raw as ValidStatusResponse;
       return handleBusinessRedirect(json);
     }
 
     if (res.status === 401) {
-      const refreshUrl = `${BACKEND}${REFRESH_PATH}`;
-
-      const refresh = await fetchWithTimeout(refreshUrl, {
+      const refresh = await fetchWithTimeout(`${baseUrl}${REFRESH_PATH}`, {
         method: 'POST',
         cache: 'no-store',
-        redirect: 'manual',
-        headers: cookieHeader0 ? { cookie: cookieHeader0 } : {},
+        headers: cookieHeader ? { cookie: cookieHeader } : {},
       });
 
       if (!refresh.ok) redirect('/login');
 
-      const setCookies = getSetCookies(refresh);
-      const cookieHeader1 = mergeCookies(cookieHeader0, setCookies);
-
-      const retry = await fetchWithTimeout(validUrl, {
+      const retry = await fetchWithTimeout(`${baseUrl}${VALID_PATH}`, {
         cache: 'no-store',
-        redirect: 'manual',
-        headers: cookieHeader1 ? { cookie: cookieHeader1 } : {},
+        headers: cookieHeader ? { cookie: cookieHeader } : {},
       });
 
       if (!retry.ok) redirect('/login');
 
-      const json = (await retry.json()) as ValidStatusResponse;
+      const raw: unknown = await retry.json();
+      const json = raw as ValidStatusResponse;
       return handleBusinessRedirect(json);
     }
 
-    // 401이 아닌 실패
+    console.error(`[Auth] 검증 실패: ${res.status}`);
     redirect('/login');
-  } catch (error) {
-    // timeout 또는 network error 처리
-    if (error instanceof Error && error.name === 'AbortError') {
-      console.error('Session verification timeout');
-    } else {
-      console.error('Session verification failed:', error);
-    }
+  } catch (error: unknown) {
+    if (isNextRedirectError(error)) throw error;
+
+    console.error('[Auth] 예상치 못한 에러:', safeErrorMessage(error));
     redirect('/login');
   }
 });
+
 function handleBusinessRedirect(json: ValidStatusResponse) {
   const user = json.data;
 

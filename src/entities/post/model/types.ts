@@ -31,6 +31,8 @@ export type PostDetail = {
   scheduleId: number | null;
   profileImageUrl?: string;
   postedAt: string;
+  isReserved: boolean;
+  reservedAt: string | null;
 };
 
 // 게시판
@@ -45,7 +47,7 @@ export type Post = {
   date: string;
   pinned: boolean;
   isReserved: boolean;
-  boardId: number | null;
+  boardId: number;
   likeCount: number;
   isLiked: boolean;
   scrappedByMe: boolean;

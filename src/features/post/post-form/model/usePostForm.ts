@@ -19,6 +19,11 @@ import { usePostInitialization } from '@/features/post/post-form/model/usePostIn
 import { usePostDirtyCheck } from '@/features/post/post-form/model/useDirtyCheck';
 
 import { EditorState, PostPageMode } from './types';
+import { useDeletePostSchedule } from '@/features/schedule/delete/model/useDelPostSchedule';
+import { useQueryClient } from '@tanstack/react-query';
+import { postQueryKeys } from '@/entities/post/api/queryKeys';
+import { scheduleQueryKeys } from '@/features/calendar/api/queryKeys';
+import { format } from 'date-fns';
 
 type Props = {
   mode: PostPageMode;
@@ -72,6 +77,7 @@ export const usePostForm = ({ mode, boardId, postId }: Props) => {
   const { mutateAsync: updateMutate, isPending: isUpdating } = useUpdatePost(numericPostId!);
   const { mutateAsync: createScheduleMutate } = useCreatePostSchedule();
   const { mutateAsync: editScheduleMutate } = useEditSchedule();
+  const { mutateAsync: deleteScheduleMutate } = useDeletePostSchedule();
 
   // 3. Logic Hooks (Initialization & Dirty Check)
 
@@ -120,6 +126,15 @@ export const usePostForm = ({ mode, boardId, postId }: Props) => {
     return !title.trim() || isEmpty;
   }, [title, checkHasChanges]);
 
+  // 이미 발행된 글인지 판단 (툴바 비활성화용)
+  // 수정 모드이고 서버 데이터상 예약 중이 아닌 경우
+  const isPublished = !!(mode === 'edit' && postDetail && !postDetail.isReserved);
+
+  // 현재 예약 중인지 판단 (배지 노출용)
+  // 클라이언트에서 새로 예약 설정을 했거나(reserved),
+  // 서버 데이터상 이미 예약 상태(postDetail.isReserved)인 경우
+  const isReserved = !!(reserved || (mode === 'edit' && postDetail?.isReserved));
+
   // 5. Event Handlers
   const handleEditorChange = useCallback(
     (updatedData: EditorState) => {
@@ -137,6 +152,8 @@ export const usePostForm = ({ mode, boardId, postId }: Props) => {
       router.back();
     }
   };
+
+  const queryClient = useQueryClient();
 
   const handleSubmit = async () => {
     if (isCreating || isUpdating) return;
@@ -168,7 +185,7 @@ export const usePostForm = ({ mode, boardId, postId }: Props) => {
           title,
           content,
           pinned: false,
-          reservedAt: reservedAt ? reservedAt.toISOString() : '',
+          reservedAt: reservedAt ? format(reservedAt, "yyyy-MM-dd'T'HH:mm:ss") : '',
           imageUrlList,
           hasSchedule: !!linkedSchedule,
           reserved,
@@ -180,8 +197,8 @@ export const usePostForm = ({ mode, boardId, postId }: Props) => {
             postId: targetPostId,
             data: {
               title: linkedSchedule.title,
-              startAt: linkedSchedule.startDate.toISOString(),
-              endAt: linkedSchedule.endDate.toISOString(),
+              startAt: format(new Date(linkedSchedule.startDate), "yyyy-MM-dd'T'HH:mm:ss"),
+              endAt: format(new Date(linkedSchedule.endDate), "yyyy-MM-dd'T'HH:mm:ss"),
               location: linkedSchedule.location ?? '미정',
               category: linkedSchedule.category,
             },
@@ -194,26 +211,93 @@ export const usePostForm = ({ mode, boardId, postId }: Props) => {
           categoryId,
           pinned: false,
           isReservationChanged,
-          reservedAt: reservedAt ? reservedAt.toISOString() : '',
+          reservedAt: reservedAt ? format(reservedAt, "yyyy-MM-dd'T'HH:mm:ss") : '',
           isContentChanged,
           isImageChanged: isImagesChanged,
           imageUrlList,
           hasSchedule: !!linkedSchedule,
         });
 
-        if (linkedSchedule?.id) {
-          await editScheduleMutate({
-            scheduleId: linkedSchedule.id,
-            data: {
-              category: linkedSchedule.category,
-              title: linkedSchedule.title,
-              startAt: linkedSchedule.startDate.toISOString(),
-              endAt: linkedSchedule.endDate.toISOString(),
-              location: linkedSchedule.location ?? '미정',
-            },
-          });
+        if (linkedSchedule) {
+          if (linkedSchedule.id) {
+            // 기존에 일정이 있었던 경우 -> 수정 훅 호출
+            try {
+              await editScheduleMutate({
+                scheduleId: linkedSchedule.id,
+                data: {
+                  category: linkedSchedule.category,
+                  title: linkedSchedule.title,
+                  startAt: format(new Date(linkedSchedule.startDate), "yyyy-MM-dd'T'HH:mm:ss"),
+                  endAt: format(new Date(linkedSchedule.endDate), "yyyy-MM-dd'T'HH:mm:ss"),
+                  location: linkedSchedule.location ?? '미정',
+                },
+              });
+            } catch (err) {
+              console.error('일정 수정 실패:', err);
+            }
+          } else if (targetPostId) {
+            // 기존에 일정이 없었는데 새로 추가한 경우 (id가 없음) -> 생성 훅 호출
+            try {
+              await createScheduleMutate({
+                postId: targetPostId, // 수정 중인 현재 게시글 ID
+                data: {
+                  title: linkedSchedule.title,
+                  startAt: format(new Date(linkedSchedule.startDate), "yyyy-MM-dd'T'HH:mm:ss"),
+                  endAt: format(new Date(linkedSchedule.endDate), "yyyy-MM-dd'T'HH:mm:ss"),
+                  location: linkedSchedule.location ?? '미정',
+                  category: linkedSchedule.category,
+                },
+              });
+            } catch (err) {
+              console.error('일정 생성 실패:', err);
+            }
+          }
+        } else {
+          if (postSchedule?.scheduleId) {
+            await deleteScheduleMutate({
+              postId: targetPostId!,
+              scheduleId: postSchedule.scheduleId,
+            });
+            if (process.env.NODE_ENV === 'development') {
+              console.log(`게시글 화면 일정 -> 삭제 성공: ${postSchedule.scheduleId}`);
+            }
+          }
         }
       }
+
+      // 캐시 무효화 작업
+      // 게시글 저장 완료 후, 최신 데이터를 받도록 관련 캐시를 무효화합니다.
+      const invalidatePromises = [
+        // 게시글 상세 정보 캐시 무효화
+        queryClient.invalidateQueries({
+          queryKey: postQueryKeys.detail(targetPostId!),
+        }),
+        // 게시글 목록 캐시 무효화 (필요시)
+        queryClient.invalidateQueries({
+          queryKey: postQueryKeys.lists(),
+        }),
+      ];
+
+      // 만약 일정이 존재한다면 일정 관련 캐시도 모두 무효화
+      if (linkedSchedule) {
+        invalidatePromises.push(
+          queryClient.invalidateQueries({
+            queryKey: scheduleQueryKeys.lists(),
+          }),
+        );
+
+        // 기존 일정 편집 시에만 해당 일정의 상세 캐시 무효화
+        if (linkedSchedule.id) {
+          invalidatePromises.push(
+            queryClient.invalidateQueries({
+              queryKey: scheduleQueryKeys.detail(linkedSchedule.id),
+            }),
+          );
+        }
+      }
+
+      // 모든 무효화 작업이 완료될 때까지 대기
+      await Promise.all(invalidatePromises);
 
       resetPostState();
       if (targetPostId) router.replace(`/board/${boardId}/post/${targetPostId}`);
@@ -243,6 +327,8 @@ export const usePostForm = ({ mode, boardId, postId }: Props) => {
     isReservationModalOpen,
     isSubmitDisabled,
     isScheduleFetching,
+    isPublished,
+    isReserved,
 
     // Actions
     openCategory,

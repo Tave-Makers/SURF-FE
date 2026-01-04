@@ -124,14 +124,15 @@ export default function ScheduleEditorContainer({ entryPoint }: Props) {
   const isPending = isCreating || isEditing;
 
   // --- 5. React Hook Form ---
-  const defaultDate = roundToNearestMinutes(new Date(), { nearestTo: 30, roundingMethod: 'ceil' });
+  const getDefaultDate = () =>
+    roundToNearestMinutes(new Date(), { nearestTo: 30, roundingMethod: 'ceil' });
 
   const methods = useForm<ScheduleFormData>({
     defaultValues: {
       category: 'regular',
       title: '',
-      startDate: defaultDate,
-      endDate: defaultDate,
+      startDate: getDefaultDate(),
+      endDate: getDefaultDate(),
       location: '',
     },
     values: activeInitialData ?? undefined,

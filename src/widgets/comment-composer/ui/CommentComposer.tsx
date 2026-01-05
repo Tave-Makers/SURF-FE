@@ -42,10 +42,8 @@ function extractMentionNicknames(text: string) {
 interface Props {
   postId: number;
   keyboardOffset: number;
-
-  // ✅ 리스트에서 “답글 클릭” 시 내려오는 정보
   pendingReply?: { commentId: number; memberId: number; nickname: string } | null;
-  onConsumedReply?: () => void; // pendingReply 소비했다고 알려줌
+  onConsumedReply?: () => void;
 }
 
 export function CommentComposer({ postId, keyboardOffset, pendingReply, onConsumedReply }: Props) {
@@ -89,7 +87,7 @@ export function CommentComposer({ postId, keyboardOffset, pendingReply, onConsum
     isError: isMentionError,
   } = useMentionSearchQuery(debouncedKeyword, mentionOpen);
 
-  // ✅ “답글 클릭” 이벤트를 페이지에서 받아서 입력창에 반영
+  // 답글 클릭 이벤트를 페이지에서 받아서 입력창에 반영
   useEffect(() => {
     if (!pendingReply) return;
 

@@ -17,7 +17,12 @@ const PART_TO_CHARACTER_KEY: Record<TrackPart, ThemeCharacterKey> = {
 };
 
 export function getCharacterKeyByPart(part: string): ThemeCharacterKey {
-  return PART_TO_CHARACTER_KEY[part as TrackPart] ?? 'feCharacter';
+  const characterKey = PART_TO_CHARACTER_KEY[part as TrackPart];
+  if (!characterKey) {
+    console.error(`Unknown part: ${part}, falling back to feCharacter`);
+    return 'feCharacter';
+  }
+  return characterKey;
 }
 
 export const PART_LABEL: Record<string, string> = {

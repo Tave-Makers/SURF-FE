@@ -8,11 +8,10 @@ import { Shortcut } from '@/shared/ui/shortcut/Shortcut';
 import { AppHeader } from '@/widgets/header/ui/AppHeader';
 import { LawBottomSheet } from '@/features/laws/ui/LawBottomSheet';
 import { useLawAgreement } from '@/features/laws/model/useLawAgreement';
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import { TAVE_CHANNEL_LINKS, SPONSOR_LINKS, SHORTCUT_LINKS } from '@/entities/home/model/constants';
 import { useRouter } from 'next/navigation';
 import { PAGE_ROUTES } from '@/shared/config/path';
-import { useAuthStore } from '@/features/auth/model/useAuthStore';
 
 export const HomePage = () => {
   const router = useRouter();
@@ -21,15 +20,6 @@ export const HomePage = () => {
 
   const { data: homeData } = useGetHome();
   const deepLink = homeData?.announcementDeepLink ?? '';
-
-  const { memberId, memberRole } = useAuthStore();
-
-  // TODO: 리뷰 반영 후 제거
-  useEffect(() => {
-    console.log('AuthStore 상태 확인');
-    console.log('memberId:', memberId);
-    console.log('memberRole:', memberRole);
-  }, [memberId, memberRole]);
 
   const handleShortcutClick = (link: string, label: string) => {
     if (process.env.NODE_ENV === 'development') {

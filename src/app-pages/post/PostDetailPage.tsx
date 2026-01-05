@@ -17,7 +17,7 @@ import { Alert } from '@/shared/ui/alert/Alert';
 import { usePathname, useRouter } from 'next/navigation';
 import { Avatar } from '@/shared/ui/avatar/Avatar';
 import { categoryIdToKey } from '@/entities/post/model/category';
-import { useGetSingleSchedule } from '@/features/schedule/edit/model/useGetSingleSchedule';
+import { useGetPostScheduleQuery } from '@/features/post/model/useGetPostScheduleQuery';
 import { useDeletePostMutation } from '@/features/post/model/useDeletePostMutation';
 import { useToastStore } from '@/shared/store/toastStore';
 
@@ -42,9 +42,7 @@ export default function PostDetailPage({ postId }: PostDetailPageProps) {
     data: schedule,
     isLoading: isScheduleLoading,
     isError: isScheduleError,
-  } = useGetSingleSchedule(scheduleId, {
-    enabled: !!scheduleId,
-  });
+  } = useGetPostScheduleQuery(numericPostId, scheduleId, !!post?.hasSchedule);
 
   // 좋아요 누른 사람 목록 API
   const {

@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import { createPortal } from 'react-dom';
+import { PAGE_ROUTES } from '@/shared/config/path';
 import { useRouter } from 'next/navigation';
 import { Sheet as ModalSheet } from 'react-modal-sheet';
 import { Alert } from '@/shared/ui/alert/Alert';
@@ -39,7 +40,7 @@ export function ScheduleActionSheet({
   const handleEditClick = () => {
     // 수정 폼 페이지로 이동
     onClose();
-    router.push(`/calendar/schedule/${scheduleId}/edit`);
+    router.push(PAGE_ROUTES.CALENDAR.SCHEDULE_EDIT(scheduleId));
   };
 
   const handleDeleteConfirm = () => {

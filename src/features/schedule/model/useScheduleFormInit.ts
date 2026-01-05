@@ -1,6 +1,7 @@
 import { useMemo, useState, useEffect } from 'react';
 import { useCreatePostScheduleStore } from '../create-post-schedule/model/useCreatePostScheduleStore';
 import { useGetSingleSchedule } from '../edit/model/useGetSingleSchedule';
+import { toFormLocation } from '../create/api/mapper';
 import { ScheduleFormData } from '../create/model/types';
 import { CATEGORY_MAP } from '@/entities/schedule/model/constants';
 
@@ -40,14 +41,19 @@ export const useScheduleFormInit = ({
   const initialData = useMemo(() => {
     if (!isHydrated) return null;
 
-    if (entryPoint === 'post' && linkedSchedule) return linkedSchedule;
+    if (entryPoint === 'post' && linkedSchedule) {
+      return {
+        ...linkedSchedule,
+        location: toFormLocation(linkedSchedule.location),
+      };
+    }
 
     if (serverData) {
       return {
         title: serverData.title,
         startDate: new Date(serverData.startAt),
         endDate: new Date(serverData.endAt),
-        location: serverData.location ?? '',
+        location: toFormLocation(serverData.location),
         category: CATEGORY_MAP[serverData.category] || 'regular',
       } as ScheduleFormData;
     }

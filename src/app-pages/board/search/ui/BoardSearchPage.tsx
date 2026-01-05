@@ -2,6 +2,7 @@
 
 import { useState } from 'react';
 import { useRouter, useSearchParams } from 'next/navigation';
+import { PAGE_ROUTES } from '@/shared/config/path';
 import { AppHeader } from '@/widgets/header/ui/AppHeader';
 import { HeaderMode } from '@/shared/ui/header/Header';
 import RecentSearch from '@/features/recent-search/ui/RecentSearch';
@@ -24,7 +25,9 @@ export default function BoardSearchPage({ initialRecent, keywordFromQuery }: Boa
   const handleSubmit = () => {
     const trimmed = keyword.trim();
     if (!trimmed) return;
-    router.replace(`/board/search?keyword=${encodeURIComponent(trimmed)}&category=all`);
+    router.replace(
+      `${PAGE_ROUTES.BOARD.SEARCH}?keyword=${encodeURIComponent(trimmed)}&category=all`,
+    );
   };
 
   const rawCategory = searchParams.get('category') ?? 'all';
@@ -38,9 +41,9 @@ export default function BoardSearchPage({ initialRecent, keywordFromQuery }: Boa
     const nextKey = (next in TAB_CATEGORIES ? next : 'all') as TabCategoryKey;
 
     router.replace(
-      `/board/search?keyword=${encodeURIComponent(keywordFromQuery)}&category=${encodeURIComponent(
-        nextKey,
-      )}`,
+      `${PAGE_ROUTES.BOARD.SEARCH}?keyword=${encodeURIComponent(
+        keywordFromQuery,
+      )}&category=${encodeURIComponent(nextKey)}`,
     );
   };
 

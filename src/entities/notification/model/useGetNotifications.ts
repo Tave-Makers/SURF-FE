@@ -12,7 +12,7 @@ export function useGetNotifications(selectedTab: NotificationTab) {
     queryKey: notificationKeys.list(apiCategory),
     queryFn: () => getNotifications(apiCategory),
     select: (response) => {
-      return response.notifications.map(mapNotificationToItem);
+      return response.data.map(mapNotificationToItem);
     },
   });
 }

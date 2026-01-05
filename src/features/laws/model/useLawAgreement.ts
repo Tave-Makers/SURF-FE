@@ -1,3 +1,4 @@
+import { PAGE_ROUTES } from '@/shared/config/path';
 import { useRouter } from 'next/navigation';
 import { useAgreementStore } from './useAgreementStore';
 
@@ -14,11 +15,11 @@ export const useLawAgreement = () => {
 
   const onClickLawDetail = (id: string) => {
     if (id === 'laws1') {
-      router.push('/settings/policy/service');
+      router.push(PAGE_ROUTES.MYPAGE.POLICY.SERVICE);
     } else if (id === 'laws2') {
-      router.push('/settings/policy/personal-info');
+      router.push(PAGE_ROUTES.MYPAGE.POLICY.PRIVACY);
     } else if (id === 'laws3') {
-      router.push('/settings/policy/marketing-info');
+      router.push(PAGE_ROUTES.MYPAGE.POLICY.MARKETING);
     }
   };
 

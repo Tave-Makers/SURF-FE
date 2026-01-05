@@ -9,18 +9,23 @@ import { AppHeader } from '@/widgets/header/ui/AppHeader';
 import { LawBottomSheet } from '@/features/laws/ui/LawBottomSheet';
 import { useLawAgreement } from '@/features/laws/model/useLawAgreement';
 import { useState } from 'react';
-import { TAVE_CHANNEL_LINKS, SPONSOR_LINKS } from '@/entities/home/model/constants';
+import { TAVE_CHANNEL_LINKS, SPONSOR_LINKS, SHORTCUT_LINKS } from '@/entities/home/model/constants';
 import { useRouter } from 'next/navigation';
+import { PAGE_ROUTES } from '@/shared/config/path';
 
 export const HomePage = () => {
   const router = useRouter();
   const { agreements, handleCheck, isAllRequiredChecked, onClickLawDetail } = useLawAgreement();
   const [isOpen, setIsOpen] = useState(!agreements.laws1 || !agreements.laws2 || !agreements.laws3);
+
   const { data: homeData } = useGetHome();
+  const deepLink = homeData?.announcementDeepLink ?? '';
 
   const handleShortcutClick = (link: string, label: string) => {
-    console.log(`${label} 클릭 - ${link}로 이동`);
-    // window.open(link, '_blank'); // TODO: 실제 구현 시 주석 해제
+    if (process.env.NODE_ENV === 'development') {
+      console.log(`${label} 클릭 - ${link}로 이동`);
+    }
+    router.push(link);
   };
 
   return (
@@ -35,7 +40,7 @@ export const HomePage = () => {
               {
                 label: 'Bell',
                 onClickIcon: () => {
-                  router.push('/notification');
+                  router.push(PAGE_ROUTES.NOTIFICATION);
                 },
               },
             ],
@@ -68,41 +73,33 @@ export const HomePage = () => {
             date={homeData?.announcementDate ?? '날짜없음'}
             category="official" // 카테고리 데이터 필요 {homeData?.announcementCategory ?? 'official'}
             onClick={() => {
-              console.log('공지사항 클릭');
-              // router.push(deepLink)
+              if (!deepLink) {
+                if (process.env.NODE_ENV === 'development') {
+                  console.warn('공지사항 링크가 없습니다.');
+                }
+                return;
+              }
+              router.push(deepLink);
             }}
           />
 
           {/* Carousel */}
           <Carousel images={homeData?.carouselImages ?? []} />
 
-          {/* Shortcut Buttons */}
+          {/* 앱 내 바로가기 링크 */}
           {/* 기획 측 정리 문서 필요 */}
           <div className="flex flex-row gap-11">
-            <Shortcut
-              type="rectangle"
-              label="바로가기 1"
-              imageSrc="/path/to/image1.png"
-              onClick={() => {
-                console.log('바로가기 1 클릭');
-              }}
-            />
-            <Shortcut
-              type="rectangle"
-              label="바로가기 2"
-              imageSrc="/path/to/image2.png"
-              onClick={() => {
-                console.log('바로가기 2 클릭');
-              }}
-            />
-            <Shortcut
-              type="rectangle"
-              label="바로가기 3"
-              imageSrc="/path/to/image3.png"
-              onClick={() => {
-                console.log('바로가기 3 클릭');
-              }}
-            />
+            <div className="flex w-full gap-11">
+              {SHORTCUT_LINKS.map((link) => (
+                <Shortcut
+                  key={link.id}
+                  type="rectangle"
+                  label={link.label}
+                  imageSrc={link.imageSrc}
+                  onClick={() => handleShortcutClick(link.link, link.label)}
+                />
+              ))}
+            </div>
           </div>
 
           {/* 테이브 채널 바로가기 */}
@@ -139,6 +136,7 @@ export const HomePage = () => {
         </div>
       </div>
 
+      {/* 약관 바텀 시트 */}
       {isAllRequiredChecked ? null : (
         <LawBottomSheet
           isOpen={isOpen}

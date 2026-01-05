@@ -1,6 +1,6 @@
 import { forwardRef, useRef, useImperativeHandle } from 'react';
-import { TextInput } from '../text-input/TextInput';
 import { SurfIcon } from '../icon/SurfIcon';
+import { MentionTextInput } from '../text-input/MentionTextInput';
 
 /**
  * 범용 메시지 입력 및 전송 컴포넌트
@@ -62,8 +62,8 @@ export const ActionBar = forwardRef<HTMLTextAreaElement, ActionBarProps>(
     };
 
     return (
-      <div className="border-border-normal bg-background-normal flex w-full items-center gap-10 border-t px-13 pt-13 pb-15">
-        <TextInput
+      <div className="bg-background-normal border-border-normal shadow-embossed flex w-full items-center gap-10 [border-top-width:var(--stroke-weight-0)] px-13 pt-13 pb-15">
+        <MentionTextInput
           mode="chat"
           ref={internalRef}
           value={value}

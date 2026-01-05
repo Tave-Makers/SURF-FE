@@ -20,7 +20,8 @@
     "convert-tokens": "pnpm run convert-typo && pnpm run convert-color && pnpm run convert-scheme && pnpm run convert-shadow",
     "test": "vitest",
     "test:ui": "vitest --ui",
-    "test:run": "vitest run"
+    "test:run": "vitest run",
+    "update-theme": "node scripts/update-theme.ts"
   },
   "lint-staged": {
     "*.{js,jsx,ts,tsx}": [

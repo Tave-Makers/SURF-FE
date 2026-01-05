@@ -2,7 +2,8 @@
 
 import { useEffect, useState } from 'react';
 
-export function useDebouncedValue<T>(value: T, delay = 50) {
+// 빠른 UI 피드백 위해 100으로 설정
+export function useDebouncedValue<T>(value: T, delay = 100) {
   const [debounced, setDebounced] = useState(value);
 
   useEffect(() => {

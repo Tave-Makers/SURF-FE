@@ -21,7 +21,7 @@
     "test": "vitest",
     "test:ui": "vitest --ui",
     "test:run": "vitest run",
-    "update-theme": "node scripts/update-theme.ts"
+    "update-theme": "node --loader ts-node/esm scripts/update-theme.ts"
   },
   "lint-staged": {
     "*.{js,jsx,ts,tsx}": [

@@ -28,7 +28,7 @@ export default function ScheduleForm({ onSubmit, initialData }: ScheduleFormProp
   useEffect(() => {
     if (initialData) {
       reset({
-        category: initialData.category || 'regular',
+        category: initialData.category || '',
         title: initialData.title ?? '',
         startDate: ensureUtcDate(initialData.startDate),
         endDate: ensureUtcDate(initialData.endDate),

@@ -1,3 +1,4 @@
+import 'server-only';
 import type { UserProfileApiResponse } from '@/entities/user/api/types';
 import { serverFetchWithCookies } from '@/shared/api/serverFetchWithCookies';
 

@@ -22,14 +22,6 @@ export type OnboardingState = OnboardingInitData & {
   clearOnboarding: () => void;
 };
 
-export type TrackPart =
-  | 'BACKEND'
-  | 'WEB_FRONTEND'
-  | 'APP_FRONTEND'
-  | 'DESIGN'
-  | 'DATA_ANALYSIS'
-  | 'DEEP_LEARNING';
-
 export type OnBoardingRequest = {
   profileImageUrl?: string;
   name: string;

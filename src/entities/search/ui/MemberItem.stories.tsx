@@ -62,7 +62,7 @@ export const PresidentLevel: Story = {
   args: {
     user: {
       ...mockUser,
-      level: 'PresidentManager',
+      level: 'president',
     },
   },
 };

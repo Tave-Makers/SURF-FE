@@ -6,8 +6,8 @@ export function useToggleCommentLikeMutation(postId: number, page: number, size:
 
   return useMutation({
     mutationFn: (commentId: number) => toggleCommentLike(commentId),
-    onSuccess: () => {
-      void qc.invalidateQueries({ queryKey: ['comments', postId, page, size] });
+    onSuccess: async () => {
+      await qc.invalidateQueries({ queryKey: ['comments', postId, page, size] });
     },
   });
 }

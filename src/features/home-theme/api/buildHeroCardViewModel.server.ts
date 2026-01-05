@@ -10,13 +10,13 @@ export async function buildHeroCardViewModel(home: HomeApiResponseData): Promise
 
   const characterKey = getCharacterKeyByPart(home.memberPart);
 
-  const charImgUrl = theme[characterKey] as string | null;
-  if (!charImgUrl) {
+  const charImgUrl = theme[characterKey];
+  if (typeof charImgUrl !== 'string' || !charImgUrl) {
     throw new Error(`Character image not found: ${characterKey}`);
   }
 
-  const bgImgUrl = theme.background as string | null;
-  if (!bgImgUrl) {
+  const bgImgUrl = theme.background;
+  if (typeof bgImgUrl !== 'string' || !bgImgUrl) {
     throw new Error('Theme background not found');
   }
 

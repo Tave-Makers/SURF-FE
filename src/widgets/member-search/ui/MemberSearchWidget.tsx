@@ -1,5 +1,5 @@
+import { toEnumPartMap, toLabelPartMap } from '@/entities/user/model/mappers';
 import { useMemberFilters } from '@/features/member-search/model/useMemberFilters';
-import { toEnumPartMap, toLabelPartMap } from '@/features/onboarding/lib/trackMapper';
 import { TOTAL_GENERATION } from '@/shared/constants';
 import { Menu } from '@/shared/ui/menu';
 import { TextInput } from '@/shared/ui/text-input/TextInput';

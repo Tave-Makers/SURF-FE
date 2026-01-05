@@ -1,6 +1,6 @@
 'use client';
 
-import { TrackPart } from '@/features/onboarding/model/types';
+import { TrackPart } from '@/entities/user/model/types';
 import { useState, useCallback, useEffect } from 'react';
 
 export function useMemberFilters() {

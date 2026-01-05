@@ -46,19 +46,6 @@ export const createRouteConfig = (router: RouterInstance): RouteConfig[] => [
     },
   },
   {
-    id: 'mypage-edit',
-    path: PAGE_ROUTES.MYPAGE.EDIT,
-    backPath: PAGE_ROUTES.MYPAGE.MAIN, // 임시
-    header: {
-      mode: HeaderMode.TextBtn,
-      title: '프로필 수정',
-      hasLeftIcon: true,
-      text: '저장',
-      btnVariant: 'secondary',
-      onClickTextBtn: () => alert('저장'),
-    },
-  },
-  {
     id: 'mypage-activity-score',
     path: PAGE_ROUTES.MYPAGE.ACTIVITY_SCORE.MAIN,
     backPath: PAGE_ROUTES.MYPAGE.MAIN,

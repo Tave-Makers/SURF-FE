@@ -1,13 +1,34 @@
 import type { UserProfileApiResponse } from '@/entities/user/api/types';
 import type {
-  YearMonth,
   CareerDTO,
   UserProfile,
   BannerPart,
   UserLevel,
   ServerUserLevel,
+  DateString,
+  TrackPart,
 } from './types';
-import { toLabelPartMap } from '@/features/onboarding/lib/trackMapper';
+import { normalizeTextNullable } from './normalize';
+
+// 한글 → 백엔드 enum
+export const toEnumPartMap: Record<string, TrackPart> = {
+  백엔드: 'BACKEND',
+  '웹 프론트엔드': 'WEB_FRONTEND',
+  '앱 프론트엔드': 'APP_FRONTEND',
+  디자인: 'DESIGN',
+  '데이터 분석': 'DATA_ANALYSIS',
+  딥러닝: 'DEEP_LEARNING',
+};
+
+// 백엔드 enum → 한글
+export const toLabelPartMap: Record<TrackPart, string> = {
+  BACKEND: '백엔드',
+  WEB_FRONTEND: '웹 프론트엔드',
+  APP_FRONTEND: '앱 프론트엔드',
+  DESIGN: '디자인',
+  DATA_ANALYSIS: '데이터 분석',
+  DEEP_LEARNING: '딥러닝',
+};
 
 export function mapUserLevel(role: ServerUserLevel | UserLevel): UserLevel {
   const map: Record<ServerUserLevel, UserLevel> = {
@@ -47,20 +68,21 @@ export function mapUserProfile(dto: UserProfileApiResponse['data']): UserProfile
     careerId: c.careerId,
     companyName: c.companyName,
     position: c.position,
-    startDate: c.startDate as YearMonth,
-    endDate: (c.endDate ?? null) as YearMonth | null,
+    startDate: c.startDate as DateString,
+    endDate: (c.endDate ?? null) as DateString | null,
     isWorking: c.isWorking,
   }));
 
   return {
-    userId: 1, // TODO: API에서 userId 받아오도록 수정 필요
-    name: dto.username,
-    bio: null, // TODO: API에서 bio 받아오도록 수정 필요
-    avatarUrl: null, // TODO: API에서 avatarUrl 받아오도록 수정 필요
+    username: dto.username,
+    selfIntroduction: normalizeTextNullable(dto.selfIntroduction) ?? '',
+    link: normalizeTextNullable(dto.link),
+    profileImgUrl: dto.profileImageUrl,
     phoneNumber: dto.phoneNumber,
+    phoneNumberPublic: dto.phoneNumberPublic,
     email: dto.email,
-    university: dto.university,
-    graduateSchool: dto.graduateSchool,
+    university: dto.university ?? null,
+    graduateSchool: dto.graduateSchool ?? null,
     level: mapUserLevel(dto.role),
     activityScore: dto.activityScore,
     isActive: dto.isActive,

@@ -1,3 +1,5 @@
+import { TrackPart } from '@/entities/user/model/types';
+
 export type OnBoardingFormData = {
   name: string;
   profileImage?: File;
@@ -8,14 +10,6 @@ export type OnBoardingFormData = {
   email: string;
   phoneNumber: string;
 };
-
-export type TrackPart =
-  | 'BACKEND'
-  | 'WEB_FRONTEND'
-  | 'APP_FRONTEND'
-  | 'DESIGN'
-  | 'DATA_ANALYSIS'
-  | 'DEEP_LEARNING';
 
 export type OnBoardingRequest = {
   profileImageUrl?: string;

@@ -1,5 +1,4 @@
-import { UserLevel } from '@/entities/user/model/types';
-import { TrackPart } from '@/features/onboarding/model/types';
+import { TrackPart, UserLevel } from '@/entities/user/model/types';
 
 export interface MemberSearchItem {
   userId: number;

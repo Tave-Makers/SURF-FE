@@ -1,33 +1,41 @@
 'use client';
 
-//import { useState } from 'react';
-//import { ProfileEditHeader } from '@/widgets/profile-edit-header/ui/ProfileEditHeader';
-//import { ProfileEditForm } from '@/widgets/profile-edit-form/ui/ProfileEditForm';
-import { TextButton } from '@/shared/ui/button/text-button/TextButton';
+import { useRef, useState } from 'react';
+import type { UserProfile } from '@/entities/user/model/types';
+import { AppHeader } from '@/widgets/header/ui/AppHeader';
+import { HeaderMode } from '@/shared/ui/header/Header';
+import {
+  EditProfileForm,
+  type EditProfileFormHandle,
+} from '@/features/profile/edit-profile/ui/EditProfileForm';
 
-export function MyEditPage() {
-  //const [memberName] = useState('김테이비');
+interface Props {
+  initialProfile: UserProfile;
+}
 
-  const handleEdit = () => {
-    // TODO: 편집 저장/전환 로직 또는 라우팅 연결
-  };
-
-  const handleAddCareer = () => {
-    // TODO: 경력 필드 추가 로직
-  };
+export function MyEditPage({ initialProfile }: Props) {
+  const formRef = useRef<EditProfileFormHandle>(null);
+  const [canSubmit, setCanSubmit] = useState(false);
 
   return (
-    <div className="flex flex-col">
-      <div className="flex w-full flex-col gap-[0.5rem] px-[1rem] py-[0.62rem]">
-        <div className="flex w-[4rem] self-end">
-          <TextButton size="s" variant="secondary" onClick={handleEdit}>
-            삭제하기
-          </TextButton>
-        </div>
-        <TextButton size="m" variant="secondary" onClick={handleAddCareer}>
-          경력 추가하기
-        </TextButton>
-      </div>
+    <div className="flex h-full w-full flex-col overflow-y-auto">
+      <AppHeader
+        overrideHeader={{
+          mode: HeaderMode.TextBtn,
+          title: '프로필 수정',
+          hasLeftIcon: true,
+          text: '저장',
+          btnVariant: 'secondary',
+          isDisabled: !canSubmit,
+          onClickTextBtn: () => formRef.current?.submit(),
+        }}
+      />
+
+      <EditProfileForm
+        ref={formRef}
+        initialProfile={initialProfile}
+        onCanSubmitChange={setCanSubmit}
+      />
     </div>
   );
 }

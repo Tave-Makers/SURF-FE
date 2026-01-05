@@ -10,14 +10,14 @@
  * @property dlCharacter - 딥러닝 파트 캐릭터 이미지 URL
  */
 export type ThemeItem = {
-  background?: string;
-  isBgDark?: boolean;
+  background: string;
+  isBgDark: boolean;
 
-  feCharacter?: string;
-  beCharacter?: string;
-  dsCharacter?: string;
-  daCharacter?: string;
-  dlCharacter?: string;
+  feCharacter: string;
+  beCharacter: string;
+  dsCharacter: string;
+  daCharacter: string;
+  dlCharacter: string;
 
   // 필요하면 확장
   [key: string]: unknown;

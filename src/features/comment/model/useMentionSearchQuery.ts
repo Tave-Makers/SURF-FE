@@ -2,10 +2,12 @@ import { useQuery, keepPreviousData } from '@tanstack/react-query';
 import { searchMentionableMembers } from '../api/searchMentionableMembers';
 
 export function useMentionSearchQuery(keyword: string, enabled: boolean) {
+  const trimmedKeyword = keyword.trim();
+
   return useQuery({
-    queryKey: ['member-mention', keyword],
-    queryFn: () => searchMentionableMembers(keyword),
-    enabled: enabled && keyword.trim().length >= 2,
+    queryKey: ['member-mention', trimmedKeyword],
+    queryFn: () => searchMentionableMembers(trimmedKeyword),
+    enabled: enabled && trimmedKeyword.length >= 2,
     select: (res) => res.data,
     placeholderData: keepPreviousData,
     staleTime: 5000,

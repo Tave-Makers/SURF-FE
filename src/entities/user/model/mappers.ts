@@ -32,8 +32,8 @@ export const toLabelPartMap: Record<TrackPart, string> = {
 
 export function mapUserLevel(role: ServerUserLevel | UserLevel): UserLevel {
   const map: Record<ServerUserLevel, UserLevel> = {
-    SUPER_MANAGER: 'superManager',
-    EXECUTIVE_MANAGER: 'executiveManager',
+    ADMIN: 'admin',
+    PRESIDENT: 'president',
     MANAGER: 'manager',
     MEMBER: 'member',
   };

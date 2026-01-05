@@ -11,6 +11,17 @@ export type OnBoardingFormData = {
   phoneNumber: string;
 };
 
+export type OnboardingInitData = {
+  nickname: string | null;
+  email: string | null;
+  profileImageUrl: string | null;
+};
+
+export type OnboardingState = OnboardingInitData & {
+  setOnboarding: (data: OnboardingInitData) => void;
+  clearOnboarding: () => void;
+};
+
 export type OnBoardingRequest = {
   profileImageUrl?: string;
   name: string;

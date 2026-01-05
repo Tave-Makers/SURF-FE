@@ -9,15 +9,10 @@ export type TrackPart =
   | 'DATA_ANALYSIS'
   | 'DEEP_LEARNING';
 
-export const SERVER_USER_LEVELS = [
-  'SUPER_MANAGER',
-  'EXECUTIVE_MANAGER',
-  'MANAGER',
-  'MEMBER',
-] as const;
+export const SERVER_USER_LEVELS = ['ADMIN', 'PRESIDENT', 'MANAGER', 'MEMBER'] as const;
 export type ServerUserLevel = (typeof SERVER_USER_LEVELS)[number];
 
-export const USER_LEVELS = ['superManager', 'executiveManager', 'manager', 'member'] as const;
+export const USER_LEVELS = ['admin', 'president', 'manager', 'member'] as const;
 export type UserLevel = (typeof USER_LEVELS)[number];
 
 export const BANNER_PARTS = [

@@ -1,9 +1,7 @@
 import type { Guard } from '@/shared/api/types';
 import { commonResponseGuard } from '@/shared/api/types';
 import type { HomeApiResponseData, HomeBanner } from './types';
-
-const isNumber: Guard<number> = (x): x is number => typeof x === 'number';
-const isString: Guard<string> = (x): x is string => typeof x === 'string';
+import { isNumber, isString } from '@/shared/api/primitives';
 
 const isNullable =
   <T>(g: Guard<T>): Guard<T | null> =>

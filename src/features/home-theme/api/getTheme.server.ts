@@ -10,7 +10,7 @@ if (!SUPABASE_URL) {
 export async function getTheme(): Promise<ThemeItem> {
   const url = `${SUPABASE_URL}/storage/v1/object/public/assets/config/image.json`;
 
-  const res = await fetch(url, { cache: 'no-store' });
+  const res = await fetch(url, { next: { revalidate: 3600 } });
   if (!res.ok) {
     throw new Error(`Failed to fetch theme: ${res.status} ${res.statusText}`);
   }

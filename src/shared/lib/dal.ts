@@ -1,5 +1,4 @@
 import 'server-only';
-import { cache } from 'react';
 import { cookies, headers } from 'next/headers';
 import { redirect } from 'next/navigation';
 import type { ValidStatusResponse } from '@/features/auth/api/types';
@@ -45,26 +44,71 @@ async function getBaseUrl(): Promise<string> {
   return host ? `${proto}://${host}` : 'http://localhost:3000';
 }
 
-export const verifySession = cache(async () => {
+function buildCookieHeaderFromStore(all: { name: string; value: string }[]) {
+  return all.map((c) => `${c.name}=${c.value}`).join('; ');
+}
+
+function mergeCookieHeaderWithSetCookie(origHeader: string, setCookies: string[]) {
+  if (!setCookies.length) return origHeader;
+
+  const jar = new Map<string, string>();
+
+  // 기존 Cookie 헤더 파싱
+  for (const part of origHeader.split(';')) {
+    const p = part.trim();
+    if (!p) continue;
+    const eq = p.indexOf('=');
+    if (eq === -1) continue;
+    const name = p.slice(0, eq).trim();
+    const value = p.slice(eq + 1);
+    jar.set(name, value);
+  }
+
+  // Set-Cookie로 받은 쿠키로 덮어쓰기
+  for (const sc of setCookies) {
+    const first = sc.split(';')[0]?.trim();
+    if (!first) continue;
+    const eq = first.indexOf('=');
+    if (eq === -1) continue;
+    const name = first.slice(0, eq).trim();
+    const value = first.slice(eq + 1);
+    jar.set(name, value);
+  }
+
+  // Cookie 헤더로 직렬화
+  return Array.from(jar.entries())
+    .map(([k, v]) => `${k}=${v}`)
+    .join('; ');
+}
+
+function getSetCookieHeaders(res: Response): string[] {
+  const anyHeaders = res.headers as unknown as { getSetCookie?: () => string[] | undefined };
+  if (typeof anyHeaders.getSetCookie === 'function') return anyHeaders.getSetCookie() ?? [];
+
+  const single = res.headers.get('set-cookie');
+  return single ? [single] : [];
+}
+
+export async function verifySession() {
   try {
     const baseUrl = await getBaseUrl();
 
-    const cookieHeader = (await cookies())
-      .getAll()
-      .map((c) => `${c.name}=${c.value}`)
-      .join('; ');
+    const cookieStore = await cookies();
+    const cookieHeader = buildCookieHeaderFromStore(cookieStore.getAll());
 
     const res = await fetchWithTimeout(`${baseUrl}${VALID_PATH}`, {
       cache: 'no-store',
       headers: cookieHeader ? { cookie: cookieHeader } : {},
     });
 
+    // 최초 검증 성공
     if (res.ok) {
       const raw: unknown = await res.json();
       const json = raw as ValidStatusResponse;
       return handleBusinessRedirect(json);
     }
 
+    // 401이면 refresh -> retry
     if (res.status === 401) {
       const refresh = await fetchWithTimeout(`${baseUrl}${REFRESH_PATH}`, {
         method: 'POST',
@@ -74,9 +118,12 @@ export const verifySession = cache(async () => {
 
       if (!refresh.ok) redirect(PAGE_ROUTES.LOGIN);
 
+      const setCookies = getSetCookieHeaders(refresh);
+      const newCookieHeader = mergeCookieHeaderWithSetCookie(cookieHeader, setCookies);
+
       const retry = await fetchWithTimeout(`${baseUrl}${VALID_PATH}`, {
         cache: 'no-store',
-        headers: cookieHeader ? { cookie: cookieHeader } : {},
+        headers: newCookieHeader ? { cookie: newCookieHeader } : {},
       });
 
       if (!retry.ok) redirect(PAGE_ROUTES.LOGIN);
@@ -94,7 +141,7 @@ export const verifySession = cache(async () => {
     console.error('[Auth] 예상치 못한 에러:', safeErrorMessage(error));
     redirect(PAGE_ROUTES.LOGIN);
   }
-});
+}
 
 function handleBusinessRedirect(json: ValidStatusResponse) {
   const user = json.data;

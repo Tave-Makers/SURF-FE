@@ -19,6 +19,10 @@ export default function MyPostsPage() {
     trackMyPostsEvent(MY_POSTS_EVENTS.VIEW_MY_POSTS_PAGE, { page_name: pageName });
   }, [pageName]);
 
+  useEffect(() => {
+    sessionStorage.setItem('entry_path', window.location.pathname);
+  }, []);
+
   const handleScrollThreshold = useCallback((percent: number) => {
     trackMyPostsEvent(MY_POSTS_EVENTS.SCROLL_MY_POSTS_PAGE, { percent });
   }, []);

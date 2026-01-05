@@ -19,7 +19,7 @@ export function useCreatePost() {
        * 2. 내 게시글 목록 invalidate
        * -------------------- */
       void queryClient.invalidateQueries({
-        queryKey: postQueryKeys.myPosts(),
+        queryKey: postQueryKeys.myPosts ? postQueryKeys.myPosts() : postQueryKeys.lists(),
       });
     },
   });

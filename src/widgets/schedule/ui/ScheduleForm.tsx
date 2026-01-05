@@ -245,7 +245,7 @@ export default function ScheduleForm({ onSubmit, initialData }: ScheduleFormProp
             <ScheduleLocation
               title="장소"
               placeholder="장소 입력"
-              location={field.value || '미정'}
+              location={field.value ?? ''}
               onChange={field.onChange}
             />
           )}

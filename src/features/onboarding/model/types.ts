@@ -1,3 +1,5 @@
+import { TrackPart } from '@/entities/user/model/types';
+
 export type OnBoardingFormData = {
   name: string;
   profileImage?: File;

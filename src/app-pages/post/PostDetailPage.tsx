@@ -13,12 +13,13 @@ import { Sheet } from '@/shared/ui/sheet/Sheet';
 import { SheetItem } from '@/shared/ui/sheet/SheetItem';
 import { SurfIcon } from '@/shared/ui/icon/SurfIcon';
 import { useState } from 'react';
-import { deletePost } from '@/features/post/api/deletePost';
 import { Alert } from '@/shared/ui/alert/Alert';
 import { usePathname, useRouter } from 'next/navigation';
 import { Avatar } from '@/shared/ui/avatar/Avatar';
 import { categoryIdToKey } from '@/entities/post/model/category';
 import { useGetSingleSchedule } from '@/features/schedule/edit/model/useGetSingleSchedule';
+import { useDeletePostMutation } from '@/features/post/model/useDeletePostMutation';
+import { useToastStore } from '@/shared/store/toastStore';
 
 type PostDetailPageProps = {
   postId: string;
@@ -29,6 +30,7 @@ export default function PostDetailPage({ postId }: PostDetailPageProps) {
   const router = useRouter();
   const numericPostId = Number(postId);
   const keyboardOffset = useKeyboardOffset();
+  const showToast = useToastStore((state) => state.show);
 
   // 게시글 상세 조회 API
   const { data: post, isLoading, isError } = usePostDetail(numericPostId);
@@ -56,6 +58,7 @@ export default function PostDetailPage({ postId }: PostDetailPageProps) {
 
   const [open, setOpen] = useState(false);
   const [showDeleteAlert, setShowDeleteAlert] = useState(false);
+  const { mutate: deletePostMutate } = useDeletePostMutation();
 
   // 로딩/에러 처리
   if (isLoading || (scheduleId && isScheduleLoading))
@@ -85,14 +88,25 @@ export default function PostDetailPage({ postId }: PostDetailPageProps) {
     setLikedUsersOpen(true);
   };
 
-  const handleDelete = async () => {
-    try {
-      await deletePost(numericPostId);
-      setShowDeleteAlert(false);
-      router.back();
-    } catch (e) {
-      console.error(e);
-    }
+  const handleDelete = () => {
+    deletePostMutate(numericPostId, {
+      onSuccess: () => {
+        setShowDeleteAlert(false);
+
+        // 저장된 경로 확인
+        const entryPath = sessionStorage.getItem('entry_path');
+
+        if (entryPath) {
+          // 저장된 경로(스크랩 또는 내 게시물 목록)로 이동
+          router.replace(entryPath);
+          sessionStorage.removeItem('entry_path');
+        } else {
+          router.push('/board/1');
+        }
+
+        showToast('게시글이 삭제되었습니다.');
+      },
+    });
   };
 
   return (
@@ -210,7 +224,7 @@ export default function PostDetailPage({ postId }: PostDetailPageProps) {
       {/* 삭제/수정/신고 Sheet*/}
       {/* ============================= */}
       <ModalSheet isOpen={open} onClose={() => setOpen(false)}>
-        <ModalSheet.Container className="!right-0 !left-0 mx-auto max-w-[360px]">
+        <ModalSheet.Container className="!right-0 !left-0 mx-auto w-full sm:max-w-[360px]">
           <ModalSheet.Content>
             <Sheet title="게시글 옵션">
               <div className="flex flex-col">

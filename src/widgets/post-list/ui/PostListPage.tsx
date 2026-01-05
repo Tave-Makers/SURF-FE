@@ -7,6 +7,7 @@ import type { PostListItemResponse } from '@/entities/post/api/types';
 import { PostCardList } from '@/widgets/post-list/ui/PostCardList';
 import { Post } from '@/entities/post/model/types';
 import type { UserLevel } from '@/entities/user/model/types';
+import { useRouter } from 'next/navigation';
 
 // 서버 응답 data 페이지 당 타입
 type ApiPage = {
@@ -30,6 +31,8 @@ export function PostListPage({
   scrollRootRef,
   userLevel,
 }: PostListPageProps) {
+  const router = useRouter();
+
   // 화면 하단 DOM 요소 참조
   const loadMoreRef = useRef<HTMLDivElement | null>(null);
   const size = 20;
@@ -66,8 +69,9 @@ export function PostListPage({
   const handlePostClick = useCallback(
     (post: Post) => {
       onPostClick?.(post);
+      router.push(`/board/${post.boardId}/post/${post.postId}`);
     },
-    [onPostClick],
+    [onPostClick, router],
   );
 
   // 에러 처리 화면

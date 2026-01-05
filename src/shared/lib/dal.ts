@@ -3,6 +3,7 @@ import { cache } from 'react';
 import { cookies, headers } from 'next/headers';
 import { redirect } from 'next/navigation';
 import type { ValidStatusResponse } from '@/features/auth/api/types';
+import { PAGE_ROUTES } from '@/shared/config/path';
 
 const TIMEOUT_MS = 15_000;
 
@@ -71,14 +72,14 @@ export const verifySession = cache(async () => {
         headers: cookieHeader ? { cookie: cookieHeader } : {},
       });
 
-      if (!refresh.ok) redirect('/login');
+      if (!refresh.ok) redirect(PAGE_ROUTES.LOGIN);
 
       const retry = await fetchWithTimeout(`${baseUrl}${VALID_PATH}`, {
         cache: 'no-store',
         headers: cookieHeader ? { cookie: cookieHeader } : {},
       });
 
-      if (!retry.ok) redirect('/login');
+      if (!retry.ok) redirect(PAGE_ROUTES.LOGIN);
 
       const raw: unknown = await retry.json();
       const json = raw as ValidStatusResponse;
@@ -86,12 +87,12 @@ export const verifySession = cache(async () => {
     }
 
     console.error(`[Auth] 검증 실패: ${res.status}`);
-    redirect('/login');
+    redirect(PAGE_ROUTES.LOGIN);
   } catch (error: unknown) {
     if (isNextRedirectError(error)) throw error;
 
     console.error('[Auth] 예상치 못한 에러:', safeErrorMessage(error));
-    redirect('/login');
+    redirect(PAGE_ROUTES.LOGIN);
   }
 });
 
@@ -100,14 +101,14 @@ function handleBusinessRedirect(json: ValidStatusResponse) {
 
   switch (user.memberStatus) {
     case 'WAITING':
-      return redirect('/login?msg=pending');
+      return redirect(PAGE_ROUTES.REDIRECT.MSG_PENDING);
     case 'REJECTED':
-      return redirect('/login?msg=rejected');
+      return redirect(PAGE_ROUTES.REDIRECT.MSG_REJECTED);
     case 'REGISTERING':
-      return redirect('/onboarding?msg=incomplete');
+      return redirect(PAGE_ROUTES.REDIRECT.MSG_INCOMPLETE);
     case 'APPROVED':
       return user;
     default:
-      return redirect('/login');
+      return redirect(PAGE_ROUTES.LOGIN);
   }
 }

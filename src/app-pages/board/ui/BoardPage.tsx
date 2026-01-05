@@ -1,6 +1,7 @@
 'use client';
 
 import { useSearchParams, useRouter } from 'next/navigation';
+import { PAGE_ROUTES } from '@/shared/config/path';
 import { PostListContainer } from '@/widgets/post-list/ui/PostListContainer';
 import { Tab } from '@/shared/ui/tab/Tab';
 import { useAuthStore } from '@/features/auth/model/useAuthStore';
@@ -30,9 +31,9 @@ const BoardPage = ({ boardId: boardIdProp }: { boardId: string }) => {
 
   const handleCategoryChange = (nextCategoryKey: string) => {
     if (nextCategoryKey === 'all') {
-      router.replace(`/board/${boardId}`);
+      router.replace(PAGE_ROUTES.BOARD.MAIN);
     } else {
-      router.replace(`/board/${boardId}?category=${nextCategoryKey}`);
+      router.replace(`${PAGE_ROUTES.BOARD.SELECT_CATEGORY(boardId)}?category=${nextCategoryKey}`);
     }
   };
 
@@ -46,7 +47,7 @@ const BoardPage = ({ boardId: boardIdProp }: { boardId: string }) => {
           icons: [
             {
               label: 'Search',
-              onClickIcon: () => router.push('/board/search'),
+              onClickIcon: () => router.push(PAGE_ROUTES.BOARD.SEARCH),
             },
           ],
         }}
@@ -62,7 +63,7 @@ const BoardPage = ({ boardId: boardIdProp }: { boardId: string }) => {
         <div className="pointer-events-none fixed inset-0 z-50">
           <div className="relative mx-auto h-full sm:max-w-[360px]">
             <div className="pointer-events-auto absolute right-15 bottom-15">
-              <PostFab onClick={() => router.push(`/board/${boardId}/post/create`)} />
+              <PostFab onClick={() => router.push(PAGE_ROUTES.BOARD.POST_CREATE(boardId))} />
             </div>
           </div>
         </div>

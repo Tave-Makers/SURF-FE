@@ -1,11 +1,6 @@
 'use client';
 
-import { FC, SVGProps } from 'react';
-import FrontendIcon from '@/shared/assets/icons/banner/banner-frontend.svg';
-import BackendIcon from '@/shared/assets/icons/banner/banner-backend.svg';
-import DesignIcon from '@/shared/assets/icons/banner/banner-design.svg';
-import DataIcon from '@/shared/assets/icons/banner/banner-data-analysis.svg';
-import DeepLearningIcon from '@/shared/assets/icons/banner/banner-deep-learning.svg';
+import { lazy, Suspense } from 'react';
 
 type ActivityScoreBannerProps = {
   part: 'frontend' | 'backend' | 'design' | 'data-analysis' | 'deep-learning';
@@ -13,37 +8,52 @@ type ActivityScoreBannerProps = {
   onClickMore: () => void;
 };
 
+const FrontendIcon = lazy(
+  () => import('@/shared/assets/icons/activity-banner/banner-frontend.svg'),
+);
+const BackendIcon = lazy(() => import('@/shared/assets/icons/activity-banner/banner-backend.svg'));
+const DesignIcon = lazy(() => import('@/shared/assets/icons/activity-banner/banner-design.svg'));
+const DataIcon = lazy(
+  () => import('@/shared/assets/icons/activity-banner/banner-data-analysis.svg'),
+);
+const DeepLearningIcon = lazy(
+  () => import('@/shared/assets/icons/activity-banner/banner-deep-learning.svg'),
+);
+
 export const ActivityScoreBanner = ({ part, score, onClickMore }: ActivityScoreBannerProps) => {
-  const iconMap: Record<ActivityScoreBannerProps['part'], FC<SVGProps<SVGSVGElement>>> = {
+  const iconMap = {
     frontend: FrontendIcon,
     backend: BackendIcon,
     design: DesignIcon,
     'data-analysis': DataIcon,
     'deep-learning': DeepLearningIcon,
-  };
+  } satisfies Record<ActivityScoreBannerProps['part'], typeof FrontendIcon>;
 
   const IconComponent = iconMap[part];
 
   return (
     <div className="rounded-4 relative flex h-[8.125rem] w-full flex-col justify-center px-12 py-11 opacity-100">
-      {/* 1. 메인 배경 */}
+      {/* 메인 배경 */}
       <img
-        src="/icons/banner/banner-background.svg"
+        src="/images/banner-background.svg"
         alt=""
         aria-hidden="true"
         className="rounded-4 absolute inset-0 h-full w-full object-cover"
       />
-      {/* 2. 캐릭터 아이콘 (제2의 배경) */}
+      {/* 캐릭터 아이콘 */}
+
       {IconComponent && (
-        <IconComponent
-          aria-hidden="true"
-          focusable="false"
-          className="pointer-events-none absolute inset-0 h-full w-full object-cover select-none"
-        />
+        <Suspense fallback={<div className="absolute inset-0" />}>
+          <IconComponent
+            aria-hidden="true"
+            focusable="false"
+            className="pointer-events-none absolute inset-0 h-full w-full object-cover select-none"
+          />
+        </Suspense>
       )}
       <div className="rounded-4 bg-background-normal-alpha-accent absolute inset-0 flex h-full w-full flex-col" />
 
-      {/* 3. 텍스트/UI */}
+      {/* 텍스트 */}
       <div className="text-foreground-static-white z-10 flex h-full w-full flex-col gap-15">
         <div className="text-body-body8 flex w-full flex-row items-center justify-between p-7">
           <span>현재 내 활동점수는?</span>

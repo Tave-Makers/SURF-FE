@@ -6,6 +6,7 @@ import Calendar from '@/widgets/calendar/ui/Calendar';
 import { useGetCalendarSchedule } from '@/features/calendar/model/useGetCalendarSchedule';
 import { PostFab } from '@/entities/post/ui/post-fab/PostFab';
 import { useAuthStore } from '@/features/auth/model/useAuthStore';
+import { PAGE_ROUTES } from '@/shared/config/path';
 
 export function CalendarPage() {
   const router = useRouter();
@@ -19,7 +20,7 @@ export function CalendarPage() {
   );
 
   const handleCreateSchedule = () => {
-    router.push('/calendar/schedule/create');
+    router.push(PAGE_ROUTES.CALENDAR.CREATE);
   };
 
   return (

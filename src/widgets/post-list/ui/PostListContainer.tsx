@@ -1,6 +1,7 @@
 'use client';
 
 import { useCallback } from 'react';
+import { PAGE_ROUTES } from '@/shared/config/path';
 import { useRouter } from 'next/navigation';
 import { PostCardList } from '@/widgets/post-list/ui/PostCardList';
 import { useInfiniteBoardPosts } from '@/entities/post/api/useInfiniteBoardPosts';
@@ -39,7 +40,7 @@ export const PostListContainer = ({ boardId, category, userLevel }: Props) => {
 
   const handlePostCardClick = useCallback(
     (post: Post) => {
-      router.push(`/board/${boardId}/post/${post.postId}`);
+      router.push(PAGE_ROUTES.BOARD.POST_DETAIL(boardId, post.postId));
     },
     [router, boardId],
   );

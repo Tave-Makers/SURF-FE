@@ -32,7 +32,8 @@
     ".next/types/**/*.ts",
     "**/*.js",
     "**/*.mjs",
-    ".storybook/**/*"
+    ".storybook/**/*",
+    "scripts/update-theme.ts"
   ],
   "exclude": ["node_modules"]
 }

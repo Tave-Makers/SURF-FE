@@ -16,7 +16,7 @@ type SurfIconName = ComponentProps<typeof SurfIcon>['name'];
 const MAX_TEXTAREA_HEIGHT = 100;
 
 const containerStyle =
-  'flex w-full flex-1 min-h-[2.25rem] items-center justify-between ' +
+  'flex w-full flex-1 min-w-0 min-h-[2.25rem] items-center justify-between ' +
   'rounded-6 bg-background-quaternary py-7 pl-11 pr-8 ' +
   'transition-[height] duration-150 ease-in-out';
 
@@ -56,10 +56,6 @@ export type TextInputProps = {
   onIconClick?: () => void;
   onEnter?: (val: string) => void;
 } & Omit<TextareaHTMLAttributes<HTMLTextAreaElement>, 'value' | 'onChange' | 'className'>;
-
-/* =======================
- * Component
- * ======================= */
 
 export const TextInput = forwardRef<HTMLTextAreaElement, TextInputProps>(
   (

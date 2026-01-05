@@ -42,11 +42,12 @@ export function HeroCard({ userData, noticeData, imgData }: HeroCardProps) {
     : 'text-foreground-static-black';
 
   return (
-    <div className="relative w-full overflow-hidden bg-transparent">
+    <div className="relative w-full overflow-hidden bg-transparent" aria-hidden="true">
       <svg
         viewBox={`${rectX} ${rectY} ${rectWidth} ${rectHeight}`}
         xmlns="http://www.w3.org/2000/svg"
         className="block h-auto w-full"
+        aria-hidden="true"
       >
         <defs>
           {/* 배경 이미지 */}
@@ -64,6 +65,7 @@ export function HeroCard({ userData, noticeData, imgData }: HeroCardProps) {
               width={rectWidth}
               height={rectHeight}
               preserveAspectRatio="xMidYMid slice"
+              aria-hidden="true"
             />
           </pattern>
 
@@ -92,6 +94,7 @@ export function HeroCard({ userData, noticeData, imgData }: HeroCardProps) {
             width={charSize}
             height={charSize}
             preserveAspectRatio="xMidYMid meet"
+            aria-label={`${userData.part} 캐릭터`}
           />
         </g>
       </svg>

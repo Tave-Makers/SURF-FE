@@ -4,8 +4,13 @@ import { buildHeroCardViewModel } from '@/features/home-theme/api/buildHeroCardV
 import { HomePageClient } from './HomePageClient';
 
 export async function HomePageServer() {
-  const home = await getHome();
-  const heroProps = await buildHeroCardViewModel(home);
+  try {
+    const home = await getHome();
+    const heroProps = await buildHeroCardViewModel(home);
 
-  return <HomePageClient heroProps={heroProps} />;
+    return <HomePageClient heroProps={heroProps} />;
+  } catch (error) {
+    console.error('[HomePageServer] Failed to load home data:', error);
+    throw error;
+  }
 }

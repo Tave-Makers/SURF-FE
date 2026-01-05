@@ -27,6 +27,10 @@ export const useDeletePostMutation = () => {
         queryKey: postQueryKeys.myPosts(),
       });
 
+      void queryClient.invalidateQueries({
+        queryKey: postQueryKeys.scraps(),
+      });
+
       // 3) 일정 목록 invalidate (scheduleId 없음 → 넓게)
       void queryClient.invalidateQueries({
         queryKey: scheduleQueryKeys.lists(),
@@ -34,7 +38,9 @@ export const useDeletePostMutation = () => {
     },
 
     onError: (error) => {
-      console.error('[Post Delete Error]', error);
+      if (error instanceof Error) {
+        console.error('[Post Delete Error]', error.message);
+      }
     },
   });
 };

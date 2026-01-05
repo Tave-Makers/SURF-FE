@@ -19,6 +19,10 @@ export default function ScrapsPage() {
     trackScrapsEvent(SCRAPS_EVENTS.VIEW_SCRAPS_PAGE, { page_name: pageName });
   }, [pageName]);
 
+  useEffect(() => {
+    sessionStorage.setItem('entry_path', window.location.pathname);
+  }, []);
+
   const handleScrollThreshold = useCallback((percent: number) => {
     trackScrapsEvent(SCRAPS_EVENTS.SCROLL_SCRAPS_PAGE, { percent });
   }, []);

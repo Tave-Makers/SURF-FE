@@ -13,8 +13,9 @@ export interface HomeApiResponseData {
   memberName: string;
   memberGeneration: number;
   memberPart: string;
-  nextScheduleTitle: string;
-  nextScheduleDate: string;
+  nextScheduleTitle?: string;
+  nextScheduleDate?: string;
+  nextScheduleDeepLink?: string;
 }
 
 export type HomeApiResponse = CommonResponse<HomeApiResponseData>;

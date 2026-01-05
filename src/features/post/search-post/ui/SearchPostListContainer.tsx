@@ -2,6 +2,7 @@
 
 import { useCallback, useMemo } from 'react';
 import { useRouter } from 'next/navigation';
+import { PAGE_ROUTES } from '@/shared/config/path';
 import { PostCardList } from '@/widgets/post-list/ui/PostCardList';
 import { useInfiniteScroll } from '@/shared/hooks/useInfiniteScroll';
 import { transformListItemToPost } from '@/entities/post/model/mappers';
@@ -51,7 +52,7 @@ const SearchPostListContainer = ({ keyword, category, userLevel }: Props) => {
   const handlePostCardClick = useCallback(
     (post: Post) => {
       const boardId = post.boardId ?? 1;
-      router.push(`/board/${boardId}/post/${post.postId}`);
+      router.push(PAGE_ROUTES.BOARD.POST_DETAIL(boardId, post.postId));
     },
     [router],
   );

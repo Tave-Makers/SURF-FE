@@ -2,6 +2,7 @@
 
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
+import { PAGE_ROUTES } from '@/shared/config/path';
 import SearchHistoryItem from '@/shared/ui/search-history-item/SearchHistoryItem';
 import { deleteAllRecentSearches } from '../api/deleteAllRecentSearches.client';
 import { deleteOneRecentSearch } from '../api/deleteOneRecentSearch.client';
@@ -19,7 +20,7 @@ export default function RecentSearch({ recentKeywords }: RecentSearchProps) {
   const [isDeleting, setIsDeleting] = useState(false);
 
   const handleSelect = (k: string) => {
-    router.push(`/board/search?keyword=${encodeURIComponent(k)}`);
+    router.push(`${PAGE_ROUTES.BOARD.SEARCH}?keyword=${encodeURIComponent(k)}`);
   };
 
   const openAlert = useAlertStore((s) => s.open);

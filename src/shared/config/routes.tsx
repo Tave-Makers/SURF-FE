@@ -1,6 +1,7 @@
 import { HeaderMode, HeaderProps } from '@/shared/ui/header/Header';
 import { DummyLogo } from '@/shared/ui/logo/DummyLogo';
 import { useRouter } from 'next/navigation';
+import { PAGE_ROUTES } from './path';
 
 type RouterInstance = ReturnType<typeof useRouter>;
 
@@ -29,14 +30,14 @@ export const createRouteConfig = (router: RouterInstance): RouteConfig[] => [
   // },
   {
     id: 'mypage',
-    path: '/mypage',
-    backPath: '/',
+    path: PAGE_ROUTES.MYPAGE.MAIN,
+    backPath: PAGE_ROUTES.HOME,
     header: {
       icons: [
         {
           label: 'Cog',
           onClickIcon: () => {
-            router.push('/settings');
+            router.push(PAGE_ROUTES.MYPAGE.SETTINGS);
           },
         },
       ],
@@ -46,8 +47,8 @@ export const createRouteConfig = (router: RouterInstance): RouteConfig[] => [
   },
   {
     id: 'mypage-edit',
-    path: '/mypage/edit',
-    backPath: '/mypage', // 임시
+    path: PAGE_ROUTES.MYPAGE.EDIT,
+    backPath: PAGE_ROUTES.MYPAGE.MAIN, // 임시
     header: {
       mode: HeaderMode.TextBtn,
       title: '프로필 수정',
@@ -59,8 +60,8 @@ export const createRouteConfig = (router: RouterInstance): RouteConfig[] => [
   },
   {
     id: 'mypage-activity-score',
-    path: '/mypage/activity-score',
-    backPath: '/mypage',
+    path: PAGE_ROUTES.MYPAGE.ACTIVITY_SCORE.MAIN,
+    backPath: PAGE_ROUTES.MYPAGE.MAIN,
     header: {
       mode: HeaderMode.TextBtn,
       title: '활동점수',
@@ -68,14 +69,14 @@ export const createRouteConfig = (router: RouterInstance): RouteConfig[] => [
       text: '회칙',
       btnVariant: 'secondary',
       onClickTextBtn: () => {
-        router.push('/mypage/activity-score/bylaws');
+        router.push(PAGE_ROUTES.MYPAGE.ACTIVITY_SCORE.BYLAWS);
       },
     },
   },
   {
     id: 'mypage-activity-score-bylaws',
-    path: '/mypage/activity-score/bylaws',
-    backPath: '/mypage/activity-score',
+    path: PAGE_ROUTES.MYPAGE.ACTIVITY_SCORE.BYLAWS,
+    backPath: PAGE_ROUTES.MYPAGE.ACTIVITY_SCORE.MAIN,
     header: {
       mode: HeaderMode.Default,
       title: 'TAVE 회칙',
@@ -84,8 +85,8 @@ export const createRouteConfig = (router: RouterInstance): RouteConfig[] => [
   },
   {
     id: 'mypage-settings',
-    path: '/settings',
-    backPath: '/mypage',
+    path: PAGE_ROUTES.MYPAGE.SETTINGS,
+    backPath: PAGE_ROUTES.MYPAGE.MAIN,
     header: {
       mode: HeaderMode.Default,
       title: '설정 및 도움',
@@ -94,8 +95,8 @@ export const createRouteConfig = (router: RouterInstance): RouteConfig[] => [
   },
   {
     id: 'mypage-scraps',
-    path: '/settings/scraps',
-    backPath: '/settings',
+    path: PAGE_ROUTES.MYPAGE.SCRAPS,
+    backPath: PAGE_ROUTES.MYPAGE.SETTINGS,
     header: {
       mode: HeaderMode.Default,
       title: '내가 스크랩한 게시글',
@@ -104,8 +105,8 @@ export const createRouteConfig = (router: RouterInstance): RouteConfig[] => [
   },
   {
     id: 'mypage-my-posts',
-    path: '/settings/my-posts',
-    backPath: '/settings',
+    path: PAGE_ROUTES.MYPAGE.MY_POSTS,
+    backPath: PAGE_ROUTES.MYPAGE.SETTINGS,
     header: {
       mode: HeaderMode.Default,
       title: '내가 작성한 게시글',
@@ -114,8 +115,8 @@ export const createRouteConfig = (router: RouterInstance): RouteConfig[] => [
   },
   {
     id: 'mypage-feedback',
-    path: '/settings/feedback',
-    backPath: '/settings',
+    path: PAGE_ROUTES.MYPAGE.FEEDBACK,
+    backPath: PAGE_ROUTES.MYPAGE.SETTINGS,
     header: {
       mode: HeaderMode.Default,
       title: '피드백 보내기',
@@ -124,8 +125,8 @@ export const createRouteConfig = (router: RouterInstance): RouteConfig[] => [
   },
   {
     id: 'mypage-policy',
-    path: '/settings/policy',
-    backPath: '/settings',
+    path: PAGE_ROUTES.MYPAGE.POLICY.MAIN,
+    backPath: PAGE_ROUTES.MYPAGE.SETTINGS,
     header: {
       mode: HeaderMode.Default,
       title: '이용약관',
@@ -136,8 +137,8 @@ export const createRouteConfig = (router: RouterInstance): RouteConfig[] => [
   // 약관 상세 페이지
   {
     id: 'mypage-policy-service-policy',
-    path: '/settings/policy/service',
-    backPath: '/settings/policy',
+    path: PAGE_ROUTES.MYPAGE.POLICY.SERVICE,
+    backPath: PAGE_ROUTES.MYPAGE.POLICY.MAIN,
     header: {
       mode: HeaderMode.Default,
       title: 'SURF 서비스 이용약관',
@@ -146,8 +147,8 @@ export const createRouteConfig = (router: RouterInstance): RouteConfig[] => [
   },
   {
     id: 'mypage-policy-personal-info-policy',
-    path: '/settings/policy/personal-info',
-    backPath: '/settings/policy',
+    path: PAGE_ROUTES.MYPAGE.POLICY.PRIVACY,
+    backPath: PAGE_ROUTES.MYPAGE.POLICY.MAIN,
     header: {
       mode: HeaderMode.Default,
       title: '개인정보 수집·이용 동의서',
@@ -156,8 +157,8 @@ export const createRouteConfig = (router: RouterInstance): RouteConfig[] => [
   },
   {
     id: 'mypage-policy-marketing-info-policy',
-    path: '/settings/policy/marketing-info',
-    backPath: '/settings/policy',
+    path: PAGE_ROUTES.MYPAGE.POLICY.MARKETING,
+    backPath: PAGE_ROUTES.MYPAGE.POLICY.MAIN,
     header: {
       mode: HeaderMode.Default,
       title: '[선택] 마케팅 정보 수신 동의',
@@ -167,8 +168,8 @@ export const createRouteConfig = (router: RouterInstance): RouteConfig[] => [
 
   {
     id: 'onboarding',
-    path: '/onboarding',
-    backPath: '/login',
+    path: PAGE_ROUTES.ONBOARDING,
+    backPath: PAGE_ROUTES.LOGIN,
     header: {
       mode: HeaderMode.Default,
       hasLeftIcon: true,
@@ -176,35 +177,35 @@ export const createRouteConfig = (router: RouterInstance): RouteConfig[] => [
   },
   {
     id: 'profile',
-    path: '/profile',
-    backPath: '/mypage', // 임시
+    path: PAGE_ROUTES.PROFILE,
+    backPath: PAGE_ROUTES.MYPAGE.MAIN, // 임시
     header: {
       mode: HeaderMode.Default,
       hasLeftIcon: true,
     },
   },
-  {
-    id: 'board',
-    path: '/board',
-    backPath: '/', // 임시
-    header: {
-      mode: HeaderMode.Default,
-      title: '공지사항',
-      hasLeftIcon: true,
-      icons: [
-        {
-          label: 'Search',
-          onClickIcon: () => {
-            router.push('/board/search');
-          },
-        },
-      ],
-    },
-  },
+  // {
+  //   id: 'board',
+  //   path: PAGE_ROUTES.BOARD.MAIN,
+  //   backPath: PAGE_ROUTES.HOME, // 임시
+  //   header: {
+  //     mode: HeaderMode.Default,
+  //     title: '공지사항',
+  //     hasLeftIcon: true,
+  //     icons: [
+  //       {
+  //         label: 'Search',
+  //         onClickIcon: () => {
+  //           router.push(PAGE_ROUTES.BOARD.SEARCH);
+  //         },
+  //       },
+  //     ],
+  //   },
+  // },
   {
     id: 'home-calendar',
-    path: '/calendar',
-    backPath: '/',
+    path: PAGE_ROUTES.CALENDAR.MAIN,
+    backPath: PAGE_ROUTES.HOME,
     header: {
       mode: HeaderMode.Default,
       title: '일정',
@@ -214,8 +215,8 @@ export const createRouteConfig = (router: RouterInstance): RouteConfig[] => [
   {
     id: 'post-detail',
     // 게시글 목록이랑 합친 후 동적 세그먼트로 변경 예정
-    path: '/board/[boardId]/post/[postId]',
-    backPath: '/board/[boardId]',
+    path: PAGE_ROUTES.BOARD.POST_DETAIL('[boardId]', '[postId]'),
+    backPath: PAGE_ROUTES.BOARD.MAIN,
     header: {
       mode: HeaderMode.Default,
       title: '공지사항',

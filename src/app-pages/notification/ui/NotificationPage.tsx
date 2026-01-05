@@ -9,6 +9,7 @@ import { NotificationList } from '@/entities/notification/ui/NotificationList';
 import { useGetNotifications } from '@/entities/notification/model/useGetNotifications';
 import { useReadNotification } from '@/entities/notification/model/useReadNotification';
 import { AppHeader } from '@/widgets/header/ui/AppHeader';
+import NotificationEmpty from './icons/NotificationEmpty.svg';
 
 const tabItems = [
   { value: 'ALL', label: '전체' },
@@ -21,7 +22,7 @@ export function NotificationPage() {
   const [currentTab, setCurrentTab] = useState<NotificationTab>('ALL');
 
   const { data, isLoading } = useGetNotifications(currentTab);
-  const { mutate: readNotification } = useReadNotification();
+  const { mutate: readNotification, isPending } = useReadNotification();
 
   const handleBack = () => {
     router.back();
@@ -52,11 +53,25 @@ export function NotificationPage() {
     // 데이터가 없거나 비어있을 때 (탭 별 메시지 분기)
     if (!data || data.length === 0) {
       const emptyMessages = {
-        ALL: '새로운 알림이 없습니다.',
-        ACTIVITY: '새로운 활동 알림이 없습니다.',
-        SCHEDULE: '새로운 일정 알림이 없습니다.',
+        ALL: '아직 새로운 알림이 없어요',
+        ACTIVITY: '아직 새로운 활동 알림이 없어요.',
+        SCHEDULE: '아직 새로운 일정 알림이 없어요.',
       };
-      return <div className="p-20 text-center text-gray-500">{emptyMessages[currentTab]}</div>;
+      return (
+        <div className="text-body-body8 text-foreground-tertiary flex h-full w-full flex-col items-center justify-center gap-[0.43rem] text-center">
+          <NotificationEmpty />
+          {emptyMessages[currentTab]}
+        </div>
+      );
+    }
+
+    if (isPending) {
+      return (
+        <div className="p-20 text-center text-gray-500">
+          <NotificationEmpty />
+          로딩 중...
+        </div>
+      );
     }
 
     // 데이터가 있을 때

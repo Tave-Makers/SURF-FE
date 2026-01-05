@@ -3,6 +3,7 @@
 import { ToolBar, type ToolBarItem } from '@/shared/ui/toolbar/ToolBar';
 import { type Editor } from '@tiptap/react';
 import { useRouter } from 'next/navigation';
+import { PAGE_ROUTES } from '@/shared/config/path';
 
 export const TOOLBAR_KEY = {
   CAMERA: 'camera',
@@ -42,7 +43,7 @@ export const PostEditorToolbar = ({
       onReservationClick();
     },
     [TOOLBAR_KEY.CALENDAR]: () => {
-      router.push('/post/schedule');
+      router.push(PAGE_ROUTES.BOARD.POST_SCHEDULE);
     },
   };
 

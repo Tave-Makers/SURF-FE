@@ -20,7 +20,7 @@ const mockUser: MemberSearchItem = {
   name: '테이브',
   university: '홍익대학교',
   bio: '프론트엔드와 블록체인을 좋아합니다',
-  level: 'superManager',
+  level: 'admin',
   chips: ['15기 프론트엔드', '15기 디자인'],
   avatarUrl: null,
 };
@@ -49,20 +49,20 @@ export const ManyChips: Story = {
   },
 };
 
-export const SuperManagerLevel: Story = {
+export const AdminLevel: Story = {
   args: {
     user: {
       ...mockUser,
-      level: 'superManager',
+      level: 'admin',
     },
   },
 };
 
-export const ExecutiveManagerLevel: Story = {
+export const PresidentLevel: Story = {
   args: {
     user: {
       ...mockUser,
-      level: 'executiveManager',
+      level: 'PresidentManager',
     },
   },
 };

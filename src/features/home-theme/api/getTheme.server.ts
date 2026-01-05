@@ -1,5 +1,6 @@
 import 'server-only';
 import type { ThemeConfig, ThemeItem } from './types';
+import { assertThemeItem } from './guards';
 
 const SUPABASE_URL = process.env.SUPABASE_URL;
 
@@ -23,6 +24,6 @@ export async function getTheme(): Promise<ThemeItem> {
   if (!theme) {
     throw new Error(`Theme not found for season: ${seasonKey}`);
   }
-
+  assertThemeItem(theme);
   return theme;
 }

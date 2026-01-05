@@ -9,6 +9,6 @@ export function useGetCommentsQuery(postId: number, page: number, size: number, 
       const response = await fetchComments(postId, page, size);
       return response.data;
     },
-    enabled: enabled && Number.isFinite(postId),
+    enabled: enabled,
   });
 }

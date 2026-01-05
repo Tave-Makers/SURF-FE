@@ -18,7 +18,7 @@ export type OnboardingInitData = {
 };
 
 export type OnboardingState = OnboardingInitData & {
-  setOnboarding: (auth: OnboardingInitData) => void;
+  setOnboarding: (data: OnboardingInitData) => void;
   clearOnboarding: () => void;
 };
 

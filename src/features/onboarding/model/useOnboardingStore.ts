@@ -12,7 +12,7 @@ export const useOnboardingStore = create<OnboardingState>()(
   persist(
     (set) => ({
       ...initialState,
-      setOnboarding: (auth) => set((state) => ({ ...state, ...auth })),
+      setOnboarding: (data) => set((state) => ({ ...state, ...data })),
       clearOnboarding: () => set(initialState),
     }),
     {

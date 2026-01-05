@@ -1,3 +1,4 @@
+import 'server-only';
 import type { HomeApiResponse, HomeApiResponseData } from './types';
 import { serverFetchJsonGuarded } from '@/shared/api/serverFetchJsonGuarded';
 import { homeResponseGuard } from './guards';

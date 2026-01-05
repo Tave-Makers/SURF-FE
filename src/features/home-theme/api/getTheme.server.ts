@@ -18,5 +18,11 @@ export async function getTheme(): Promise<ThemeItem> {
   const config = (await res.json()) as ThemeConfig;
 
   const seasonKey = (config.currentSeason ?? '').trim();
-  return config.seasons?.[seasonKey] ?? config.base ?? {};
+  const theme = config.seasons?.[seasonKey] ?? config.base;
+
+  if (!theme) {
+    throw new Error(`Theme not found for season: ${seasonKey}`);
+  }
+
+  return theme;
 }

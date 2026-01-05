@@ -72,11 +72,24 @@ export const verifySession = cache(async () => {
         headers: cookieHeader ? { cookie: cookieHeader } : {},
       });
 
-      if (!refresh.ok) redirect(PAGE_ROUTES.LOGIN);
+      if (!refresh.ok) redirect('/login');
+
+      const refreshSetCookie: string[] =
+        typeof refresh.headers.getSetCookie === 'function'
+          ? (refresh.headers.getSetCookie() ?? [])
+          : [];
+
+      function buildUpdatedCookieHeader(origHeader: string, setCookies: string[]) {
+        if (!setCookies.length) return origHeader;
+        const updatedCookies = setCookies.map((c) => c.split(';')[0].trim()).join('; ');
+        return updatedCookies;
+      }
+
+      const newCookieHeader = buildUpdatedCookieHeader(cookieHeader, refreshSetCookie);
 
       const retry = await fetchWithTimeout(`${baseUrl}${VALID_PATH}`, {
         cache: 'no-store',
-        headers: cookieHeader ? { cookie: cookieHeader } : {},
+        headers: newCookieHeader ? { cookie: newCookieHeader } : {},
       });
 
       if (!retry.ok) redirect(PAGE_ROUTES.LOGIN);

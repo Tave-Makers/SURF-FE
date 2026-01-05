@@ -3,9 +3,9 @@ import type { ThemeItem } from './types';
 import type { HomeApiResponseData } from '@/entities/home/api/types';
 import type { HeroCardProps } from '@/features/home-theme/ui/hero-card/HeroCard';
 import { getCharacterKeyByPart, PART_LABEL } from '@/features/home-theme/model/mappers';
+import { getTheme } from './getTheme.server';
 
 export async function buildHeroCardViewModel(home: HomeApiResponseData): Promise<HeroCardProps> {
-  const { getTheme } = await import('./getTheme.server');
   const theme: ThemeItem = await getTheme();
 
   const characterKey = getCharacterKeyByPart(home.memberPart);

@@ -11,7 +11,7 @@ export interface ShortcutItem {
 export const SHORTCUT_LINKS: ShortcutItem[] = [
   { id: 1, label: '공지사항', imageSrc: '/icons/notice.png', link: PAGE_ROUTES.BOARD.MAIN },
   { id: 2, label: '일정', imageSrc: '/icons/notice.png', link: PAGE_ROUTES.CALENDAR.MAIN },
-  { id: 3, label: '주소록', imageSrc: '/icons/job.png', link: '/job' },
+  { id: 3, label: '주소록', imageSrc: '/icons/job.png', link: PAGE_ROUTES.MEMBER_SEARCH },
 ];
 
 // 2. TAVE 채널 데이터

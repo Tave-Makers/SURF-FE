@@ -20,6 +20,15 @@ export default function FCMInitializer() {
           // 1. 로그인 상태 확인 (API 호출)
           await getValidStatus();
 
+          // 2. 이미 등록되었다면 스킵
+          const isRegistered = sessionStorage.getItem('isFcmRegistered');
+          if (isRegistered === 'true') {
+            if (process.env.NODE_ENV === 'development') {
+              console.log('[FCMInitializer] Token already registered in session. Skipping.');
+            }
+            return;
+          }
+
           if (process.env.NODE_ENV === 'development') {
             console.log('[FCMInitializer] User is logged in. Requesting FCM token...');
           }

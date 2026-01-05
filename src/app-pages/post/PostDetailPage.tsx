@@ -18,8 +18,9 @@ import { usePathname, useRouter } from 'next/navigation';
 import { Avatar } from '@/shared/ui/avatar/Avatar';
 import { categoryIdToKey } from '@/entities/post/model/category';
 import { useGetSingleSchedule } from '@/features/schedule/edit/model/useGetSingleSchedule';
-import { useDeletePostMutation } from '@/features/post/model/useDeletePostMutation';
+import { CommentSection } from '@/widgets/comment-section/ui/CommentSection';
 import { useToastStore } from '@/shared/store/toastStore';
+import { useDeletePostMutation } from '@/features/post/model/useDeletePostMutation';
 
 type PostDetailPageProps = {
   postId: string;
@@ -148,6 +149,7 @@ export default function PostDetailPage({ postId }: PostDetailPageProps) {
 
             <PostBodySection post={post} schedule={schedule} onClickLikeCount={openLikedUsers} />
           </main>
+          <CommentSection postId={numericPostId} />
         </div>
 
         {/* 댓글 입력창 */}
@@ -270,7 +272,7 @@ export default function PostDetailPage({ postId }: PostDetailPageProps) {
             </Sheet>
           </ModalSheet.Content>
         </ModalSheet.Container>
-        <ModalSheet.Backdrop onClick={() => setOpen(false)} />
+        <ModalSheet.Backdrop onTap={() => setOpen(false)} />
       </ModalSheet>
     </div>
   );

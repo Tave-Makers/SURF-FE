@@ -19,8 +19,7 @@ import { useState } from 'react';
 interface Props {
   postId: number;
   memberId?: number;
-
-  // ✅ 답글 시작을 부모로 올림
+  // 답글 시작을 부모로 올림
   onStartReply: (info: { commentId: number; memberId: number; nickname: string }) => void;
 }
 

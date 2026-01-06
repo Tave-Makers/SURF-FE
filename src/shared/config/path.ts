@@ -2,7 +2,10 @@ export const PAGE_ROUTES = {
   HOME: '/',
   LOGIN: '/login',
   ONBOARDING: '/onboarding',
+
+  // 멤버 관련
   PROFILE: '/profile',
+  MEMBER_SEARCH: '/member-search',
 
   // 캘린더 관련
   CALENDAR: {

@@ -1,3 +1,4 @@
+import 'server-only';
 import type { CommonResponse } from '@/shared/api/types';
 import { serverFetchJsonGuarded } from '@/shared/api/serverFetchJsonGuarded';
 import { commonResponseGuard } from '@/shared/api/types';

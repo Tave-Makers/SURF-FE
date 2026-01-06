@@ -75,11 +75,7 @@ export default function OnBoardingPage() {
           agreements={agreements}
           onCheck={handleCheck}
           onClickPrimaryBtn={() => {
-            if (isAllRequiredChecked) {
-              setIsOpen(false);
-            } else {
-              alert('필수 약관에 모두 동의해 주세요.');
-            }
+            setIsOpen(false);
           }}
           onClickLawDetail={onClickLawDetail}
           allAgreed={isAllRequiredChecked}

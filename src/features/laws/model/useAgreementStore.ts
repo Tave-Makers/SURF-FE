@@ -1,5 +1,5 @@
 import { create } from 'zustand';
-import { persist } from 'zustand/middleware';
+import { persist, createJSONStorage } from 'zustand/middleware';
 
 export type AgreementId = 'laws1' | 'laws2' | 'laws3';
 
@@ -33,6 +33,7 @@ export const useAgreementStore = create(
     }),
     {
       name: 'agreement-storage',
+      storage: createJSONStorage(() => sessionStorage),
     },
   ),
 );

@@ -68,19 +68,17 @@ export default function OnBoardingPage() {
       <OnBoardingForm />
 
       {/* 약관 바텀 시트 */}
-      {isAllRequiredChecked ? null : (
-        <LawBottomSheet
-          isOpen={isOpen}
-          onClose={() => setIsOpen(false)}
-          agreements={agreements}
-          onCheck={handleCheck}
-          onClickPrimaryBtn={() => {
-            setIsOpen(false);
-          }}
-          onClickLawDetail={onClickLawDetail}
-          allAgreed={isAllRequiredChecked}
-        />
-      )}
+      <LawBottomSheet
+        isOpen={isOpen}
+        onClose={() => setIsOpen(false)}
+        agreements={agreements}
+        onCheck={handleCheck}
+        onClickPrimaryBtn={() => {
+          setIsOpen(false);
+        }}
+        onClickLawDetail={onClickLawDetail}
+        allAgreed={isAllRequiredChecked}
+      />
     </FormProvider>
   );
 }

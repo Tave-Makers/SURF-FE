@@ -9,6 +9,7 @@ type SurfIconName = ComponentProps<typeof SurfIcon>['name'];
 export type SettingsItemProps = Omit<ButtonHTMLAttributes<HTMLButtonElement>, 'disabled'> & {
   leftIconName?: SurfIconName | null;
   rightIconName?: SurfIconName | null;
+  rightContent?: ReactNode;
   isDisabled?: boolean;
   children: ReactNode;
   onClick?: (e: MouseEvent<HTMLButtonElement>) => void;
@@ -22,6 +23,7 @@ export const SettingsItem = forwardRef<HTMLButtonElement, SettingsItemProps>(
     {
       leftIconName,
       rightIconName,
+      rightContent,
       isDisabled = false,
       children,
       type = 'button',
@@ -50,7 +52,8 @@ export const SettingsItem = forwardRef<HTMLButtonElement, SettingsItemProps>(
           )}
           {children && <span className="text-body-body9 text-foreground-normal">{children}</span>}
         </div>
-        {rightIconName && (
+        {rightContent}
+        {rightIconName && !rightContent && (
           <SurfIcon
             name={rightIconName}
             size={'s'}

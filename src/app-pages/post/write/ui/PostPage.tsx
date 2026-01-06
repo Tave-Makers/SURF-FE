@@ -137,9 +137,12 @@ export default function PostPage(props: PostPageProps) {
         className="mx-auto flex w-full sm:w-[360px]"
       >
         <ModalSheet.Container>
-          <ModalSheet.Header />
+          <ModalSheet.Header className="bg-background-normal-lighter" />
           <ModalSheet.Content>
-            <div id={categorySheetId} className="flex flex-col gap-5 p-15">
+            <div
+              id={categorySheetId}
+              className="bg-background-normal-lighter flex flex-col gap-5 p-15"
+            >
               {Object.values(POST_CATEGORIES).map((item) => (
                 <button
                   key={item.id}

@@ -6,15 +6,28 @@ import { Carousel } from '@/shared/ui/carousel/Carousel';
 import { HeaderMode } from '@/shared/ui/header/Header';
 import { Shortcut } from '@/shared/ui/shortcut/Shortcut';
 import { AppHeader } from '@/widgets/header/ui/AppHeader';
+import { useEffect } from 'react';
 import { TAVE_CHANNEL_LINKS, SPONSOR_LINKS, SHORTCUT_LINKS } from '@/entities/home/model/constants';
 import { useRouter } from 'next/navigation';
 import { PAGE_ROUTES } from '@/shared/config/path';
+import { useAuthStore } from '@/features/auth/model/useAuthStore';
+import { HeroCard } from '@/features/home-theme/ui/hero-card/HeroCard';
+import type { HeroCardProps } from '@/features/home-theme/ui/hero-card/HeroCard';
 
-export const HomePage = () => {
+export const HomePageClient = ({ heroProps }: { heroProps: HeroCardProps }) => {
   const router = useRouter();
 
   const { data: homeData } = useGetHome();
   const deepLink = homeData?.announcementDeepLink ?? '';
+
+  const { memberId, memberRole } = useAuthStore();
+
+  // TODO: 리뷰 반영 후 제거
+  useEffect(() => {
+    console.log('AuthStore 상태 확인');
+    console.log('memberId:', memberId);
+    console.log('memberRole:', memberRole);
+  }, [memberId, memberRole]);
 
   const handleShortcutClick = (link: string, label: string) => {
     if (process.env.NODE_ENV === 'development') {
@@ -24,7 +37,7 @@ export const HomePage = () => {
   };
 
   return (
-    <div className="overflow-y-auto pb-[1.61rem]">
+    <div className="flex flex-col overflow-y-auto pb-[1.61rem]">
       <div className="absolute z-10 w-full sm:w-[360px]">
         {/* AppHeader */}
         <AppHeader
@@ -46,19 +59,8 @@ export const HomePage = () => {
 
       <div>
         {/* Hero Card */}
-        <div className="bg-foreground-badge-pink h-85 w-full">
-          {/* <HeroCard
-            userData={{
-              name: homeData?.userName,
-              batch: homeData?.userBatch,
-              part: homeData?.userPart,
-            }}
-            noticeData={{
-              title: homeData?.noticeDataMainText,
-              // sender: homeData?.noticeDataSender,
-            }}
-            imgData={[]} // 프론트엔드에서 결정할 부분
-          /> */}
+        <div className="flex w-full flex-col">
+          <HeroCard {...heroProps} />
         </div>
 
         <div className="flex flex-col gap-16 px-13 pt-15">
@@ -79,7 +81,14 @@ export const HomePage = () => {
           />
 
           {/* Carousel */}
-          <Carousel images={homeData?.carouselImages ?? []} />
+          <Carousel
+            images={
+              homeData?.carouselImages?.map((img) => ({
+                ...img,
+                linkUrl: img.linkUrl === null ? undefined : img.linkUrl,
+              })) ?? []
+            }
+          />
 
           {/* 앱 내 바로가기 링크 */}
           {/* 기획 측 정리 문서 필요 */}

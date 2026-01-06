@@ -14,6 +14,7 @@ import { trackOnBoardingEvent } from '@/features/onboarding/lib/trackOnBoardingE
 import { useImageUploader } from '@/entities/image/model/useImageUploader';
 import { safeUUID } from '@/shared/utils/uuid';
 import { Alert } from '@/shared/ui/alert/Alert';
+import { useAgreementStore } from '@/features/laws/model/useAgreementStore';
 
 const STEP_ANALYTICS_NAMES: Record<number, 'nickname' | 'track' | 'contact'> = {
   0: 'nickname',
@@ -137,6 +138,7 @@ export default function OnBoardingForm() {
       input_count: filledCount,
     });
     await submitOnBoarding(submitData);
+    useAgreementStore.getState().resetAgreements();
     setIsAlertOpen(true);
   }
 

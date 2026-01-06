@@ -14,16 +14,29 @@ export default function OnBoardingPage() {
   const email = useOnboardingStore((s) => s.email);
   const profileImageUrl = useOnboardingStore((s) => s.profileImageUrl);
 
-  const { agreements, handleCheck, isAllRequiredChecked, onClickLawDetail } = useLawAgreement();
-  const [isOpen, setIsOpen] = useState(!agreements.laws1 || !agreements.laws2 || !agreements.laws3);
+  const {
+    agreements,
+    handleCheck,
+    isAllRequiredChecked,
+    onClickLawDetail,
+    isAgreed,
+    confirmAgreement,
+  } = useLawAgreement();
+  const [isOpen, setIsOpen] = useState(true);
 
   const { data: statusData } = useGetValidStatusQuery();
 
   useEffect(() => {
-    if (statusData?.memberStatus === 'REGISTERING') {
+    if (isAgreed) {
+      setIsOpen(false);
+    }
+  }, [isAgreed]);
+
+  useEffect(() => {
+    if (statusData?.memberStatus === 'REGISTERING' && !isAgreed) {
       setIsOpen(true);
     }
-  }, [statusData]);
+  }, [statusData, isAgreed]);
 
   const methods = useForm<OnBoardingFormData>({
     defaultValues: {
@@ -74,6 +87,7 @@ export default function OnBoardingPage() {
         agreements={agreements}
         onCheck={handleCheck}
         onClickPrimaryBtn={() => {
+          confirmAgreement();
           setIsOpen(false);
         }}
         onClickLawDetail={onClickLawDetail}

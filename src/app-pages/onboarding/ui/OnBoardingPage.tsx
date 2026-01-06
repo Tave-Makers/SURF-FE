@@ -3,13 +3,40 @@
 import { useOnboardingStore } from '@/features/onboarding/model/useOnboardingStore';
 import { OnBoardingFormData } from '@/features/onboarding/model/types';
 import OnBoardingForm from '@/widgets/onboarding/ui/OnBoardingForm';
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { FormProvider, useForm } from 'react-hook-form';
+import { LawBottomSheet } from '@/features/laws/ui/LawBottomSheet';
+import { useLawAgreement } from '@/features/laws/model/useLawAgreement';
+import { useGetValidStatusQuery } from '@/features/auth/model/useGetValidStatusQuery';
 
 export default function OnBoardingPage() {
   const nickname = useOnboardingStore((s) => s.nickname);
   const email = useOnboardingStore((s) => s.email);
   const profileImageUrl = useOnboardingStore((s) => s.profileImageUrl);
+
+  const {
+    agreements,
+    handleCheck,
+    isAllRequiredChecked,
+    onClickLawDetail,
+    isAgreed,
+    confirmAgreement,
+  } = useLawAgreement();
+  const [isOpen, setIsOpen] = useState(true);
+
+  const { data: statusData } = useGetValidStatusQuery();
+
+  useEffect(() => {
+    if (isAgreed) {
+      setIsOpen(false);
+    }
+  }, [isAgreed]);
+
+  useEffect(() => {
+    if (statusData?.memberStatus === 'REGISTERING' && !isAgreed) {
+      setIsOpen(true);
+    }
+  }, [statusData, isAgreed]);
 
   const methods = useForm<OnBoardingFormData>({
     defaultValues: {
@@ -52,6 +79,20 @@ export default function OnBoardingPage() {
   return (
     <FormProvider {...methods}>
       <OnBoardingForm />
+
+      {/* 약관 바텀 시트 */}
+      <LawBottomSheet
+        isOpen={isOpen}
+        onClose={() => setIsOpen(false)}
+        agreements={agreements}
+        onCheck={handleCheck}
+        onClickPrimaryBtn={() => {
+          confirmAgreement();
+          setIsOpen(false);
+        }}
+        onClickLawDetail={onClickLawDetail}
+        allAgreed={isAllRequiredChecked}
+      />
     </FormProvider>
   );
 }

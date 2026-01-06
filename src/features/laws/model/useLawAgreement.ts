@@ -5,10 +5,14 @@ import { useAgreementStore } from './useAgreementStore';
 export const useLawAgreement = () => {
   const router = useRouter();
 
-  const { agreements, setAgreement } = useAgreementStore();
+  const { agreements, setAgreement, isAgreed, setAgreed } = useAgreementStore();
 
   const handleCheck = (id: string, checked: boolean) => {
     setAgreement(id, checked);
+  };
+
+  const confirmAgreement = () => {
+    setAgreed(true);
   };
 
   const isAllRequiredChecked = agreements.laws1 && agreements.laws2 && agreements.laws3;
@@ -23,5 +27,12 @@ export const useLawAgreement = () => {
     }
   };
 
-  return { agreements, handleCheck, isAllRequiredChecked, onClickLawDetail };
+  return {
+    agreements,
+    handleCheck,
+    isAllRequiredChecked,
+    onClickLawDetail,
+    isAgreed,
+    confirmAgreement,
+  };
 };

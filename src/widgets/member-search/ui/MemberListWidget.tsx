@@ -51,10 +51,8 @@ export function MemberListWidget({ keyword, queryResult }: MemberListWidgetProps
     [isLoading, hasNextPage, isFetchingNextPage, fetchNextPage],
   );
 
-  if (isLoading) return <div className="p-10 text-center">불러오는 중...</div>;
-
   return (
-    <div className="flex flex-col divide-y divide-gray-50">
+    <div className="flex flex-col">
       <MemberList members={members} keyword={keyword} onClick={handleClick} />
 
       {/* 무한 스크롤 트리거 지점: lastElementRef를 ref로 전달 */}

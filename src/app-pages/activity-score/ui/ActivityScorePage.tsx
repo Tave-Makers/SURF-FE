@@ -157,7 +157,7 @@ export default function ActivityScorePage() {
 
       {/* 활동 점수 리스트 */}
       {history.length > 0 && (
-        <div className="flex w-full flex-1 flex-col gap-18 overflow-y-auto px-13 pt-17">
+        <div className="flex w-full flex-1 flex-col gap-18 overflow-y-auto px-13 py-17">
           <ActivityHistoryList records={history} />
 
           {hasNextPage && (

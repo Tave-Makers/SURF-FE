@@ -10,6 +10,8 @@ import { useState, useRef, useEffect } from 'react';
 import { trackActivityScoreEvent } from '@/features/activity-score/lib/trackActivityScoreEvent';
 import { ACTIVITY_SCORE_EVENTS } from '@/features/activity-score/model/types';
 import { usePageName } from '@/shared/analytics/lib/getPageName';
+import RewardEmptyIcon from './icons/reward-empty.svg';
+import PenaltyEmptyIcon from './icons/penalty-empty.svg';
 
 export default function ActivityScorePage() {
   // 탭 상태
@@ -54,6 +56,7 @@ export default function ActivityScorePage() {
   } = useInfiniteActivityHistory(mode, 5);
 
   const history = historyRaw?.pages.flatMap((page) => page.content) ?? [];
+  const isHistoryEmpty = !isHistoryLoading && !isHistoryError && history.length === 0;
 
   useEffect(() => {
     if (!loadMoreRef.current || !hasNextPage) return;
@@ -108,47 +111,67 @@ export default function ActivityScorePage() {
         />
       </div>
 
+      {/* 활동 점수 상태 영역 */}
+      {(isHistoryLoading || isHistoryError || isHistoryEmpty) && (
+        <div className="flex flex-col items-center pt-20">
+          {isHistoryLoading && (
+            <div aria-live="polite" aria-busy="true" className="">
+              불러오는 중...
+            </div>
+          )}
+
+          {isHistoryError && (
+            <div role="alert" className="flex flex-col items-center gap-[0.5rem]">
+              <p>히스토리를 불러오는 중 오류가 발생했습니다.</p>
+              <button
+                type="button"
+                onClick={() => void refetchHistory()}
+                className="bg-background-primary rounded px-[1rem] py-[0.5rem] text-white"
+              >
+                다시 시도
+              </button>
+            </div>
+          )}
+
+          {isHistoryEmpty && (
+            <div className="flex flex-col items-center gap-12">
+              {mode === 'REWARD' ? (
+                <>
+                  <RewardEmptyIcon className="h-[60px] w-[60px]" />
+                  <p className="text-body-body8 text-foreground-tertiary">
+                    아직 등록된 상점이 없어요
+                  </p>
+                </>
+              ) : (
+                <>
+                  <PenaltyEmptyIcon className="h-[60px] w-[60px]" />
+                  <p className="text-body-body8 text-foreground-tertiary">
+                    아직 등록된 벌점이 없어요
+                  </p>
+                </>
+              )}
+            </div>
+          )}
+        </div>
+      )}
+
       {/* 활동 점수 리스트 */}
-      <div className="flex w-full flex-1 flex-col gap-18 overflow-y-auto px-13 pt-17">
-        {isHistoryLoading && (
-          <div aria-live="polite" aria-busy="true">
-            불러오는 중...
-          </div>
-        )}
+      {history.length > 0 && (
+        <div className="flex w-full flex-1 flex-col gap-18 overflow-y-auto px-13 pt-17">
+          <ActivityHistoryList records={history} />
 
-        {isHistoryError && (
-          <div role="alert" className="flex flex-col items-center gap-[0.5rem]">
-            <p>히스토리를 불러오는 중 오류가 발생했습니다.</p>
-            <button
-              type="button"
-              onClick={() => void refetchHistory()}
-              className="bg-background-primary rounded px-[1rem] py-[0.5rem] text-white"
+          {hasNextPage && (
+            <div
+              ref={loadMoreRef}
+              className="text-body-body8 text-foreground-tertiary flex items-center justify-center py-[1rem]"
+              aria-live="polite"
+              aria-atomic="true"
             >
-              다시 시도
-            </button>
-          </div>
-        )}
-
-        {!isHistoryLoading && !isHistoryError && history.length === 0 && (
-          <div className="text-body-body8 text-foreground-tertiary text-center">
-            활동 내역이 없습니다.
-          </div>
-        )}
-
-        {history.length > 0 && <ActivityHistoryList records={history} />}
-
-        {/* sentinel */}
-        {hasNextPage && (
-          <div
-            ref={loadMoreRef}
-            className="text-body-body8 text-foreground-tertiary flex items-center justify-center py-[1rem]"
-            aria-live="polite"
-            aria-atomic="true"
-          >
-            {isFetchingNextPage ? '로딩 중...' : '스크롤 내려서 더 불러오기'}
-          </div>
-        )}
-      </div>
+              {isFetchingNextPage ? '로딩 중...' : '스크롤 내려서 더 불러오기'}
+            </div>
+          )}
+        </div>
+      )}
     </div>
   );
 }

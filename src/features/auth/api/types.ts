@@ -24,6 +24,7 @@ export type KakaoLoginResponse = {
   status: number;
   message: string;
   data: {
+    accessToken: string;
     nickname: string;
     email: string;
     profileImageUrl: string;

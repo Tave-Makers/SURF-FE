@@ -40,10 +40,10 @@ export const PAGE_ROUTES = {
     MY_POSTS: '/settings/my-posts',
     MODE: '/settings/mode',
     POLICY: {
-      MAIN: '/policy',
+      MAIN: '/settings/policy',
       SERVICE: '/policy/service',
       PRIVACY: '/policy/personal-info',
-      MARKETING: '/policy/marketing-info',
+      OPERATING: '/policy/operating-info',
     },
   },
 

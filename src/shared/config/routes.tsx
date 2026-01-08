@@ -138,13 +138,13 @@ export const createRouteConfig = (router: RouterInstance): RouteConfig[] => [
     backPath: PAGE_ROUTES.MYPAGE.POLICY.MAIN,
     header: {
       mode: HeaderMode.Default,
-      title: '개인정보 수집·이용 동의서',
+      title: '[필수] 개인정보 처리방침',
       hasLeftIcon: true,
     },
   },
   {
-    id: 'mypage-policy-marketing-info-policy',
-    path: PAGE_ROUTES.MYPAGE.POLICY.MARKETING,
+    id: 'mypage-policy-operating-info-policy',
+    path: PAGE_ROUTES.MYPAGE.POLICY.OPERATING,
     backPath: PAGE_ROUTES.MYPAGE.POLICY.MAIN,
     header: {
       mode: HeaderMode.Default,

@@ -10,7 +10,7 @@ export default function PersonalInfoPolicyPage() {
       <AppHeader
         overrideHeader={{
           mode: HeaderMode.Default,
-          title: '개인정보 수집·이용 동의서',
+          title: '[필수] 개인정보 처리방침',
           hasLeftIcon: true,
         }}
       />

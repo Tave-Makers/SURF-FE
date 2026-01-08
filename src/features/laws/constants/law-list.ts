@@ -9,7 +9,7 @@ export const LAW_LIST = [
   },
   {
     id: 'laws2',
-    title: '[필수] 개인정보 처리 방침',
+    title: '[필수] 개인정보 처리방침',
     required: true,
     route: PAGE_ROUTES.MYPAGE.POLICY.PRIVACY,
   },
@@ -17,6 +17,6 @@ export const LAW_LIST = [
     id: 'laws3',
     title: '[필수] SURF 서비스 운영정책',
     required: true,
-    route: PAGE_ROUTES.MYPAGE.POLICY.MARKETING,
+    route: PAGE_ROUTES.MYPAGE.POLICY.OPERATING,
   },
 ] as const;

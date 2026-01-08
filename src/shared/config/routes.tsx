@@ -1,5 +1,5 @@
 import { HeaderMode, HeaderProps } from '@/shared/ui/header/Header';
-import HeaderLogo from '@/public/HeaderLogo.svg';
+import HeaderLogo from '../../../public/HeaderLogo.svg';
 import { useRouter } from 'next/navigation';
 import { PAGE_ROUTES } from './path';
 

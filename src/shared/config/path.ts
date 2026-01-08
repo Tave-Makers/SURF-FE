@@ -38,16 +38,16 @@ export const PAGE_ROUTES = {
     FEEDBACK: '/settings/feedback',
     SCRAPS: '/settings/scraps',
     MY_POSTS: '/settings/my-posts',
+    MODE: '/settings/mode',
     POLICY: {
-      MAIN: '/settings/policy',
-      SERVICE: '/settings/policy/service',
-      PRIVACY: '/settings/policy/personal-info',
-      MARKETING: '/settings/policy/marketing-info',
+      MAIN: '/policy',
+      SERVICE: '/policy/service',
+      PRIVACY: '/policy/personal-info',
+      MARKETING: '/policy/marketing-info',
     },
   },
 
   // 기타
-  SIGNUP: '/signup',
   REDIRECT: {
     MSG_PENDING: '/login?msg=pending',
     MSG_REJECTED: '/login?msg=rejected',

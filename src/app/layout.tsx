@@ -8,15 +8,8 @@ import { PageTrackingProvider } from '@/shared/analytics/providers/PageTrackingP
 import GlobalComponents from '@/shared/ui/global-components/GlobalComponents';
 import FCMInitializer from '@/app/providers/FCMInitializer';
 import { PathWatcher } from './providers/PathWatcher';
-import { MOBILE_SCREEN_RATIO } from '@/shared/constants';
 
 export default function RootLayout({ children }: { children: ReactNode }) {
-  const mainClassName = `
-  bg-background-tertiary box-content flex h-full w-dvw
-  sm:h-[min(100dvh,calc(100dvw*${MOBILE_SCREEN_RATIO.height}/${MOBILE_SCREEN_RATIO.width}))]
-  sm:w-[min(100dvw,calc(100dvh*${MOBILE_SCREEN_RATIO.width}/${MOBILE_SCREEN_RATIO.height}))]
-`;
-
   return (
     <html lang="ko">
       <head>
@@ -39,7 +32,9 @@ export default function RootLayout({ children }: { children: ReactNode }) {
           <FCMInitializer />
           <PathWatcher />
           <PageTrackingProvider>
-            <main className={mainClassName}>{children}</main>
+            <main className="bg-background-tertiary box-content flex h-full w-dvw sm:h-[min(100dvh,calc(100dvw*812/375))] sm:w-[min(100dvw,calc(100dvh*375/812))]">
+              {children}
+            </main>
             <GlobalComponents />
           </PageTrackingProvider>
           <ReactQueryDevtools initialIsOpen={false} />

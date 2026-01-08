@@ -1,5 +1,5 @@
 import { HeaderMode, HeaderProps } from '@/shared/ui/header/Header';
-import { DummyLogo } from '@/shared/ui/logo/DummyLogo';
+import HeaderLogo from '@/public/HeaderLogo.svg';
 import { useRouter } from 'next/navigation';
 import { PAGE_ROUTES } from './path';
 
@@ -41,7 +41,7 @@ export const createRouteConfig = (router: RouterInstance): RouteConfig[] => [
           },
         },
       ],
-      logo: <DummyLogo />,
+      logo: <HeaderLogo className="h-full w-auto" />,
       mode: HeaderMode.Logo,
     },
   },

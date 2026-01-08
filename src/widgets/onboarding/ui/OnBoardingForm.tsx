@@ -22,8 +22,12 @@ const STEP_ANALYTICS_NAMES: Record<number, 'nickname' | 'track' | 'contact'> = {
   2: 'contact',
 };
 
-export default function OnBoardingForm() {
-  const [step, setStep] = useState(0);
+interface OnBoardingFormProps {
+  step: number;
+  setStep: React.Dispatch<React.SetStateAction<number>>;
+}
+
+export default function OnBoardingForm({ step, setStep }: OnBoardingFormProps) {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isAlertOpen, setIsAlertOpen] = useState(false);
   const methods = useFormContext<OnBoardingFormData>();

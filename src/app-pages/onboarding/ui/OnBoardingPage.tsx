@@ -23,6 +23,7 @@ export default function OnBoardingPage() {
     confirmAgreement,
   } = useLawAgreement();
   const [isOpen, setIsOpen] = useState(true);
+  const [step, setStep] = useState(0);
 
   const { data: statusData } = useGetValidStatusQuery();
 
@@ -78,11 +79,11 @@ export default function OnBoardingPage() {
 
   return (
     <FormProvider {...methods}>
-      <OnBoardingForm />
+      <OnBoardingForm step={step} setStep={setStep} />
 
       {/* 약관 바텀 시트 */}
       <LawBottomSheet
-        isOpen={isOpen}
+        isOpen={isOpen && step === 0}
         onClose={() => setIsOpen(false)}
         agreements={agreements}
         onCheck={handleCheck}

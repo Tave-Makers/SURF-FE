@@ -1,4 +1,5 @@
 import { SettingsItemType } from './types';
+import { PAGE_ROUTES } from '@/shared/config/path';
 
 export const THEME_OPTIONS = [
   { value: 'system', label: '시스템 설정 모드', icon: 'Cog' },
@@ -11,31 +12,31 @@ export const SETTINGS_ITEMS: SettingsItemType[] = [
     id: 'scraps',
     leftIconName: 'Bookmark',
     text: '내가 스크랩한 게시글',
-    action: { type: 'NAVIGATE', payload: '/settings/scraps' },
+    action: { type: 'NAVIGATE', payload: PAGE_ROUTES.MYPAGE.SCRAPS },
   },
   {
     id: 'my-posts',
     leftIconName: 'Edit',
     text: '내가 작성한 게시글',
-    action: { type: 'NAVIGATE', payload: '/settings/my-posts' },
+    action: { type: 'NAVIGATE', payload: PAGE_ROUTES.MYPAGE.MY_POSTS },
   },
   {
     id: 'feedback',
     leftIconName: 'ChatDots',
     text: '피드백 보내기',
-    action: { type: 'NAVIGATE', payload: '/settings/feedback' },
+    action: { type: 'NAVIGATE', payload: PAGE_ROUTES.MYPAGE.FEEDBACK },
   },
   {
     id: 'mode',
     leftIconName: 'CircleHalfSolid',
     text: '테마 변경',
-    action: { type: 'NAVIGATE', payload: '/settings/mode' },
+    action: { type: 'NAVIGATE', payload: PAGE_ROUTES.MYPAGE.MODE },
   },
   {
     id: 'policy',
     leftIconName: 'InfoCircle',
     text: '이용약관',
-    action: { type: 'NAVIGATE', payload: '/settings/policy' },
+    action: { type: 'NAVIGATE', payload: PAGE_ROUTES.MYPAGE.POLICY.MAIN },
   },
   {
     id: 'logout',

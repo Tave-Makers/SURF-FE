@@ -3,7 +3,7 @@
  * 정책 ID에 따라 다른 변환 규칙을 적용합니다.
  *
  * @param src - 원본 정책 텍스트
- * @param policyId - 정책 식별자 (PersonalInfoPolicy | ServicePolicy | MarketingPolicy)
+ * @param policyId - 정책 식별자 (PersonalInfoPolicy | ServicePolicy | OperatingPolicy)
  * @returns Markdown 형식으로 변환된 텍스트
  */
 
@@ -30,8 +30,8 @@ export function preprocessToMarkdown(src: string, policyId?: string): string {
       .replace(/^제\s*(\d+)조\s*\((.+?)\)\s*$/gm, '### 제$1조 ($2)');
   }
 
-  // MarketingPolicy: 번호 및 원형 번호 변환
-  if (policyId === 'MarketingPolicy') {
+  // OperatingPolicy: 번호 및 원형 번호 변환
+  if (policyId === 'OperatingPolicy') {
     /* 기본 숫자 번호 조항 top, bottom margin 조정 */
     // 1. 수신 채널 및 범위 → ## 1. 수신 채널 및 범위 [my-0]
     out = out.replace(

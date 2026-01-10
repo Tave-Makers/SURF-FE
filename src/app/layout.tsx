@@ -32,7 +32,7 @@ export default function RootLayout({ children }: { children: ReactNode }) {
           <FCMInitializer />
           <PathWatcher />
           <PageTrackingProvider>
-            <main className="bg-background-normal box-content flex h-[min(100dvh,calc(100dvw*812/375))] w-[min(100dvw,calc(100dvh*375/812))]">
+            <main className="bg-background-normal box-content flex h-full w-dvw sm:h-[min(100dvh,calc(100dvw*812/375))] sm:w-[min(100dvw,calc(100dvh*375/812))]">
               {children}
             </main>
             <GlobalComponents />

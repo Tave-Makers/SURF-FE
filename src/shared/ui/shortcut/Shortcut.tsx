@@ -22,15 +22,15 @@ export const Shortcut = ({ type, label, imageSrc, onClick }: ShortcutProps) => {
   // rectangle
   return (
     <button
-      className="bg-background-normal-lighter rounded-5 border-border-secondary flex h-[9.375rem] w-[6.5625rem] flex-col items-start overflow-hidden border shadow-[0_0_20px_3px_rgba(0,0,0,0.04)]"
+      className="bg-background-normal-lighter rounded-5 border-border-secondary flex w-full flex-col items-start overflow-hidden border shadow-[0_0_20px_3px_rgba(0,0,0,0.04)]"
       onClick={onClick}
     >
       {/* Label 영역 */}
       <div className="text-foreground-normal text-body-body5 px-13 pt-13">{label}</div>
 
       {/* 이미지 영역 */}
-      <div className="w-full flex-1 bg-gray-200">
-        {SvgIcon && <SvgIcon className="h-[110px] w-[105px] object-cover" />}
+      <div className="w-full flex-1">
+        {SvgIcon && <SvgIcon className="h-full w-full object-cover" />}
       </div>
     </button>
   );

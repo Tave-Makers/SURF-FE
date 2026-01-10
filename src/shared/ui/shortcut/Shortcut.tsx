@@ -29,7 +29,7 @@ export const Shortcut = ({ type, label, imageSrc, onClick }: ShortcutProps) => {
       <div className="text-foreground-normal text-body-body5 px-13 pt-13">{label}</div>
 
       {/* 이미지 영역 */}
-      <div className="w-full flex-1">
+      <div className="w-full flex-1 bg-gray-200">
         {SvgIcon && <SvgIcon className="h-full w-full object-cover" />}
       </div>
     </button>

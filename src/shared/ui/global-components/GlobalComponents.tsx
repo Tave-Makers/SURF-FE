@@ -2,7 +2,7 @@
 
 import ToastViewport from '@/shared/ui/toast/ToastViewport';
 import AlertViewport from '@/shared/ui/alert/AlertViewport';
-import BottomSheetViewport from '@/shared/ui/sheet/BottomSheetViewport';
+import BottomSheetViewport from '@/widgets/bottom-sheet/ui/BottomSheetViewport';
 
 export default function GlobalComponents() {
   return (

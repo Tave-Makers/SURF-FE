@@ -1,18 +1,15 @@
 import { create } from 'zustand';
-import { LawBottomSheetProps } from '@/shared/ui/sheet/bottomSheet';
 
-export type BottomSheetPropsMap = {
-  law: Omit<LawBottomSheetProps, 'isOpen' | 'onClose'>;
-  // 게시글 수정삭제 / 일정 수정삭제 추가 정의
-  // postOption: Omit<PostOptionSheetProps, 'isOpen' | 'onClose'>;
-};
+// Registry Pattern: Features will augment this interface
+// eslint-disable-next-line @typescript-eslint/no-empty-object-type
+export interface BottomSheetMap {}
 
-export type BottomSheetType = keyof BottomSheetPropsMap;
+export type BottomSheetType = keyof BottomSheetMap;
 
 export type BottomSheetPayload = {
   [K in BottomSheetType]: {
     type: K;
-    props: BottomSheetPropsMap[K];
+    props: BottomSheetMap[K];
   };
 }[BottomSheetType];
 

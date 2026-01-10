@@ -3,6 +3,7 @@
 import { useBottomSheetStore } from '@/shared/store/bottomSheetStore';
 import { LawBottomSheet } from '@/features/laws/ui/LawBottomSheet';
 import { createPortal } from 'react-dom';
+import '@/features/laws/model/lawBottomSheetSchema';
 
 export default function BottomSheetViewport() {
   const current = useBottomSheetStore((s) => s.current);

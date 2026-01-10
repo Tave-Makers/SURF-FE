@@ -2,7 +2,16 @@ import { Sheet as ModalSheet } from 'react-modal-sheet';
 import { Sheet } from '@/shared/ui/sheet/Sheet';
 import { CheckList } from '@/shared/ui/check-list/CheckList';
 import { LAW_LIST } from '@/features/laws/constants/law-list';
-import { LawBottomSheetProps } from '@/shared/ui/sheet/bottomSheet';
+
+export type LawBottomSheetProps = {
+  onClose: () => void;
+  isOpen: boolean;
+  onClickPrimaryBtn: () => void;
+  agreements: { [key: string]: boolean };
+  onCheck: (id: string, checked: boolean) => void;
+  onClickLawDetail: (id: string) => void;
+  allAgreed: boolean;
+};
 
 export function LawBottomSheet({
   isOpen,

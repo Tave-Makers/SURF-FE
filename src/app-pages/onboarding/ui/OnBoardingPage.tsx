@@ -8,6 +8,7 @@ import { FormProvider, useForm } from 'react-hook-form';
 import { useLawAgreement } from '@/features/laws/model/useLawAgreement';
 import { useGetValidStatusQuery } from '@/features/auth/model/useGetValidStatusQuery';
 import { useBottomSheetStore } from '@/shared/store/bottomSheetStore';
+import '@/features/laws/model/lawBottomSheetSchema';
 
 export default function OnBoardingPage() {
   const nickname = useOnboardingStore((s) => s.nickname);

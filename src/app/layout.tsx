@@ -26,7 +26,7 @@ export default function RootLayout({ children }: { children: ReactNode }) {
           href="https://cdn.jsdelivr.net/gh/wanteddev/wanted-sans@v1.0.3/packages/wanted-sans/fonts/webfonts/variable/split/WantedSansVariable.min.css"
         />
       </head>
-      <body className="flex min-h-screen items-center justify-center bg-gray-100">
+      <body className="flex min-h-screen items-center justify-center bg-gray-200">
         <AnalyticsProvider />
         <QueryProvider>
           <FCMInitializer />

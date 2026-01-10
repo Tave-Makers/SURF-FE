@@ -23,7 +23,7 @@ export const useLawAgreement = () => {
     } else if (id === 'laws2') {
       router.push(PAGE_ROUTES.MYPAGE.POLICY.PRIVACY);
     } else if (id === 'laws3') {
-      router.push(PAGE_ROUTES.MYPAGE.POLICY.MARKETING);
+      router.push(PAGE_ROUTES.MYPAGE.POLICY.OPERATING);
     }
   };
 

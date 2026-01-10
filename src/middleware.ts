@@ -8,6 +8,7 @@ const PUBLIC_PREFIX = [
   '/_next',
   '/robots.txt',
   '/sitemap.xml',
+  '/onboarding',
 ];
 const PUBLIC_EXACT = ['/'];
 

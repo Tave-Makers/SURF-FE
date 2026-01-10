@@ -13,7 +13,7 @@ import { PAGE_ROUTES } from '@/shared/config/path';
 import { useAuthStore } from '@/features/auth/model/useAuthStore';
 import { HeroCard } from '@/features/home-theme/ui/hero-card/HeroCard';
 import type { HeroCardProps } from '@/features/home-theme/ui/hero-card/HeroCard';
-import HeaderLogo from '../../../public/header-logo.svg';
+import HeaderLogo from '../../../../public/header-logo.svg';
 
 export const HomePageClient = ({ heroProps }: { heroProps: HeroCardProps }) => {
   const router = useRouter();

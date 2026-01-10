@@ -29,7 +29,7 @@ export function LawBottomSheet({
       isOpen={isOpen}
       onClose={onClose}
       disableDrag={true}
-      className="mx-auto flex w-full sm:w-[360px]"
+      className="sm:w-mobile-app mx-auto flex w-full"
     >
       <ModalSheet.Container>
         <ModalSheet.Content>

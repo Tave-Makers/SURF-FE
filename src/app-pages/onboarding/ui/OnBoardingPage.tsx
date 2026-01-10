@@ -5,9 +5,9 @@ import { OnBoardingFormData } from '@/features/onboarding/model/types';
 import OnBoardingForm from '@/widgets/onboarding/ui/OnBoardingForm';
 import { useEffect, useState } from 'react';
 import { FormProvider, useForm } from 'react-hook-form';
-import { LawBottomSheet } from '@/features/laws/ui/LawBottomSheet';
 import { useLawAgreement } from '@/features/laws/model/useLawAgreement';
 import { useGetValidStatusQuery } from '@/features/auth/model/useGetValidStatusQuery';
+import { useBottomSheetStore } from '@/shared/store/bottomSheetStore';
 
 export default function OnBoardingPage() {
   const nickname = useOnboardingStore((s) => s.nickname);
@@ -22,22 +22,48 @@ export default function OnBoardingPage() {
     isAgreed,
     confirmAgreement,
   } = useLawAgreement();
-  const [isOpen, setIsOpen] = useState(true);
   const [step, setStep] = useState(0);
 
   const { data: statusData } = useGetValidStatusQuery();
 
-  useEffect(() => {
-    if (isAgreed) {
-      setIsOpen(false);
-    }
-  }, [isAgreed]);
+  const openBottomSheet = useBottomSheetStore((s) => s.open);
+  const closeBottomSheet = useBottomSheetStore((s) => s.close);
 
   useEffect(() => {
-    if (statusData?.memberStatus === 'REGISTERING' && !isAgreed) {
-      setIsOpen(true);
+    const shouldOpen = statusData?.memberStatus === 'REGISTERING' && !isAgreed && step === 0;
+
+    if (shouldOpen) {
+      openBottomSheet({
+        type: 'law',
+        props: {
+          agreements,
+          onCheck: handleCheck,
+          onClickPrimaryBtn: () => {
+            confirmAgreement();
+            closeBottomSheet();
+          },
+          onClickLawDetail: (id: string) => {
+            closeBottomSheet();
+            onClickLawDetail(id);
+          },
+          allAgreed: isAllRequiredChecked,
+        },
+      });
+    } else {
+      closeBottomSheet();
     }
-  }, [statusData, isAgreed]);
+  }, [
+    statusData,
+    isAgreed,
+    step,
+    openBottomSheet,
+    closeBottomSheet,
+    agreements,
+    handleCheck,
+    confirmAgreement,
+    onClickLawDetail,
+    isAllRequiredChecked,
+  ]);
 
   const methods = useForm<OnBoardingFormData>({
     defaultValues: {
@@ -80,20 +106,6 @@ export default function OnBoardingPage() {
   return (
     <FormProvider {...methods}>
       <OnBoardingForm step={step} setStep={setStep} />
-
-      {/* 약관 바텀 시트 */}
-      <LawBottomSheet
-        isOpen={isOpen && step === 0}
-        onClose={() => setIsOpen(false)}
-        agreements={agreements}
-        onCheck={handleCheck}
-        onClickPrimaryBtn={() => {
-          confirmAgreement();
-          setIsOpen(false);
-        }}
-        onClickLawDetail={onClickLawDetail}
-        allAgreed={isAllRequiredChecked}
-      />
     </FormProvider>
   );
 }

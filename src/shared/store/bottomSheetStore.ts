@@ -1,5 +1,5 @@
 import { create } from 'zustand';
-import { LawBottomSheetProps } from '@/features/laws/ui/LawBottomSheet';
+import { LawBottomSheetProps } from '@/shared/ui/sheet/bottomSheet';
 
 export type BottomSheetPropsMap = {
   law: Omit<LawBottomSheetProps, 'isOpen' | 'onClose'>;

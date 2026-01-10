@@ -79,7 +79,7 @@ const renderLeftIcon = (hasLeftIcon?: boolean, onClickBack?: () => void) =>
 
 const renderTitle = (title?: string) =>
   title ? (
-    <div className="text-title-title1 text-border-contrast flex-1 leading-14!">{title}</div>
+    <div className="text-title-title1 text-foreground-normal flex-1 leading-14!">{title}</div>
   ) : null;
 
 const renderRightIcons = (icons: MaxThree<HeaderIcon> = []) => (
@@ -138,7 +138,7 @@ export function Header({ className, ...props }: HeaderProps) {
               value={value}
               onChange={onChange}
               onEnter={onSubmit}
-              placeholder="검색어를 입력하세요"
+              placeholder="검색어를 입력하세요."
               iconName="Search"
               onIconClick={() => onSubmit(value)}
             />
@@ -183,7 +183,7 @@ export function Header({ className, ...props }: HeaderProps) {
 
   return (
     <header
-      className={`top-0 flex h-[3rem] w-full items-center justify-between px-13 py-11 ${className ?? 'bg-background-normal-lighter'}`}
+      className={`top-0 flex h-[3rem] w-full items-center justify-between px-13 py-11 ${className ?? 'bg-background-normal'} border-border-normal border-b-[var(--stroke-weight-0)]`}
     >
       {content}
     </header>

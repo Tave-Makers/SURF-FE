@@ -4,17 +4,17 @@ import { PolicyDetailItem } from '@/entities/policy/ui/PolicyDetailItem';
 import { AppHeader } from '@/widgets/header/ui/AppHeader';
 import { HeaderMode } from '@/shared/ui/header/Header';
 
-export default function ServicePolicyPage() {
+export default function OperatingPolicyPage() {
   return (
     <div className="flex h-full flex-col">
       <AppHeader
         overrideHeader={{
           mode: HeaderMode.Default,
-          title: 'SURF 서비스 이용약관',
+          title: '[필수] SURF 운영정책',
           hasLeftIcon: true,
         }}
       />
-      <PolicyDetailItem policyId="ServicePolicy" />
+      <PolicyDetailItem policyId="OperatingPolicy" />
     </div>
   );
 }

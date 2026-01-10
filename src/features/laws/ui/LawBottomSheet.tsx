@@ -57,7 +57,7 @@ export function LawBottomSheet({
           </Sheet>
         </ModalSheet.Content>
       </ModalSheet.Container>
-      <ModalSheet.Backdrop />
+      <ModalSheet.Backdrop className="bg-effect-overlay-dim-normal" />
     </ModalSheet>
   );
 }

@@ -6,28 +6,18 @@ import { Carousel } from '@/shared/ui/carousel/Carousel';
 import { HeaderMode } from '@/shared/ui/header/Header';
 import { Shortcut } from '@/shared/ui/shortcut/Shortcut';
 import { AppHeader } from '@/widgets/header/ui/AppHeader';
-import { useEffect } from 'react';
 import { TAVE_CHANNEL_LINKS, SPONSOR_LINKS, SHORTCUT_LINKS } from '@/entities/home/model/constants';
 import { useRouter } from 'next/navigation';
 import { PAGE_ROUTES } from '@/shared/config/path';
-import { useAuthStore } from '@/features/auth/model/useAuthStore';
 import { HeroCard } from '@/features/home-theme/ui/hero-card/HeroCard';
 import type { HeroCardProps } from '@/features/home-theme/ui/hero-card/HeroCard';
+import HeaderLogo from '../../../../public/header-logo.svg';
 
 export const HomePageClient = ({ heroProps }: { heroProps: HeroCardProps }) => {
   const router = useRouter();
 
   const { data: homeData } = useGetHome();
   const deepLink = homeData?.announcementDeepLink ?? '';
-
-  const { memberId, memberRole } = useAuthStore();
-
-  // TODO: 리뷰 반영 후 제거
-  useEffect(() => {
-    console.log('AuthStore 상태 확인');
-    console.log('memberId:', memberId);
-    console.log('memberRole:', memberRole);
-  }, [memberId, memberRole]);
 
   const handleShortcutClick = (link: string, label: string) => {
     if (process.env.NODE_ENV === 'development') {
@@ -43,7 +33,7 @@ export const HomePageClient = ({ heroProps }: { heroProps: HeroCardProps }) => {
         <AppHeader
           overrideHeader={{
             mode: HeaderMode.Logo,
-            logo: <div>Custom Logo</div>,
+            logo: <HeaderLogo role="presentation" aria-label="SURF 홈 로고" />,
             icons: [
               {
                 label: 'Bell',

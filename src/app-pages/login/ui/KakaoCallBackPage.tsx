@@ -5,6 +5,7 @@ import { useSearchParams, useRouter } from 'next/navigation';
 import { PAGE_ROUTES } from '@/shared/config/path';
 import { getKakaoLoginCallback } from '@/features/auth/api/getKakaoLoginCallback';
 import { useOnboardingStore } from '@/features/onboarding/model/useOnboardingStore';
+import { axiosInstance } from '@/shared/lib/axiosInstance';
 
 export default function KakaoCallBackPage() {
   const searchParams = useSearchParams();
@@ -14,29 +15,55 @@ export default function KakaoCallBackPage() {
 
   const code = searchParams.get('code');
 
+  // 렌더 단계 로그
+  console.log('[KAKAO][CALLBACK] render');
+  console.log('[KAKAO][CALLBACK] code from query =', code);
+
   useEffect(() => {
-    if (didRun.current) return;
+    console.log('[KAKAO][CALLBACK] useEffect entered');
+
+    if (didRun.current) {
+      console.log('[KAKAO][CALLBACK] already ran -> skip');
+      return;
+    }
     didRun.current = true;
 
     if (!code) {
+      console.error('[KAKAO][CALLBACK] code is null');
       alert('잘못된 접근이에요. 다시 로그인해주세요.');
       router.push(PAGE_ROUTES.LOGIN);
       return;
     }
 
+    console.log('[KAKAO][CALLBACK] code exists, start backend call');
+
     void (async () => {
       try {
+        console.log('[KAKAO][CALLBACK] -> calling getKakaoLoginCallback');
         const response = await getKakaoLoginCallback(code);
-        const { nickname, email, profileImageUrl } = response.data;
+
+        console.log('[KAKAO][CALLBACK] <- backend response', response);
+
+        const { accessToken, nickname, email, profileImageUrl } = response.data;
+
+        console.log('[KAKAO][CALLBACK] accessToken', accessToken);
+
+        // axios 전역 Authorization 헤더 세팅
+        axiosInstance.defaults.headers.common.Authorization = `Bearer ${accessToken}`;
+
+        console.log('[KAKAO][CALLBACK] Authorization header set');
 
         setOnboarding({
-          nickname: nickname,
-          email: email,
-          profileImageUrl: profileImageUrl,
+          nickname,
+          email,
+          profileImageUrl,
         });
 
+        console.log('[KAKAO][CALLBACK] onboarding set -> move HOME');
         router.push(PAGE_ROUTES.HOME);
       } catch (err) {
+        console.error('[KAKAO][CALLBACK] error during login', err);
+
         const message =
           err instanceof Error
             ? err.message

@@ -84,9 +84,9 @@ export const Carousel = ({ images, className = '' }: CarouselProps) => {
               if (!img.linkUrl) return;
               window.open(img.linkUrl, '_blank');
             }}
-            className="h-full w-full flex-shrink-0"
+            className="relative h-full w-full flex-shrink-0"
           >
-            <Image src={img.src} alt={img.alt} className="h-full w-full object-cover" />
+            <Image src={img.src} alt={img.alt} fill className="object-cover" />
           </button>
         ))}
       </div>

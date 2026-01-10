@@ -44,7 +44,7 @@ export const HomePageClient = ({ heroProps }: { heroProps: HeroCardProps }) => {
         <AppHeader
           overrideHeader={{
             mode: HeaderMode.Logo,
-            logo: <HeaderLogo />,
+            logo: <HeaderLogo role="presentation" aria-label="SURF 홈 로고" />,
             icons: [
               {
                 label: 'Bell',

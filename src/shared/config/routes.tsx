@@ -41,7 +41,7 @@ export const createRouteConfig = (router: RouterInstance): RouteConfig[] => [
           },
         },
       ],
-      logo: <HeaderLogo className="h-full w-auto" />,
+      logo: <HeaderLogo role="presentation" aria-label="SURF 홈 로고" />,
       mode: HeaderMode.Logo,
     },
   },

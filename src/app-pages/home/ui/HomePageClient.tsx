@@ -11,6 +11,7 @@ import { useRouter } from 'next/navigation';
 import { PAGE_ROUTES } from '@/shared/config/path';
 import { HeroCard } from '@/features/home-theme/ui/hero-card/HeroCard';
 import type { HeroCardProps } from '@/features/home-theme/ui/hero-card/HeroCard';
+import HeaderLogo from '../../../../public/header-logo.svg';
 
 export const HomePageClient = ({ heroProps }: { heroProps: HeroCardProps }) => {
   const router = useRouter();
@@ -32,7 +33,7 @@ export const HomePageClient = ({ heroProps }: { heroProps: HeroCardProps }) => {
         <AppHeader
           overrideHeader={{
             mode: HeaderMode.Logo,
-            logo: <div>Custom Logo</div>,
+            logo: <HeaderLogo role="presentation" aria-label="SURF 홈 로고" />,
             icons: [
               {
                 label: 'Bell',

@@ -81,7 +81,7 @@ export default function ScheduleForm({ onSubmit, initialData }: ScheduleFormProp
             <ModalSheet
               isOpen={openModal === 'category'}
               onClose={handleCloseModal}
-              className="mx-auto flex w-full sm:w-[360px]"
+              className="app-responsive-width mx-auto flex w-full"
             >
               <ModalSheet.Container>
                 <ModalSheet.Content>
@@ -149,7 +149,7 @@ export default function ScheduleForm({ onSubmit, initialData }: ScheduleFormProp
               <ModalSheet
                 isOpen={openModal === 'startDate'}
                 onClose={handleCloseModal}
-                className="mx-auto flex w-full sm:w-[360px]"
+                className="app-responsive-width mx-auto flex w-full"
               >
                 <ModalSheet.Container>
                   <ModalSheet.Content>
@@ -202,7 +202,7 @@ export default function ScheduleForm({ onSubmit, initialData }: ScheduleFormProp
               <ModalSheet
                 isOpen={openModal === 'endDate'}
                 onClose={handleCloseModal}
-                className="mx-auto flex w-full sm:w-[360px]"
+                className="app-responsive-width mx-auto flex w-full"
               >
                 <ModalSheet.Container>
                   <ModalSheet.Content>

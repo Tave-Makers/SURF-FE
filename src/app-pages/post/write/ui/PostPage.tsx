@@ -134,7 +134,7 @@ export default function PostPage(props: PostPageProps) {
         isOpen={isCategoryOpen}
         onClose={closeCategory}
         aria-labelledby={categorySheetId}
-        className="mx-auto flex w-full sm:w-[360px]"
+        className="app-responsive-width mx-auto flex w-full"
       >
         <ModalSheet.Container>
           <ModalSheet.Header className="bg-background-normal-lighter" />
@@ -196,7 +196,7 @@ export default function PostPage(props: PostPageProps) {
       <ModalSheet
         isOpen={isReservationModalOpen}
         onClose={closeReservationModal}
-        className="mx-auto flex w-full sm:w-[360px]"
+        className="app-responsive-width mx-auto flex"
       >
         <ModalSheet.Container>
           <ModalSheet.Content>

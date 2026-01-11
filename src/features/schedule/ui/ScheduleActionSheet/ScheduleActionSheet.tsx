@@ -66,7 +66,11 @@ export function ScheduleActionSheet({
 
   return (
     <>
-      <ModalSheet isOpen={isOpen} onClose={onClose} className="mx-auto flex w-full sm:w-[360px]">
+      <ModalSheet
+        isOpen={isOpen}
+        onClose={onClose}
+        className="app-responsive-width mx-auto flex w-full"
+      >
         <ModalSheet.Container>
           <ModalSheet.Content>
             <Sheet>

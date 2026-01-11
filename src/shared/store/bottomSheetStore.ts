@@ -8,11 +8,19 @@ import { create } from 'zustand';
  * src/features/xxx/model/schema.ts같은 곳에서 기존에 구현된 바텀 시트 props의 타입을 가져와서 선언
  *
  * 2. 바텀 시트 컴포넌트 구현
- * 3. 바텀 시트를 사용하는 페이지에서 useBottomSheetStore 를 사용하여 시트를 열고 닫기
+ * 3. BottomSheetViewport에 아래와 같이 케이스 추가
+ * if (current.type === 'law') {
+     return createPortal(
+       <LawBottomSheet {...current.props} isOpen={true} onClose={close} />,
+       document.body,
+     );
+   }
+     
+ * 4. 바텀 시트를 사용하는 페이지에서 useBottomSheetStore 를 사용하여 시트를 열고 닫기
  *    - const open = useBottomSheetStore((s) => s.open);
  *    - const close = useBottomSheetStore((s) => s.close);
  *
- * 4. props는 해당 type(키)에 맞는 props를 작성(타입 체크 됨)
+ * 5. props는 해당 type(키)에 맞는 props를 작성(타입 체크 됨)
  */
 
 // Registry Pattern: Features will augment this interface

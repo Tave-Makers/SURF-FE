@@ -8,6 +8,7 @@ import { PostCardList } from '@/widgets/post-list/ui/PostCardList';
 import { Post } from '@/entities/post/model/types';
 import type { UserLevel } from '@/entities/user/model/types';
 import { useRouter } from 'next/navigation';
+import { PAGE_ROUTES } from '@/shared/config/path';
 
 // 서버 응답 data 페이지 당 타입
 type ApiPage = {
@@ -69,7 +70,7 @@ export function PostListPage({
   const handlePostClick = useCallback(
     (post: Post) => {
       onPostClick?.(post);
-      router.push(`/board/${post.boardId}/post/${post.postId}`);
+      router.push(PAGE_ROUTES.BOARD.POST_DETAIL(post.boardId, post.postId));
     },
     [onPostClick, router],
   );

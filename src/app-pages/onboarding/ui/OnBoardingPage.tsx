@@ -30,7 +30,9 @@ export default function OnBoardingPage() {
   const closeBottomSheet = useBottomSheetStore((s) => s.close);
 
   useEffect(() => {
-    const shouldOpen = statusData?.memberStatus === 'REGISTERING' && !isAgreed && step === 0;
+    const shouldOpen =
+      // statusData?.memberStatus === 'REGISTERING' &&
+      !isAgreed && step === 0;
 
     if (shouldOpen) {
       openBottomSheet({

@@ -2,9 +2,9 @@
 
 import { useEffect } from 'react';
 import { useBottomSheetStore } from '@/shared/store/bottomSheetStore';
-import { LawBottomSheet } from '@/features/laws/ui/LawBottomSheet';
 import { createPortal } from 'react-dom';
 import '@/features/laws/model/lawBottomSheetSchema';
+import { SHEET_COMPONENTS } from '../model/constants';
 
 export default function BottomSheetViewport() {
   const current = useBottomSheetStore((s) => s.current);
@@ -27,12 +27,18 @@ export default function BottomSheetViewport() {
   if (typeof window === 'undefined') return null;
   if (!current) return null;
 
-  if (current.type === 'law') {
-    return createPortal(
-      <LawBottomSheet {...current.props} isOpen={true} onClose={close} />,
-      document.body,
-    );
+  const Component = SHEET_COMPONENTS[current.type];
+
+  if (!Component) {
+    return null;
   }
 
-  return null;
+  return createPortal(
+    <Component
+      {...(current.props as React.ComponentProps<typeof Component>)}
+      isOpen={true}
+      onClose={close}
+    />,
+    document.body,
+  );
 }

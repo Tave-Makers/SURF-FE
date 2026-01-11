@@ -18,6 +18,7 @@ export const SHORTCUT_LINKS: ShortcutItem[] = [
 ];
 
 // 2. TAVE 채널 데이터
+// TODO: svg 이미지 추가 필요
 export const TAVE_CHANNEL_LINKS: ShortcutItem[] = [
   {
     id: 1,
@@ -30,6 +31,7 @@ export const TAVE_CHANNEL_LINKS: ShortcutItem[] = [
 ];
 
 // 3. 후원사 데이터
+// TODO: svg 이미지 추가 필요
 export const SPONSOR_LINKS: ShortcutItem[] = [
   { id: 1, label: '후원사 A', link: 'https://...' },
   { id: 2, label: '후원사 B', link: 'https://...' },

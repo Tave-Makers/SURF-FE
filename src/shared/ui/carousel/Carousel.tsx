@@ -18,7 +18,7 @@ interface CarouselProps {
 }
 
 const baseStyle =
-  'rounded-5 w-full h-[9.375rem] relative overflow-hidden bg-white bg-gradient-to-b from-background-carousel-start to-background-carousel-end shadow-[0_2px_8px_0_var(--shadow-embossed)]';
+  'rounded-5 w-full h-[9.375rem] relative overflow-hidden bg-white bg-gradient-to-b from-background-carousel-start to-background-carousel-end shadow-embossed';
 
 export const Carousel = ({ images, className = '' }: CarouselProps) => {
   const [current, setCurrent] = useState(0);

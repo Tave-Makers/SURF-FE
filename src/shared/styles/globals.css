@@ -4,38 +4,87 @@
 @import './scheme-tokens.css';
 @import './shadow-tokens.css';
 
-/* 뷰포트 높이 전파 */
-html,
-body,
-#__next {
-  height: 100%;
+/* 1. Base Layer: 전역 기본 스타일 및 변수 */
+@layer base {
+  :root {
+    /* 모바일 앱 비율 너비 계산식을 상수로 등록 */
+    --app-max-width: min(100dvw, calc(100dvh * 375 / 812));
+  }
+
+  /* 뷰포트 높이 전파 */
+  html,
+  body,
+  #__next {
+    height: 100%;
+  }
+
+  html,
+  body {
+    font-family:
+      'Wanted Sans Variable',
+      'Wanted Sans',
+      -apple-system,
+      BlinkMacSystemFont,
+      system-ui,
+      'Segoe UI',
+      'Apple SD Gothic Neo',
+      'Noto Sans KR',
+      'Malgun Gothic',
+      'Apple Color Emoji',
+      'Segoe UI Emoji',
+      'Segoe UI Symbol',
+      sans-serif;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    overflow: hidden;
+  }
+
+  button,
+  a {
+    @apply cursor-pointer;
+  }
+
+  button:disabled,
+  a[aria-disabled='true'],
+  a.disabled {
+    @apply cursor-not-allowed;
+  }
 }
 
-html,
-body {
-  font-family:
-    'Wanted Sans Variable',
-    'Wanted Sans',
-    -apple-system,
-    BlinkMacSystemFont,
-    system-ui,
-    'Segoe UI',
-    'Apple SD Gothic Neo',
-    'Noto Sans KR',
-    'Malgun Gothic',
-    'Apple Color Emoji',
-    'Segoe UI Emoji',
-    'Segoe UI Symbol',
-    sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  overflow: hidden;
+/* 2. Utilities Layer: 재사용 가능한 유틸리티 클래스 */
+@layer utilities {
+  .app-responsive-width {
+    width: 100dvw;
+  }
+
+  @media (min-width: 640px) {
+    .app-responsive-width {
+      width: var(--app-max-width);
+      margin-left: auto;
+      margin-right: auto;
+    }
+  }
+
+  .scroll-touch {
+    -webkit-overflow-scrolling: touch;
+  }
+
+  .lock-interaction {
+    pointer-events: none !important;
+    user-select: none !important;
+    overflow: hidden !important;
+  }
+
+  .scrollbar-hide {
+    scrollbar-width: none;
+    -ms-overflow-style: none;
+  }
+  .scrollbar-hide::-webkit-scrollbar {
+    display: none;
+  }
 }
 
-/* iOS 관성 스크롤 보강용 유틸 */
-.scroll-touch {
-  -webkit-overflow-scrolling: touch;
-}
+/* 3. Library & Custom Styles */
 
 /* placeholder */
 .placeholder-body-14-600--1-24::placeholder {
@@ -60,20 +109,7 @@ body {
   height: auto !important;
 }
 
-@layer base {
-  button,
-  a {
-    @apply cursor-pointer;
-  }
-
-  button:disabled,
-  a[aria-disabled='true'],
-  a.disabled {
-    @apply cursor-not-allowed;
-  }
-}
-
-/* wheel picker */
+/* wheel picker (keen-slider) */
 .wheel.keen-slider {
   display: block;
   color: #828282;
@@ -131,29 +167,18 @@ body {
   justify-content: center;
 }
 
-.scrollbar-hide {
-  scrollbar-width: none; /* Firefox */
-  -ms-overflow-style: none; /* IE, Edge */
-}
-.scrollbar-hide::-webkit-scrollbar {
-  display: none; /* Chrome, Safari */
-}
-
-/* MenuDropDown 컴포넌트 전용 커스텀 스크롤바 */
+/* MenuDropDown 커스텀 스크롤바 */
 .menu-dropdown-scrollbar {
   &::-webkit-scrollbar {
     width: 0.125rem;
   }
-
   &::-webkit-scrollbar-track {
     background: transparent;
   }
-
   &::-webkit-scrollbar-thumb {
     background-color: transparent;
     border-radius: 62.4375rem;
   }
-
   &:hover::-webkit-scrollbar-thumb {
     background-color: var(--color-background-secondary);
   }

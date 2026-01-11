@@ -1,57 +1,45 @@
-import js from "@eslint/js";
-import { globalIgnores } from "eslint/config";
-import eslintConfigPrettier from "eslint-config-prettier";
-import tseslint from "typescript-eslint";
-import pluginReactHooks from "eslint-plugin-react-hooks";
-import pluginReact from "eslint-plugin-react";
-import globals from "globals";
-import pluginNext from "@next/eslint-plugin-next";
-import { config as baseConfig } from "./base.js";
+// @ts-check
+import nextPlugin from '@next/eslint-plugin-next';
+import storybook from 'eslint-plugin-storybook';
+import configPrettier from 'eslint-config-prettier';
+
+import { base } from './base.js';
 
 /**
- * A custom ESLint configuration for libraries that use Next.js.
- *
- * @type {import("eslint").Linter.Config[]}
- * */
-export const nextJsConfig = [
-  ...baseConfig,
-  js.configs.recommended,
-  eslintConfigPrettier,
-  ...tseslint.configs.recommended,
-  globalIgnores([
-    // Default ignores of eslint-config-next:
-    ".next/**",
-    "out/**",
-    "build/**",
-    "next-env.d.ts",
-  ]),
-  {
-    ...pluginReact.configs.flat.recommended,
-    languageOptions: {
-      ...pluginReact.configs.flat.recommended.languageOptions,
-      globals: {
-        ...globals.serviceworker,
+ * @param {{
+ *  tsconfigRootDir: string,
+ *  project?: string[],
+ *  storybook?: boolean,
+ *  ignores?: string[]
+ * }} opts
+ */
+export function next(opts) {
+  const {
+    tsconfigRootDir,
+    project = ['./tsconfig.json', './.storybook/tsconfig.json'],
+    storybook: enableStorybook = true,
+    ignores = [],
+  } = opts ?? {};
+
+  return [
+    ...base({ tsconfigRootDir, project, ignores }),
+
+    // Next 규칙
+    {
+      plugins: {
+        '@next/next': nextPlugin,
+      },
+      rules: {
+        ...nextPlugin.configs['core-web-vitals'].rules,
       },
     },
-  },
-  {
-    plugins: {
-      "@next/next": pluginNext,
-    },
-    rules: {
-      ...pluginNext.configs.recommended.rules,
-      ...pluginNext.configs["core-web-vitals"].rules,
-    },
-  },
-  {
-    plugins: {
-      "react-hooks": pluginReactHooks,
-    },
-    settings: { react: { version: "detect" } },
-    rules: {
-      ...pluginReactHooks.configs.recommended.rules,
-      // React scope no longer necessary with new JSX transform.
-      "react/react-in-jsx-scope": "off",
-    },
-  },
-];
+
+    // Storybook 규칙(필요한 앱만)
+    ...(enableStorybook ? [...storybook.configs['flat/recommended']] : []),
+
+    // ✅ Prettier는 무조건 마지막
+    configPrettier,
+  ];
+}
+
+export default next;

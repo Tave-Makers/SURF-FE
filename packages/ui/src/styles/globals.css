@@ -1,0 +1,115 @@
+@import 'tailwindcss';
+@import 'keen-slider/keen-slider.min.css';
+@import './font-tokens.css';
+@import './color-tokens.css';
+@import './scheme-tokens.css';
+@import './shadow-tokens.css';
+@source '../ui/**/*.{js,jsx,ts,tsx}';
+
+/* react-modal-sheet */
+.react-modal-sheet-header {
+  padding: 0.65rem 0 !important;
+  height: auto !important;
+}
+.react-modal-sheet-container {
+  height: auto !important;
+}
+
+@layer base {
+  button,
+  a {
+    @apply cursor-pointer;
+  }
+
+  button:disabled,
+  a[aria-disabled='true'],
+  a.disabled {
+    @apply cursor-not-allowed;
+  }
+}
+
+/* wheel picker */
+.wheel.keen-slider {
+  display: block;
+  color: #828282;
+  height: 100%;
+  overflow: visible;
+  width: 100%;
+}
+.wheel--perspective-right .wheel__inner {
+  perspective-origin: calc(50% + 100px) 50%;
+  transform: translateX(10px);
+  -webkit-transform: translateX(10px);
+}
+.wheel--perspective-left .wheel__inner {
+  perspective-origin: calc(50% - 100px) 50%;
+  transform: translateX(-10px);
+  -webkit-transform: translateX(-10px);
+}
+.wheel__inner {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  perspective: 1000px;
+  transform-style: preserve-3d;
+  height: 20%;
+  width: 100%;
+}
+.wheel__slides {
+  height: 100%;
+  position: relative;
+  width: 100%;
+}
+.wheel__shadow-top,
+.wheel__shadow-bottom {
+  left: 0;
+  height: calc(42% - 2px);
+  width: 100%;
+  position: relative;
+  margin-top: -2px;
+  z-index: 5;
+}
+.wheel__shadow-bottom {
+  margin-top: 2px;
+  border-bottom: none;
+}
+.wheel__slide {
+  align-items: center;
+  backface-visibility: hidden;
+  -webkit-backface-visibility: hidden;
+  display: flex;
+  font-size: 18px;
+  font-weight: 400;
+  height: 100%;
+  width: 100%;
+  position: absolute;
+  justify-content: center;
+}
+
+.scrollbar-hide {
+  scrollbar-width: none; /* Firefox */
+  -ms-overflow-style: none; /* IE, Edge */
+}
+.scrollbar-hide::-webkit-scrollbar {
+  display: none; /* Chrome, Safari */
+}
+
+/* MenuDropDown custom scrollbar */
+.menu-dropdown-scrollbar {
+  &::-webkit-scrollbar {
+    width: 0.125rem;
+  }
+
+  &::-webkit-scrollbar-track {
+    background: transparent;
+  }
+
+  &::-webkit-scrollbar-thumb {
+    background-color: transparent;
+    border-radius: 62.4375rem;
+  }
+
+  &:hover::-webkit-scrollbar-thumb {
+    background-color: var(--color-background-secondary);
+  }
+}

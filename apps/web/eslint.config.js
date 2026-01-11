@@ -1,4 +1,11 @@
-import { nextJsConfig } from "@repo/eslint-config/next-js";
+import { next } from '@surf/eslint-config/next';
+import { dirname } from 'path';
+import { fileURLToPath } from 'url';
 
-/** @type {import("eslint").Linter.Config[]} */
-export default nextJsConfig;
+const tsconfigRootDir = dirname(fileURLToPath(import.meta.url));
+
+export default next({
+  tsconfigRootDir,
+  project: ['./tsconfig.json', './.storybook/tsconfig.json'],
+  storybook: true,
+});

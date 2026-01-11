@@ -1,20 +1,22 @@
 {
-  "extends": "@repo/typescript-config/nextjs.json",
+  "extends": "@surf/typescript-config/nextjs.json",
   "compilerOptions": {
-    "plugins": [
-      {
-        "name": "next"
-      }
-    ]
+    "baseUrl": ".",
+    "paths": {
+      "@/*": ["src/*"]
+    }
   },
   "include": [
+    "svgr.d.ts",
+    "next-env.d.ts",
+    "vitest.shims.d.ts",
     "**/*.ts",
     "**/*.tsx",
-    "next-env.d.ts",
-    "next.config.js",
-    ".next/types/**/*.ts"
+    ".next/types/**/*.ts",
+    "**/*.js",
+    "**/*.mjs",
+    ".storybook/**/*",
+    "scripts/update-theme.ts"
   ],
-  "exclude": [
-    "node_modules"
-  ]
+  "exclude": ["node_modules"]
 }

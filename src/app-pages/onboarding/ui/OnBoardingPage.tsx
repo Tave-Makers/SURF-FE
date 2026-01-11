@@ -30,7 +30,9 @@ export default function OnBoardingPage() {
   const closeBottomSheet = useBottomSheetStore((s) => s.close);
 
   useEffect(() => {
-    const shouldOpen = statusData?.memberStatus === 'REGISTERING' && !isAgreed && step === 0;
+    const shouldOpen =
+      // statusData?.memberStatus === 'REGISTERING' &&
+      !isAgreed && step != 2;
 
     if (shouldOpen) {
       openBottomSheet({
@@ -43,8 +45,8 @@ export default function OnBoardingPage() {
             closeBottomSheet();
           },
           onClickLawDetail: (id: string) => {
-            closeBottomSheet();
             onClickLawDetail(id);
+            setTimeout(() => closeBottomSheet(), 200);
           },
           allAgreed: isAllRequiredChecked,
         },

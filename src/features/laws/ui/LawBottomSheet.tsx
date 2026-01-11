@@ -3,6 +3,12 @@ import { Sheet } from '@/shared/ui/sheet/Sheet';
 import { CheckList } from '@/shared/ui/check-list/CheckList';
 import { LAW_LIST } from '@/features/laws/constants/law-list';
 
+declare module '@/shared/store/bottomSheetStore' {
+  interface BottomSheetMap {
+    law: Omit<LawBottomSheetProps, 'isOpen' | 'onClose'>;
+  }
+}
+
 export type LawBottomSheetProps = {
   onClose: () => void;
   isOpen: boolean;

@@ -2,7 +2,6 @@
 
 import { useBottomSheetStore } from '@/shared/store/bottomSheetStore';
 import { createPortal } from 'react-dom';
-import '@/features/laws/model/lawBottomSheetSchema';
 import { SHEET_COMPONENTS } from '../model/constants';
 
 export default function BottomSheetViewport() {

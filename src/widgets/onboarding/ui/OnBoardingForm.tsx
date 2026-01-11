@@ -182,7 +182,7 @@ export default function OnBoardingForm({ step, setStep }: OnBoardingFormProps) {
         openAlert({
           title: '업로드 실패',
           infoText: '프로필 이미지 업로드에 실패했습니다.',
-          actions: [{ type: 'text', label: '확인', onClick: () => {} }],
+          actions: [{ type: 'text', label: '확인', onClick: closeAlert }],
         });
         return;
       }
@@ -196,9 +196,8 @@ export default function OnBoardingForm({ step, setStep }: OnBoardingFormProps) {
             openAlert({
               title: '오류',
               infoText: data.message || '입력한 정보가 올바르지 않습니다.',
-              actions: [{ type: 'text', label: '확인', onClick: () => {} }],
+              actions: [{ type: 'text', label: '확인', onClick: closeAlert }],
             });
-            router.push(PAGE_ROUTES.ONBOARDING);
             break;
           case 409:
             openAlert({
@@ -213,14 +212,14 @@ export default function OnBoardingForm({ step, setStep }: OnBoardingFormProps) {
             openAlert({
               title: '오류',
               infoText: data.message || '알 수 없는 오류가 발생했습니다.',
-              actions: [{ type: 'text', label: '확인', onClick: () => {} }],
+              actions: [{ type: 'text', label: '확인', onClick: closeAlert }],
             });
         }
       } else {
         openAlert({
           title: '오류',
           infoText: '네트워크 오류가 발생했습니다.',
-          actions: [{ type: 'text', label: '확인', onClick: () => {} }],
+          actions: [{ type: 'text', label: '확인', onClick: closeAlert }],
         });
       }
     } finally {

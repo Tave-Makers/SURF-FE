@@ -98,7 +98,7 @@ export const HomePageClient = ({ heroProps }: { heroProps: HeroCardProps }) => {
 
           {/* 테이브 채널 바로가기 */}
           <div className="flex flex-col gap-11">
-            <div className="text-body-body7 text-black">TAVE 채널 바로가기</div>
+            <div className="text-body-body7 text-foreground-normal">TAVE 채널 바로가기</div>
             <div className="flex w-full flex-row gap-11">
               {TAVE_CHANNEL_LINKS.map((channel) => (
                 <Shortcut
@@ -114,7 +114,7 @@ export const HomePageClient = ({ heroProps }: { heroProps: HeroCardProps }) => {
 
           {/* 후원사 바로가기 */}
           <div className="flex flex-col gap-11">
-            <div className="text-body-body7 text-black">후원사 바로가기</div>
+            <div className="text-body-body7 text-foreground-normal">후원사 바로가기</div>
             <div className="grid grid-cols-4 gap-11">
               {SPONSOR_LINKS.map((sponsor) => (
                 <Shortcut

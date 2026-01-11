@@ -6,10 +6,12 @@ import { SettingsItem } from '@/entities/settings/ui/SettingsItem';
 import { Alert } from '@/shared/ui/alert/Alert';
 import { SETTINGS_ITEMS } from '../model/constants';
 import type { AlertType } from '../model/types';
+import { useLogout } from '@/features/auth/model/useLogout';
 
 export const SettingsList = () => {
   const router = useRouter();
   const [activeAlert, setActiveAlert] = useState<AlertType>(null);
+  const { mutate: logoutMutate } = useLogout();
 
   const handleItemClick = useCallback(
     (item: (typeof SETTINGS_ITEMS)[number]) => {
@@ -31,8 +33,11 @@ export const SettingsList = () => {
 
   // TODO: 로그아웃 및 회원탈퇴 훅 features 레이어에서 import 필요. 아래는 임시 코드
   const handleLogout = () => {
-    console.log('로그아웃 처리');
-    setActiveAlert(null);
+    logoutMutate(undefined, {
+      onSuccess: () => {
+        setActiveAlert(null);
+      },
+    });
   };
 
   const handleWithdraw = () => {

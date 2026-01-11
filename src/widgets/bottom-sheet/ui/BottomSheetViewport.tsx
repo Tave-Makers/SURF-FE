@@ -19,6 +19,9 @@ export default function BottomSheetViewport() {
     } else {
       document.body.classList.remove('lock-interaction');
     }
+    return () => {
+      document.body.classList.remove('lock-interaction');
+    };
   }, [current]);
 
   if (typeof window === 'undefined') return null;

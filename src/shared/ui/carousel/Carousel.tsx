@@ -3,6 +3,7 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { Pagenation } from '../pagenation/Pagenation';
 import { Control } from './Control';
+import Image from 'next/image';
 
 interface CarouselImage {
   src: string;
@@ -17,7 +18,7 @@ interface CarouselProps {
 }
 
 const baseStyle =
-  'rounded-5 w-full h-[9.375rem] relative overflow-hidden bg-white bg-gradient-to-b from-background-carousel-start to-background-carousel-end shadow-[0_2px_8px_rgba(0,0,0,0.06)]';
+  'rounded-5 w-full h-[9.375rem] relative overflow-hidden bg-white bg-gradient-to-b from-background-carousel-start to-background-carousel-end shadow-embossed';
 
 export const Carousel = ({ images, className = '' }: CarouselProps) => {
   const [current, setCurrent] = useState(0);
@@ -83,9 +84,9 @@ export const Carousel = ({ images, className = '' }: CarouselProps) => {
               if (!img.linkUrl) return;
               window.open(img.linkUrl, '_blank');
             }}
-            className="h-full w-full flex-shrink-0"
+            className="relative h-full w-full flex-shrink-0"
           >
-            <img src={img.src} alt={img.alt} className="h-full w-full object-cover" />
+            <Image src={img.src} alt={img.alt} fill className="object-cover" />
           </button>
         ))}
       </div>

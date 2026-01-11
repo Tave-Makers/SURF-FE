@@ -21,9 +21,8 @@ export function LoginPage() {
     if (msg === 'pending') {
       openAlert({
         state: 'default',
-        title: '회원가입이 완료되었어요!',
-        infoText:
-          '회원가입이 완료되었습니다. 회원 승인 절차가 완료되면 정상적으로 SURF를 이용하실 수 있습니다.',
+        title: '회원가입 대기중이에요!',
+        infoText: '회원 승인 절차가 완료되면 정상적으로 SURF를 이용하실 수 있습니다.',
         actions: [
           {
             type: 'text',

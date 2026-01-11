@@ -19,6 +19,7 @@ export function LoginPage() {
     if (!msg) return;
 
     if (msg === 'pending') {
+      router.replace(PAGE_ROUTES.LOGIN);
       openAlert({
         state: 'default',
         title: '회원가입 대기중이에요!',
@@ -30,7 +31,6 @@ export function LoginPage() {
             label: '확인',
             onClick: () => {
               closeAlert();
-              router.replace(PAGE_ROUTES.LOGIN);
             },
           },
         ],

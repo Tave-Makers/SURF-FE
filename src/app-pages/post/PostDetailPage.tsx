@@ -100,7 +100,7 @@ export default function PostDetailPage({ postId }: PostDetailPageProps) {
           router.replace(entryPath);
           sessionStorage.removeItem('entry_path');
         } else {
-          PAGE_ROUTES.BOARD.SELECT_CATEGORY(post.boardId);
+          router.replace(PAGE_ROUTES.BOARD.SELECT_CATEGORY(post.boardId));
         }
 
         showToast('게시글이 삭제되었습니다.');

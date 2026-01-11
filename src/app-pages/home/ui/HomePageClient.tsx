@@ -28,7 +28,7 @@ export const HomePageClient = ({ heroProps }: { heroProps: HeroCardProps }) => {
 
   return (
     <div className="flex flex-col overflow-y-auto pb-[1.61rem]">
-      <div className="app-responsive-width absolute z-10 w-full">
+      <div className="app-responsive-width absolute z-10">
         {/* AppHeader */}
         <AppHeader
           overrideHeader={{

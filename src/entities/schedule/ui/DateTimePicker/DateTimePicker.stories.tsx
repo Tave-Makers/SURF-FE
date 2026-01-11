@@ -35,7 +35,7 @@ export const Interactive: Story = {
     };
 
     return (
-      <div className="app-responsive-width mx-auto max-w-md rounded-lg p-4">
+      <div className="app-responsive-width max-w-md rounded-lg p-4">
         <div className="mb-4 text-center text-lg font-bold">
           선택된 날짜: {date.toLocaleString('ko-KR')}
         </div>

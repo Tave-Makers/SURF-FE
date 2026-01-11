@@ -30,6 +30,7 @@ interface OnBoardingFormProps {
 export default function OnBoardingForm({ step, setStep }: OnBoardingFormProps) {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const openAlert = useAlertStore((s) => s.open);
+  const closeAlert = useAlertStore((s) => s.close);
   const methods = useFormContext<OnBoardingFormData>();
   const router = useRouter();
   type StepConfig = {
@@ -156,6 +157,7 @@ export default function OnBoardingForm({ step, setStep }: OnBoardingFormProps) {
           label: '확인',
           onClick: () => {
             router.push(PAGE_ROUTES.LOGIN);
+            closeAlert();
           },
         },
       ],

@@ -12,14 +12,13 @@ export default function BottomSheetViewport() {
 
   useEffect(() => {
     if (current) {
+      if (document.activeElement instanceof HTMLElement) {
+        document.activeElement.blur();
+      }
       document.body.classList.add('lock-interaction');
     } else {
       document.body.classList.remove('lock-interaction');
     }
-
-    return () => {
-      document.body.classList.remove('lock-interaction');
-    };
   }, [current]);
 
   if (typeof window === 'undefined') return null;

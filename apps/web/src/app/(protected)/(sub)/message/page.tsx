@@ -1,10 +1,12 @@
-import { SendMessagePage } from '@/app-pages/message/ui/SendMessagePage';
 import { Suspense } from 'react';
+import { SendMessagePage } from '@/app-pages/message/ui/SendMessagePage';
 
-export default function Page() {
+const Page = () => {
   return (
     <Suspense fallback={null}>
       <SendMessagePage />
     </Suspense>
   );
-}
+};
+
+export default Page;

@@ -1,4 +1,6 @@
 import PolicyPage from '@/app-pages/mypage/settings/policy/ui/PolicyPage';
-export default function Page() {
+const Page = () => {
   return <PolicyPage />;
-}
+};
+
+export default Page;

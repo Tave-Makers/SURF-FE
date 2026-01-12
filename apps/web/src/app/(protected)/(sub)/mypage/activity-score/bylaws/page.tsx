@@ -1,5 +1,7 @@
 import BylawsPage from '@/app-pages/bylaws/ui/BylawsPage';
 
-export default function Page() {
+const Page = () => {
   return <BylawsPage />;
-}
+};
+
+export default Page;

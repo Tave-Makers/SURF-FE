@@ -1,13 +1,13 @@
 'use client';
 
-import { useEffect, useRef } from 'react';
 import { useSearchParams, useRouter } from 'next/navigation';
-import { PAGE_ROUTES } from '@/shared/config/path';
+import { useEffect, useRef } from 'react';
 import { getKakaoLoginCallback } from '@/features/auth/api/getKakaoLoginCallback';
 import { useOnboardingStore } from '@/features/onboarding/model/useOnboardingStore';
+import { PAGE_ROUTES } from '@/shared/config/path';
 import { axiosInstance } from '@/shared/lib/axiosInstance';
 
-export default function KakaoCallBackPage() {
+const KakaoCallBackPage = () => {
   const searchParams = useSearchParams();
   const router = useRouter();
   const didRun = useRef(false);
@@ -75,4 +75,6 @@ export default function KakaoCallBackPage() {
   }, [code, router, setOnboarding]);
 
   return <div>로그인 콜백 처리중...</div>;
-}
+};
+
+export default KakaoCallBackPage;

@@ -14,7 +14,7 @@ interface Props {
 const ROUTE_MYPAGE_ACTIVITY_SCORE = '/mypage/activity-score';
 const ROUTE_MYPAGE_EDIT = '/mypage/edit';
 
-export function MyPageActions({ isActive, bannerPart, bannerScore }: Props) {
+export const MyPageActions = ({ isActive, bannerPart, bannerScore }: Props) => {
   const router = useRouter();
   const handleEditClick = () => router.push(ROUTE_MYPAGE_EDIT);
 
@@ -32,4 +32,4 @@ export function MyPageActions({ isActive, bannerPart, bannerScore }: Props) {
       </SolidButton>
     </section>
   );
-}
+};

@@ -1,12 +1,12 @@
 'use client';
 
-import { SettingsItem } from '@/entities/settings/ui/SettingsItem';
 import { HeaderMode } from '@surf/ui/header';
 import { Radio } from '@surf/ui/radio';
-import { AppHeader } from '@/widgets/header/ui/AppHeader';
-import { THEME_OPTIONS } from '@/widgets/settings-list/model/constants';
 import { useTheme } from 'next-themes';
 import { useEffect, useState } from 'react';
+import { SettingsItem } from '@/entities/settings/ui/SettingsItem';
+import { AppHeader } from '@/widgets/header/ui/AppHeader';
+import { THEME_OPTIONS } from '@/widgets/settings-list/model/constants';
 
 export const ModePage = () => {
   const { theme, setTheme } = useTheme();

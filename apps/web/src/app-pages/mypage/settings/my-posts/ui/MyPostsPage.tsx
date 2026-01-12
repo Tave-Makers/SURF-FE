@@ -1,15 +1,15 @@
 'use client';
 
-import { useInfiniteMyPosts } from '@/features/post/model/useMyPosts';
-import { PostListPage } from '@/widgets/post-list/ui/PostListPage';
-import { MY_POSTS_EVENTS } from '@/features/post/model/types';
-import { trackMyPostsEvent } from '@/features/post/lib/trackMyPostsEvent';
 import { useEffect, useCallback } from 'react';
-import { useDynamicScrollTracking } from '@/shared/hooks/useDynamicScrollTracking';
-import { usePageName } from '@/shared/analytics/lib/getPageName';
 import { useAuthStore } from '@/features/auth/model/useAuthStore';
+import { trackMyPostsEvent } from '@/features/post/lib/trackMyPostsEvent';
+import { MY_POSTS_EVENTS } from '@/features/post/model/types';
+import { useInfiniteMyPosts } from '@/features/post/model/useMyPosts';
+import { usePageName } from '@/shared/analytics/lib/getPageName';
+import { useDynamicScrollTracking } from '@/shared/hooks/useDynamicScrollTracking';
+import { PostListPage } from '@/widgets/post-list/ui/PostListPage';
 
-export default function MyPostsPage() {
+const MyPostsPage = () => {
   const pageName = usePageName();
   const { memberRole } = useAuthStore();
 
@@ -43,4 +43,6 @@ export default function MyPostsPage() {
       </div>
     </div>
   );
-}
+};
+
+export default MyPostsPage;

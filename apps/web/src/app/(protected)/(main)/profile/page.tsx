@@ -1,4 +1,6 @@
 import { ProfilePage } from '@/app-pages/profile/ui/ProfilePage';
-export default function Page() {
+const Page = () => {
   return <ProfilePage />;
-}
+};
+
+export default Page;

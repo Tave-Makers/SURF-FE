@@ -1,5 +1,8 @@
 import type { Meta, StoryObj } from '@storybook/nextjs';
+import type { ComponentProps } from 'react';
 import { PostHeader } from './PostHeader';
+
+type PostHeaderProps = ComponentProps<typeof PostHeader>;
 
 const meta: Meta<typeof PostHeader> = {
   title: 'Entities/UI/Post/PostHeader',
@@ -18,10 +21,9 @@ const meta: Meta<typeof PostHeader> = {
 };
 
 export default meta;
-type Story = StoryObj<typeof meta>;
+
+type Story = StoryObj<typeof PostHeader>;
 
 export const Default: Story = {
-  render: (args) => {
-    return <PostHeader {...args} />;
-  },
+  render: (args: PostHeaderProps) => <PostHeader {...args} />,
 };

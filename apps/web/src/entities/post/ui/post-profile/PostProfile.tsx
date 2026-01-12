@@ -8,7 +8,13 @@ type PostProfileProps = {
   viewCount: number;
 };
 
-export function PostProfile({ profileImgUrl, nickname, date, time, viewCount }: PostProfileProps) {
+export const PostProfile = ({
+  profileImgUrl,
+  nickname,
+  date,
+  time,
+  viewCount,
+}: PostProfileProps) => {
   return (
     <section className="flex items-center gap-10" aria-label={`${nickname}님의 작성 게시글 정보`}>
       <Avatar src={profileImgUrl} size="m" alt={`${nickname}의 프로필 이미지`} />
@@ -28,4 +34,4 @@ export function PostProfile({ profileImgUrl, nickname, date, time, viewCount }: 
       </div>
     </section>
   );
-}
+};

@@ -1,22 +1,22 @@
 'use client';
 
-import { useState } from 'react';
-import { useRouter, useSearchParams } from 'next/navigation';
-import { PAGE_ROUTES } from '@/shared/config/path';
-import { AppHeader } from '@/widgets/header/ui/AppHeader';
 import { HeaderMode } from '@surf/ui/header';
-import RecentSearch from '@/features/recent-search/ui/RecentSearch';
+import { Tab } from '@surf/ui/tab';
+import { useRouter, useSearchParams } from 'next/navigation';
+import { useState } from 'react';
 import { TAB_CATEGORIES, TAB_CATEGORY_LIST, type TabCategoryKey } from '@/entities/post/model/tab';
 import { useAuthStore } from '@/features/auth/model/useAuthStore';
 import { SearchPostListContainer } from '@/features/post/search-post/ui/SearchPostListContainer';
-import { Tab } from '@surf/ui/tab';
+import { RecentSearch } from '@/features/recent-search/ui/RecentSearch';
+import { PAGE_ROUTES } from '@/shared/config/path';
+import { AppHeader } from '@/widgets/header/ui/AppHeader';
 
 interface BoardSearchPageProps {
   initialRecent: string[];
   keywordFromQuery: string | null;
 }
 
-export default function BoardSearchPage({ initialRecent, keywordFromQuery }: BoardSearchPageProps) {
+const BoardSearchPage = ({ initialRecent, keywordFromQuery }: BoardSearchPageProps) => {
   const router = useRouter();
   const searchParams = useSearchParams();
 
@@ -82,4 +82,6 @@ export default function BoardSearchPage({ initialRecent, keywordFromQuery }: Boa
       )}
     </div>
   );
-}
+};
+
+export default BoardSearchPage;

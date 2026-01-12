@@ -1,18 +1,18 @@
 'use client';
 
-import { useCallback, useMemo } from 'react';
 import { useRouter } from 'next/navigation';
-import { PAGE_ROUTES } from '@/shared/config/path';
-import { PostCardList } from '@/widgets/post-list/ui/PostCardList';
-import { useInfiniteScroll } from '@/shared/hooks/useInfiniteScroll';
+import { useCallback, useMemo } from 'react';
+import type { PostListItemResponse } from '@/entities/post/api/types';
+import { POST_CATEGORIES } from '@/entities/post/model/category';
 import { transformListItemToPost } from '@/entities/post/model/mappers';
-import type { UserLevel } from '@/entities/user/model/types';
-import type { Post } from '@/entities/post/model/types';
 import type { TabCategoryKey } from '@/entities/post/model/tab';
 import { TAB_CATEGORIES } from '@/entities/post/model/tab';
-import { POST_CATEGORIES } from '@/entities/post/model/category';
+import type { Post } from '@/entities/post/model/types';
+import type { UserLevel } from '@/entities/user/model/types';
 import { useInfiniteSearchPosts } from '@/features/post/search-post/api/useInfiniteSearchPosts';
-import type { PostListItemResponse } from '@/entities/post/api/types';
+import { PAGE_ROUTES } from '@/shared/config/path';
+import { useInfiniteScroll } from '@/shared/hooks/useInfiniteScroll';
+import { PostCardList } from '@/widgets/post-list/ui/PostCardList';
 
 type Props = {
   keyword: string;

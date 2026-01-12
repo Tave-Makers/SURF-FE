@@ -1,19 +1,19 @@
 'use client';
 
-import { ScoreMode } from '@/entities/activity-score/model/types';
-import ActivityScoreCard from '@/widgets/activity-score/ui/ActivityScoreCard';
-import { ActivityHistoryList } from '@/entities/activity-score/ui/ActivityHistoryList';
 import { Tab } from '@surf/ui/tab';
-import { useActivitySummary } from '@/entities/activity-score/model/useActivitySummary';
-import { useInfiniteActivityHistory } from '@/entities/activity-score/model/useActivityHistory';
 import { useState, useRef, useEffect } from 'react';
+import PenaltyEmptyIcon from './icons/penalty-empty.svg';
+import RewardEmptyIcon from './icons/reward-empty.svg';
+import { ScoreMode } from '@/entities/activity-score/model/types';
+import { useInfiniteActivityHistory } from '@/entities/activity-score/model/useActivityHistory';
+import { useActivitySummary } from '@/entities/activity-score/model/useActivitySummary';
+import { ActivityHistoryList } from '@/entities/activity-score/ui/ActivityHistoryList';
 import { trackActivityScoreEvent } from '@/features/activity-score/lib/trackActivityScoreEvent';
 import { ACTIVITY_SCORE_EVENTS } from '@/features/activity-score/model/types';
 import { usePageName } from '@/shared/analytics/lib/getPageName';
-import RewardEmptyIcon from './icons/reward-empty.svg';
-import PenaltyEmptyIcon from './icons/penalty-empty.svg';
+import { ActivityScoreCard } from '@/widgets/activity-score/ui/ActivityScoreCard';
 
-export default function ActivityScorePage() {
+const ActivityScorePage = () => {
   // 탭 상태
   const [mode, setMode] = useState<ScoreMode>('REWARD');
   // sentinel ref
@@ -174,4 +174,6 @@ export default function ActivityScorePage() {
       )}
     </div>
   );
-}
+};
+
+export default ActivityScorePage;

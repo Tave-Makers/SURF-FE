@@ -1,12 +1,12 @@
 'use client';
 
-import { memo } from 'react';
 import { SurfIcon } from '@surf/ui/icon';
-import { PostBadge } from '@/entities/post/ui/post-badge/PostBadge';
+import Image from 'next/image';
+import { memo } from 'react';
 import { Post } from '../../model/types';
+import { PostBadge } from '@/entities/post/ui/post-badge/PostBadge';
 import { stripHtml } from '@/shared/lib/stripHtml';
 import { toDate, toKST, timeAgo } from '@/shared/utils/date';
-import Image from 'next/image';
 
 type PostCardProps = {
   post: Post;
@@ -16,13 +16,13 @@ type PostCardProps = {
   shouldShowReservationBadge?: boolean;
 };
 
-function PostCardComponent({
+const PostCardComponent = ({
   post,
   onClick,
   onLikeToggle,
   shouldShowCategoryBadge,
   shouldShowReservationBadge,
-}: PostCardProps) {
+}: PostCardProps) => {
   const {
     title,
     content,
@@ -118,6 +118,6 @@ function PostCardComponent({
       )}
     </div>
   );
-}
+};
 
 export const PostCard = memo(PostCardComponent);

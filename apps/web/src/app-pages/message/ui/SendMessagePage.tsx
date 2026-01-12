@@ -1,19 +1,19 @@
 'use client';
 
-import { useRouter, useSearchParams } from 'next/navigation';
-import { Callout } from '@/entities/message/ui/callout/Callout';
-import { FieldGroup } from '@surf/ui/field-group';
-import { TextArea } from '@surf/ui/text-area';
-import { SolidButton } from '@surf/ui/button';
-import { useMemo, useState } from 'react';
-import { useKeyboardOffset } from '@/shared/hooks/useKeyboardOffset';
 import { Alert } from '@surf/ui/alert';
-import { AppHeader } from '@/widgets/header/ui/AppHeader';
+import { SolidButton } from '@surf/ui/button';
+import { FieldGroup } from '@surf/ui/field-group';
 import { HeaderMode } from '@surf/ui/header';
+import { TextArea } from '@surf/ui/text-area';
+import { useRouter, useSearchParams } from 'next/navigation';
+import { useMemo, useState } from 'react';
 import { useSendMessage } from '@/entities/message/model/useSendMessage';
+import { Callout } from '@/entities/message/ui/callout/Callout';
+import { useKeyboardOffset } from '@/shared/hooks/useKeyboardOffset';
 import { kakaoImgNormalize } from '@/shared/lib/kakaoImgNormalize';
+import { AppHeader } from '@/widgets/header/ui/AppHeader';
 
-export function SendMessagePage() {
+export const SendMessagePage = () => {
   // 쿼리 파라미터
   const searchParams = useSearchParams();
   const memberId = searchParams.get('memberId');
@@ -194,4 +194,4 @@ export function SendMessagePage() {
       />
     </div>
   );
-}
+};

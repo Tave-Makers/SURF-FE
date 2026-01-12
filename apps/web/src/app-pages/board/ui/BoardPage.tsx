@@ -1,15 +1,15 @@
 'use client';
 
-import { useSearchParams, useRouter } from 'next/navigation';
-import { PAGE_ROUTES } from '@/shared/config/path';
-import { PostListContainer } from '@/widgets/post-list/ui/PostListContainer';
-import { Tab } from '@surf/ui/tab';
-import { useAuthStore } from '@/features/auth/model/useAuthStore';
-import { TAB_CATEGORIES, TAB_CATEGORY_LIST } from '@/entities/post/model/tab';
-import { AppHeader } from '@/widgets/header/ui/AppHeader';
 import { HeaderMode } from '@surf/ui/header';
+import { Tab } from '@surf/ui/tab';
+import { useSearchParams, useRouter } from 'next/navigation';
 import { POST_BOARDS } from '@/entities/post/model/board';
+import { TAB_CATEGORIES, TAB_CATEGORY_LIST } from '@/entities/post/model/tab';
 import { PostFab } from '@/entities/post/ui/post-fab/PostFab';
+import { useAuthStore } from '@/features/auth/model/useAuthStore';
+import { PAGE_ROUTES } from '@/shared/config/path';
+import { AppHeader } from '@/widgets/header/ui/AppHeader';
+import { PostListContainer } from '@/widgets/post-list/ui/PostListContainer';
 
 const BoardPage = ({ boardId: boardIdProp }: { boardId: string }) => {
   const router = useRouter();

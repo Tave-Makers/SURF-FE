@@ -1,16 +1,16 @@
 'use client';
 
 import { useEffect } from 'react';
-import { useAuthStore } from '@/features/auth/model/useAuthStore';
 import { UserLevel } from '@/entities/user/model/types';
+import { useAuthStore } from '@/features/auth/model/useAuthStore';
 
-export function AuthHydrator({
+export const AuthHydrator = ({
   memberId,
   memberRole,
 }: {
   memberId: number;
   memberRole: UserLevel;
-}) {
+}) => {
   const setAuth = useAuthStore((s) => s.setAuth);
 
   useEffect(() => {
@@ -18,4 +18,4 @@ export function AuthHydrator({
   }, [memberId, memberRole, setAuth]);
 
   return null;
-}
+};

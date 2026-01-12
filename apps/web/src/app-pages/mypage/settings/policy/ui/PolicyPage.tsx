@@ -1,10 +1,10 @@
 'use client';
 
-import { PolicyItem } from '@/entities/policy/ui/PolicyItem';
 import { useRouter } from 'next/navigation';
+import { PolicyItem } from '@/entities/policy/ui/PolicyItem';
 import { LAW_LIST } from '@/features/laws/constants/law-list';
 
-export default function PolicyPage() {
+const PolicyPage = () => {
   const router = useRouter();
 
   return (
@@ -20,4 +20,6 @@ export default function PolicyPage() {
       ))}
     </div>
   );
-}
+};
+
+export default PolicyPage;

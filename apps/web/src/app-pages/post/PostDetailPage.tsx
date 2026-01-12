@@ -1,32 +1,32 @@
 'use client';
 
-import { usePostDetail } from '@/entities/post/api/usePostDetail';
-import { PostHeader } from '@/entities/post/ui/post-header/PostHeader';
-import { useKeyboardOffset } from '@/shared/hooks/useKeyboardOffset';
-import { useGetPostLikesQuery } from '@/features/post/model/useGetPostLikesQuery';
 import { ActionBar } from '@surf/ui/action-bar';
-import { PostBodySection } from '@/widgets/post-detail/PostBodySection';
-import { AppHeader } from '@/widgets/header/ui/AppHeader';
-import { HeaderMode } from '@surf/ui/header';
-import { Sheet as ModalSheet } from 'react-modal-sheet';
-import { Sheet } from '@surf/ui/sheet';
-import { SheetItem } from '@surf/ui/sheet';
-import { SurfIcon } from '@surf/ui/icon';
-import { useState } from 'react';
 import { Alert } from '@surf/ui/alert';
-import { usePathname, useRouter } from 'next/navigation';
 import { Avatar } from '@surf/ui/avatar';
-import { categoryIdToKey } from '@/entities/post/model/category';
-import { useGetPostScheduleQuery } from '@/features/post/model/useGetPostScheduleQuery';
-import { useDeletePostMutation } from '@/features/post/model/useDeletePostMutation';
+import { HeaderMode } from '@surf/ui/header';
+import { SurfIcon } from '@surf/ui/icon';
+import { SheetItem } from '@surf/ui/sheet';
+import { Sheet } from '@surf/ui/sheet';
 import { useToastStore } from '@surf/ui/store/toastStore';
+import { usePathname, useRouter } from 'next/navigation';
+import { useState } from 'react';
+import { Sheet as ModalSheet } from 'react-modal-sheet';
+import { usePostDetail } from '@/entities/post/api/usePostDetail';
+import { categoryIdToKey } from '@/entities/post/model/category';
+import { PostHeader } from '@/entities/post/ui/post-header/PostHeader';
+import { useDeletePostMutation } from '@/features/post/model/useDeletePostMutation';
+import { useGetPostLikesQuery } from '@/features/post/model/useGetPostLikesQuery';
+import { useGetPostScheduleQuery } from '@/features/post/model/useGetPostScheduleQuery';
 import { PAGE_ROUTES } from '@/shared/config/path';
+import { useKeyboardOffset } from '@/shared/hooks/useKeyboardOffset';
+import { AppHeader } from '@/widgets/header/ui/AppHeader';
+import { PostBodySection } from '@/widgets/post-detail/PostBodySection';
 
 type PostDetailPageProps = {
   postId: string;
 };
 
-export default function PostDetailPage({ postId }: PostDetailPageProps) {
+const PostDetailPage = ({ postId }: PostDetailPageProps) => {
   const pathname = usePathname();
   const router = useRouter();
   const numericPostId = Number(postId);
@@ -273,4 +273,6 @@ export default function PostDetailPage({ postId }: PostDetailPageProps) {
       </ModalSheet>
     </div>
   );
-}
+};
+
+export default PostDetailPage;

@@ -1,5 +1,7 @@
 import ServicePolicyPage from '@/app-pages/mypage/settings/policy/ui/ServicePolicyPage';
 
-export default function Page() {
+const Page = () => {
   return <ServicePolicyPage />;
-}
+};
+
+export default Page;

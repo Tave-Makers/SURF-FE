@@ -11,7 +11,7 @@ export type ScheduleSettingProps = {
   onClick?: () => void;
 };
 
-export function ScheduleSetting({ title, date, onClick }: ScheduleSettingProps) {
+export const ScheduleSetting = ({ title, date, onClick }: ScheduleSettingProps) => {
   const roundedDate = roundToNearestMinutes(date, { nearestTo: 30 });
 
   return (
@@ -28,4 +28,4 @@ export function ScheduleSetting({ title, date, onClick }: ScheduleSettingProps) 
       </div>
     </button>
   );
-}
+};

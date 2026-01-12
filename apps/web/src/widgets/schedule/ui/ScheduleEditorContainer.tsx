@@ -1,30 +1,30 @@
 'use client';
 
-import { useState, useMemo } from 'react';
-import { useRouter, useParams, useSearchParams } from 'next/navigation';
-import { useForm, FormProvider } from 'react-hook-form';
+import { Alert } from '@surf/ui/alert';
+import { HeaderMode } from '@surf/ui/header';
+import { useToastStore } from '@surf/ui/store/toastStore';
 import { format, roundToNearestMinutes } from 'date-fns';
+import { useRouter, useParams, useSearchParams } from 'next/navigation';
+import { useState, useMemo } from 'react';
+import { useForm, FormProvider } from 'react-hook-form';
 
 // Hooks & Store
-import { useScheduleFormInit } from '@/features/schedule/model/useScheduleFormInit';
+import { mapScheduleFormToRequest, toServerLocation } from '@/features/schedule/create/api/mapper';
+import { ScheduleFormData } from '@/features/schedule/create/model/types';
 import { useCreateSchedule } from '@/features/schedule/create/model/useCreateSchedule';
-import { useEditSchedule } from '@/features/schedule/edit/model/useEditSchedule';
 import { useCreatePostScheduleStore } from '@/features/schedule/create-post-schedule/model/useCreatePostScheduleStore';
-import { useToastStore } from '@surf/ui/store/toastStore';
+import { useEditSchedule } from '@/features/schedule/edit/model/useEditSchedule';
+import { useScheduleFormInit } from '@/features/schedule/model/useScheduleFormInit';
 
 // UI & Types
-import { mapScheduleFormToRequest, toServerLocation } from '@/features/schedule/create/api/mapper';
 import { AppHeader } from '@/widgets/header/ui/AppHeader';
-import { HeaderMode } from '@surf/ui/header';
-import { Alert } from '@surf/ui/alert';
-import ScheduleForm from '@/widgets/schedule/ui/ScheduleForm';
-import { ScheduleFormData } from '@/features/schedule/create/model/types';
+import { ScheduleForm } from '@/widgets/schedule/ui/ScheduleForm';
 
 type Props = {
   entryPoint: 'calendar' | 'post'; // 진입점
 };
 
-export default function ScheduleEditorContainer({ entryPoint }: Props) {
+export const ScheduleEditorContainer = ({ entryPoint }: Props) => {
   const router = useRouter();
   const showToast = useToastStore((state) => state.show);
   const params = useParams();
@@ -210,4 +210,4 @@ export default function ScheduleEditorContainer({ entryPoint }: Props) {
       </FormProvider>
     </>
   );
-}
+};

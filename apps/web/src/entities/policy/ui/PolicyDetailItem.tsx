@@ -1,8 +1,8 @@
 'use client';
 
 import { POLICY_ITEMS } from '../model/constants';
-import { Markdown } from '@/entities/policy/ui/Markdown';
 import { preprocessToMarkdown } from '../model/preprocessMarkdown';
+import { Markdown } from '@/entities/policy/ui/Markdown';
 
 type PolicyDetailItemProps = {
   policyId?: string;

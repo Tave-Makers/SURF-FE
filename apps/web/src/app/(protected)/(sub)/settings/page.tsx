@@ -1,5 +1,7 @@
 import SettingsPage from '@/app-pages/mypage/settings/ui/SettingsPage';
 
-export default function Page() {
+const Page = () => {
   return <SettingsPage />;
-}
+};
+
+export default Page;

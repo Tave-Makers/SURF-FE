@@ -1,5 +1,7 @@
 import OperatingPolicyPage from '@/app-pages/mypage/settings/policy/ui/OperatingPolicyPage';
 
-export default function Page() {
+const Page = () => {
   return <OperatingPolicyPage />;
-}
+};
+
+export default Page;

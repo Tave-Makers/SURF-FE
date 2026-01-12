@@ -23,7 +23,7 @@ interface Props {
   item: CareerDTO;
 }
 
-export function CareerCard({ item }: Props) {
+export const CareerCard = ({ item }: Props) => {
   const isWorking = item.isWorking === true;
 
   const startView = formatYmForView(item.startDate);
@@ -46,4 +46,4 @@ export function CareerCard({ item }: Props) {
       </div>
     </article>
   );
-}
+};

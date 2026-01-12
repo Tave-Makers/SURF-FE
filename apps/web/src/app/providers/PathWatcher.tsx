@@ -3,7 +3,7 @@
 import { usePathname } from 'next/navigation';
 import { useEffect } from 'react';
 
-export function PathWatcher() {
+export const PathWatcher = () => {
   const pathname = usePathname();
 
   useEffect(() => {
@@ -17,4 +17,4 @@ export function PathWatcher() {
   }, [pathname]);
 
   return null;
-}
+};

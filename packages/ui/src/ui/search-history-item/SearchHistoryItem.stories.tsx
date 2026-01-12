@@ -1,5 +1,6 @@
 import type { Meta, StoryObj } from '@storybook/nextjs';
-import SearchHistoryItem from './SearchHistoryItem';
+import { SearchHistoryItem } from './SearchHistoryItem';
+import React from 'react';
 
 // ---------- Meta ----------
 const meta: Meta<typeof SearchHistoryItem> = {

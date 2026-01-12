@@ -1,12 +1,12 @@
 'use client';
 
-import { useEffect, useRef } from 'react';
-import { getFcmToken } from '@/shared/lib/fcm';
-import { getValidStatus } from '@/features/auth/api/getValidStatus';
-import { useRegisterToken } from '@/entities/notification/model/useRegisterToken';
 import { isAxiosError } from 'axios';
+import { useEffect, useRef } from 'react';
+import { useRegisterToken } from '@/entities/notification/model/useRegisterToken';
+import { getValidStatus } from '@/features/auth/api/getValidStatus';
+import { getFcmToken } from '@/shared/lib/fcm';
 
-export default function FCMInitializer() {
+export const FCMInitializer = () => {
   const { mutate: registerToken } = useRegisterToken();
   const initRef = useRef(false);
 
@@ -69,4 +69,4 @@ export default function FCMInitializer() {
   ); // 한 번만 실행 보장
 
   return null;
-}
+};

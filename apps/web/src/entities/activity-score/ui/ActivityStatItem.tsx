@@ -1,7 +1,7 @@
 'use client';
 
-import { useTooltipStore } from '@/entities/activity-score/model/tooltipStore';
 import { FC, ReactNode } from 'react';
+import { useTooltipStore } from '@/entities/activity-score/model/tooltipStore';
 
 type Props = {
   id: string;

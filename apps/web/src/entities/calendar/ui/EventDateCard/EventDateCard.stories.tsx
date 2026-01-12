@@ -1,7 +1,7 @@
 import type { Meta, StoryObj } from '@storybook/nextjs';
+import type { ActivityCategory, EventCardType } from '../../model/types';
 import { EventCard } from '../EventCard/EventCard';
 import { EventDateCard } from './EventDateCard';
-import type { ActivityCategory, EventCardType } from '../../model/types';
 
 type EventItem = {
   id: string;
@@ -33,7 +33,7 @@ const meta: Meta<typeof EventDateCard<EventItem>> = {
     isLoading: false,
 
     // 기본 renderItem 정의
-    renderItem: (item) => (
+    renderItem: (item: EventItem) => (
       <EventCard
         title={item.title}
         category={item.category}

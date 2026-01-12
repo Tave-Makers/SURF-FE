@@ -13,7 +13,7 @@ type Story = StoryObj<typeof AppNavigation>;
 /**
  * Storybook에서 next/link 이동 막는 공통 Wrapper
  */
-function PreventNavigation({ children }: { children: React.ReactNode }) {
+const PreventNavigation = ({ children }: { children: React.ReactNode }) => {
   return (
     <div
       onClickCapture={(e) => {
@@ -25,7 +25,7 @@ function PreventNavigation({ children }: { children: React.ReactNode }) {
       {children}
     </div>
   );
-}
+};
 
 export const HomeActive: Story = {
   parameters: {

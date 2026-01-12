@@ -5,7 +5,7 @@ import { useEffect, useRef } from 'react';
 import { trackCommonEvent } from '@/shared/analytics/lib/trackCommonEvent';
 import { COMMON_EVENTS } from '@/shared/analytics/model/types';
 
-export function PageTrackingProvider({ children }: { children: React.ReactNode }) {
+export const PageTrackingProvider = ({ children }: { children: React.ReactNode }) => {
   const pathname = usePathname();
   const mountTime = useRef<number | null>(null);
   const firstActionRecorded = useRef(false);
@@ -57,4 +57,4 @@ export function PageTrackingProvider({ children }: { children: React.ReactNode }
     };
   }, [pathname]);
   return <>{children}</>;
-}
+};

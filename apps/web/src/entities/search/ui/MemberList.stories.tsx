@@ -1,7 +1,7 @@
 import type { Meta, StoryObj } from '@storybook/nextjs';
 
-import { MemberList } from './MemberList';
 import type { MemberSearchItem } from '../model/types';
+import { MemberList } from './MemberList';
 
 const meta: Meta<typeof MemberList> = {
   title: 'Entities/UI/Search/MemberList',

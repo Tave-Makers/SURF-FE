@@ -1,17 +1,17 @@
 'use client';
 
-import { useGetHome } from '@/entities/home/api/useGetHome';
-import { AnnouncementBar } from '@/entities/schedule/ui/announcement-bar/AnnouncementBar';
 import { Carousel } from '@surf/ui/carousel';
 import { HeaderMode } from '@surf/ui/header';
 import { Shortcut } from '@surf/ui/shortcut';
-import { AppHeader } from '@/widgets/header/ui/AppHeader';
-import { TAVE_CHANNEL_LINKS, SPONSOR_LINKS, SHORTCUT_LINKS } from '@/entities/home/model/constants';
 import { useRouter } from 'next/navigation';
-import { PAGE_ROUTES } from '@/shared/config/path';
-import { HeroCard } from '@/features/home-theme/ui/hero-card/HeroCard';
-import type { HeroCardProps } from '@/features/home-theme/ui/hero-card/HeroCard';
 import HeaderLogo from '../../../../public/header-logo.svg';
+import { useGetHome } from '@/entities/home/api/useGetHome';
+import { TAVE_CHANNEL_LINKS, SPONSOR_LINKS, SHORTCUT_LINKS } from '@/entities/home/model/constants';
+import { AnnouncementBar } from '@/entities/schedule/ui/announcement-bar/AnnouncementBar';
+import type { HeroCardProps } from '@/features/home-theme/ui/hero-card/HeroCard';
+import { HeroCard } from '@/features/home-theme/ui/hero-card/HeroCard';
+import { PAGE_ROUTES } from '@/shared/config/path';
+import { AppHeader } from '@/widgets/header/ui/AppHeader';
 
 export const HomePageClient = ({ heroProps }: { heroProps: HeroCardProps }) => {
   const router = useRouter();

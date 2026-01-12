@@ -1,26 +1,26 @@
 'use client';
 
-import { POST_CATEGORIES } from '@/entities/post/model/category';
 import { AccordionSelect } from '@surf/ui/accordion';
-import { PostEditor } from '@/widgets/post/post-editor/PostEditor';
-import { Sheet as ModalSheet } from 'react-modal-sheet';
-import { AppHeader } from '@/widgets/header/ui/AppHeader';
-import { HeaderMode } from '@surf/ui/header';
 import { Alert } from '@surf/ui/alert';
-import { usePostForm } from '../../../../features/post/post-form/model/usePostForm';
-import { useRouter } from 'next/navigation';
-import { POST_VALIDATION } from '@/entities/post/model/validation';
-import { POST_BOARDS } from '@/entities/post/model/board';
-import { PostBadge } from '@/entities/post/ui/post-badge/PostBadge';
-import { useEffect, useState } from 'react';
+import { HeaderMode } from '@surf/ui/header';
 import { Sheet } from '@surf/ui/sheet';
+import { useRouter } from 'next/navigation';
+import { useEffect, useState } from 'react';
+import { Sheet as ModalSheet } from 'react-modal-sheet';
+import { usePostForm } from '../../../../features/post/post-form/model/usePostForm';
+import { POST_BOARDS } from '@/entities/post/model/board';
+import { POST_CATEGORIES } from '@/entities/post/model/category';
+import { POST_VALIDATION } from '@/entities/post/model/validation';
+import { PostBadge } from '@/entities/post/ui/post-badge/PostBadge';
 import { DateTimePicker } from '@/entities/schedule/ui/DateTimePicker/DateTimePicker';
+import { AppHeader } from '@/widgets/header/ui/AppHeader';
+import { PostEditor } from '@/widgets/post/post-editor/PostEditor';
 
 type PostPageProps =
   | { mode: 'create'; boardId: string }
   | { mode: 'edit'; boardId: string; postId: string };
 
-export default function PostPage(props: PostPageProps) {
+const PostPage = (props: PostPageProps) => {
   const router = useRouter();
 
   const { mode, boardId } = props;
@@ -287,4 +287,6 @@ export default function PostPage(props: PostPageProps) {
       />
     </div>
   );
-}
+};
+
+export default PostPage;

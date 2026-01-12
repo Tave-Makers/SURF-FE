@@ -1,6 +1,9 @@
 import type { Meta, StoryObj } from '@storybook/nextjs';
-import Comment from './Comment';
 import { useState } from 'react';
+import type { ComponentProps } from 'react';
+import { Comment } from './Comment';
+
+type CommentProps = ComponentProps<typeof Comment>;
 
 const meta: Meta<typeof Comment> = {
   title: 'Entities/UI/Comment',
@@ -29,6 +32,7 @@ const meta: Meta<typeof Comment> = {
     },
   },
 };
+
 export default meta;
 
 type Story = StoryObj<typeof Comment>;
@@ -52,20 +56,15 @@ export const LongContent: Story = {
   },
 };
 
-/** 좋아요 클릭 이벤트 확인용 (상호작용 스토리) */
+/** 좋아요 클릭 이벤트 확인용 */
 export const InteractiveLike: Story = {
-  render: (args) => {
-    const [liked, setLiked] = useState(args.isLiked);
-    const [count, setCount] = useState(args.likeCount ?? 0);
+  render: (args: CommentProps) => {
+    const [liked, setLiked] = useState<boolean>(args.isLiked);
+    const [count, setCount] = useState<number>(args.likeCount ?? 0);
 
-    /**
-     * 좋아요 상태 클릭 시:
-     * 1. 내부 liked/count 상태 갱신
-     * 2. 외부(onLikeToggle) 콜백 실행 → Storybook Actions 탭에 로그 출력
-     */
     const handleToggle = (newState: boolean) => {
       setLiked(newState);
-      setCount((prev) => prev + (newState ? 1 : -1));
+      setCount((prev) => Math.max(0, prev + (newState ? 1 : -1)));
       args.onLikeToggle?.(newState);
     };
 

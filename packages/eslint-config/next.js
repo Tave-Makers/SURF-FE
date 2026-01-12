@@ -34,10 +34,10 @@ export function next(opts) {
       },
     },
 
-    // Storybook 규칙(필요한 앱만)
+    // Storybook 규칙
     ...(enableStorybook ? [...storybook.configs['flat/recommended']] : []),
 
-    // ✅ Prettier는 무조건 마지막
+    // Prettier는 무조건 마지막
     configPrettier,
   ];
 }

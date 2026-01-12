@@ -2,6 +2,8 @@
 
 import { ModePage } from '@/app-pages/mypage/settings/mode/ui/ModePage';
 
-export default function Page() {
+const Page = () => {
   return <ModePage />;
-}
+};
+
+export default Page;

@@ -1,8 +1,8 @@
 'use client';
 
 import { SolidButton } from '@surf/ui/button';
-import { AppHeader } from '@/widgets/header/ui/AppHeader';
 import React from 'react';
+import { AppHeader } from '@/widgets/header/ui/AppHeader';
 type OnBoardingLayoutProps = {
   step: number;
   setStep: React.Dispatch<React.SetStateAction<number>>;
@@ -14,7 +14,7 @@ type OnBoardingLayoutProps = {
   isFinalStep?: boolean;
   isSubmitting?: boolean;
 };
-export default function OnBoardingLayout({
+export const OnBoardingLayout = ({
   step,
   setStep,
   title,
@@ -24,7 +24,7 @@ export default function OnBoardingLayout({
   isNextBtnDisabled = true,
   isFinalStep = false,
   isSubmitting,
-}: OnBoardingLayoutProps) {
+}: OnBoardingLayoutProps) => {
   return (
     <div className="flex h-full w-full flex-col">
       <AppHeader
@@ -60,4 +60,4 @@ export default function OnBoardingLayout({
       </div>
     </div>
   );
-}
+};

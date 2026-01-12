@@ -1,8 +1,8 @@
 'use client';
 
+import { SurfIcon } from '@surf/ui/icon';
 import type { ComponentProps, ButtonHTMLAttributes, ReactNode, MouseEvent } from 'react';
 import { forwardRef } from 'react';
-import { SurfIcon } from '@surf/ui/icon';
 
 type SurfIconName = ComponentProps<typeof SurfIcon>['name'];
 

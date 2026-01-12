@@ -1,20 +1,20 @@
+import { Alert } from '@surf/ui/alert';
+import axios from 'axios';
+import { useRouter } from 'next/navigation';
 import { useEffect, useState } from 'react';
 import { useFormContext, useWatch } from 'react-hook-form';
-import OnBoardingLayout from './OnBoardingLayout';
+import { OnBoardingLayout } from './OnBoardingLayout';
+import { useImageUploader } from '@/entities/image/model/useImageUploader';
+import { useAgreementStore } from '@/features/laws/model/useAgreementStore';
+import { submitOnBoarding } from '@/features/onboarding/api/submitOnBoarding';
+import { trackOnBoardingEvent } from '@/features/onboarding/lib/trackOnBoardingEvent';
 import { ONBOARDING_EVENTS, OnBoardingFormData } from '@/features/onboarding/model/types';
+import { EmailPhoneStep } from '@/features/onboarding/ui/EmailPhoneStep';
 import { ProfileStep } from '@/features/onboarding/ui/ProfileStep';
 import { TrackUnivStep } from '@/features/onboarding/ui/TrackUnivStep';
-import { EmailPhoneStep } from '@/features/onboarding/ui/EmailPhoneStep';
-import { useRouter } from 'next/navigation';
-import { submitOnBoarding } from '@/features/onboarding/api/submitOnBoarding';
 import { PAGE_ROUTES } from '@/shared/config/path';
-import axios from 'axios';
 import { DefaultError } from '@/shared/lib/handleApiError';
-import { trackOnBoardingEvent } from '@/features/onboarding/lib/trackOnBoardingEvent';
-import { useImageUploader } from '@/entities/image/model/useImageUploader';
 import { safeUUID } from '@/shared/utils/uuid';
-import { Alert } from '@surf/ui/alert';
-import { useAgreementStore } from '@/features/laws/model/useAgreementStore';
 
 const STEP_ANALYTICS_NAMES: Record<number, 'nickname' | 'track' | 'contact'> = {
   0: 'nickname',
@@ -22,7 +22,7 @@ const STEP_ANALYTICS_NAMES: Record<number, 'nickname' | 'track' | 'contact'> = {
   2: 'contact',
 };
 
-export default function OnBoardingForm() {
+export const OnBoardingForm = () => {
   const [step, setStep] = useState(0);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isAlertOpen, setIsAlertOpen] = useState(false);
@@ -221,4 +221,4 @@ export default function OnBoardingForm() {
       />
     </>
   );
-}
+};

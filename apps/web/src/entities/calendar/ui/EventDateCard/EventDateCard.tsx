@@ -1,6 +1,6 @@
-import type { ReactNode } from 'react';
 import { format } from 'date-fns';
 import { ko } from 'date-fns/locale';
+import type { ReactNode } from 'react';
 import CalendarEventDateCardEmpty from '../icons/CalendarEventDateCardEmpty.svg';
 
 /**
@@ -17,12 +17,12 @@ type EventDateCardProps<T extends { id: string | number }> = {
   renderItem: (item: T, index: number) => ReactNode;
 };
 
-export function EventDateCard<T extends { id: string | number }>({
+export const EventDateCard = <T extends { id: string | number }>({
   date,
   items,
   isLoading,
   renderItem,
-}: EventDateCardProps<T>) {
+}: EventDateCardProps<T>) => {
   if (!date) return null;
   const formattedDate = format(date, 'yyyy년 M월 d일 (E)', { locale: ko });
 
@@ -48,4 +48,4 @@ export function EventDateCard<T extends { id: string | number }>({
       )}
     </div>
   );
-}
+};

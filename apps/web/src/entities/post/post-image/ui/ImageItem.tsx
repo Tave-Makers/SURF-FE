@@ -1,6 +1,6 @@
 'use client';
-import DeleteIcon from '@/shared/assets/icons/post/post-image/x-circle-fill.svg';
 import { UploadImage } from '@/entities/image/model/types';
+import DeleteIcon from '@/shared/assets/icons/post/post-image/x-circle-fill.svg';
 
 type ImageItemProps = {
   preview: string;
@@ -9,7 +9,7 @@ type ImageItemProps = {
   onRemove?: () => void;
 };
 
-export function ImageItem({ preview, uploadedUrl, status, onRemove }: ImageItemProps) {
+export const ImageItem = ({ preview, uploadedUrl, status, onRemove }: ImageItemProps) => {
   const src = uploadedUrl ?? preview;
 
   return (
@@ -57,4 +57,4 @@ export function ImageItem({ preview, uploadedUrl, status, onRemove }: ImageItemP
       </button>
     </div>
   );
-}
+};

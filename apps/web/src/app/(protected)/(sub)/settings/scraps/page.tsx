@@ -1,4 +1,6 @@
 import ScrapsPage from '@/app-pages/mypage/settings/scraps/ui/ScrapsPage';
-export default function Page() {
+const Page = () => {
   return <ScrapsPage />;
-}
+};
+
+export default Page;

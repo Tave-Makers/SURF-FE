@@ -1,10 +1,10 @@
 'use client';
 
+import { HeaderMode } from '@surf/ui/header';
 import { PolicyDetailItem } from '@/entities/policy/ui/PolicyDetailItem';
 import { AppHeader } from '@/widgets/header/ui/AppHeader';
-import { HeaderMode } from '@surf/ui/header';
 
-export default function ServicePolicyPage() {
+const ServicePolicyPage = () => {
   return (
     <div className="flex h-full flex-col">
       <AppHeader
@@ -17,4 +17,6 @@ export default function ServicePolicyPage() {
       <PolicyDetailItem policyId="ServicePolicy" />
     </div>
   );
-}
+};
+
+export default ServicePolicyPage;

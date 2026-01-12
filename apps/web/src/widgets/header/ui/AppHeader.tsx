@@ -1,8 +1,8 @@
 'use client';
 
-import { useMemo } from 'react';
-import { usePathname, useRouter } from 'next/navigation';
 import { Header, HeaderMode, HeaderProps } from '@surf/ui/header';
+import { usePathname, useRouter } from 'next/navigation';
+import { useMemo } from 'react';
 import { createRouteConfig } from '@/shared/config/routes';
 
 type AppHeaderProps = {
@@ -11,7 +11,7 @@ type AppHeaderProps = {
   className?: string;
 };
 
-export function AppHeader({ customBack, overrideHeader, className }: AppHeaderProps) {
+export const AppHeader = ({ customBack, overrideHeader, className }: AppHeaderProps) => {
   const pathname = usePathname();
   const router = useRouter();
   const routeConfig = useMemo(() => createRouteConfig(router), [router]);
@@ -49,4 +49,4 @@ export function AppHeader({ customBack, overrideHeader, className }: AppHeaderPr
   const headerProps = getHeaderProps(baseHeader, handleBack);
 
   return <Header {...headerProps} className={className} />;
-}
+};

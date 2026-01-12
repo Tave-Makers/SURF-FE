@@ -8,7 +8,7 @@ export type EventTitleProps = {
   onChange: (value: string) => void;
 };
 
-export function EventTitle({ placeholder, title, onChange }: EventTitleProps) {
+export const EventTitle = ({ placeholder, title, onChange }: EventTitleProps) => {
   const [isEditing, setIsEditing] = useState(false);
   const [value, setValue] = useState(title || '');
   const inputRef = useRef<HTMLTextAreaElement>(null);
@@ -96,4 +96,4 @@ export function EventTitle({ placeholder, title, onChange }: EventTitleProps) {
       )}
     </button>
   );
-}
+};

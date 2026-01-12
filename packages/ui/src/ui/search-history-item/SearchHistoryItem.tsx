@@ -25,7 +25,7 @@ export type SearchHistoryItemProps = {
   onDelete?: () => void;
 };
 
-const SearchHistoryItem = ({ keyword = '', onSelect, onDelete }: SearchHistoryItemProps) => {
+export const SearchHistoryItem = ({ keyword = '', onSelect, onDelete }: SearchHistoryItemProps) => {
   return (
     <div
       className={`${baseStyle} ${colorStyle} ${interactionStyle}`}
@@ -53,5 +53,3 @@ const SearchHistoryItem = ({ keyword = '', onSelect, onDelete }: SearchHistoryIt
     </div>
   );
 };
-
-export default SearchHistoryItem;

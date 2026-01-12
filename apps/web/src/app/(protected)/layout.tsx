@@ -1,8 +1,8 @@
 import type { ReactNode } from 'react';
-import { verifySession } from '@/shared/lib/dal';
 import { AuthHydrator } from '../providers/AuthHydrator';
+import { verifySession } from '@/shared/lib/dal';
 
-export default async function ProtectedLayout({ children }: { children: ReactNode }) {
+const ProtectedLayout = async ({ children }: { children: ReactNode }) => {
   const user = await verifySession();
   return (
     <>
@@ -10,4 +10,6 @@ export default async function ProtectedLayout({ children }: { children: ReactNod
       {children}
     </>
   );
-}
+};
+
+export default ProtectedLayout;

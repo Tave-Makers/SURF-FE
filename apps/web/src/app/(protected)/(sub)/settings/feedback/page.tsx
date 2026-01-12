@@ -1,5 +1,7 @@
 import FeedbackPage from '@/app-pages/mypage/settings/feedback/ui/FeedbackPage';
 
-export default function Page() {
+const Page = () => {
   return <FeedbackPage />;
-}
+};
+
+export default Page;

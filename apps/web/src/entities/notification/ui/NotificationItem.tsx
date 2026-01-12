@@ -1,6 +1,6 @@
+import { Avatar } from '@surf/ui/avatar';
 import LikeNotificationBadge from '@/shared/assets/icons/notification/notification-badge-like.svg';
 import MentionNotificationBadge from '@/shared/assets/icons/notification/notification-badge-mention.svg';
-import { Avatar } from '@surf/ui/avatar';
 import { formatDateTime } from '@/shared/utils/date';
 
 export type NOTIFICATION_BADGE = 'LIKE' | 'MENTION';

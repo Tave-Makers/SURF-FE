@@ -1,7 +1,9 @@
 'use client';
 
-import ScheduleEditorContainer from '@/widgets/schedule/ui/ScheduleEditorContainer';
+import { ScheduleEditorContainer } from '@/widgets/schedule/ui/ScheduleEditorContainer';
 
-export default function EditSchedulePage() {
+const EditSchedulePage = () => {
   return <ScheduleEditorContainer entryPoint="calendar" />;
-}
+};
+
+export default EditSchedulePage;

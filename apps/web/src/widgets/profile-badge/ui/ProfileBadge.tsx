@@ -1,16 +1,16 @@
 'use client';
 
-import { useMemo, useRef } from 'react';
 import { ActivityBadge } from '@surf/ui/activity-badge';
+import { useMemo, useRef } from 'react';
+import { dedupeAndSortBadges } from '../model/utils';
 import { useInfiniteBadges } from '@/entities/user/model/useInfiniteBadges';
 import { useInfiniteScroll } from '@/shared/hooks/useInfiniteScroll';
-import { dedupeAndSortBadges } from '../model/utils';
 
 interface Props {
   memberId?: number; // 없으면 내 뱃지
 }
 
-export function ProfileBadge({ memberId }: Props) {
+export const ProfileBadge = ({ memberId }: Props) => {
   const contentRef = useRef<HTMLDivElement | null>(null);
 
   const { data, isLoading, isFetchingNextPage, fetchNextPage, hasNextPage } = useInfiniteBadges({
@@ -58,4 +58,4 @@ export function ProfileBadge({ memberId }: Props) {
       </div>
     </section>
   );
-}
+};

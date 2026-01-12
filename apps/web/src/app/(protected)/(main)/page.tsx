@@ -1,4 +1,6 @@
 import { HomePageServer } from '@/app-pages/home/ui/HomePageServer';
-export default function Page() {
+const Page = () => {
   return <HomePageServer />;
-}
+};
+
+export default Page;

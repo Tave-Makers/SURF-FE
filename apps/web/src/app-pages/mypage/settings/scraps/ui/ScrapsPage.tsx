@@ -1,15 +1,15 @@
 'use client';
 
-import { useInfiniteScraps } from '@/features/post/model/useScraps';
-import { PostListPage } from '@/widgets/post-list/ui/PostListPage';
-import { SCRAPS_EVENTS } from '@/features/post/model/types';
-import { trackScrapsEvent } from '@/features/post/lib/trackScrapsEvent';
 import { useEffect, useCallback } from 'react';
-import { useDynamicScrollTracking } from '@/shared/hooks/useDynamicScrollTracking';
-import { usePageName } from '@/shared/analytics/lib/getPageName';
 import { useAuthStore } from '@/features/auth/model/useAuthStore';
+import { trackScrapsEvent } from '@/features/post/lib/trackScrapsEvent';
+import { SCRAPS_EVENTS } from '@/features/post/model/types';
+import { useInfiniteScraps } from '@/features/post/model/useScraps';
+import { usePageName } from '@/shared/analytics/lib/getPageName';
+import { useDynamicScrollTracking } from '@/shared/hooks/useDynamicScrollTracking';
+import { PostListPage } from '@/widgets/post-list/ui/PostListPage';
 
-export default function ScrapsPage() {
+const ScrapsPage = () => {
   const pageName = usePageName();
   const { memberRole } = useAuthStore();
 
@@ -45,4 +45,6 @@ export default function ScrapsPage() {
       </div>
     </div>
   );
-}
+};
+
+export default ScrapsPage;

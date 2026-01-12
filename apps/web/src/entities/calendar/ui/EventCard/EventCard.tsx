@@ -1,10 +1,10 @@
 'use client';
 
-import { useState } from 'react';
 import { SurfIcon } from '@surf/ui/icon';
-import { formatScheduleDate } from '@/entities/calendar/utils/formatScheduleDate';
+import { useState } from 'react';
 import { ActivityCategory, EventCardType } from '@/entities/calendar/model/types';
 import { CalendarBadge } from '@/entities/calendar/ui/CalendarBadge/CalendarBadge';
+import { formatScheduleDate } from '@/entities/calendar/utils/formatScheduleDate';
 import { ScheduleActionSheet } from '@/features/schedule/ui/ScheduleActionSheet/ScheduleActionSheet';
 
 /**
@@ -37,7 +37,7 @@ export type EventCardProps = {
   mode?: EventCardType;
 };
 
-export function EventCard({
+export const EventCard = ({
   category,
   scheduleId,
   title,
@@ -50,7 +50,7 @@ export function EventCard({
   onDeleteSchedule,
   mode,
   postId,
-}: EventCardProps) {
+}: EventCardProps) => {
   const [isActionSheetOpen, setIsActionSheetOpen] = useState(false);
 
   const handleCardClick = () => {
@@ -180,4 +180,4 @@ export function EventCard({
       )}
     </>
   );
-}
+};

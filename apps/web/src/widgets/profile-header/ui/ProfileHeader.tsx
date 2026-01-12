@@ -1,13 +1,13 @@
 'use client';
 
+import { Avatar } from '@surf/ui/avatar';
+import { SurfIcon } from '@surf/ui/icon';
+import { InfoBadge } from '@surf/ui/info-badge';
 import Link from 'next/link';
 
-import { Avatar } from '@surf/ui/avatar';
-import { InfoBadge } from '@surf/ui/info-badge';
-import { USER_LEVEL_BADGE } from '@/entities/user/ui/user-level/UserLevelBadges';
-import { SurfIcon } from '@surf/ui/icon';
-import { kakaoImgNormalize } from '@/shared/lib/kakaoImgNormalize';
 import type { UserProfile } from '@/entities/user/model/types';
+import { USER_LEVEL_BADGE } from '@/entities/user/ui/user-level/UserLevelBadges';
+import { kakaoImgNormalize } from '@/shared/lib/kakaoImgNormalize';
 import { normalizeUrl, formatPhoneNumber } from '@/shared/lib/validator';
 
 const infoRow = 'text-caption-caption6 text-foreground-normal flex flex-row items-center gap-5';
@@ -22,7 +22,7 @@ function nonEmptyText(value: string | null | undefined): string | null {
   return v.length > 0 ? v : null;
 }
 
-export function ProfileHeader({ userProfile }: Props) {
+export const ProfileHeader = ({ userProfile }: Props) => {
   const BadgeIcon = USER_LEVEL_BADGE[userProfile.level];
   const showBadge = userProfile.level !== 'member' && !!BadgeIcon;
 
@@ -102,4 +102,4 @@ export function ProfileHeader({ userProfile }: Props) {
       </div>
     </section>
   );
-}
+};

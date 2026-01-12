@@ -1,13 +1,13 @@
 'use client';
 
-import { useEffect } from 'react';
 import * as amplitude from '@amplitude/analytics-browser';
+import { useEffect } from 'react';
 import { useAuthStore } from '@/features/auth/model/useAuthStore';
 const AMPLITUDE_API_KEY = process.env.NEXT_PUBLIC_AMPLITUDE_API_KEY ?? '';
 
 let amplitudeInitialized = false;
 
-export function AnalyticsProvider() {
+export const AnalyticsProvider = () => {
   const memberId = useAuthStore((s) => s.memberId);
 
   const initAmplitude = () => {
@@ -53,4 +53,4 @@ export function AnalyticsProvider() {
   }, []);
 
   return null;
-}
+};

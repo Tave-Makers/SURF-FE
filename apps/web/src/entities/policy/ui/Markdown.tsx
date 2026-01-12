@@ -17,7 +17,7 @@ const toText = (nodes: React.ReactNode): string =>
     })
     .join('');
 
-export function Markdown({ children }: { children: string }) {
+export const Markdown = ({ children }: { children: string }) => {
   return (
     <ReactMarkdown
       remarkPlugins={[remarkGfm]}
@@ -73,4 +73,4 @@ export function Markdown({ children }: { children: string }) {
       {children}
     </ReactMarkdown>
   );
-}
+};

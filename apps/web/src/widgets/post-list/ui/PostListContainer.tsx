@@ -1,16 +1,16 @@
 'use client';
 
-import { useCallback } from 'react';
-import { PAGE_ROUTES } from '@/shared/config/path';
 import { useRouter } from 'next/navigation';
-import { PostCardList } from '@/widgets/post-list/ui/PostCardList';
+import { useCallback } from 'react';
 import { useInfiniteBoardPosts } from '@/entities/post/api/useInfiniteBoardPosts';
-import { useInfiniteScroll } from '@/shared/hooks/useInfiniteScroll';
 import { transformListItemToPost } from '@/entities/post/model/mappers';
-import type { UserLevel } from '@/entities/user/model/types';
-import type { Post } from '@/entities/post/model/types';
 import type { TabCategoryKey } from '@/entities/post/model/tab';
 import { TAB_CATEGORIES } from '@/entities/post/model/tab';
+import type { Post } from '@/entities/post/model/types';
+import type { UserLevel } from '@/entities/user/model/types';
+import { PAGE_ROUTES } from '@/shared/config/path';
+import { useInfiniteScroll } from '@/shared/hooks/useInfiniteScroll';
+import { PostCardList } from '@/widgets/post-list/ui/PostCardList';
 
 type Props = {
   boardId: number;

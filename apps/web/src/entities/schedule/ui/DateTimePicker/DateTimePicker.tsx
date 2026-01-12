@@ -1,6 +1,5 @@
 'use client';
 
-import { useState, useCallback, useMemo } from 'react';
 import { Wheel } from '@surf/ui/wheel-picker';
 import {
   isToday,
@@ -13,6 +12,7 @@ import {
   roundToNearestMinutes,
 } from 'date-fns';
 import { ko } from 'date-fns/locale';
+import { useState, useCallback, useMemo } from 'react';
 
 export type DatePickerMode = 'future' | 'all';
 
@@ -25,7 +25,7 @@ export type DateTimePickerProps = {
 const MINUTES = [0, 30];
 const AM_PM_OPTIONS = ['오전', '오후'];
 
-export function DateTimePicker({ value, onChange, mode = 'all' }: DateTimePickerProps) {
+export const DateTimePicker = ({ value, onChange, mode = 'all' }: DateTimePickerProps) => {
   // index 0 => 오늘
   const { BASE_DATE, TOTAL_DAYS } = useMemo(() => {
     const today = startOfDay(new Date());
@@ -194,4 +194,4 @@ export function DateTimePicker({ value, onChange, mode = 'all' }: DateTimePicker
       </div>
     </div>
   );
-}
+};

@@ -1,9 +1,11 @@
 'use client';
 
-import PostPage from '@/app-pages/post/write/ui/PostPage';
 import { useParams } from 'next/navigation';
+import PostPage from '@/app-pages/post/write/ui/PostPage';
 
-export default function Page() {
+const Page = () => {
   const { boardId } = useParams<{ boardId: string }>();
   return <PostPage mode="create" boardId={boardId} />;
-}
+};
+
+export default Page;

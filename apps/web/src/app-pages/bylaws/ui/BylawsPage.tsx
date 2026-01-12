@@ -1,15 +1,15 @@
 'use client';
 
-import { BylawsAccordionGroup } from '@/features/bylaws/ui/BylawsAccordionGroup';
-import { bylawsData } from '@/app-pages/bylaws/model/data';
 import { useEffect, useRef } from 'react';
+import { useCallback } from 'react';
+import { bylawsData } from '@/app-pages/bylaws/model/data';
 import { trackBylawsEvent } from '@/features/bylaws/lib/trackBylawsEvent';
 import { BYLAWS_EVENTS } from '@/features/bylaws/model/types';
-import { useDynamicScrollTracking } from '@/shared/hooks/useDynamicScrollTracking';
-import { useCallback } from 'react';
+import { BylawsAccordionGroup } from '@/features/bylaws/ui/BylawsAccordionGroup';
 import { usePageName } from '@/shared/analytics/lib/getPageName';
+import { useDynamicScrollTracking } from '@/shared/hooks/useDynamicScrollTracking';
 
-export default function BylawsPage() {
+const BylawsPage = () => {
   // 페이지 진입 트래킹 (최초 1회)
   const trackRef = useRef(false);
   const pageName = usePageName();
@@ -37,4 +37,6 @@ export default function BylawsPage() {
       <BylawsAccordionGroup accordions={bylawsData} />
     </main>
   );
-}
+};
+
+export default BylawsPage;

@@ -1,15 +1,15 @@
 'use client';
 
-import { useOnboardingStore } from '@/features/onboarding/model/useOnboardingStore';
-import { OnBoardingFormData } from '@/features/onboarding/model/types';
-import OnBoardingForm from '@/widgets/onboarding/ui/OnBoardingForm';
 import { useEffect, useState } from 'react';
 import { FormProvider, useForm } from 'react-hook-form';
-import { LawBottomSheet } from '@/features/laws/ui/LawBottomSheet';
-import { useLawAgreement } from '@/features/laws/model/useLawAgreement';
 import { useGetValidStatusQuery } from '@/features/auth/model/useGetValidStatusQuery';
+import { useLawAgreement } from '@/features/laws/model/useLawAgreement';
+import { LawBottomSheet } from '@/features/laws/ui/LawBottomSheet';
+import { OnBoardingFormData } from '@/features/onboarding/model/types';
+import { useOnboardingStore } from '@/features/onboarding/model/useOnboardingStore';
+import { OnBoardingForm } from '@/widgets/onboarding/ui/OnBoardingForm';
 
-export default function OnBoardingPage() {
+const OnBoardingPage = () => {
   const nickname = useOnboardingStore((s) => s.nickname);
   const email = useOnboardingStore((s) => s.email);
   const profileImageUrl = useOnboardingStore((s) => s.profileImageUrl);
@@ -95,4 +95,6 @@ export default function OnBoardingPage() {
       />
     </FormProvider>
   );
-}
+};
+
+export default OnBoardingPage;

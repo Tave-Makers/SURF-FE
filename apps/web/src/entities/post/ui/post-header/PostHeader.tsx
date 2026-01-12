@@ -11,7 +11,7 @@ export type PostHeaderProps = {
   subCategory?: CategoryItem;
 };
 
-export function PostHeader({ title, category, subCategory }: PostHeaderProps) {
+export const PostHeader = ({ title, category, subCategory }: PostHeaderProps) => {
   const baseClass = 'underline [text-underline-position:from-font]';
   const interactiveClass = 'cursor-pointer';
 
@@ -48,4 +48,4 @@ export function PostHeader({ title, category, subCategory }: PostHeaderProps) {
       <h1 className="text-foreground-normal text-body-body3 pt-10">{title}</h1>
     </header>
   );
-}
+};

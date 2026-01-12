@@ -1,10 +1,10 @@
 'use client';
 
 import { memo } from 'react';
-import { PostCard } from '@/entities/post/ui/post-card/PostCard';
-import type { UserLevel } from '@/entities/user/model/types';
 import type { TabCategoryLabel } from '@/entities/post/model/tab';
 import type { Post } from '@/entities/post/model/types';
+import { PostCard } from '@/entities/post/ui/post-card/PostCard';
+import type { UserLevel } from '@/entities/user/model/types';
 
 type PostCardListProps = {
   posts: Post[];
@@ -20,7 +20,7 @@ type PostCardListProps = {
   error?: Error | null;
 };
 
-function PostCardListComponent({
+const PostCardListComponent = ({
   posts,
   isLoading = false,
   isFetchingNextPage = false,
@@ -30,7 +30,7 @@ function PostCardListComponent({
   shouldShowCategoryBadge,
   shouldShowReservationBadge,
   error = null,
-}: PostCardListProps) {
+}: PostCardListProps) => {
   if (isLoading) {
     // 임시
     return (
@@ -76,6 +76,6 @@ function PostCardListComponent({
       </div>
     </div>
   );
-}
+};
 
 export const PostCardList = memo(PostCardListComponent);

@@ -8,6 +8,8 @@
     "dev:surf": "turbo run dev --filter=surf-web",
     "lint": "turbo run lint",
     "lint:surf": "turbo run lint --filter=surf-web",
+    "lint:fix": "turbo run lint -- --fix",
+    "lint:fix:surf": "turbo run lint --filter=surf-web -- --fix",
     "format": "prettier --write \"**/*.{ts,tsx,md}\"",
     "check-types": "turbo run check-types",
     "storybook:ui": "turbo run storybook --filter=@surf/ui",

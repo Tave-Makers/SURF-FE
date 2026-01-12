@@ -1,14 +1,14 @@
-import { useState } from 'react';
-import { createPortal } from 'react-dom';
-import { PAGE_ROUTES } from '@/shared/config/path';
-import { useRouter } from 'next/navigation';
-import { Sheet as ModalSheet } from 'react-modal-sheet';
 import { Alert } from '@surf/ui/alert';
 import { SurfIcon } from '@surf/ui/icon';
 import { Sheet } from '@surf/ui/sheet';
+import { useToastStore } from '@surf/ui/store/toastStore';
+import { useRouter } from 'next/navigation';
+import { useState } from 'react';
+import { createPortal } from 'react-dom';
+import { Sheet as ModalSheet } from 'react-modal-sheet';
 import { useDeleteSchedule } from '@/features/schedule/delete/model/useDelSchedule';
 import { useEditSchedule } from '@/features/schedule/edit/model/useEditSchedule';
-import { useToastStore } from '@surf/ui/store/toastStore';
+import { PAGE_ROUTES } from '@/shared/config/path';
 
 type ScheduleActionSheetProps = {
   scheduleId: string | number;
@@ -20,12 +20,12 @@ type ScheduleActionSheetProps = {
 /**
  * 일정 수정/삭제 액션을 보여주는 바텀 시트 컴포넌트
  */
-export function ScheduleActionSheet({
+export const ScheduleActionSheet = ({
   scheduleId,
   isOpen,
   onClose,
   onDeleteSuccess,
-}: ScheduleActionSheetProps) {
+}: ScheduleActionSheetProps) => {
   const router = useRouter();
   const [showDeleteAlert, setShowDeleteAlert] = useState(false);
   const scheduleIdNum = typeof scheduleId === 'string' ? parseInt(scheduleId, 10) : scheduleId;
@@ -128,4 +128,4 @@ export function ScheduleActionSheet({
       )}
     </>
   );
-}
+};

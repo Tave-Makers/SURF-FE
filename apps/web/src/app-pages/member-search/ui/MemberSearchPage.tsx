@@ -1,14 +1,14 @@
 'use client';
 
+import { HeaderMode } from '@surf/ui/header';
 import { useMemberSearch } from '@/features/member-search/api/useMemberSearch';
 import { useMemberFilters } from '@/features/member-search/model/useMemberFilters';
-import { HeaderMode } from '@surf/ui/header';
+import SearchEmptyIcon from '@/shared/assets/icons/empty-space/search-empty.svg';
 import { AppHeader } from '@/widgets/header/ui/AppHeader';
 import { MemberListWidget } from '@/widgets/member-search/ui/MemberListWidget';
 import { MemberSearchWidget } from '@/widgets/member-search/ui/MemberSearchWidget';
-import SearchEmptyIcon from '@/shared/assets/icons/empty-space/search-empty.svg';
 
-export function MemberSearchPage() {
+export const MemberSearchPage = () => {
   const filters = useMemberFilters();
   const { keyword, debouncedKeyword, generation, part } = filters;
 
@@ -66,4 +66,4 @@ export function MemberSearchPage() {
       </main>
     </div>
   );
-}
+};

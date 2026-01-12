@@ -1,11 +1,11 @@
 'use client';
 
-import { useState } from 'react';
 import { SolidButton } from '@surf/ui/button';
-import { usePostFeedback } from '@/features/feedback/model/usePostFeedback';
 import { TextArea } from '@surf/ui/text-area';
-import { FEEDBACK_EVENTS } from '@/features/feedback/model/types';
+import { useState } from 'react';
 import { trackFeedbackEvent } from '@/features/feedback/lib/trackFeedbackEvent';
+import { FEEDBACK_EVENTS } from '@/features/feedback/model/types';
+import { usePostFeedback } from '@/features/feedback/model/usePostFeedback';
 
 export const FeedbackForm = () => {
   const [content, setContent] = useState('');

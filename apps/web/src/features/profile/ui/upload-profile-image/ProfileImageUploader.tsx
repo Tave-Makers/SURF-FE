@@ -1,7 +1,7 @@
 'use client';
 
-import { useMemo, useRef, useEffect, memo } from 'react';
 import { Avatar, AvatarSize } from '@surf/ui/avatar';
+import { useMemo, useRef, useEffect, memo } from 'react';
 import { validateProfileImage } from '@/features/profile/lib/validateProfileImage';
 
 type Props = {
@@ -11,12 +11,12 @@ type Props = {
   imageSize?: AvatarSize;
 };
 
-export const ProfileImageUploader = memo(function ProfileImageUploader({
+const ProfileImageUploaderComponent = ({
   file,
   initialImageUrl,
   onChange,
   imageSize = 'xl',
-}: Props) {
+}: Props) => {
   const inputRef = useRef<HTMLInputElement>(null);
 
   const previewUrl = useMemo(() => {
@@ -58,4 +58,6 @@ export const ProfileImageUploader = memo(function ProfileImageUploader({
       </button>
     </>
   );
-});
+};
+
+export const ProfileImageUploader = memo(ProfileImageUploaderComponent);

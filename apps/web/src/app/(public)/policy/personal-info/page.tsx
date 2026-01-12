@@ -1,5 +1,7 @@
 import PersonalInfoPolicyPage from '@/app-pages/mypage/settings/policy/ui/PersonalInfoPolicyPage';
 
-export default function Page() {
+const Page = () => {
   return <PersonalInfoPolicyPage />;
-}
+};
+
+export default Page;

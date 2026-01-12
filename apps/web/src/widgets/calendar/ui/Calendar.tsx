@@ -1,21 +1,20 @@
 'use client';
 
-import { useMemo, useState } from 'react';
+import { format } from 'date-fns';
+import { useRouter } from 'next/navigation';
+import { useCallback, useMemo, useState } from 'react';
 import { DayPicker } from 'react-day-picker';
-import type { DayButtonProps, NavProps, MonthProps } from 'react-day-picker';
+import type { DayButtonProps, MonthProps, NavProps } from 'react-day-picker';
 import { ko } from 'react-day-picker/locale';
 import 'react-day-picker/style.css';
-import { PAGE_ROUTES } from '@/shared/config/path';
-import { useRouter } from 'next/navigation';
-
-import { MonthNavigator } from '@/entities/calendar/ui/MonthNavigator/MonthNavigator';
-import { DayChipRadio } from '@/entities/calendar/ui/DayChipRadio/DayChipRadio';
-import { EventDateCard } from '@/entities/calendar/ui/EventDateCard/EventDateCard';
 import type { ActivityMap } from '@/entities/calendar/model/types';
+import { DayChipRadio } from '@/entities/calendar/ui/DayChipRadio/DayChipRadio';
 import { EventCard } from '@/entities/calendar/ui/EventCard/EventCard';
-import { format } from 'date-fns';
-import { ensureUtcDate } from '@/features/schedule/lib/ensureUtcDate';
+import { EventDateCard } from '@/entities/calendar/ui/EventDateCard/EventDateCard';
+import { MonthNavigator } from '@/entities/calendar/ui/MonthNavigator/MonthNavigator';
 import { useAuthStore } from '@/features/auth/model/useAuthStore';
+import { ensureUtcDate } from '@/features/schedule/lib/ensureUtcDate';
+import { PAGE_ROUTES } from '@/shared/config/path';
 
 /**
  * calendarClassNames: DayPicker 컴포넌트의 클래스 네임 커스터마이징 객체
@@ -55,38 +54,37 @@ type CalendarProps = {
   schedules: ActivityMap;
 };
 
-export default function Calendar({ month, onMonthChange, schedules }: CalendarProps) {
+export const Calendar = ({ month, onMonthChange, schedules }: CalendarProps) => {
   const router = useRouter();
   const [selectedDay, setSelectedDay] = useState<Date>(new Date());
   const memberRole = useAuthStore((s) => s.memberRole);
 
   // 날짜 선택 핸들러
-  const handleDaySelect = (date: Date | undefined) => {
-    if (!date) return;
-    setSelectedDay(date);
-    onMonthChange(date);
-  };
+  const handleDaySelect = useCallback(
+    (date: Date | undefined) => {
+      if (!date) return;
+      setSelectedDay(date);
+      onMonthChange(date);
+    },
+    [onMonthChange],
+  );
 
   // DayPicker의 DayButton 커스텀 컴포넌트
   const DayBtn = useMemo(() => {
-    function DayButton(props: DayButtonProps) {
+    const DayButton = (props: DayButtonProps) => {
       return (
         <div className="h-full w-full">
           <DayChipRadio
             {...props}
             displayMonth={month}
             activityMap={schedules}
-            onSelect={(date) => {
-              if (date instanceof Date) {
-                setSelectedDay(date);
-              }
-            }}
+            onSelect={handleDaySelect}
           />
         </div>
       );
-    }
+    };
     return DayButton;
-  }, [month, schedules]);
+  }, [handleDaySelect, month, schedules]);
 
   // 월 네비게이터 컴포넌트
   const NavigatorComponent = ({
@@ -153,4 +151,4 @@ export default function Calendar({ month, onMonthChange, schedules }: CalendarPr
       </div>
     </div>
   );
-}
+};

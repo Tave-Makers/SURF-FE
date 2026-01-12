@@ -1,6 +1,6 @@
 import type { Meta, StoryObj } from '@storybook/nextjs';
-import { EventCard } from './EventCard';
 import type { ActivityCategory, EventCardType } from '../../model/types';
+import { EventCard } from './EventCard';
 
 // 더미 데이터
 const SAMPLE_START_DATE = new Date('2025-11-08T14:00:00');

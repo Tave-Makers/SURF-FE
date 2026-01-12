@@ -1,14 +1,14 @@
 'use client';
 
-import { useState } from 'react';
 import { useRouter } from 'next/navigation';
-import Calendar from '@/widgets/calendar/ui/Calendar';
-import { useGetCalendarSchedule } from '@/features/calendar/model/useGetCalendarSchedule';
+import { useState } from 'react';
 import { PostFab } from '@/entities/post/ui/post-fab/PostFab';
 import { useAuthStore } from '@/features/auth/model/useAuthStore';
+import { useGetCalendarSchedule } from '@/features/calendar/model/useGetCalendarSchedule';
 import { PAGE_ROUTES } from '@/shared/config/path';
+import { Calendar } from '@/widgets/calendar/ui/Calendar';
 
-export function CalendarPage() {
+export const CalendarPage = () => {
   const router = useRouter();
   const [month, setMonth] = useState<Date>(new Date());
 
@@ -36,4 +36,4 @@ export function CalendarPage() {
       )}
     </div>
   );
-}
+};

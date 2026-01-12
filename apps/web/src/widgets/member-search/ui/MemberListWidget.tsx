@@ -1,13 +1,13 @@
-import { useMemberSearch } from '@/features/member-search/api/useMemberSearch';
-import { MemberList } from '@/entities/search/ui/MemberList';
 import { useCallback, useEffect, useRef } from 'react';
+import { MemberList } from '@/entities/search/ui/MemberList';
+import { useMemberSearch } from '@/features/member-search/api/useMemberSearch';
 
 interface MemberListWidgetProps {
   keyword?: string; // 검색어가 있으면 학교를, 없으면 소개글을 보여줌
   queryResult: ReturnType<typeof useMemberSearch>;
 }
 
-export function MemberListWidget({ keyword, queryResult }: MemberListWidgetProps) {
+export const MemberListWidget = ({ keyword, queryResult }: MemberListWidgetProps) => {
   const { members, fetchNextPage, hasNextPage, isFetchingNextPage, isLoading } = queryResult;
 
   const handleClick = () => {
@@ -63,4 +63,4 @@ export function MemberListWidget({ keyword, queryResult }: MemberListWidgetProps
       </div>
     </div>
   );
-}
+};

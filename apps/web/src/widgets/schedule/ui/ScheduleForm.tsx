@@ -1,17 +1,17 @@
 'use client';
 
+import { AccordionSelect } from '@surf/ui/accordion';
+import { Sheet } from '@surf/ui/sheet';
 import { useState, useEffect, useMemo } from 'react';
 import { Controller, useFormContext } from 'react-hook-form';
 import { Sheet as ModalSheet } from 'react-modal-sheet';
-import { Sheet } from '@surf/ui/sheet';
-import { AccordionSelect } from '@surf/ui/accordion';
-import { ScheduleSetting } from '@/entities/schedule/ui/ScheduleSetting/ScheduleSetting';
-import { ScheduleLocation } from '@/entities/schedule/ui/ScheduleLocation/ScheduleLocation';
-import { EventTitle } from '@/entities/schedule/ui/EventTitle/EventTitle';
-import { DateTimePicker } from '@/entities/schedule/ui/DateTimePicker/DateTimePicker';
 import { getInitialDate } from '@/entities/calendar/utils/getInitialDate';
 import { CATEGORY_LABELS } from '@/entities/schedule/model/constants';
 import { SCHEDULE_CATEGORIES } from '@/entities/schedule/model/constants';
+import { DateTimePicker } from '@/entities/schedule/ui/DateTimePicker/DateTimePicker';
+import { EventTitle } from '@/entities/schedule/ui/EventTitle/EventTitle';
+import { ScheduleLocation } from '@/entities/schedule/ui/ScheduleLocation/ScheduleLocation';
+import { ScheduleSetting } from '@/entities/schedule/ui/ScheduleSetting/ScheduleSetting';
 import { ScheduleFormData } from '@/features/schedule/create/model/types';
 import { ensureUtcDate } from '@/features/schedule/lib/ensureUtcDate';
 
@@ -20,7 +20,7 @@ export type ScheduleFormProps = {
   initialData?: ScheduleFormData | null;
 };
 
-export default function ScheduleForm({ onSubmit, initialData }: ScheduleFormProps) {
+export const ScheduleForm = ({ onSubmit, initialData }: ScheduleFormProps) => {
   const { control, handleSubmit, watch, reset } = useFormContext<ScheduleFormData>();
   const [openModal, setOpenModal] = useState<'category' | 'startDate' | 'endDate' | null>(null);
 
@@ -254,4 +254,4 @@ export default function ScheduleForm({ onSubmit, initialData }: ScheduleFormProp
       </div>
     </form>
   );
-}
+};

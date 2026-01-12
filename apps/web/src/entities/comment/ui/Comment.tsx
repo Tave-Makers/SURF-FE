@@ -1,5 +1,5 @@
-import { SurfIcon } from '@surf/ui/icon';
 import { Avatar } from '@surf/ui/avatar';
+import { SurfIcon } from '@surf/ui/icon';
 
 /**
  * 댓글(Comment) 컴포넌트
@@ -32,7 +32,7 @@ type CommentProps = {
   onMoreClick?: () => void;
 };
 
-const Comment = ({
+export const Comment = ({
   name,
   profileImageUrl,
   date,
@@ -103,5 +103,3 @@ const Comment = ({
     </article>
   );
 };
-
-export default Comment;

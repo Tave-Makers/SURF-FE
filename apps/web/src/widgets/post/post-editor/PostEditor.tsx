@@ -1,25 +1,24 @@
 'use client';
 
-import { useCallback, useEffect, useRef, useState } from 'react';
+import { Alert } from '@surf/ui/alert';
 import { EditorContent } from '@tiptap/react';
+import { useCallback, useEffect, useRef, useState } from 'react';
 
 import '@/features/post/post-editor/ui/PostEditor.style.css';
-import { PostEditorToolbar } from '@/features/post/post-editor/ui/PostEditorToolbar';
-import { ImageList } from '@/entities/post/post-image/ui/ImageList';
-import { Alert } from '@surf/ui/alert';
-import { EventCard } from '@/entities/calendar/ui/EventCard/EventCard';
-
-import { usePostEditor } from '@/features/post/post-editor/lib/usePostEditor';
-import { useImageManager } from '@/features/image/model/useImageManager';
-import { useKeyboardOffset } from '@/shared/hooks/useKeyboardOffset';
-
-import { UploadImage } from '@/entities/image/model/types';
-import { ScheduleFormData } from '@/features/schedule/create/model/types';
-import { POST_VALIDATION } from '@/entities/post/model/validation';
-import { PostPageMode } from '@/features/post/post-form/model/types';
-import { ScheduleCategory } from '@/entities/schedule/model/types';
 import { ActivityCategory } from '@/entities/calendar/model/types';
+import { EventCard } from '@/entities/calendar/ui/EventCard/EventCard';
+import { UploadImage } from '@/entities/image/model/types';
+import { POST_VALIDATION } from '@/entities/post/model/validation';
+import { ImageList } from '@/entities/post/post-image/ui/ImageList';
+import { ScheduleCategory } from '@/entities/schedule/model/types';
+import { useImageManager } from '@/features/image/model/useImageManager';
+import { usePostEditor } from '@/features/post/post-editor/lib/usePostEditor';
+import { PostEditorToolbar } from '@/features/post/post-editor/ui/PostEditorToolbar';
+
+import { PostPageMode } from '@/features/post/post-form/model/types';
 import { usePostFormStore } from '@/features/post/post-form/model/usePostFormStore';
+import { ScheduleFormData } from '@/features/schedule/create/model/types';
+import { useKeyboardOffset } from '@/shared/hooks/useKeyboardOffset';
 
 export type PostEditorProps = {
   mode: PostPageMode;

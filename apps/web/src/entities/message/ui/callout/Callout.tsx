@@ -15,7 +15,7 @@ export type CalloutProps = {
 const baseStyle =
   'bg-background-secondary-lighter flex w-full items-start gap-8 self-stretch px-13 py-10';
 
-export function Callout({ userImage, userName }: CalloutProps) {
+export const Callout = ({ userImage, userName }: CalloutProps) => {
   return (
     <aside className={baseStyle} role="note" aria-label="쪽지 수신자 안내">
       <Avatar src={userImage} size="xs" alt="프로필 이미지" />
@@ -35,4 +35,4 @@ export function Callout({ userImage, userName }: CalloutProps) {
       </div>
     </aside>
   );
-}
+};

@@ -1,22 +1,22 @@
 'use client';
 
-import { Controller, useFieldArray, useFormContext } from 'react-hook-form';
-import { Sheet as ModalSheet } from 'react-modal-sheet';
-import { WheelPicker } from '@surf/ui/wheel-picker';
-import { Sheet } from '@surf/ui/sheet';
+import { SolidButton } from '@surf/ui/button';
 import { Checkbox } from '@surf/ui/checkbox';
+import { FieldGroup } from '@surf/ui/field-group';
 import { SurfIcon } from '@surf/ui/icon';
 import { SelectField } from '@surf/ui/select-field';
+import { Sheet } from '@surf/ui/sheet';
 import { TextArea } from '@surf/ui/text-area';
-import { FieldGroup } from '@surf/ui/field-group';
-import { SolidButton } from '@surf/ui/button';
+import { WheelPicker } from '@surf/ui/wheel-picker';
 import { useCallback, useState } from 'react';
-import { ONBOARDING_EVENTS, OnBoardingFormData } from '@/features/onboarding/model/types';
+import { Controller, useFieldArray, useFormContext } from 'react-hook-form';
+import { Sheet as ModalSheet } from 'react-modal-sheet';
 import { formatTrackLabel, mapToApiTrack } from '../lib/trackMapper';
 import { trackOnBoardingEvent } from '../lib/trackOnBoardingEvent';
 import { TrackPart } from '@/entities/user/model/types';
+import { ONBOARDING_EVENTS, OnBoardingFormData } from '@/features/onboarding/model/types';
 
-export function TrackUnivStep() {
+export const TrackUnivStep = () => {
   const { control, setValue } = useFormContext<OnBoardingFormData>();
   const { fields, append, remove, update } = useFieldArray({
     control,
@@ -185,4 +185,4 @@ export function TrackUnivStep() {
       </ModalSheet>
     </>
   );
-}
+};

@@ -23,7 +23,7 @@ export interface HeroCardProps {
   imgData: ImgData;
 }
 
-export function HeroCard({ userData, noticeData, imgData }: HeroCardProps) {
+export const HeroCard = ({ userData, noticeData, imgData }: HeroCardProps) => {
   const id = useId();
   // 백그라운드 모양 생성 로직
   const rectWidth = 375;
@@ -114,4 +114,4 @@ export function HeroCard({ userData, noticeData, imgData }: HeroCardProps) {
       </div>
     </div>
   );
-}
+};

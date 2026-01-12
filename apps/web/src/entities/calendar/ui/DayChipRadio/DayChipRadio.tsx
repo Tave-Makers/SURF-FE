@@ -1,22 +1,22 @@
-import type { DayButtonProps } from 'react-day-picker';
 import { format, isSameMonth } from 'date-fns';
+import type { DayButtonProps } from 'react-day-picker';
 import type { ActivityMap } from '@/entities/calendar/model/types';
 import { DailyActivityBadgeList } from '@/entities/calendar/ui/DailyActivityBadgeList/DailyActivityBadgeList';
 
-type Props = DayButtonProps & {
+type Props = Omit<DayButtonProps, 'onSelect'> & {
   displayMonth: Date;
   activityMap: ActivityMap;
-  onSelect?: (d: Date) => void;
+  onSelect?: (d: Date | undefined) => void;
 };
 
-export function DayChipRadio({
+export const DayChipRadio = ({
   day,
   modifiers,
   displayMonth,
   activityMap,
   onSelect,
   ...btn
-}: Props) {
+}: Props) => {
   const date = day.date;
   const formatDate = format(date, 'yyyy-MM-dd');
 
@@ -50,4 +50,4 @@ export function DayChipRadio({
       </div>
     </button>
   );
-}
+};

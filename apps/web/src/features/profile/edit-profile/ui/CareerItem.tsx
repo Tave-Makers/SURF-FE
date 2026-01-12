@@ -1,5 +1,8 @@
 'use client';
 
+import { FieldGroup } from '@surf/ui/field-group';
+import { TextArea } from '@surf/ui/text-area';
+import { Toggle } from '@surf/ui/toggle';
 import { memo } from 'react';
 import {
   Control,
@@ -10,11 +13,8 @@ import {
   UseFormTrigger,
   useWatch,
 } from 'react-hook-form';
-import { FieldGroup } from '@surf/ui/field-group';
-import { TextArea } from '@surf/ui/text-area';
-import { Toggle } from '@surf/ui/toggle';
-import { formatYearMonth } from '@/shared/lib/validator';
 import type { FormValues } from '../model/types';
+import { formatYearMonth } from '@/shared/lib/validator';
 
 interface CareerItemProps {
   index: number;
@@ -26,7 +26,7 @@ interface CareerItemProps {
   onDelete: () => void;
 }
 
-export const CareerItem = memo(function CareerItem({
+const CareerItemComponent = ({
   index,
   control,
   errors,
@@ -34,7 +34,7 @@ export const CareerItem = memo(function CareerItem({
   clearErrors,
   trigger,
   onDelete,
-}: CareerItemProps) {
+}: CareerItemProps) => {
   const isWorking = useWatch({
     control,
     name: `careers.${index}.isWorking`,
@@ -170,4 +170,7 @@ export const CareerItem = memo(function CareerItem({
       </div>
     </div>
   );
-});
+};
+
+export const CareerItem = memo(CareerItemComponent);
+CareerItem.displayName = 'CareerItem';

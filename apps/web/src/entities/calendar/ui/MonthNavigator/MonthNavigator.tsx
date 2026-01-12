@@ -1,14 +1,14 @@
 'use client';
+import { SurfIcon } from '@surf/ui/icon';
 import { addMonths, format } from 'date-fns';
 import { ko } from 'date-fns/locale';
-import { SurfIcon } from '@surf/ui/icon';
 
 type Props = {
   month: Date;
   onChange: (m: Date) => void;
 };
 
-export function MonthNavigator({ month, onChange }: Props) {
+export const MonthNavigator = ({ month, onChange }: Props) => {
   const prev = () => onChange(addMonths(month, -1));
   const next = () => onChange(addMonths(month, 1));
 
@@ -37,4 +37,4 @@ export function MonthNavigator({ month, onChange }: Props) {
       </button>
     </div>
   );
-}
+};

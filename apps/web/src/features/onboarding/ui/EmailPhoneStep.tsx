@@ -1,10 +1,10 @@
-import { Controller, useFormContext } from 'react-hook-form';
-import { ONBOARDING_EVENTS, OnBoardingFormData } from '@/features/onboarding/model/types';
 import { FieldGroup } from '@surf/ui/field-group';
 import { TextArea } from '@surf/ui/text-area';
+import { Controller, useFormContext } from 'react-hook-form';
 import { trackOnBoardingEvent } from '../lib/trackOnBoardingEvent';
+import { ONBOARDING_EVENTS, OnBoardingFormData } from '@/features/onboarding/model/types';
 
-export function EmailPhoneStep() {
+export const EmailPhoneStep = () => {
   const { control } = useFormContext<OnBoardingFormData>();
   return (
     <>
@@ -66,4 +66,4 @@ export function EmailPhoneStep() {
       </FieldGroup>
     </>
   );
-}
+};

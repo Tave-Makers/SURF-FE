@@ -1,14 +1,14 @@
 'use client';
 
-import { useEffect, useRef, useCallback } from 'react';
 import type { InfiniteData, UseInfiniteQueryResult } from '@tanstack/react-query';
-import { transformListItemToPost } from '@/entities/post/model/mappers';
+import { useRouter } from 'next/navigation';
+import { useEffect, useRef, useCallback } from 'react';
 import type { PostListItemResponse } from '@/entities/post/api/types';
-import { PostCardList } from '@/widgets/post-list/ui/PostCardList';
+import { transformListItemToPost } from '@/entities/post/model/mappers';
 import { Post } from '@/entities/post/model/types';
 import type { UserLevel } from '@/entities/user/model/types';
-import { useRouter } from 'next/navigation';
 import { PAGE_ROUTES } from '@/shared/config/path';
+import { PostCardList } from '@/widgets/post-list/ui/PostCardList';
 
 // 서버 응답 data 페이지 당 타입
 type ApiPage = {
@@ -26,12 +26,12 @@ type PostListPageProps = {
   userLevel: UserLevel;
 };
 
-export function PostListPage({
+export const PostListPage = ({
   useInfiniteQueryHook,
   onPostClick,
   scrollRootRef,
   userLevel,
-}: PostListPageProps) {
+}: PostListPageProps) => {
   const router = useRouter();
 
   // 화면 하단 DOM 요소 참조
@@ -103,4 +103,4 @@ export function PostListPage({
       userLevel={userLevel}
     />
   );
-}
+};

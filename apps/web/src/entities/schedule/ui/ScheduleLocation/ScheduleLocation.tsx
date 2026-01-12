@@ -9,12 +9,12 @@ export type ScheduleLocationProps = {
   onChange?: (value: string) => void;
 };
 
-export function ScheduleLocation({
+export const ScheduleLocation = ({
   title,
   placeholder,
   location,
   onChange,
-}: ScheduleLocationProps) {
+}: ScheduleLocationProps) => {
   const [isEditing, setIsEditing] = useState(false);
   const [value, setValue] = useState(location || '');
   const inputRef = useRef<HTMLTextAreaElement>(null);
@@ -105,4 +105,4 @@ export function ScheduleLocation({
       </div>
     </button>
   );
-}
+};

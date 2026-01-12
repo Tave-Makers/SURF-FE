@@ -1,11 +1,11 @@
 'use client';
 
-import { useState, useCallback } from 'react';
-import { useRouter } from 'next/navigation';
-import { SettingsItem } from '@/entities/settings/ui/SettingsItem';
 import { Alert } from '@surf/ui/alert';
+import { useRouter } from 'next/navigation';
+import { useState, useCallback } from 'react';
 import { SETTINGS_ITEMS } from '../model/constants';
 import type { AlertType } from '../model/types';
+import { SettingsItem } from '@/entities/settings/ui/SettingsItem';
 
 export const SettingsList = () => {
   const router = useRouter();

@@ -1,7 +1,7 @@
-import { AppHeader } from '@/widgets/header/ui/AppHeader';
 import { AppNavigation } from '@/widgets/bottom-navigation/ui/AppNavigation';
+import { AppHeader } from '@/widgets/header/ui/AppHeader';
 
-export default function MainLayout({ children }: { children: React.ReactNode }) {
+const MainLayout = ({ children }: { children: React.ReactNode }) => {
   return (
     <div className="flex w-full flex-col">
       <AppHeader />
@@ -9,4 +9,6 @@ export default function MainLayout({ children }: { children: React.ReactNode }) 
       <AppNavigation />
     </div>
   );
-}
+};
+
+export default MainLayout;

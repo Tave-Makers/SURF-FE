@@ -1,9 +1,9 @@
-import { toEnumPartMap, toLabelPartMap } from '@/entities/user/model/mappers';
-import { useMemberFilters } from '@/features/member-search/model/useMemberFilters';
-import { TOTAL_GENERATION } from '@/shared/constants';
 import { Menu } from '@surf/ui/menu';
 import { TextInput } from '@surf/ui/text-input';
 import { useState } from 'react';
+import { toEnumPartMap, toLabelPartMap } from '@/entities/user/model/mappers';
+import { useMemberFilters } from '@/features/member-search/model/useMemberFilters';
+import { TOTAL_GENERATION } from '@/shared/constants';
 
 interface MemberSearchWidgetProps {
   filters: ReturnType<typeof useMemberFilters>;

@@ -1,7 +1,7 @@
 import 'server-only';
+import { HomePageClient } from './HomePageClient';
 import { getHome } from '@/entities/home/api/getHome.server';
 import { buildHeroCardViewModel } from '@/features/home-theme/api/buildHeroCardViewModel.server';
-import { HomePageClient } from './HomePageClient';
 
 export async function HomePageServer() {
   try {

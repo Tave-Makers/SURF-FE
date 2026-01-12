@@ -1,21 +1,21 @@
 'use client';
 
+import { FieldGroup } from '@surf/ui/field-group';
 import { useEffect, useRef } from 'react';
+import type { UserProfile } from '@/entities/user/model/types';
+import { CareerCard } from '@/entities/user/ui/career-card/CareerCard';
 import { useAuthStore } from '@/features/auth/model/useAuthStore';
+import { trackProfileEvent } from '@/features/profile/lib/trackProfileEvent';
+import { PROFILE_EVENTS } from '@/features/profile/model/types';
 import { MyPageActions } from '@/widgets/mypage-actions/ui/MyPageActions';
 import { ProfileBadge } from '@/widgets/profile-badge/ui/ProfileBadge';
 import { ProfileHeader } from '@/widgets/profile-header/ui/ProfileHeader';
-import { PROFILE_EVENTS } from '@/features/profile/model/types';
-import { trackProfileEvent } from '@/features/profile/lib/trackProfileEvent';
-import type { UserProfile } from '@/entities/user/model/types';
-import { FieldGroup } from '@surf/ui/field-group';
-import { CareerCard } from '@/entities/user/ui/career-card/CareerCard';
 
 interface Props {
   userProfile: UserProfile;
 }
 
-export function MyPage({ userProfile }: Props) {
+export const MyPage = ({ userProfile }: Props) => {
   const memberId = useAuthStore((s) => s.memberId);
 
   // 중복 로그 방지 (StrictMode에서 useEffect 2번 도는 것 대비)
@@ -58,4 +58,4 @@ export function MyPage({ userProfile }: Props) {
       <ProfileBadge />
     </div>
   );
-}
+};

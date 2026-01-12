@@ -1,12 +1,12 @@
 'use client';
 
 import { useEffect } from 'react';
-import { FeedbackForm } from '@/features/feedback/ui/FeedbackForm';
-import { FEEDBACK_EVENTS } from '@/features/feedback/model/types';
 import { trackFeedbackEvent } from '@/features/feedback/lib/trackFeedbackEvent';
+import { FEEDBACK_EVENTS } from '@/features/feedback/model/types';
+import { FeedbackForm } from '@/features/feedback/ui/FeedbackForm';
 import { usePageName } from '@/shared/analytics/lib/getPageName';
 
-export default function FeedbackPage() {
+const FeedbackPage = () => {
   const pageName = usePageName();
 
   useEffect(() => {
@@ -18,4 +18,6 @@ export default function FeedbackPage() {
       <FeedbackForm />
     </>
   );
-}
+};
+
+export default FeedbackPage;

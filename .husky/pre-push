@@ -3,7 +3,6 @@
 
 set -eu
 echo "🔍 브랜치 네이밍 규칙 검사 실행"
-
 had_input=false
 while read -r local_ref local_sha remote_ref remote_sha; do
   had_input=true
@@ -22,7 +21,6 @@ while read -r local_ref local_sha remote_ref remote_sha; do
     exit 1
   fi
 done
-
 # STDIN이 비어 있을 경우 대비 (git push origin HEAD 등)
 if [ "$had_input" = false ]; then
   branch_name="$(git rev-parse --abbrev-ref HEAD || echo '')"
@@ -36,5 +34,10 @@ if [ "$had_input" = false ]; then
       ;;
   esac
 fi
-
 echo "✅ 브랜치 네이밍 규칙 통과"
+
+echo "🔍 빌드 검사 실행"
+pnpm build
+echo "✅ 빌드 성공"
+
+echo "🚀 push 진행"

@@ -1,5 +1,7 @@
 import OnBoardingPage from '@/app-pages/onboarding/ui/OnBoardingPage';
 
-export default function Page() {
+const Page = () => {
   return <OnBoardingPage />;
-}
+};
+
+export default Page;

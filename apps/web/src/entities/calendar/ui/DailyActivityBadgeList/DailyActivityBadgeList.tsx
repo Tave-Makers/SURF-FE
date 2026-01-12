@@ -7,11 +7,11 @@ type DailyActivityBadgeListProps = {
   isCurrentMonth?: boolean;
 };
 
-export function DailyActivityBadgeList({
+export const DailyActivityBadgeList = ({
   items,
   maxVisible = 2,
   isCurrentMonth = true,
-}: DailyActivityBadgeListProps) {
+}: DailyActivityBadgeListProps) => {
   if (!items?.length) return null;
 
   const visible = items.slice(0, maxVisible);
@@ -36,4 +36,4 @@ export function DailyActivityBadgeList({
       )}
     </div>
   );
-}
+};

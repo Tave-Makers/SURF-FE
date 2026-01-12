@@ -1,6 +1,6 @@
 import type { Meta, StoryObj } from '@storybook/nextjs';
-import { NotificationList } from './NotificationList';
 import { NotificationItemProps } from './NotificationItem';
+import { NotificationList } from './NotificationList';
 
 const meta: Meta<typeof NotificationList> = {
   title: 'Entities/UI/Notification/NotificationList',

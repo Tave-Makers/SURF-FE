@@ -1,7 +1,5 @@
 'use client';
 
-import { ActivitySummaryItem } from '@/entities/activity-score/ui/ActivitySummaryItem';
-import { ActivitySummaryTooltip } from '@/entities/activity-score/ui/ActivitySummaryTooltip';
 import { activityMetaMap, groupMetaMap } from '@/entities/activity-score/model/meta';
 import {
   ActivitySummaryRecords,
@@ -9,6 +7,8 @@ import {
   ScoreMode,
   PenaltySummary,
 } from '@/entities/activity-score/model/types';
+import { ActivitySummaryItem } from '@/entities/activity-score/ui/ActivitySummaryItem';
+import { ActivitySummaryTooltip } from '@/entities/activity-score/ui/ActivitySummaryTooltip';
 
 type ActivityScoreCardProps = {
   score: number;
@@ -16,7 +16,7 @@ type ActivityScoreCardProps = {
   mode: ScoreMode; // 탭 상태
 };
 
-export default function ActivityScoreCard({ score, records, mode }: ActivityScoreCardProps) {
+export const ActivityScoreCard = ({ score, records, mode }: ActivityScoreCardProps) => {
   return (
     <section aria-labelledby="activity-score-title" className="flex flex-col gap-[2.5rem]">
       {/* 점수 표시 */}
@@ -108,4 +108,4 @@ export default function ActivityScoreCard({ score, records, mode }: ActivityScor
       )}
     </section>
   );
-}
+};

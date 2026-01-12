@@ -1,15 +1,15 @@
 'use client';
 
-import { useState } from 'react';
-import { useRouter } from 'next/navigation';
-import { Tab } from '@surf/ui/tab';
 import { HeaderMode } from '@surf/ui/header';
+import { Tab } from '@surf/ui/tab';
+import { useRouter } from 'next/navigation';
+import { useState } from 'react';
+import NotificationEmpty from './icons/NotificationEmpty.svg';
 import type { NotificationTab } from '@/entities/notification/model/notificationTab';
-import { NotificationList } from '@/entities/notification/ui/NotificationList';
 import { useGetNotifications } from '@/entities/notification/model/useGetNotifications';
 import { useReadNotification } from '@/entities/notification/model/useReadNotification';
+import { NotificationList } from '@/entities/notification/ui/NotificationList';
 import { AppHeader } from '@/widgets/header/ui/AppHeader';
-import NotificationEmpty from './icons/NotificationEmpty.svg';
 
 const tabItems = [
   { value: 'ALL', label: '전체' },
@@ -17,7 +17,7 @@ const tabItems = [
   { value: 'SCHEDULE', label: '일정' },
 ];
 
-export function NotificationPage() {
+export const NotificationPage = () => {
   const router = useRouter();
   const [currentTab, setCurrentTab] = useState<NotificationTab>('ALL');
 
@@ -92,4 +92,4 @@ export function NotificationPage() {
       <div className="flex-1 overflow-y-auto">{renderContent()}</div>
     </div>
   );
-}
+};

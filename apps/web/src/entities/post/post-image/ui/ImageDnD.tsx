@@ -11,6 +11,7 @@ import {
   DragStartEvent,
   DragOverlay,
 } from '@dnd-kit/core';
+import { restrictToParentElement } from '@dnd-kit/modifiers';
 import {
   horizontalListSortingStrategy,
   SortableContext,
@@ -18,10 +19,9 @@ import {
   sortableKeyboardCoordinates,
 } from '@dnd-kit/sortable';
 import { CSS } from '@dnd-kit/utilities';
-import { restrictToParentElement } from '@dnd-kit/modifiers';
-import { ImageItem } from '@/entities/post/post-image/ui/ImageItem';
-import { UploadImage } from '@/entities/image/model/types';
 import React, { useState } from 'react';
+import { UploadImage } from '@/entities/image/model/types';
+import { ImageItem } from '@/entities/post/post-image/ui/ImageItem';
 
 type ImageDnDProps = {
   images: UploadImage[]; // 현재 이미지 배열
@@ -36,7 +36,7 @@ type ImageDnDProps = {
  * - `@dnd-kit`을 사용해 이미지 순서 변경
  * - 내부적으로 SortableImage로 각 아이템을 감쌈
  */
-export function ImageDnD({ images, onReorder, onRemove }: ImageDnDProps) {
+export const ImageDnD = ({ images, onReorder, onRemove }: ImageDnDProps) => {
   // 마우스 드래그 이벤트 인식 센서 등록
   const sensors = useSensors(
     useSensor(PointerSensor),
@@ -109,17 +109,11 @@ export function ImageDnD({ images, onReorder, onRemove }: ImageDnDProps) {
       </DragOverlay>
     </DndContext>
   );
-}
+};
 
 /** ImageDnD의 activeId 상태 변화에 의한 리렌더 방지 memo */
 const SortableImageList = React.memo(
-  function SortableImageList({
-    images,
-    onRemove,
-  }: {
-    images: UploadImage[];
-    onRemove: (index: number) => void;
-  }) {
+  ({ images, onRemove }: { images: UploadImage[]; onRemove: (index: number) => void }) => {
     return (
       <>
         {images.map((image, index) => (
@@ -138,6 +132,7 @@ const SortableImageList = React.memo(
   // 리스트 shallow 비교
   (prev, next) => prev.images === next.images && prev.onRemove === next.onRemove,
 );
+SortableImageList.displayName = 'SortableImageList';
 
 /**
  * 개별 이미지 아이템을 Sortable로 감싸는 컴포넌트
@@ -146,7 +141,7 @@ const SortableImageList = React.memo(
  * @param id 각 이미지의 고유 인덱스 (드래그 식별용)
  */
 const SortableImage = React.memo(
-  function SortableImage({
+  ({
     id,
     preview,
     uploadedUrl,
@@ -158,7 +153,7 @@ const SortableImage = React.memo(
     uploadedUrl?: string;
     status: UploadImage['status'];
     onRemove: () => void;
-  }) {
+  }) => {
     const { attributes, listeners, setNodeRef, transform, transition, isDragging } = useSortable({
       id,
     });
@@ -191,3 +186,4 @@ const SortableImage = React.memo(
     );
   },
 );
+SortableImage.displayName = 'SortableImage';

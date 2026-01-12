@@ -1,6 +1,6 @@
-import { Sheet as ModalSheet } from 'react-modal-sheet';
-import { Sheet } from '@surf/ui/sheet';
 import { CheckList } from '@surf/ui/check-list';
+import { Sheet } from '@surf/ui/sheet';
+import { Sheet as ModalSheet } from 'react-modal-sheet';
 import { LAW_LIST } from '@/features/laws/constants/law-list';
 
 export type LawBottomSheetProps = {
@@ -13,7 +13,7 @@ export type LawBottomSheetProps = {
   allAgreed: boolean;
 };
 
-export function LawBottomSheet({
+export const LawBottomSheet = ({
   isOpen,
   onClose,
   agreements,
@@ -21,7 +21,7 @@ export function LawBottomSheet({
   onClickPrimaryBtn,
   onClickLawDetail,
   allAgreed,
-}: LawBottomSheetProps) {
+}: LawBottomSheetProps) => {
   if (!isOpen) return null;
 
   return (
@@ -60,4 +60,4 @@ export function LawBottomSheet({
       <ModalSheet.Backdrop className="bg-effect-overlay-dim-normal" />
     </ModalSheet>
   );
-}
+};

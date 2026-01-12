@@ -1,7 +1,7 @@
 import type { Meta, StoryObj } from '@storybook/nextjs';
-import { MonthNavigator } from './MonthNavigator';
-import { useState } from 'react';
 import { format } from 'date-fns';
+import { useState } from 'react';
+import { MonthNavigator } from './MonthNavigator';
 
 const meta: Meta<typeof MonthNavigator> = {
   title: 'Entities/UI/Calendar/MonthNavigator',

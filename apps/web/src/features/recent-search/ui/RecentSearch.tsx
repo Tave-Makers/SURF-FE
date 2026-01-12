@@ -1,12 +1,12 @@
 'use client';
 
-import { useState } from 'react';
+import { SearchHistoryItem } from '@surf/ui/search-history-item';
+import { useAlertStore } from '@surf/ui/store/alertStore';
 import { useRouter } from 'next/navigation';
-import { PAGE_ROUTES } from '@/shared/config/path';
-import SearchHistoryItem from '@surf/ui/search-history-item';
+import { useState } from 'react';
 import { deleteAllRecentSearches } from '../api/deleteAllRecentSearches.client';
 import { deleteOneRecentSearch } from '../api/deleteOneRecentSearch.client';
-import { useAlertStore } from '@surf/ui/store/alertStore';
+import { PAGE_ROUTES } from '@/shared/config/path';
 
 const textStyle = 'text-body-body6 text-foreground-normal';
 
@@ -14,7 +14,7 @@ interface RecentSearchProps {
   recentKeywords: string[];
 }
 
-export default function RecentSearch({ recentKeywords }: RecentSearchProps) {
+export const RecentSearch = ({ recentKeywords }: RecentSearchProps) => {
   const router = useRouter();
   const [items, setItems] = useState(recentKeywords);
   const [isDeleting, setIsDeleting] = useState(false);
@@ -122,4 +122,4 @@ export default function RecentSearch({ recentKeywords }: RecentSearchProps) {
       </div>
     </section>
   );
-}
+};

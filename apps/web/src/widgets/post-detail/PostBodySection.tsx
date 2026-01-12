@@ -1,15 +1,15 @@
 'use client';
 
-import { PostProfile } from '@/entities/post/ui/post-profile/PostProfile';
 import { ChipToggle } from '@surf/ui/chip-toggle';
+import sanitizeHtml, { IOptions } from 'sanitize-html';
+import { EventCard } from '@/entities/calendar/ui/EventCard/EventCard';
+import { PostScheduleData } from '@/entities/post/api/types';
 import { PostDetail } from '@/entities/post/model/types';
+import { PostImage } from '@/entities/post/ui/post-image/PostImage';
+import { PostProfile } from '@/entities/post/ui/post-profile/PostProfile';
+import { mapCategoryToActivityCategory } from '@/features/calendar/model/mapper';
 import { useToggleLikeMutation } from '@/features/post/model/useToggleLikeMutation';
 import { useToggleScrapMutation } from '@/features/post/model/useToggleScrapMutation';
-import { EventCard } from '@/entities/calendar/ui/EventCard/EventCard';
-import sanitizeHtml, { IOptions } from 'sanitize-html';
-import { PostImage } from '@/entities/post/ui/post-image/PostImage';
-import { mapCategoryToActivityCategory } from '@/features/calendar/model/mapper';
-import { PostScheduleData } from '@/entities/post/api/types';
 
 type PostBodySectionProps = {
   post: PostDetail;
@@ -17,7 +17,7 @@ type PostBodySectionProps = {
   onClickLikeCount: () => void;
 };
 
-export function PostBodySection({ post, schedule, onClickLikeCount }: PostBodySectionProps) {
+export const PostBodySection = ({ post, schedule, onClickLikeCount }: PostBodySectionProps) => {
   // 좋아요/스크랩 Mutation
   const likeMutation = useToggleLikeMutation();
   const scrapMutation = useToggleScrapMutation();
@@ -102,4 +102,4 @@ export function PostBodySection({ post, schedule, onClickLikeCount }: PostBodySe
       </div>
     </div>
   );
-}
+};

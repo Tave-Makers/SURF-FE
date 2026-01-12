@@ -1,10 +1,10 @@
+import { FieldGroup } from '@surf/ui/field-group';
+import { TextArea } from '@surf/ui/text-area';
 import { Controller, useFormContext, useWatch } from 'react-hook-form';
 import { OnBoardingFormData } from '@/features/onboarding/model/types';
 import { ProfileImageUploader } from '@/features/profile/ui/upload-profile-image/ProfileImageUploader';
-import { TextArea } from '@surf/ui/text-area';
-import { FieldGroup } from '@surf/ui/field-group';
 
-export function ProfileStep() {
+export const ProfileStep = () => {
   const { control } = useFormContext<OnBoardingFormData>();
   const profileImageUrl = useWatch({
     control,
@@ -53,4 +53,4 @@ export function ProfileStep() {
       </div>
     </>
   );
-}
+};

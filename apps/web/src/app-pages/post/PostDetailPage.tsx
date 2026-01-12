@@ -20,6 +20,7 @@ import { categoryIdToKey } from '@/entities/post/model/category';
 import { useGetPostScheduleQuery } from '@/features/post/model/useGetPostScheduleQuery';
 import { useDeletePostMutation } from '@/features/post/model/useDeletePostMutation';
 import { useToastStore } from '@surf/ui/store/toastStore';
+import { PAGE_ROUTES } from '@/shared/config/path';
 
 type PostDetailPageProps = {
   postId: string;
@@ -99,7 +100,7 @@ export default function PostDetailPage({ postId }: PostDetailPageProps) {
           router.replace(entryPath);
           sessionStorage.removeItem('entry_path');
         } else {
-          router.push('/board/1');
+          router.replace(PAGE_ROUTES.BOARD.SELECT_CATEGORY(post.boardId));
         }
 
         showToast('게시글이 삭제되었습니다.');

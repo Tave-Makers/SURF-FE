@@ -38,6 +38,7 @@ import { useToastStore } from '@surf/ui/store/toastStore';
 import { useAbortableLifeCycle } from '@/shared/hooks/useAbortableLifeCycle';
 import { CareerItem } from './CareerItem';
 import type { CareerForm, FormValues } from '../model/types';
+import { PAGE_ROUTES } from '@/shared/config/path';
 
 export type EditProfileFormHandle = {
   submit: () => void;
@@ -235,7 +236,7 @@ export const EditProfileForm = forwardRef<EditProfileFormHandle, Props>(function
         await updateMyProfile(payload, signal);
         if (!isActive()) return;
         toast('정보 수정이 완료되었습니다.', 1000);
-        router.replace('/mypage');
+        router.replace(PAGE_ROUTES.MYPAGE.MAIN);
         router.refresh();
       } catch (e: unknown) {
         if (!isActive()) return;

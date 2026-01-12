@@ -1,6 +1,3 @@
-#!/usr/bin/env sh
-# . "$(dirname "$0")/_/husky.sh"
-
 set -eu
 echo "🔍 브랜치 네이밍 규칙 검사 실행"
 had_input=false

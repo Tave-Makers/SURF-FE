@@ -76,9 +76,10 @@ export const LikedUsersInSheet: Story = {
   render: () => {
     const [open, setOpen] = useState(false);
     const users = [
-      { id: 1, name: '홍길동' },
-      { id: 2, name: '김철수' },
-      { id: 3, name: '이영희' },
+      { id: 1, name: '홍길동', onClick: () => alert('홍길동 클릭') },
+      { id: 2, name: '김철수', onClick: () => alert('김철수 클릭') },
+      { id: 3, name: '이영희', onClick: () => alert('이영희 클릭') },
+      { id: null, name: '탈퇴한 회원' },
     ];
 
     return (
@@ -97,8 +98,8 @@ export const LikedUsersInSheet: Story = {
                     <SheetItem
                       key={user.id}
                       title={user.name}
+                      onClick={user.onClick}
                       node={<Avatar size="xs" className="rounded-3!" />}
-                      onClick={() => alert(`${user.name} 클릭`)}
                     />
                   ))}
                 </div>

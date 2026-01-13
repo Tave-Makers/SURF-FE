@@ -6,6 +6,7 @@ const meta: Meta<typeof PostProfile> = {
   component: PostProfile,
   tags: ['autodocs'],
   argTypes: {
+    memberId: { control: 'number' },
     profileImgUrl: { control: 'text' },
     nickname: { control: 'text' },
     date: { control: 'text' },
@@ -13,6 +14,7 @@ const meta: Meta<typeof PostProfile> = {
     viewCount: { control: 'number' },
   },
   args: {
+    memberId: 1,
     nickname: '사용자 이름',
     date: '2023-01-01',
     time: '12:00',
@@ -23,14 +25,12 @@ const meta: Meta<typeof PostProfile> = {
 export default meta;
 type Story = StoryObj<typeof meta>;
 
-export const Default: Story = {
-  render: (args) => {
-    return <PostProfile {...args} />;
-  },
+export const Default: Story = {};
+
+export const Withdrawn: Story = {
   args: {
-    nickname: '사용자 이름',
-    date: '2023-01-01',
-    time: '12:00',
-    viewCount: 100,
+    memberId: null,
+    nickname: '탈퇴한 사용자',
+    profileImgUrl: undefined,
   },
 };

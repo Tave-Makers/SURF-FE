@@ -122,7 +122,7 @@ export type GetBoardPostsRequest = {
 
 // 좋아요 누른 유저 타입
 export interface LikedUser {
-  id: number;
+  id: number | null;
   name: string;
   profileImageUrl: string;
 }

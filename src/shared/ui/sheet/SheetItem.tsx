@@ -29,11 +29,18 @@ const TEXT_COLOR_STYLES: Record<TextColor, string> = {
 export function SheetItem({ title, node, onClick, textColor = 'normal' }: SheetItemProps) {
   const textColorClass = TEXT_COLOR_STYLES[textColor];
 
+  const Wrapper = onClick ? 'button' : 'div';
+
   return (
-    <button onClick={onClick} className="flex w-full items-center gap-8 px-12 py-10">
+    <Wrapper
+      onClick={onClick}
+      className={`flex w-full items-center gap-8 px-12 py-10 ${
+        onClick ? 'cursor-pointer' : 'cursor-default'
+      }`}
+    >
       {node && <div className="flex h-[1.5rem] w-[1.5rem] items-center justify-center">{node}</div>}
 
       <span className={`text-body-body6 ${textColorClass}`}>{title}</span>
-    </button>
+    </Wrapper>
   );
 }

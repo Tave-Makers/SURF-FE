@@ -52,6 +52,7 @@ export type FullPostListResponse = CommonResponse<PostListApiResponse>;
 
 // 게시글 상세 데이터 타입
 export type PostDetailData = {
+  memberId: number | null;
   postId: number;
   title: string;
   content: string;

@@ -10,6 +10,8 @@ import { AppHeader } from '@/widgets/header/ui/AppHeader';
 import { HeaderMode } from '@/shared/ui/header/Header';
 import { POST_BOARDS } from '@/entities/post/model/board';
 import { PostFab } from '@/entities/post/ui/post-fab/PostFab';
+import { useCreatePostScheduleStore } from '@/features/schedule/create-post-schedule/model/useCreatePostScheduleStore';
+import { usePostFormStore } from '@/features/post/post-form/model/usePostFormStore';
 
 const BoardPage = ({ boardId: boardIdProp }: { boardId: string }) => {
   const router = useRouter();
@@ -35,6 +37,16 @@ const BoardPage = ({ boardId: boardIdProp }: { boardId: string }) => {
     } else {
       router.replace(`${PAGE_ROUTES.BOARD.SELECT_CATEGORY(boardId)}?category=${nextCategoryKey}`);
     }
+  };
+
+  // 게시글 생성 화면 이동 전 스토어 초기화
+  const { resetForm } = usePostFormStore();
+  const { clearLinkedSchedule } = useCreatePostScheduleStore();
+
+  const handlePostClick = () => {
+    resetForm();
+    clearLinkedSchedule();
+    router.push(PAGE_ROUTES.BOARD.POST_CREATE(boardId));
   };
 
   return (
@@ -63,7 +75,7 @@ const BoardPage = ({ boardId: boardIdProp }: { boardId: string }) => {
         <div className="pointer-events-none fixed inset-0 z-50">
           <div className="relative mx-auto h-full sm:max-w-[360px]">
             <div className="pointer-events-auto absolute right-15 bottom-15">
-              <PostFab onClick={() => router.push(PAGE_ROUTES.BOARD.POST_CREATE(boardId))} />
+              <PostFab onClick={handlePostClick} />
             </div>
           </div>
         </div>

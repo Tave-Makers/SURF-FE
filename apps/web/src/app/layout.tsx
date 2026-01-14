@@ -29,18 +29,19 @@ const RootLayout = ({ children }: { children: ReactNode }) => {
       </head>
       <body className="flex min-h-screen items-center justify-center bg-gray-200">
         <AnalyticsProvider />
-        <ThemeProvider attribute="data-theme" defaultTheme="system" enableSystem />
-        <QueryProvider>
-          <FCMInitializer />
-          <PathWatcher />
-          <PageTrackingProvider>
-            <main className="bg-background-normal box-content flex h-full w-dvw sm:h-[min(100dvh,calc(100dvw*812/375))] sm:w-[min(100dvw,calc(100dvh*375/812))]">
-              {children}
-            </main>
-            <GlobalComponents />
-          </PageTrackingProvider>
-          <ReactQueryDevtools initialIsOpen={false} />
-        </QueryProvider>
+        <ThemeProvider attribute="data-theme" defaultTheme="system" enableSystem>
+          <QueryProvider>
+            <FCMInitializer />
+            <PathWatcher />
+            <PageTrackingProvider>
+              <main className="bg-background-normal box-content flex h-full w-dvw sm:h-[min(100dvh,calc(100dvw*812/375))] sm:w-[min(100dvw,calc(100dvh*375/812))]">
+                {children}
+              </main>
+              <GlobalComponents />
+            </PageTrackingProvider>
+            <ReactQueryDevtools initialIsOpen={false} />
+          </QueryProvider>
+        </ThemeProvider>
       </body>
     </html>
   );

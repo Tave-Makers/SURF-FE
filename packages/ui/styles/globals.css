@@ -4,7 +4,8 @@
 @import './color-tokens.css';
 @import './scheme-tokens.css';
 @import './shadow-tokens.css';
-@source '../ui/**/*.{js,jsx,ts,tsx}';
+@source '../{components,hooks,lib,store}/**/*.{js,jsx,ts,tsx}';
+@source '../../**/*.{js,jsx,ts,tsx}';
 
 /* react-modal-sheet */
 .react-modal-sheet-header {

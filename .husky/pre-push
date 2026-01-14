@@ -1,28 +1,28 @@
 set -eu
+
 echo "🔍 브랜치 네이밍 규칙 검사 실행"
 had_input=false
 while read -r local_ref local_sha remote_ref remote_sha; do
   had_input=true
   case "$remote_ref" in
-    refs/tags/*) continue ;; # 태그는 제외
+    refs/tags/*) continue ;;
   esac
 
   branch_name="${remote_ref#refs/heads/}"
   case "$branch_name" in
-    main|develop) continue ;; # 보호 브랜치는 허용
+    main|develop) continue ;;
   esac
 
   if ! echo "$branch_name" | grep -Eq '^(feat|fix|hotfix|refactor|style|docs|chore|test|release)/[a-z0-9._-]+$'; then
     echo "❌ 브랜치 네이밍 규칙 위반"
-    echo "👉 규칙 예시: feat/login-api, fix/navbar-bug-210"
     exit 1
   fi
 done
-# STDIN이 비어 있을 경우 대비 (git push origin HEAD 등)
+
 if [ "$had_input" = false ]; then
   branch_name="$(git rev-parse --abbrev-ref HEAD || echo '')"
   case "$branch_name" in
-    ""|HEAD|main|develop) : ;; # 허용
+    ""|HEAD|main|develop) : ;;
     *)
       if ! echo "$branch_name" | grep -Eq '^(feat|fix|hotfix|refactor|style|docs|chore|test|release)/[a-z0-9._-]+$'; then
         echo "❌ 브랜치 네이밍 규칙 위반"
@@ -33,8 +33,39 @@ if [ "$had_input" = false ]; then
 fi
 echo "✅ 브랜치 네이밍 규칙 통과"
 
-echo "🔍 빌드 검사 실행"
-pnpm build
+echo "🔍 변경 파일 확인"
+CHANGED="$(git diff --name-only --cached || true)"
+
+if [ -z "$CHANGED" ]; then
+  echo "ℹ️ 스테이징된 변경 없음 → 빌드 스킵"
+  exit 0
+fi
+
+# 변경된 경로를 보고 어떤 패키지를 빌드할지 결정
+FILTERS=""
+
+# web 변경이면 web만 빌드
+if echo "$CHANGED" | grep -Eq '^apps/web/'; then
+  FILTERS="$FILTERS --filter=surf-web"
+fi
+
+# ui 변경이면 ui + web 빌드
+if echo "$CHANGED" | grep -Eq '^packages/ui/'; then
+  FILTERS="$FILTERS --filter=@surf/ui --filter=surf-web"
+fi
+
+# 공통 설정 변경이면 web 중심으로 전체 
+if echo "$CHANGED" | grep -Eq '^(packages/typescript-config/|packages/eslint-config/|packages/prettier-config/|turbo\.json|pnpm-lock\.yaml)'; then
+  FILTERS="$FILTERS --filter=surf-web"
+fi
+
+if [ -z "$FILTERS" ]; then
+  echo "ℹ️ web/ui 빌드에 영향 없는 변경 → 빌드 스킵"
+  exit 0
+fi
+
+echo "🔍 빌드 검사 실행: $FILTERS"
+pnpm turbo run build $FILTERS --output-logs=errors-only
 echo "✅ 빌드 성공"
 
 echo "🚀 push 진행"

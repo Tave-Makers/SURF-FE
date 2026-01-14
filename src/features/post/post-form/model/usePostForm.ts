@@ -142,6 +142,7 @@ export const usePostForm = ({ mode, boardId, postId }: Props) => {
   const handleEditorChange = useCallback(
     (updatedData: EditorState) => {
       setEditorState(updatedData.content, updatedData.images);
+      console.log('Editor changed:', updatedData);
     },
     [setEditorState],
   );
@@ -221,6 +222,8 @@ export const usePostForm = ({ mode, boardId, postId }: Props) => {
           imageUrlList,
           hasSchedule: !!linkedSchedule,
         });
+        console.log('content', content);
+        console.log('imageUrlList', imageUrlList);
 
         if (linkedSchedule) {
           if (linkedSchedule.id) {

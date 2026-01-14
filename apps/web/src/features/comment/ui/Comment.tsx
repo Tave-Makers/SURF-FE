@@ -1,5 +1,6 @@
 import { Avatar } from '@surf/ui/avatar';
 import { SurfIcon } from '@surf/ui/icon';
+import type { MentionResponse } from '@/features/comment/api/types';
 
 /**
  * 댓글(Comment) 컴포넌트
@@ -9,8 +10,7 @@ import { SurfIcon } from '@surf/ui/icon';
  * - 모든 사용자 액션(좋아요, 답글, 더보기)은 콜백을 통해 상위에서 처리
  *
  * @prop name 작성자 이름
- * @prop date 작성 날짜 (예: 2026.10.16)
- * @prop time 작성 시간 (예: 01:21)
+ * @prop date 작성 날짜 및 시간
  * @prop content 댓글 내용
  * @prop likeCount 좋아요 개수
  * @prop isLiked 좋아요 여부
@@ -19,25 +19,45 @@ import { SurfIcon } from '@surf/ui/icon';
  * @prop onMoreClick 더보기 클릭 콜백
  */
 
-type CommentProps = {
+interface CommentProps {
   name: string;
-  profileImageUrl?: string;
+  profileImageUrl?: string | null;
   date: string;
-  time: string;
   content: string;
+  mentions?: MentionResponse[];
   likeCount: number;
   isLiked: boolean;
   onLikeToggle?: (newState: boolean) => void;
   onReplyClick?: () => void;
   onMoreClick?: () => void;
-};
+}
+
+function renderContentWithMentions(content: string, mentions: MentionResponse[] | undefined) {
+  const mentionSet = new Set((mentions ?? []).map((m) => m.nickname));
+
+  const parts = content.split(/(@[^\s]+)/g);
+
+  return parts.map((part, idx) => {
+    if (part.startsWith('@')) {
+      const nickname = part.slice(1);
+      if (mentionSet.has(nickname)) {
+        return (
+          <span key={idx} className="text-foreground-primary">
+            {part}
+          </span>
+        );
+      }
+    }
+    return <span key={idx}>{part}</span>;
+  });
+}
 
 export const Comment = ({
   name,
   profileImageUrl,
   date,
-  time,
   content,
+  mentions,
   likeCount,
   isLiked,
   onLikeToggle,
@@ -49,17 +69,16 @@ export const Comment = ({
   };
 
   return (
-    <article className="flex flex-1 gap-11" aria-label={`${name}님의 댓글`}>
-      <Avatar src={profileImageUrl} size="s" alt={`${name}님의 프로필 이미지`} />
+    <article className="flex w-full gap-11" aria-label={`${name}님의 댓글`}>
+      <Avatar src={profileImageUrl ?? undefined} size="s" alt={`${name}님의 프로필 이미지`} />
 
-      <div className="flex flex-1 flex-col gap-7">
+      <div className="flex flex-col gap-7">
         {/* 이름, 날짜, 시간, 더보기 */}
         <header className="flex items-center">
           <div className="flex gap-8">
             <p className="text-body-body6 text-foreground-normal">{name}</p>
-            <p className="text-caption-caption4 text-foreground-quinary-darker flex items-center gap-5">
+            <p className="text-caption-caption4 text-foreground-quinary-darker flex items-center">
               <time>{date}</time>
-              <time>{time}</time>
             </p>
           </div>
           <button type="button" aria-label="댓글 더보기" className="ml-auto" onClick={onMoreClick}>
@@ -68,7 +87,9 @@ export const Comment = ({
         </header>
 
         {/* 댓글 내용 */}
-        <p className="text-body-body7 text-foreground-normal">{content}</p>
+        <p className="text-body-body7 text-foreground-normal">
+          {renderContentWithMentions(content, mentions)}
+        </p>
 
         {/* 좋아요, 답글 */}
         <footer className="flex gap-11">

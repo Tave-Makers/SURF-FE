@@ -116,7 +116,7 @@ export function Sheet({
           aria-hidden="true"
         />
       </header>
-      <div className="flex w-full flex-col px-15 pt-11">
+      <div className="px-15 flex w-full flex-col pt-11">
         {renderTitleSection()}
         <div
           className="scroll-hide max-h-[308px] w-full overflow-y-auto"
@@ -126,7 +126,7 @@ export function Sheet({
           {children}
         </div>
       </div>
-      <div className="w-full px-15 pb-15">{renderButtons()}</div>
+      <div className="px-15 pb-15 w-full">{renderButtons()}</div>
     </div>
   );
 }

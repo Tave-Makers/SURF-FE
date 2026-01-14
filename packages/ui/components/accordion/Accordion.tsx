@@ -52,7 +52,7 @@ export function Accordion({
         type="button"
         disabled={isDisabled}
         onClick={handleToggle}
-        className="disabled:bg-background-quinary text-foreground-normal text-body-body6 flex w-full cursor-pointer items-center justify-between p-13 disabled:cursor-not-allowed"
+        className="disabled:bg-background-quinary text-foreground-normal text-body-body6 p-13 flex w-full cursor-pointer items-center justify-between disabled:cursor-not-allowed"
       >
         <span>
           {renderTitle

@@ -21,7 +21,7 @@ export function ToolBar<K extends string>({ items, onItemClick, className = '' }
   return (
     <nav
       className={[
-        'flex w-full items-center gap-15 px-13 py-8',
+        'gap-15 px-13 flex w-full items-center py-8',
         'rounded-1 border-border-tertiary border-t-1 opacity-100',
         className,
       ].join(' ')}

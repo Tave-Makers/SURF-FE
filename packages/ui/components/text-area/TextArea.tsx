@@ -148,7 +148,7 @@ export const TextArea = forwardRef<HTMLTextAreaElement, TextAreaProps>(
               textColor,
               readOnly ? 'cursor-default select-text' : '',
               mode === 'oneLine'
-                ? 'h-[1.5rem] overflow-hidden leading-[1.5rem] text-ellipsis whitespace-nowrap'
+                ? 'h-[1.5rem] overflow-hidden text-ellipsis whitespace-nowrap leading-[1.5rem]'
                 : '',
             ].join(' ')}
             rows={mode === 'oneLine' ? 1 : undefined}

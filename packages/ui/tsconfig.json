@@ -1,11 +1,11 @@
 {
   "extends": "@surf/typescript-config/react-library.json",
   "compilerOptions": {
-    "rootDir": "./src",
+    "rootDir": "./",
     "outDir": "./dist",
     "types": ["react", "react-dom"],
     "declaration": true
   },
-  "include": ["src"],
+  "include": ["src", "components", "hooks", "lib", "store", "types"],
   "exclude": ["**/*.stories.*"]
 }

@@ -65,12 +65,12 @@ export const Both: Story = {
       <Control
         direction="left"
         onClick={() => {}}
-        className="absolute top-1/2 left-[10px] -translate-y-1/2"
+        className="absolute left-[10px] top-1/2 -translate-y-1/2"
       />
       <Control
         direction="right"
         onClick={() => {}}
-        className="absolute top-1/2 right-[10px] -translate-y-1/2"
+        className="absolute right-[10px] top-1/2 -translate-y-1/2"
       />
     </Wrapper>
   ),

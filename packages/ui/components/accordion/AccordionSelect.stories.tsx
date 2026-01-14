@@ -35,7 +35,7 @@ export const ToggleAccordionSelect: Story = {
           <ModalSheet.Container>
             <ModalSheet.Header />
             <ModalSheet.Content>
-              <div id={sheetId} className="flex flex-col gap-[0.25rem] p-15">
+              <div id={sheetId} className="p-15 flex flex-col gap-[0.25rem]">
                 <p className="text-body-body6 text-foreground-normal">
                   이건 단순히 토글되는 시트입니다.
                 </p>
@@ -72,7 +72,7 @@ export const SelectAccordion: Story = {
           <ModalSheet.Container>
             <ModalSheet.Header />
             <ModalSheet.Content>
-              <div id={sheetId} className="flex flex-col gap-[0.25rem] p-15">
+              <div id={sheetId} className="p-15 flex flex-col gap-[0.25rem]">
                 {items.map((item) => (
                   <button
                     key={item}

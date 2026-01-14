@@ -4,7 +4,7 @@
   "private": true,
   "type": "module",
   "scripts": {
-    "build": "tsc -p tsconfig.json && rm -rf dist/styles dist/assets && cp -R src/styles dist/styles && cp -R src/assets dist/assets",
+    "build": "tsc -p tsconfig.json && rm -rf dist/styles dist/assets && cp -R styles dist/styles && cp -R assets dist/assets",
     "storybook": "storybook dev -p 6007",
     "build-storybook": "storybook build"
   },

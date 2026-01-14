@@ -35,7 +35,7 @@ const inactiveStyle = 'text-foreground-quaternary';
  * @param props.defaultValue - (uncontrolled) 초기 활성 탭 value
  * @param props.onValueChange - 탭 변경 시 호출되는 콜백
  */
-export function Tab({ items, value, defaultValue, onValueChange }: TabProps) {
+export const Tab = ({ items, value, defaultValue, onValueChange }: TabProps) => {
   const isControlled = value !== undefined;
 
   const [internalValue, setInternalValue] = useState(() => {
@@ -75,4 +75,4 @@ export function Tab({ items, value, defaultValue, onValueChange }: TabProps) {
       </div>
     </div>
   );
-}
+};

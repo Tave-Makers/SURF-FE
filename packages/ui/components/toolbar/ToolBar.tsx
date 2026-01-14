@@ -17,7 +17,11 @@ type ToolBarProps<K extends string> = {
   className?: string;
 };
 
-export function ToolBar<K extends string>({ items, onItemClick, className = '' }: ToolBarProps<K>) {
+export const ToolBar = <K extends string>({
+  items,
+  onItemClick,
+  className = '',
+}: ToolBarProps<K>) => {
   return (
     <nav
       className={[
@@ -40,4 +44,4 @@ export function ToolBar<K extends string>({ items, onItemClick, className = '' }
       ))}
     </nav>
   );
-}
+};

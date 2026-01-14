@@ -35,14 +35,14 @@ export type AvatarProps = {
   onClick?: () => void;
 };
 
-export function Avatar({
+export const Avatar = ({
   src,
   size = 'l',
   priority,
   className = '',
   alt = '프로필 이미지',
   onClick,
-}: AvatarProps) {
+}: AvatarProps) => {
   const [error, setError] = useState(false);
 
   const base = `relative flex items-center justify-center flex-shrink-0 aspect-square ${sizesStyle[size].rounded} overflow-hidden ${sizesStyle[size].cls}`;
@@ -67,4 +67,4 @@ export function Avatar({
       />
     </Wrapper>
   );
-}
+};

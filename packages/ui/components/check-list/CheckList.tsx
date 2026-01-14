@@ -10,13 +10,13 @@ type CheckListProps = {
   onClickItem?: (id: string) => void; // 클릭 시 어떤 아이템인지 부모에 전달
 };
 
-export function CheckList({
+export const CheckList = ({
   id,
   title = 'Title',
   isChecked = false,
   onChange,
   onClickItem,
-}: CheckListProps) {
+}: CheckListProps) => {
   return (
     <div className="flex w-full items-center gap-[0.35rem] pr-[0.62rem]">
       {/* 체크 토글 버튼 및 제목 */}
@@ -43,4 +43,4 @@ export function CheckList({
       </button>
     </div>
   );
-}
+};

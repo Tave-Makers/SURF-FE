@@ -2,10 +2,10 @@
 
 import { createPortal } from 'react-dom';
 
-import { Alert } from './Alert';
 import { useAlertStore } from '../../store/alertStore';
+import { Alert } from './Alert';
 
-export default function AlertViewport() {
+export const AlertViewport = () => {
   const current = useAlertStore((s) => s.current);
   const close = useAlertStore((s) => s.close);
 
@@ -23,4 +23,4 @@ export default function AlertViewport() {
     />,
     document.body,
   );
-}
+};

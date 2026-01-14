@@ -1,5 +1,5 @@
-import { AccordionGroupProps } from './types';
 import { Accordion } from './Accordion';
+import { AccordionGroupProps } from './types';
 
 /**
  * 여러 개의 Accordion을 리스트 기반으로 렌더링하는 그룹 컴포넌트.

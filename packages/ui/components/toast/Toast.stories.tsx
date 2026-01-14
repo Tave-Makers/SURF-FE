@@ -1,5 +1,5 @@
 import type { Meta, StoryObj } from '@storybook/nextjs';
-import Toast from './Toast';
+import { Toast } from './Toast';
 
 const meta: Meta<typeof Toast> = {
   title: 'Shared/UI/Toast',

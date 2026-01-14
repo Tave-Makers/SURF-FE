@@ -1,11 +1,11 @@
 'use client';
 
-import AlertViewport from '../alert/AlertViewport';
-import ToastViewport from '../toast/ToastViewport';
+import { AlertViewport } from '../alert/AlertViewport';
+import { ToastViewport } from '../toast/ToastViewport';
 
 // import BottomSheetViewport from '@surf/ui/bottom-sheet/BottomSheetViewport";
 
-export default function GlobalComponents() {
+export const GlobalComponents = () => {
   return (
     <>
       <ToastViewport />
@@ -13,4 +13,4 @@ export default function GlobalComponents() {
       {/* <BottomSheetViewport /> */}
     </>
   );
-}
+};

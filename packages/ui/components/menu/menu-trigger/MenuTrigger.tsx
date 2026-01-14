@@ -14,7 +14,7 @@ export interface MenuTriggerProps {
 
 const baseStyle = 'flex h-18 items-center justify-center gap-5 px-8 rounded-3';
 
-export function MenuTrigger({ label, isOpen, onClick }: MenuTriggerProps) {
+export const MenuTrigger = ({ label, isOpen, onClick }: MenuTriggerProps) => {
   return (
     <button type="button" className={baseStyle} onClick={onClick}>
       <div className="text-foreground-normal text-body-body9 flex">{label}</div>
@@ -25,4 +25,4 @@ export function MenuTrigger({ label, isOpen, onClick }: MenuTriggerProps) {
       </div>
     </button>
   );
-}
+};

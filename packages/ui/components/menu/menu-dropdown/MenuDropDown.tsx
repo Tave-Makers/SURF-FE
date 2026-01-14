@@ -12,11 +12,11 @@ export interface MenuDropDownProps<T extends { id: number }> {
   onItemClick: (item: T) => void;
 }
 
-export function MenuDropDown<T extends { id: number }>({
+export const MenuDropDown = <T extends { id: number }>({
   items,
   renderItem,
   onItemClick,
-}: MenuDropDownProps<T>) {
+}: MenuDropDownProps<T>) => {
   return (
     <div className="rounded-3 shadow-raised bg-background-normal-lighter flex w-full items-center justify-center p-5">
       <div className="menu-dropdown-scrollbar flex max-h-[9.85rem] w-full min-w-[4.5rem] flex-col overflow-y-auto">
@@ -28,4 +28,4 @@ export function MenuDropDown<T extends { id: number }>({
       </div>
     </div>
   );
-}
+};

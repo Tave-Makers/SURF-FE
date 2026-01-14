@@ -13,7 +13,7 @@ export interface MenuItemProps {
   isSelected?: boolean;
 }
 
-export function MenuItem({ id, label, onClick, isSelected = false }: MenuItemProps) {
+export const MenuItem = ({ id, label, onClick, isSelected = false }: MenuItemProps) => {
   const menuItemBaseStyle =
     'rounded-3 bg-background-normal-lighter active:bg-background-quaternary flex h-[1.87rem] w-full items-center justify-center truncate px-10';
 
@@ -26,4 +26,4 @@ export function MenuItem({ id, label, onClick, isSelected = false }: MenuItemPro
       <span className={labelBaseStyle}>{label}</span>
     </button>
   );
-}
+};

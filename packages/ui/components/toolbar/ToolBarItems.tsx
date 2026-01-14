@@ -11,7 +11,7 @@ interface ToolBarItemsProps {
   onClick?: MouseEventHandler<HTMLButtonElement>;
 }
 
-export function ToolBarItems({ label, icon, onClick, active, disabled }: ToolBarItemsProps) {
+export const ToolBarItems = ({ label, icon, onClick, active, disabled }: ToolBarItemsProps) => {
   const baseStyle = 'text-foreground-normal inline-flex items-center gap-5 focus:outline-none';
 
   const statusStyle = disabled ? 'opacity-30' : 'opacity-100';
@@ -28,4 +28,4 @@ export function ToolBarItems({ label, icon, onClick, active, disabled }: ToolBar
       <span className="text-body-body10">{label}</span>
     </button>
   );
-}
+};

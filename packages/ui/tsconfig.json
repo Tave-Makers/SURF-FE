@@ -6,6 +6,6 @@
     "types": ["react", "react-dom"],
     "declaration": true
   },
-  "include": ["src", "components", "hooks", "lib", "store", "types"],
-  "exclude": ["**/*.stories.*"]
+  "include": ["components", "hooks", "lib", "store", "types"],
+  "exclude": ["**/*.stories.*", ".storybook"]
 }

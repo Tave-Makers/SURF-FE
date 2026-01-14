@@ -36,14 +36,14 @@ interface SheetProps {
   textBtn?: SheetButton; // 텍스트 버튼
 }
 
-export function Sheet({
+export const Sheet = ({
   title,
   description,
   children,
   primaryBtn,
   secondaryBtn,
   textBtn,
-}: SheetProps) {
+}: SheetProps) => {
   const renderTitleSection = () => (
     <div className="flex w-full flex-col gap-5">
       {title && (
@@ -129,4 +129,4 @@ export function Sheet({
       <div className="px-15 pb-15 w-full">{renderButtons()}</div>
     </div>
   );
-}
+};

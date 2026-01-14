@@ -10,7 +10,7 @@
     "lint:surf": "turbo run lint --filter=surf-web",
     "lint:fix": "turbo run lint -- --fix",
     "lint:fix:surf": "turbo run lint --filter=surf-web -- --fix",
-    "format": "prettier --write \"**/*.{ts,tsx,md}\"",
+    "format": "pnpm -w exec prettier --write .",
     "check-types": "turbo run check-types",
     "storybook:ui": "turbo run storybook --filter=@surf/ui",
     "prepare": "husky"
@@ -18,14 +18,18 @@
   "lint-staged": {
     "apps/web/**/*.{js,jsx,ts,tsx}": [
       "pnpm --filter surf-web exec eslint --max-warnings=0 --fix --no-warn-ignored",
-      "pnpm exec prettier --write"
+      "pnpm -w exec prettier --write"
     ],
-    "*.{js,jsx,ts,tsx}": "pnpm exec prettier --write",
-    "*.{json,md,css,scss,html}": "pnpm exec prettier --write"
+    "packages/**/*.{js,jsx,ts,tsx}": [
+      "pnpm -w exec eslint --max-warnings=0 --fix --no-warn-ignored",
+      "pnpm -w exec prettier --write"
+    ],
+    "*.{json,md,css,scss,html}": "pnpm -w exec prettier --write"
   },
   "devDependencies": {
     "@commitlint/cli": "^19.8.1",
     "@surf/prettier-config": "workspace:*",
+    "eslint": "^9.39.2",
     "husky": "^9.1.7",
     "lint-staged": "^16.1.6",
     "prettier": "^3.7.4",

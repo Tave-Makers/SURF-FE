@@ -1,9 +1,9 @@
 'use client';
 
 import { useEffect, useId, useRef } from 'react';
+import { AlertAction, AlertState } from '../../store/alertStore';
 import { SolidButton } from '../button/solid-button/SolidButton';
 import { TextButton } from '../button/text-button/TextButton';
-import { AlertAction, AlertState } from '../../store/alertStore';
 
 type AlertProps = {
   state: AlertState;

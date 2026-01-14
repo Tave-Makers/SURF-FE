@@ -1,9 +1,9 @@
 'use client';
 
-import React, { useRef, useMemo, useState } from 'react';
 import { KeenSliderOptions, useKeenSlider } from 'keen-slider/react';
+import React, { useRef, useMemo, useState } from 'react';
 
-export function Wheel({
+export const Wheel = ({
   value,
   onChange,
   length,
@@ -21,7 +21,7 @@ export function Wheel({
   setValue?: (relative: number, absolute: number) => string;
   width: number;
   disableHighlight?: boolean;
-}) {
+}) => {
   const wheelSize = 20;
   const slideDegree = 360 / wheelSize;
   const slidesPerView = loop ? 9 : 1;
@@ -118,4 +118,4 @@ export function Wheel({
       <div className="wheel__shadow-bottom" style={{ transform: `translateZ(${radius}px)` }} />
     </div>
   );
-}
+};

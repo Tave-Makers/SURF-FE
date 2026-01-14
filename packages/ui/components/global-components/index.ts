@@ -1,1 +1,1 @@
-export { default as GlobalComponents } from './GlobalComponents';
+export { GlobalComponents } from './GlobalComponents';

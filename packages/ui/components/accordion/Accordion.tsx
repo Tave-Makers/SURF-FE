@@ -10,8 +10,7 @@ import { AccordionProps } from './types';
  * - index를 생략하면 제목만 표시
  * - renderTitle을 사용하면 타이틀 렌더링을 원하는 대로 커스터마이징 가능
  */
-
-export function Accordion({
+export const Accordion = ({
   index,
   title,
   defaultOpen = false,
@@ -19,7 +18,7 @@ export function Accordion({
   children,
   renderTitle,
   onToggle,
-}: AccordionProps) {
+}: AccordionProps) => {
   const [isOpen, setIsOpen] = useState(defaultOpen);
   const [maxHeight, setMaxHeight] = useState('0px');
   const contentRef = useRef<HTMLDivElement>(null);
@@ -75,4 +74,4 @@ export function Accordion({
       </div>
     </div>
   );
-}
+};

@@ -26,7 +26,7 @@ const TEXT_COLOR_STYLES: Record<TextColor, string> = {
   danger: 'text-foreground-danger-darker',
 };
 
-export function SheetItem({ title, node, onClick, textColor = 'normal' }: SheetItemProps) {
+export const SheetItem = ({ title, node, onClick, textColor = 'normal' }: SheetItemProps) => {
   const textColorClass = TEXT_COLOR_STYLES[textColor];
 
   return (
@@ -36,4 +36,4 @@ export function SheetItem({ title, node, onClick, textColor = 'normal' }: SheetI
       <span className={`text-body-body6 ${textColorClass}`}>{title}</span>
     </button>
   );
-}
+};

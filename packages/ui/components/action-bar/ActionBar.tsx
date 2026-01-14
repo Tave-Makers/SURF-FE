@@ -1,6 +1,6 @@
 import { forwardRef, useRef, useImperativeHandle } from 'react';
-import { TextInput } from '../text-input/TextInput';
 import { SurfIcon } from '../icon/SurfIcon';
+import { TextInput } from '../text-input/TextInput';
 
 /**
  * 범용 메시지 입력 및 전송 컴포넌트

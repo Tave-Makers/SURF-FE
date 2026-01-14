@@ -1,6 +1,6 @@
-import { MenuTrigger } from './menu-trigger/MenuTrigger';
 import { MenuDropDown } from './menu-dropdown/MenuDropDown';
 import { MenuItem, MenuItemProps } from './menu-item/MenuItem';
+import { MenuTrigger } from './menu-trigger/MenuTrigger';
 
 /**
  * @param label - 메뉴 트리거에 표시될 라벨 텍스트

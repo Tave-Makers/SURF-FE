@@ -23,7 +23,7 @@ type AccordionSelectProps = {
   controlsId?: string;
 };
 
-export function AccordionSelect({ title, isOpen, onClick, controlsId }: AccordionSelectProps) {
+export const AccordionSelect = ({ title, isOpen, onClick, controlsId }: AccordionSelectProps) => {
   return (
     <button
       type="button"
@@ -38,4 +38,4 @@ export function AccordionSelect({ title, isOpen, onClick, controlsId }: Accordio
       </span>
     </button>
   );
-}
+};

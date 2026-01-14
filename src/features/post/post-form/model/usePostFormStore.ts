@@ -42,3 +42,24 @@ export const usePostFormStore = create<PostFormState>((set, get) => ({
   setSnapshot: (snapshot) => set({ initialSnapshot: snapshot }),
   setCanInitialize: (val) => set({ canInitialize: val }),
 }));
+
+// usePostFormStore.ts 파일 맨 아래에 추가
+usePostFormStore.subscribe((state, prevState) => {
+  if (state.canInitialize !== prevState.canInitialize) {
+    console.log('🔔 canInitialize 변경:', prevState.canInitialize, '->', state.canInitialize);
+  }
+  if (state.isEditorInitialized !== prevState.isEditorInitialized) {
+    console.log(
+      '✅ isEditorInitialized 변경:',
+      prevState.isEditorInitialized,
+      '->',
+      state.isEditorInitialized,
+    );
+  }
+  if (state.content !== prevState.content) {
+    console.log('✍️ content 변경:', {
+      before: prevState.content,
+      after: state.content,
+    });
+  }
+});

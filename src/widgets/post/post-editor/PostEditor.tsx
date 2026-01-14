@@ -83,6 +83,10 @@ export const PostEditor = ({
 
   // 외부 데이터(initialValue) 주입 및 초기화 세션 관리
   useEffect(() => {
+    console.log('canInitialize', canInitialize);
+    console.log('isInitialized', isInitialized);
+    console.log('initialContent:', initialContent);
+    console.log('initialImages:', initialImages);
     if (!editor || isInitialized || !canInitialize) return;
 
     // 생성 모드: 데이터 주입을 기다리지 않고 즉시 활성화
@@ -107,6 +111,7 @@ export const PostEditor = ({
       // 이미지가 없는 게시글인 경우 여기서 초기화 완료 처리
       if (!initialImages || initialImages.length === 0) {
         setIsInitialized(true);
+        console.log('이미지가 없는 글 초기화 완료');
       }
     }
 
@@ -114,6 +119,7 @@ export const PostEditor = ({
     if (initialImages && initialImages.length > 0) {
       setImages(initialImages);
       setIsInitialized(true);
+      console.log('바뀜 3');
     }
   }, [
     editor,
@@ -132,6 +138,8 @@ export const PostEditor = ({
 
     // 현재 로컬 images가 비어있고, initialImages가 있으면 동기화
     if (images.length === 0 && initialImages.length > 0) {
+      console.log('images.length', images.length);
+      console.log('initialImages', initialImages);
       setImages(initialImages);
       setIsDataSynced(true);
     }

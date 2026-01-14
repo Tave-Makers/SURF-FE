@@ -5,6 +5,7 @@
   "type": "module",
   "scripts": {
     "dev": "node scripts/gen-sw.js && next dev --turbopack",
+    "prebuild": "pnpm -w --filter @surf/ui build",
     "build": "node scripts/gen-sw.js && next build --turbopack",
     "start": "next start",
     "lint": "eslint .",

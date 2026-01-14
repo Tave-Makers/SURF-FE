@@ -101,9 +101,9 @@ export const usePostForm = ({ mode, boardId, postId }: Props) => {
 
   // 4. Utility Functions & Callbacks
   const resetPostState = useCallback(() => {
-    setCanInitialize(false);
     clearLinkedSchedule();
     resetForm();
+    setCanInitialize(false);
     isScheduleInitializedRef.current = false;
   }, [clearLinkedSchedule, resetForm, setCanInitialize]);
 
@@ -151,8 +151,8 @@ export const usePostForm = ({ mode, boardId, postId }: Props) => {
     if (hasChanges && !isEmpty) {
       setShowExitAlert(true);
     } else {
-      setCanInitialize(false);
       resetPostState();
+      setCanInitialize(false);
       router.back();
     }
   };
@@ -302,8 +302,8 @@ export const usePostForm = ({ mode, boardId, postId }: Props) => {
 
       // 모든 무효화 작업이 완료될 때까지 대기
       await Promise.all(invalidatePromises);
-
       resetPostState();
+      setCanInitialize(false);
       if (targetPostId) router.replace(PAGE_ROUTES.BOARD.POST_DETAIL(boardId, targetPostId));
     } catch (err) {
       console.error('게시글 처리 실패', err);

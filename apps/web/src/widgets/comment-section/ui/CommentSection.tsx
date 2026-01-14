@@ -18,7 +18,7 @@ interface Props {
   postId: number;
   memberId?: number;
   // 답글 시작을 부모로 올림
-  onStartReply: (info: { commentId: number; nickname: string }) => void;
+  onStartReply: (info: { commentId: number; memberId: number; nickname: string }) => void;
 }
 
 export const CommentSection = ({ postId, memberId, onStartReply }: Props) => {

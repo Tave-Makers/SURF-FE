@@ -179,7 +179,7 @@ export const PostEditor = ({
     <div className="flex w-full min-w-0 flex-col gap-10">
       {/* 본문 에디터 영역 */}
       <div className="text-foreground-normal text-body-body7 relative flex flex-1 overflow-y-auto px-13 break-all">
-        {/* 빈 공간 클릭 시 에디터 포커싱 */}
+        {/* PostEditor.style.css에서 placeholder 및 focusing 스타일 정의 */}
         <button
           type="button"
           aria-label="본문 클릭 영역"

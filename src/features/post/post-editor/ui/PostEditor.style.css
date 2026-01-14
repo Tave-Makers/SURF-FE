@@ -8,6 +8,7 @@
   min-width: 1px;
 }
 
+/* placeholder 폰트 색상, 입력 커서 설정 */
 .ProseMirror p.is-editor-empty:first-child::before {
   content: attr(data-placeholder);
   color: var(--color-foreground-tertiary-lighter);

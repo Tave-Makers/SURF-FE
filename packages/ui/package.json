@@ -15,8 +15,8 @@
     "./assets/*": "./dist/assets/*",
     "./assets/*/*": "./dist/assets/*/*",
     "./*": {
-      "types": "./dist/ui/*/index.d.ts",
-      "default": "./dist/ui/*/index.js"
+      "types": "./dist/components/*/index.d.ts",
+      "default": "./dist/components/*/index.js"
     },
     "./store/*": {
       "types": "./dist/store/*.d.ts",
@@ -31,12 +31,12 @@
       "default": "./dist/hooks/*.js"
     },
     "./*/*": {
-      "types": "./dist/ui/*/*.d.ts",
-      "default": "./dist/ui/*/*.js"
+      "types": "./dist/components/*/*.d.ts",
+      "default": "./dist/components/*/*.js"
     },
     "./*/*/*": {
-      "types": "./dist/ui/*/*/*.d.ts",
-      "default": "./dist/ui/*/*/*.js"
+      "types": "./dist/components/*/*/*.d.ts",
+      "default": "./dist/components/*/*/*.js"
     }
   },
   "files": [

@@ -130,7 +130,9 @@ export const CommentSection = ({ postId, memberId, onStartReply }: Props) => {
                       onError: () => showToast('좋아요 처리에 실패했어요'),
                     })
                   }
-                  onReplyClick={() => onStartReply({ commentId: c.id, nickname: c.nickname })}
+                  onReplyClick={() =>
+                    onStartReply({ commentId: c.id, memberId: c.memberId, nickname: c.nickname })
+                  }
                   onMoreClick={() => openOptions(c)}
                 />
               </div>

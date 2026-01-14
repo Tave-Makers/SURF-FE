@@ -27,7 +27,7 @@ function mentionedText(text: string) {
 export const MentionTextInput = forwardRef<HTMLTextAreaElement, TextInputProps>(
   ({ value, defaultValue, ...props }, ref) => {
     const internalRef = useRef<HTMLTextAreaElement>(null);
-    useImperativeHandle(ref, () => internalRef.current);
+    useImperativeHandle(ref, () => internalRef.current!);
 
     let currentValue = '';
     if (typeof value === 'string') {

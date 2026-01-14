@@ -54,8 +54,11 @@ export const PostEditor = ({
   } = useImageManager();
 
   const contentRef = useRef<string>(initialContent);
-  const { isEditorInitialized: isInitialized, setIsEditorInitialized: setIsInitialized } =
-    usePostFormStore();
+  const {
+    isEditorInitialized: isInitialized,
+    setIsEditorInitialized: setIsInitialized,
+    canInitialize,
+  } = usePostFormStore();
   const [isDataSynced, setIsDataSynced] = useState(false);
   const keyboardOffset = useKeyboardOffset();
   const { MAX_IMAGES } = POST_VALIDATION;
@@ -80,7 +83,7 @@ export const PostEditor = ({
 
   // 외부 데이터(initialValue) 주입 및 초기화 세션 관리
   useEffect(() => {
-    if (!editor || isInitialized) return;
+    if (!editor || isInitialized || !canInitialize) return;
 
     // 생성 모드: 데이터 주입을 기다리지 않고 즉시 활성화
     if (mode === 'create') {
@@ -112,6 +115,8 @@ export const PostEditor = ({
       setImages(initialImages);
       setIsInitialized(true);
     }
+    // 부모에서만 초기화 허용 여부를 관리, 의존성 배열에 canInitialize 제외
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [editor, isInitialized, setIsInitialized, initialContent, initialImages, setImages, mode]);
 
   // 복귀 시 초기 이미지가 들어오면 로컬 상태에 동기화

@@ -20,6 +20,8 @@ export interface PostFormState {
   setIsEditorInitialized: (isInit: boolean) => void;
   resetForm: () => void;
   setSnapshot: (snapshot: PostSnapshot) => void;
+  canInitialize: boolean;
+  setCanInitialize: (val: boolean) => void;
 }
 
 export type EditorState = Pick<PostFormState, 'content' | 'images'>;

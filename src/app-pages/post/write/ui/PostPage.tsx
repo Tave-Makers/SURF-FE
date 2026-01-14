@@ -15,6 +15,7 @@ import { PostBadge } from '@/entities/post/ui/post-badge/PostBadge';
 import { useEffect, useState } from 'react';
 import { Sheet } from '@/shared/ui/sheet/Sheet';
 import { DateTimePicker } from '@/entities/schedule/ui/DateTimePicker/DateTimePicker';
+import { usePostFormStore } from '@/features/post/post-form/model/usePostFormStore';
 
 type PostPageProps =
   | { mode: 'create'; boardId: string }
@@ -25,6 +26,9 @@ export default function PostPage(props: PostPageProps) {
 
   const { mode, boardId } = props;
   const postId = mode === 'edit' ? props.postId : undefined;
+
+  // 초기화 허용 플래그 설정
+  const { setCanInitialize } = usePostFormStore();
 
   // 로직 훅 호출 (Logic과 View의 연결 고리)
   const {
@@ -68,6 +72,11 @@ export default function PostPage(props: PostPageProps) {
       setTempDate(reservedAt || new Date());
     }
   }, [isReservationModalOpen, reservedAt]);
+
+  // 마운트시 초기화 허용
+  useEffect(() => {
+    setCanInitialize(true);
+  }, [setCanInitialize]);
 
   const handleSaveReservation = () => {
     if (tempDate > new Date()) {
@@ -279,6 +288,7 @@ export default function PostPage(props: PostPageProps) {
             variant: 'danger',
             onClick: () => {
               setShowExitAlert(false);
+              setCanInitialize(false);
               resetPostState();
               router.back();
             },

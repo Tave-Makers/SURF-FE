@@ -10,6 +10,7 @@ export const usePostFormStore = create<PostFormState>((set, get) => ({
   reservedAt: null,
   initialSnapshot: null,
   isEditorInitialized: false,
+  canInitialize: false,
 
   setField: (field, value) => set((state) => ({ ...state, [field]: value })),
   setEditorState: (content, images) => set({ content, images }),
@@ -39,4 +40,5 @@ export const usePostFormStore = create<PostFormState>((set, get) => ({
     });
   },
   setSnapshot: (snapshot) => set({ initialSnapshot: snapshot }),
+  setCanInitialize: (val) => set({ canInitialize: val }),
 }));

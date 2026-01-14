@@ -48,6 +48,7 @@ export const usePostForm = ({ mode, boardId, postId }: Props) => {
     setField,
     setEditorState,
     resetForm,
+    setCanInitialize,
   } = usePostFormStore();
 
   const { linkedSchedule, setLinkedSchedule, clearLinkedSchedule } = useCreatePostScheduleStore();
@@ -100,10 +101,11 @@ export const usePostForm = ({ mode, boardId, postId }: Props) => {
 
   // 4. Utility Functions & Callbacks
   const resetPostState = useCallback(() => {
+    setCanInitialize(false);
     clearLinkedSchedule();
     resetForm();
     isScheduleInitializedRef.current = false;
-  }, [clearLinkedSchedule, resetForm]);
+  }, [clearLinkedSchedule, resetForm, setCanInitialize]);
 
   const {
     isOpen: isCategoryOpen,
@@ -149,6 +151,7 @@ export const usePostForm = ({ mode, boardId, postId }: Props) => {
     if (hasChanges && !isEmpty) {
       setShowExitAlert(true);
     } else {
+      setCanInitialize(false);
       resetPostState();
       router.back();
     }

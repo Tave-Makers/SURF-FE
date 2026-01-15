@@ -32,7 +32,7 @@ export const MyPage = ({ userProfile }: Props) => {
   }, [memberId]);
 
   return (
-    <div className="flex h-dvh flex-col overflow-y-auto">
+    <div className="flex h-full flex-col overflow-y-auto">
       <ProfileHeader userProfile={userProfile} />
 
       <MyPageActions

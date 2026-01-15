@@ -1,48 +1,73 @@
 'use client';
 
-import { Alert } from '@surf/ui/alert';
+import { useAlertStore } from '@surf/ui/store/alertStore';
 import { useRouter } from 'next/navigation';
-import { useState, useCallback } from 'react';
 import { SETTINGS_ITEMS } from '../model/constants';
-import type { AlertType } from '../model/types';
 import { SettingsItem } from '@/entities/settings/ui/SettingsItem';
+import { useLogout } from '@/features/auth/model/useLogout';
+import { useWithdraw } from '@/features/auth/model/useWithdraw';
 
 export const SettingsList = () => {
   const router = useRouter();
-  const [activeAlert, setActiveAlert] = useState<AlertType>(null);
+  const openAlert = useAlertStore((s) => s.open);
+  const closeAlert = useAlertStore((s) => s.close);
+  const { mutate: logoutMutate } = useLogout();
+  const { mutate: withdrawMutate } = useWithdraw();
 
-  const handleItemClick = useCallback(
-    (item: (typeof SETTINGS_ITEMS)[number]) => {
-      const { type, payload } = item.action;
-
-      switch (type) {
-        case 'NAVIGATE':
-          if (payload) router.push(payload); // payload : string
-          break;
-        case 'OPEN_ALERT':
-          setActiveAlert(payload); // payload : AlertType
-          break;
-        default:
-          break;
-      }
-    },
-    [router],
-  );
-
-  // TODO: 로그아웃 및 회원탈퇴 훅 features 레이어에서 import 필요. 아래는 임시 코드
   const handleLogout = () => {
-    console.log('로그아웃 처리');
-    setActiveAlert(null);
+    logoutMutate(undefined, {
+      onSuccess: () => {
+        closeAlert();
+      },
+    });
   };
 
   const handleWithdraw = () => {
-    console.log('회원탈퇴 처리');
-    setActiveAlert(null);
+    withdrawMutate(undefined, {
+      onSuccess: () => {
+        closeAlert();
+      },
+    });
   };
-  // -------------------------------------
 
-  const closeAlert = () => {
-    setActiveAlert(null);
+  const openLogoutAlert = () => {
+    openAlert({
+      state: 'default',
+      title: '로그아웃',
+      infoText: '정말 로그아웃할까요?',
+      actions: [
+        { type: 'solid', label: '취소', onClick: closeAlert, variant: 'secondary' },
+        { type: 'solid', label: '로그아웃', onClick: handleLogout, variant: 'primary' },
+      ],
+    });
+  };
+
+  const handleItemClick = (item: (typeof SETTINGS_ITEMS)[number]) => {
+    const { type, payload } = item.action;
+
+    switch (type) {
+      case 'NAVIGATE':
+        if (payload) router.push(payload); // payload : string
+        break;
+      case 'OPEN_ALERT':
+        if (payload === 'logout') openLogoutAlert();
+        if (payload === 'withdraw') openWithdrawAlert();
+        break;
+      default:
+        break;
+    }
+  };
+
+  const openWithdrawAlert = () => {
+    openAlert({
+      state: 'default',
+      title: '정말 탈퇴하시겠습니까?',
+      infoText: '한 번 탈퇴하면, 계정 정보가 저장되지 않으며\n회원가입이 어려워질 수 있어요.',
+      actions: [
+        { type: 'solid', label: '취소', onClick: closeAlert, variant: 'secondary' },
+        { type: 'solid', label: '탈퇴하기', onClick: handleWithdraw, variant: 'danger' },
+      ],
+    });
   };
 
   return (
@@ -58,29 +83,6 @@ export const SettingsList = () => {
           {item.text}
         </SettingsItem>
       ))}
-
-      {/* Alert Modals */}
-      <Alert
-        state="default"
-        title="정말 로그아웃 하시겠습니까?"
-        actions={[
-          { type: 'solid', label: '취소', onClick: closeAlert, variant: 'secondary' },
-          { type: 'solid', label: '로그아웃', onClick: handleLogout, variant: 'primary' },
-        ]}
-        isOpen={activeAlert === 'logout'}
-        onClose={closeAlert}
-      />
-      <Alert
-        state="default"
-        title="정말 탈퇴하시겠습니까?"
-        infoText={`탈퇴한 후에는 서비스 이용 기록이 삭제되며,\n복구가 불가능합니다.`}
-        actions={[
-          { type: 'solid', label: '취소', onClick: closeAlert, variant: 'secondary' },
-          { type: 'solid', label: '탈퇴하기', onClick: handleWithdraw, variant: 'danger' },
-        ]}
-        isOpen={activeAlert === 'withdraw'}
-        onClose={closeAlert}
-      />
     </div>
   );
 };

@@ -25,6 +25,8 @@ export function base(opts) {
     'node_modules/',
     'public/',
     'assets/',
+    '**/.storybook/**',
+    '.storybook/**',
     '*.svg',
     '*.ico',
     '*.md',

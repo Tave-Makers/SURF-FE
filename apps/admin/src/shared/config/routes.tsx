@@ -1,7 +1,5 @@
 import { HeaderMode, HeaderProps } from "@surf/ui/header";
 import { useRouter } from "next/navigation";
-import HeaderLogo from "../../../public/header-logo.svg";
-import { PAGE_ROUTES } from "./path";
 
 type RouterInstance = ReturnType<typeof useRouter>;
 

@@ -1,5 +1,6 @@
 import { HeaderMode, HeaderProps } from "@surf/ui/header";
 import { useRouter } from "next/navigation";
+import { PAGE_ROUTES } from "./path";
 
 type RouterInstance = ReturnType<typeof useRouter>;
 
@@ -10,11 +11,11 @@ export type RouteConfig = {
   header: HeaderProps;
 };
 
-export const createRouteConfig = (router: RouterInstance): RouteConfig[] => [
+export const createRouteConfig = (): RouteConfig[] => [
   {
     id: "signup-request",
-    path: "/signup-request",
-    backPath: "/",
+    path: PAGE_ROUTES.SIGNUP_REQUEST,
+    backPath: PAGE_ROUTES.HOME,
     header: {
       mode: HeaderMode.Default,
       title: "회원가입 요청",

@@ -115,7 +115,7 @@ feat: 로그인 API 연동 (#39)
 - `entities/*/model/types.ts`, `features/*/model/types.ts`: UI 도메인 타입만 정의합니다. (뷰 모델, UI 상태, 폼 데이터 등)
 - API DTO -> UI 도메인 변환은 `*/model/mappers.ts`에서 처리합니다.
 
-### 3. API 파일 네이밍
+### 2. API 파일 네이밍
 - API 호출 파일은 실행 환경을 명시합니다.
   - 클라이언트 호출: `*.client.ts`
   - 서버 전용 호출: `*.server.ts`
@@ -123,11 +123,11 @@ feat: 로그인 API 연동 (#39)
   - `entities/user/api/getMyProfile.server.ts`
   - `features/recent-search/api/deleteAllRecentSearches.client.ts`
 
-### 4. 폴더 역할 분리
+### 3. 폴더 역할 분리
 - `*/api`: API 호출만 포함합니다. (fetch/axios, guards, queryKeys, api types)
 - `*/model`: 훅/매퍼/도메인 로직만 포함합니다. (hooks, mappers, domain types, stores)
 
-### 5. 네이밍 예시
+### 4. 네이밍 예시
 - API DTO: `UserProfileApiResponse`, `UpdateProfileRequest`
 
 ---

@@ -23,13 +23,13 @@ export const MemberProfilePage = ({ userProfile, memberId }: Props) => {
   function handleMessage() {
     if (isMe) return;
 
-    const params = new URLSearchParams({
-      memberId: String(memberId),
-      nickname: userProfile.username,
-      profileImageUrl: userProfile.profileImgUrl,
-    });
-
-    router.push(`${PAGE_ROUTES.MESSAGE}?${params.toString()}`);
+    router.push(
+      PAGE_ROUTES.MESSAGE({
+        memberId,
+        nickname: userProfile.username,
+        profileImageUrl: userProfile.profileImgUrl,
+      }),
+    );
   }
 
   return (

@@ -27,7 +27,7 @@ const RootLayout = ({ children }: { children: ReactNode }) => {
           href="https://cdn.jsdelivr.net/gh/wanteddev/wanted-sans@v1.0.3/packages/wanted-sans/fonts/webfonts/variable/split/WantedSansVariable.min.css"
         />
       </head>
-      <body className="flex min-h-screen items-center justify-center bg-gray-200">
+      <body className="flex min-h-dvh items-center justify-center bg-gray-200">
         <AnalyticsProvider />
         <ThemeProvider attribute="data-theme" defaultTheme="system" enableSystem>
           <QueryProvider>

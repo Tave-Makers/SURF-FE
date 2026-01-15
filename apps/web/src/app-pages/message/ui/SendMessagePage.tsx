@@ -76,6 +76,17 @@ export const SendMessagePage = () => {
     return Number.isInteger(id) && id > 0 ? id : null;
   }, [memberId]);
 
+  // 이메일 에러 메시지
+  const emailErrorMessage = useMemo(() => {
+    if (senderEmail.length === 0) return undefined;
+
+    if (!isValidEmail(senderEmail)) {
+      return '올바른 형태의 이메일을 입력해주세요.';
+    }
+
+    return undefined;
+  }, [senderEmail]);
+
   // 버튼 활성화 조건
   const isBtnEnabled =
     !isPending &&
@@ -104,6 +115,7 @@ export const SendMessagePage = () => {
             value={senderEmail}
             onChange={setSenderEmail}
             readOnly={isPending}
+            errorMessage={emailErrorMessage}
           />
         </FieldGroup>
         <FieldGroup title="추가로 연락받고 싶은 SNS">

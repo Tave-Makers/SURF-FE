@@ -1,6 +1,6 @@
 'use client';
 
-import { forwardRef, useRef, useImperativeHandle } from 'react';
+import { forwardRef, useRef, useImperativeHandle, useState } from 'react';
 import { TextInput, TextInputProps } from '..';
 
 function mentionedText(text: string) {
@@ -25,16 +25,20 @@ function mentionedText(text: string) {
 }
 
 export const MentionTextInput = forwardRef<HTMLTextAreaElement, TextInputProps>(
-  ({ value, defaultValue, ...props }, ref) => {
+  ({ value, defaultValue, onChange, ...props }, ref) => {
     const internalRef = useRef<HTMLTextAreaElement>(null);
     useImperativeHandle(ref, () => internalRef.current!);
+    const normalizedDefault =
+      typeof defaultValue === 'string' || typeof defaultValue === 'number'
+        ? defaultValue.toString()
+        : '';
+    const [internalValue, setInternalValue] = useState(normalizedDefault);
+    const currentValue = value ?? internalValue;
 
-    let currentValue = '';
-    if (typeof value === 'string') {
-      currentValue = value;
-    } else if (typeof defaultValue === 'string' || typeof defaultValue === 'number') {
-      currentValue = defaultValue.toString();
-    }
+    const handleChange = (next: string) => {
+      if (value === undefined) setInternalValue(next);
+      onChange?.(next);
+    };
 
     return (
       <div className="relative h-full w-full min-w-0">
@@ -52,12 +56,8 @@ export const MentionTextInput = forwardRef<HTMLTextAreaElement, TextInputProps>(
         <TextInput
           {...props}
           ref={internalRef}
-          value={typeof value === 'string' ? value : undefined}
-          defaultValue={
-            typeof defaultValue === 'string' || typeof defaultValue === 'number'
-              ? defaultValue
-              : undefined
-          }
+          value={currentValue}
+          onChange={handleChange}
           style={{
             color: 'transparent',
             caretColor: 'var(--color-foreground-normal)',

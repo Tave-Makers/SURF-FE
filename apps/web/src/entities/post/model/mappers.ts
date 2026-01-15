@@ -45,6 +45,7 @@ export const transformDetailToPost = (item: PostDetailData): PostDetail => {
   const dateObj = toKST(toDate(item.postedAt));
 
   return {
+    memberId: item.memberId,
     postId: item.postId,
     title: item.title,
     content: item.content,

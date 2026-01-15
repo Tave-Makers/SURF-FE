@@ -6,6 +6,7 @@ import { useRouter } from 'next/navigation';
 import type { UserProfile } from '@/entities/user/model/types';
 import { CareerCard } from '@/entities/user/ui/career-card/CareerCard';
 import { useAuthStore } from '@/features/auth/model/useAuthStore';
+import { PAGE_ROUTES } from '@/shared/config/path';
 import { ProfileBadge } from '@/widgets/profile-badge/ui/ProfileBadge';
 import { ProfileHeader } from '@/widgets/profile-header/ui/ProfileHeader';
 
@@ -21,7 +22,7 @@ export const MemberProfilePage = ({ userProfile, memberId }: Props) => {
 
   function handleMessage() {
     if (isMe) return;
-    router.push('/message');
+    router.push(PAGE_ROUTES.MESSAGE);
   }
 
   return (

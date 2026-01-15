@@ -49,11 +49,14 @@ export const PAGE_ROUTES = {
     },
   },
 
+  MESSAGE: '/message',
+
+  NOTIFICATION: '/notification',
+
   // 기타
   REDIRECT: {
     MSG_PENDING: '/login?msg=pending',
     MSG_REJECTED: '/login?msg=rejected',
     MSG_INCOMPLETE: '/onboarding?msg=incomplete',
   },
-  NOTIFICATION: '/notification',
 } as const;

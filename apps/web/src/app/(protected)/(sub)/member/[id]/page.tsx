@@ -3,11 +3,12 @@ import { getProfile } from '@/entities/user/api/getProfile.server';
 import { mapUserProfile } from '@/entities/user/model/mappers';
 
 interface Props {
-  params: { id: string };
+  params: Promise<{ id: string }>;
 }
 
 const Page = async ({ params }: Props) => {
-  const memberId = Number(params.id);
+  const { id } = await params;
+  const memberId = Number(id);
   const res = await getProfile({ memberId });
   const profile = mapUserProfile(res.data);
 

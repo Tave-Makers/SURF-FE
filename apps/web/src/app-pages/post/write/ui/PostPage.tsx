@@ -174,7 +174,7 @@ const PostPage = (props: PostPageProps) => {
         isOpen={isCategoryOpen}
         onClose={closeCategory}
         aria-labelledby={categorySheetId}
-        className="mx-auto flex w-full sm:w-[360px]"
+        className="mx-auto flex w-full sm:w-[min(100dvw,calc(100dvh*375/812))]"
       >
         <ModalSheet.Container>
           <ModalSheet.Header className="bg-background-normal-lighter" />
@@ -236,7 +236,7 @@ const PostPage = (props: PostPageProps) => {
       <ModalSheet
         isOpen={isReservationModalOpen}
         onClose={closeReservationModal}
-        className="mx-auto flex w-full sm:w-[360px]"
+        className="mx-auto flex w-full sm:w-[min(100dvw,calc(100dvh*375/812))]"
       >
         <ModalSheet.Container>
           <ModalSheet.Content>

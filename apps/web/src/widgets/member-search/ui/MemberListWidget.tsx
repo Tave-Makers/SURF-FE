@@ -43,12 +43,15 @@ export const MemberListWidget = ({ keyword, queryResult }: MemberListWidgetProps
       if (observer.current) observer.current.disconnect();
 
       // 새로운 관찰자 생성 및 설정
-      observer.current = new IntersectionObserver((entries) => {
-        // 요소가 화면에 보이고, 다음 페이지가 있다면 데이터 호출
-        if (entries[0].isIntersecting && hasNextPage && !isFetchingNextPage) {
-          void fetchNextPage();
-        }
-      });
+      observer.current = new IntersectionObserver(
+        (entries) => {
+          // 요소가 화면에 보이고, 다음 페이지가 있다면 데이터 호출
+          if (entries[0].isIntersecting && hasNextPage && !isFetchingNextPage) {
+            void fetchNextPage();
+          }
+        },
+        { rootMargin: '100px' },
+      ); // 100px 전에 미리 로딩 시작
 
       // 노드가 존재하면 관찰 시작
       if (node) observer.current.observe(node);

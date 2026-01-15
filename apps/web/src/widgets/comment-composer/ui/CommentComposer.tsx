@@ -8,7 +8,6 @@ import { SheetItem } from '@surf/ui/sheet';
 import { useToastStore } from '@surf/ui/store/toastStore';
 import { useEffect, useRef, useState } from 'react';
 import type { MentionSearchResponse } from '@/features/comment/api/types';
-import { COMMENT_DEFAULT_PAGE, COMMENT_PAGE_SIZE } from '@/features/comment/model/constant';
 import { useCreateCommentMutation } from '@/features/comment/model/useCreateCommentMutation';
 import { useMentionSearchQuery } from '@/features/comment/model/useMentionSearchQuery';
 
@@ -54,8 +53,9 @@ export const CommentComposer = ({
 }: Props) => {
   const showToast = useToastStore((s) => s.show);
   const inputRef = useRef<HTMLTextAreaElement>(null);
+  const onConsumedReplyRef = useRef(onConsumedReply);
 
-  const createMutation = useCreateCommentMutation(postId, COMMENT_DEFAULT_PAGE, COMMENT_PAGE_SIZE);
+  const createMutation = useCreateCommentMutation(postId);
 
   // 입력 상태
   const [value, setValue] = useState('');
@@ -89,6 +89,10 @@ export const CommentComposer = ({
     isError: isMentionError,
   } = useMentionSearchQuery(debouncedKeyword, mentionOpen);
 
+  useEffect(() => {
+    onConsumedReplyRef.current = onConsumedReply;
+  }, [onConsumedReply]);
+
   // 답글 클릭 이벤트를 페이지에서 받아서 입력창에 반영
   useEffect(() => {
     if (!pendingReply) return;
@@ -108,8 +112,8 @@ export const CommentComposer = ({
 
     requestAnimationFrame(() => inputRef.current?.focus());
 
-    onConsumedReply?.();
-  }, [pendingReply, onConsumedReply]);
+    onConsumedReplyRef.current?.();
+  }, [pendingReply]);
 
   const onChange = (next: string) => {
     setValue(next);
@@ -126,17 +130,6 @@ export const CommentComposer = ({
       setMentionAtIndex(info.atIndex);
       setMentionKeyword(info.keyword);
     }
-
-    // mentionMemberIds 동기화
-    const nicksInText = extractMentionNicknames(next);
-    const ids = Array.from(
-      new Set(
-        nicksInText
-          .map((nick) => mentionMap[nick])
-          .filter((id): id is number => typeof id === 'number'),
-      ),
-    );
-    setMentionMemberIds(ids);
   };
 
   const pickMention = (user: MentionSearchResponse) => {
@@ -203,9 +196,11 @@ export const CommentComposer = ({
       closeMentionPanel();
 
       showToast('댓글이 등록됐어요');
+      return true;
     } catch (e) {
       console.error(e);
       showToast('댓글 등록에 실패했어요');
+      return false;
     }
   };
 

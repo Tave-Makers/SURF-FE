@@ -29,7 +29,7 @@ interface ActionBarProps {
   defaultValue?: string;
   onChange?: (val: string) => void;
   placeholder?: string;
-  onSend?: (val: string) => void;
+  onSend?: (val: string) => void | boolean | Promise<void | boolean>;
   onIconClick?: () => void;
   isEmojiActive?: boolean;
 }
@@ -43,12 +43,17 @@ export const ActionBar = forwardRef<HTMLTextAreaElement, ActionBarProps>(
     useImperativeHandle(ref, () => internalRef.current as HTMLTextAreaElement);
 
     /** 메시지 전송 및 입력 초기화 */
-    const handleSend = () => {
+    const runSend = async () => {
       const rawValue = internalRef.current?.value ?? '';
       const trimmedValue = rawValue.trim();
       if (!trimmedValue) return;
 
-      onSend?.(trimmedValue);
+      try {
+        const result = await onSend?.(trimmedValue);
+        if (result === false) return;
+      } catch {
+        return;
+      }
 
       // 전송 후 입력 초기화
       if (value !== undefined) {
@@ -59,6 +64,10 @@ export const ActionBar = forwardRef<HTMLTextAreaElement, ActionBarProps>(
       }
 
       internalRef.current?.focus(); // 포커스 유지
+    };
+
+    const handleSend = () => {
+      void runSend();
     };
 
     return (

@@ -8,12 +8,13 @@ import { useToastStore } from '@surf/ui/store/toastStore';
 import { useRouter } from 'next/navigation';
 import { useCallback, useEffect, useState } from 'react';
 import { Sheet as ModalSheet } from 'react-modal-sheet';
-import { usePostForm } from '../../../../features/post/post-form/model/usePostForm';
 import { POST_BOARDS } from '@/entities/post/model/board';
 import { POST_CATEGORIES } from '@/entities/post/model/category';
 import { POST_VALIDATION } from '@/entities/post/model/validation';
 import { PostBadge } from '@/entities/post/ui/post-badge/PostBadge';
 import { DateTimePicker } from '@/entities/schedule/ui/DateTimePicker/DateTimePicker';
+import { usePostForm } from '@/features/post/post-form/model/usePostForm';
+import { usePostFormStore } from '@/features/post/post-form/model/usePostFormStore';
 import { AppHeader } from '@/widgets/header/ui/AppHeader';
 import { PostEditor } from '@/widgets/post/post-editor/PostEditor';
 
@@ -29,6 +30,9 @@ const PostPage = (props: PostPageProps) => {
 
   const { mode, boardId } = props;
   const postId = mode === 'edit' ? props.postId : undefined;
+
+  // 초기화 허용 플래그 설정
+  const { setCanInitialize } = usePostFormStore();
 
   // 로직 훅 호출 (Logic과 View의 연결 고리)
   const {
@@ -64,6 +68,12 @@ const PostPage = (props: PostPageProps) => {
 
   // 예약 시간 임시 저장용 state (취소 시 롤백 위함)
   const [tempDate, setTempDate] = useState<Date>(new Date());
+
+  // 마운트시 초기화 허용
+  useEffect(() => {
+    setCanInitialize(true);
+  }, [setCanInitialize]);
+
   // 모달 열릴 때 현재 예약 시간으로 초기화
   useEffect(() => {
     if (isReservationModalOpen) {
@@ -128,13 +138,22 @@ const PostPage = (props: PostPageProps) => {
           onClick: () => {
             closeExitAlert();
             resetPostState();
+            setCanInitialize(false);
             router.back();
           },
         },
       ],
     });
     setShowExitAlert(false);
-  }, [closeExitAlert, openAlert, resetPostState, router, setShowExitAlert, showExitAlert]);
+  }, [
+    closeExitAlert,
+    openAlert,
+    resetPostState,
+    router,
+    setShowExitAlert,
+    showExitAlert,
+    setCanInitialize,
+  ]);
 
   return (
     <div className="flex h-full w-full flex-1 flex-col">

@@ -53,8 +53,11 @@ export const PostEditor = ({
   } = useImageManager();
 
   const contentRef = useRef<string>(initialContent);
-  const { isEditorInitialized: isInitialized, setIsEditorInitialized: setIsInitialized } =
-    usePostFormStore();
+  const {
+    isEditorInitialized: isInitialized,
+    setIsEditorInitialized: setIsInitialized,
+    canInitialize,
+  } = usePostFormStore();
   const [isDataSynced, setIsDataSynced] = useState(false);
   const keyboardOffset = useKeyboardOffset();
   const { MAX_IMAGES } = POST_VALIDATION;
@@ -68,18 +71,18 @@ export const PostEditor = ({
     (html: string) => {
       contentRef.current = html;
       // 초기화 완료 후에만 부모 컴포넌트의 상태를 업데이트
-      if (isInitialized) {
+      if (isInitialized && canInitialize) {
         onChange({ content: html, images });
       }
     },
-    [onChange, images, isInitialized],
+    [onChange, images, isInitialized, canInitialize],
   );
 
   const editor = usePostEditor(initialContent, onUpdate);
 
   // 외부 데이터(initialValue) 주입 및 초기화 세션 관리
   useEffect(() => {
-    if (!editor || isInitialized) return;
+    if (!editor || isInitialized || !canInitialize) return;
 
     // 생성 모드: 데이터 주입을 기다리지 않고 즉시 활성화
     if (mode === 'create') {
@@ -111,26 +114,35 @@ export const PostEditor = ({
       setImages(initialImages);
       setIsInitialized(true);
     }
-  }, [editor, isInitialized, setIsInitialized, initialContent, initialImages, setImages, mode]);
+  }, [
+    editor,
+    isInitialized,
+    setIsInitialized,
+    initialContent,
+    initialImages,
+    setImages,
+    mode,
+    canInitialize,
+  ]);
 
   // 복귀 시 초기 이미지가 들어오면 로컬 상태에 동기화
   useEffect(() => {
-    if (isDataSynced || !isInitialized || !initialImages) return;
+    if (isDataSynced || !isInitialized || !initialImages || !canInitialize) return;
 
     // 현재 로컬 images가 비어있고, initialImages가 있으면 동기화
     if (images.length === 0 && initialImages.length > 0) {
       setImages(initialImages);
       setIsDataSynced(true);
     }
-  }, [isInitialized, initialImages, images.length, isDataSynced, setImages]);
+  }, [isInitialized, initialImages, images.length, isDataSynced, setImages, canInitialize]);
 
   // 3. Side Effects
 
   // 이미지 리스트 변경 감지 (삭제/순서변경 등) 시 부모에게 알림
   useEffect(() => {
-    if (!isInitialized) return;
+    if (!isInitialized || !canInitialize) return;
     onChange({ content: contentRef.current, images });
-  }, [images, onChange, isInitialized]);
+  }, [images, onChange, isInitialized, canInitialize]);
 
   // 4. Handlers
   const handleImageUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {

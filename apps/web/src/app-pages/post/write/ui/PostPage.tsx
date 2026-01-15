@@ -1,11 +1,11 @@
 'use client';
 
 import { AccordionSelect } from '@surf/ui/accordion';
-import { Alert } from '@surf/ui/alert';
 import { HeaderMode } from '@surf/ui/header';
 import { Sheet } from '@surf/ui/sheet';
+import { useAlertStore } from '@surf/ui/store/alertStore';
 import { useRouter } from 'next/navigation';
-import { useEffect, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import { Sheet as ModalSheet } from 'react-modal-sheet';
 import { usePostForm } from '../../../../features/post/post-form/model/usePostForm';
 import { POST_BOARDS } from '@/entities/post/model/board';
@@ -22,6 +22,8 @@ type PostPageProps =
 
 const PostPage = (props: PostPageProps) => {
   const router = useRouter();
+  const openAlert = useAlertStore((s) => s.open);
+  const closeAlert = useAlertStore((s) => s.close);
 
   const { mode, boardId } = props;
   const postId = mode === 'edit' ? props.postId : undefined;
@@ -60,8 +62,6 @@ const PostPage = (props: PostPageProps) => {
 
   // 예약 시간 임시 저장용 state (취소 시 롤백 위함)
   const [tempDate, setTempDate] = useState<Date>(new Date());
-  const [showRemoveReservationAlert, setShowRemoveReservationAlert] = useState(false);
-
   // 모달 열릴 때 현재 예약 시간으로 초기화
   useEffect(() => {
     if (isReservationModalOpen) {
@@ -69,32 +69,75 @@ const PostPage = (props: PostPageProps) => {
     }
   }, [isReservationModalOpen, reservedAt]);
 
+  const closeExitAlert = useCallback(() => {
+    setShowExitAlert(false);
+    closeAlert();
+  }, [closeAlert, setShowExitAlert]);
+
   const handleSaveReservation = () => {
     if (tempDate > new Date()) {
       setReservedAt(tempDate);
       setReserved(true);
       closeReservationModal();
     } else {
-      alert('현재 시간 이후로만 예약할 수 있습니다.');
+      openAlert({
+        state: 'error',
+        title: '예약 시간 설정에 실패했습니다.',
+        infoText: '현재 시간 이후로만 예약할 수 있습니다.',
+        actions: [{ type: 'solid', label: '확인', variant: 'primary', onClick: closeAlert }],
+      });
     }
   };
 
   const handleRemoveReservation = () => {
     closeReservationModal();
-    setTimeout(() => setShowRemoveReservationAlert(true), 100);
+    setTimeout(() => {
+      openAlert({
+        state: 'default',
+        title: '설정한 예약이 취소됩니다',
+        infoText: '예약 취소하기를 누를 경우 게시글 내 설정된 예약이 삭제됩니다.',
+        actions: [
+          { type: 'solid', label: '취소', variant: 'secondary', onClick: closeAlert },
+          { type: 'solid', label: '삭제하기', variant: 'danger', onClick: handleConfirmRemove },
+        ],
+      });
+    }, 100);
   };
 
   // 실제 예약 취소
   const handleConfirmRemove = () => {
     setReserved(false);
     setReservedAt(null);
-    setShowRemoveReservationAlert(false);
+    closeAlert();
   };
 
   const board = POST_BOARDS.find((b) => b.id === Number(boardId));
   const boardLabel = board ? board.label : '';
 
   const { MAX_TITLE_LENGTH } = POST_VALIDATION;
+
+  useEffect(() => {
+    if (!showExitAlert) return;
+    openAlert({
+      state: 'default',
+      title: '변경 내용을 저장하지 않고 나가시겠습니까?',
+      infoText: '작성 중인 내용은 저장되지 않습니다.',
+      actions: [
+        { type: 'solid', label: '취소', variant: 'secondary', onClick: closeExitAlert },
+        {
+          type: 'solid',
+          label: '나가기',
+          variant: 'danger',
+          onClick: () => {
+            closeExitAlert();
+            resetPostState();
+            router.back();
+          },
+        },
+      ],
+    });
+    setShowExitAlert(false);
+  }, [closeExitAlert, openAlert, resetPostState, router, setShowExitAlert, showExitAlert]);
 
   return (
     <div className="flex h-full w-full flex-1 flex-col">
@@ -235,56 +278,6 @@ const PostPage = (props: PostPageProps) => {
         </ModalSheet.Container>
         <ModalSheet.Backdrop onTap={closeReservationModal} />
       </ModalSheet>
-
-      {/* 7. 실제 예약 취소 확인 모달 */}
-      <Alert
-        state="default"
-        title="설정한 예약이 취소됩니다"
-        infoText="예약 취소하기를 누를 경우 게시글 내 설정된 예약이 삭제됩니다."
-        isOpen={showRemoveReservationAlert}
-        onClose={() => setShowRemoveReservationAlert(false)}
-        actions={[
-          {
-            type: 'solid',
-            label: '취소',
-            variant: 'secondary',
-            onClick: () => setShowRemoveReservationAlert(false),
-          },
-          {
-            type: 'solid',
-            label: '삭제하기',
-            variant: 'danger',
-            onClick: handleConfirmRemove,
-          },
-        ]}
-      />
-
-      {/* 8. 뒤로가기 경고 모달 */}
-      <Alert
-        state="default"
-        title="변경 내용을 저장하지 않고 나가시겠습니까?"
-        infoText="작성 중인 내용은 저장되지 않습니다."
-        isOpen={showExitAlert}
-        onClose={() => setShowExitAlert(false)}
-        actions={[
-          {
-            type: 'solid',
-            label: '취소',
-            variant: 'secondary',
-            onClick: () => setShowExitAlert(false),
-          },
-          {
-            type: 'solid',
-            label: '나가기',
-            variant: 'danger',
-            onClick: () => {
-              setShowExitAlert(false);
-              resetPostState();
-              router.back();
-            },
-          },
-        ]}
-      />
     </div>
   );
 };

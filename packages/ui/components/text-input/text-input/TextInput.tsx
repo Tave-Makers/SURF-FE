@@ -9,14 +9,14 @@ import {
   type ComponentProps,
   type TextareaHTMLAttributes,
 } from 'react';
-import { SurfIcon } from '../icon/SurfIcon';
+import { SurfIcon } from '../../icon/SurfIcon';
 
 type SurfIconName = ComponentProps<typeof SurfIcon>['name'];
 
 const MAX_TEXTAREA_HEIGHT = 100;
 
 const containerStyle =
-  'flex w-full flex-1 min-h-[2.25rem] items-center justify-between ' +
+  'flex w-full flex-1 min-w-0 min-h-[2.25rem] items-center justify-between ' +
   'rounded-6 bg-background-quaternary py-7 pl-11 pr-8 ' +
   'transition-[height] duration-150 ease-in-out';
 

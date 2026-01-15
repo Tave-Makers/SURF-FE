@@ -1,6 +1,10 @@
+'use client';
+
+import { useRouter } from 'next/navigation';
 import { useCallback, useEffect, useRef } from 'react';
 import { MemberList } from '@/entities/search/ui/MemberList';
 import { useMemberSearch } from '@/features/member-search/api/useMemberSearch';
+import { PAGE_ROUTES } from '@/shared/config/path';
 
 interface MemberListWidgetProps {
   keyword?: string; // 검색어가 있으면 학교를, 없으면 소개글을 보여줌
@@ -8,12 +12,13 @@ interface MemberListWidgetProps {
 }
 
 export const MemberListWidget = ({ keyword, queryResult }: MemberListWidgetProps) => {
+  const router = useRouter();
+
   const { members, fetchNextPage, hasNextPage, isFetchingNextPage, isLoading } = queryResult;
 
-  const handleClick = () => {
-    // TODO: 타회원 프로필 조회 페이지와 연결
-    // router.push(`/members/${userId}`);
-  };
+  function handleClick(userId: number) {
+    router.push(PAGE_ROUTES.MEMBER.PROFILE(userId));
+  }
 
   // IntersectionObserver 인스턴스를 저장할 ref
   const observer = useRef<IntersectionObserver | null>(null);
@@ -38,12 +43,15 @@ export const MemberListWidget = ({ keyword, queryResult }: MemberListWidgetProps
       if (observer.current) observer.current.disconnect();
 
       // 새로운 관찰자 생성 및 설정
-      observer.current = new IntersectionObserver((entries) => {
-        // 요소가 화면에 보이고, 다음 페이지가 있다면 데이터 호출
-        if (entries[0].isIntersecting && hasNextPage && !isFetchingNextPage) {
-          void fetchNextPage();
-        }
-      });
+      observer.current = new IntersectionObserver(
+        (entries) => {
+          // 요소가 화면에 보이고, 다음 페이지가 있다면 데이터 호출
+          if (entries[0].isIntersecting && hasNextPage && !isFetchingNextPage) {
+            void fetchNextPage();
+          }
+        },
+        { rootMargin: '100px' },
+      ); // 100px 전에 미리 로딩 시작
 
       // 노드가 존재하면 관찰 시작
       if (node) observer.current.observe(node);

@@ -5,6 +5,7 @@ import type { CommentListResponse } from '@/features/comment/api/types';
 export function useToggleCommentLikeMutation(postId: number, page: number, size: number) {
   const queryClient = useQueryClient();
   const key = ['comments', postId, page, size] as const;
+  const invalidateKey = ['comments', postId] as const;
 
   return useMutation({
     mutationFn: (commentId: number) => toggleCommentLike(commentId),
@@ -31,26 +32,6 @@ export function useToggleCommentLikeMutation(postId: number, page: number, size:
 
       return { previous };
     },
-    onSuccess: (res, commentId) => {
-      const nextLiked = res.data.liked;
-      const current = queryClient.getQueryData<CommentListResponse>(key);
-      if (!current) return;
-
-      const next: CommentListResponse = {
-        ...current,
-        comments: current.comments.map((comment) => {
-          if (comment.id !== commentId) return comment;
-          const delta = nextLiked === comment.liked ? 0 : nextLiked ? 1 : -1;
-          return {
-            ...comment,
-            liked: nextLiked,
-            likeCount: Math.max(0, comment.likeCount + delta),
-          };
-        }),
-      };
-
-      queryClient.setQueryData(key, next);
-    },
     onError: (_error, _commentId, context) => {
       console.error('[useToggleCommentLikeMutation] 좋아요 토글 실패:', _error);
       if (context?.previous) {
@@ -58,7 +39,7 @@ export function useToggleCommentLikeMutation(postId: number, page: number, size:
       }
     },
     onSettled: async () => {
-      await queryClient.invalidateQueries({ queryKey: key });
+      await queryClient.invalidateQueries({ queryKey: invalidateKey });
     },
   });
 }

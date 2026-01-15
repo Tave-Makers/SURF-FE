@@ -15,6 +15,6 @@ export async function searchMentionableMembers(
     );
     return res.data;
   } catch (error) {
-    throw handleApiError(error, '멘션 목록을불러올 수 없습니다.');
+    throw handleApiError(error, '멘션 목록을 불러올 수 없습니다.');
   }
 }

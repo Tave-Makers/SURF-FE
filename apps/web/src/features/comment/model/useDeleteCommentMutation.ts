@@ -5,6 +5,7 @@ import { CommentListResponse } from '../api/types';
 export function useDeleteCommentMutation(postId: number, page: number, size: number) {
   const qc = useQueryClient();
   const key = ['comments', postId, page, size] as const;
+  const invalidateKey = ['comments', postId] as const;
 
   return useMutation({
     mutationFn: (commentId: number) => deleteComment(postId, commentId),
@@ -32,11 +33,12 @@ export function useDeleteCommentMutation(postId: number, page: number, size: num
     },
 
     onError: (_err, _vars, ctx) => {
+      console.error('[useDeleteCommentMutation] 댓글 삭제 실패:', _err);
       if (ctx?.prev) qc.setQueryData(key, ctx.prev);
     },
 
     onSettled: async () => {
-      await qc.invalidateQueries({ queryKey: key });
+      await qc.invalidateQueries({ queryKey: invalidateKey });
     },
   });
 }

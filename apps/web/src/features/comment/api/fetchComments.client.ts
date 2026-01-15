@@ -2,11 +2,12 @@ import { axiosInstance } from '@/shared/lib/axiosInstance';
 import type { CommentListResponse } from '@/features/comment/api/types';
 import type { CommonResponse } from '@/shared/api/types';
 import { handleApiError } from '@/shared/lib/handleApiError';
+import { COMMENT_DEFAULT_PAGE, COMMENT_PAGE_SIZE } from '../model/constant';
 
 export async function fetchComments(
   postId: number,
-  page = 0,
-  size = 10,
+  page = COMMENT_DEFAULT_PAGE,
+  size = COMMENT_PAGE_SIZE,
 ): Promise<CommonResponse<CommentListResponse>> {
   try {
     const res = await axiosInstance.get<CommonResponse<CommentListResponse>>(

@@ -18,7 +18,6 @@ export interface CommentResponse {
 
   likeCount: number;
   liked: boolean;
-
   createdAt: string;
   mentions: MentionResponse[];
 }

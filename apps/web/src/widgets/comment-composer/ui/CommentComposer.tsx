@@ -8,6 +8,7 @@ import { SheetItem } from '@surf/ui/sheet';
 import { useToastStore } from '@surf/ui/store/toastStore';
 import { useEffect, useRef, useState } from 'react';
 import type { MentionSearchResponse } from '@/features/comment/api/types';
+import { COMMENT_DEFAULT_PAGE, COMMENT_PAGE_SIZE } from '@/features/comment/model/constant';
 import { useCreateCommentMutation } from '@/features/comment/model/useCreateCommentMutation';
 import { useMentionSearchQuery } from '@/features/comment/model/useMentionSearchQuery';
 
@@ -51,13 +52,10 @@ export const CommentComposer = ({
   pendingReply,
   onConsumedReply,
 }: Props) => {
-  const page = 0;
-  const size = 10;
-
   const showToast = useToastStore((s) => s.show);
   const inputRef = useRef<HTMLTextAreaElement>(null);
 
-  const createMutation = useCreateCommentMutation(postId, page, size);
+  const createMutation = useCreateCommentMutation(postId, COMMENT_DEFAULT_PAGE, COMMENT_PAGE_SIZE);
 
   // 입력 상태
   const [value, setValue] = useState('');

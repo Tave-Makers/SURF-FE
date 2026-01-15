@@ -8,6 +8,7 @@ import { useState } from 'react';
 import { Sheet as ModalSheet } from 'react-modal-sheet';
 import { useAuthStore } from '@/features/auth/model/useAuthStore';
 import type { CommentResponse } from '@/features/comment/api/types';
+import { COMMENT_DEFAULT_PAGE, COMMENT_PAGE_SIZE } from '@/features/comment/model/constant';
 import { useDeleteCommentMutation } from '@/features/comment/model/useDeleteCommentMutation';
 import { useGetCommentsQuery } from '@/features/comment/model/useGetCommentsQuery';
 import { useToggleCommentLikeMutation } from '@/features/comment/model/useToggleCommentLikeMutation';
@@ -23,16 +24,25 @@ interface Props {
 
 export const CommentSection = ({ postId, memberId, onStartReply }: Props) => {
   const myId = useAuthStore((s) => s.memberId);
-  const page = 0;
-  const size = 10;
 
   const showToast = useToastStore((s) => s.show);
   const openAlert = useAlertStore((s) => s.open);
   const closeAlert = useAlertStore((s) => s.close);
 
-  const { data, isLoading, isError } = useGetCommentsQuery(postId, page, size, true);
-  const toggleLikeMutation = useToggleCommentLikeMutation(postId, page, size);
-  const deleteMutation = useDeleteCommentMutation(postId, page, size);
+  const { data, isLoading, isError } = useGetCommentsQuery(
+    postId,
+    COMMENT_DEFAULT_PAGE,
+    COMMENT_PAGE_SIZE,
+    true,
+  );
+
+  const toggleLikeMutation = useToggleCommentLikeMutation(
+    postId,
+    COMMENT_DEFAULT_PAGE,
+    COMMENT_PAGE_SIZE,
+  );
+
+  const deleteMutation = useDeleteCommentMutation(postId, COMMENT_DEFAULT_PAGE, COMMENT_PAGE_SIZE);
 
   const comments = data?.comments ?? [];
   const totalCount = data?.totalCount ?? 0;

@@ -39,7 +39,7 @@ function renderContentWithMentions(content: string, mentions: MentionResponse[] 
 
   return parts.map((part, idx) => {
     if (part.startsWith('@')) {
-      const nickname = part.slice(1);
+      const nickname = part.slice(1).trim();
       if (mentionSet.has(nickname)) {
         return (
           <span key={idx} className="text-foreground-primary">

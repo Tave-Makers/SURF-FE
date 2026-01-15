@@ -35,7 +35,7 @@ interface CommentProps {
 function renderContentWithMentions(content: string, mentions: MentionResponse[] | undefined) {
   const mentionSet = new Set((mentions ?? []).map((m) => m.nickname));
 
-  const parts = content.split(/(@[^\s]+)/g);
+  const parts = content.split(/(@[^\s@]+\s)/g);
 
   return parts.map((part, idx) => {
     if (part.startsWith('@')) {

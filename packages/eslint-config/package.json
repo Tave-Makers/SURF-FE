@@ -1,0 +1,33 @@
+{
+  "name": "@surf/eslint-config",
+  "version": "0.0.0",
+  "private": true,
+  "type": "module",
+  "exports": {
+    "./base": "./base.js",
+    "./next": "./next.js"
+  },
+  "devDependencies": {
+    "@types/eslint-plugin-jsx-a11y": "^6.10.0"
+  },
+  "peerDependencies": {
+    "@eslint/js": "^9",
+    "@next/eslint-plugin-next": "^15",
+    "eslint": "^9",
+    "eslint-config-prettier": "^10",
+    "eslint-import-resolver-typescript": "^4",
+    "eslint-plugin-import": "^2",
+    "eslint-plugin-jsx-a11y": "^6",
+    "eslint-plugin-react": "^7",
+    "eslint-plugin-react-hooks": "^5",
+    "eslint-plugin-storybook": "^9",
+    "globals": "^16",
+    "typescript": "^5",
+    "typescript-eslint": "^8"
+  },
+  "peerDependenciesMeta": {
+    "eslint-plugin-storybook": {
+      "optional": true
+    }
+  }
+}

@@ -1,10 +1,13 @@
 set -e   # 명령어 중 하나라도 실패하면 스크립트 즉시 종료 (-u는 뺌: $1 미전달 시 에러 방지)
 
+REPO_ROOT="$(git rev-parse --show-toplevel)"
+cd "$REPO_ROOT"
+
 echo "🔍 커밋 메시지 규칙 검사"
 
 # 커밋 메시지가 저장된 파일 경로
 # 일반적으로 $1 로 전달되지만, 혹시 없으면 .git/COMMIT_EDITMSG 로 대체
-MSG_FILE="${1:-.git/COMMIT_EDITMSG}"
+MSG_FILE="${1:-$REPO_ROOT/.git/COMMIT_EDITMSG}"
 
 # GitHub Desktop (Windows)에서는 줄바꿈이 CRLF(\r\n)로 저장돼서
 # 정규식 검사 시 줄 끝에 \r 이 남아 규칙이 깨질 수 있음

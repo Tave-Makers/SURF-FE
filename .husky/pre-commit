@@ -1,3 +1,5 @@
 echo "🔍 lint-staged 실행"
 
+REPO_ROOT="$(git rev-parse --show-toplevel)"
+cd "$REPO_ROOT"
 pnpm exec lint-staged

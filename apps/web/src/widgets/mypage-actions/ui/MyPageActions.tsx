@@ -1,0 +1,35 @@
+'use client';
+
+import { SolidButton } from '@surf/ui/button';
+import { useRouter } from 'next/navigation';
+import type { BannerPart } from '@/entities/user/model/types';
+import { ActivityScoreBanner } from '@/entities/user/ui/activity-score-banner/ActivityScoreBanner';
+
+interface Props {
+  isActive: boolean;
+  bannerPart: BannerPart | null;
+  bannerScore: number;
+}
+
+const ROUTE_MYPAGE_ACTIVITY_SCORE = '/mypage/activity-score';
+const ROUTE_MYPAGE_EDIT = '/mypage/edit';
+
+export const MyPageActions = ({ isActive, bannerPart, bannerScore }: Props) => {
+  const router = useRouter();
+  const handleEditClick = () => router.push(ROUTE_MYPAGE_EDIT);
+
+  return (
+    <section className="flex flex-col gap-13 px-13 pt-11">
+      {isActive && bannerPart && (
+        <ActivityScoreBanner
+          part={bannerPart}
+          score={bannerScore}
+          onClickMore={() => router.push(ROUTE_MYPAGE_ACTIVITY_SCORE)}
+        />
+      )}
+      <SolidButton size="s" variant="secondary" onClick={handleEditClick}>
+        프로필 편집
+      </SolidButton>
+    </section>
+  );
+};

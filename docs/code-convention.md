@@ -12,11 +12,12 @@
 - 작업 내용은 간결하고 명확하게 작성합니다.
 
 #### Examples
+
 feat/login-api
 fix/navbar-overlap-210
 
-
 ### 2. Branch Types
+
 - **feat/** → 새로운 기능 개발  
   e.g. `feat/login-api-123`
 - **fix/** → 버그 수정  
@@ -41,13 +42,15 @@ fix/navbar-overlap-210
 ## 📩 Commit Convention
 
 ### 1. Commit Message Rules
+
 - 기본 규칙: **기능 Type: 작업 내용 (#이슈번호 선택)**
 
 #### Examples
+
 feat: 로그인 API 연동 (#39)
 
-
 ### 2. Commit Types
+
 1. **feat**: 새로운 기능 추가 → `feat: 회원가입 기능 추가`
 2. **fix**: 버그 수정 → `fix: 비밀번호 유효성 검사 버그 수정`
 3. **refactor**: 리팩토링 (구조/성능 개선) → `refactor: 유저 서비스 모듈 구조 리팩토링`

@@ -1,0 +1,5 @@
+{
+  "extends": "./tsconfig.json",
+  "include": ["components", "hooks", "lib", "store", "types", ".storybook", "**/*.stories.tsx"],
+  "exclude": []
+}

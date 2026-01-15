@@ -1,4 +1,4 @@
-import { Alert } from '@surf/ui/alert';
+import { useAlertStore } from '@surf/ui/store/alertStore';
 import axios from 'axios';
 import { useRouter } from 'next/navigation';
 import { useEffect, useState } from 'react';
@@ -22,10 +22,15 @@ const STEP_ANALYTICS_NAMES: Record<number, 'nickname' | 'track' | 'contact'> = {
   2: 'contact',
 };
 
-export const OnBoardingForm = () => {
-  const [step, setStep] = useState(0);
+interface OnBoardingFormProps {
+  step: number;
+  setStep: React.Dispatch<React.SetStateAction<number>>;
+}
+
+export const OnBoardingForm = ({ step, setStep }: OnBoardingFormProps) => {
   const [isSubmitting, setIsSubmitting] = useState(false);
-  const [isAlertOpen, setIsAlertOpen] = useState(false);
+  const openAlert = useAlertStore((s) => s.open);
+  const closeAlert = useAlertStore((s) => s.close);
   const methods = useFormContext<OnBoardingFormData>();
   const router = useRouter();
   type StepConfig = {
@@ -139,7 +144,24 @@ export const OnBoardingForm = () => {
     });
     await submitOnBoarding(submitData);
     useAgreementStore.getState().resetAgreements();
-    setIsAlertOpen(true);
+
+    openAlert({
+      state: 'default',
+      title: '회원가입이 완료되었어요!',
+      infoText:
+        '회원가입이 완료되었습니다. 회원 승인 절차가 완료되면 정상적으로 SURF를 이용하실 수 있습니다.',
+      actions: [
+        {
+          type: 'text',
+          variant: 'primary',
+          label: '확인',
+          onClick: () => {
+            router.push(PAGE_ROUTES.LOGIN);
+            closeAlert();
+          },
+        },
+      ],
+    });
   }
 
   async function handleNext() {
@@ -157,7 +179,11 @@ export const OnBoardingForm = () => {
       router.push(PAGE_ROUTES.HOME);
     } catch (error) {
       if (error instanceof Error && error.message === 'PROFILE_IMAGE_UPLOAD_FAILED') {
-        alert('프로필 이미지 업로드에 실패했습니다.');
+        openAlert({
+          title: '업로드 실패',
+          infoText: '프로필 이미지 업로드에 실패했습니다.',
+          actions: [{ type: 'text', label: '확인', onClick: closeAlert }],
+        });
         return;
       }
 
@@ -167,18 +193,34 @@ export const OnBoardingForm = () => {
 
         switch (status) {
           case 400:
-            alert(data.message || '입력한 정보가 올바르지 않습니다.');
-            router.push(PAGE_ROUTES.ONBOARDING);
+            openAlert({
+              title: '오류',
+              infoText: data.message || '입력한 정보가 올바르지 않습니다.',
+              actions: [{ type: 'text', label: '확인', onClick: closeAlert }],
+            });
             break;
           case 409:
-            alert(data.message || '이미 존재하는 회원입니다. 로그인 페이지로 이동합니다.');
-            router.push(PAGE_ROUTES.LOGIN);
+            openAlert({
+              title: '알림',
+              infoText: data.message || '이미 존재하는 회원입니다. 로그인 페이지로 이동합니다.',
+              actions: [
+                { type: 'text', label: '확인', onClick: () => router.push(PAGE_ROUTES.LOGIN) },
+              ],
+            });
             break;
           default:
-            alert(data.message || '알 수 없는 오류가 발생했습니다.');
+            openAlert({
+              title: '오류',
+              infoText: data.message || '알 수 없는 오류가 발생했습니다.',
+              actions: [{ type: 'text', label: '확인', onClick: closeAlert }],
+            });
         }
       } else {
-        alert('네트워크 오류가 발생했습니다.');
+        openAlert({
+          title: '오류',
+          infoText: '네트워크 오류가 발생했습니다.',
+          actions: [{ type: 'text', label: '확인', onClick: closeAlert }],
+        });
       }
     } finally {
       setIsSubmitting(false);
@@ -201,24 +243,6 @@ export const OnBoardingForm = () => {
       >
         <StepComponent />
       </OnBoardingLayout>
-      <Alert
-        state="default"
-        title="회원가입이 완료되었어요!"
-        infoText="회원가입이 완료되었습니다. 회원 승인 절차가 완료되면 정상적으로 SURF를 이용하실 수 있습니다."
-        isOpen={isAlertOpen}
-        onClose={() => setIsAlertOpen(false)}
-        actions={[
-          {
-            type: 'text',
-            variant: 'primary',
-            label: '확인',
-            onClick: () => {
-              setIsAlertOpen(false);
-              router.push('/login');
-            },
-          },
-        ]}
-      />
     </>
   );
 };

@@ -1,14 +1,13 @@
 import { redirect } from 'next/navigation';
 import PostDetailPage from '@/app-pages/post/PostDetailPage';
 
-const Page = async ({ params }: { params: Promise<{ boardId: string; postId: string }> }) => {
-  const { postId } = await params;
-  const numericPostId = Number(postId);
-  if (!Number.isFinite(numericPostId)) {
-    redirect('/board/1');
+const Page = async ({ params }: { params: Promise<{ boardId: number; postId: number }> }) => {
+  const { boardId, postId } = await params;
+  if (!Number.isFinite(postId)) {
+    redirect(`/board/${boardId}`);
   }
 
-  return <PostDetailPage postId={numericPostId} />;
+  return <PostDetailPage postId={postId} />;
 };
 
 export default Page;

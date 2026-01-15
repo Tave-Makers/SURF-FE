@@ -11,7 +11,7 @@ export type RouteConfig = {
   header: HeaderProps;
 };
 
-export const createRouteConfig = (): RouteConfig[] => [
+export const createRouteConfig = (router: RouterInstance): RouteConfig[] => [
   {
     id: "signup-request",
     path: PAGE_ROUTES.SIGNUP_REQUEST,

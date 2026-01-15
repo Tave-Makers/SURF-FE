@@ -9,13 +9,10 @@ export interface CommentResponse {
   rootId: number | null;
   parentId: number | null;
   depth: number;
-
   content: string;
-
   memberId: number;
   nickname: string;
-  profileImageUrl?: string | null;
-
+  profileImageUrl?: string;
   likeCount: number;
   liked: boolean;
   createdAt: string;
@@ -38,7 +35,7 @@ export interface CommentCreateRequest {
 export interface MentionSearchResponse {
   memberId: number;
   nickname: string;
-  profileImageUrl?: string | null;
+  profileImageUrl?: string;
   firstGeneration: number;
 }
 
@@ -46,5 +43,5 @@ export interface MentionSearchResponse {
 export interface CommentLikeMemberResponse {
   memberId: number;
   nickname: string;
-  profileImageUrl?: string | null;
+  profileImageUrl?: string;
 }

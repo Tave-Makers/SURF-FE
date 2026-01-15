@@ -174,7 +174,7 @@ const PostPage = (props: PostPageProps) => {
           maxLength={MAX_TITLE_LENGTH}
           onChange={(e) => setTitle(e.target.value)}
           placeholder="제목을 입력해주세요."
-          className="text-foreground-normal placeholder:foreground-tertiary-lighter text-body-body3 flex flex-1 pt-10 pb-5 focus:outline-none"
+          className="text-foreground-normal placeholder:text-foreground-tertiary-lighter text-body-body3 flex flex-1 pt-10 pb-5 focus:outline-none"
         />
       </div>
 

@@ -1,6 +1,5 @@
 import '@/shared/styles/globals.css';
 import 'keen-slider/keen-slider.min.css';
-import { GlobalComponents } from '@surf/ui/global-components';
 import { ReactQueryDevtools } from '@tanstack/react-query-devtools';
 import { ThemeProvider } from 'next-themes';
 import type { ReactNode } from 'react';
@@ -9,6 +8,7 @@ import { AnalyticsProvider } from '@/app/providers/AnalyticsProvider';
 import { FCMInitializer } from '@/app/providers/FCMInitializer';
 import { QueryProvider } from '@/app/providers/QueryProvider';
 import { PageTrackingProvider } from '@/shared/analytics/providers/PageTrackingProvider';
+import { GlobalComponents } from '@/widgets/global-components/GlobalComponents';
 
 const RootLayout = ({ children }: { children: ReactNode }) => {
   return (

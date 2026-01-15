@@ -39,14 +39,14 @@ import { PAGE_ROUTES } from '@/shared/config/path';
 import { useAbortableLifeCycle } from '@/shared/hooks/useAbortableLifeCycle';
 import { formatPhoneNumber, isYearMonth, isValidUrl, onlyDigits } from '@/shared/lib/validator';
 
-export type EditProfileFormHandle = {
+export interface EditProfileFormHandle {
   submit: () => void;
-};
+}
 
-type Props = {
+interface Props {
   initialProfile: UserProfile;
   onCanSubmitChange?: (canSubmit: boolean) => void;
-};
+}
 
 function toLocalDateOrNull(value: string): DateString | null {
   const t = value.trim();

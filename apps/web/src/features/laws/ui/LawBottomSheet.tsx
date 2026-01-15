@@ -13,6 +13,12 @@ export type LawBottomSheetProps = {
   allAgreed: boolean;
 };
 
+declare module '@/shared/store/bottomSheetStore' {
+  interface BottomSheetMap {
+    law: Omit<LawBottomSheetProps, 'isOpen' | 'onClose'>;
+  }
+}
+
 export const LawBottomSheet = ({
   isOpen,
   onClose,

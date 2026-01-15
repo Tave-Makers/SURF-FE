@@ -4,6 +4,7 @@ import { AccordionSelect } from '@surf/ui/accordion';
 import { HeaderMode } from '@surf/ui/header';
 import { Sheet } from '@surf/ui/sheet';
 import { useAlertStore } from '@surf/ui/store/alertStore';
+import { useToastStore } from '@surf/ui/store/toastStore';
 import { useRouter } from 'next/navigation';
 import { useCallback, useEffect, useState } from 'react';
 import { Sheet as ModalSheet } from 'react-modal-sheet';
@@ -24,6 +25,7 @@ const PostPage = (props: PostPageProps) => {
   const router = useRouter();
   const openAlert = useAlertStore((s) => s.open);
   const closeAlert = useAlertStore((s) => s.close);
+  const showToast = useToastStore((s) => s.show);
 
   const { mode, boardId } = props;
   const postId = mode === 'edit' ? props.postId : undefined;
@@ -80,12 +82,7 @@ const PostPage = (props: PostPageProps) => {
       setReserved(true);
       closeReservationModal();
     } else {
-      openAlert({
-        state: 'error',
-        title: '예약 시간 설정에 실패했습니다.',
-        infoText: '현재 시간 이후로만 예약할 수 있습니다.',
-        actions: [{ type: 'solid', label: '확인', variant: 'primary', onClick: closeAlert }],
-      });
+      showToast('현재 시간 이후로만 예약할 수 있습니다.');
     }
   };
 

@@ -17,7 +17,9 @@ export const AppHeader = ({ customBack, overrideHeader, className }: AppHeaderPr
   const routeConfig = useMemo(() => createRouteConfig(router), [router]);
 
   // 현재 경로에 맞는 route 설정 찾기
-  const currentRoute = routeConfig.find((item) => pathname === item.path);
+  const currentRoute = routeConfig.find((item) =>
+    typeof item.path === 'string' ? pathname === item.path : item.path.test(pathname),
+  );
 
   // 뒤로가기 동작
   const handleBack = () => {

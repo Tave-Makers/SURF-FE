@@ -4,8 +4,10 @@ export const PAGE_ROUTES = {
   ONBOARDING: '/onboarding',
 
   // 멤버 관련
-  PROFILE: '/profile',
-  MEMBER_SEARCH: '/member-search',
+  MEMBER: {
+    PROFILE: (memberId: string | number) => `/member/${memberId}`,
+    MEMBER_SEARCH: '/member/search',
+  },
 
   // 캘린더 관련
   CALENDAR: {
@@ -47,11 +49,14 @@ export const PAGE_ROUTES = {
     },
   },
 
+  MESSAGE: '/message',
+
+  NOTIFICATION: '/notification',
+
   // 기타
   REDIRECT: {
     MSG_PENDING: '/login?msg=pending',
     MSG_REJECTED: '/login?msg=rejected',
     MSG_INCOMPLETE: '/onboarding?msg=incomplete',
   },
-  NOTIFICATION: '/notification',
 } as const;

@@ -1,45 +1,38 @@
 'use client';
 
+import { SolidButton } from '@surf/ui/button';
 import { FieldGroup } from '@surf/ui/field-group';
-import { useEffect, useRef } from 'react';
+import { useRouter } from 'next/navigation';
 import type { UserProfile } from '@/entities/user/model/types';
 import { CareerCard } from '@/entities/user/ui/career-card/CareerCard';
 import { useAuthStore } from '@/features/auth/model/useAuthStore';
-import { trackProfileEvent } from '@/features/profile/lib/trackProfileEvent';
-import { PROFILE_EVENTS } from '@/features/profile/model/types';
-import { MyPageActions } from '@/widgets/mypage-actions/ui/MyPageActions';
+import { PAGE_ROUTES } from '@/shared/config/path';
 import { ProfileBadge } from '@/widgets/profile-badge/ui/ProfileBadge';
 import { ProfileHeader } from '@/widgets/profile-header/ui/ProfileHeader';
 
 interface Props {
   userProfile: UserProfile;
+  memberId: number;
 }
 
-export const MyPage = ({ userProfile }: Props) => {
-  const memberId = useAuthStore((s) => s.memberId);
+export const MemberProfilePage = ({ userProfile, memberId }: Props) => {
+  const router = useRouter();
+  const myId = useAuthStore((s) => s.memberId);
+  const isMe = myId != null && myId === memberId;
 
-  // 중복 로그 방지 (StrictMode에서 useEffect 2번 도는 것 대비)
-  const fired = useRef(false);
-
-  useEffect(() => {
-    if (fired.current) return;
-
-    fired.current = true;
-
-    trackProfileEvent(PROFILE_EVENTS.VIEW_PROFILE, {
-      member_id: memberId != null ? String(memberId) : 'anonymous',
-    });
-  }, [memberId]);
+  function handleMessage() {
+    if (isMe) return;
+    router.push(PAGE_ROUTES.MESSAGE);
+  }
 
   return (
     <div className="flex h-full flex-col overflow-y-auto">
       <ProfileHeader userProfile={userProfile} />
-
-      <MyPageActions
-        isActive={userProfile.isActive}
-        bannerPart={userProfile.bannerPart}
-        bannerScore={userProfile.activityScore}
-      />
+      <div className="w-full px-13">
+        <SolidButton size="s" variant="secondary" onClick={handleMessage} isDisabled={isMe}>
+          쪽지 보내기
+        </SolidButton>
+      </div>
       <section className="flex flex-col gap-16 px-13 pt-16">
         <div className="flex flex-col gap-10">
           <FieldGroup title="경력">

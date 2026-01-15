@@ -1,3 +1,6 @@
+'use client';
+
+import { useRouter } from 'next/navigation';
 import { useCallback, useEffect, useRef } from 'react';
 import { MemberList } from '@/entities/search/ui/MemberList';
 import { useMemberSearch } from '@/features/member-search/api/useMemberSearch';
@@ -8,12 +11,13 @@ interface MemberListWidgetProps {
 }
 
 export const MemberListWidget = ({ keyword, queryResult }: MemberListWidgetProps) => {
+  const router = useRouter();
+
   const { members, fetchNextPage, hasNextPage, isFetchingNextPage, isLoading } = queryResult;
 
-  const handleClick = () => {
-    // TODO: 타회원 프로필 조회 페이지와 연결
-    // router.push(`/members/${userId}`);
-  };
+  function handleClick(userId: number) {
+    router.push(`/member/${userId}`);
+  }
 
   // IntersectionObserver 인스턴스를 저장할 ref
   const observer = useRef<IntersectionObserver | null>(null);

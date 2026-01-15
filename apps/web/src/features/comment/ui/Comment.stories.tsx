@@ -11,8 +11,7 @@ const meta: Meta<typeof Comment> = {
   tags: ['autodocs'],
   args: {
     name: '홍길동',
-    date: '2026.10.16',
-    time: '01:21',
+    date: '2026.10.16 01:21',
     content: '정말 좋은 글이네요! 잘 읽었습니다 😊',
     likeCount: 12,
     isLiked: false,

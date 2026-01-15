@@ -1,1 +1,2 @@
-export * from './TextInput';
+export * from './text-input/TextInput';
+export * from './mention-text-input/MentionTextInput';

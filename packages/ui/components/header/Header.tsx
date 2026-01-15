@@ -1,7 +1,7 @@
 import React, { ComponentProps } from 'react';
 import { ButtonVariant, TextButton } from '../button/text-button/TextButton';
 import { SurfIcon } from '../icon/SurfIcon';
-import { TextInput } from '../text-input/TextInput';
+import { TextInput } from '../text-input';
 
 type SurfIconName = ComponentProps<typeof SurfIcon>['name'];
 

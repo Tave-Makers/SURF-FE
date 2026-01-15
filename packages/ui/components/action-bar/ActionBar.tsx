@@ -1,6 +1,6 @@
 import { forwardRef, useRef, useImperativeHandle } from 'react';
 import { SurfIcon } from '../icon/SurfIcon';
-import { TextInput } from '../text-input/TextInput';
+import { MentionTextInput } from '@surf/ui/text-input';
 
 /**
  * 범용 메시지 입력 및 전송 컴포넌트
@@ -29,7 +29,7 @@ interface ActionBarProps {
   defaultValue?: string;
   onChange?: (val: string) => void;
   placeholder?: string;
-  onSend?: (val: string) => void;
+  onSend?: (val: string) => void | boolean | Promise<void | boolean>;
   onIconClick?: () => void;
   isEmojiActive?: boolean;
 }
@@ -43,12 +43,18 @@ export const ActionBar = forwardRef<HTMLTextAreaElement, ActionBarProps>(
     useImperativeHandle(ref, () => internalRef.current as HTMLTextAreaElement);
 
     /** 메시지 전송 및 입력 초기화 */
-    const handleSend = () => {
+    const runSend = async () => {
       const rawValue = internalRef.current?.value ?? '';
       const trimmedValue = rawValue.trim();
       if (!trimmedValue) return;
 
-      onSend?.(trimmedValue);
+      try {
+        const result = await onSend?.(trimmedValue);
+        if (result === false) return;
+      } catch (error) {
+        console.error('[ActionBar] onSend failed:', error);
+        return;
+      }
 
       // 전송 후 입력 초기화
       if (value !== undefined) {
@@ -61,9 +67,13 @@ export const ActionBar = forwardRef<HTMLTextAreaElement, ActionBarProps>(
       internalRef.current?.focus(); // 포커스 유지
     };
 
+    const handleSend = () => {
+      void runSend();
+    };
+
     return (
-      <div className="border-border-normal bg-background-normal px-13 pt-13 pb-15 flex w-full items-center gap-10 border-t">
-        <TextInput
+      <div className="bg-background-normal border-border-normal shadow-embossed px-13 pt-13 pb-15 flex w-full items-center gap-10 [border-top-width:var(--stroke-weight-0)]">
+        <MentionTextInput
           mode="chat"
           ref={internalRef}
           value={value}

@@ -4,6 +4,7 @@ import { useRouter } from 'next/navigation';
 import { useCallback, useEffect, useRef } from 'react';
 import { MemberList } from '@/entities/search/ui/MemberList';
 import { useMemberSearch } from '@/features/member-search/api/useMemberSearch';
+import { PAGE_ROUTES } from '@/shared/config/path';
 
 interface MemberListWidgetProps {
   keyword?: string; // 검색어가 있으면 학교를, 없으면 소개글을 보여줌
@@ -16,7 +17,7 @@ export const MemberListWidget = ({ keyword, queryResult }: MemberListWidgetProps
   const { members, fetchNextPage, hasNextPage, isFetchingNextPage, isLoading } = queryResult;
 
   function handleClick(userId: number) {
-    router.push(`/member/${userId}`);
+    router.push(PAGE_ROUTES.MEMBER.PROFILE(userId));
   }
 
   // IntersectionObserver 인스턴스를 저장할 ref

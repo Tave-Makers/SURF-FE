@@ -165,7 +165,7 @@ export const createRouteConfig = (router: RouterInstance): RouteConfig[] => [
   {
     id: 'profile',
     path: /^\/member\/\d+$/,
-    backPath: PAGE_ROUTES.MEMBER_SEARCH,
+    backPath: PAGE_ROUTES.MEMBER.MEMBER_SEARCH,
     header: {
       mode: HeaderMode.Default,
       hasLeftIcon: true,

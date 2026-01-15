@@ -4,8 +4,10 @@ export const PAGE_ROUTES = {
   ONBOARDING: '/onboarding',
 
   // 멤버 관련
-  MEMBER: { PROFILE: (memberId: string | number) => `/member/${memberId}` },
-  MEMBER_SEARCH: '/member/search',
+  MEMBER: {
+    PROFILE: (memberId: string | number) => `/member/${memberId}`,
+    MEMBER_SEARCH: '/member/search',
+  },
 
   // 캘린더 관련
   CALENDAR: {

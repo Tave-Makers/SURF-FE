@@ -3,6 +3,12 @@ import { Sheet } from '@surf/ui/sheet';
 import { Sheet as ModalSheet } from 'react-modal-sheet';
 import { LAW_LIST } from '@/features/laws/constants/law-list';
 
+declare module '@/shared/store/bottomSheetStore' {
+  interface BottomSheetMap {
+    law: Omit<LawBottomSheetProps, 'isOpen' | 'onClose'>;
+  }
+}
+
 export type LawBottomSheetProps = {
   onClose: () => void;
   isOpen: boolean;
@@ -29,7 +35,7 @@ export const LawBottomSheet = ({
       isOpen={isOpen}
       onClose={onClose}
       disableDrag={true}
-      className="mx-auto flex w-full sm:w-[360px]"
+      className="mx-auto flex w-full sm:w-[min(100dvw,calc(100dvh*375/812))]"
     >
       <ModalSheet.Container>
         <ModalSheet.Content>
@@ -57,7 +63,7 @@ export const LawBottomSheet = ({
           </Sheet>
         </ModalSheet.Content>
       </ModalSheet.Container>
-      <ModalSheet.Backdrop className="bg-effect-overlay-dim-normal" />
+      <ModalSheet.Backdrop className="bg-effect-overlay-dim-normal pointer-events-auto touch-none" />
     </ModalSheet>
   );
 };

@@ -1,20 +1,18 @@
-import Image from 'next/image';
-
 interface ShortcutProps {
   type: 'circle' | 'rectangle';
   label: string;
-  imageSrc?: string;
+  imageSrc?: React.FC<React.SVGProps<SVGSVGElement>>;
   onClick?: () => void;
 }
 
 export const Shortcut = ({ type, label, imageSrc, onClick }: ShortcutProps) => {
+  const SvgIcon = typeof imageSrc === 'function' ? imageSrc : null;
+
   if (type === 'circle') {
     return (
       <button className="flex w-full flex-col items-center gap-7" onClick={onClick}>
         <div className="h-[2.5rem] w-[2.5rem] overflow-hidden rounded-full bg-gray-200">
-          {imageSrc && (
-            <Image src={imageSrc} alt={label} width={40} height={40} className="object-cover" />
-          )}
+          {SvgIcon && <SvgIcon aria-hidden="true" className="h-[40px] w-[40px]" />}
         </div>
         <span className="text-caption-caption6">{label}</span>
       </button>
@@ -24,7 +22,7 @@ export const Shortcut = ({ type, label, imageSrc, onClick }: ShortcutProps) => {
   // rectangle
   return (
     <button
-      className="bg-background-normal-lighter rounded-5 border-border-secondary flex h-[9.375rem] w-[6.5625rem] flex-col items-start overflow-hidden border shadow-[0_0_20px_3px_rgba(0,0,0,0.04)]"
+      className="bg-background-normal-lighter rounded-5 border-border-secondary flex w-full flex-col items-start overflow-hidden border shadow-[0_0_20px_3px_rgba(0,0,0,0.04)]"
       onClick={onClick}
     >
       {/* Label 영역 */}
@@ -32,15 +30,7 @@ export const Shortcut = ({ type, label, imageSrc, onClick }: ShortcutProps) => {
 
       {/* 이미지 영역 */}
       <div className="w-full flex-1 bg-gray-200">
-        {imageSrc && (
-          <Image
-            src={imageSrc}
-            alt={label}
-            width={105}
-            height={110}
-            className="h-full w-full object-cover"
-          />
-        )}
+        {SvgIcon && <SvgIcon aria-hidden="true" className="h-full w-full" />}
       </div>
     </button>
   );

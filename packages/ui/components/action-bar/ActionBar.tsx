@@ -51,7 +51,8 @@ export const ActionBar = forwardRef<HTMLTextAreaElement, ActionBarProps>(
       try {
         const result = await onSend?.(trimmedValue);
         if (result === false) return;
-      } catch {
+      } catch (error) {
+        console.error('[ActionBar] onSend failed:', error);
         return;
       }
 

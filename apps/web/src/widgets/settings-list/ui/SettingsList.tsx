@@ -34,7 +34,7 @@ export const SettingsList = () => {
     openAlert({
       state: 'default',
       title: '로그아웃',
-      infoText: '정말 로그아웃할까요?',
+      infoText: '정말 로그아웃하시겠습니까?',
       actions: [
         { type: 'solid', label: '취소', onClick: closeAlert, variant: 'secondary' },
         { type: 'solid', label: '로그아웃', onClick: handleLogout, variant: 'primary' },

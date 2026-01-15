@@ -22,9 +22,9 @@ import { useKeyboardOffset } from '@/shared/hooks/useKeyboardOffset';
 import { AppHeader } from '@/widgets/header/ui/AppHeader';
 import { PostBodySection } from '@/widgets/post-detail/PostBodySection';
 
-type PostDetailPageProps = {
-  postId: string;
-};
+interface PostDetailPageProps {
+  postId: number;
+}
 
 const PostDetailPage = ({ postId }: PostDetailPageProps) => {
   const pathname = usePathname();

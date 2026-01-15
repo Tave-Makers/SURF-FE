@@ -8,7 +8,7 @@ const Page = async ({ params }: { params: Promise<{ boardId: string; postId: str
     redirect('/board/1');
   }
 
-  return <PostDetailPage postId={postId} />;
+  return <PostDetailPage postId={numericPostId} />;
 };
 
 export default Page;

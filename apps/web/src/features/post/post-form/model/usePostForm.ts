@@ -48,6 +48,7 @@ export const usePostForm = ({ mode, boardId, postId }: Props) => {
     setField,
     setEditorState,
     resetForm,
+    setCanInitialize,
   } = usePostFormStore();
 
   const { linkedSchedule, setLinkedSchedule, clearLinkedSchedule } = useCreatePostScheduleStore();
@@ -102,8 +103,9 @@ export const usePostForm = ({ mode, boardId, postId }: Props) => {
   const resetPostState = useCallback(() => {
     clearLinkedSchedule();
     resetForm();
+    setCanInitialize(false);
     isScheduleInitializedRef.current = false;
-  }, [clearLinkedSchedule, resetForm]);
+  }, [clearLinkedSchedule, resetForm, setCanInitialize]);
 
   const {
     isOpen: isCategoryOpen,
@@ -150,6 +152,7 @@ export const usePostForm = ({ mode, boardId, postId }: Props) => {
       setShowExitAlert(true);
     } else {
       resetPostState();
+      setCanInitialize(false);
       router.back();
     }
   };
@@ -301,6 +304,7 @@ export const usePostForm = ({ mode, boardId, postId }: Props) => {
       await Promise.all(invalidatePromises);
 
       resetPostState();
+      setCanInitialize(false);
       if (targetPostId) router.replace(PAGE_ROUTES.BOARD.POST_DETAIL(boardId, targetPostId));
     } catch (err) {
       console.error('게시글 처리 실패', err);

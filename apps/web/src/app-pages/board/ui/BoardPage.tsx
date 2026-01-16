@@ -7,6 +7,8 @@ import { POST_BOARDS } from '@/entities/post/model/board';
 import { TAB_CATEGORIES, TAB_CATEGORY_LIST } from '@/entities/post/model/tab';
 import { PostFab } from '@/entities/post/ui/post-fab/PostFab';
 import { useAuthStore } from '@/features/auth/model/useAuthStore';
+import { usePostFormStore } from '@/features/post/post-form/model/usePostFormStore';
+import { useCreatePostScheduleStore } from '@/features/schedule/create-post-schedule/model/useCreatePostScheduleStore';
 import { PAGE_ROUTES } from '@/shared/config/path';
 import { AppHeader } from '@/widgets/header/ui/AppHeader';
 import { PostListContainer } from '@/widgets/post-list/ui/PostListContainer';
@@ -37,6 +39,16 @@ const BoardPage = ({ boardId: boardIdProp }: { boardId: string }) => {
     }
   };
 
+  // 게시글 생성 화면 이동 전 스토어 초기화
+  const { resetForm } = usePostFormStore();
+  const { clearLinkedSchedule } = useCreatePostScheduleStore();
+
+  const handlePostClick = () => {
+    resetForm();
+    clearLinkedSchedule();
+    router.push(PAGE_ROUTES.BOARD.POST_CREATE(boardId));
+  };
+
   return (
     <>
       <AppHeader
@@ -63,7 +75,7 @@ const BoardPage = ({ boardId: boardIdProp }: { boardId: string }) => {
         <div className="pointer-events-none fixed inset-0 z-50">
           <div className="relative mx-auto h-full sm:max-w-[360px]">
             <div className="pointer-events-auto absolute right-15 bottom-15">
-              <PostFab onClick={() => router.push(PAGE_ROUTES.BOARD.POST_CREATE(boardId))} />
+              <PostFab onClick={handlePostClick} />
             </div>
           </div>
         </div>

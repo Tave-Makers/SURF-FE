@@ -13,6 +13,7 @@ export interface PostFormState {
   reservedAt: Date | null;
   initialSnapshot: PostSnapshot | null;
   isEditorInitialized: boolean;
+  canInitialize: boolean;
 
   // Actions
   setField: <K extends keyof PostFormState>(field: K, value: PostFormState[K]) => void;
@@ -20,6 +21,7 @@ export interface PostFormState {
   setIsEditorInitialized: (isInit: boolean) => void;
   resetForm: () => void;
   setSnapshot: (snapshot: PostSnapshot) => void;
+  setCanInitialize: (canInit: boolean) => void;
 }
 
 export type EditorState = Pick<PostFormState, 'content' | 'images'>;

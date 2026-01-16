@@ -31,10 +31,11 @@ export const usePostInitialization = ({
   isInitializedRef,
   isScheduleFetching,
 }: Props) => {
-  const { initialSnapshot, setSnapshot, content, images } = usePostFormStore();
+  const { initialSnapshot, setSnapshot, content, images, canInitialize } = usePostFormStore();
 
   useEffect(() => {
     // 1. 초기화 가드
+    if (!canInitialize) return;
     if (mode === 'create' || isInitializedRef.current) return;
     if (mode === 'edit' && !postDetail) return;
     // 일정이 있는 게시글인데, 일정을 아직 가져오지 못했거나 '새로 가져오는 중(Fetching)'이면 대기
@@ -145,5 +146,6 @@ export const usePostInitialization = ({
     content,
     images,
     isScheduleFetching,
+    canInitialize,
   ]);
 };

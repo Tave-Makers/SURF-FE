@@ -14,6 +14,7 @@ import { useGetCommentsQuery } from '@/features/comment/model/useGetCommentsQuer
 import { useToggleCommentLikeMutation } from '@/features/comment/model/useToggleCommentLikeMutation';
 import { Comment } from '@/features/comment/ui/Comment';
 import { toDate, toKST, formatDateTime } from '@/shared/utils/date';
+import CommentsEmpty from '@/widgets/comment-section/ui/icons/comments-empty.svg';
 
 interface Props {
   postId: number;
@@ -115,7 +116,7 @@ export const CommentSection = ({ postId, memberId, onStartReply }: Props) => {
 
   return (
     <div className="flex w-full flex-col">
-      <div className="flex flex-col gap-11 px-13 pt-16 pb-16">
+      <div className="flex flex-col gap-11 pt-16 pb-16">
         <div className="flex items-center gap-5">
           <span className="text-body-body4 text-foreground-normal">댓글 {totalCount}</span>
         </div>
@@ -150,7 +151,10 @@ export const CommentSection = ({ postId, memberId, onStartReply }: Props) => {
           })}
 
           {comments.length === 0 && (
-            <div className="py-8 text-center text-gray-500">첫 댓글을 남겨보세요.</div>
+            <div className="flex h-full flex-col items-center justify-center gap-3 pt-[3rem]">
+              <CommentsEmpty />
+              <div className="text-body-body8 text-foreground-tertiary">첫 댓글을 남겨보세요!</div>
+            </div>
           )}
         </div>
       </div>

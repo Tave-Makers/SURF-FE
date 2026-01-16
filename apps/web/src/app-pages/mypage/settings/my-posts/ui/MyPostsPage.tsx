@@ -1,6 +1,7 @@
 'use client';
 
 import { useEffect, useCallback } from 'react';
+import MyPostsEmpty from '@/app-pages/mypage/settings/my-posts/ui/icons/myposts-empty.svg';
 import { useAuthStore } from '@/features/auth/model/useAuthStore';
 import { trackMyPostsEvent } from '@/features/post/lib/trackMyPostsEvent';
 import { MY_POSTS_EVENTS } from '@/features/post/model/types';
@@ -29,6 +30,13 @@ const MyPostsPage = () => {
 
   const scrollRef = useDynamicScrollTracking<HTMLDivElement>(handleScrollThreshold);
 
+  const emptyView = (
+    <div className="flex h-full flex-col items-center justify-center gap-12">
+      <MyPostsEmpty />
+      <div className="text-body-body8 text-foreground-tertiary">아직 작성한 게시글이 없어요</div>
+    </div>
+  );
+
   return (
     <div className="flex h-full">
       <div ref={scrollRef} className="flex-1 overflow-y-auto px-13 pt-13">
@@ -39,6 +47,7 @@ const MyPostsPage = () => {
           }
           scrollRootRef={scrollRef}
           userLevel={userLevel}
+          emptyView={emptyView}
         />
       </div>
     </div>

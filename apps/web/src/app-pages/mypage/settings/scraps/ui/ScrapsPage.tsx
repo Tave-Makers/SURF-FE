@@ -1,6 +1,7 @@
 'use client';
 
 import { useEffect, useCallback } from 'react';
+import ScrapsEmpty from '@/app-pages/mypage/settings/scraps/ui/icons/scraps-empty.svg';
 import { useAuthStore } from '@/features/auth/model/useAuthStore';
 import { trackScrapsEvent } from '@/features/post/lib/trackScrapsEvent';
 import { SCRAPS_EVENTS } from '@/features/post/model/types';
@@ -29,6 +30,13 @@ const ScrapsPage = () => {
 
   const scrollRef = useDynamicScrollTracking<HTMLDivElement>(handleScrollThreshold);
 
+  const emptyView = (
+    <div className="flex h-full flex-col items-center justify-center gap-12">
+      <ScrapsEmpty />
+      <div className="text-body-body8 text-foreground-tertiary">아직 스크랩한 게시글이 없어요</div>
+    </div>
+  );
+
   return (
     <div className="flex h-full">
       <div ref={scrollRef} className="flex-1 overflow-y-auto px-13 pt-13">
@@ -41,6 +49,7 @@ const ScrapsPage = () => {
           }
           scrollRootRef={scrollRef}
           userLevel={userLevel}
+          emptyView={emptyView}
         />
       </div>
     </div>

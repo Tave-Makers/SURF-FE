@@ -41,7 +41,7 @@ export const SignupRequestItem = ({
       </div>
       <div className="mt-7 flex flex-row gap-8">
         <RequestStatusBadge status={status} />
-        <SurfIcon name="ArrowRight" />
+        <SurfIcon name="ChevronRight" />
       </div>
     </div>
   );

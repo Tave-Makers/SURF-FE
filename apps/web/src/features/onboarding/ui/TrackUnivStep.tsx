@@ -169,7 +169,7 @@ export const TrackUnivStep = () => {
 
       {/* 피커 모달 */}
       <ModalSheet isOpen={isSheetOpen} onClose={() => setIsSheetOpen(false)}>
-        <ModalSheet.Container className="!right-0 !left-0 mx-auto w-full sm:max-w-[360px]">
+        <ModalSheet.Container className="!right-0 !left-0 mx-auto w-full sm:max-w-[min(100dvw,calc(100dvh*375/812))]">
           <ModalSheet.Content>
             <Sheet>
               <div className="flex flex-col gap-[1.25rem]">

@@ -25,7 +25,7 @@ const onChangeMock = (data: { content: string; images: UploadImage[] }) => {
 // 기본 예시
 export const Default: Story = {
   render: (args) => (
-    <div className="mx-auto flex h-[300px] w-[360px] overflow-hidden border border-[#e0e0e0]">
+    <div className="mx-auto flex h-[300px] w-[min(100dvw,calc(100dvh*375/812))] overflow-hidden border border-[#e0e0e0]">
       <PostEditor {...args} />
     </div>
   ),
@@ -40,7 +40,7 @@ export const Default: Story = {
 // 빈 에디터
 export const Empty: Story = {
   render: (args) => (
-    <div className="mx-auto flex h-[300px] w-[360px] overflow-hidden border border-[#e0e0e0]">
+    <div className="mx-auto flex h-[300px] w-[min(100dvw,calc(100dvh*375/812))] overflow-hidden border border-[#e0e0e0]">
       <PostEditor {...args} />
     </div>
   ),

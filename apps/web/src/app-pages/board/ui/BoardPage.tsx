@@ -61,7 +61,7 @@ const BoardPage = ({ boardId: boardIdProp }: { boardId: string }) => {
       </div>
       {userLevel !== 'member' && (
         <div className="pointer-events-none fixed inset-0 z-50">
-          <div className="relative mx-auto h-full sm:max-w-[360px]">
+          <div className="relative mx-auto h-full sm:max-w-[min(100dvw,calc(100dvh*375/812))]">
             <div className="pointer-events-auto absolute right-15 bottom-15">
               <PostFab onClick={() => router.push(PAGE_ROUTES.BOARD.POST_CREATE(boardId))} />
             </div>

@@ -157,7 +157,7 @@ export const CommentSection = ({ postId, memberId, onStartReply }: Props) => {
 
       {/* 댓글 옵션 Sheet */}
       <ModalSheet isOpen={optionsOpen} onClose={() => setOptionsOpen(false)}>
-        <ModalSheet.Container className="!right-0 !left-0 mx-auto max-w-[360px]">
+        <ModalSheet.Container className="!right-0 !left-0 mx-auto max-w-[min(100dvw,calc(100dvh*375/812))]">
           <ModalSheet.Content>
             <Sheet title="댓글 옵션">
               <div className="flex flex-col">

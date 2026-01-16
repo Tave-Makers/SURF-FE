@@ -24,7 +24,7 @@ export const Default: Story = {
       useImageSelector();
 
     return (
-      <div className="flex w-[360px] flex-col items-center gap-4 rounded-lg border border-gray-200 p-4">
+      <div className="flex w-[min(100dvw,calc(100dvh*375/812))] flex-col items-center gap-4 rounded-lg border border-gray-200 p-4">
         {/* 파일 업로드 버튼 */}
         <button
           type="button"

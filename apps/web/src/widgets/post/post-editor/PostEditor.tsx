@@ -122,7 +122,7 @@ export const PostEditor = ({
       if (!storeContent) return;
 
       const currentHtml = editor.getHTML();
-      if (currentHtml === '' || currentHtml === '<p></p>') {
+      if (currentHtml !== storeContent) {
         editor.commands.setContent(storeContent);
         contentRef.current = storeContent;
       }

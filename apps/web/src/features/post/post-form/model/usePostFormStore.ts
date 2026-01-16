@@ -43,9 +43,8 @@ export const usePostFormStore = create<PostFormState>((set, get) => ({
   setCanInitialize: (canInit) => set({ canInitialize: canInit }),
 }));
 
-// usePostFormStore.ts 파일 맨 아래에 추가
-usePostFormStore.subscribe((state, prevState) => {
-  if (process.env.NODE_ENV === 'development') {
+if (process.env.NODE_ENV === 'development') {
+  usePostFormStore.subscribe((state, prevState) => {
     if (state.canInitialize !== prevState.canInitialize) {
       console.log('🔔 canInitialize 변경:', prevState.canInitialize, '->', state.canInitialize);
     }
@@ -69,5 +68,5 @@ usePostFormStore.subscribe((state, prevState) => {
         after: state.images,
       });
     }
-  }
-});
+  });
+}

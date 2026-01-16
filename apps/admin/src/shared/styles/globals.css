@@ -1,0 +1,48 @@
+@import '@surf/ui/styles/globals.css';
+
+/* 뷰포트 높이 전파 */
+html,
+body,
+#__next {
+  height: 100%;
+}
+
+html,
+body {
+  font-family:
+    'Wanted Sans Variable',
+    'Wanted Sans',
+    -apple-system,
+    BlinkMacSystemFont,
+    system-ui,
+    'Segoe UI',
+    'Apple SD Gothic Neo',
+    'Noto Sans KR',
+    'Malgun Gothic',
+    'Apple Color Emoji',
+    'Segoe UI Emoji',
+    'Segoe UI Symbol',
+    sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  overflow: hidden;
+}
+
+/* iOS 관성 스크롤 보강용 유틸 */
+.scroll-touch {
+  -webkit-overflow-scrolling: touch;
+}
+
+/* placeholder */
+.placeholder-body-14-600--1-24::placeholder {
+  font-family:
+    Wanted Sans Variable,
+    sans-serif;
+  font-weight: 600;
+  line-height: 24px;
+  font-size: 14px;
+  letter-spacing: -0.01em;
+  text-indent: 0px;
+  text-transform: none;
+  text-decoration: none;
+}

@@ -1,4 +1,6 @@
 import { Avatar } from '@surf/ui/avatar';
+import { useRouter } from 'next/navigation';
+import { PAGE_ROUTES } from '@/shared/config/path';
 
 type PostProfileProps = {
   memberId: number | null;
@@ -17,23 +19,32 @@ export const PostProfile = ({
   time,
   viewCount,
 }: PostProfileProps) => {
+  const router = useRouter();
+
   const isClickable = memberId !== null;
+
   return (
     <section className="flex items-center gap-10" aria-label={`${nickname}님의 작성 게시글 정보`}>
-      {/* TODO: 프로필 이미지 클릭 시 사용자 프로필 페이지로 이동 */}
       <Avatar
         src={profileImgUrl}
         size="m"
         alt={`${nickname}의 프로필 이미지`}
         className={isClickable ? 'cursor-pointer' : 'cursor-default'}
-        onClick={isClickable ? () => {} : undefined}
+        onClick={
+          isClickable
+            ? () => {
+                router.push(PAGE_ROUTES.MEMBER.PROFILE(memberId));
+              }
+            : undefined
+        }
       />
       <div className="flex flex-col items-start justify-center py-3">
-        {/* TODO: 닉네임 클릭 시 사용자 프로필 페이지로 이동 */}
         {isClickable ? (
           <button
             type="button"
-            onClick={() => {}}
+            onClick={() => {
+              router.push(PAGE_ROUTES.MEMBER.PROFILE(memberId));
+            }}
             className="text-body-body6 text-foreground-normal"
           >
             {nickname}

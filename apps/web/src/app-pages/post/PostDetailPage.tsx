@@ -218,7 +218,9 @@ const PostDetailPage = ({ postId }: PostDetailPageProps) => {
                         node={
                           <Avatar size="xs" src={user.profileImageUrl} className="rounded-3!" />
                         }
-                        onClick={() => {}} // TODO: 사용자 프로필 이동 기능 추가
+                        onClick={() => {
+                          router.push(PAGE_ROUTES.MEMBER.PROFILE(user.id!));
+                        }}
                       />
                     );
                   })}

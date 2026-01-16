@@ -7,7 +7,7 @@ type RouterInstance = ReturnType<typeof useRouter>;
 
 export type RouteConfig = {
   id: string;
-  path: string;
+  path: string | RegExp;
   backPath: string;
   header: HeaderProps;
 };
@@ -164,8 +164,8 @@ export const createRouteConfig = (router: RouterInstance): RouteConfig[] => [
   },
   {
     id: 'profile',
-    path: PAGE_ROUTES.PROFILE,
-    backPath: PAGE_ROUTES.MYPAGE.MAIN, // 임시
+    path: /^\/member\/\d+$/,
+    backPath: PAGE_ROUTES.MEMBER.MEMBER_SEARCH,
     header: {
       mode: HeaderMode.Default,
       hasLeftIcon: true,

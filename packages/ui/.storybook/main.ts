@@ -2,13 +2,13 @@ import type { StorybookConfig } from '@storybook/nextjs';
 import type { Configuration, RuleSetRule } from 'webpack';
 
 const config: StorybookConfig = {
-  stories: ['../src/**/*.stories.@(js|jsx|mjs|ts|tsx)'],
+  stories: ['../components/**/*.stories.@(js|jsx|mjs|ts|tsx)'],
   addons: ['@chromatic-com/storybook', '@storybook/addon-docs', '@storybook/addon-a11y'],
   framework: {
     name: '@storybook/nextjs',
     options: {},
   },
-  staticDirs: ['../src/assets'],
+  staticDirs: ['../assets'],
 
   webpackFinal: (config: Configuration) => {
     if (!config.module || !config.module.rules) {

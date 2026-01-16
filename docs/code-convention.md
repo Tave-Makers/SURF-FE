@@ -26,8 +26,8 @@ fix/navbar-overlap-210
   e.g. `hotfix/prod-payment-error-555`
 - **refactor/** → 리팩토링 (동작 변경 없음, 구조/성능 개선)  
   e.g. `refactor/user-service-98`
-- **style/** → UI, CSS 스타일 작업  
-  e.g. `style/homepage-header-45`
+- **ui/** → UI, CSS 스타일 작업  
+  e.g. `ui/homepage-header-45`
 - **docs/** → 문서 작업  
   e.g. `docs/contribution-guide-12`
 - **chore/** → 빌드/설정/배포/의존성 업데이트  
@@ -115,19 +115,11 @@ feat: 로그인 API 연동 (#39)
 - `entities/*/model/types.ts`, `features/*/model/types.ts`: UI 도메인 타입만 정의합니다. (뷰 모델, UI 상태, 폼 데이터 등)
 - API DTO -> UI 도메인 변환은 `*/model/mappers.ts`에서 처리합니다.
 
-### 2. API 파일 네이밍
-- API 호출 파일은 실행 환경을 명시합니다.
-  - 클라이언트 호출: `*.client.ts`
-  - 서버 전용 호출: `*.server.ts`
-- 예시:
-  - `entities/user/api/getMyProfile.server.ts`
-  - `features/recent-search/api/deleteAllRecentSearches.client.ts`
+### 2. 폴더 역할 분리
+- `*/api`: API 호출만 포함합니다. (fetch/axios, guards, api types)
+- `*/model`: 훅/매퍼/도메인 로직만 포함합니다. (hooks, mappers, queryKeys, domain types, stores)
 
-### 3. 폴더 역할 분리
-- `*/api`: API 호출만 포함합니다. (fetch/axios, guards, queryKeys, api types)
-- `*/model`: 훅/매퍼/도메인 로직만 포함합니다. (hooks, mappers, domain types, stores)
-
-### 4. 네이밍 예시
+### 3. 네이밍 예시
 - API DTO: `UserProfileApiResponse`, `UpdateProfileRequest`
 
 ---

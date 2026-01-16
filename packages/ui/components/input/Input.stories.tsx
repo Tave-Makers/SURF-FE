@@ -24,7 +24,7 @@ const meta = {
       control: 'text',
       description: 'Placeholder 문구',
     },
-    isDisabled: {
+    disabled: {
       control: 'boolean',
       description: '비활성화 여부',
     },
@@ -101,7 +101,7 @@ export const Password: Story = {
 export const Disabled: Story = {
   args: {
     type: 'text',
-    isDisabled: true,
+    disabled: true,
     initialValue: '수정할 수 없습니다',
   },
 };

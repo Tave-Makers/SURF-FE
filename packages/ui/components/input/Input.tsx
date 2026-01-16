@@ -36,14 +36,6 @@ export type InputProps = Omit<InputHTMLAttributes<HTMLInputElement>, 'onChange' 
    */
   errorMessage?: string;
   /**
-   * 비활성화 상태
-   */
-  isDisabled?: boolean;
-  /**
-   * 읽기 전용 상태
-   */
-  readOnly?: boolean;
-  /**
    * 우측에 표시할 아이콘 슬롯
    */
   icon?: React.ReactNode;
@@ -70,7 +62,7 @@ export const Input = forwardRef<HTMLInputElement, InputProps>(
       errorMessage,
       type = 'text',
       placeholder = '내용을 입력하세요',
-      isDisabled = false,
+      disabled = false,
       readOnly = false,
       icon,
       prefix,
@@ -85,7 +77,7 @@ export const Input = forwardRef<HTMLInputElement, InputProps>(
     const [isFocused, setIsFocused] = useState(false);
     const uid = useId();
 
-    const isInteractive = !isDisabled && !readOnly;
+    const isInteractive = !disabled && !readOnly;
     const hasValue = value.trim().length > 0;
     const isPasswordType = type === 'password';
     const [isPasswordVisible, setIsPasswordVisible] = useState(false);
@@ -96,7 +88,7 @@ export const Input = forwardRef<HTMLInputElement, InputProps>(
     const borderColor =
       isInteractive && isFocused ? 'border border-border-primary' : 'border border-transparent';
 
-    const containerOpacity = isDisabled ? 'opacity-50' : '';
+    const containerOpacity = disabled ? 'opacity-50' : '';
 
     const { describedBy, guideId, errorId } = useMemo(() => {
       const gId = `input-guide-${uid}`;
@@ -125,7 +117,7 @@ export const Input = forwardRef<HTMLInputElement, InputProps>(
       <div
         className={`flex flex-col gap-5 ${containerOpacity} ${className}`}
         data-readonly={readOnly || undefined}
-        data-disabled={isDisabled || undefined}
+        data-disabled={disabled || undefined}
       >
         <div
           className={[
@@ -140,7 +132,7 @@ export const Input = forwardRef<HTMLInputElement, InputProps>(
             ref={ref}
             value={value}
             placeholder={placeholder}
-            disabled={isDisabled}
+            disabled={disabled}
             readOnly={readOnly}
             type={inputType}
             onFocus={handleFocus}
@@ -171,7 +163,7 @@ export const Input = forwardRef<HTMLInputElement, InputProps>(
               type="button"
               aria-label={isPasswordVisible ? '비밀번호 숨기기' : '비밀번호 보기'}
               aria-pressed={isPasswordVisible}
-              disabled={isDisabled}
+              disabled={disabled}
               onClick={() => setIsPasswordVisible((prev) => !prev)}
               className="text-foreground-tertiary flex items-center"
             >

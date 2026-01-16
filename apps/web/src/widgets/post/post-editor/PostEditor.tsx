@@ -22,8 +22,8 @@ import { useKeyboardOffset } from '@/shared/hooks/useKeyboardOffset';
 
 export type PostEditorProps = {
   mode: PostPageMode;
-  initialContent: string;
-  initialImages: UploadImage[];
+  initialContent: string; // Store에서 내려오는 전역 본문 데이터
+  initialImages: UploadImage[]; // Store에서 내려오는 전역 이미지 데이터
   linkedSchedule: ScheduleFormData | null;
   onChange: (data: { content: string; images: UploadImage[] }) => void;
   onScheduleRemove: () => void;
@@ -33,15 +33,29 @@ export type PostEditorProps = {
 
 export const PostEditor = ({
   mode,
-  initialContent,
-  initialImages,
+  initialContent: storeContent,
+  initialImages: storeImages,
   linkedSchedule,
   onChange,
   onScheduleRemove,
   onReservationClick,
   isPublished,
 }: PostEditorProps) => {
-  // 1. Hooks & Refs
+  /**
+   * [플래그 역할 정의]
+   * 1. canInitialize (전역): 페이지 진입 시 데이터 준비가 완료되었음을 알리는 신호 (부모 제어)
+   * 2. isInitialized (전역): 게시글 데이터가 에디터에 "생애 최초 1회" 주입되었음을 의미 (재주입 방지)
+   * 3. isLocalInitialized (지역): 현재 마운트된 에디터 인스턴스에 데이터가 주입되었는지 여부 (복귀 시 대응)
+   */
+  const {
+    isEditorInitialized: isInitialized,
+    setIsEditorInitialized: setIsInitialized,
+    canInitialize,
+  } = usePostFormStore();
+
+  const isLocalInitialized = useRef(false);
+  const contentRef = useRef<string>(storeContent);
+
   const {
     inputRef,
     images,
@@ -52,25 +66,16 @@ export const PostEditor = ({
     openPicker,
   } = useImageManager();
 
-  const contentRef = useRef<string>(initialContent);
-  const {
-    isEditorInitialized: isInitialized,
-    setIsEditorInitialized: setIsInitialized,
-    canInitialize,
-  } = usePostFormStore();
-  const [isDataSynced, setIsDataSynced] = useState(false);
   const keyboardOffset = useKeyboardOffset();
   const { MAX_IMAGES } = POST_VALIDATION;
-
   const [showImageLimitAlert, setShowImageLimitAlert] = useState(false);
 
-  // 2. Editor Callbacks & Initialization
+  // --- 1. Editor Callbacks ---
 
-  // TipTap 내용 업데이트 핸들러
   const onUpdate = useCallback(
     (html: string) => {
       contentRef.current = html;
-      // 초기화 완료 후에만 부모 컴포넌트의 상태를 업데이트
+      // 초기화가 완료된 후, 유효한 페이지 세션 내에서만 부모 스토어 업데이트 전파
       if (isInitialized && canInitialize) {
         onChange({ content: html, images });
       }
@@ -78,73 +83,79 @@ export const PostEditor = ({
     [onChange, images, isInitialized, canInitialize],
   );
 
-  const editor = usePostEditor(initialContent, onUpdate);
+  const editor = usePostEditor(storeContent, onUpdate);
 
-  // 외부 데이터(initialValue) 주입 및 초기화 세션 관리
+  // --- 2. Data Initialization (로컬 & 전역 동기화) ---
+
+  /**
+   * [CASE A: 일정 페이지 복귀 대응]
+   * 전역 초기화는 이미 끝났지만(true), 컴포넌트가 재마운트되어 로컬 상태가 비어있을 때 실행
+   */
+  useEffect(() => {
+    if (!canInitialize || !editor) return;
+
+    if (isInitialized && !isLocalInitialized.current) {
+      if (storeContent) editor.commands.setContent(storeContent);
+      setImages(storeImages || []);
+
+      isLocalInitialized.current = true;
+      return;
+    }
+  }, [canInitialize, isInitialized, editor, storeContent, storeImages, setImages]);
+
+  /**
+   * [CASE B: 게시글 최초 진입 및 데이터 주입]
+   * 수정 모드의 상세 데이터를 기다리거나, 생성 모드 진입 시 최초 1회 실행
+   */
   useEffect(() => {
     if (!editor || isInitialized || !canInitialize) return;
 
-    // 생성 모드: 데이터 주입을 기다리지 않고 즉시 활성화
     if (mode === 'create') {
-      // 일정 페이지 등 외부에서 돌아온 경우: Zustand에 저장된 이미지를 복구
-      if (initialImages && initialImages.length > 0) {
-        setImages(initialImages);
-      }
+      setImages(storeImages || []);
       setIsInitialized(true);
+      isLocalInitialized.current = true;
       return;
     }
 
-    // 수정 모드: 서버에서 넘어온 데이터를 에디터 및 이미지 매니저에 주입
-    const currentHtml = editor.getHTML();
-    const hasNoContent = currentHtml === '' || currentHtml === '<p></p>';
+    if (mode === 'edit') {
+      // 수정 모드는 서버 데이터(storeContent)가 로드될 때까지 대기
+      if (!storeContent) return;
 
-    // 1) 본문 데이터 주입
-    if (initialContent && hasNoContent) {
-      editor.commands.setContent(initialContent);
-      contentRef.current = initialContent;
-
-      // 이미지가 없는 게시글인 경우 여기서 초기화 완료 처리
-      if (!initialImages || initialImages.length === 0) {
-        setIsInitialized(true);
+      const currentHtml = editor.getHTML();
+      if (currentHtml === '' || currentHtml === '<p></p>') {
+        editor.commands.setContent(storeContent);
+        contentRef.current = storeContent;
       }
-    }
 
-    // 2) 이미지 데이터 주입 (최초 1회)
-    if (initialImages && initialImages.length > 0) {
-      setImages(initialImages);
+      setImages(storeImages || []);
       setIsInitialized(true);
+      isLocalInitialized.current = true;
     }
   }, [
     editor,
     isInitialized,
-    setIsInitialized,
-    initialContent,
-    initialImages,
-    setImages,
-    mode,
     canInitialize,
+    storeContent,
+    storeImages,
+    mode,
+    setImages,
+    setIsInitialized,
   ]);
 
-  // 복귀 시 초기 이미지가 들어오면 로컬 상태에 동기화
+  // --- 3. Side Effects ---
+
+  /**
+   * [이미지 변경 감지 및 부모 전파]
+   * 로컬 주입(isMountedRef)이 끝난 상태에서만 변경 사항을 전역 스토어로 전달 (역류 방지)
+   */
   useEffect(() => {
-    if (isDataSynced || !isInitialized || !initialImages || !canInitialize) return;
+    if (!isInitialized || !canInitialize || !isLocalInitialized.current) return;
 
-    // 현재 로컬 images가 비어있고, initialImages가 있으면 동기화
-    if (images.length === 0 && initialImages.length > 0) {
-      setImages(initialImages);
-      setIsDataSynced(true);
-    }
-  }, [isInitialized, initialImages, images.length, isDataSynced, setImages, canInitialize]);
-
-  // 3. Side Effects
-
-  // 이미지 리스트 변경 감지 (삭제/순서변경 등) 시 부모에게 알림
-  useEffect(() => {
-    if (!isInitialized || !canInitialize) return;
     onChange({ content: contentRef.current, images });
   }, [images, onChange, isInitialized, canInitialize]);
 
-  // 4. Handlers
+  // --- 4. Handlers & Render Helpers ---
+
   const handleImageUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
     const files = e.target.files;
     if (!files) return;
@@ -154,13 +165,9 @@ export const PostEditor = ({
       e.target.value = '';
       return;
     }
-
     await handleSelectAndUpload(e);
   };
 
-  if (!editor) return null;
-
-  // 5. Render Helpers
   const renderScheduleCard = () => {
     if (!linkedSchedule) return null;
 
@@ -185,6 +192,8 @@ export const PostEditor = ({
       </div>
     );
   };
+
+  if (!editor) return null;
 
   return (
     <div className="flex w-full min-w-0 flex-col gap-10">

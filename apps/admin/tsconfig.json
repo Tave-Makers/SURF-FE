@@ -1,0 +1,23 @@
+{
+  "extends": "@surf/typescript-config/nextjs.json",
+  "compilerOptions": {
+    "baseUrl": ".",
+    "paths": {
+      "@/*": ["src/*"],
+      "@surf/ui/*": ["../../packages/ui/*"]
+    }
+  },
+  "include": [
+    "svgr.d.ts",
+    "next-env.d.ts",
+    "vitest.shims.d.ts",
+    "**/*.ts",
+    "**/*.tsx",
+    ".next/types/**/*.ts",
+    "**/*.js",
+    "**/*.mjs",
+    ".storybook/**/*",
+    "scripts/update-theme.ts"
+  ],
+  "exclude": ["node_modules"]
+}

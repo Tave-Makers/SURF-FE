@@ -2,10 +2,7 @@ import type { StorybookConfig } from '@storybook/nextjs';
 import type { Configuration, RuleSetRule } from 'webpack';
 
 const config: StorybookConfig = {
-  stories: [
-    '../src/**/*.stories.@(js|jsx|mjs|ts|tsx)',
-    '../../packages/ui/src/**/*.stories.@(js|jsx|mjs|ts|tsx)',
-  ],
+  stories: ['../src/**/*.stories.@(js|jsx|mjs|ts|tsx)'],
   addons: ['@chromatic-com/storybook', '@storybook/addon-docs', '@storybook/addon-a11y'],
   framework: {
     name: '@storybook/nextjs',

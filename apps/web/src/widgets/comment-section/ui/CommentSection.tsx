@@ -13,8 +13,8 @@ import { useDeleteCommentMutation } from '@/features/comment/model/useDeleteComm
 import { useGetCommentsQuery } from '@/features/comment/model/useGetCommentsQuery';
 import { useToggleCommentLikeMutation } from '@/features/comment/model/useToggleCommentLikeMutation';
 import { Comment } from '@/features/comment/ui/Comment';
+import CommentsEmpty from '@/shared/assets/icons/empty-space/comments-empty.svg';
 import { toDate, toKST, formatDateTime } from '@/shared/utils/date';
-import CommentsEmpty from '@/widgets/comment-section/ui/icons/comments-empty.svg';
 
 interface Props {
   postId: number;
@@ -152,7 +152,7 @@ export const CommentSection = ({ postId, memberId, onStartReply }: Props) => {
 
           {comments.length === 0 && (
             <div className="flex h-full flex-col items-center justify-center gap-3 pt-[3rem]">
-              <CommentsEmpty />
+              <CommentsEmpty className="h-[3.16rem] w-[4.53rem]" />
               <div className="text-body-body8 text-foreground-tertiary">첫 댓글을 남겨보세요!</div>
             </div>
           )}

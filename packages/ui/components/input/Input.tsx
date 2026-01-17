@@ -77,7 +77,6 @@ export const Input = forwardRef<HTMLInputElement, InputProps>(
     const [isFocused, setIsFocused] = useState(false);
     const uid = useId();
 
-    const isInteractive = !disabled && !readOnly;
     const hasValue = value.trim().length > 0;
     const isPasswordType = type === 'password';
     const [isPasswordVisible, setIsPasswordVisible] = useState(false);
@@ -86,7 +85,9 @@ export const Input = forwardRef<HTMLInputElement, InputProps>(
     const textColor = hasValue ? 'text-foreground-normal' : 'text-foreground-tertiary';
 
     const borderColor =
-      isInteractive && isFocused ? 'border border-border-primary' : 'border border-transparent';
+      isFocused && !disabled && !readOnly
+        ? 'border border-border-primary'
+        : 'border border-transparent';
 
     const containerOpacity = disabled ? 'opacity-50' : '';
 
@@ -98,13 +99,13 @@ export const Input = forwardRef<HTMLInputElement, InputProps>(
     }, [uid, errorMessage, guideMessage]);
 
     const handleFocus = (e: React.FocusEvent<HTMLInputElement>) => {
-      if (!isInteractive) return;
+      if (disabled) return;
       setIsFocused(true);
       onFocusProp?.(e);
     };
 
     const handleBlur = (e: React.FocusEvent<HTMLInputElement>) => {
-      if (!isInteractive) return;
+      if (disabled) return;
       setIsFocused(false);
       onBlurProp?.(e);
     };
@@ -138,7 +139,7 @@ export const Input = forwardRef<HTMLInputElement, InputProps>(
             onFocus={handleFocus}
             onBlur={handleBlur}
             onMouseDown={(e) => {
-              if (!isInteractive) e.preventDefault();
+              if (disabled) e.preventDefault();
             }}
             onChange={handleChange}
             className={[
@@ -152,7 +153,7 @@ export const Input = forwardRef<HTMLInputElement, InputProps>(
             aria-invalid={!!errorMessage}
             aria-readonly={readOnly || undefined}
             aria-describedby={describedBy}
-            tabIndex={readOnly ? -1 : undefined}
+            tabIndex={disabled ? -1 : undefined}
             {...rest}
           />
 

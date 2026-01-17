@@ -1,7 +1,7 @@
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { readNotification } from '../api/readNotification';
 import { notificationKeys } from './queryKeys';
-import type { Notification } from '../api/types';
+import type { GetNotificationsResponse } from '../api/types';
 
 export function useReadNotification() {
   const queryClient = useQueryClient();
@@ -21,14 +21,17 @@ export function useReadNotification() {
       // 알림 읽음 여부 데이터 직접 수정
       queryClient.setQueriesData(
         { queryKey: notificationKeys.all },
-        (oldData: Notification[] | undefined) => {
+        (oldData: GetNotificationsResponse | undefined) => {
           if (!oldData) return oldData;
 
-          return oldData.map((notification) =>
-            notification.id === notificationId
-              ? { ...notification, read: true } // 해당 ID 알림 읽음 처리
-              : notification,
-          );
+          return {
+            ...oldData,
+            data: oldData.data.map((notification) =>
+              notification.id === notificationId
+                ? { ...notification, read: true } // 해당 ID 알림 읽음 처리
+                : notification,
+            ),
+          };
         },
       );
 

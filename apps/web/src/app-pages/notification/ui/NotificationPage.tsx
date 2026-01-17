@@ -66,12 +66,7 @@ export const NotificationPage = () => {
     }
 
     if (isPending) {
-      return (
-        <div className="p-20 text-center text-gray-500">
-          <NotificationEmpty />
-          로딩 중...
-        </div>
-      );
+      return <div className="p-20 text-center text-gray-500">로딩 중...</div>;
     }
 
     // 데이터가 있을 때

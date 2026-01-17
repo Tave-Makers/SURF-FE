@@ -13,8 +13,8 @@ import { SurfIcon } from '../icon/SurfIcon';
  *   value={value}
  *   onChange={setValue}
  *   guideMessage="영문/숫자 조합 8자 이상"
- *   prefix={<span>@</span>}
- *   suffix={<span>원</span>}
+ *   leading={<span>@</span>}
+ *   trailing={<span>원</span>}
  * />
  * ```
  */
@@ -40,13 +40,13 @@ export type InputProps = Omit<InputHTMLAttributes<HTMLInputElement>, 'onChange' 
    */
   icon?: React.ReactNode;
   /**
-   * 좌측 슬롯 (prefix)
+   * 좌측 슬롯 (leading)
    */
-  prefix?: React.ReactNode;
+  leading?: React.ReactNode;
   /**
-   * 우측 슬롯 (suffix)
+   * 우측 슬롯 (trailing)
    */
-  suffix?: React.ReactNode;
+  trailing?: React.ReactNode;
 };
 
 /**
@@ -65,8 +65,8 @@ export const Input = forwardRef<HTMLInputElement, InputProps>(
       disabled = false,
       readOnly = false,
       icon,
-      prefix,
-      suffix,
+      leading,
+      trailing,
       className = '',
       onFocus: onFocusProp,
       onBlur: onBlurProp,
@@ -127,7 +127,7 @@ export const Input = forwardRef<HTMLInputElement, InputProps>(
             borderColor,
           ].join(' ')}
         >
-          {prefix ? <div className="flex items-center">{prefix}</div> : null}
+          {leading ? <div className="flex items-center">{leading}</div> : null}
 
           <input
             ref={ref}
@@ -157,7 +157,7 @@ export const Input = forwardRef<HTMLInputElement, InputProps>(
             {...rest}
           />
 
-          {suffix ? <div className="flex items-center">{suffix}</div> : null}
+          {trailing ? <div className="flex items-center">{trailing}</div> : null}
 
           {isPasswordType ? (
             <button

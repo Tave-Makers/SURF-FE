@@ -13,10 +13,12 @@ export const ToastViewport = () => {
   if (typeof window === 'undefined') return null;
   if (!current) return null;
 
+  const container = document.getElementById('toast-root') || document.body;
+
   return createPortal(
     <div className={viewportStyle} role="status" aria-live="polite" aria-atomic="true">
       <Toast text={current.text} />
     </div>,
-    document.body,
+    container,
   );
 };

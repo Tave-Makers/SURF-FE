@@ -17,12 +17,14 @@ export const BottomSheetViewport = () => {
     return null;
   }
 
+  const container = document.getElementById('bottom-sheet-root') || document.body;
+
   return createPortal(
     <Component
       {...(current.props as React.ComponentProps<typeof Component>)}
       isOpen={true}
       onClose={close}
     />,
-    document.body,
+    container,
   );
 };

@@ -1,14 +1,12 @@
 import type { Meta, StoryObj } from '@storybook/nextjs';
-import type { ComponentProps } from 'react';
 import { PostProfile } from './PostProfile';
-
-type PostProfileProps = ComponentProps<typeof PostProfile>;
 
 const meta: Meta<typeof PostProfile> = {
   title: 'Entities/UI/Post/PostProfile',
   component: PostProfile,
   tags: ['autodocs'],
   argTypes: {
+    memberId: { control: 'number' },
     profileImgUrl: { control: 'text' },
     nickname: { control: 'text' },
     date: { control: 'text' },
@@ -16,6 +14,7 @@ const meta: Meta<typeof PostProfile> = {
     viewCount: { control: 'number' },
   },
   args: {
+    memberId: 1,
     nickname: '사용자 이름',
     date: '2023-01-01',
     time: '12:00',
@@ -27,6 +26,12 @@ export default meta;
 
 type Story = StoryObj<typeof PostProfile>;
 
-export const Default: Story = {
-  render: (args: PostProfileProps) => <PostProfile {...args} />,
+export const Default: Story = {};
+
+export const Withdrawn: Story = {
+  args: {
+    memberId: null,
+    nickname: '탈퇴한 사용자',
+    profileImgUrl: undefined,
+  },
 };

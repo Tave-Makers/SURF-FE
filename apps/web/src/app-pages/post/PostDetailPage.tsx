@@ -200,13 +200,30 @@ const PostDetailPage = ({ postId }: PostDetailPageProps) => {
                 {/* 목록 */}
                 {!isLikesLoading &&
                   !isLikesError &&
-                  likedUsers.map((user) => (
-                    <SheetItem
-                      key={user.id}
-                      title={user.name}
-                      node={<Avatar size="xs" src={user.profileImageUrl} className="rounded-3!" />}
-                    />
-                  ))}
+                  likedUsers.map((user, index) => {
+                    if (!user.id) {
+                      return (
+                        <SheetItem
+                          key={`withdrawn-${index}`}
+                          title={user.name} // '탈퇴한 회원'으로 표시됨
+                          node={<Avatar size="xs" className="rounded-3!" />}
+                        />
+                      );
+                    }
+
+                    return (
+                      <SheetItem
+                        key={user.id}
+                        title={user.name}
+                        node={
+                          <Avatar size="xs" src={user.profileImageUrl} className="rounded-3!" />
+                        }
+                        onClick={() => {
+                          router.push(PAGE_ROUTES.MEMBER.PROFILE(user.id!));
+                        }}
+                      />
+                    );
+                  })}
 
                 {/* 비어 있을 때 */}
                 {!isLikesLoading && !isLikesError && likedUsers.length === 0 && (

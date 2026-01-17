@@ -33,7 +33,7 @@ export const LoginForm = () => {
         e.preventDefault();
         void handleSubmit(onSubmit)(e);
       }}
-      aria-label="프로필 편집 폼"
+      aria-label="어드민 로그인 폼"
     >
       <div className="flex w-full flex-col gap-16 pb-16">
         <FieldGroup title="이메일" isRequired className="w-full">

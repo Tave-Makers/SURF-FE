@@ -1,6 +1,7 @@
 'use client';
-import { SolidButton } from '@surf/ui/dist/components/button';
-import { FieldGroup } from '@surf/ui/dist/components/field-group';
+import { SolidButton } from '@surf/ui/button';
+
+import { FieldGroup } from '@surf/ui/field-group';
 import { Input } from '@surf/ui/input';
 
 import { Controller, useForm } from 'react-hook-form';

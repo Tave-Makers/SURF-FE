@@ -1,4 +1,4 @@
-import { SolidButton } from '@surf/ui/dist/components/button';
+import { SolidButton } from '@surf/ui/button';
 
 type ButtonAction = {
   key: string;

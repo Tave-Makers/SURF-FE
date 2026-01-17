@@ -1,11 +1,11 @@
 'use client';
 
-import { Alert } from '@surf/ui/alert';
 import { HeaderMode } from '@surf/ui/header';
+import { useAlertStore } from '@surf/ui/store/alertStore';
 import { useToastStore } from '@surf/ui/store/toastStore';
 import { format, roundToNearestMinutes } from 'date-fns';
 import { useRouter, useParams, useSearchParams } from 'next/navigation';
-import { useState, useMemo } from 'react';
+import { useMemo } from 'react';
 import { useForm, FormProvider } from 'react-hook-form';
 
 // Hooks & Store
@@ -29,7 +29,8 @@ export const ScheduleEditorContainer = ({ entryPoint }: Props) => {
   const showToast = useToastStore((state) => state.show);
   const params = useParams();
   const searchParams = useSearchParams();
-  const [showExitAlert, setShowExitAlert] = useState(false);
+  const openAlert = useAlertStore((s) => s.open);
+  const closeAlert = useAlertStore((s) => s.close);
 
   // --- 1. 파라미터 파싱 ---
   // [Calendar] ID는 URL Path
@@ -153,8 +154,32 @@ export const ScheduleEditorContainer = ({ entryPoint }: Props) => {
   };
 
   const handleBack = () => {
-    if ((title?.trim().length ?? 0) >= 2) setShowExitAlert(true);
-    else router.back();
+    if ((title?.trim().length ?? 0) >= 2) {
+      openAlert({
+        state: 'default',
+        title: '변경 내용을 저장하지 않고 나가시겠습니까?',
+        infoText: '작성 중인 내용은 저장되지 않습니다.',
+        actions: [
+          {
+            type: 'solid',
+            label: '취소',
+            variant: 'secondary',
+            onClick: () => closeAlert(),
+          },
+          {
+            type: 'solid',
+            label: '나가기',
+            variant: 'danger',
+            onClick: () => {
+              closeAlert();
+              router.back();
+            },
+          },
+        ],
+      });
+    } else {
+      router.back();
+    }
   };
 
   // --- 7. 로딩 처리 ---
@@ -178,30 +203,6 @@ export const ScheduleEditorContainer = ({ entryPoint }: Props) => {
           isDisabled: !isFormValid || methods.formState.isSubmitting || isPending,
           onClickTextBtn: () => void methods.handleSubmit(handleSubmit)(),
         }}
-      />
-      <Alert
-        state="default"
-        title="변경 내용을 저장하지 않고 나가시겠습니까?"
-        infoText="작성 중인 내용은 저장되지 않습니다."
-        isOpen={showExitAlert}
-        onClose={() => setShowExitAlert(false)}
-        actions={[
-          {
-            type: 'solid',
-            label: '취소',
-            variant: 'secondary',
-            onClick: () => setShowExitAlert(false),
-          },
-          {
-            type: 'solid',
-            label: '나가기',
-            variant: 'danger',
-            onClick: () => {
-              setShowExitAlert(false);
-              router.back();
-            },
-          },
-        ]}
       />
       <FormProvider {...methods}>
         <div className="px-13">

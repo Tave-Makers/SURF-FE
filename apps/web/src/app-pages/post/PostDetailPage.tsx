@@ -1,12 +1,12 @@
 'use client';
 
 import { ActionBar } from '@surf/ui/action-bar';
-import { Alert } from '@surf/ui/alert';
 import { Avatar } from '@surf/ui/avatar';
 import { HeaderMode } from '@surf/ui/header';
 import { SurfIcon } from '@surf/ui/icon';
 import { SheetItem } from '@surf/ui/sheet';
 import { Sheet } from '@surf/ui/sheet';
+import { useAlertStore } from '@surf/ui/store/alertStore';
 import { useToastStore } from '@surf/ui/store/toastStore';
 import { usePathname, useRouter } from 'next/navigation';
 import { useState } from 'react';
@@ -55,8 +55,10 @@ const PostDetailPage = ({ postId }: PostDetailPageProps) => {
 
   const [likedUsersOpen, setLikedUsersOpen] = useState(false);
 
+  const openAlert = useAlertStore((s) => s.open);
+  const closeAlert = useAlertStore((s) => s.close);
+
   const [open, setOpen] = useState(false);
-  const [showDeleteAlert, setShowDeleteAlert] = useState(false);
   const { mutate: deletePostMutate } = useDeletePostMutation();
 
   // 로딩/에러 처리
@@ -90,7 +92,7 @@ const PostDetailPage = ({ postId }: PostDetailPageProps) => {
   const handleDelete = () => {
     deletePostMutate(numericPostId, {
       onSuccess: () => {
-        setShowDeleteAlert(false);
+        closeAlert();
 
         // 저장된 경로 확인
         const entryPath = sessionStorage.getItem('entry_path');
@@ -105,6 +107,29 @@ const PostDetailPage = ({ postId }: PostDetailPageProps) => {
 
         showToast('게시글이 삭제되었습니다.');
       },
+    });
+  };
+
+  // 삭제 경고 알러트
+  const openDeleteAlert = () => {
+    openAlert({
+      state: 'default',
+      title: '게시글을 정말 삭제하시겠습니까?',
+      infoText: '삭제된 게시글은 복구되지 않습니다.',
+      actions: [
+        {
+          type: 'solid',
+          variant: 'secondary',
+          label: '취소',
+          onClick: () => closeAlert(),
+        },
+        {
+          type: 'solid',
+          variant: 'danger',
+          label: '삭제',
+          onClick: () => void handleDelete(),
+        },
+      ],
     });
   };
 
@@ -155,28 +180,6 @@ const PostDetailPage = ({ postId }: PostDetailPageProps) => {
         </div>
       </div>
 
-      {/* 삭제 Alert */}
-      <Alert
-        state="default"
-        title="게시글을 정말 삭제하시겠습니까?"
-        infoText="삭제된 게시글은 복구되지 않습니다."
-        isOpen={showDeleteAlert}
-        onClose={() => setShowDeleteAlert(false)}
-        actions={[
-          {
-            type: 'solid',
-            variant: 'secondary',
-            label: '취소',
-            onClick: () => setShowDeleteAlert(false),
-          },
-          {
-            type: 'solid',
-            variant: 'danger',
-            label: '삭제',
-            onClick: () => void handleDelete(),
-          },
-        ]}
-      />
       {/* ============================= */}
       {/* 좋아요 누른 사용자 Sheet */}
       {/* ============================= */}
@@ -245,7 +248,7 @@ const PostDetailPage = ({ postId }: PostDetailPageProps) => {
                       node={<SurfIcon name="TrashOneSolid" className="text-foreground-danger" />}
                       onClick={() => {
                         setOpen(false);
-                        setShowDeleteAlert(true);
+                        openDeleteAlert();
                       }}
                       textColor="danger"
                     />

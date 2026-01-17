@@ -97,18 +97,15 @@ const PostPage = (props: PostPageProps) => {
   };
 
   const handleRemoveReservation = () => {
-    closeReservationModal();
-    setTimeout(() => {
-      openAlert({
-        state: 'default',
-        title: '설정한 예약이 취소됩니다',
-        infoText: '예약 취소하기를 누를 경우 게시글 내 설정된 예약이 삭제됩니다.',
-        actions: [
-          { type: 'solid', label: '취소', variant: 'secondary', onClick: closeAlert },
-          { type: 'solid', label: '삭제하기', variant: 'danger', onClick: handleConfirmRemove },
-        ],
-      });
-    }, 100);
+    openAlert({
+      state: 'default',
+      title: '설정한 예약이 취소됩니다',
+      infoText: '예약 취소하기를 누를 경우 게시글 내 설정된 예약이 삭제됩니다.',
+      actions: [
+        { type: 'solid', label: '취소', variant: 'secondary', onClick: closeAlert },
+        { type: 'solid', label: '삭제하기', variant: 'danger', onClick: handleConfirmRemove },
+      ],
+    });
   };
 
   // 실제 예약 취소
@@ -116,6 +113,7 @@ const PostPage = (props: PostPageProps) => {
     setReserved(false);
     setReservedAt(null);
     closeAlert();
+    closeReservationModal();
   };
 
   const board = POST_BOARDS.find((b) => b.id === Number(boardId));

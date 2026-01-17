@@ -1,8 +1,8 @@
 'use client';
 
-import { Alert } from '@surf/ui/alert';
+import { useAlertStore } from '@surf/ui/store/alertStore';
 import { EditorContent } from '@tiptap/react';
-import { useCallback, useEffect, useRef, useState } from 'react';
+import { useCallback, useEffect, useRef } from 'react';
 
 import '@/features/post/post-editor/ui/PostEditor.style.css';
 import { ActivityCategory } from '@/entities/calendar/model/types';
@@ -56,6 +56,9 @@ export const PostEditor = ({
   const isLocalInitialized = useRef(false);
   const contentRef = useRef<string>(storeContent);
 
+  const openAlert = useAlertStore((s) => s.open);
+  const closeAlert = useAlertStore((s) => s.close);
+
   const {
     inputRef,
     images,
@@ -68,7 +71,6 @@ export const PostEditor = ({
 
   const keyboardOffset = useKeyboardOffset();
   const { MAX_IMAGES } = POST_VALIDATION;
-  const [showImageLimitAlert, setShowImageLimitAlert] = useState(false);
 
   // --- 1. Editor Callbacks ---
 
@@ -161,7 +163,19 @@ export const PostEditor = ({
     if (!files) return;
 
     if (images.length + files.length > MAX_IMAGES) {
-      setShowImageLimitAlert(true);
+      openAlert({
+        state: 'error',
+        title: '이미지 최대 장수 오류',
+        infoText: `이미지는 최대 ${MAX_IMAGES}장까지 업로드할 수 있어요`,
+        actions: [
+          {
+            type: 'text',
+            label: '확인',
+            variant: 'primary',
+            onClick: () => closeAlert(),
+          },
+        ],
+      });
       e.target.value = '';
       return;
     }
@@ -242,23 +256,6 @@ export const PostEditor = ({
           isReservationDisabled={isPublished}
         />
       </div>
-
-      {/* 알림 모달 */}
-      <Alert
-        state="error"
-        title="이미지 최대 장수 오류"
-        infoText={`이미지는 최대 ${MAX_IMAGES}장까지 업로드할 수 있어요`}
-        actions={[
-          {
-            type: 'text',
-            label: '확인',
-            variant: 'primary',
-            onClick: () => setShowImageLimitAlert(false),
-          },
-        ]}
-        isOpen={showImageLimitAlert}
-        onClose={() => setShowImageLimitAlert(false)}
-      />
     </div>
   );
 };

@@ -40,7 +40,8 @@ export const NotificationPage = () => {
 
     // 딥링크가 있다면 페이지 이동
     if (deepLink) {
-      router.push(deepLink);
+      const separator = deepLink.includes('?') ? '&' : '?';
+      router.push(`${deepLink}${separator}from=notification`);
     }
   };
 

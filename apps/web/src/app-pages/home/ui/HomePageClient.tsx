@@ -7,6 +7,7 @@ import { useRouter } from 'next/navigation';
 import HeaderLogo from '../../../../public/header-logo.svg';
 import { useGetHome } from '@/entities/home/api/useGetHome';
 import { TAVE_CHANNEL_LINKS, SPONSOR_LINKS, SHORTCUT_LINKS } from '@/entities/home/model/constants';
+import { useGetNotifications } from '@/entities/notification/model/useGetNotifications';
 import { AnnouncementBar } from '@/entities/schedule/ui/announcement-bar/AnnouncementBar';
 import type { HeroCardProps } from '@/features/home-theme/ui/hero-card/HeroCard';
 import { HeroCard } from '@/features/home-theme/ui/hero-card/HeroCard';
@@ -18,6 +19,9 @@ export const HomePageClient = ({ heroProps }: { heroProps: HeroCardProps }) => {
 
   const { data: homeData } = useGetHome();
   const deepLink = homeData?.announcementDeepLink ?? '';
+
+  const { data: notifications } = useGetNotifications('ALL');
+  const hasUnread = notifications?.some((noti) => !noti.isRead);
 
   const handleShortcutClick = (link: string, label: string) => {
     if (process.env.NODE_ENV === 'development') {
@@ -37,6 +41,7 @@ export const HomePageClient = ({ heroProps }: { heroProps: HeroCardProps }) => {
             icons: [
               {
                 label: 'Bell',
+                isNew: hasUnread,
                 onClickIcon: () => {
                   router.push(PAGE_ROUTES.NOTIFICATION);
                 },

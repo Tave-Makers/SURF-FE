@@ -16,6 +16,7 @@ export enum HeaderMode {
 type HeaderIcon = {
   label?: SurfIconName; // 아이콘 이름
   onClickIcon?: () => void; // 아이콘 클릭 시 이벤트
+  isNew?: boolean; // 알림 배지 표시 여부
 };
 
 type MaxThree<T> = [] | [T] | [T, T] | [T, T, T];
@@ -89,11 +90,14 @@ const renderRightIcons = (icons: MaxThree<HeaderIcon> = []) => (
         icon.label && (
           <button
             key={idx}
-            className="cursor-pointer border-none bg-transparent p-8"
+            className="relative cursor-pointer border-none bg-transparent p-8"
             onClick={icon.onClickIcon}
             type="button"
           >
             <SurfIcon name={icon.label} size="l" className="text-foreground-normal" />
+            {icon.isNew && (
+              <span className="bg-foreground-primary absolute right-8 top-8 h-4 w-4 rounded-full" />
+            )}
           </button>
         ),
     )}

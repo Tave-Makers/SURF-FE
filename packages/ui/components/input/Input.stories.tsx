@@ -77,12 +77,12 @@ export const WithIcon: Story = {
   },
 };
 
-export const WithPrefixSuffix: Story = {
+export const WithLeadingTrailing: Story = {
   render: (args) => (
     <ControlledInput
       {...args}
-      prefix={<span className="text-body-body9 text-foreground-tertiary">₩</span>}
-      suffix={<span className="text-body-body9 text-foreground-tertiary">원</span>}
+      leading={<span className="text-body-body9 text-foreground-tertiary">₩</span>}
+      trailing={<span className="text-body-body9 text-foreground-tertiary">원</span>}
     />
   ),
   args: {

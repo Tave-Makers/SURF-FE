@@ -4,11 +4,13 @@ import { Alert } from '@surf/ui/alert';
 import { SolidButton } from '@surf/ui/button';
 import { FieldGroup } from '@surf/ui/field-group';
 import { HeaderMode } from '@surf/ui/header';
+import { useToastStore } from '@surf/ui/store/toastStore';
 import { TextArea } from '@surf/ui/text-area';
 import { useRouter, useSearchParams } from 'next/navigation';
 import { useMemo, useState } from 'react';
 import { useSendMessage } from '@/entities/message/model/useSendMessage';
 import { Callout } from '@/entities/message/ui/callout/Callout';
+import { PAGE_ROUTES } from '@/shared/config/path';
 import { useKeyboardOffset } from '@/shared/hooks/useKeyboardOffset';
 import { kakaoImgNormalize } from '@/shared/lib/kakaoImgNormalize';
 import { AppHeader } from '@/widgets/header/ui/AppHeader';
@@ -37,6 +39,8 @@ export const SendMessagePage = () => {
   const keyboardOffset = useKeyboardOffset();
   const router = useRouter();
 
+  const showToast = useToastStore((state) => state.show);
+
   // 쪽지 전송 mutation
   const { mutate: sendMessage, isPending } = useSendMessage();
 
@@ -60,8 +64,9 @@ export const SendMessagePage = () => {
       },
       {
         onSuccess: () => {
+          showToast('상대방의 이메일로 쪽지가 발송되었습니다.');
           setIsSendAlertOpen(false);
-          router.back();
+          router.replace(PAGE_ROUTES.MEMBER.PROFILE(validMemberId));
         },
       },
     );
@@ -75,6 +80,17 @@ export const SendMessagePage = () => {
     const id = Number(memberId);
     return Number.isInteger(id) && id > 0 ? id : null;
   }, [memberId]);
+
+  // 이메일 에러 메시지
+  const emailErrorMessage = useMemo(() => {
+    if (senderEmail.length === 0) return undefined;
+
+    if (!isValidEmail(senderEmail)) {
+      return '올바른 형태의 이메일을 입력해주세요.';
+    }
+
+    return undefined;
+  }, [senderEmail]);
 
   // 버튼 활성화 조건
   const isBtnEnabled =
@@ -104,6 +120,7 @@ export const SendMessagePage = () => {
             value={senderEmail}
             onChange={setSenderEmail}
             readOnly={isPending}
+            errorMessage={emailErrorMessage}
           />
         </FieldGroup>
         <FieldGroup title="추가로 연락받고 싶은 SNS">

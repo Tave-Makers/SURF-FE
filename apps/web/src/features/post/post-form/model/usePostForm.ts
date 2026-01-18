@@ -54,10 +54,6 @@ export const usePostForm = ({ mode, boardId, postId }: Props) => {
   const { linkedSchedule, setLinkedSchedule, clearLinkedSchedule } = useCreatePostScheduleStore();
 
   const [showExitAlert, setShowExitAlert] = useState(false);
-  const [isReservationModalOpen, setIsReservationModalOpen] = useState(false);
-
-  const openReservationModal = () => setIsReservationModalOpen(true);
-  const closeReservationModal = () => setIsReservationModalOpen(false);
 
   // 2. Data Queries & Mutations
 
@@ -329,7 +325,7 @@ export const usePostForm = ({ mode, boardId, postId }: Props) => {
     // UI State
     isCategoryOpen,
     showExitAlert,
-    isReservationModalOpen,
+
     isSubmitDisabled,
     isScheduleFetching,
     isPublished,
@@ -340,8 +336,6 @@ export const usePostForm = ({ mode, boardId, postId }: Props) => {
     closeCategory,
     selectCategory,
     setShowExitAlert,
-    openReservationModal,
-    closeReservationModal,
 
     // Handlers
     handleEditorChange,

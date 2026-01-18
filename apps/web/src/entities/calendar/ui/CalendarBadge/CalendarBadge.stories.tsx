@@ -11,7 +11,7 @@ const meta: Meta<typeof CalendarBadge> = {
   argTypes: {
     variation: {
       control: 'radio',
-      options: ['official', 'operation', 'other'],
+      options: ['regular', 'operation', 'other'],
       description: '일정의 유형에 따라 색상과 스타일이 다르게 표시됩니다.',
     },
   },
@@ -22,9 +22,9 @@ type Story = StoryObj<typeof CalendarBadge>;
 // ───────────────────────────────
 // 기본 상태들
 // ───────────────────────────────
-export const Official: Story = {
+export const Regular: Story = {
   args: {
-    variation: 'official',
+    variation: 'regular',
   },
 };
 
@@ -46,7 +46,7 @@ export const Etc: Story = {
 export const AllVariations: Story = {
   render: () => (
     <div className="flex gap-8">
-      <CalendarBadge variation="official" />
+      <CalendarBadge variation="regular" />
       <CalendarBadge variation="operation" />
       <CalendarBadge variation="other" />
     </div>

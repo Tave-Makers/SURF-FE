@@ -3,7 +3,7 @@ import { DailyActivityBadgeList } from './DailyActivityBadgeList';
 import type { DailyActivity } from '@/entities/calendar/model/types';
 
 const createDummyItems = (count: number): DailyActivity[] => {
-  const types: DailyActivity['category'][] = ['official', 'operation', 'other'];
+  const types: DailyActivity['category'][] = ['regular', 'operation', 'other'];
   return Array.from({ length: count }, (_, i) => ({
     id: i,
     category: types[i % 3],

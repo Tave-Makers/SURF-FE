@@ -53,7 +53,7 @@ const meta: Meta<typeof EventCard> = {
   },
   args: {
     title: '후반기 만남의 장',
-    category: 'official',
+    category: 'regular',
     mode: 'calendar',
     startDate: SAMPLE_START_DATE,
     endDate: SAMPLE_END_DATE,

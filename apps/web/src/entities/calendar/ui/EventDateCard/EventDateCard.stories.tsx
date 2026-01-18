@@ -50,7 +50,7 @@ const meta: Meta<typeof EventDateCard<EventItem>> = {
       {
         id: '1',
         title: '후반기 만남의 장',
-        category: 'official',
+        category: 'regular',
         mode: 'calendar',
         startDate: new Date('2025-11-20T10:00:00'),
         endDate: new Date('2025-11-21T18:00:00'),
@@ -96,7 +96,7 @@ export const MixedCases: Story = {
       {
         id: '1',
         title: '일반 회원 보기 (공지 있음)',
-        category: 'official',
+        category: 'regular',
         mode: 'calendar',
         startDate: new Date(),
         endDate: new Date(),

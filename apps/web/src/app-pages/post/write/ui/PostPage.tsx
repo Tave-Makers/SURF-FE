@@ -185,10 +185,10 @@ const PostPage = (props: PostPageProps) => {
         isOpen={isCategoryOpen}
         onClose={closeCategory}
         aria-labelledby={categorySheetId}
-        className="mx-auto flex w-full sm:w-[360px]"
+        className="mx-auto flex w-full sm:w-[min(100dvw,calc(100dvh*375/812))]"
       >
         <ModalSheet.Container>
-          <ModalSheet.Header className="bg-background-normal-lighter" />
+          <ModalSheet.Header className="bg-background-normal-lighter rounded-t-4" />
           <ModalSheet.Content>
             <div
               id={categorySheetId}
@@ -242,7 +242,6 @@ const PostPage = (props: PostPageProps) => {
           isPublished={isPublished}
         />
       </div>
-      {/* 6. 예약 설정 모달 삭제됨 */}
     </div>
   );
 };

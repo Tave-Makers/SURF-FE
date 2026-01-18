@@ -8,8 +8,8 @@ import { SurfIcon } from '@surf/ui/icon';
 import { SheetItem } from '@surf/ui/sheet';
 import { Sheet } from '@surf/ui/sheet';
 import { useToastStore } from '@surf/ui/store/toastStore';
-import { usePathname, useRouter } from 'next/navigation';
-import { useState } from 'react';
+import { usePathname, useRouter, useSearchParams } from 'next/navigation';
+import { useEffect, useState } from 'react';
 import { Sheet as ModalSheet } from 'react-modal-sheet';
 import { usePostDetail } from '@/entities/post/api/usePostDetail';
 import { categoryIdToKey } from '@/entities/post/model/category';
@@ -36,8 +36,19 @@ const PostDetailPage = ({ postId }: PostDetailPageProps) => {
   const showToast = useToastStore((state) => state.show);
   const memberId = useAuthStore((s) => s.memberId);
 
+  const searchParams = useSearchParams();
+  const from = searchParams.get('from');
+
   // 게시글 상세 조회 API
   const { data: post, isLoading, isError } = usePostDetail(numericPostId);
+
+  // 삭제된 게시글 처리 (알림에서 진입했을 경우)
+  useEffect(() => {
+    if (isError && from === 'notification') {
+      alert('삭제된 게시글입니다.');
+      router.replace(PAGE_ROUTES.NOTIFICATION);
+    }
+  }, [isError, from, router]);
 
   // 일정 조회 API
   const scheduleId = post?.scheduleId;

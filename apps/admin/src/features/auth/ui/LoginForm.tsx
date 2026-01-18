@@ -53,8 +53,7 @@ export const LoginForm = () => {
                 {...field}
                 placeholder="email@example.com"
                 errorMessage={errors.email?.message}
-                autoComplete="email"
-                name="email"
+                autoComplete="username"
               />
             )}
           />

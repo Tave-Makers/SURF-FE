@@ -53,7 +53,11 @@ export const ReservationBottomSheet = ({
   if (!isOpen) return null;
 
   return (
-    <ModalSheet isOpen={isOpen} onClose={onClose} className="mx-auto flex w-full sm:w-[360px]">
+    <ModalSheet
+      isOpen={isOpen}
+      onClose={onClose}
+      className="mx-auto flex w-full sm:w-[min(100dvw,calc(100dvh*375/812))]"
+    >
       <ModalSheet.Container>
         <ModalSheet.Content>
           <Sheet

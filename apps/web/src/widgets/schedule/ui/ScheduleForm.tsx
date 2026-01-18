@@ -81,7 +81,7 @@ export const ScheduleForm = ({ onSubmit, initialData }: ScheduleFormProps) => {
             <ModalSheet
               isOpen={openModal === 'category'}
               onClose={handleCloseModal}
-              className="mx-auto flex w-full sm:w-[360px]"
+              className="mx-auto flex w-full sm:w-[min(100dvw,calc(100dvh*375/812))]"
             >
               <ModalSheet.Container>
                 <ModalSheet.Content>
@@ -149,7 +149,7 @@ export const ScheduleForm = ({ onSubmit, initialData }: ScheduleFormProps) => {
               <ModalSheet
                 isOpen={openModal === 'startDate'}
                 onClose={handleCloseModal}
-                className="mx-auto flex w-full sm:w-[360px]"
+                className="mx-auto flex w-full sm:w-[min(100dvw,calc(100dvh*375/812))]"
               >
                 <ModalSheet.Container>
                   <ModalSheet.Content>
@@ -202,7 +202,7 @@ export const ScheduleForm = ({ onSubmit, initialData }: ScheduleFormProps) => {
               <ModalSheet
                 isOpen={openModal === 'endDate'}
                 onClose={handleCloseModal}
-                className="mx-auto flex w-full sm:w-[360px]"
+                className="mx-auto flex w-full sm:w-[min(100dvw,calc(100dvh*375/812))]"
               >
                 <ModalSheet.Container>
                   <ModalSheet.Content>

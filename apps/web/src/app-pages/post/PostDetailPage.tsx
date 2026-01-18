@@ -192,7 +192,7 @@ const PostDetailPage = ({ postId }: PostDetailPageProps) => {
       {/* 좋아요 누른 사용자 Sheet */}
       {/* ============================= */}
       <ModalSheet isOpen={likedUsersOpen} onClose={() => setLikedUsersOpen(false)}>
-        <ModalSheet.Container className="!right-0 !left-0 mx-auto w-full sm:max-w-[360px]">
+        <ModalSheet.Container className="!right-0 !left-0 mx-auto w-full sm:max-w-[min(100dvw,calc(100dvh*375/812))]">
           <ModalSheet.Content>
             <Sheet title="좋아요를 누른 사람">
               <div className="flex flex-col">
@@ -211,13 +211,30 @@ const PostDetailPage = ({ postId }: PostDetailPageProps) => {
                 {/* 목록 */}
                 {!isLikesLoading &&
                   !isLikesError &&
-                  likedUsers.map((user) => (
-                    <SheetItem
-                      key={user.id}
-                      title={user.name}
-                      node={<Avatar size="xs" src={user.profileImageUrl} className="rounded-3!" />}
-                    />
-                  ))}
+                  likedUsers.map((user, index) => {
+                    if (!user.id) {
+                      return (
+                        <SheetItem
+                          key={`withdrawn-${index}`}
+                          title={user.name} // '탈퇴한 회원'으로 표시됨
+                          node={<Avatar size="xs" className="rounded-3!" />}
+                        />
+                      );
+                    }
+
+                    return (
+                      <SheetItem
+                        key={user.id}
+                        title={user.name}
+                        node={
+                          <Avatar size="xs" src={user.profileImageUrl} className="rounded-3!" />
+                        }
+                        onClick={() => {
+                          router.push(PAGE_ROUTES.MEMBER.PROFILE(user.id!));
+                        }}
+                      />
+                    );
+                  })}
 
                 {/* 비어 있을 때 */}
                 {!isLikesLoading && !isLikesError && likedUsers.length === 0 && (
@@ -234,7 +251,7 @@ const PostDetailPage = ({ postId }: PostDetailPageProps) => {
       {/* 삭제/수정/신고 Sheet*/}
       {/* ============================= */}
       <ModalSheet isOpen={open} onClose={() => setOpen(false)}>
-        <ModalSheet.Container className="!right-0 !left-0 mx-auto w-full sm:max-w-[360px]">
+        <ModalSheet.Container className="!right-0 !left-0 mx-auto w-full sm:max-w-[min(100dvw,calc(100dvh*375/812))]">
           <ModalSheet.Content>
             <Sheet title="게시글 옵션">
               <div className="flex flex-col">

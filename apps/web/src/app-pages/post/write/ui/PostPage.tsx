@@ -5,7 +5,6 @@ import { HeaderMode } from '@surf/ui/header';
 import { useAlertStore } from '@surf/ui/store/alertStore';
 import { useRouter } from 'next/navigation';
 import { useCallback, useEffect } from 'react';
-import { Sheet as ModalSheet } from 'react-modal-sheet';
 import { POST_BOARDS } from '@/entities/post/model/board';
 import { POST_CATEGORIES } from '@/entities/post/model/category';
 import { POST_VALIDATION } from '@/entities/post/model/validation';
@@ -36,11 +35,7 @@ const PostPage = (props: PostPageProps) => {
     title,
     setTitle,
     category,
-    categorySheetId,
-    isCategoryOpen,
-    openCategory,
-    closeCategory,
-    selectCategory,
+    setCategory,
     initialContent,
     initialImages,
     linkedSchedule,
@@ -167,9 +162,21 @@ const PostPage = (props: PostPageProps) => {
       <div className="px-13">
         <AccordionSelect
           title={POST_CATEGORIES[category].label}
-          isOpen={isCategoryOpen}
-          onClick={openCategory}
-          controlsId={categorySheetId}
+          isOpen={false}
+          onClick={() => {
+            openBottomSheet({
+              type: 'postCategory',
+              props: {
+                category,
+                onSelect: (val) => {
+                  setCategory(val);
+                  closeBottomSheet();
+                },
+                controlsId: 'post-category-sheet',
+              },
+            });
+          }}
+          controlsId="post-category-sheet"
         />
       </div>
 
@@ -180,39 +187,7 @@ const PostPage = (props: PostPageProps) => {
         </div>
       )}
 
-      {/* 3. 카테고리 시트 */}
-      <ModalSheet
-        isOpen={isCategoryOpen}
-        onClose={closeCategory}
-        aria-labelledby={categorySheetId}
-        className="mx-auto flex w-full sm:w-[min(100dvw,calc(100dvh*375/812))]"
-      >
-        <ModalSheet.Container>
-          <ModalSheet.Header className="bg-background-normal-lighter rounded-t-4" />
-          <ModalSheet.Content>
-            <div
-              id={categorySheetId}
-              className="bg-background-normal-lighter flex flex-col gap-5 p-15"
-            >
-              {Object.values(POST_CATEGORIES).map((item) => (
-                <button
-                  key={item.id}
-                  type="button"
-                  onClick={() => selectCategory(item.key)}
-                  className={`rounded-md px-5 py-10 text-left transition-colors ${
-                    category === item.key
-                      ? 'bg-background-secondary font-semibold'
-                      : 'hover:bg-background-secondary'
-                  }`}
-                >
-                  {item.label}
-                </button>
-              ))}
-            </div>
-          </ModalSheet.Content>
-        </ModalSheet.Container>
-        <ModalSheet.Backdrop onTap={closeCategory} />
-      </ModalSheet>
+      {/* 3. 카테고리 시트 - REMOVED (now global) */}
 
       {/* 4. 제목 입력 */}
       <div className="flex w-full px-13">

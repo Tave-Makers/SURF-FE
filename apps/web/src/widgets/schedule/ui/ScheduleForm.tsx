@@ -23,6 +23,10 @@ export type ScheduleFormProps = {
 export const ScheduleForm = ({ onSubmit, initialData }: ScheduleFormProps) => {
   const { control, handleSubmit, watch, reset } = useFormContext<ScheduleFormData>();
   const [openModal, setOpenModal] = useState<'category' | 'startDate' | 'endDate' | null>(null);
+  const [dateConfirmed, setDateConfirmed] = useState({
+    startDate: !!initialData,
+    endDate: !!initialData,
+  });
 
   // 1. 부모로부터 데이터가 들어오면 폼 리셋
   useEffect(() => {
@@ -34,6 +38,7 @@ export const ScheduleForm = ({ onSubmit, initialData }: ScheduleFormProps) => {
         endDate: ensureUtcDate(initialData.endDate),
         location: initialData.location ?? '',
       });
+      setDateConfirmed({ startDate: true, endDate: true });
     }
   }, [initialData, reset]);
 
@@ -54,6 +59,7 @@ export const ScheduleForm = ({ onSubmit, initialData }: ScheduleFormProps) => {
 
   const handleSaveDate = (type: 'startDate' | 'endDate', rhfOnChange: (date: Date) => void) => {
     rhfOnChange(type === 'startDate' ? tempStartDate : tempEndDate);
+    setDateConfirmed((prev) => ({ ...prev, [type]: true }));
     setOpenModal(null);
   };
 
@@ -144,6 +150,7 @@ export const ScheduleForm = ({ onSubmit, initialData }: ScheduleFormProps) => {
               <ScheduleSetting
                 title="시작"
                 date={field.value}
+                isSelected={dateConfirmed.startDate}
                 onClick={() => handleOpenDateModal('startDate')}
               />
               <ModalSheet
@@ -197,6 +204,7 @@ export const ScheduleForm = ({ onSubmit, initialData }: ScheduleFormProps) => {
               <ScheduleSetting
                 title="종료"
                 date={field.value}
+                isSelected={dateConfirmed.endDate}
                 onClick={() => handleOpenDateModal('endDate')}
               />
               <ModalSheet

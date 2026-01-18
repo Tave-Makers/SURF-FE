@@ -8,7 +8,13 @@ import { useDeleteSchedule } from '@/features/schedule/delete/model/useDelSchedu
 import { useEditSchedule } from '@/features/schedule/edit/model/useEditSchedule';
 import { PAGE_ROUTES } from '@/shared/config/path';
 
-type ScheduleActionSheetProps = {
+declare module '@/shared/store/bottomSheetStore' {
+  interface BottomSheetMap {
+    scheduleAction: Omit<ScheduleActionSheetProps, 'isOpen' | 'onClose'>;
+  }
+}
+
+export type ScheduleActionSheetProps = {
   scheduleId: string | number;
   isOpen: boolean;
   onClose: () => void;

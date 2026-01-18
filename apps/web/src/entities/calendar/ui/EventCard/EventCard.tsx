@@ -1,11 +1,8 @@
-'use client';
-
 import { SurfIcon } from '@surf/ui/icon';
-import { useState } from 'react';
 import { ActivityCategory, EventCardType } from '@/entities/calendar/model/types';
 import { CalendarBadge } from '@/entities/calendar/ui/CalendarBadge/CalendarBadge';
 import { formatScheduleDate } from '@/entities/calendar/utils/formatScheduleDate';
-import { ScheduleActionSheet } from '@/features/schedule/ui/ScheduleActionSheet/ScheduleActionSheet';
+import { useBottomSheetStore } from '@/shared/store/bottomSheetStore';
 
 /**
  * 이벤트 카드 컴포넌트
@@ -51,7 +48,7 @@ export const EventCard = ({
   mode,
   postId,
 }: EventCardProps) => {
-  const [isActionSheetOpen, setIsActionSheetOpen] = useState(false);
+  const openBottomSheet = useBottomSheetStore((s) => s.open);
 
   const handleCardClick = () => {
     if (mode === 'calendar') {
@@ -134,7 +131,17 @@ export const EventCard = ({
                 type="button"
                 onClick={(e) => {
                   e.stopPropagation();
-                  setIsActionSheetOpen(true);
+                  if (scheduleId) {
+                    openBottomSheet({
+                      type: 'scheduleAction',
+                      props: {
+                        scheduleId,
+                        onDeleteSuccess: () => {
+                          onDeleteSchedule?.();
+                        },
+                      },
+                    });
+                  }
                 }}
                 className="relative flex items-center justify-center"
               >
@@ -166,18 +173,6 @@ export const EventCard = ({
           </div>
         </section>
       </div>
-
-      {/* 일정 액션 바텀 시트 */}
-      {scheduleId && (
-        <ScheduleActionSheet
-          scheduleId={scheduleId}
-          isOpen={isActionSheetOpen}
-          onClose={() => setIsActionSheetOpen(false)}
-          onDeleteSuccess={() => {
-            onDeleteSchedule?.();
-          }}
-        />
-      )}
     </>
   );
 };

@@ -51,6 +51,7 @@ export const PostBodySection = ({ post, schedule, onClickLikeCount }: PostBodySe
   return (
     <div className="flex flex-col gap-16">
       <PostProfile
+        memberId={post.memberId}
         profileImgUrl={post.profileImageUrl}
         nickname={post.writer}
         date={post.date}

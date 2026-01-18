@@ -1,6 +1,8 @@
 import { ReservationBottomSheet } from '@/features/post/post-form/ui/ReservationBottomSheet';
 import { PostCategoryBottomSheet } from '@/features/post/post-form/ui/PostCategoryBottomSheet';
 import { LawBottomSheet } from '@/features/laws/ui/LawBottomSheet';
+import { PostLikeBottomSheet } from '@/features/post/post-like/ui/PostLikeBottomSheet';
+import { PostOptionBottomSheet } from '@/features/post/post-option/ui/PostOptionBottomSheet';
 import type { BottomSheetMap, BottomSheetType } from '@/shared/store/bottomSheetStore';
 import type { ComponentType } from 'react';
 
@@ -17,4 +19,6 @@ export const SHEET_COMPONENTS = {
   law: LawBottomSheet,
   reservation: ReservationBottomSheet,
   postCategory: PostCategoryBottomSheet,
+  postLike: PostLikeBottomSheet,
+  postOption: PostOptionBottomSheet,
 } satisfies BottomSheetComponents;

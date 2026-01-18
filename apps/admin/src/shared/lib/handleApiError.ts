@@ -1,4 +1,5 @@
 import axios from 'axios';
+import { CommonResponse } from '../api/types';
 
 export type DefaultError = {
   code: number;
@@ -6,16 +7,7 @@ export type DefaultError = {
   errorCode: string;
 };
 
-export type LoginCallBackError = {
-  timestamp: string;
-  path: string;
-  status: number;
-  message: string;
-  error: string;
-  requestId: string;
-};
-
-export type ErrorResponse = DefaultError | LoginCallBackError;
+export type ErrorResponse = DefaultError;
 
 export function handleApiError(
   error: unknown,
@@ -24,7 +16,7 @@ export function handleApiError(
   if (axios.isAxiosError(error)) {
     // 백엔드가 응답을 준 경우
     if (error.response) {
-      const data = error.response.data as ErrorResponse | undefined;
+      const data = error.response.data as ErrorResponse | CommonResponse<null>;
       let message = defaultMessage;
 
       if (data) {
@@ -33,10 +25,10 @@ export function handleApiError(
           console.error(
             `[Backend Error] ${data.message} (errorCode=${data.errorCode}, code=${data.code})`,
           );
-        } else if ('requestId' in data) {
+        } else if ('data' in data) {
           message = data.message || defaultMessage;
           console.error(
-            `[Backend Error - LoginCallback] ${data.message} (error=${data.error}, path=${data.path}, requestId=${data.requestId})`,
+            `[Backend Error] ${data.message} (code=${data.code}, message=${data.message})`,
           );
         }
       }

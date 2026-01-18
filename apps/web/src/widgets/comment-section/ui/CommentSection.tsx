@@ -13,6 +13,7 @@ import { useDeleteCommentMutation } from '@/features/comment/model/useDeleteComm
 import { useGetCommentsQuery } from '@/features/comment/model/useGetCommentsQuery';
 import { useToggleCommentLikeMutation } from '@/features/comment/model/useToggleCommentLikeMutation';
 import { Comment } from '@/features/comment/ui/Comment';
+import CommentsEmpty from '@/shared/assets/icons/empty-space/comments-empty.svg';
 import { toDate, toKST, formatDateTime } from '@/shared/utils/date';
 
 interface Props {
@@ -115,7 +116,7 @@ export const CommentSection = ({ postId, memberId, onStartReply }: Props) => {
 
   return (
     <div className="flex w-full flex-col">
-      <div className="flex flex-col gap-11 px-13 pt-16 pb-16">
+      <div className="flex flex-col gap-11 pt-16 pb-16">
         <div className="flex items-center gap-5">
           <span className="text-body-body4 text-foreground-normal">댓글 {totalCount}</span>
         </div>
@@ -150,14 +151,17 @@ export const CommentSection = ({ postId, memberId, onStartReply }: Props) => {
           })}
 
           {comments.length === 0 && (
-            <div className="py-8 text-center text-gray-500">첫 댓글을 남겨보세요.</div>
+            <div className="flex h-full flex-col items-center justify-center gap-3 pt-[3rem]">
+              <CommentsEmpty className="h-[3.16rem] w-[4.53rem]" />
+              <div className="text-body-body8 text-foreground-tertiary">첫 댓글을 남겨보세요!</div>
+            </div>
           )}
         </div>
       </div>
 
       {/* 댓글 옵션 Sheet */}
       <ModalSheet isOpen={optionsOpen} onClose={() => setOptionsOpen(false)}>
-        <ModalSheet.Container className="!right-0 !left-0 mx-auto max-w-[360px]">
+        <ModalSheet.Container className="!right-0 !left-0 mx-auto max-w-[min(100dvw,calc(100dvh*375/812))]">
           <ModalSheet.Content>
             <Sheet title="댓글 옵션">
               <div className="flex flex-col">

@@ -8,6 +8,7 @@ export type PostBadgeProps = {
 };
 
 export type PostDetail = {
+  memberId: number | null;
   postId: number;
   title: string;
   content: string;

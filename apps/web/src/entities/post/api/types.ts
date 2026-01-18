@@ -52,6 +52,7 @@ export type FullPostListResponse = CommonResponse<PostListApiResponse>;
 
 // 게시글 상세 데이터 타입
 export type PostDetailData = {
+  memberId: number | null;
   postId: number;
   title: string;
   content: string;
@@ -122,7 +123,7 @@ export type GetBoardPostsRequest = {
 
 // 좋아요 누른 유저 타입
 export interface LikedUser {
-  id: number;
+  id: number | null;
   name: string;
   profileImageUrl: string;
 }

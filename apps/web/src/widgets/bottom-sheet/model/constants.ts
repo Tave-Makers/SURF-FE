@@ -5,6 +5,7 @@ import { PostLikeBottomSheet } from '@/features/post/post-like/ui/PostLikeBottom
 import { PostOptionBottomSheet } from '@/features/post/post-option/ui/PostOptionBottomSheet';
 import { TrackPickerBottomSheet } from '@/features/onboarding/ui/TrackPickerBottomSheet';
 import { ScheduleActionSheet } from '@/features/schedule/ui/ScheduleActionSheet/ScheduleActionSheet';
+import { CommentOptionBottomSheet } from '@/features/comment/ui/CommentOptionBottomSheet';
 import type { BottomSheetMap, BottomSheetType } from '@/shared/store/bottomSheetStore';
 import type { ComponentType } from 'react';
 
@@ -25,4 +26,5 @@ export const SHEET_COMPONENTS = {
   postOption: PostOptionBottomSheet,
   trackPicker: TrackPickerBottomSheet,
   scheduleAction: ScheduleActionSheet,
+  commentOption: CommentOptionBottomSheet,
 } satisfies BottomSheetComponents;

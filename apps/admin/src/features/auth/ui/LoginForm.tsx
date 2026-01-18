@@ -29,7 +29,7 @@ export const LoginForm = () => {
   };
   return (
     <form
-      className="flex w-full grow flex-col justify-between"
+      className="flex w-full flex-col justify-between"
       onSubmit={(e) => {
         e.preventDefault();
         void handleSubmit(onSubmit)(e);
@@ -82,7 +82,7 @@ export const LoginForm = () => {
         type="submit"
         variant="primary"
         size="l"
-        className="mb-[1.25rem]"
+        className="absolute bottom-[1.25rem] left-1/2 -translate-x-1/2"
         isDisabled={!isValid}
       >
         로그인

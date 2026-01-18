@@ -1,4 +1,4 @@
-export type ActivityCategory = 'official' | 'operation' | 'other';
+export type ActivityCategory = 'regular' | 'operation' | 'other';
 export type EventCardType = 'reservation' | 'calendar';
 
 export type DailyActivity = {

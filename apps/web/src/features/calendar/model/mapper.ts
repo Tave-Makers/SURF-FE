@@ -1,24 +1,7 @@
 import { format, eachDayOfInterval, isValid } from 'date-fns';
 import { scheduleResDTO } from '../api/types';
-import { ActivityCategory } from '@/entities/calendar/model/types';
 import { ActivityMap } from '@/entities/calendar/model/types';
 import { EventCardProps } from '@/entities/calendar/ui/EventCard/EventCard';
-
-/**
- * 서버에서 내려주는 카테고리 문자열을 UI에서 사용하는 ActivityCategory로 변환
- */
-export const mapCategoryToActivityCategory = (category: string): ActivityCategory => {
-  switch (category) {
-    case '정규행사':
-      return 'official';
-    case '운영회의':
-      return 'operation';
-    case '기타일정':
-      return 'other';
-    default:
-      return 'official';
-  }
-};
 
 /**
  * 단일 DTO를 UI에서 사용하는 일정 객체로 변환
@@ -27,7 +10,7 @@ const mapDTOToEvent = (dto: scheduleResDTO): EventCardProps => {
   return {
     scheduleId: dto.scheduleId,
     title: dto.title,
-    category: mapCategoryToActivityCategory(dto.category),
+    category: dto.category,
     startDate: new Date(dto.startAt),
     endDate: new Date(dto.endAt),
     location: dto.location,

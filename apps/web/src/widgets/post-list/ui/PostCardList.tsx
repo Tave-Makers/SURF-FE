@@ -5,6 +5,7 @@ import type { TabCategoryLabel } from '@/entities/post/model/tab';
 import type { Post } from '@/entities/post/model/types';
 import { PostCard } from '@/entities/post/ui/post-card/PostCard';
 import type { UserLevel } from '@/entities/user/model/types';
+import PostEmpty from '@/shared/assets/icons/empty-space/posts-empty.svg';
 
 type PostCardListProps = {
   posts: Post[];
@@ -49,7 +50,15 @@ const PostCardListComponent = ({
     );
   }
   if (posts.length === 0) {
-    return <div>게시글이 없습니다.</div>;
+    return (
+      <div className="flex h-full flex-col items-center gap-[0.43rem] pt-[15.38rem]">
+        <PostEmpty className="h-[4.72rem] w-[4.79rem]" />
+        <div className="flex flex-col items-center">
+          <div className="text-body-body8 text-foreground-tertiary">아무도 글을</div>
+          <div className="text-body-body8 text-foreground-tertiary">작성하지 않았어요</div>
+        </div>
+      </div>
+    );
   }
 
   return (

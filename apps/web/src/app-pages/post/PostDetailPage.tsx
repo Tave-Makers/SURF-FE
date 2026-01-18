@@ -14,11 +14,13 @@ import { Sheet as ModalSheet } from 'react-modal-sheet';
 import { usePostDetail } from '@/entities/post/api/usePostDetail';
 import { categoryIdToKey } from '@/entities/post/model/category';
 import { PostHeader } from '@/entities/post/ui/post-header/PostHeader';
+import { useAuthStore } from '@/features/auth/model/useAuthStore';
 import { useDeletePostMutation } from '@/features/post/model/useDeletePostMutation';
 import { useGetPostLikesQuery } from '@/features/post/model/useGetPostLikesQuery';
 import { useGetPostScheduleQuery } from '@/features/post/model/useGetPostScheduleQuery';
 import { PAGE_ROUTES } from '@/shared/config/path';
 import { useKeyboardOffset } from '@/shared/hooks/useKeyboardOffset';
+import { CommentSection } from '@/widgets/comment-section/ui/CommentSection';
 import { AppHeader } from '@/widgets/header/ui/AppHeader';
 import { PostBodySection } from '@/widgets/post-detail/PostBodySection';
 
@@ -32,6 +34,7 @@ const PostDetailPage = ({ postId }: PostDetailPageProps) => {
   const numericPostId = Number(postId);
   const keyboardOffset = useKeyboardOffset();
   const showToast = useToastStore((state) => state.show);
+  const memberId = useAuthStore((s) => s.memberId);
 
   const searchParams = useSearchParams();
   const from = searchParams.get('from');
@@ -157,6 +160,15 @@ const PostDetailPage = ({ postId }: PostDetailPageProps) => {
             />
 
             <PostBodySection post={post} schedule={schedule} onClickLikeCount={openLikedUsers} />
+
+            {/* 댓글 섹션 */}
+            <div className="flex h-full flex-col">
+              <CommentSection
+                postId={numericPostId}
+                memberId={memberId ?? undefined}
+                onStartReply={() => {}}
+              />
+            </div>
           </main>
         </div>
 

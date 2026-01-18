@@ -4,11 +4,11 @@ import { HeaderMode } from '@surf/ui/header';
 import { Tab } from '@surf/ui/tab';
 import { useRouter } from 'next/navigation';
 import { useState } from 'react';
-import NotificationEmpty from './icons/NotificationEmpty.svg';
 import type { NotificationTab } from '@/entities/notification/model/notificationTab';
 import { useGetNotifications } from '@/entities/notification/model/useGetNotifications';
 import { useReadNotification } from '@/entities/notification/model/useReadNotification';
 import { NotificationList } from '@/entities/notification/ui/NotificationList';
+import NotificationEmpty from '@/shared/assets/icons/empty-space/notification-empty.svg';
 import { AppHeader } from '@/widgets/header/ui/AppHeader';
 
 const tabItems = [
@@ -46,8 +46,8 @@ export const NotificationPage = () => {
   };
 
   const renderContent = () => {
-    // 로딩 중일 때
-    if (isLoading) {
+    // 로딩 중일 때(임시)
+    if (isLoading || isPending) {
       return <div className="p-20 text-center text-gray-500">로딩 중...</div>;
     }
 

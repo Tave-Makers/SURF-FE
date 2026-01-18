@@ -2,8 +2,6 @@
 
 import { Tab } from '@surf/ui/tab';
 import { useState, useRef, useEffect } from 'react';
-import PenaltyEmptyIcon from './icons/penalty-empty.svg';
-import RewardEmptyIcon from './icons/reward-empty.svg';
 import { ScoreMode } from '@/entities/activity-score/model/types';
 import { useInfiniteActivityHistory } from '@/entities/activity-score/model/useActivityHistory';
 import { useActivitySummary } from '@/entities/activity-score/model/useActivitySummary';
@@ -11,6 +9,8 @@ import { ActivityHistoryList } from '@/entities/activity-score/ui/ActivityHistor
 import { trackActivityScoreEvent } from '@/features/activity-score/lib/trackActivityScoreEvent';
 import { ACTIVITY_SCORE_EVENTS } from '@/features/activity-score/model/types';
 import { usePageName } from '@/shared/analytics/lib/getPageName';
+import PenaltyEmptyIcon from '@/shared/assets/icons/empty-space/penalty-empty.svg';
+import RewardEmptyIcon from '@/shared/assets/icons/empty-space/reward-empty.svg';
 import { ActivityScoreCard } from '@/widgets/activity-score/ui/ActivityScoreCard';
 
 const ActivityScorePage = () => {

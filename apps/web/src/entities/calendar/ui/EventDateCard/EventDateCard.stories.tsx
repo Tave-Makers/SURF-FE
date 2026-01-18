@@ -1,12 +1,13 @@
 import type { Meta, StoryObj } from '@storybook/nextjs';
-import type { ActivityCategory, EventCardType } from '../../model/types';
+import type { EventCardType } from '../../model/types';
 import { EventCard } from '../EventCard/EventCard';
 import { EventDateCard } from './EventDateCard';
+import { ScheduleCategory } from '@/entities/schedule/model/types';
 
 type EventItem = {
   id: string;
   title: string;
-  category: ActivityCategory;
+  category: ScheduleCategory;
   mode: EventCardType;
   startDate?: Date | null;
   endDate?: Date | null;

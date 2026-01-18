@@ -2,14 +2,15 @@
 
 import { SurfIcon } from '@surf/ui/icon';
 import { useState } from 'react';
-import { ActivityCategory, EventCardType } from '@/entities/calendar/model/types';
+import { EventCardType } from '@/entities/calendar/model/types';
 import { CalendarBadge } from '@/entities/calendar/ui/CalendarBadge/CalendarBadge';
 import { formatScheduleDate } from '@/entities/calendar/utils/formatScheduleDate';
+import { ScheduleCategory } from '@/entities/schedule/model/types';
 import { ScheduleActionSheet } from '@/features/schedule/ui/ScheduleActionSheet/ScheduleActionSheet';
 
 /**
  * 이벤트 카드 컴포넌트
- * @param category - 일정 이벤트 유형 (ActivityCategory: 'official', 'operation', 'other' 중 하나)
+ * @param category - 일정 이벤트 유형 (ScheduleCategory: 'regular', 'operation', 'other' 중 하나)
  * @param scheduleId - 일정 ID (바텀 시트 오픈 시 필요)
  * @param title - 일정 이벤트 제목
  * @param startDate - 일정 이벤트 시작 날짜 (Date 객체)
@@ -23,7 +24,7 @@ import { ScheduleActionSheet } from '@/features/schedule/ui/ScheduleActionSheet/
  * @param mode - 이벤트 카드 모드 (EventCardType: 'reservation', 'calendar' 중 하나)
  */
 export type EventCardProps = {
-  category: ActivityCategory;
+  category: ScheduleCategory;
   scheduleId?: string | number;
   title: string;
   startDate: Date | null;

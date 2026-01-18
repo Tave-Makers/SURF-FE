@@ -1,10 +1,10 @@
-import { ActivityCategory } from '@/entities/calendar/model/types';
+import { ScheduleCategory } from '../../model/types';
 import { CalendarBadge } from '@/entities/calendar/ui/CalendarBadge/CalendarBadge';
 
 interface AnnouncementBarProps {
   title: string;
   date: string;
-  category: ActivityCategory;
+  category: ScheduleCategory;
   onClick?: () => void;
 }
 

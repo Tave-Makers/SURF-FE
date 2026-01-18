@@ -1,4 +1,4 @@
-import { ActivityCategory } from '@/entities/calendar/model/types';
+import { ScheduleCategory } from '@/entities/schedule/model/types';
 import { CommonResponse } from '@/shared/api/types';
 
 // 캘린더 일정 조회 api params 타입
@@ -10,7 +10,7 @@ export type CalendarScheduleRequest = {
 // 단일 일정 조회 응답 api DTO 타입
 export type scheduleResDTO = {
   scheduleId: number;
-  category: ActivityCategory;
+  category: ScheduleCategory;
   title: string;
   startAt: string;
   endAt: string;

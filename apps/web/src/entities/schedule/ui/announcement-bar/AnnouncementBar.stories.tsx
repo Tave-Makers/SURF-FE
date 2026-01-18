@@ -1,8 +1,8 @@
 import type { Meta, StoryObj } from '@storybook/nextjs';
+import { ScheduleCategory } from '../../model/types';
 import { AnnouncementBar } from './AnnouncementBar';
-import type { ActivityCategory } from '@/entities/calendar/model/types';
 
-const CATEGORY_OPTIONS: ActivityCategory[] = ['regular', 'operation', 'other'];
+const CATEGORY_OPTIONS: ScheduleCategory[] = ['regular', 'operation', 'other'];
 
 const meta: Meta<typeof AnnouncementBar> = {
   title: 'Entities/UI/Schedule/AnnouncementBar',

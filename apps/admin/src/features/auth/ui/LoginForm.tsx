@@ -53,8 +53,8 @@ export const LoginForm = () => {
                 {...field}
                 placeholder="email@example.com"
                 errorMessage={errors.email?.message}
-                autoComplete="username"
-                name="username"
+                autoComplete="email"
+                name="email"
               />
             )}
           />
@@ -72,7 +72,8 @@ export const LoginForm = () => {
                 name="password"
                 type="password"
                 placeholder="비밀번호를 입력해주세요."
-                autoComplete={'current-password'}
+                autoComplete="current-password"
+                errorMessage={errors.password?.message}
               />
             )}
           />

@@ -4,14 +4,23 @@ import { SolidButton } from '@surf/ui/button';
 import { FieldGroup } from '@surf/ui/field-group';
 import { Input } from '@surf/ui/input';
 
+import { useToastStore } from '@surf/ui/store/toastStore';
+
+import { useRouter } from 'next/navigation';
 import { Controller, useForm } from 'react-hook-form';
+
+import { login } from '../api/login';
 import { FormValues } from '../model/types';
+import { PAGE_ROUTES } from '@/shared/config/path';
+import { handleApiError } from '@/shared/lib/handleApiError';
 
 export const LoginForm = () => {
+  const toast = useToastStore((s) => s.show);
+  const router = useRouter();
+
   const {
     control,
     handleSubmit,
-
     formState: { errors, isValid },
   } = useForm<FormValues>({
     mode: 'onChange',
@@ -23,9 +32,15 @@ export const LoginForm = () => {
     },
   });
 
-  const onSubmit = (values: FormValues) => {
+  const onSubmit = async (values: FormValues) => {
     const { email, password } = values;
-    console.log(email, password);
+    try {
+      await login({ email, password });
+      router.push(PAGE_ROUTES.HOME);
+    } catch (e) {
+      const error = handleApiError(e, '로그인 중 알 수 없는 오류가 발생했습니다.');
+      toast(error.message);
+    }
   };
   return (
     <form

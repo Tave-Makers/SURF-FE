@@ -181,7 +181,7 @@ const PostDetailPage = ({ postId }: PostDetailPageProps) => {
       {/* 좋아요 누른 사용자 Sheet */}
       {/* ============================= */}
       <ModalSheet isOpen={likedUsersOpen} onClose={() => setLikedUsersOpen(false)}>
-        <ModalSheet.Container className="!right-0 !left-0 mx-auto w-full sm:max-w-[360px]">
+        <ModalSheet.Container className="!right-0 !left-0 mx-auto w-full sm:max-w-[min(100dvw,calc(100dvh*375/812))]">
           <ModalSheet.Content>
             <Sheet title="좋아요를 누른 사람">
               <div className="flex flex-col">
@@ -240,7 +240,7 @@ const PostDetailPage = ({ postId }: PostDetailPageProps) => {
       {/* 삭제/수정/신고 Sheet*/}
       {/* ============================= */}
       <ModalSheet isOpen={open} onClose={() => setOpen(false)}>
-        <ModalSheet.Container className="!right-0 !left-0 mx-auto w-full sm:max-w-[360px]">
+        <ModalSheet.Container className="!right-0 !left-0 mx-auto w-full sm:max-w-[min(100dvw,calc(100dvh*375/812))]">
           <ModalSheet.Content>
             <Sheet title="게시글 옵션">
               <div className="flex flex-col">

@@ -1,6 +1,6 @@
 import '@/shared/styles/globals.css';
-import { GlobalComponents } from '@surf/ui/global-components';
 import type { ReactNode } from 'react';
+import { GlobalComponents } from '@/shared/ui/global-components/GlobalComponents';
 
 const RootLayout = ({ children }: { children: ReactNode }) => {
   return (

@@ -1,6 +1,5 @@
 'use client';
 
-import { ActionBar } from '@surf/ui/action-bar';
 import { Alert } from '@surf/ui/alert';
 import { Avatar } from '@surf/ui/avatar';
 import { HeaderMode } from '@surf/ui/header';
@@ -20,6 +19,7 @@ import { useGetPostLikesQuery } from '@/features/post/model/useGetPostLikesQuery
 import { useGetPostScheduleQuery } from '@/features/post/model/useGetPostScheduleQuery';
 import { PAGE_ROUTES } from '@/shared/config/path';
 import { useKeyboardOffset } from '@/shared/hooks/useKeyboardOffset';
+import { CommentComposer } from '@/widgets/comment-composer/ui/CommentComposer';
 import { CommentSection } from '@/widgets/comment-section/ui/CommentSection';
 import { AppHeader } from '@/widgets/header/ui/AppHeader';
 import { PostBodySection } from '@/widgets/post-detail/PostBodySection';
@@ -72,6 +72,11 @@ const PostDetailPage = ({ postId }: PostDetailPageProps) => {
   const [open, setOpen] = useState(false);
   const [showDeleteAlert, setShowDeleteAlert] = useState(false);
   const { mutate: deletePostMutate } = useDeletePostMutation();
+  const [pendingReply, setPendingReply] = useState<{
+    commentId: number;
+    memberId: number;
+    nickname: string;
+  } | null>(null);
 
   // 로딩/에러 처리
   if (isLoading || (scheduleId && isScheduleLoading))
@@ -122,6 +127,13 @@ const PostDetailPage = ({ postId }: PostDetailPageProps) => {
     });
   };
 
+  const handleStartReply = (info: { commentId: number; memberId: number; nickname: string }) => {
+    setPendingReply(info);
+  };
+
+  const handleConsumedReply = () => {
+    setPendingReply(null);
+  };
   return (
     <div className="flex h-full flex-col">
       <AppHeader
@@ -166,16 +178,19 @@ const PostDetailPage = ({ postId }: PostDetailPageProps) => {
               <CommentSection
                 postId={numericPostId}
                 memberId={memberId ?? undefined}
-                onStartReply={() => {}}
+                onStartReply={handleStartReply}
               />
             </div>
           </main>
         </div>
 
         {/* 댓글 입력창 */}
-        <div className="sticky bottom-0 w-full" style={{ paddingBottom: keyboardOffset }}>
-          <ActionBar placeholder="댓글을 입력해주세요" />
-        </div>
+        <CommentComposer
+          postId={numericPostId}
+          keyboardOffset={keyboardOffset}
+          pendingReply={pendingReply}
+          onConsumedReply={handleConsumedReply}
+        />
       </div>
 
       {/* 삭제 Alert */}

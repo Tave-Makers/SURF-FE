@@ -1,5 +1,6 @@
 'use client';
 
+import { SurfIcon } from '@surf/ui/icon';
 import { Sheet } from '@surf/ui/sheet';
 import { SheetItem } from '@surf/ui/sheet';
 import { useAlertStore } from '@surf/ui/store/alertStore';
@@ -163,12 +164,24 @@ export const CommentSection = ({ postId, memberId, onStartReply }: Props) => {
       <ModalSheet isOpen={optionsOpen} onClose={() => setOptionsOpen(false)}>
         <ModalSheet.Container className="!right-0 !left-0 mx-auto max-w-[min(100dvw,calc(100dvh*375/812))]">
           <ModalSheet.Content>
-            <Sheet title="댓글 옵션">
-              <div className="flex flex-col">
+            <Sheet>
+              <div className="flex flex-row">
                 {activeComment && isMine(activeComment) ? (
-                  <SheetItem title="삭제하기" textColor="danger" onClick={clickDelete} />
+                  <SheetItem
+                    title="삭제하기"
+                    textColor="danger"
+                    onClick={clickDelete}
+                    node={
+                      <SurfIcon name="TrashOneSolid" size="m" className="text-foreground-danger" />
+                    }
+                  />
                 ) : (
-                  <SheetItem title="신고하기" onClick={clickReport} />
+                  <SheetItem
+                    title="신고하기"
+                    textColor="danger"
+                    onClick={clickReport}
+                    node={<SurfIcon name="FlagSolid" size="m" className="text-foreground-danger" />}
+                  />
                 )}
               </div>
             </Sheet>

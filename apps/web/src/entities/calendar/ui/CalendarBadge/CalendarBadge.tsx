@@ -21,7 +21,7 @@ const BADGE_STYLE = {
 } as const;
 
 export const CalendarBadge = ({ variation }: CalendarBadgeProps) => {
-  const { text, color } = BADGE_STYLE[variation];
+  const { text, color } = BADGE_STYLE[variation] || BADGE_STYLE.regular;
   return (
     <span
       className={`rounded-3 text-caption-caption5 inline-flex items-center justify-center px-7 py-5 ${color}`}

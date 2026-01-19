@@ -1,14 +1,15 @@
 'use client';
 
 import { HeaderMode } from '@surf/ui/header';
+import { useToastStore } from '@surf/ui/store/toastStore';
 import { Tab } from '@surf/ui/tab';
 import { useRouter } from 'next/navigation';
-import { useState } from 'react';
-import NotificationEmpty from './icons/NotificationEmpty.svg';
+import { useState, useEffect } from 'react';
 import type { NotificationTab } from '@/entities/notification/model/notificationTab';
 import { useGetNotifications } from '@/entities/notification/model/useGetNotifications';
 import { useReadNotification } from '@/entities/notification/model/useReadNotification';
 import { NotificationList } from '@/entities/notification/ui/NotificationList';
+import NotificationEmpty from '@/shared/assets/icons/empty-space/notification-empty.svg';
 import { AppHeader } from '@/widgets/header/ui/AppHeader';
 
 const tabItems = [
@@ -20,6 +21,14 @@ const tabItems = [
 export const NotificationPage = () => {
   const router = useRouter();
   const [currentTab, setCurrentTab] = useState<NotificationTab>('ALL');
+  const showToast = useToastStore((state) => state.show);
+
+  useEffect(() => {
+    if (Notification.permission === 'denied') {
+      // 이미 거부된 경우 브라우저 설정 유도
+      showToast('알림 권한이 차단되어 있습니다. 브라우저 설정에서 알림을 허용해주세요.');
+    }
+  }, [showToast]);
 
   const { data, isLoading } = useGetNotifications(currentTab);
   const { mutate: readNotification, isPending } = useReadNotification();
@@ -40,13 +49,14 @@ export const NotificationPage = () => {
 
     // 딥링크가 있다면 페이지 이동
     if (deepLink) {
-      router.push(deepLink);
+      const separator = deepLink.includes('?') ? '&' : '?';
+      router.push(`${deepLink}${separator}from=notification`);
     }
   };
 
   const renderContent = () => {
-    // 로딩 중일 때
-    if (isLoading) {
+    // 로딩 중일 때(임시)
+    if (isLoading || isPending) {
       return <div className="p-20 text-center text-gray-500">로딩 중...</div>;
     }
 
@@ -66,12 +76,7 @@ export const NotificationPage = () => {
     }
 
     if (isPending) {
-      return (
-        <div className="p-20 text-center text-gray-500">
-          <NotificationEmpty />
-          로딩 중...
-        </div>
-      );
+      return <div className="p-20 text-center text-gray-500">로딩 중...</div>;
     }
 
     // 데이터가 있을 때

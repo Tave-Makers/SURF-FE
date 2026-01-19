@@ -9,9 +9,15 @@ export type ScheduleSettingProps = {
   title: ScheduleTitle;
   date: Date;
   onClick?: () => void;
+  isSelected?: boolean;
 };
 
-export const ScheduleSetting = ({ title, date, onClick }: ScheduleSettingProps) => {
+export const ScheduleSetting = ({
+  title,
+  date,
+  onClick,
+  isSelected = false,
+}: ScheduleSettingProps) => {
   const roundedDate = roundToNearestMinutes(date, { nearestTo: 30 });
 
   return (
@@ -22,7 +28,9 @@ export const ScheduleSetting = ({ title, date, onClick }: ScheduleSettingProps) 
     >
       <div className="text-foreground-normal text-body-body9 flex shrink-0">{title}</div>
 
-      <div className="text-foreground-quaternary text-caption-caption2 flex w-full flex-row justify-end gap-4">
+      <div
+        className={`${isSelected ? 'text-foreground-normal' : 'text-foreground-quaternary'} text-caption-caption2 flex w-full flex-row justify-end gap-4`}
+      >
         <div>{format(roundedDate, 'yyyy년 M월 d일 (E)', { locale: ko })}</div>
         <div>{format(roundedDate, 'HH:mm', { locale: ko })}</div>
       </div>

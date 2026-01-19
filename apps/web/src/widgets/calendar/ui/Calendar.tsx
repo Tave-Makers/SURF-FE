@@ -52,11 +52,17 @@ type CalendarProps = {
   month: Date;
   onMonthChange: (date: Date) => void;
   schedules: ActivityMap;
+  initialSelectedDate?: Date;
 };
 
-export const Calendar = ({ month, onMonthChange, schedules }: CalendarProps) => {
+export const Calendar = ({
+  month,
+  onMonthChange,
+  schedules,
+  initialSelectedDate,
+}: CalendarProps) => {
   const router = useRouter();
-  const [selectedDay, setSelectedDay] = useState<Date>(new Date());
+  const [selectedDay, setSelectedDay] = useState<Date>(initialSelectedDate || new Date());
   const memberRole = useAuthStore((s) => s.memberRole);
 
   // 날짜 선택 핸들러

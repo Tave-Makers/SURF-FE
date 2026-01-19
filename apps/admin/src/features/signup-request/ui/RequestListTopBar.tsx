@@ -1,4 +1,4 @@
-import { TextButton } from '@surf/ui/dist/components/button';
+import { TextButton } from '@surf/ui/button';
 
 interface RequestListTopBarProps {
   mode: 'select' | 'view';

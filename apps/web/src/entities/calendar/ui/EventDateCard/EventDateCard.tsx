@@ -1,7 +1,7 @@
 import { format } from 'date-fns';
 import { ko } from 'date-fns/locale';
 import type { ReactNode } from 'react';
-import CalendarEventDateCardEmpty from '../icons/CalendarEventDateCardEmpty.svg';
+import CalendarEventDateCardEmpty from '@/shared/assets/icons/empty-space/calendar-event-date-card-empty.svg';
 
 /**
  * @param date - 선택된 날짜
@@ -36,7 +36,7 @@ export const EventDateCard = <T extends { id: string | number }>({
         <div className="text-background-secondary-darker">불러오는 중...</div>
       ) : items.length === 0 ? (
         <div className="flex flex-col items-center gap-3 pt-[2.19rem]">
-          <CalendarEventDateCardEmpty />
+          <CalendarEventDateCardEmpty className="h-[3.16rem] w-[3.16rem]" />
           <div className="text-body-body8 text-foreground-tertiary">등록된 일정이 없어요</div>
         </div>
       ) : (

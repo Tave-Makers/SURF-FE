@@ -49,7 +49,21 @@ export const PAGE_ROUTES = {
     },
   },
 
-  MESSAGE: '/message',
+  MESSAGE: (params: { memberId: number | string; nickname?: string; profileImageUrl?: string }) => {
+    const searchParams = new URLSearchParams({
+      memberId: String(params.memberId),
+    });
+
+    if (params.nickname) {
+      searchParams.set('nickname', params.nickname);
+    }
+
+    if (params.profileImageUrl) {
+      searchParams.set('profileImageUrl', params.profileImageUrl);
+    }
+
+    return `/message?${searchParams.toString()}`;
+  },
 
   NOTIFICATION: '/notification',
 

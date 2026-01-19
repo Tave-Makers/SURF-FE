@@ -187,8 +187,6 @@ const PostPage = (props: PostPageProps) => {
         </div>
       )}
 
-      {/* 3. 카테고리 시트 - REMOVED (now global) */}
-
       {/* 4. 제목 입력 */}
       <div className="flex w-full px-13">
         <label htmlFor="post-title" className="sr-only">

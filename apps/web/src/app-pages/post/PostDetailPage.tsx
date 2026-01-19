@@ -4,16 +4,19 @@ import { ActionBar } from '@surf/ui/action-bar';
 import { HeaderMode } from '@surf/ui/header';
 import { useAlertStore } from '@surf/ui/store/alertStore';
 import { useToastStore } from '@surf/ui/store/toastStore';
-import { usePathname, useRouter } from 'next/navigation';
+import { usePathname, useRouter, useSearchParams } from 'next/navigation';
+import { useEffect } from 'react';
 import { usePostDetail } from '@/entities/post/api/usePostDetail';
 import { categoryIdToKey } from '@/entities/post/model/category';
 import { PostHeader } from '@/entities/post/ui/post-header/PostHeader';
+import { useAuthStore } from '@/features/auth/model/useAuthStore';
 import { useDeletePostMutation } from '@/features/post/model/useDeletePostMutation';
 import { useGetPostLikesQuery } from '@/features/post/model/useGetPostLikesQuery';
 import { useGetPostScheduleQuery } from '@/features/post/model/useGetPostScheduleQuery';
 import { PAGE_ROUTES } from '@/shared/config/path';
 import { useKeyboardOffset } from '@/shared/hooks/useKeyboardOffset';
 import { useBottomSheetStore } from '@/shared/store/bottomSheetStore';
+import { CommentSection } from '@/widgets/comment-section/ui/CommentSection';
 import { AppHeader } from '@/widgets/header/ui/AppHeader';
 import { PostBodySection } from '@/widgets/post-detail/PostBodySection';
 
@@ -27,9 +30,21 @@ const PostDetailPage = ({ postId }: PostDetailPageProps) => {
   const numericPostId = Number(postId);
   const keyboardOffset = useKeyboardOffset();
   const showToast = useToastStore((state) => state.show);
+  const memberId = useAuthStore((s) => s.memberId);
+
+  const searchParams = useSearchParams();
+  const from = searchParams.get('from');
 
   // 게시글 상세 조회 API
   const { data: post, isLoading, isError } = usePostDetail(numericPostId);
+
+  // 삭제된 게시글 처리 (알림에서 진입했을 경우)
+  useEffect(() => {
+    if (isError && from === 'notification') {
+      alert('삭제된 게시글입니다.');
+      router.back();
+    }
+  }, [isError, from, router]);
 
   // 일정 조회 API
   const scheduleId = post?.scheduleId;
@@ -191,6 +206,15 @@ const PostDetailPage = ({ postId }: PostDetailPageProps) => {
             />
 
             <PostBodySection post={post} schedule={schedule} onClickLikeCount={openLikedUsers} />
+
+            {/* 댓글 섹션 */}
+            <div className="flex h-full flex-col">
+              <CommentSection
+                postId={numericPostId}
+                memberId={memberId ?? undefined}
+                onStartReply={() => {}}
+              />
+            </div>
           </main>
         </div>
 

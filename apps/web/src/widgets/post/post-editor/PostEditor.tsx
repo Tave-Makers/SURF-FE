@@ -5,12 +5,10 @@ import { EditorContent } from '@tiptap/react';
 import { useCallback, useEffect, useRef } from 'react';
 
 import '@/features/post/post-editor/ui/PostEditor.style.css';
-import { ActivityCategory } from '@/entities/calendar/model/types';
 import { EventCard } from '@/entities/calendar/ui/EventCard/EventCard';
 import { UploadImage } from '@/entities/image/model/types';
 import { POST_VALIDATION } from '@/entities/post/model/validation';
 import { ImageList } from '@/entities/post/post-image/ui/ImageList';
-import { ScheduleCategory } from '@/entities/schedule/model/types';
 import { useImageManager } from '@/features/image/model/useImageManager';
 import { usePostEditor } from '@/features/post/post-editor/lib/usePostEditor';
 import { PostEditorToolbar } from '@/features/post/post-editor/ui/PostEditorToolbar';
@@ -185,16 +183,10 @@ export const PostEditor = ({
   const renderScheduleCard = () => {
     if (!linkedSchedule) return null;
 
-    const categoryMap: Record<ScheduleCategory, ActivityCategory> = {
-      regular: 'official',
-      operation: 'operation',
-      other: 'other',
-    };
-
     return (
       <div className="p-13">
         <EventCard
-          category={categoryMap[linkedSchedule.category]}
+          category={linkedSchedule.category}
           title={linkedSchedule.title}
           startDate={linkedSchedule.startDate}
           endDate={linkedSchedule.endDate}

@@ -22,7 +22,14 @@ export const MemberProfilePage = ({ userProfile, memberId }: Props) => {
 
   function handleMessage() {
     if (isMe) return;
-    router.push(PAGE_ROUTES.MESSAGE);
+
+    router.push(
+      PAGE_ROUTES.MESSAGE({
+        memberId,
+        nickname: userProfile.username,
+        profileImageUrl: userProfile.profileImgUrl,
+      }),
+    );
   }
 
   return (

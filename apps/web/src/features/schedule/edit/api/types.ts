@@ -16,7 +16,7 @@ export type EditScheduleResponse = CommonResponse<void>;
 // 일정 단건 type
 export type SingleSchedule = {
   scheduleId: number;
-  category: string;
+  category: ScheduleCategory;
   title: string;
   startAt: string;
   endAt: string;

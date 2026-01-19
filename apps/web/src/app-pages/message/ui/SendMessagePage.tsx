@@ -4,6 +4,7 @@ import { SolidButton } from '@surf/ui/button';
 import { FieldGroup } from '@surf/ui/field-group';
 import { HeaderMode } from '@surf/ui/header';
 import { useAlertStore } from '@surf/ui/store/alertStore';
+import { useToastStore } from '@surf/ui/store/toastStore';
 import { TextArea } from '@surf/ui/text-area';
 import { useRouter, useSearchParams } from 'next/navigation';
 import { useMemo, useState } from 'react';
@@ -27,9 +28,10 @@ export const SendMessagePage = () => {
   const [title, setTitle] = useState<string>('');
   const [content, setContent] = useState<string>('');
 
-  // Alert open 상태
+  // 알러트/토스트 스토어
   const openAlert = useAlertStore((s) => s.open);
   const closeAlert = useAlertStore((s) => s.close);
+  const showToast = useToastStore((state) => state.show);
 
   // 본문/제목 최소 글자 수
   const MIN_LENGTH = 10;
@@ -80,6 +82,7 @@ export const SendMessagePage = () => {
       },
       {
         onSuccess: () => {
+          showToast('상대방의 이메일로 쪽지가 발송되었습니다.');
           closeAlert();
           router.back();
         },
@@ -121,6 +124,17 @@ export const SendMessagePage = () => {
     return Number.isInteger(id) && id > 0 ? id : null;
   }, [memberId]);
 
+  // 이메일 에러 메시지
+  const emailErrorMessage = useMemo(() => {
+    if (senderEmail.length === 0) return undefined;
+
+    if (!isValidEmail(senderEmail)) {
+      return '올바른 형태의 이메일을 입력해주세요.';
+    }
+
+    return undefined;
+  }, [senderEmail]);
+
   // 버튼 활성화 조건
   const isBtnEnabled =
     !isPending &&
@@ -149,6 +163,7 @@ export const SendMessagePage = () => {
             value={senderEmail}
             onChange={setSenderEmail}
             readOnly={isPending}
+            errorMessage={emailErrorMessage}
           />
         </FieldGroup>
         <FieldGroup title="추가로 연락받고 싶은 SNS">

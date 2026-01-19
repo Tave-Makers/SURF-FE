@@ -1,7 +1,7 @@
 'use client';
 
 import { AccordionSelect } from '@surf/ui/accordion';
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { Controller, useFormContext } from 'react-hook-form';
 import { getInitialDate } from '@/entities/calendar/utils/getInitialDate';
 import { CATEGORY_LABELS } from '@/entities/schedule/model/constants';
@@ -21,6 +21,11 @@ export const ScheduleForm = ({ onSubmit, initialData }: ScheduleFormProps) => {
   const { control, handleSubmit, reset } = useFormContext<ScheduleFormData>();
   const openBottomSheet = useBottomSheetStore((s) => s.open);
 
+  const [dateConfirmed, setDateConfirmed] = useState({
+    startDate: !!initialData,
+    endDate: !!initialData,
+  });
+
   // 1. 부모로부터 데이터가 들어오면 폼 리셋
   useEffect(() => {
     if (initialData) {
@@ -31,6 +36,7 @@ export const ScheduleForm = ({ onSubmit, initialData }: ScheduleFormProps) => {
         endDate: ensureUtcDate(initialData.endDate),
         location: initialData.location ?? '',
       });
+      setDateConfirmed({ startDate: true, endDate: true });
     }
   }, [initialData, reset]);
 
@@ -94,6 +100,7 @@ export const ScheduleForm = ({ onSubmit, initialData }: ScheduleFormProps) => {
               <ScheduleSetting
                 title="시작"
                 date={field.value}
+                isSelected={dateConfirmed.startDate}
                 onClick={() => {
                   openBottomSheet({
                     type: 'scheduleDate',
@@ -103,6 +110,7 @@ export const ScheduleForm = ({ onSubmit, initialData }: ScheduleFormProps) => {
                       initialDate: getInitialDate(field.value),
                       onSave: (date) => {
                         field.onChange(date);
+                        setDateConfirmed((prev) => ({ ...prev, startDate: true }));
                       },
                     },
                   });
@@ -125,6 +133,7 @@ export const ScheduleForm = ({ onSubmit, initialData }: ScheduleFormProps) => {
               <ScheduleSetting
                 title="종료"
                 date={field.value}
+                isSelected={dateConfirmed.endDate}
                 onClick={() => {
                   openBottomSheet({
                     type: 'scheduleDate',
@@ -134,6 +143,7 @@ export const ScheduleForm = ({ onSubmit, initialData }: ScheduleFormProps) => {
                       initialDate: getInitialDate(field.value),
                       onSave: (date) => {
                         field.onChange(date);
+                        setDateConfirmed((prev) => ({ ...prev, endDate: true }));
                       },
                     },
                   });

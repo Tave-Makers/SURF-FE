@@ -30,7 +30,7 @@ export const SignupRequestItem = ({
         <h3 className="text-body-body6 text-foreground-normal">{name}</h3>
         <div className="flex flex-row gap-5">
           <InfoBadge text={infoTags[0]} />
-          {infoTags.length > 1 && <InfoBadge text={`+ ${infoTags.length - 1}`} />}
+          {infoTags?.length > 1 && <InfoBadge text={`+ ${infoTags?.length - 1}`} />}
         </div>
 
         <span className="text-body-body11 text-foreground-secondary">

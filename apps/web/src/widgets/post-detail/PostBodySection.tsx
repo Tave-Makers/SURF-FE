@@ -7,7 +7,6 @@ import { PostScheduleData } from '@/entities/post/api/types';
 import { PostDetail } from '@/entities/post/model/types';
 import { PostImage } from '@/entities/post/ui/post-image/PostImage';
 import { PostProfile } from '@/entities/post/ui/post-profile/PostProfile';
-import { mapCategoryToActivityCategory } from '@/features/calendar/model/mapper';
 import { useToggleLikeMutation } from '@/features/post/model/useToggleLikeMutation';
 import { useToggleScrapMutation } from '@/features/post/model/useToggleScrapMutation';
 
@@ -72,7 +71,7 @@ export const PostBodySection = ({ post, schedule, onClickLikeCount }: PostBodySe
         <EventCard
           scheduleId={schedule.scheduleId}
           title={schedule.title}
-          category={mapCategoryToActivityCategory(schedule.category)}
+          category={schedule.category}
           mode="reservation"
           location={schedule.location}
           startDate={new Date(schedule.startAt)}

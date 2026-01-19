@@ -1,9 +1,9 @@
 type CalendarBadgeProps = {
-  variation: 'official' | 'operation' | 'other';
+  variation: 'regular' | 'operation' | 'other';
 };
 
 const BADGE_STYLE = {
-  official: {
+  regular: {
     text: '정규행사',
     color:
       'bg-background-badge-pink text-foreground-badge-pink shadow-[inset_0_0_10px_0_var(--background-tag-pink-darker,rgba(255,112,172,0.1))]',

@@ -1,9 +1,10 @@
-export type ActivityCategory = 'official' | 'operation' | 'other';
+import { ScheduleCategory } from '@/entities/schedule/model/types';
+
 export type EventCardType = 'reservation' | 'calendar';
 
 export type DailyActivity = {
   id: number;
-  category: ActivityCategory;
+  category: ScheduleCategory;
   title: string;
   startDate: Date | null;
   endDate: Date | null;

@@ -1,6 +1,7 @@
 import type { Meta, StoryObj } from '@storybook/nextjs';
-import type { ActivityCategory, EventCardType } from '../../model/types';
+import type { EventCardType } from '../../model/types';
 import { EventCard } from './EventCard';
+import { ScheduleCategory } from '@/entities/schedule/model/types';
 
 // 더미 데이터
 const SAMPLE_START_DATE = new Date('2025-11-08T14:00:00');
@@ -20,7 +21,7 @@ const meta: Meta<typeof EventCard> = {
     },
     category: {
       control: 'radio',
-      options: ['official', 'operation', 'other'] as ActivityCategory[],
+      options: ['official', 'operation', 'other'] as ScheduleCategory[],
       description: '이벤트 태그의 종류',
     },
     mode: {
@@ -53,7 +54,7 @@ const meta: Meta<typeof EventCard> = {
   },
   args: {
     title: '후반기 만남의 장',
-    category: 'official',
+    category: 'regular',
     mode: 'calendar',
     startDate: SAMPLE_START_DATE,
     endDate: SAMPLE_END_DATE,

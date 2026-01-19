@@ -17,9 +17,9 @@ type BottomActionBarProps = {
  * actions로 최대 2개의 버튼을 전달해 하단 CTA 영역을 구성한다.
  */
 export const BottomActionBar = ({ actions }: BottomActionBarProps) => {
-  if (actions?.length === 0) return null;
+  if (actions.length === 0) return null;
 
-  if (actions?.length > 2) throw new Error('BottomActionBar supports up to 2 actions.');
+  if (actions.length > 2) throw new Error('BottomActionBar supports up to 2 actions.');
 
   return (
     <div

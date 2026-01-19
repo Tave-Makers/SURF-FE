@@ -7,6 +7,7 @@ import { Input } from '@surf/ui/input';
 import { useToastStore } from '@surf/ui/store/toastStore';
 
 import { useRouter } from 'next/navigation';
+import { useState } from 'react';
 import { Controller, useForm } from 'react-hook-form';
 
 import { login } from '../api/login';
@@ -15,8 +16,10 @@ import { PAGE_ROUTES } from '@/shared/config/path';
 import { handleApiError } from '@/shared/lib/handleApiError';
 
 export const LoginForm = () => {
-  const toast = useToastStore((s) => s.show);
   const router = useRouter();
+
+  const toast = useToastStore((s) => s.show);
+  const [isLoading, setIsLoading] = useState<boolean>(false);
 
   const {
     control,
@@ -33,13 +36,18 @@ export const LoginForm = () => {
   });
 
   const onSubmit = async (values: FormValues) => {
+    if (isLoading) return;
+
     const { email, password } = values;
+    setIsLoading(true);
     try {
       await login({ email, password });
       router.push(PAGE_ROUTES.HOME);
     } catch (e) {
       const error = handleApiError(e, '로그인 중 알 수 없는 오류가 발생했습니다.');
       toast(error.message);
+    } finally {
+      setIsLoading(false);
     }
   };
   return (
@@ -97,7 +105,7 @@ export const LoginForm = () => {
         type="submit"
         variant="primary"
         size="l"
-        className="absolute bottom-[1.25rem] left-1/2 -translate-x-1/2"
+        className="absolute bottom-15 left-1/2 -translate-x-1/2"
         isDisabled={!isValid}
       >
         로그인

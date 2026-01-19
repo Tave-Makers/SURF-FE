@@ -55,9 +55,7 @@ export const EventCard = ({
   const [isActionSheetOpen, setIsActionSheetOpen] = useState(false);
 
   const handleCardClick = () => {
-    if (mode === 'calendar') {
-      onClickCard?.();
-    }
+    onClickCard?.();
   };
 
   const handleDeleteSchedule = () => {

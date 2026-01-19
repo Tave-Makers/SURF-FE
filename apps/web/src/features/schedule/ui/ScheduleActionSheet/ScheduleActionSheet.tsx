@@ -1,10 +1,8 @@
-import { Alert } from '@surf/ui/alert';
 import { SurfIcon } from '@surf/ui/icon';
 import { Sheet } from '@surf/ui/sheet';
+import { useAlertStore } from '@surf/ui/store/alertStore';
 import { useToastStore } from '@surf/ui/store/toastStore';
 import { useRouter } from 'next/navigation';
-import { useState } from 'react';
-import { createPortal } from 'react-dom';
 import { Sheet as ModalSheet } from 'react-modal-sheet';
 import { useDeleteSchedule } from '@/features/schedule/delete/model/useDelSchedule';
 import { useEditSchedule } from '@/features/schedule/edit/model/useEditSchedule';
@@ -27,9 +25,10 @@ export const ScheduleActionSheet = ({
   onDeleteSuccess,
 }: ScheduleActionSheetProps) => {
   const router = useRouter();
-  const [showDeleteAlert, setShowDeleteAlert] = useState(false);
   const scheduleIdNum = typeof scheduleId === 'string' ? parseInt(scheduleId, 10) : scheduleId;
   const showToast = useToastStore((state) => state.show);
+  const openAlert = useAlertStore((state) => state.open);
+  const closeAlert = useAlertStore((state) => state.close);
 
   // 삭제 훅 사용
   const deleteScheduleMutation = useDeleteSchedule();
@@ -44,7 +43,7 @@ export const ScheduleActionSheet = ({
   };
 
   const handleDeleteConfirm = () => {
-    setShowDeleteAlert(false);
+    closeAlert();
     deleteScheduleMutation.mutate(scheduleIdNum, {
       onSuccess: () => {
         onDeleteSuccess?.();
@@ -59,7 +58,26 @@ export const ScheduleActionSheet = ({
   };
 
   const handleDeleteClick = () => {
-    setShowDeleteAlert(true);
+    openAlert({
+      state: 'default',
+      title: '작성된 일정이 삭제됩니다.',
+      infoText: '삭제하기를 누를 경우에 해당 일정이 삭제됩니다.',
+      actions: [
+        {
+          type: 'solid',
+          variant: 'secondary',
+          label: '취소',
+          onClick: () => closeAlert(),
+        },
+        {
+          type: 'solid',
+          variant: 'danger',
+          label: '삭제',
+          onClick: handleDeleteConfirm,
+          isDisabled: deleteScheduleMutation.isPending,
+        },
+      ],
+    });
   };
 
   if (!isOpen) return null;
@@ -100,36 +118,6 @@ export const ScheduleActionSheet = ({
         </ModalSheet.Container>
         <ModalSheet.Backdrop onClick={onClose} className="bg-effect-overlay-dim-normal" />
       </ModalSheet>
-
-      {createPortal(
-        <div className="pointer-events-none fixed inset-0 z-9999 flex items-center justify-center">
-          <div className="pointer-events-auto">
-            <Alert
-              state="default"
-              title="작성된 일정이 삭제됩니다."
-              infoText="삭제하기를 누를 경우에 해당 일정이 삭제됩니다."
-              isOpen={showDeleteAlert}
-              onClose={() => setShowDeleteAlert(false)}
-              actions={[
-                {
-                  type: 'solid',
-                  variant: 'secondary',
-                  label: '취소',
-                  onClick: () => setShowDeleteAlert(false),
-                },
-                {
-                  type: 'solid',
-                  variant: 'danger',
-                  label: '삭제',
-                  onClick: handleDeleteConfirm,
-                  isDisabled: deleteScheduleMutation.isPending,
-                },
-              ]}
-            />
-          </div>
-        </div>,
-        document.body,
-      )}
     </>
   );
 };

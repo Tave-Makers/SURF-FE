@@ -79,9 +79,9 @@ export const Alert = ({
   if (!isOpen) return null;
 
   return (
-    <div className="absolute inset-0 z-50 flex items-center justify-center">
+    <div className="fixed inset-0 z-50 flex items-center justify-center">
       <div
-        className="absolute inset-0 w-full bg-black/60"
+        className="fixed inset-0 w-full bg-black/60"
         onClick={closeOnBackdrop ? onClose : undefined}
         aria-hidden
       />

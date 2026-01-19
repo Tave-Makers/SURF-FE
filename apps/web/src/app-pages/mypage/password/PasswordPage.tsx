@@ -5,16 +5,26 @@ import { FieldGroup } from '@surf/ui/field-group';
 import { useToastStore } from '@surf/ui/store/toastStore';
 import { TextArea } from '@surf/ui/text-area';
 import { useRouter } from 'next/navigation';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { updateManagerPassword } from '@/entities/user/api/updateManagerPassword';
+import { useAuthStore } from '@/features/auth/model/useAuthStore';
 import { PAGE_ROUTES } from '@/shared/config/path';
 
 export const PasswordPage = () => {
   const router = useRouter();
+  const userLevel = useAuthStore((s) => s.memberRole);
   const showToast = useToastStore((state) => state.show);
   const [pw, setPw] = useState('');
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
   const [isSubmitting, setIsSubmitting] = useState(false);
+
+  useEffect(() => {
+    if (userLevel === 'member') {
+      router.replace(PAGE_ROUTES.MYPAGE.MAIN);
+    }
+  }, [router, userLevel]);
+
+  if (userLevel === 'member') return null;
 
   const handleSubmit = () => {
     if (!pw.trim()) {
@@ -32,6 +42,7 @@ export const PasswordPage = () => {
       })
       .catch((error) => {
         const message = error instanceof Error ? error.message : '비밀번호 설정에 실패했습니다.';
+        setErrorMessage(message);
         showToast(message);
       })
       .finally(() => {

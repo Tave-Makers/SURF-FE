@@ -1,9 +1,10 @@
 'use client';
 
 import { HeaderMode } from '@surf/ui/header';
+import { useToastStore } from '@surf/ui/store/toastStore';
 import { Tab } from '@surf/ui/tab';
 import { useRouter } from 'next/navigation';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import type { NotificationTab } from '@/entities/notification/model/notificationTab';
 import { useGetNotifications } from '@/entities/notification/model/useGetNotifications';
 import { useReadNotification } from '@/entities/notification/model/useReadNotification';
@@ -20,6 +21,14 @@ const tabItems = [
 export const NotificationPage = () => {
   const router = useRouter();
   const [currentTab, setCurrentTab] = useState<NotificationTab>('ALL');
+  const showToast = useToastStore((state) => state.show);
+
+  useEffect(() => {
+    if (Notification.permission === 'denied') {
+      // 이미 거부된 경우 브라우저 설정 유도
+      showToast('알림 권한이 차단되어 있습니다. 브라우저 설정에서 알림을 허용해주세요.');
+    }
+  }, [showToast]);
 
   const { data, isLoading } = useGetNotifications(currentTab);
   const { mutate: readNotification, isPending } = useReadNotification();

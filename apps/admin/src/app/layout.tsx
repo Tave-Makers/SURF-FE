@@ -1,15 +1,12 @@
-import "@/shared/styles/globals.css";
-import type { ReactNode } from "react";
+import '@/shared/styles/globals.css';
+import type { ReactNode } from 'react';
+import { GlobalComponents } from '@/shared/ui/global-components/GlobalComponents';
 
 const RootLayout = ({ children }: { children: ReactNode }) => {
   return (
     <html lang="ko">
       <head>
-        <link
-          rel="preconnect"
-          href="https://cdn.jsdelivr.net"
-          crossOrigin="anonymous"
-        />
+        <link rel="preconnect" href="https://cdn.jsdelivr.net" crossOrigin="anonymous" />
         <link
           rel="preload"
           as="style"
@@ -26,6 +23,7 @@ const RootLayout = ({ children }: { children: ReactNode }) => {
         <main className="bg-background-normal box-content flex h-full w-dvw sm:h-[min(100dvh,calc(100dvw*812/375))] sm:w-[min(100dvw,calc(100dvh*375/812))]">
           {children}
         </main>
+        <GlobalComponents />
       </body>
     </html>
   );

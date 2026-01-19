@@ -1,7 +1,7 @@
 import { format } from 'date-fns';
 import { ko } from 'date-fns/locale';
 import type { ReactNode } from 'react';
-import CalendarEventDateCardEmpty from '../icons/CalendarEventDateCardEmpty.svg';
+import CalendarEventDateCardEmpty from '@/shared/assets/icons/empty-space/calendar-event-date-card-empty.svg';
 
 /**
  * @param date - 선택된 날짜

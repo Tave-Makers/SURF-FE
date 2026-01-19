@@ -1,6 +1,6 @@
-import { Checkbox } from '@surf/ui/dist/components/checkbox';
-import { SurfIcon } from '@surf/ui/dist/components/icon';
-import { InfoBadge } from '@surf/ui/dist/components/info-badge';
+import { Checkbox } from '@surf/ui/checkbox';
+import { SurfIcon } from '@surf/ui/icon';
+import { InfoBadge } from '@surf/ui/info-badge';
 import { SignupRequestStatus } from '../model/types';
 import { RequestStatusBadge } from './RequestStatusBadge';
 

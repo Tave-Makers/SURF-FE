@@ -24,6 +24,7 @@ type PostListPageProps = {
   scrollRootRef?: React.RefObject<HTMLDivElement | null>;
   // 추후 MVP에서 단일 페이지 조회 훅도 추가 될 수 있음
   userLevel: UserLevel;
+  emptyView?: React.ReactNode;
 };
 
 export const PostListPage = ({
@@ -31,6 +32,7 @@ export const PostListPage = ({
   onPostClick,
   scrollRootRef,
   userLevel,
+  emptyView,
 }: PostListPageProps) => {
   const router = useRouter();
 
@@ -90,6 +92,10 @@ export const PostListPage = ({
   }
 
   // 게시글 목록 렌더링
+  if (allPosts.length === 0 && !isLoading && emptyView) {
+    return <>{emptyView}</>;
+  }
+
   return (
     <PostCardList
       posts={allPosts}

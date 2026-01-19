@@ -6,6 +6,7 @@ import { trackMyPostsEvent } from '@/features/post/lib/trackMyPostsEvent';
 import { MY_POSTS_EVENTS } from '@/features/post/model/types';
 import { useInfiniteMyPosts } from '@/features/post/model/useMyPosts';
 import { usePageName } from '@/shared/analytics/lib/getPageName';
+import MyPostsEmpty from '@/shared/assets/icons/empty-space/myposts-empty.svg';
 import { useDynamicScrollTracking } from '@/shared/hooks/useDynamicScrollTracking';
 import { PostListPage } from '@/widgets/post-list/ui/PostListPage';
 
@@ -29,6 +30,13 @@ const MyPostsPage = () => {
 
   const scrollRef = useDynamicScrollTracking<HTMLDivElement>(handleScrollThreshold);
 
+  const emptyView = (
+    <div className="flex h-full flex-col items-center justify-center gap-12">
+      <MyPostsEmpty className="h-[4.72rem] w-[5.68rem]" />
+      <div className="text-body-body8 text-foreground-tertiary">아직 작성한 게시글이 없어요</div>
+    </div>
+  );
+
   return (
     <div className="flex h-full">
       <div ref={scrollRef} className="flex-1 overflow-y-auto px-13 pt-13">
@@ -39,6 +47,7 @@ const MyPostsPage = () => {
           }
           scrollRootRef={scrollRef}
           userLevel={userLevel}
+          emptyView={emptyView}
         />
       </div>
     </div>

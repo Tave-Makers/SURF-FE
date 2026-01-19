@@ -1,4 +1,4 @@
-import { TextInput } from '@surf/ui/dist/components/text-input';
+import { TextInput } from '@surf/ui/text-input';
 import { SignupRequestListWidget } from '@/widgets/signup-request/ui/SignupRequestListWidget';
 
 export const SignupRequestPage = () => {

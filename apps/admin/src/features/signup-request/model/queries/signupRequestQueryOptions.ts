@@ -3,6 +3,7 @@ import { signupRequestQueryKeys, SignupRequestFilters } from './signupRequestQue
 import { getSignupRequestList } from '../../api/signupRequestApi';
 import { getNextPageNumber, transformInfiniteData } from '../utils';
 import { SIGNUP_REQUEST_PAGE_SIZE, SIGNUP_REQUEST_STALE_TIME } from '../constants';
+import { SignupRequestListParams } from '../../api/types';
 
 /**
  * 가입 신청 목록 무한스크롤 Query 옵션
@@ -25,12 +26,19 @@ export function signupRequestQueryOptions(filters: SignupRequestFilters) {
   return infiniteQueryOptions({
     queryKey: signupRequestQueryKeys.list(filters),
 
-    queryFn: ({ pageParam = 0 }) =>
-      getSignupRequestList({
-        keyword: filters.keyword,
-        pageNumber: pageParam,
+    queryFn: ({ pageParam = 0 }) => {
+      const params: SignupRequestListParams = {
+        pageNum: pageParam,
         pageSize: filters.pageSize || SIGNUP_REQUEST_PAGE_SIZE,
-      }).then((res) => res.data),
+      };
+
+      // keyword가 있을 때만 파라미터에 추가
+      if (filters.keyword) {
+        params.keyword = filters.keyword;
+      }
+
+      return getSignupRequestList(params).then((res) => res.data);
+    },
 
     initialPageParam: 0,
     getNextPageParam: getNextPageNumber,

@@ -38,6 +38,6 @@ export type SignupRequestListResponse = CommonResponse<SignupRequestListData>;
  */
 export interface SignupRequestListParams {
   keyword?: string;
-  pageNumber: number;
+  pageNum: number;
   pageSize: number;
 }

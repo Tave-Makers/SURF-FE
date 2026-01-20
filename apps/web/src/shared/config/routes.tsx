@@ -214,4 +214,14 @@ export const createRouteConfig = (router: RouterInstance): RouteConfig[] => [
       ],
     },
   },
+  {
+    id: 'mypage-password',
+    path: PAGE_ROUTES.MYPAGE.PASSWORD,
+    backPath: PAGE_ROUTES.MYPAGE.MAIN,
+    header: {
+      mode: HeaderMode.Default,
+      title: '비밀번호 설정',
+      hasLeftIcon: true,
+    },
+  },
 ];

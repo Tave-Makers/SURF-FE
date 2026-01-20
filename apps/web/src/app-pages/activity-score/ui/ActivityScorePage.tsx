@@ -100,7 +100,7 @@ const ActivityScorePage = () => {
       </div>
 
       {/* 탭 버튼 */}
-      <div className="w-full max-w-[400px]" role="tablist" aria-label="활동 유형">
+      <div className="w-full" role="tablist" aria-label="활동 유형">
         <Tab
           items={[
             { value: 'REWARD', label: '상점' },

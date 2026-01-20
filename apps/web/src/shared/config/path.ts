@@ -32,6 +32,7 @@ export const PAGE_ROUTES = {
   MYPAGE: {
     MAIN: '/mypage',
     EDIT: '/mypage/edit',
+    PASSWORD: '/mypage/password',
     ACTIVITY_SCORE: {
       MAIN: '/mypage/activity-score',
       BYLAWS: '/mypage/activity-score/bylaws',

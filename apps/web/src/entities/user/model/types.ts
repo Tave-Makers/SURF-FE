@@ -15,15 +15,6 @@ export type ServerUserLevel = (typeof SERVER_USER_LEVELS)[number];
 export const USER_LEVELS = ['admin', 'president', 'manager', 'member'] as const;
 export type UserLevel = (typeof USER_LEVELS)[number];
 
-export const BANNER_PARTS = [
-  'frontend',
-  'backend',
-  'design',
-  'data-analysis',
-  'deep-learning',
-] as const;
-export type BannerPart = (typeof BANNER_PARTS)[number];
-
 export interface CareerBase {
   companyName: string;
   position: string;
@@ -49,7 +40,7 @@ export interface UserProfile {
   level: UserLevel;
   activityScore: number;
   isActive: boolean;
-  bannerPart: BannerPart | null;
+  bannerPart: TrackPart | null;
   chips: string[];
   careers: CareerDTO[];
 }

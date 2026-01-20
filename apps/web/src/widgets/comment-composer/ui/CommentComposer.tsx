@@ -205,10 +205,7 @@ export const CommentComposer = ({
   };
 
   return (
-    <div
-      className="absolute right-0 bottom-0 left-0 z-[130]"
-      style={{ paddingBottom: keyboardOffset }}
-    >
+    <div className="sticky bottom-0 w-full flex-none" style={{ paddingBottom: keyboardOffset }}>
       <div className="relative">
         {mentionOpen && (
           <>

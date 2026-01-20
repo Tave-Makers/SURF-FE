@@ -8,7 +8,7 @@ import { SheetItem } from '@surf/ui/sheet';
 import { Sheet } from '@surf/ui/sheet';
 import { useToastStore } from '@surf/ui/store/toastStore';
 import { usePathname, useRouter, useSearchParams } from 'next/navigation';
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { Sheet as ModalSheet } from 'react-modal-sheet';
 import { usePostDetail } from '@/entities/post/api/usePostDetail';
 import { categoryIdToKey } from '@/entities/post/model/category';
@@ -35,6 +35,7 @@ const PostDetailPage = ({ postId }: PostDetailPageProps) => {
   const keyboardOffset = useKeyboardOffset();
   const showToast = useToastStore((state) => state.show);
   const memberId = useAuthStore((s) => s.memberId);
+  const scrollRootRef = useRef<HTMLDivElement | null>(null);
 
   const searchParams = useSearchParams();
   const from = searchParams.get('from');
@@ -157,8 +158,8 @@ const PostDetailPage = ({ postId }: PostDetailPageProps) => {
       {/* 본문 */}
       <div className="relative flex h-full min-h-0 w-full flex-col">
         {/* 스크롤 영역 */}
-        <div className="scrollbar-hide flex-1 overflow-y-auto">
-          <main className="flex flex-col gap-[0.62rem] px-13 pt-13">
+        <div ref={scrollRootRef} className="flex-1 overflow-y-auto">
+          <div className="flex flex-col gap-[0.62rem] px-13 pt-13">
             <PostHeader
               title={post.title}
               category={{
@@ -178,19 +179,19 @@ const PostDetailPage = ({ postId }: PostDetailPageProps) => {
               <CommentSection
                 postId={numericPostId}
                 memberId={memberId ?? undefined}
+                scrollRootRef={scrollRootRef}
                 onStartReply={handleStartReply}
               />
             </div>
-          </main>
+          </div>
+          {/* 댓글 입력창 */}
+          <CommentComposer
+            postId={numericPostId}
+            keyboardOffset={keyboardOffset}
+            pendingReply={pendingReply}
+            onConsumedReply={handleConsumedReply}
+          />
         </div>
-
-        {/* 댓글 입력창 */}
-        <CommentComposer
-          postId={numericPostId}
-          keyboardOffset={keyboardOffset}
-          pendingReply={pendingReply}
-          onConsumedReply={handleConsumedReply}
-        />
       </div>
 
       {/* 삭제 Alert */}

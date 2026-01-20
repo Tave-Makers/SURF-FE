@@ -110,7 +110,7 @@ export const usePostForm = ({ mode, boardId, postId }: Props) => {
       stripHtml(content).trim() === '<p></p>' ||
       isEmpty
     );
-  }, [title, checkHasChanges]);
+  }, [title, content, checkHasChanges]);
 
   // 이미 발행된 글인지 판단 (툴바 비활성화용)
   // 수정 모드이고 서버 데이터상 예약 중이 아닌 경우

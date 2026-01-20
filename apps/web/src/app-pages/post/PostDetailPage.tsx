@@ -40,10 +40,10 @@ const PostDetailPage = ({ postId }: PostDetailPageProps) => {
   // 삭제된 게시글 처리 (알림에서 진입했을 경우)
   useEffect(() => {
     if (isError && from === 'notification') {
-      alert('삭제된 게시글입니다.');
+      showToast('삭제된 게시글입니다.');
       router.back();
     }
-  }, [isError, from, router]);
+  }, [isError, from, router, showToast]);
 
   // 일정 조회 API
   const scheduleId = post?.scheduleId;

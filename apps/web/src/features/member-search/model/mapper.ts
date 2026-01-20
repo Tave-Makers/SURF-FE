@@ -1,6 +1,6 @@
 import { MemberSearchItemDTO, MemberSearchRequestDTO } from '../api/types';
 import { MemberSearchFilters, MemberSearchItem } from '@/entities/search/model/types';
-import { mapUserLevel } from '@/entities/user/model/mappers';
+import { mapUserLevel, toLabelPartMap } from '@/entities/user/model/mappers';
 
 export function mapMemberSearchItem(dto: MemberSearchItemDTO): MemberSearchItem {
   return {
@@ -10,7 +10,7 @@ export function mapMemberSearchItem(dto: MemberSearchItemDTO): MemberSearchItem 
     bio: dto.selfIntroduction,
     avatarUrl: dto.profileImageUrl,
     level: mapUserLevel(dto.role),
-    chips: dto.trackList.map((t) => `${t.generation}기 ${t.part}`),
+    chips: dto.trackList.map((t) => `${t.generation}기 ${toLabelPartMap[t.part]}`),
   };
 }
 

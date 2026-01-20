@@ -64,7 +64,11 @@ export const usePostForm = ({ mode, boardId, postId }: Props) => {
   // 일정 조회 API
   const scheduleId = postDetail?.scheduleId;
   const shouldFetchSchedule = !!scheduleId;
-  const { data: postSchedule, isFetching: isScheduleFetching } = useGetSingleSchedule(scheduleId, {
+  const {
+    data: postSchedule,
+    isFetching: isScheduleFetching,
+    isError: isScheduleError,
+  } = useGetSingleSchedule(scheduleId, {
     enabled: shouldFetchSchedule,
     staleTime: 0,
   });
@@ -89,6 +93,7 @@ export const usePostForm = ({ mode, boardId, postId }: Props) => {
     setLinkedSchedule,
     isInitializedRef: isScheduleInitializedRef,
     isScheduleFetching,
+    isScheduleError,
   });
 
   // 변경 사항 감지

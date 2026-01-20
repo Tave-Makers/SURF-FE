@@ -13,7 +13,6 @@ import { useAuthStore } from '@/features/auth/model/useAuthStore';
 import { useDeletePostMutation } from '@/features/post/model/useDeletePostMutation';
 import { useGetPostLikesQuery } from '@/features/post/model/useGetPostLikesQuery';
 import { useGetPostScheduleQuery } from '@/features/post/model/useGetPostScheduleQuery';
-import { PAGE_ROUTES } from '@/shared/config/path';
 import { useKeyboardOffset } from '@/shared/hooks/useKeyboardOffset';
 import { useBottomSheetStore } from '@/shared/store/bottomSheetStore';
 import { CommentSection } from '@/widgets/comment-section/ui/CommentSection';
@@ -109,18 +108,7 @@ const PostDetailPage = ({ postId }: PostDetailPageProps) => {
     deletePostMutate(numericPostId, {
       onSuccess: () => {
         closeAlert();
-
-        // 저장된 경로 확인
-        const entryPath = sessionStorage.getItem('entry_path');
-
-        if (entryPath) {
-          // 저장된 경로(스크랩 또는 내 게시물 목록)로 이동
-          router.replace(entryPath);
-          sessionStorage.removeItem('entry_path');
-        } else {
-          router.replace(PAGE_ROUTES.BOARD.SELECT_CATEGORY(post.boardId));
-        }
-
+        router.back();
         showToast('게시글이 삭제되었습니다.');
       },
     });

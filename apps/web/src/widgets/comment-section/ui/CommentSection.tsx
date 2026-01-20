@@ -5,13 +5,13 @@ import { Sheet } from '@surf/ui/sheet';
 import { SheetItem } from '@surf/ui/sheet';
 import { useAlertStore } from '@surf/ui/store/alertStore';
 import { useToastStore } from '@surf/ui/store/toastStore';
-import { useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { Sheet as ModalSheet } from 'react-modal-sheet';
 import { useAuthStore } from '@/features/auth/model/useAuthStore';
 import type { CommentResponse } from '@/features/comment/api/types';
-import { COMMENT_DEFAULT_PAGE, COMMENT_PAGE_SIZE } from '@/features/comment/model/constant';
+import { COMMENT_PAGE_SIZE } from '@/features/comment/model/constant';
 import { useDeleteCommentMutation } from '@/features/comment/model/useDeleteCommentMutation';
-import { useGetCommentsQuery } from '@/features/comment/model/useGetCommentsQuery';
+import { useInfiniteCommentsQuery } from '@/features/comment/model/useInfiniteCommentsQuery';
 import { useToggleCommentLikeMutation } from '@/features/comment/model/useToggleCommentLikeMutation';
 import { Comment } from '@/features/comment/ui/Comment';
 import CommentsEmpty from '@/shared/assets/icons/empty-space/comments-empty.svg';
@@ -20,34 +20,48 @@ import { toDate, toKST, formatDateTime } from '@/shared/utils/date';
 interface Props {
   postId: number;
   memberId?: number;
+  scrollRootRef?: React.RefObject<HTMLDivElement | null>;
   // 답글 시작을 부모로 올림
   onStartReply: (info: { commentId: number; memberId: number; nickname: string }) => void;
 }
 
-export const CommentSection = ({ postId, memberId, onStartReply }: Props) => {
+export const CommentSection = ({ postId, memberId, scrollRootRef, onStartReply }: Props) => {
   const myId = useAuthStore((s) => s.memberId);
 
   const showToast = useToastStore((s) => s.show);
   const openAlert = useAlertStore((s) => s.open);
   const closeAlert = useAlertStore((s) => s.close);
 
-  const { data, isLoading, isError } = useGetCommentsQuery(
-    postId,
-    COMMENT_DEFAULT_PAGE,
-    COMMENT_PAGE_SIZE,
-    true,
-  );
+  const { data, isLoading, isError, fetchNextPage, hasNextPage, isFetchingNextPage } =
+    useInfiniteCommentsQuery(postId, COMMENT_PAGE_SIZE, true);
 
-  const toggleLikeMutation = useToggleCommentLikeMutation(
-    postId,
-    COMMENT_DEFAULT_PAGE,
-    COMMENT_PAGE_SIZE,
-  );
+  const toggleLikeMutation = useToggleCommentLikeMutation(postId);
 
-  const deleteMutation = useDeleteCommentMutation(postId, COMMENT_DEFAULT_PAGE, COMMENT_PAGE_SIZE);
+  const deleteMutation = useDeleteCommentMutation(postId);
 
-  const comments = data?.comments ?? [];
-  const totalCount = data?.totalCount ?? 0;
+  const comments = data?.pages.flatMap((page) => page.comments) ?? [];
+  const totalCount = data?.pages[0]?.totalCount ?? 0;
+
+  const loadMoreRef = useRef<HTMLDivElement | null>(null);
+
+  useEffect(() => {
+    if (!loadMoreRef.current || !hasNextPage) return;
+
+    const observer = new IntersectionObserver(
+      (entries) => {
+        if (entries[0].isIntersecting && !isFetchingNextPage) {
+          fetchNextPage().catch((err) => {
+            console.error('fetchNextPage error:', err);
+          });
+        }
+      },
+      { root: scrollRootRef?.current ?? null, rootMargin: '0px 0px 100px 0px' },
+    );
+
+    observer.observe(loadMoreRef.current);
+
+    return () => observer.disconnect();
+  }, [fetchNextPage, hasNextPage, isFetchingNextPage, scrollRootRef]);
 
   // 옵션/삭제/신고
   const [optionsOpen, setOptionsOpen] = useState(false);
@@ -121,41 +135,48 @@ export const CommentSection = ({ postId, memberId, onStartReply }: Props) => {
         <div className="flex items-center gap-5">
           <span className="text-body-body4 text-foreground-normal">댓글 {totalCount}</span>
         </div>
+        <div className="flex w-full flex-col">
+          <div className="flex w-full flex-col gap-13">
+            {comments.map((c) => {
+              const createdAtKst = toKST(toDate(c.createdAt));
+              const dateText = formatDateTime(createdAtKst);
 
-        <div className="flex w-full flex-col gap-13">
-          {comments.map((c) => {
-            const createdAtKst = toKST(toDate(c.createdAt));
-            const dateText = formatDateTime(createdAtKst);
+              return (
+                <div key={c.id} className="flex flex-col">
+                  <Comment
+                    name={c.nickname}
+                    profileImageUrl={c.profileImageUrl ?? undefined}
+                    date={dateText}
+                    content={c.content}
+                    mentions={c.mentions}
+                    likeCount={c.likeCount}
+                    isLiked={c.liked}
+                    onLikeToggle={() =>
+                      toggleLikeMutation.mutate(c.id, {
+                        onError: () => showToast('좋아요 처리에 실패했어요'),
+                      })
+                    }
+                    onReplyClick={() =>
+                      onStartReply({ commentId: c.id, memberId: c.memberId, nickname: c.nickname })
+                    }
+                    onMoreClick={() => openOptions(c)}
+                  />
+                </div>
+              );
+            })}
 
-            return (
-              <div key={c.id} className="flex flex-col">
-                <Comment
-                  name={c.nickname}
-                  profileImageUrl={c.profileImageUrl ?? undefined}
-                  date={dateText}
-                  content={c.content}
-                  mentions={c.mentions}
-                  likeCount={c.likeCount}
-                  isLiked={c.liked}
-                  onLikeToggle={() =>
-                    toggleLikeMutation.mutate(c.id, {
-                      onError: () => showToast('좋아요 처리에 실패했어요'),
-                    })
-                  }
-                  onReplyClick={() =>
-                    onStartReply({ commentId: c.id, memberId: c.memberId, nickname: c.nickname })
-                  }
-                  onMoreClick={() => openOptions(c)}
-                />
+            {comments.length === 0 && (
+              <div className="flex h-full flex-col items-center justify-center gap-3 pt-[3rem]">
+                <CommentsEmpty className="h-[3.16rem] w-[4.53rem]" />
+                <div className="text-body-body8 text-foreground-tertiary">
+                  첫 댓글을 남겨보세요!
+                </div>
               </div>
-            );
-          })}
-
-          {comments.length === 0 && (
-            <div className="flex h-full flex-col items-center justify-center gap-3 pt-[3rem]">
-              <CommentsEmpty className="h-[3.16rem] w-[4.53rem]" />
-              <div className="text-body-body8 text-foreground-tertiary">첫 댓글을 남겨보세요!</div>
-            </div>
+            )}
+          </div>
+          <div ref={loadMoreRef} className="h-px w-full" />
+          {isFetchingNextPage && (
+            <div className="py-8 text-center text-sm text-gray-500">불러오는 중...</div>
           )}
         </div>
       </div>

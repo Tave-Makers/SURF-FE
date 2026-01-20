@@ -283,7 +283,11 @@ export const usePostForm = ({ mode, boardId, postId }: Props) => {
 
       resetPostState();
       setCanInitialize(false);
-      if (targetPostId) router.replace(PAGE_ROUTES.BOARD.POST_DETAIL(boardId, targetPostId));
+      if (mode === 'create') {
+        if (targetPostId) router.replace(PAGE_ROUTES.BOARD.POST_DETAIL(boardId, targetPostId));
+      } else {
+        router.back();
+      }
     } catch (err) {
       console.error('게시글 처리 실패', err);
       alert('게시글 저장 중 오류가 발생했습니다.');

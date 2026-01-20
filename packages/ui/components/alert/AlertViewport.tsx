@@ -12,6 +12,8 @@ export const AlertViewport = () => {
   if (typeof window === 'undefined') return null;
   if (!current) return null;
 
+  const container = document.getElementById('alert-root') || document.body;
+
   return createPortal(
     <Alert
       state={current.state ?? 'default'}
@@ -21,6 +23,6 @@ export const AlertViewport = () => {
       isOpen={true}
       onClose={close}
     />,
-    document.body,
+    container,
   );
 };

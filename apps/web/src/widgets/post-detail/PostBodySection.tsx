@@ -1,15 +1,17 @@
 'use client';
 
 import { ChipToggle } from '@surf/ui/chip-toggle';
+import { format } from 'date-fns';
+import { useRouter } from 'next/navigation';
 import sanitizeHtml, { IOptions } from 'sanitize-html';
 import { EventCard } from '@/entities/calendar/ui/EventCard/EventCard';
 import { PostScheduleData } from '@/entities/post/api/types';
 import { PostDetail } from '@/entities/post/model/types';
 import { PostImage } from '@/entities/post/ui/post-image/PostImage';
 import { PostProfile } from '@/entities/post/ui/post-profile/PostProfile';
-import { mapCategoryToActivityCategory } from '@/features/calendar/model/mapper';
 import { useToggleLikeMutation } from '@/features/post/model/useToggleLikeMutation';
 import { useToggleScrapMutation } from '@/features/post/model/useToggleScrapMutation';
+import { PAGE_ROUTES } from '@/shared/config/path';
 
 type PostBodySectionProps = {
   post: PostDetail;
@@ -18,6 +20,8 @@ type PostBodySectionProps = {
 };
 
 export const PostBodySection = ({ post, schedule, onClickLikeCount }: PostBodySectionProps) => {
+  const router = useRouter();
+
   // 좋아요/스크랩 Mutation
   const likeMutation = useToggleLikeMutation();
   const scrapMutation = useToggleScrapMutation();
@@ -48,6 +52,14 @@ export const PostBodySection = ({ post, schedule, onClickLikeCount }: PostBodySe
 
   const cleanContent = sanitizeHtml(post.content, sanitizeOptions);
 
+  // 이벤트 카드 클릭 시 캘린더 화면으로 이동
+  const handleEventCardClick = () => {
+    if (!schedule) return;
+    const date = new Date(schedule.startAt);
+    const dateStr = format(date, 'yyyy-MM-dd');
+    router.push(`${PAGE_ROUTES.CALENDAR.MAIN}?date=${dateStr}`);
+  };
+
   return (
     <div className="flex flex-col gap-16">
       <PostProfile
@@ -72,11 +84,12 @@ export const PostBodySection = ({ post, schedule, onClickLikeCount }: PostBodySe
         <EventCard
           scheduleId={schedule.scheduleId}
           title={schedule.title}
-          category={mapCategoryToActivityCategory(schedule.category)}
+          category={schedule.category}
           mode="reservation"
           location={schedule.location}
           startDate={new Date(schedule.startAt)}
           endDate={new Date(schedule.endAt)}
+          onClickCard={handleEventCardClick}
         />
       )}
 

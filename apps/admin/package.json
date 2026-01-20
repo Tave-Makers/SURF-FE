@@ -18,7 +18,8 @@
     "next": "15.5.9",
     "react": "19.1.0",
     "react-dom": "19.1.0",
-    "react-hook-form": "^7.71.0"
+    "react-hook-form": "^7.71.0",
+    "axios": "^1.12.2"
   },
   "devDependencies": {
     "@chromatic-com/storybook": "4.1.1",
@@ -35,12 +36,20 @@
     "@types/react": "^19",
     "@types/react-dom": "^19",
     "@types/webpack": "^5.28.5",
+    "@eslint/js": "^9.35.0",
     "eslint": "^9",
     "eslint-import-resolver-typescript": "^4.4.4",
+    "eslint-config-prettier": "^10.1.8",
     "eslint-plugin-storybook": "9.1.5",
+    "eslint-plugin-import": "^2",
+    "eslint-plugin-jsx-a11y": "^6",
+    "eslint-plugin-react": "^7",
+    "eslint-plugin-react-hooks": "^5",
+    "globals": "^16.3.0",
     "storybook": "9.1.16",
     "tailwindcss": "^4",
     "typescript": "^5",
+    "typescript-eslint": "^8.42.0",
     "webpack": "^5.102.1"
   }
 }

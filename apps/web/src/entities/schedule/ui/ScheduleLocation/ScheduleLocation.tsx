@@ -77,7 +77,9 @@ export const ScheduleLocation = ({
             onBlur={handleBlur}
             onKeyDown={handleTextAreaKeyDown}
             maxLength={45}
-            className="text-foreground-quaternary text-caption-caption2 w-full resize-none border-none bg-transparent text-right outline-none"
+            className={`text-caption-caption2 w-full resize-none border-none bg-transparent text-right outline-none ${
+              isEmpty ? 'text-foreground-quaternary' : 'text-foreground-normal'
+            }`}
             rows={1}
             style={{ overflow: 'hidden', height: 'auto' }}
             onInput={(e) => {
@@ -100,7 +102,11 @@ export const ScheduleLocation = ({
     >
       <div className="text-foreground-normal text-body-body9 flex shrink-0">{title}</div>
 
-      <div className="text-foreground-quaternary text-caption-caption2 line-clamp-1 flex shrink-0">
+      <div
+        className={`text-caption-caption2 line-clamp-1 flex shrink-0 ${
+          isEmpty ? 'text-foreground-quaternary' : 'text-foreground-normal'
+        }`}
+      >
         {displayValue}
       </div>
     </button>

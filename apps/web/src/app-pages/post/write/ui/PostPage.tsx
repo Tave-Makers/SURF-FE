@@ -2,19 +2,16 @@
 
 import { AccordionSelect } from '@surf/ui/accordion';
 import { HeaderMode } from '@surf/ui/header';
-import { Sheet } from '@surf/ui/sheet';
 import { useAlertStore } from '@surf/ui/store/alertStore';
-import { useToastStore } from '@surf/ui/store/toastStore';
 import { useRouter } from 'next/navigation';
-import { useCallback, useEffect, useState } from 'react';
-import { Sheet as ModalSheet } from 'react-modal-sheet';
+import { useCallback, useEffect } from 'react';
 import { POST_BOARDS } from '@/entities/post/model/board';
 import { POST_CATEGORIES } from '@/entities/post/model/category';
 import { POST_VALIDATION } from '@/entities/post/model/validation';
 import { PostBadge } from '@/entities/post/ui/post-badge/PostBadge';
-import { DateTimePicker } from '@/entities/schedule/ui/DateTimePicker/DateTimePicker';
 import { usePostForm } from '@/features/post/post-form/model/usePostForm';
 import { usePostFormStore } from '@/features/post/post-form/model/usePostFormStore';
+import { useBottomSheetStore } from '@/shared/store/bottomSheetStore';
 import { AppHeader } from '@/widgets/header/ui/AppHeader';
 import { PostEditor } from '@/widgets/post/post-editor/PostEditor';
 
@@ -26,7 +23,6 @@ const PostPage = (props: PostPageProps) => {
   const router = useRouter();
   const openAlert = useAlertStore((s) => s.open);
   const closeAlert = useAlertStore((s) => s.close);
-  const showToast = useToastStore((s) => s.show);
 
   const { mode, boardId } = props;
   const postId = mode === 'edit' ? props.postId : undefined;
@@ -39,20 +35,13 @@ const PostPage = (props: PostPageProps) => {
     title,
     setTitle,
     category,
-    categorySheetId,
-    isCategoryOpen,
-    openCategory,
-    closeCategory,
-    selectCategory,
+    setCategory,
     initialContent,
     initialImages,
     linkedSchedule,
     handleScheduleRemove,
     showExitAlert,
     setShowExitAlert,
-    isReservationModalOpen,
-    openReservationModal,
-    closeReservationModal,
     reserved,
     setReserved,
     reservedAt,
@@ -66,49 +55,22 @@ const PostPage = (props: PostPageProps) => {
     isReserved,
   } = usePostForm({ mode, boardId, postId });
 
-  // 예약 시간 임시 저장용 state (취소 시 롤백 위함)
-  const [tempDate, setTempDate] = useState<Date>(new Date());
-
   // 마운트시 초기화 허용
   useEffect(() => {
     setCanInitialize(true);
   }, [setCanInitialize]);
-
-  // 모달 열릴 때 현재 예약 시간으로 초기화
-  useEffect(() => {
-    if (isReservationModalOpen) {
-      setTempDate(reservedAt || new Date());
-    }
-  }, [isReservationModalOpen, reservedAt]);
 
   const closeExitAlert = useCallback(() => {
     setShowExitAlert(false);
     closeAlert();
   }, [closeAlert, setShowExitAlert]);
 
-  const handleSaveReservation = () => {
-    if (tempDate > new Date()) {
-      setReservedAt(tempDate);
-      setReserved(true);
-      closeReservationModal();
-    } else {
-      showToast('현재 시간 이후로만 예약할 수 있습니다.');
-    }
-  };
+  const openBottomSheet = useBottomSheetStore((s) => s.open);
+  const closeBottomSheet = useBottomSheetStore((s) => s.close);
 
-  const handleRemoveReservation = () => {
-    closeReservationModal();
-    setTimeout(() => {
-      openAlert({
-        state: 'default',
-        title: '설정한 예약이 취소됩니다',
-        infoText: '예약 취소하기를 누를 경우 게시글 내 설정된 예약이 삭제됩니다.',
-        actions: [
-          { type: 'solid', label: '취소', variant: 'secondary', onClick: closeAlert },
-          { type: 'solid', label: '삭제하기', variant: 'danger', onClick: handleConfirmRemove },
-        ],
-      });
-    }, 100);
+  const handleSaveReservation = (date: Date) => {
+    setReservedAt(date);
+    setReserved(true);
   };
 
   // 실제 예약 취소
@@ -116,6 +78,31 @@ const PostPage = (props: PostPageProps) => {
     setReserved(false);
     setReservedAt(null);
     closeAlert();
+    closeBottomSheet();
+  };
+
+  const handleRemoveReservation = () => {
+    openAlert({
+      state: 'default',
+      title: '설정한 예약이 취소됩니다',
+      infoText: '예약 취소하기를 누를 경우 게시글 내 설정된 예약이 삭제됩니다.',
+      actions: [
+        { type: 'solid', label: '취소', variant: 'secondary', onClick: closeAlert },
+        { type: 'solid', label: '삭제하기', variant: 'danger', onClick: handleConfirmRemove },
+      ],
+    });
+  };
+
+  const handleOpenReservation = () => {
+    openBottomSheet({
+      type: 'reservation',
+      props: {
+        reserved,
+        defaultDate: reservedAt,
+        onSave: handleSaveReservation,
+        onRemove: handleRemoveReservation,
+      },
+    });
   };
 
   const board = POST_BOARDS.find((b) => b.id === Number(boardId));
@@ -175,9 +162,21 @@ const PostPage = (props: PostPageProps) => {
       <div className="px-13">
         <AccordionSelect
           title={POST_CATEGORIES[category].label}
-          isOpen={isCategoryOpen}
-          onClick={openCategory}
-          controlsId={categorySheetId}
+          isOpen={false}
+          onClick={() => {
+            openBottomSheet({
+              type: 'postCategory',
+              props: {
+                category,
+                onSelect: (val) => {
+                  setCategory(val);
+                  closeBottomSheet();
+                },
+                controlsId: 'post-category-sheet',
+              },
+            });
+          }}
+          controlsId="post-category-sheet"
         />
       </div>
 
@@ -187,40 +186,6 @@ const PostPage = (props: PostPageProps) => {
           <PostBadge type="reservation" />
         </div>
       )}
-
-      {/* 3. 카테고리 시트 */}
-      <ModalSheet
-        isOpen={isCategoryOpen}
-        onClose={closeCategory}
-        aria-labelledby={categorySheetId}
-        className="mx-auto flex w-full sm:w-[min(100dvw,calc(100dvh*375/812))]"
-      >
-        <ModalSheet.Container>
-          <ModalSheet.Header className="bg-background-normal-lighter rounded-t-4" />
-          <ModalSheet.Content>
-            <div
-              id={categorySheetId}
-              className="bg-background-normal-lighter flex flex-col gap-5 p-15"
-            >
-              {Object.values(POST_CATEGORIES).map((item) => (
-                <button
-                  key={item.id}
-                  type="button"
-                  onClick={() => selectCategory(item.key)}
-                  className={`rounded-md px-5 py-10 text-left transition-colors ${
-                    category === item.key
-                      ? 'bg-background-secondary font-semibold'
-                      : 'hover:bg-background-secondary'
-                  }`}
-                >
-                  {item.label}
-                </button>
-              ))}
-            </div>
-          </ModalSheet.Content>
-        </ModalSheet.Container>
-        <ModalSheet.Backdrop onTap={closeCategory} />
-      </ModalSheet>
 
       {/* 4. 제목 입력 */}
       <div className="flex w-full px-13">
@@ -246,54 +211,10 @@ const PostPage = (props: PostPageProps) => {
           linkedSchedule={linkedSchedule}
           onChange={handleEditorChange}
           onScheduleRemove={handleScheduleRemove}
-          onReservationClick={openReservationModal}
+          onReservationClick={handleOpenReservation}
           isPublished={isPublished}
         />
       </div>
-
-      {/* 6. 예약 설정 모달 */}
-      <ModalSheet
-        isOpen={isReservationModalOpen}
-        onClose={closeReservationModal}
-        className="mx-auto flex w-full sm:w-[min(100dvw,calc(100dvh*375/812))]"
-      >
-        <ModalSheet.Container>
-          <ModalSheet.Content>
-            <Sheet
-              title="게시글 예약 설정"
-              description="해당 시간에 맞춰 게시글이 예약됩니다"
-              primaryBtn={
-                reserved
-                  ? {
-                      label: '수정하기',
-                      onClick: handleSaveReservation,
-                    }
-                  : {
-                      label: '예약하기',
-                      onClick: handleSaveReservation,
-                    }
-              }
-              secondaryBtn={
-                reserved
-                  ? {
-                      label: '예약 취소하기',
-                      onClick: handleRemoveReservation,
-                      variant: 'warning',
-                    }
-                  : {
-                      label: '취소하기',
-                      onClick: closeReservationModal,
-                    }
-              }
-            >
-              <div className="py-15">
-                <DateTimePicker mode="future" value={tempDate} onChange={setTempDate} />
-              </div>
-            </Sheet>
-          </ModalSheet.Content>
-        </ModalSheet.Container>
-        <ModalSheet.Backdrop onTap={closeReservationModal} />
-      </ModalSheet>
     </div>
   );
 };

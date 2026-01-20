@@ -17,6 +17,7 @@ interface Props {
 
 export const MyPage = ({ userProfile }: Props) => {
   const memberId = useAuthStore((s) => s.memberId);
+  const isManager = userProfile.level !== 'member';
 
   // 중복 로그 방지 (StrictMode에서 useEffect 2번 도는 것 대비)
   const fired = useRef(false);
@@ -39,6 +40,7 @@ export const MyPage = ({ userProfile }: Props) => {
         isActive={userProfile.isActive}
         bannerPart={userProfile.bannerPart}
         bannerScore={userProfile.activityScore}
+        isManager={isManager}
       />
       <section className="flex flex-col gap-16 px-13 pt-16">
         <div className="flex flex-col gap-10">

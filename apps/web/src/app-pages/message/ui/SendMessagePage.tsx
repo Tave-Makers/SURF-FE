@@ -1,16 +1,15 @@
 'use client';
 
-import { Alert } from '@surf/ui/alert';
 import { SolidButton } from '@surf/ui/button';
 import { FieldGroup } from '@surf/ui/field-group';
 import { HeaderMode } from '@surf/ui/header';
+import { useAlertStore } from '@surf/ui/store/alertStore';
 import { useToastStore } from '@surf/ui/store/toastStore';
 import { TextArea } from '@surf/ui/text-area';
 import { useRouter, useSearchParams } from 'next/navigation';
 import { useMemo, useState } from 'react';
 import { useSendMessage } from '@/entities/message/model/useSendMessage';
 import { Callout } from '@/entities/message/ui/callout/Callout';
-import { PAGE_ROUTES } from '@/shared/config/path';
 import { useKeyboardOffset } from '@/shared/hooks/useKeyboardOffset';
 import { kakaoImgNormalize } from '@/shared/lib/kakaoImgNormalize';
 import { AppHeader } from '@/widgets/header/ui/AppHeader';
@@ -29,9 +28,10 @@ export const SendMessagePage = () => {
   const [title, setTitle] = useState<string>('');
   const [content, setContent] = useState<string>('');
 
-  // Alert open 상태
-  const [isExitAlertOpen, setIsExitAlertOpen] = useState<boolean>(false);
-  const [isSendAlertOpen, setIsSendAlertOpen] = useState<boolean>(false);
+  // 알러트/토스트 스토어
+  const openAlert = useAlertStore((s) => s.open);
+  const closeAlert = useAlertStore((s) => s.close);
+  const showToast = useToastStore((state) => state.show);
 
   // 본문/제목 최소 글자 수
   const MIN_LENGTH = 10;
@@ -39,15 +39,33 @@ export const SendMessagePage = () => {
   const keyboardOffset = useKeyboardOffset();
   const router = useRouter();
 
-  const showToast = useToastStore((state) => state.show);
-
   // 쪽지 전송 mutation
   const { mutate: sendMessage, isPending } = useSendMessage();
 
   // 작성 중 나가기 (뒤로가기)
   function handleExit() {
-    setIsExitAlertOpen(false);
-    router.back();
+    openAlert({
+      state: 'default',
+      title: '정말로 나가시겠습니까?',
+      infoText: '쪽지 작성 중 나갈 경우, 작성된 내용은 저장되지 않습니다.',
+      actions: [
+        {
+          type: 'solid',
+          variant: 'secondary',
+          label: '취소',
+          onClick: () => closeAlert(),
+        },
+        {
+          type: 'solid',
+          variant: 'danger',
+          label: '나가기',
+          onClick: () => {
+            closeAlert();
+            router.back();
+          },
+        },
+      ],
+    });
   }
 
   // 쪽지 전송
@@ -65,12 +83,37 @@ export const SendMessagePage = () => {
       {
         onSuccess: () => {
           showToast('상대방의 이메일로 쪽지가 발송되었습니다.');
-          setIsSendAlertOpen(false);
-          router.replace(PAGE_ROUTES.MEMBER.PROFILE(validMemberId));
+          closeAlert();
+          router.back();
         },
       },
     );
   }
+
+  // 쪽지 전송 알러트
+  const handleOpenSendAlert = () => {
+    openAlert({
+      state: 'default',
+      title: '작성한 쪽지를 보내겠습니까?',
+      infoText: '보내신 쪽지는 상대방의 이메일로 전송됩니다.',
+      actions: [
+        {
+          type: 'solid',
+          variant: 'secondary',
+          label: '취소',
+          onClick: () => closeAlert(),
+          isDisabled: isPending,
+        },
+        {
+          type: 'solid',
+          variant: 'primary',
+          label: isPending ? '전송 중' : '전송하기',
+          onClick: handleSend,
+          isDisabled: !isBtnEnabled,
+        },
+      ],
+    });
+  };
 
   // 이메일 형식 검증
   const isValidEmail = (email: string) => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
@@ -103,7 +146,7 @@ export const SendMessagePage = () => {
   return (
     <div className="flex h-full flex-col">
       <AppHeader
-        customBack={() => setIsExitAlertOpen(true)}
+        customBack={handleExit}
         overrideHeader={{
           mode: HeaderMode.Default,
           title: '쪽지 보내기',
@@ -156,59 +199,12 @@ export const SendMessagePage = () => {
         <SolidButton
           size="l"
           variant="primary"
-          onClick={() => setIsSendAlertOpen(true)}
+          onClick={handleOpenSendAlert}
           isDisabled={!isBtnEnabled}
         >
           {isPending ? '전송 중' : '쪽지 보내기'}
         </SolidButton>
       </div>
-
-      {/* 나가기 Alert */}
-      <Alert
-        state="default"
-        title="정말로 나가시겠습니까?"
-        infoText="쪽지 작성 중 나갈 경우, 작성된 내용은 저장되지 않습니다."
-        isOpen={isExitAlertOpen}
-        onClose={() => setIsExitAlertOpen(false)}
-        actions={[
-          {
-            type: 'solid',
-            variant: 'secondary',
-            label: '취소',
-            onClick: () => setIsExitAlertOpen(false),
-          },
-          {
-            type: 'solid',
-            variant: 'danger',
-            label: '나가기',
-            onClick: handleExit,
-          },
-        ]}
-      />
-      {/* 전송 Alert */}
-      <Alert
-        state="default"
-        title="작성한 쪽지를 보내겠습니까?"
-        infoText="보내신 쪽지는 상대방의 이메일로 전송됩니다."
-        isOpen={isSendAlertOpen}
-        onClose={() => setIsSendAlertOpen(false)}
-        actions={[
-          {
-            type: 'solid',
-            variant: 'secondary',
-            label: '취소',
-            onClick: () => setIsSendAlertOpen(false),
-            isDisabled: isPending,
-          },
-          {
-            type: 'solid',
-            variant: 'primary',
-            label: isPending ? '전송 중' : '전송하기',
-            onClick: () => void handleSend(),
-            isDisabled: !isBtnEnabled,
-          },
-        ]}
-      />
     </div>
   );
 };

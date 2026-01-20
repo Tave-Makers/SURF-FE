@@ -1,4 +1,5 @@
 // API 공통 응답 형식
+import { ScheduleCategory } from '@/entities/schedule/model/types';
 import { CommonResponse } from '@/shared/api/types';
 
 // 게시글 상세 이미지 타입
@@ -82,7 +83,7 @@ export type PostDetailResponse = CommonResponse<PostDetailData>;
 // 특정 게시글의 일정
 export type PostScheduleData = {
   scheduleId: number;
-  category: string;
+  category: ScheduleCategory;
   title: string;
   startAt: string;
   endAt: string;

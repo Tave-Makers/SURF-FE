@@ -1,19 +1,16 @@
 'use client';
 
 import { AccordionSelect } from '@surf/ui/accordion';
-import { Sheet } from '@surf/ui/sheet';
-import { useState, useEffect, useMemo } from 'react';
+import { useEffect, useState } from 'react';
 import { Controller, useFormContext } from 'react-hook-form';
-import { Sheet as ModalSheet } from 'react-modal-sheet';
 import { getInitialDate } from '@/entities/calendar/utils/getInitialDate';
 import { CATEGORY_LABELS } from '@/entities/schedule/model/constants';
-import { SCHEDULE_CATEGORIES } from '@/entities/schedule/model/constants';
-import { DateTimePicker } from '@/entities/schedule/ui/DateTimePicker/DateTimePicker';
 import { EventTitle } from '@/entities/schedule/ui/EventTitle/EventTitle';
 import { ScheduleLocation } from '@/entities/schedule/ui/ScheduleLocation/ScheduleLocation';
 import { ScheduleSetting } from '@/entities/schedule/ui/ScheduleSetting/ScheduleSetting';
 import { ScheduleFormData } from '@/features/schedule/create/model/types';
 import { ensureUtcDate } from '@/features/schedule/lib/ensureUtcDate';
+import { useBottomSheetStore } from '@/shared/store/bottomSheetStore';
 
 export type ScheduleFormProps = {
   onSubmit: (data: ScheduleFormData) => void;
@@ -21,8 +18,13 @@ export type ScheduleFormProps = {
 };
 
 export const ScheduleForm = ({ onSubmit, initialData }: ScheduleFormProps) => {
-  const { control, handleSubmit, watch, reset } = useFormContext<ScheduleFormData>();
-  const [openModal, setOpenModal] = useState<'category' | 'startDate' | 'endDate' | null>(null);
+  const { control, handleSubmit, reset } = useFormContext<ScheduleFormData>();
+  const openBottomSheet = useBottomSheetStore((s) => s.open);
+
+  const [dateConfirmed, setDateConfirmed] = useState({
+    startDate: !!initialData,
+    endDate: !!initialData,
+  });
 
   // 1. 부모로부터 데이터가 들어오면 폼 리셋
   useEffect(() => {
@@ -34,30 +36,9 @@ export const ScheduleForm = ({ onSubmit, initialData }: ScheduleFormProps) => {
         endDate: ensureUtcDate(initialData.endDate),
         location: initialData.location ?? '',
       });
+      setDateConfirmed({ startDate: true, endDate: true });
     }
   }, [initialData, reset]);
-
-  const watchedStartDate = watch('startDate');
-  const watchedEndDate = watch('endDate');
-
-  const initialTempStartDate = useMemo(() => getInitialDate(watchedStartDate), [watchedStartDate]);
-  const initialTempEndDate = useMemo(() => getInitialDate(watchedEndDate), [watchedEndDate]);
-
-  const [tempStartDate, setTempStartDate] = useState(initialTempStartDate);
-  const [tempEndDate, setTempEndDate] = useState(initialTempEndDate);
-
-  const handleOpenDateModal = (type: 'startDate' | 'endDate') => {
-    if (type === 'startDate') setTempStartDate(getInitialDate(watchedStartDate));
-    else setTempEndDate(getInitialDate(watchedEndDate));
-    setOpenModal(type);
-  };
-
-  const handleSaveDate = (type: 'startDate' | 'endDate', rhfOnChange: (date: Date) => void) => {
-    rhfOnChange(type === 'startDate' ? tempStartDate : tempEndDate);
-    setOpenModal(null);
-  };
-
-  const handleCloseModal = () => setOpenModal(null);
 
   return (
     <form
@@ -74,45 +55,20 @@ export const ScheduleForm = ({ onSubmit, initialData }: ScheduleFormProps) => {
           <div>
             <AccordionSelect
               title={field.value ? CATEGORY_LABELS[field.value] : '정규행사'}
-              isOpen={openModal === 'category'}
-              onClick={() => setOpenModal(openModal === 'category' ? null : 'category')}
+              isOpen={false}
+              onClick={() => {
+                openBottomSheet({
+                  type: 'scheduleCategory',
+                  props: {
+                    selectedCategory: field.value,
+                    onSelect: (val) => {
+                      field.onChange(val);
+                    },
+                  },
+                });
+              }}
               controlsId="select-sheet"
             />
-            <ModalSheet
-              isOpen={openModal === 'category'}
-              onClose={handleCloseModal}
-              className="mx-auto flex w-full sm:w-[min(100dvw,calc(100dvh*375/812))]"
-            >
-              <ModalSheet.Container>
-                <ModalSheet.Content>
-                  <Sheet>
-                    <div className="rounded-4 flex flex-col gap-4 pt-16 pb-15">
-                      {SCHEDULE_CATEGORIES.map((option) => (
-                        <button
-                          key={option.value}
-                          type="button"
-                          onClick={() => {
-                            field.onChange(option.value);
-                            handleCloseModal();
-                          }}
-                          className={`text-foreground-normal text-body-body6 flex w-full flex-1 items-center px-12 py-10 ${
-                            field.value === option.value
-                              ? 'bg-background-secondary'
-                              : 'hover:bg-background-secondary'
-                          }`}
-                        >
-                          {option.label}
-                        </button>
-                      ))}
-                    </div>
-                  </Sheet>
-                </ModalSheet.Content>
-              </ModalSheet.Container>
-              <ModalSheet.Backdrop
-                onTap={handleCloseModal}
-                style={{ backgroundColor: 'rgba(0, 0, 0, 0.70)' }}
-              />
-            </ModalSheet>
           </div>
         )}
       />
@@ -144,42 +100,22 @@ export const ScheduleForm = ({ onSubmit, initialData }: ScheduleFormProps) => {
               <ScheduleSetting
                 title="시작"
                 date={field.value}
-                onClick={() => handleOpenDateModal('startDate')}
+                isSelected={dateConfirmed.startDate}
+                onClick={() => {
+                  openBottomSheet({
+                    type: 'scheduleDate',
+                    props: {
+                      title: '일정 시작 설정',
+                      description: '해당 시간에 맞춰 일정이 생성됩니다',
+                      initialDate: getInitialDate(field.value),
+                      onSave: (date) => {
+                        field.onChange(date);
+                        setDateConfirmed((prev) => ({ ...prev, startDate: true }));
+                      },
+                    },
+                  });
+                }}
               />
-              <ModalSheet
-                isOpen={openModal === 'startDate'}
-                onClose={handleCloseModal}
-                className="mx-auto flex w-full sm:w-[min(100dvw,calc(100dvh*375/812))]"
-              >
-                <ModalSheet.Container>
-                  <ModalSheet.Content>
-                    <Sheet
-                      title="일정 시작 설정"
-                      description="해당 시간에 맞춰 일정이 생성됩니다"
-                      primaryBtn={{
-                        label: '예약하기',
-                        onClick: () => handleSaveDate('startDate', field.onChange),
-                      }}
-                      secondaryBtn={{
-                        label: '취소하기',
-                        onClick: handleCloseModal,
-                      }}
-                    >
-                      <div className="py-15">
-                        <DateTimePicker
-                          value={tempStartDate}
-                          onChange={setTempStartDate}
-                          mode="all"
-                        />
-                      </div>
-                    </Sheet>
-                  </ModalSheet.Content>
-                </ModalSheet.Container>
-                <ModalSheet.Backdrop
-                  onTap={handleCloseModal}
-                  style={{ backgroundColor: 'rgba(0, 0, 0, 0.70)' }}
-                />
-              </ModalSheet>
             </>
           )}
         />
@@ -197,38 +133,22 @@ export const ScheduleForm = ({ onSubmit, initialData }: ScheduleFormProps) => {
               <ScheduleSetting
                 title="종료"
                 date={field.value}
-                onClick={() => handleOpenDateModal('endDate')}
+                isSelected={dateConfirmed.endDate}
+                onClick={() => {
+                  openBottomSheet({
+                    type: 'scheduleDate',
+                    props: {
+                      title: '일정 종료 설정',
+                      description: '해당 시간에 맞춰 일정이 생성됩니다',
+                      initialDate: getInitialDate(field.value),
+                      onSave: (date) => {
+                        field.onChange(date);
+                        setDateConfirmed((prev) => ({ ...prev, endDate: true }));
+                      },
+                    },
+                  });
+                }}
               />
-              <ModalSheet
-                isOpen={openModal === 'endDate'}
-                onClose={handleCloseModal}
-                className="mx-auto flex w-full sm:w-[min(100dvw,calc(100dvh*375/812))]"
-              >
-                <ModalSheet.Container>
-                  <ModalSheet.Content>
-                    <Sheet
-                      title="일정 종료 설정"
-                      description="해당 시간에 맞춰 일정이 생성됩니다"
-                      primaryBtn={{
-                        label: '예약하기',
-                        onClick: () => handleSaveDate('endDate', field.onChange),
-                      }}
-                      secondaryBtn={{
-                        label: '취소하기',
-                        onClick: handleCloseModal,
-                      }}
-                    >
-                      <div className="py-15">
-                        <DateTimePicker value={tempEndDate} onChange={setTempEndDate} mode="all" />
-                      </div>
-                    </Sheet>
-                  </ModalSheet.Content>
-                </ModalSheet.Container>
-                <ModalSheet.Backdrop
-                  onTap={handleCloseModal}
-                  style={{ backgroundColor: 'rgba(0, 0, 0, 0.70)' }}
-                />
-              </ModalSheet>
             </>
           )}
         />

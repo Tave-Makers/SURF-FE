@@ -2,7 +2,6 @@ import type { UserProfileApiResponse } from '@/entities/user/api/types';
 import type {
   CareerDTO,
   UserProfile,
-  BannerPart,
   UserLevel,
   ServerUserLevel,
   DateString,
@@ -30,6 +29,10 @@ export const toLabelPartMap: Record<TrackPart, string> = {
   DEEP_LEARNING: '딥러닝',
 };
 
+export function isTrackPart(part: string): part is TrackPart {
+  return Object.prototype.hasOwnProperty.call(toLabelPartMap, part);
+}
+
 export function mapUserLevel(role: ServerUserLevel | UserLevel): UserLevel {
   const map: Record<ServerUserLevel, UserLevel> = {
     ADMIN: 'admin',
@@ -41,19 +44,6 @@ export function mapUserLevel(role: ServerUserLevel | UserLevel): UserLevel {
   return role as UserLevel;
 }
 
-export function mapPartToBanner(partKo: string): BannerPart | null {
-  const norm = partKo.replace(/\s+/g, '');
-  const partMap: Record<string, BannerPart> = {
-    웹프론트엔드: 'frontend',
-    앱프론트엔드: 'frontend',
-    백엔드: 'backend',
-    디자인: 'design',
-    데이터분석: 'data-analysis',
-    딥러닝: 'deep-learning',
-  };
-  return partMap[norm] ?? null;
-}
-
 export function mapMemberPartToBatch(memberPart: string): string {
   const map: Record<string, string> = toLabelPartMap;
   const label = map[memberPart];
@@ -62,8 +52,8 @@ export function mapMemberPartToBatch(memberPart: string): string {
 
 export function mapUserProfile(dto: UserProfileApiResponse['data']): UserProfile {
   const primaryTrack = dto.trackList?.[0];
-  const bannerPart = primaryTrack?.part ? mapPartToBanner(primaryTrack.part) : null;
-
+  const bannerPart =
+    primaryTrack?.part && isTrackPart(primaryTrack.part) ? primaryTrack.part : null;
   const careers: CareerDTO[] = dto.careerList.map((c) => ({
     careerId: c.careerId,
     companyName: c.companyName,
@@ -87,7 +77,10 @@ export function mapUserProfile(dto: UserProfileApiResponse['data']): UserProfile
     activityScore: dto.activityScore,
     isActive: dto.isActive,
     bannerPart,
-    chips: dto.trackList.map((t) => `${t.generation}기 ${t.part}`),
+    chips: dto.trackList.map((t) => {
+      const partLabel = isTrackPart(t.part) ? toLabelPartMap[t.part] : t.part;
+      return `${t.generation}기 ${partLabel}`;
+    }),
     careers,
   };
 }

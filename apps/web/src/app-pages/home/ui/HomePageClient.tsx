@@ -61,9 +61,9 @@ export const HomePageClient = ({ heroProps }: { heroProps: HeroCardProps }) => {
         <div className="flex flex-col gap-16 px-13 pt-15">
           {/* Announcement Bar */}
           <AnnouncementBar
-            title={homeData?.announcementTitle ?? '타이틀 제목 없음'}
-            date={homeData?.announcementDate ?? '날짜없음'}
-            category="official" // 카테고리 데이터 필요 {homeData?.announcementCategory ?? 'official'}
+            title={homeData?.announcementTitle ?? 'Title'}
+            date={homeData?.announcementDate ?? '00.00'}
+            category="regular" // 카테고리 데이터 필요 {homeData?.announcementCategory ?? 'regular'}
             onClick={() => {
               if (!deepLink) {
                 if (process.env.NODE_ENV === 'development') {

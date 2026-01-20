@@ -51,7 +51,7 @@ type Story = StoryObj<typeof CalendarActivityBadge>;
 // ───────────────────────────────
 export const Official: Story = {
   args: {
-    item: createDummyItem('official', '공식 일정'),
+    item: createDummyItem('regular', '공식 일정'),
   },
 };
 
@@ -72,7 +72,7 @@ export const Other: Story = {
 // ───────────────────────────────
 export const NotCurrentMonth: Story = {
   args: {
-    item: createDummyItem('official', '이전/다음 달 일정'),
+    item: createDummyItem('regular', '이전/다음 달 일정'),
     isCurrentMonth: false,
   },
 };
@@ -97,10 +97,7 @@ export const AllVariations: Story = {
   render: () => (
     <div className="flex w-[150px] flex-col gap-4">
       <div className="text-sm font-bold">Current Month</div>
-      <CalendarActivityBadge
-        item={createDummyItem('official', '공식 일정')}
-        isCurrentMonth={true}
-      />
+      <CalendarActivityBadge item={createDummyItem('regular', '공식 일정')} isCurrentMonth={true} />
       <CalendarActivityBadge
         item={createDummyItem('operation', '운영 일정')}
         isCurrentMonth={true}
@@ -109,7 +106,7 @@ export const AllVariations: Story = {
 
       <div className="mt-4 text-sm font-bold">Other Month (Opacity 50%)</div>
       <CalendarActivityBadge
-        item={createDummyItem('official', '공식 일정')}
+        item={createDummyItem('regular', '공식 일정')}
         isCurrentMonth={false}
       />
       <CalendarActivityBadge

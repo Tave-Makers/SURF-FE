@@ -5,16 +5,14 @@ import { Checkbox } from '@surf/ui/checkbox';
 import { FieldGroup } from '@surf/ui/field-group';
 import { SurfIcon } from '@surf/ui/icon';
 import { SelectField } from '@surf/ui/select-field';
-import { Sheet } from '@surf/ui/sheet';
 import { TextArea } from '@surf/ui/text-area';
-import { WheelPicker } from '@surf/ui/wheel-picker';
-import { useCallback, useState } from 'react';
+import { useState } from 'react';
 import { Controller, useFieldArray, useFormContext } from 'react-hook-form';
-import { Sheet as ModalSheet } from 'react-modal-sheet';
-import { formatTrackLabel, mapToApiTrack } from '../lib/trackMapper';
+import { formatTrackLabel } from '../lib/trackMapper';
 import { trackOnBoardingEvent } from '../lib/trackOnBoardingEvent';
 import { TrackPart } from '@/entities/user/model/types';
 import { ONBOARDING_EVENTS, OnBoardingFormData } from '@/features/onboarding/model/types';
+import { useBottomSheetStore } from '@/shared/store/bottomSheetStore';
 
 export const TrackUnivStep = () => {
   const { control, setValue } = useFormContext<OnBoardingFormData>();
@@ -23,9 +21,9 @@ export const TrackUnivStep = () => {
     name: 'tracks',
   });
 
-  const [isSheetOpen, setIsSheetOpen] = useState(false);
-  const [editingIndex, setEditingIndex] = useState<number | null>(null);
-  const [tempTrack, setTempTrack] = useState<{ generation: number; part: TrackPart } | null>(null);
+  const [_editingIndex, setEditingIndex] = useState<number | null>(null);
+  const openBottomSheet = useBottomSheetStore((s) => s.open);
+  const closeBottomSheet = useBottomSheetStore((s) => s.close);
 
   const [isGraduateStudent, setIsGraduateStudent] = useState(false);
 
@@ -40,39 +38,24 @@ export const TrackUnivStep = () => {
     });
   }
 
-  function handleSelectTrack() {
-    if (!tempTrack) return;
-    const isDuplicate = isDuplicateTrack(fields, tempTrack, editingIndex);
-
-    if (isDuplicate) {
-      // TODO: 이미 선택된 기수 및 파트임을 안내하는 문구 추가
-      return;
-    }
-
-    if (editingIndex === null) {
-      append(tempTrack);
-    } else {
-      update(editingIndex, tempTrack);
-    }
-    setTempTrack(null);
-    setEditingIndex(null);
-    setIsSheetOpen(false);
+  function openTrackPicker(index: number) {
+    setEditingIndex(index);
+    openBottomSheet({
+      type: 'trackPicker',
+      props: {
+        onSelect: (selectedTrack) => {
+          const isDuplicate = isDuplicateTrack(fields, selectedTrack, index);
+          if (isDuplicate) {
+            // TODO: 이미 선택된 기수 및 파트임을 안내하는 문구 추가
+            return;
+          }
+          update(index, selectedTrack);
+          setEditingIndex(null);
+          closeBottomSheet();
+        },
+      },
+    });
   }
-
-  const handlePickerChange = useCallback(({ period, part }: { period: string; part: string }) => {
-    try {
-      const track = mapToApiTrack(period, part);
-
-      setTempTrack((prev) => {
-        if (prev?.generation === track.generation && prev?.part === track.part) {
-          return prev;
-        }
-        return track;
-      });
-    } catch (err) {
-      console.error(err);
-    }
-  }, []);
 
   return (
     <>
@@ -90,8 +73,7 @@ export const TrackUnivStep = () => {
                     : undefined
                 }
                 onClick={() => {
-                  setEditingIndex(idx);
-                  setIsSheetOpen(true);
+                  openTrackPicker(idx);
                 }}
               />
 
@@ -166,23 +148,6 @@ export const TrackUnivStep = () => {
           isChecked={isGraduateStudent}
         />
       </div>
-
-      {/* 피커 모달 */}
-      <ModalSheet isOpen={isSheetOpen} onClose={() => setIsSheetOpen(false)}>
-        <ModalSheet.Container className="!right-0 !left-0 mx-auto w-full sm:max-w-[min(100dvw,calc(100dvh*375/812))]">
-          <ModalSheet.Content>
-            <Sheet>
-              <div className="flex flex-col gap-[1.25rem]">
-                <WheelPicker initPeriodIdx={0} initPartIdx={0} onChange={handlePickerChange} />
-                <SolidButton type="button" size="l" variant="primary" onClick={handleSelectTrack}>
-                  선택하기
-                </SolidButton>
-              </div>
-            </Sheet>
-          </ModalSheet.Content>
-        </ModalSheet.Container>
-        <ModalSheet.Backdrop onTap={() => setIsSheetOpen(false)} />
-      </ModalSheet>
     </>
   );
 };

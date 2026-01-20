@@ -1,11 +1,5 @@
-'use client';
-
-import { Sheet } from '@surf/ui/sheet';
-import { SheetItem } from '@surf/ui/sheet';
 import { useAlertStore } from '@surf/ui/store/alertStore';
 import { useToastStore } from '@surf/ui/store/toastStore';
-import { useState } from 'react';
-import { Sheet as ModalSheet } from 'react-modal-sheet';
 import { useAuthStore } from '@/features/auth/model/useAuthStore';
 import type { CommentResponse } from '@/features/comment/api/types';
 import { COMMENT_DEFAULT_PAGE, COMMENT_PAGE_SIZE } from '@/features/comment/model/constant';
@@ -14,6 +8,7 @@ import { useGetCommentsQuery } from '@/features/comment/model/useGetCommentsQuer
 import { useToggleCommentLikeMutation } from '@/features/comment/model/useToggleCommentLikeMutation';
 import { Comment } from '@/features/comment/ui/Comment';
 import CommentsEmpty from '@/shared/assets/icons/empty-space/comments-empty.svg';
+import { useBottomSheetStore } from '@/shared/store/bottomSheetStore';
 import { toDate, toKST, formatDateTime } from '@/shared/utils/date';
 
 interface Props {
@@ -29,6 +24,8 @@ export const CommentSection = ({ postId, memberId, onStartReply }: Props) => {
   const showToast = useToastStore((s) => s.show);
   const openAlert = useAlertStore((s) => s.open);
   const closeAlert = useAlertStore((s) => s.close);
+
+  const openBottomSheet = useBottomSheetStore((s) => s.open);
 
   const { data, isLoading, isError } = useGetCommentsQuery(
     postId,
@@ -48,25 +45,13 @@ export const CommentSection = ({ postId, memberId, onStartReply }: Props) => {
   const comments = data?.comments ?? [];
   const totalCount = data?.totalCount ?? 0;
 
-  // 옵션/삭제/신고
-  const [optionsOpen, setOptionsOpen] = useState(false);
-  const [activeComment, setActiveComment] = useState<CommentResponse | null>(null);
-
   const isMine = (c: CommentResponse) => {
     const currentId = memberId ?? myId;
     return currentId != null ? c.memberId === currentId : false;
   };
 
-  const openOptions = (c: CommentResponse) => {
-    setActiveComment(c);
-    setOptionsOpen(true);
-  };
-
-  const clickDelete = () => {
-    setOptionsOpen(false);
-    if (!activeComment) return;
-
-    const commentId = activeComment.id;
+  const handleDelete = (comment: CommentResponse) => {
+    const commentId = comment.id;
 
     openAlert({
       state: 'default',
@@ -88,7 +73,6 @@ export const CommentSection = ({ postId, memberId, onStartReply }: Props) => {
               try {
                 await deleteMutation.mutateAsync(commentId);
                 closeAlert();
-                setActiveComment(null);
                 showToast('댓글이 삭제됐어요');
               } catch (e) {
                 console.error(e);
@@ -102,9 +86,19 @@ export const CommentSection = ({ postId, memberId, onStartReply }: Props) => {
     });
   };
 
-  const clickReport = () => {
-    setOptionsOpen(false);
+  const handleReport = () => {
     showToast('신고 기능 준비 중입니다.');
+  };
+
+  const openOptions = (c: CommentResponse) => {
+    openBottomSheet({
+      type: 'commentOption',
+      props: {
+        isMine: isMine(c),
+        onDelete: () => handleDelete(c),
+        onReport: handleReport,
+      },
+    });
   };
 
   if (isLoading) {
@@ -116,7 +110,7 @@ export const CommentSection = ({ postId, memberId, onStartReply }: Props) => {
 
   return (
     <div className="flex w-full flex-col">
-      <div className="flex flex-col gap-11 pt-16 pb-16">
+      <div className="flex flex-col gap-11 px-13 pt-16 pb-16">
         <div className="flex items-center gap-5">
           <span className="text-body-body4 text-foreground-normal">댓글 {totalCount}</span>
         </div>
@@ -158,24 +152,6 @@ export const CommentSection = ({ postId, memberId, onStartReply }: Props) => {
           )}
         </div>
       </div>
-
-      {/* 댓글 옵션 Sheet */}
-      <ModalSheet isOpen={optionsOpen} onClose={() => setOptionsOpen(false)}>
-        <ModalSheet.Container className="!right-0 !left-0 mx-auto max-w-[min(100dvw,calc(100dvh*375/812))]">
-          <ModalSheet.Content>
-            <Sheet title="댓글 옵션">
-              <div className="flex flex-col">
-                {activeComment && isMine(activeComment) ? (
-                  <SheetItem title="삭제하기" textColor="danger" onClick={clickDelete} />
-                ) : (
-                  <SheetItem title="신고하기" onClick={clickReport} />
-                )}
-              </div>
-            </Sheet>
-          </ModalSheet.Content>
-        </ModalSheet.Container>
-        <ModalSheet.Backdrop onTap={() => setOptionsOpen(false)} />
-      </ModalSheet>
     </div>
   );
 };

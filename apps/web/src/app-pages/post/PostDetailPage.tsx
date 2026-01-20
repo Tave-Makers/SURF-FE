@@ -1,16 +1,11 @@
 'use client';
 
 import { ActionBar } from '@surf/ui/action-bar';
-import { Avatar } from '@surf/ui/avatar';
 import { HeaderMode } from '@surf/ui/header';
-import { SurfIcon } from '@surf/ui/icon';
-import { SheetItem } from '@surf/ui/sheet';
-import { Sheet } from '@surf/ui/sheet';
 import { useAlertStore } from '@surf/ui/store/alertStore';
 import { useToastStore } from '@surf/ui/store/toastStore';
 import { usePathname, useRouter, useSearchParams } from 'next/navigation';
-import { useEffect, useState } from 'react';
-import { Sheet as ModalSheet } from 'react-modal-sheet';
+import { useEffect } from 'react';
 import { usePostDetail } from '@/entities/post/api/usePostDetail';
 import { categoryIdToKey } from '@/entities/post/model/category';
 import { PostHeader } from '@/entities/post/ui/post-header/PostHeader';
@@ -20,6 +15,7 @@ import { useGetPostLikesQuery } from '@/features/post/model/useGetPostLikesQuery
 import { useGetPostScheduleQuery } from '@/features/post/model/useGetPostScheduleQuery';
 import { PAGE_ROUTES } from '@/shared/config/path';
 import { useKeyboardOffset } from '@/shared/hooks/useKeyboardOffset';
+import { useBottomSheetStore } from '@/shared/store/bottomSheetStore';
 import { CommentSection } from '@/widgets/comment-section/ui/CommentSection';
 import { AppHeader } from '@/widgets/header/ui/AppHeader';
 import { PostBodySection } from '@/widgets/post-detail/PostBodySection';
@@ -46,7 +42,7 @@ const PostDetailPage = ({ postId }: PostDetailPageProps) => {
   useEffect(() => {
     if (isError && from === 'notification') {
       alert('삭제된 게시글입니다.');
-      router.replace(PAGE_ROUTES.NOTIFICATION);
+      router.back();
     }
   }, [isError, from, router]);
 
@@ -67,12 +63,11 @@ const PostDetailPage = ({ postId }: PostDetailPageProps) => {
     refetch: refetchLikedUsers,
   } = useGetPostLikesQuery(numericPostId, false);
 
-  const [likedUsersOpen, setLikedUsersOpen] = useState(false);
-
   const openAlert = useAlertStore((s) => s.open);
   const closeAlert = useAlertStore((s) => s.close);
 
-  const [open, setOpen] = useState(false);
+  const openBottomSheet = useBottomSheetStore((s) => s.open);
+  const closeBottomSheet = useBottomSheetStore((s) => s.close);
   const { mutate: deletePostMutate } = useDeletePostMutation();
 
   // 로딩/에러 처리
@@ -100,7 +95,14 @@ const PostDetailPage = ({ postId }: PostDetailPageProps) => {
 
   const openLikedUsers = () => {
     void refetchLikedUsers();
-    setLikedUsersOpen(true);
+    openBottomSheet({
+      type: 'postLike',
+      props: {
+        likedUsers,
+        isLoading: isLikesLoading,
+        isError: isLikesError,
+      },
+    });
   };
 
   const handleDelete = () => {
@@ -147,6 +149,25 @@ const PostDetailPage = ({ postId }: PostDetailPageProps) => {
     });
   };
 
+  const handleOpenOptions = () => {
+    openBottomSheet({
+      type: 'postOption',
+      props: {
+        isMine: post.isMine,
+        onEdit: () => {
+          router.push(`${pathname}/edit`);
+          closeBottomSheet();
+        },
+        onDelete: () => {
+          openDeleteAlert();
+        },
+        onReport: () => {
+          alert('신고 기능 준비 중입니다.');
+        },
+      },
+    });
+  };
+
   return (
     <div className="flex h-full flex-col">
       <AppHeader
@@ -161,7 +182,7 @@ const PostDetailPage = ({ postId }: PostDetailPageProps) => {
             },
             {
               label: 'Dots',
-              onClickIcon: () => setOpen(true),
+              onClickIcon: handleOpenOptions,
             },
           ],
         }}
@@ -202,118 +223,6 @@ const PostDetailPage = ({ postId }: PostDetailPageProps) => {
           <ActionBar placeholder="댓글을 입력해주세요" />
         </div>
       </div>
-
-      {/* ============================= */}
-      {/* 좋아요 누른 사용자 Sheet */}
-      {/* ============================= */}
-      <ModalSheet isOpen={likedUsersOpen} onClose={() => setLikedUsersOpen(false)}>
-        <ModalSheet.Container className="!right-0 !left-0 mx-auto w-full sm:max-w-[min(100dvw,calc(100dvh*375/812))]">
-          <ModalSheet.Content>
-            <Sheet title="좋아요를 누른 사람">
-              <div className="flex flex-col">
-                {/* 로딩 */}
-                {isLikesLoading && (
-                  <div className="py-4 text-center text-gray-500">불러오는 중...</div>
-                )}
-
-                {/* 에러 */}
-                {isLikesError && (
-                  <div className="py-4 text-center text-red-500">
-                    좋아요 목록을 불러오지 못했습니다.
-                  </div>
-                )}
-
-                {/* 목록 */}
-                {!isLikesLoading &&
-                  !isLikesError &&
-                  likedUsers.map((user, index) => {
-                    if (!user.id) {
-                      return (
-                        <SheetItem
-                          key={`withdrawn-${index}`}
-                          title={user.name} // '탈퇴한 회원'으로 표시됨
-                          node={<Avatar size="xs" className="rounded-3!" />}
-                        />
-                      );
-                    }
-
-                    return (
-                      <SheetItem
-                        key={user.id}
-                        title={user.name}
-                        node={
-                          <Avatar size="xs" src={user.profileImageUrl} className="rounded-3!" />
-                        }
-                        onClick={() => {
-                          router.push(PAGE_ROUTES.MEMBER.PROFILE(user.id!));
-                        }}
-                      />
-                    );
-                  })}
-
-                {/* 비어 있을 때 */}
-                {!isLikesLoading && !isLikesError && likedUsers.length === 0 && (
-                  <div className="py-4 text-center text-gray-500">좋아요가 없습니다.</div>
-                )}
-              </div>
-            </Sheet>
-          </ModalSheet.Content>
-        </ModalSheet.Container>
-
-        <ModalSheet.Backdrop onTap={() => setLikedUsersOpen(false)} />
-      </ModalSheet>
-      {/* ============================= */}
-      {/* 삭제/수정/신고 Sheet*/}
-      {/* ============================= */}
-      <ModalSheet isOpen={open} onClose={() => setOpen(false)}>
-        <ModalSheet.Container className="!right-0 !left-0 mx-auto w-full sm:max-w-[min(100dvw,calc(100dvh*375/812))]">
-          <ModalSheet.Content>
-            <Sheet title="게시글 옵션">
-              <div className="flex flex-col">
-                {post.isMine ? (
-                  <>
-                    {/* 수정하기 */}
-                    <SheetItem
-                      title="수정하기"
-                      node={<SurfIcon name="EditSolid" />}
-                      onClick={() => {
-                        setOpen(false);
-                        router.push(`${pathname}/edit`);
-                      }}
-                    />
-
-                    {/* 삭제하기 */}
-                    <SheetItem
-                      title="삭제하기"
-                      node={<SurfIcon name="TrashOneSolid" className="text-foreground-danger" />}
-                      onClick={() => {
-                        setOpen(false);
-                        openDeleteAlert();
-                      }}
-                      textColor="danger"
-                    />
-                  </>
-                ) : (
-                  <>
-                    {/* 신고하기 */}
-                    <SheetItem
-                      title="신고하기"
-                      // TODO: 신고 아이콘 추가
-                      // node={<SurfIcon name="" />}
-                      onClick={() => {
-                        setOpen(false);
-                        // TODO: 신고하기 기능 연동
-                        alert('신고 기능 준비 중입니다.');
-                      }}
-                    />
-                  </>
-                )}
-              </div>
-            </Sheet>
-          </ModalSheet.Content>
-        </ModalSheet.Container>
-        <ModalSheet.Backdrop onClick={() => setOpen(false)} />
-      </ModalSheet>
     </div>
   );
 };

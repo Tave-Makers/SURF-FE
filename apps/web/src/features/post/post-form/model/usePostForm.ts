@@ -3,7 +3,6 @@ import { useRouter } from 'next/navigation';
 import { PAGE_ROUTES } from '@/shared/config/path';
 
 import { stripHtml } from '@/shared/lib/stripHtml';
-import { usePicker } from '@surf/ui/hooks/usePicker';
 import { POST_CATEGORIES, PostCategoryKey } from '@/entities/post/model/category';
 import { POST_VALIDATION } from '@/entities/post/model/validation';
 
@@ -54,10 +53,6 @@ export const usePostForm = ({ mode, boardId, postId }: Props) => {
   const { linkedSchedule, setLinkedSchedule, clearLinkedSchedule } = useCreatePostScheduleStore();
 
   const [showExitAlert, setShowExitAlert] = useState(false);
-  const [isReservationModalOpen, setIsReservationModalOpen] = useState(false);
-
-  const openReservationModal = () => setIsReservationModalOpen(true);
-  const closeReservationModal = () => setIsReservationModalOpen(false);
 
   // 2. Data Queries & Mutations
 
@@ -106,23 +101,6 @@ export const usePostForm = ({ mode, boardId, postId }: Props) => {
     setCanInitialize(false);
     isScheduleInitializedRef.current = false;
   }, [clearLinkedSchedule, resetForm, setCanInitialize]);
-
-  const {
-    isOpen: isCategoryOpen,
-    open: openCategory,
-    close: closeCategory,
-  } = usePicker<PostCategoryKey>({
-    defaultValue: 'event',
-    onChange: (val) => val && setField('category', val),
-  });
-
-  const selectCategory = useCallback(
-    (val: PostCategoryKey) => {
-      setField('category', val);
-      closeCategory();
-    },
-    [setField, closeCategory],
-  );
 
   const isSubmitDisabled = useMemo(() => {
     const { isEmpty } = checkHasChanges();
@@ -317,7 +295,7 @@ export const usePostForm = ({ mode, boardId, postId }: Props) => {
     title,
     setTitle: (val: string) => setField('title', val),
     category,
-    categorySheetId: 'post-category-sheet',
+    setCategory: (val: PostCategoryKey) => setField('category', val),
     initialContent: content,
     initialImages: images,
     linkedSchedule,
@@ -327,21 +305,15 @@ export const usePostForm = ({ mode, boardId, postId }: Props) => {
     setReservedAt: (val: Date | null) => setField('reservedAt', val),
 
     // UI State
-    isCategoryOpen,
     showExitAlert,
-    isReservationModalOpen,
+
     isSubmitDisabled,
     isScheduleFetching,
     isPublished,
     isReserved,
 
     // Actions
-    openCategory,
-    closeCategory,
-    selectCategory,
     setShowExitAlert,
-    openReservationModal,
-    closeReservationModal,
 
     // Handlers
     handleEditorChange,

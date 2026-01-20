@@ -104,7 +104,12 @@ export const usePostForm = ({ mode, boardId, postId }: Props) => {
 
   const isSubmitDisabled = useMemo(() => {
     const { isEmpty } = checkHasChanges();
-    return !title.trim() || isEmpty;
+    return (
+      !title.trim() ||
+      stripHtml(content).trim() === '' ||
+      stripHtml(content).trim() === '<p></p>' ||
+      isEmpty
+    );
   }, [title, checkHasChanges]);
 
   // 이미 발행된 글인지 판단 (툴바 비활성화용)

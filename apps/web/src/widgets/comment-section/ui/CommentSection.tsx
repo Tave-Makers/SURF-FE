@@ -103,18 +103,19 @@ export const CommentSection = ({ postId, memberId, scrollRootRef, onStartReply }
           variant: 'danger',
           label: '삭제하기',
           onClick: () => {
-            void (async () => {
-              try {
-                await deleteMutation.mutateAsync(commentId);
-                closeAlert();
-                setActiveComment(null);
-                showToast('댓글이 삭제됐어요');
-              } catch (e) {
-                console.error(e);
-                closeAlert();
-                showToast('댓글 삭제에 실패했어요');
-              }
-            })();
+            closeAlert();
+            window.setTimeout(() => {
+              void (async () => {
+                try {
+                  await deleteMutation.mutateAsync(commentId);
+                  setActiveComment(null);
+                  showToast('댓글이 삭제됐어요');
+                } catch (e) {
+                  console.error(e);
+                  showToast('댓글 삭제에 실패했어요');
+                }
+              })();
+            }, 0);
           },
         },
       ],
@@ -123,6 +124,7 @@ export const CommentSection = ({ postId, memberId, scrollRootRef, onStartReply }
 
   const clickReport = () => {
     setOptionsOpen(false);
+    setActiveComment(null);
     showToast('신고 기능 준비 중입니다.');
   };
 

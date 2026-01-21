@@ -133,10 +133,10 @@ const PostDetailPage = ({ postId }: PostDetailPageProps) => {
           openAlert({
             state: 'default',
             title: '게시글을 정말 삭제하시겠습니까?',
-            infoText: '삭제된 게시글은 복구되지 않습니다.',
+            infoText: '게시글을 삭제할 경우 이전 내용은 복원할 수 없습니다.',
             actions: [
               { type: 'solid', variant: 'secondary', label: '취소', onClick: closeAlert },
-              { type: 'solid', variant: 'danger', label: '삭제', onClick: handleDelete },
+              { type: 'solid', variant: 'danger', label: '삭제하기', onClick: handleDelete },
             ],
           });
         },

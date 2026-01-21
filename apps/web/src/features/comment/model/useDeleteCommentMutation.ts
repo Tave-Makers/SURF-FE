@@ -4,7 +4,7 @@ import type { CommentListResponse, CommentResponse } from '../api/types';
 
 export function useDeleteCommentMutation(postId: number) {
   const qc = useQueryClient();
-  const baseKey = ['comments', postId] as const;
+  const baseKey = ['comments', postId, 'list'] as const;
 
   const removeComment = (comments: CommentResponse[], commentId: number) =>
     comments.filter((comment) => comment.id !== commentId);

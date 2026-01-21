@@ -5,7 +5,7 @@ import { COMMENT_DEFAULT_PAGE } from '@/features/comment/model/constant';
 
 export function useInfiniteCommentsQuery(postId: number, size: number, enabled = true) {
   return useInfiniteQuery<CommentListResponse>({
-    queryKey: ['comments', postId, 'infinite', size],
+    queryKey: ['comments', postId, 'list', 'infinite', size],
     queryFn: async ({ pageParam = COMMENT_DEFAULT_PAGE }): Promise<CommentListResponse> => {
       const response = await fetchComments(postId, pageParam as number, size);
       return response.data;

@@ -4,7 +4,7 @@ import type { CommentListResponse, CommentResponse } from '@/features/comment/ap
 
 export function useToggleCommentLikeMutation(postId: number) {
   const queryClient = useQueryClient();
-  const baseKey = ['comments', postId] as const;
+  const baseKey = ['comments', postId, 'list'] as const;
 
   const toggleLike = (comments: CommentResponse[], commentId: number) =>
     comments.map((comment) => {

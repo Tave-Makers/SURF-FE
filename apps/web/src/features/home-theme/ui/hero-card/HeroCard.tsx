@@ -7,7 +7,7 @@ interface UserData {
 }
 
 interface NoticeData {
-  title: string;
+  message: string;
   sender: string;
 }
 
@@ -102,7 +102,7 @@ export const HeroCard = ({ userData, noticeData, imgData }: HeroCardProps) => {
       {/* 텍스트 레이어 */}
       <div className="pointer-events-none absolute inset-0 z-10 flex flex-col">
         <div className="mt-[4.875rem] flex flex-col gap-1 px-15">
-          <h1 className={`text-body-body5 ${textColor} truncate`}>{noticeData.title}</h1>
+          <h1 className={`text-body-body5 ${textColor} truncate`}>{noticeData.message}</h1>
           <h2 className={`text-body-body9 ${textColor} truncate`}>{noticeData.sender}</h2>
         </div>
 

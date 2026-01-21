@@ -1,13 +1,9 @@
 'use client';
 
-import { SurfIcon } from '@surf/ui/icon';
-import { Sheet } from '@surf/ui/sheet';
-import { SheetItem } from '@surf/ui/sheet';
 import { useAlertStore } from '@surf/ui/store/alertStore';
 import { useToastStore } from '@surf/ui/store/toastStore';
 import { useRouter } from 'next/navigation';
-import { useEffect, useRef, useState } from 'react';
-import { Sheet as ModalSheet } from 'react-modal-sheet';
+import { useEffect, useRef } from 'react';
 import { useAuthStore } from '@/features/auth/model/useAuthStore';
 import type { CommentResponse } from '@/features/comment/api/types';
 import { COMMENT_PAGE_SIZE } from '@/features/comment/model/constant';
@@ -17,6 +13,7 @@ import { useToggleCommentLikeMutation } from '@/features/comment/model/useToggle
 import { Comment } from '@/features/comment/ui/Comment';
 import CommentsEmpty from '@/shared/assets/icons/empty-space/comments-empty.svg';
 import { PAGE_ROUTES } from '@/shared/config/path';
+import { useBottomSheetStore } from '@/shared/store/bottomSheetStore';
 import { toDate, toKST, formatDateTime } from '@/shared/utils/date';
 
 interface Props {
@@ -31,6 +28,7 @@ export const CommentSection = ({ postId, memberId, scrollRootRef, onStartReply }
   const router = useRouter();
   const myId = useAuthStore((s) => s.memberId);
   const isClickable = memberId !== null;
+  const openBottomSheet = useBottomSheetStore((s) => s.open);
 
   const showToast = useToastStore((s) => s.show);
   const openAlert = useAlertStore((s) => s.open);
@@ -67,26 +65,23 @@ export const CommentSection = ({ postId, memberId, scrollRootRef, onStartReply }
     return () => observer.disconnect();
   }, [fetchNextPage, hasNextPage, isFetchingNextPage, scrollRootRef]);
 
-  // 옵션/삭제/신고
-  const [optionsOpen, setOptionsOpen] = useState(false);
-  const [activeComment, setActiveComment] = useState<CommentResponse | null>(null);
-
   const isMine = (c: CommentResponse) => {
     const currentId = memberId ?? myId;
     return currentId != null ? c.memberId === currentId : false;
   };
 
   const openOptions = (c: CommentResponse) => {
-    setActiveComment(c);
-    setOptionsOpen(true);
+    openBottomSheet({
+      type: 'commentOption',
+      props: {
+        isMine: isMine(c),
+        onDelete: () => clickDelete(c.id),
+        onReport: clickReport,
+      },
+    });
   };
 
-  const clickDelete = () => {
-    setOptionsOpen(false);
-    if (!activeComment) return;
-
-    const commentId = activeComment.id;
-
+  const clickDelete = (commentId: number) => {
     openAlert({
       state: 'default',
       title: '댓글을 정말 삭제하시겠습니까?',
@@ -108,7 +103,6 @@ export const CommentSection = ({ postId, memberId, scrollRootRef, onStartReply }
               void (async () => {
                 try {
                   await deleteMutation.mutateAsync(commentId);
-                  setActiveComment(null);
                   showToast('댓글이 삭제됐어요');
                 } catch (e) {
                   console.error(e);
@@ -123,8 +117,6 @@ export const CommentSection = ({ postId, memberId, scrollRootRef, onStartReply }
   };
 
   const clickReport = () => {
-    setOptionsOpen(false);
-    setActiveComment(null);
     showToast('신고 기능 준비 중입니다.');
   };
 
@@ -193,36 +185,6 @@ export const CommentSection = ({ postId, memberId, scrollRootRef, onStartReply }
           )}
         </div>
       </div>
-
-      {/* 댓글 옵션 Sheet */}
-      <ModalSheet isOpen={optionsOpen} onClose={() => setOptionsOpen(false)}>
-        <ModalSheet.Container className="!right-0 !left-0 mx-auto max-w-[min(100dvw,calc(100dvh*375/812))]">
-          <ModalSheet.Content>
-            <Sheet>
-              <div className="flex flex-row">
-                {activeComment && isMine(activeComment) ? (
-                  <SheetItem
-                    title="삭제하기"
-                    textColor="danger"
-                    onClick={clickDelete}
-                    node={
-                      <SurfIcon name="TrashOneSolid" size="m" className="text-foreground-danger" />
-                    }
-                  />
-                ) : (
-                  <SheetItem
-                    title="신고하기"
-                    textColor="danger"
-                    onClick={clickReport}
-                    node={<SurfIcon name="FlagSolid" size="m" className="text-foreground-danger" />}
-                  />
-                )}
-              </div>
-            </Sheet>
-          </ModalSheet.Content>
-        </ModalSheet.Container>
-        <ModalSheet.Backdrop onTap={() => setOptionsOpen(false)} />
-      </ModalSheet>
     </div>
   );
 };

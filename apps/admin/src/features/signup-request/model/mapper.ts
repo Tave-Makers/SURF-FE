@@ -32,7 +32,7 @@ export function toSignupRequestMember(dto: SignupRequestItem): SignupRequestMemb
     university: dto.university,
     profileImageUrl: dto.profileImageUrl,
     tracks: dto.trackList.map(toMemberTrack), // trackList → tracks
-    registeredAt: new Date(dto.createdAt), // string → Date
+    registeredAt: dto.createdAt,
     status: 'waiting', // 초기값 설정 (서버에서 제공하지 않음)
   };
 }

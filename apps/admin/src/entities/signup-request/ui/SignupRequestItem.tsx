@@ -5,13 +5,12 @@ import { SignupRequestStatus } from '../model/types';
 import { RequestStatusBadge } from './RequestStatusBadge';
 import { PART_LABELS } from '@/entities/member/model/constants';
 import { MemberTrack } from '@/entities/member/model/types';
-import { formatDateTime } from '@/shared/utils/date';
 
 interface SignupRequestItemProps {
   name: string;
   university: string;
   tracks: MemberTrack[];
-  registeredAt: Date;
+  registeredAt: string;
   checked: boolean;
   status: SignupRequestStatus;
 }
@@ -39,11 +38,8 @@ export const SignupRequestItem = ({
         </div>
 
         <span className="text-body-body11 text-foreground-secondary">
-          <time
-            dateTime={registeredAt.toISOString()}
-            aria-label={`요청 시간  ${formatDateTime(registeredAt)}`}
-          >
-            {formatDateTime(registeredAt)}
+          <time dateTime={registeredAt} aria-label={`요청 시간  ${registeredAt}`}>
+            {registeredAt}
           </time>
         </span>
       </div>

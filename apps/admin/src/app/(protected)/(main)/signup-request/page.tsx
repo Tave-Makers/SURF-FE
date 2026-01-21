@@ -1,5 +1,6 @@
 import { HydrationBoundary, dehydrate } from '@tanstack/react-query';
 import { SignupRequestPage } from '@/app-pages/signup-request/ui/SignupRequestPage';
+import { getSignupRequestListServer } from '@/features/signup-request/api/getSignupRequestListServer';
 import { signupRequestQueryOptions } from '@/features/signup-request/model/queries/signupRequestQueryOptions';
 import { getQueryClient } from '@/shared/lib/tanstack-query/queryClient';
 
@@ -12,7 +13,9 @@ const Page = async () => {
   const queryClient = getQueryClient();
 
   // Server-side prefetch: 첫 페이지 데이터 미리 로드
-  await queryClient.prefetchInfiniteQuery(signupRequestQueryOptions({}));
+  await queryClient.prefetchInfiniteQuery(
+    signupRequestQueryOptions({ filters: {}, fetcher: getSignupRequestListServer }),
+  );
 
   return (
     <HydrationBoundary state={dehydrate(queryClient)}>

@@ -44,5 +44,5 @@ export interface Member {
   university: string;
   profileImageUrl: string;
   tracks: MemberTrack[];
-  registeredAt: Date;
+  registeredAt: string;
 }

@@ -15,7 +15,7 @@ import { SignupRequestFilters } from './signupRequestQueryKeys';
  */
 export function useSignupRequestList(filters: SignupRequestFilters = {}) {
   const { data, fetchNextPage, hasNextPage, isFetchingNextPage, refetch } =
-    useSuspenseInfiniteQuery(signupRequestQueryOptions(filters));
+    useSuspenseInfiniteQuery(signupRequestQueryOptions({ filters }));
 
   return {
     // 필터 정보

@@ -25,8 +25,8 @@ const isHomeApiResponseData: Guard<HomeApiResponseData> = (x): x is HomeApiRespo
   const o = x as Record<string, unknown>;
 
   return (
-    isNullable(isString)(o.message) &&
-    isNullable(isString)(o.sender) &&
+    (o.message === undefined || isNullable(isString)(o.message)) &&
+    (o.sender === undefined || isNullable(isString)(o.sender)) &&
     Array.isArray(o.banners) &&
     o.banners.every(isHomeBanner) &&
     isString(o.memberName) &&

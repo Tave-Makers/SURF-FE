@@ -22,11 +22,7 @@ export const BottomActionBar = ({ actions }: BottomActionBarProps) => {
   if (actions.length > 2) throw new Error('BottomActionBar supports up to 2 actions.');
 
   return (
-    <div
-      className={
-        'fixed bottom-0 left-1/2 z-50 w-dvw -translate-x-1/2 sm:w-[min(100dvw,calc(100dvh*375/812))]'
-      }
-    >
+    <div className="mx-auto flex w-full sm:w-[min(100dvw,calc(100dvh*375/812))]">
       <div
         className={'h-[4.5rem] w-full max-w-screen-sm pb-[calc(env(safe-area-inset-bottom)+12px)]'}
       >
@@ -37,6 +33,7 @@ export const BottomActionBar = ({ actions }: BottomActionBarProps) => {
                 size="l"
                 variant={a.variant || 'primary'}
                 isDisabled={a.disabled}
+                onClick={a.onClick}
                 className="h-full w-full rounded-none"
               >
                 {a.label}

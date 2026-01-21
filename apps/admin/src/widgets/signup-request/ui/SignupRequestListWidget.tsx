@@ -127,7 +127,7 @@ export const SignupRequestListWidget = ({ keyword }: SignupRequestListWidgetProp
         },
         {
           type: 'solid',
-          variant: 'warning',
+          variant: 'danger',
           label: '거절하기',
           onClick: () => {
             closeAlert();

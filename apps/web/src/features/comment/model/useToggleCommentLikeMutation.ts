@@ -46,6 +46,9 @@ export function useToggleCommentLikeMutation(postId: number) {
 
       return { previousAll };
     },
+    onSuccess: () => {
+      // 낙관적 업데이트가 성공하면 추가 fetch 불필요
+    },
     onError: (_error, _commentId, context) => {
       console.error('[useToggleCommentLikeMutation] 좋아요 토글 실패:', _error);
       if (context?.previousAll) {
@@ -53,9 +56,8 @@ export function useToggleCommentLikeMutation(postId: number) {
           queryClient.setQueryData(key, data);
         });
       }
-    },
-    onSettled: async () => {
-      await queryClient.invalidateQueries({ queryKey: baseKey });
+      // 에러 시에만 서버 상태 동기화
+      void queryClient.invalidateQueries({ queryKey: baseKey });
     },
   });
 }

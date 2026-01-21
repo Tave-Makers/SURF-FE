@@ -23,7 +23,7 @@ export function useSignupRequestList(filters: SignupRequestFilters = {}) {
     ...filters,
 
     // 변환된 데이터 (SignupRequestMember[])
-    members: data?.members ?? [],
+    members: data?.items ?? [],
     totalCount: data?.totalCount ?? 0,
     isLast: data?.isLast ?? true,
 

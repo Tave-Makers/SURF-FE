@@ -10,7 +10,7 @@ export interface Track {
 }
 
 /**
- * 가입 신청 아이템 (API 응답)
+ * 가입 신청 아이템
  */
 export interface SignupRequestItem {
   memberId: number;

@@ -1,4 +1,4 @@
-import { SignupRequestMember } from '../model/types';
+import { SignupRequestMember } from '@/entities/signup-request/model/types';
 import { SignupRequestItem } from '@/entities/signup-request/ui/SignupRequestItem';
 
 interface SignupRequestListProps {
@@ -17,7 +17,7 @@ export const SignupRequestList = ({ members }: SignupRequestListProps) => {
   }
 
   return (
-    <div className="flex w-full grow flex-col">
+    <div className="scrollbar-hide flex w-full grow flex-col">
       {members.map((member) => (
         <SignupRequestItem
           key={member.id}
@@ -26,7 +26,7 @@ export const SignupRequestList = ({ members }: SignupRequestListProps) => {
           tracks={member.tracks}
           registeredAt={member.registeredAt}
           checked={false}
-          status="waiting"
+          status={member.status}
         />
       ))}
     </div>

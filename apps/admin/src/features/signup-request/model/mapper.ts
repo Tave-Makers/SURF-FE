@@ -1,10 +1,6 @@
-/**
- * 가입 신청 API DTO ↔ Domain Model 변환 (매퍼)
- */
-
-import { SignupRequestItem, Track } from '../api/types';
-import { SignupRequestMember } from './types';
 import { MemberTrack } from '@/entities/member/model/types';
+import { SignupRequestMember } from '@/entities/signup-request/model/types';
+import { SignupRequestItem, Track } from '../api/types';
 
 /**
  * API Track DTO → 도메인 MemberTrack 변환
@@ -37,5 +33,6 @@ export function toSignupRequestMember(dto: SignupRequestItem): SignupRequestMemb
     profileImageUrl: dto.profileImageUrl,
     tracks: dto.trackList.map(toMemberTrack), // trackList → tracks
     registeredAt: new Date(dto.createdAt), // string → Date
+    status: 'waiting', // 초기값 설정 (서버에서 제공하지 않음)
   };
 }

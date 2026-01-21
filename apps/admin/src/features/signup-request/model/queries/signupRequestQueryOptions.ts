@@ -1,7 +1,14 @@
 import { infiniteQueryOptions } from '@tanstack/react-query';
+import { SignupRequestMember } from '@/entities/signup-request/model/types';
+import {
+  getNextPageNumber,
+  createInfiniteDataSelector,
+  InfiniteSelectResult,
+  PageWithContent,
+} from '@/shared/lib/tanstack-query/infiniteQueryUtils';
 import { signupRequestQueryKeys, SignupRequestFilters } from './signupRequestQueryKeys';
 import { getSignupRequestList } from '../../api/signupRequestApi';
-import { getNextPageNumber, transformInfiniteData } from '../utils';
+import { toSignupRequestMember } from '../mapper';
 import { SIGNUP_REQUEST_PAGE_SIZE, SIGNUP_REQUEST_STALE_TIME } from '../constants';
 import { SignupRequestListParams } from '../../api/types';
 
@@ -9,24 +16,22 @@ import { SignupRequestListParams } from '../../api/types';
  * 가입 신청 목록 무한스크롤 Query 옵션
  *
  * TanStack Query의 infiniteQuery 설정을 정의합니다.
+ * queryFn에서 DTO → Domain Model 매핑을 수행하여 캐시에 저장합니다.
  *
  * @param filters - 필터 조건 (keyword, pageSize)
  * @returns infiniteQueryOptions 객체
- *
- * @example
- * // 기본 사용
- * const options = signupRequestQueryOptions({});
- * useInfiniteQuery(options);
- *
- * // 검색어 필터링
- * const options = signupRequestQueryOptions({ keyword: '홍길동' });
- * useInfiniteQuery(options);
  */
 export function signupRequestQueryOptions(filters: SignupRequestFilters) {
-  return infiniteQueryOptions({
+  return infiniteQueryOptions<
+    PageWithContent<SignupRequestMember>,
+    Error,
+    InfiniteSelectResult<SignupRequestMember>,
+    ReturnType<typeof signupRequestQueryKeys.list>,
+    number
+  >({
     queryKey: signupRequestQueryKeys.list(filters),
 
-    queryFn: ({ pageParam = 0 }) => {
+    queryFn: async ({ pageParam = 0 }) => {
       const params: SignupRequestListParams = {
         pageNum: pageParam,
         pageSize: filters.pageSize || SIGNUP_REQUEST_PAGE_SIZE,
@@ -37,12 +42,19 @@ export function signupRequestQueryOptions(filters: SignupRequestFilters) {
         params.keyword = filters.keyword;
       }
 
-      return getSignupRequestList(params).then((res) => res.data);
+      const response = await getSignupRequestList(params);
+      const { content, ...pageMeta } = response.data;
+
+      // queryFn에서 매핑: 캐시에 Domain Model로 저장
+      return {
+        ...pageMeta,
+        content: content.map(toSignupRequestMember),
+      };
     },
 
     initialPageParam: 0,
     getNextPageParam: getNextPageNumber,
-    select: transformInfiniteData,
+    select: createInfiniteDataSelector<SignupRequestMember>(),
     staleTime: SIGNUP_REQUEST_STALE_TIME,
   });
 }

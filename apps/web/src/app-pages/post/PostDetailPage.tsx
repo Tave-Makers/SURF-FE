@@ -1,15 +1,10 @@
 'use client';
 
-import { Alert } from '@surf/ui/alert';
-import { Avatar } from '@surf/ui/avatar';
 import { HeaderMode } from '@surf/ui/header';
-import { SurfIcon } from '@surf/ui/icon';
-import { SheetItem } from '@surf/ui/sheet';
-import { Sheet } from '@surf/ui/sheet';
+import { useAlertStore } from '@surf/ui/store/alertStore';
 import { useToastStore } from '@surf/ui/store/toastStore';
 import { usePathname, useRouter, useSearchParams } from 'next/navigation';
 import { useEffect, useRef, useState } from 'react';
-import { Sheet as ModalSheet } from 'react-modal-sheet';
 import { usePostDetail } from '@/entities/post/api/usePostDetail';
 import { categoryIdToKey } from '@/entities/post/model/category';
 import { PostHeader } from '@/entities/post/ui/post-header/PostHeader';
@@ -19,6 +14,7 @@ import { useGetPostLikesQuery } from '@/features/post/model/useGetPostLikesQuery
 import { useGetPostScheduleQuery } from '@/features/post/model/useGetPostScheduleQuery';
 import { PAGE_ROUTES } from '@/shared/config/path';
 import { useKeyboardOffset } from '@/shared/hooks/useKeyboardOffset';
+import { useBottomSheetStore } from '@/shared/store/bottomSheetStore';
 import { CommentComposer } from '@/widgets/comment-composer/ui/CommentComposer';
 import { CommentSection } from '@/widgets/comment-section/ui/CommentSection';
 import { AppHeader } from '@/widgets/header/ui/AppHeader';
@@ -34,6 +30,9 @@ const PostDetailPage = ({ postId }: PostDetailPageProps) => {
   const numericPostId = Number(postId);
   const keyboardOffset = useKeyboardOffset();
   const showToast = useToastStore((state) => state.show);
+  const openAlert = useAlertStore((s) => s.open);
+  const closeAlert = useAlertStore((s) => s.close);
+  const openBottomSheet = useBottomSheetStore((s) => s.open);
   const memberId = useAuthStore((s) => s.memberId);
   const scrollRootRef = useRef<HTMLDivElement | null>(null);
 
@@ -61,17 +60,8 @@ const PostDetailPage = ({ postId }: PostDetailPageProps) => {
   } = useGetPostScheduleQuery(numericPostId, scheduleId, !!post?.hasSchedule);
 
   // 좋아요 누른 사람 목록 API
-  const {
-    data: likedUsersData,
-    isLoading: isLikesLoading,
-    isError: isLikesError,
-    refetch: refetchLikedUsers,
-  } = useGetPostLikesQuery(numericPostId, false);
+  const { refetch: refetchLikedUsers } = useGetPostLikesQuery(numericPostId, false);
 
-  const [likedUsersOpen, setLikedUsersOpen] = useState(false);
-
-  const [open, setOpen] = useState(false);
-  const [showDeleteAlert, setShowDeleteAlert] = useState(false);
   const { mutate: deletePostMutate } = useDeletePostMutation();
   const [pendingReply, setPendingReply] = useState<{
     commentId: number;
@@ -100,17 +90,22 @@ const PostDetailPage = ({ postId }: PostDetailPageProps) => {
     }
   }
 
-  const likedUsers = likedUsersData ?? [];
-
-  const openLikedUsers = () => {
-    void refetchLikedUsers();
-    setLikedUsersOpen(true);
+  const openLikedUsers = async () => {
+    const result = await refetchLikedUsers();
+    openBottomSheet({
+      type: 'postLike',
+      props: {
+        likedUsers: result.data ?? [],
+        isLoading: result.isFetching,
+        isError: result.isError,
+      },
+    });
   };
 
   const handleDelete = () => {
     deletePostMutate(numericPostId, {
       onSuccess: () => {
-        setShowDeleteAlert(false);
+        closeAlert();
 
         // 저장된 경로 확인
         const entryPath = sessionStorage.getItem('entry_path');
@@ -124,6 +119,28 @@ const PostDetailPage = ({ postId }: PostDetailPageProps) => {
         }
 
         showToast('게시글이 삭제되었습니다.');
+      },
+    });
+  };
+
+  const handleOpenOptions = () => {
+    openBottomSheet({
+      type: 'postOption',
+      props: {
+        isMine: post.isMine,
+        onEdit: () => router.push(`${pathname}/edit`),
+        onDelete: () => {
+          openAlert({
+            state: 'default',
+            title: '게시글을 정말 삭제하시겠습니까?',
+            infoText: '삭제된 게시글은 복구되지 않습니다.',
+            actions: [
+              { type: 'solid', variant: 'secondary', label: '취소', onClick: closeAlert },
+              { type: 'solid', variant: 'danger', label: '삭제', onClick: handleDelete },
+            ],
+          });
+        },
+        onReport: () => alert('신고 기능 준비 중입니다.'),
       },
     });
   };
@@ -149,7 +166,7 @@ const PostDetailPage = ({ postId }: PostDetailPageProps) => {
             },
             {
               label: 'Dots',
-              onClickIcon: () => setOpen(true),
+              onClickIcon: handleOpenOptions,
             },
           ],
         }}
@@ -172,7 +189,11 @@ const PostDetailPage = ({ postId }: PostDetailPageProps) => {
               }}
             />
 
-            <PostBodySection post={post} schedule={schedule} onClickLikeCount={openLikedUsers} />
+            <PostBodySection
+              post={post}
+              schedule={schedule}
+              onClickLikeCount={() => void openLikedUsers()}
+            />
 
             {/* 댓글 섹션 */}
             <div className="flex h-full flex-col">
@@ -184,149 +205,16 @@ const PostDetailPage = ({ postId }: PostDetailPageProps) => {
               />
             </div>
           </div>
-          {/* 댓글 입력창 */}
-          <CommentComposer
-            postId={numericPostId}
-            keyboardOffset={keyboardOffset}
-            pendingReply={pendingReply}
-            onConsumedReply={handleConsumedReply}
-          />
         </div>
+
+        {/* 댓글 입력창 */}
+        <CommentComposer
+          postId={numericPostId}
+          keyboardOffset={keyboardOffset}
+          pendingReply={pendingReply}
+          onConsumedReply={handleConsumedReply}
+        />
       </div>
-
-      {/* 삭제 Alert */}
-      <Alert
-        state="default"
-        title="게시글을 정말 삭제하시겠습니까?"
-        infoText="삭제된 게시글은 복구되지 않습니다."
-        isOpen={showDeleteAlert}
-        onClose={() => setShowDeleteAlert(false)}
-        actions={[
-          {
-            type: 'solid',
-            variant: 'secondary',
-            label: '취소',
-            onClick: () => setShowDeleteAlert(false),
-          },
-          {
-            type: 'solid',
-            variant: 'danger',
-            label: '삭제',
-            onClick: () => void handleDelete(),
-          },
-        ]}
-      />
-      {/* ============================= */}
-      {/* 좋아요 누른 사용자 Sheet */}
-      {/* ============================= */}
-      <ModalSheet isOpen={likedUsersOpen} onClose={() => setLikedUsersOpen(false)}>
-        <ModalSheet.Container className="!right-0 !left-0 mx-auto w-full sm:max-w-[min(100dvw,calc(100dvh*375/812))]">
-          <ModalSheet.Content>
-            <Sheet title="좋아요를 누른 사람">
-              <div className="flex flex-col">
-                {/* 로딩 */}
-                {isLikesLoading && (
-                  <div className="py-4 text-center text-gray-500">불러오는 중...</div>
-                )}
-
-                {/* 에러 */}
-                {isLikesError && (
-                  <div className="py-4 text-center text-red-500">
-                    좋아요 목록을 불러오지 못했습니다.
-                  </div>
-                )}
-
-                {/* 목록 */}
-                {!isLikesLoading &&
-                  !isLikesError &&
-                  likedUsers.map((user, index) => {
-                    if (!user.id) {
-                      return (
-                        <SheetItem
-                          key={`withdrawn-${index}`}
-                          title={user.name} // '탈퇴한 회원'으로 표시됨
-                          node={<Avatar size="xs" className="rounded-3!" />}
-                        />
-                      );
-                    }
-
-                    return (
-                      <SheetItem
-                        key={user.id}
-                        title={user.name}
-                        node={
-                          <Avatar size="xs" src={user.profileImageUrl} className="rounded-3!" />
-                        }
-                        onClick={() => {
-                          router.push(PAGE_ROUTES.MEMBER.PROFILE(user.id!));
-                        }}
-                      />
-                    );
-                  })}
-
-                {/* 비어 있을 때 */}
-                {!isLikesLoading && !isLikesError && likedUsers.length === 0 && (
-                  <div className="py-4 text-center text-gray-500">좋아요가 없습니다.</div>
-                )}
-              </div>
-            </Sheet>
-          </ModalSheet.Content>
-        </ModalSheet.Container>
-
-        <ModalSheet.Backdrop onTap={() => setLikedUsersOpen(false)} />
-      </ModalSheet>
-      {/* ============================= */}
-      {/* 삭제/수정/신고 Sheet*/}
-      {/* ============================= */}
-      <ModalSheet isOpen={open} onClose={() => setOpen(false)}>
-        <ModalSheet.Container className="!right-0 !left-0 mx-auto w-full sm:max-w-[min(100dvw,calc(100dvh*375/812))]">
-          <ModalSheet.Content>
-            <Sheet title="게시글 옵션">
-              <div className="flex flex-col">
-                {post.isMine ? (
-                  <>
-                    {/* 수정하기 */}
-                    <SheetItem
-                      title="수정하기"
-                      node={<SurfIcon name="EditSolid" />}
-                      onClick={() => {
-                        setOpen(false);
-                        router.push(`${pathname}/edit`);
-                      }}
-                    />
-
-                    {/* 삭제하기 */}
-                    <SheetItem
-                      title="삭제하기"
-                      node={<SurfIcon name="TrashOneSolid" className="text-foreground-danger" />}
-                      onClick={() => {
-                        setOpen(false);
-                        setShowDeleteAlert(true);
-                      }}
-                      textColor="danger"
-                    />
-                  </>
-                ) : (
-                  <>
-                    {/* 신고하기 */}
-                    <SheetItem
-                      title="신고하기"
-                      // TODO: 신고 아이콘 추가
-                      // node={<SurfIcon name="" />}
-                      onClick={() => {
-                        setOpen(false);
-                        // TODO: 신고하기 기능 연동
-                        alert('신고 기능 준비 중입니다.');
-                      }}
-                    />
-                  </>
-                )}
-              </div>
-            </Sheet>
-          </ModalSheet.Content>
-        </ModalSheet.Container>
-        <ModalSheet.Backdrop onClick={() => setOpen(false)} />
-      </ModalSheet>
     </div>
   );
 };

@@ -1,7 +1,7 @@
 import { HeaderMode } from '@surf/ui/header';
+import HeaderLogo from '../../../../public/admin-header-logo.svg';
 import { AppHeader } from '@/widgets/header/ui/AppHeader';
 import { AppNavigation } from '@/widgets/navigation/ui/AppNavigation';
-import HeaderLogo from 'public/admin-header-logo.svg';
 
 export const HomePage = () => {
   return (

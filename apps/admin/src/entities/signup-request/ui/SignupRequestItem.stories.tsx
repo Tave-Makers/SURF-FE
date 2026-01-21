@@ -6,10 +6,14 @@ const meta: Meta<typeof SignupRequestItem> = {
   component: SignupRequestItem,
   args: {
     name: 'Tavee',
-    timestamp: '2025-01-15 16:32',
-    infoTags: ['15기 디자인', '16기 프론트'],
+    university: '서울대학교',
+    tracks: [
+      { generation: 15, part: 'DESIGN' },
+      { generation: 16, part: 'WEB_FRONTEND' },
+    ],
+    registeredAt: new Date('2025-01-15T16:32:00'),
     status: 'waiting',
-    isChecked: false,
+    checked: false,
   },
   argTypes: {
     status: {
@@ -26,7 +30,7 @@ export const Default: Story = {};
 
 export const Checked: Story = {
   args: {
-    isChecked: true,
+    checked: true,
   },
 };
 

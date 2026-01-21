@@ -6,11 +6,13 @@ import type {
   SignupRequestStatus,
 } from '@/entities/signup-request/model/types';
 import type { PageWithContent } from '@/shared/lib/tanstack-query/infiniteQueryUtils';
+import type { CommonResponse } from '@/shared/api/types';
 import {
   signupRequestQueryKeys,
   SignupRequestFilters,
   normalizeSignupRequestFilters,
 } from './queries/signupRequestQueryKeys';
+import { updateSignupRequest } from '../api/updateSignupRequest';
 
 type UpdateSignupRequestStatusParams = {
   memberIds: number[];
@@ -21,11 +23,10 @@ type UpdateSignupRequestStatusParams = {
 export const useUpdateSignupRequestStatusMutation = () => {
   const queryClient = useQueryClient();
 
-  return useMutation<UpdateSignupRequestStatusParams, Error, UpdateSignupRequestStatusParams>({
+  return useMutation<CommonResponse<null>, Error, UpdateSignupRequestStatusParams>({
     mutationKey: ['signup-request', 'update'],
-    // TODO: API 연동 시 mutationFn을 실제 요청으로 교체.
-    mutationFn: (params) => Promise.resolve(params),
-    onSuccess: (params) => {
+    mutationFn: (params) => updateSignupRequest(params.memberIds, params.nextStatus),
+    onSuccess: (_data, params) => {
       const normalizedFilters = normalizeSignupRequestFilters(params.filters);
       const queryKey = signupRequestQueryKeys.list(normalizedFilters);
 

@@ -17,7 +17,6 @@ interface SignupRequestItemProps {
 }
 export const SignupRequestItem = ({
   name,
-  university,
   tracks,
   registeredAt,
   status,
@@ -34,7 +33,6 @@ export const SignupRequestItem = ({
       <div className="flex w-full grow flex-col items-start gap-5 overflow-hidden">
         <h3 className="text-body-body6 text-foreground-normal">{name}</h3>
         <div className="flex flex-row gap-5">
-          <InfoBadge text={university} />
           {tracks.map((track, idx) => (
             <InfoBadge key={idx} text={`${track.generation}기 ${PART_LABELS[track.part]}`} />
           ))}

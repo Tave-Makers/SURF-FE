@@ -5,7 +5,7 @@
 /**
  * 가입 신청 목록 페이지 크기
  */
-export const SIGNUP_REQUEST_PAGE_SIZE = 10;
+export const SIGNUP_REQUEST_PAGE_SIZE = 20;
 
 /**
  * 가입 신청 목록 stale time (30초)

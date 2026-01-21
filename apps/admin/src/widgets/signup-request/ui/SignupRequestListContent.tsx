@@ -1,34 +1,47 @@
 'use client';
 
-import { useSignupRequestList } from '@/features/signup-request/model/queries/useSignupRequestList';
+import { SignupRequestMember } from '@/entities/signup-request/model/types';
 import { SignupRequestList } from '@/features/signup-request/ui/SignupRequestList';
 import { useInfiniteScroll } from '@/shared/hooks/useInfiniteScroll';
 
 interface SignupRequestListContentProps {
-  keyword: string;
+  members: SignupRequestMember[];
+  isSelectionEnabled: boolean;
+  selectedIds: Set<number>;
+  onToggleSelect: (memberId: number) => void;
+  hasNextPage: boolean;
+  isFetchingNextPage: boolean;
+  onLoadMore: () => void;
 }
 
 /**
  * 가입 신청 목록 콘텐츠 컴포넌트
  *
  */
-export const SignupRequestListContent = ({ keyword }: SignupRequestListContentProps) => {
-  const { members, fetchNextPage, hasNextPage, isFetchingNextPage } = useSignupRequestList({
-    keyword,
-  });
-
+export const SignupRequestListContent = ({
+  members,
+  isSelectionEnabled,
+  selectedIds,
+  onToggleSelect,
+  hasNextPage,
+  isFetchingNextPage,
+  onLoadMore,
+}: SignupRequestListContentProps) => {
   // 무한 스크롤 트리거
   const triggerRef = useInfiniteScroll({
     hasNextPage,
     isFetching: isFetchingNextPage,
-    onLoadMore: () => {
-      void fetchNextPage();
-    },
+    onLoadMore,
   });
 
   return (
     <div className="scrollbar-hide flex-1 overflow-y-auto">
-      <SignupRequestList members={members} />
+      <SignupRequestList
+        members={members}
+        isSelectionEnabled={isSelectionEnabled}
+        selectedIds={selectedIds}
+        onToggleSelect={onToggleSelect}
+      />
       {/* 무한 스크롤 트리거 */}
       <div ref={triggerRef} className="h-10" />
       {isFetchingNextPage && (

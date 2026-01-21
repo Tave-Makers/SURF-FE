@@ -1,6 +1,7 @@
 import { Checkbox } from '@surf/ui/checkbox';
 import { SurfIcon } from '@surf/ui/icon';
 import { InfoBadge } from '@surf/ui/info-badge';
+import type { ChangeEvent } from 'react';
 import { SignupRequestStatus } from '../model/types';
 import { RequestStatusBadge } from './RequestStatusBadge';
 import { PART_LABELS } from '@/entities/member/model/constants';
@@ -13,6 +14,8 @@ interface SignupRequestItemProps {
   registeredAt: string;
   checked: boolean;
   status: SignupRequestStatus;
+  isSelectionEnabled?: boolean;
+  onToggle: (e: ChangeEvent<HTMLInputElement>) => void;
 }
 export const SignupRequestItem = ({
   name,
@@ -20,6 +23,8 @@ export const SignupRequestItem = ({
   registeredAt,
   status,
   checked,
+  isSelectionEnabled = false,
+  onToggle,
 }: SignupRequestItemProps) => {
   return (
     <div
@@ -27,7 +32,9 @@ export const SignupRequestItem = ({
         checked ? 'bg-background-notification' : ''
       }`}
     >
-      <Checkbox />
+      {isSelectionEnabled && (
+        <Checkbox isChecked={checked} onChange={onToggle} isDisabled={!isSelectionEnabled} />
+      )}
 
       <div className="flex w-full grow flex-col items-start gap-5 overflow-hidden">
         <h3 className="text-body-body6 text-foreground-normal">{name}</h3>

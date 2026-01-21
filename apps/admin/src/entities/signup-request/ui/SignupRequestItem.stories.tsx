@@ -11,7 +11,7 @@ const meta: Meta<typeof SignupRequestItem> = {
       { generation: 15, part: 'DESIGN' },
       { generation: 16, part: 'WEB_FRONTEND' },
     ],
-    registeredAt: new Date('2025-01-15T16:32:00'),
+    registeredAt: '25.06.30 12:12',
     status: 'waiting',
     checked: false,
   },

@@ -28,6 +28,7 @@ interface CommentProps {
   likeCount: number;
   isLiked: boolean;
   onLikeToggle?: (newState: boolean) => void;
+  onProfileClick?: () => void;
   onReplyClick?: () => void;
   onMoreClick?: () => void;
 }
@@ -61,16 +62,24 @@ export const Comment = ({
   likeCount,
   isLiked,
   onLikeToggle,
+  onProfileClick,
   onReplyClick,
   onMoreClick,
 }: CommentProps) => {
   const handleLikeToggle = () => {
     onLikeToggle?.(!isLiked);
   };
+  const isProfileClickable = Boolean(onProfileClick);
 
   return (
     <article className="flex w-full gap-11" aria-label={`${name}님의 댓글`}>
-      <Avatar src={profileImageUrl ?? undefined} size="s" alt={`${name}님의 프로필 이미지`} />
+      <Avatar
+        src={profileImageUrl ?? undefined}
+        size="s"
+        alt={`${name}님의 프로필 이미지`}
+        className={isProfileClickable ? 'cursor-pointer' : 'cursor-default'}
+        onClick={onProfileClick}
+      />
 
       <div className="flex flex-col gap-7">
         {/* 이름, 날짜, 시간, 더보기 */}

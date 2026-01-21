@@ -5,6 +5,7 @@ import { Sheet } from '@surf/ui/sheet';
 import { SheetItem } from '@surf/ui/sheet';
 import { useAlertStore } from '@surf/ui/store/alertStore';
 import { useToastStore } from '@surf/ui/store/toastStore';
+import { useRouter } from 'next/navigation';
 import { useEffect, useRef, useState } from 'react';
 import { Sheet as ModalSheet } from 'react-modal-sheet';
 import { useAuthStore } from '@/features/auth/model/useAuthStore';
@@ -15,6 +16,7 @@ import { useInfiniteCommentsQuery } from '@/features/comment/model/useInfiniteCo
 import { useToggleCommentLikeMutation } from '@/features/comment/model/useToggleCommentLikeMutation';
 import { Comment } from '@/features/comment/ui/Comment';
 import CommentsEmpty from '@/shared/assets/icons/empty-space/comments-empty.svg';
+import { PAGE_ROUTES } from '@/shared/config/path';
 import { toDate, toKST, formatDateTime } from '@/shared/utils/date';
 
 interface Props {
@@ -26,7 +28,9 @@ interface Props {
 }
 
 export const CommentSection = ({ postId, memberId, scrollRootRef, onStartReply }: Props) => {
+  const router = useRouter();
   const myId = useAuthStore((s) => s.memberId);
+  const isClickable = memberId !== null;
 
   const showToast = useToastStore((s) => s.show);
   const openAlert = useAlertStore((s) => s.open);
@@ -151,6 +155,13 @@ export const CommentSection = ({ postId, memberId, scrollRootRef, onStartReply }
                     mentions={c.mentions}
                     likeCount={c.likeCount}
                     isLiked={c.liked}
+                    onProfileClick={
+                      isClickable
+                        ? () => {
+                            router.push(PAGE_ROUTES.MEMBER.PROFILE(c.memberId));
+                          }
+                        : undefined
+                    }
                     onLikeToggle={() =>
                       toggleLikeMutation.mutate(c.id, {
                         onError: () => showToast('좋아요 처리에 실패했어요'),

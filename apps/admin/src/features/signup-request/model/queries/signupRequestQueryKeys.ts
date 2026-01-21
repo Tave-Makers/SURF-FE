@@ -6,6 +6,16 @@ export interface SignupRequestFilters {
   pageSize?: number;
 }
 
+export function normalizeSignupRequestFilters(filters: SignupRequestFilters): SignupRequestFilters {
+  const normalized = { ...filters };
+
+  if (!normalized.keyword) {
+    delete normalized.keyword;
+  }
+
+  return normalized;
+}
+
 /**
  * 가입 신청 관련 Query Keys
  *

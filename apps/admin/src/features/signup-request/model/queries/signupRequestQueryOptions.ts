@@ -6,7 +6,11 @@ import {
   InfiniteSelectResult,
   PageWithContent,
 } from '@/shared/lib/tanstack-query/infiniteQueryUtils';
-import { signupRequestQueryKeys, SignupRequestFilters } from './signupRequestQueryKeys';
+import {
+  signupRequestQueryKeys,
+  SignupRequestFilters,
+  normalizeSignupRequestFilters,
+} from './signupRequestQueryKeys';
 
 import { toSignupRequestMember } from '../mapper';
 import { SIGNUP_REQUEST_PAGE_SIZE, SIGNUP_REQUEST_STALE_TIME } from '../constants';
@@ -32,10 +36,7 @@ export function signupRequestQueryOptions({
   filters,
   fetcher = getSignupRequestListClient,
 }: SignupRequestQueryOptionsParams) {
-  const normalizedFilters: SignupRequestFilters = { ...filters };
-  if (!normalizedFilters.keyword) {
-    delete normalizedFilters.keyword;
-  }
+  const normalizedFilters = normalizeSignupRequestFilters(filters);
 
   return infiniteQueryOptions<
     PageWithContent<SignupRequestMember>,

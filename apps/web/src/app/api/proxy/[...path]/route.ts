@@ -108,8 +108,9 @@ async function buildResponse(upstream: Response, setCookies: string[], path: str
       });
     }
 
-    if (isLogoutPath(path)) {
+    if (isLogoutPath(path) || isWithdrawPath(path)) {
       clearAccessTokenCookie(res);
+      clearRefreshTokenCookie(res);
     }
 
     return res;
@@ -135,8 +136,9 @@ async function buildResponse(upstream: Response, setCookies: string[], path: str
     }
   }
 
-  if (isLogoutPath(path)) {
+  if (isLogoutPath(path) || isWithdrawPath(path)) {
     clearAccessTokenCookie(res);
+    clearRefreshTokenCookie(res);
   }
 
   return res;
@@ -177,6 +179,16 @@ function isLogoutPath(path: string[]): boolean {
   return path.length >= 2 && path[0] === 'auth' && path[1] === 'logout';
 }
 
+function isWithdrawPath(path: string[]): boolean {
+  return (
+    path.length >= 4 &&
+    path[0] === 'v1' &&
+    path[1] === 'user' &&
+    path[2] === 'members' &&
+    path[3] === 'withdraw'
+  );
+}
+
 function clearAccessTokenCookie(res: NextResponse) {
   res.cookies.set({
     name: 'accessToken',
@@ -185,6 +197,18 @@ function clearAccessTokenCookie(res: NextResponse) {
     secure: !IS_DEV,
     sameSite: 'lax',
     path: '/',
+    maxAge: 0,
+  });
+}
+
+function clearRefreshTokenCookie(res: NextResponse) {
+  res.cookies.set({
+    name: 'refreshToken',
+    value: '',
+    httpOnly: true,
+    secure: !IS_DEV,
+    sameSite: 'lax',
+    path: '/auth/refresh',
     maxAge: 0,
   });
 }

@@ -1,16 +1,13 @@
 'use client';
 
 import { useAlertStore } from '@surf/ui/store/alertStore';
-import { useRouter, useSearchParams } from 'next/navigation';
+import { useSearchParams } from 'next/navigation';
 import { useEffect } from 'react';
 import Logo from '../../../../public/logo.svg';
 import { KakaoLoginButton } from '@/features/auth/ui/KakaoLoginButton';
 
-import { PAGE_ROUTES } from '@/shared/config/path';
-
 export const LoginPage = () => {
   const searchParams = useSearchParams();
-  const router = useRouter();
   const openAlert = useAlertStore((s) => s.open);
   const closeAlert = useAlertStore((s) => s.close);
 
@@ -20,7 +17,6 @@ export const LoginPage = () => {
     if (!msg) return;
 
     if (msg === 'pending') {
-      router.replace(PAGE_ROUTES.LOGIN);
       openAlert({
         state: 'default',
         title: '회원가입 대기중이에요!',
@@ -37,7 +33,7 @@ export const LoginPage = () => {
         ],
       });
     }
-  }, [msg, openAlert, closeAlert, router]);
+  }, [msg, openAlert, closeAlert]);
 
   return (
     <div className="flex h-dvh w-dvw flex-col items-center gap-[6.75rem] px-15 pt-[16.81rem]">

@@ -57,7 +57,7 @@ export const LoginForm = () => {
         e.preventDefault();
         void handleSubmit(onSubmit)(e);
       }}
-      aria-label="어드민 로그인 폼"
+      aria-label="게스트 로그인 폼"
     >
       <div className="flex w-full flex-col gap-16">
         <FieldGroup title="이메일" isRequired className="w-full">
@@ -81,7 +81,7 @@ export const LoginForm = () => {
             )}
           />
         </FieldGroup>
-        <FieldGroup title="Admin 비밀번호" isRequired>
+        <FieldGroup title="비밀번호" isRequired>
           <Controller
             control={control}
             name="password"

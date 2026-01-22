@@ -1,41 +1,57 @@
 import { Checkbox } from '@surf/ui/checkbox';
 import { SurfIcon } from '@surf/ui/icon';
 import { InfoBadge } from '@surf/ui/info-badge';
+import type { ChangeEvent } from 'react';
 import { SignupRequestStatus } from '../model/types';
 import { RequestStatusBadge } from './RequestStatusBadge';
+import { PART_LABELS } from '@/entities/member/model/constants';
+import { MemberTrack } from '@/entities/member/model/types';
 
-interface SignupRequestItem {
+interface SignupRequestItemProps {
   name: string;
-  infoTags: string[];
-  timestamp: string;
-  isChecked: boolean;
+  university: string;
+  tracks: MemberTrack[];
+  registeredAt: string;
+  checked: boolean;
   status: SignupRequestStatus;
+  isSelectionEnabled?: boolean;
+  onToggle: (e: ChangeEvent<HTMLInputElement>) => void;
 }
 export const SignupRequestItem = ({
   name,
-  infoTags,
-  timestamp,
+  tracks,
+  registeredAt,
   status,
-  isChecked,
-}: SignupRequestItem) => {
+  checked,
+  isSelectionEnabled = false,
+  onToggle,
+}: SignupRequestItemProps) => {
   return (
     <div
       className={`border-border-secondary flex flex-row items-start gap-13 border-b px-14 py-11 ${
-        isChecked ? 'bg-background-notification' : ''
+        checked ? 'bg-background-notification' : ''
       }`}
     >
-      <Checkbox />
+      {isSelectionEnabled && (
+        <Checkbox
+          isChecked={checked}
+          onChange={onToggle}
+          isDisabled={!isSelectionEnabled}
+          aria-label={`${name} 선택`}
+        />
+      )}
 
       <div className="flex w-full grow flex-col items-start gap-5 overflow-hidden">
         <h3 className="text-body-body6 text-foreground-normal">{name}</h3>
         <div className="flex flex-row gap-5">
-          <InfoBadge text={infoTags[0]} />
-          {infoTags.length > 1 && <InfoBadge text={`+ ${infoTags.length - 1}`} />}
+          {tracks.map((track, idx) => (
+            <InfoBadge key={idx} text={`${track.generation}기 ${PART_LABELS[track.part]}`} />
+          ))}
         </div>
 
         <span className="text-body-body11 text-foreground-secondary">
-          <time dateTime={timestamp} aria-label={`요청 시간  ${timestamp}`}>
-            {timestamp}
+          <time dateTime={registeredAt} aria-label={`요청 시간  ${registeredAt}`}>
+            {registeredAt}
           </time>
         </span>
       </div>

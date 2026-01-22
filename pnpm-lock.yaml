@@ -56,6 +56,9 @@ importers:
       next:
         specifier: 15.5.9
         version: 15.5.9(@babel/core@7.28.5)(babel-plugin-react-compiler@1.0.0)(react-dom@19.1.0(react@19.1.0))(react@19.1.0)
+      next-themes:
+        specifier: ^0.4.6
+        version: 0.4.6(react-dom@19.1.0(react@19.1.0))(react@19.1.0)
       react:
         specifier: 19.1.0
         version: 19.1.0
@@ -11352,7 +11355,7 @@ snapshots:
       tinyglobby: 0.2.15
       unrs-resolver: 1.11.1
     optionalDependencies:
-      eslint-plugin-import: 2.32.0(eslint-import-resolver-typescript@4.4.4)(eslint@9.39.1(jiti@2.6.1))
+      eslint-plugin-import: 2.32.0(@typescript-eslint/parser@8.50.0(eslint@9.39.1(jiti@2.6.1))(typescript@5.9.2))(eslint-import-resolver-typescript@4.4.4)(eslint@9.39.1(jiti@2.6.1))
     transitivePeerDependencies:
       - supports-color
 

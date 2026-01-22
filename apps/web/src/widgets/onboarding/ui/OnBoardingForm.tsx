@@ -145,6 +145,11 @@ export const OnBoardingForm = ({ step, setStep }: OnBoardingFormProps) => {
     await submitOnBoarding(submitData);
     useAgreementStore.getState().resetAgreements();
 
+    const timeoutId = window.setTimeout(() => {
+      closeAlert();
+      router.push(PAGE_ROUTES.LOGIN);
+    }, 3000);
+
     openAlert({
       state: 'default',
       title: '회원가입이 완료되었어요!',
@@ -156,8 +161,9 @@ export const OnBoardingForm = ({ step, setStep }: OnBoardingFormProps) => {
           variant: 'primary',
           label: '확인',
           onClick: () => {
-            router.push(PAGE_ROUTES.LOGIN);
             closeAlert();
+            clearTimeout(timeoutId);
+            router.push(PAGE_ROUTES.LOGIN);
           },
         },
       ],

@@ -99,17 +99,15 @@ export const CommentSection = ({ postId, memberId, scrollRootRef, onStartReply }
           label: '삭제하기',
           onClick: () => {
             closeAlert();
-            window.setTimeout(() => {
-              void (async () => {
-                try {
-                  await deleteMutation.mutateAsync(commentId);
-                  showToast('댓글이 삭제됐어요');
-                } catch (e) {
-                  console.error(e);
-                  showToast('댓글 삭제에 실패했어요');
-                }
-              })();
-            }, 0);
+            void (async () => {
+              try {
+                await deleteMutation.mutateAsync(commentId);
+                showToast('댓글이 삭제됐어요');
+              } catch (e) {
+                console.error(e);
+                showToast('댓글 삭제에 실패했어요');
+              }
+            })();
           },
         },
       ],

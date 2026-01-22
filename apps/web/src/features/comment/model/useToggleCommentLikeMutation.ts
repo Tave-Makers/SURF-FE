@@ -1,45 +1,63 @@
-import { useMutation, useQueryClient } from '@tanstack/react-query';
+import { useMutation, useQueryClient, type InfiniteData } from '@tanstack/react-query';
 import { toggleCommentLike } from '@/features/comment/api/toggleCommentLike.client';
-import type { CommentListResponse } from '@/features/comment/api/types';
+import type { CommentListResponse, CommentResponse } from '@/features/comment/api/types';
 
-export function useToggleCommentLikeMutation(postId: number, page: number, size: number) {
+export function useToggleCommentLikeMutation(postId: number) {
   const queryClient = useQueryClient();
-  const key = ['comments', postId, page, size] as const;
-  const invalidateKey = ['comments', postId] as const;
+  const baseKey = ['comments', postId, 'list'] as const;
+
+  const toggleLike = (comments: CommentResponse[], commentId: number) =>
+    comments.map((comment) => {
+      if (comment.id !== commentId) return comment;
+      const nextLiked = !comment.liked;
+      const delta = nextLiked ? 1 : -1;
+      return {
+        ...comment,
+        liked: nextLiked,
+        likeCount: Math.max(0, comment.likeCount + delta),
+      };
+    });
 
   return useMutation({
     mutationFn: (commentId: number) => toggleCommentLike(commentId),
     onMutate: async (commentId) => {
-      await queryClient.cancelQueries({ queryKey: key });
-      const previous = queryClient.getQueryData<CommentListResponse>(key);
+      await queryClient.cancelQueries({ queryKey: baseKey });
+      const previousAll = queryClient.getQueriesData<
+        CommentListResponse | InfiniteData<CommentListResponse>
+      >({ queryKey: baseKey });
 
-      if (previous) {
-        const next: CommentListResponse = {
-          ...previous,
-          comments: previous.comments.map((comment) => {
-            if (comment.id !== commentId) return comment;
-            const nextLiked = !comment.liked;
-            const delta = nextLiked ? 1 : -1;
-            return {
-              ...comment,
-              liked: nextLiked,
-              likeCount: Math.max(0, comment.likeCount + delta),
-            };
-          }),
-        };
-        queryClient.setQueryData(key, next);
-      }
+      queryClient.setQueriesData({ queryKey: baseKey }, (old) => {
+        if (!old) return old;
 
-      return { previous };
+        if ('pages' in (old as InfiniteData<CommentListResponse>)) {
+          const data = old as InfiniteData<CommentListResponse>;
+          return {
+            ...data,
+            pages: data.pages.map((pageData) => ({
+              ...pageData,
+              comments: toggleLike(pageData.comments, commentId),
+            })),
+          };
+        }
+
+        const data = old as CommentListResponse;
+        return { ...data, comments: toggleLike(data.comments, commentId) };
+      });
+
+      return { previousAll };
+    },
+    onSuccess: () => {
+      // 낙관적 업데이트가 성공하면 추가 fetch 불필요
     },
     onError: (_error, _commentId, context) => {
       console.error('[useToggleCommentLikeMutation] 좋아요 토글 실패:', _error);
-      if (context?.previous) {
-        queryClient.setQueryData(key, context.previous);
+      if (context?.previousAll) {
+        context.previousAll.forEach(([key, data]) => {
+          queryClient.setQueryData(key, data);
+        });
       }
-    },
-    onSettled: async () => {
-      await queryClient.invalidateQueries({ queryKey: invalidateKey });
+      // 에러 시에만 서버 상태 동기화
+      void queryClient.invalidateQueries({ queryKey: baseKey });
     },
   });
 }

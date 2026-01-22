@@ -3,8 +3,8 @@ import { mapMemberPartToBatch } from '@/entities/user/model/mappers';
 
 export const mapHomeDataToHomeUI = (data: HomeApiResponseData) => {
   return {
-    noticeDataMainText: data.mainText,
-    //noticeDataSender: data.senderName,
+    noticeDataMessage: data.message,
+    noticeDataSender: data.sender,
     carouselImages: mapBannersToCarouselImages(data.banners),
     userName: data.memberName,
     userBatch: data.memberGeneration,

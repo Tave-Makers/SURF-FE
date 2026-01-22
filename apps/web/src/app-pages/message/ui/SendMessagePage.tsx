@@ -156,10 +156,10 @@ export const SendMessagePage = () => {
 
       <Callout userImage={profileImageUrl} userName={nickname} />
 
-      <div className="scrollbar-hide flex w-full flex-1 flex-col gap-[1.875rem] overflow-y-auto px-[1.5rem] py-[1rem]">
+      <div className="flex w-full flex-1 flex-col gap-[1.875rem] overflow-y-auto px-[1.5rem] py-[1rem]">
         <FieldGroup title="회신받을 본인 이메일" isRequired>
           <TextArea
-            placeholder="ex. tavemakers@gmail.com"
+            placeholder="ex) tavemakers@gmail.com"
             value={senderEmail}
             onChange={setSenderEmail}
             readOnly={isPending}
@@ -185,7 +185,7 @@ export const SendMessagePage = () => {
         </FieldGroup>
         <FieldGroup title="본문" isRequired>
           <TextArea
-            placeholder="해당 멤버에게 궁금한 내용을 자세하게 작성해주세요. 이야기 나누고 싶은 주제를 쉽게 이해할 수 있도록 회원님에 대해 간단하게 소개해 주시면 더 좋아요"
+            placeholder="해당 멤버에게 궁금한 내용을 자세하게 작성해주세요. 이야기 나누고 싶은 주제를 쉽게 이해할 수 있도록 회원님에 대해 간단하게 소개해 주시면 더 좋아요."
             value={content}
             onChange={setContent}
             mode="multiLine"

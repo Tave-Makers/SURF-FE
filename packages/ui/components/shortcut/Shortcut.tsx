@@ -1,18 +1,16 @@
 interface ShortcutProps {
   type: 'circle' | 'rectangle';
   label: string;
-  imageSrc?: React.FC<React.SVGProps<SVGSVGElement>>;
+  imageSrc: string;
   onClick?: () => void;
 }
 
 export const Shortcut = ({ type, label, imageSrc, onClick }: ShortcutProps) => {
-  const SvgIcon = typeof imageSrc === 'function' ? imageSrc : null;
-
   if (type === 'circle') {
     return (
       <button className="flex w-full flex-col items-center gap-7" onClick={onClick}>
         <div className="h-[2.5rem] w-[2.5rem] overflow-hidden rounded-full bg-gray-200">
-          {SvgIcon && <SvgIcon aria-hidden="true" className="h-[40px] w-[40px]" />}
+          <img src={imageSrc} alt={label} className="h-full w-full object-cover" />
         </div>
         <span className="text-caption-caption6">{label}</span>
       </button>
@@ -30,7 +28,7 @@ export const Shortcut = ({ type, label, imageSrc, onClick }: ShortcutProps) => {
 
       {/* 이미지 영역 */}
       <div className="w-full flex-1 bg-gray-200">
-        {SvgIcon && <SvgIcon aria-hidden="true" className="h-full w-full" />}
+        <img src={imageSrc} alt={label} className="h-full w-full object-cover" />
       </div>
     </button>
   );

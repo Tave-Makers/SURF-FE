@@ -58,10 +58,10 @@ async function proxy(req: NextRequest, path: string[]) {
   console.log('[proxy] upstream content-type:', upstream.headers.get('content-type'));
   console.log('[proxy] upstream set-cookie:', setCookies);
 
-  return buildResponse(upstream, setCookies);
+  return buildResponse(upstream, setCookies, path);
 }
 
-async function buildResponse(upstream: Response, setCookies: string[]) {
+async function buildResponse(upstream: Response, setCookies: string[], path: string[]) {
   const contentType = upstream.headers.get('content-type') ?? '';
   const refreshValueFromUpstream = findCookieValue(setCookies, 'refreshToken');
 
@@ -108,6 +108,10 @@ async function buildResponse(upstream: Response, setCookies: string[]) {
       });
     }
 
+    if (isLogoutPath(path)) {
+      clearAccessTokenCookie(res);
+    }
+
     return res;
   }
 
@@ -129,6 +133,10 @@ async function buildResponse(upstream: Response, setCookies: string[]) {
         path: '/auth/refresh',
       });
     }
+  }
+
+  if (isLogoutPath(path)) {
+    clearAccessTokenCookie(res);
   }
 
   return res;
@@ -163,6 +171,22 @@ function findCookieValue(setCookies: string[], cookieName: string): string | nul
     return value || null;
   }
   return null;
+}
+
+function isLogoutPath(path: string[]): boolean {
+  return path.length >= 2 && path[0] === 'auth' && path[1] === 'logout';
+}
+
+function clearAccessTokenCookie(res: NextResponse) {
+  res.cookies.set({
+    name: 'accessToken',
+    value: '',
+    httpOnly: true,
+    secure: !IS_DEV,
+    sameSite: 'lax',
+    path: '/',
+    maxAge: 0,
+  });
 }
 
 function isRecord(v: unknown): v is Record<string, unknown> {

@@ -13,6 +13,7 @@ export interface PageMeta {
 
 export type ServerFetchOptions = Omit<globalThis.RequestInit, 'headers'> & {
   headers?: Record<string, string>;
+  authRedirect?: boolean;
 };
 
 export type Guard<T> = (x: unknown) => x is T;

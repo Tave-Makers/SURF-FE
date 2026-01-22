@@ -1,5 +1,7 @@
 import 'server-only';
+import { redirect } from 'next/navigation';
 import { cookies, headers } from 'next/headers';
+import { PAGE_ROUTES } from '@/shared/config/path';
 import type { ServerFetchOptions } from './types';
 
 async function getBaseUrl(): Promise<string> {
@@ -28,14 +30,21 @@ export async function serverFetchWithCookies(path: string, options: ServerFetchO
   const cookieStore = await cookies();
   const cookie = buildCookieHeader(cookieStore);
 
+  const { authRedirect = true, ...fetchOptions } = options;
   const headersObj: Record<string, string> = {
-    ...(options.headers ?? {}),
+    ...(fetchOptions.headers ?? {}),
     ...(cookie ? { cookie } : {}),
   };
 
-  return fetch(url, {
-    ...options,
+  const res = await fetch(url, {
+    ...fetchOptions,
     headers: headersObj,
-    cache: options.cache ?? 'no-store',
+    cache: fetchOptions.cache ?? 'no-store',
   });
+
+  if (authRedirect && (res.status === 401 || res.status === 403)) {
+    redirect(PAGE_ROUTES.LOGIN);
+  }
+
+  return res;
 }

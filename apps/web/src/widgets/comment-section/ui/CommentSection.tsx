@@ -172,7 +172,11 @@ export const CommentSection = ({ postId, memberId, scrollRootRef, onStartReply }
 
             {comments.length === 0 && (
               <div className="flex h-full flex-col items-center justify-center gap-3 pt-[3rem]">
-                <CommentsEmpty className="h-[3.16rem] w-[4.53rem]" />
+                <CommentsEmpty
+                  className="h-[3.16rem] w-[4.53rem]"
+                  aria-hidden="true"
+                  focusable="false"
+                />
                 <div className="text-body-body8 text-foreground-tertiary">
                   첫 댓글을 남겨보세요!
                 </div>

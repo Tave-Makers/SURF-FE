@@ -1,6 +1,7 @@
 'use client';
 
 import { useAlertStore } from '@surf/ui/store/alertStore';
+import { useToastStore } from '@surf/ui/store/toastStore';
 import { Suspense, useCallback, useEffect, useMemo, useState } from 'react';
 import { SignupRequestListContent } from './SignupRequestListContent';
 import { useSignupRequestList } from '@/features/signup-request/model/queries/useSignupRequestList';
@@ -33,6 +34,8 @@ export const SignupRequestListWidget = ({ keyword }: SignupRequestListWidgetProp
   const { members, totalCount, fetchNextPage, hasNextPage, isFetchingNextPage } =
     useSignupRequestList(filters);
 
+  const showErrorToast = useToastStore((s) => s.show);
+
   const { mutate, isPending } = useUpdateSignupRequestStatusMutation();
 
   useEffect(() => {
@@ -63,26 +66,44 @@ export const SignupRequestListWidget = ({ keyword }: SignupRequestListWidgetProp
       return;
     }
 
-    mutate({
-      memberIds: Array.from(selectedIds),
-      nextStatus: 'approve',
-      filters,
-    });
-    setSelectedIds(new Set());
-  }, [canApprove, filters, mutate, selectedIds]);
+    mutate(
+      {
+        memberIds: Array.from(selectedIds),
+        nextStatus: 'approve',
+        filters,
+      },
+      {
+        onSuccess: () => {
+          setSelectedIds(new Set());
+        },
+        onError: (error) => {
+          showErrorToast(error.message);
+        },
+      },
+    );
+  }, [canApprove, filters, mutate, selectedIds, showErrorToast]);
 
   const handleReject = useCallback(() => {
     if (!canReject || selectedIds.size === 0) {
       return;
     }
 
-    mutate({
-      memberIds: Array.from(selectedIds),
-      nextStatus: 'reject',
-      filters,
-    });
-    setSelectedIds(new Set());
-  }, [canReject, filters, mutate, selectedIds]);
+    mutate(
+      {
+        memberIds: Array.from(selectedIds),
+        nextStatus: 'reject',
+        filters,
+      },
+      {
+        onSuccess: () => {
+          setSelectedIds(new Set());
+        },
+        onError: (error) => {
+          showErrorToast(error.message);
+        },
+      },
+    );
+  }, [canReject, filters, mutate, selectedIds, showErrorToast]);
 
   const openApproveAlert = useCallback(() => {
     openAlert({

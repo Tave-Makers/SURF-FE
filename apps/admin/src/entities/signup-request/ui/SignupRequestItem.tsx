@@ -33,7 +33,12 @@ export const SignupRequestItem = ({
       }`}
     >
       {isSelectionEnabled && (
-        <Checkbox isChecked={checked} onChange={onToggle} isDisabled={!isSelectionEnabled} />
+        <Checkbox
+          isChecked={checked}
+          onChange={onToggle}
+          isDisabled={!isSelectionEnabled}
+          aria-label={`${name} 선택`}
+        />
       )}
 
       <div className="flex w-full grow flex-col items-start gap-5 overflow-hidden">

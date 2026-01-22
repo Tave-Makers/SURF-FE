@@ -45,10 +45,10 @@ const PostDetailPage = ({ postId }: PostDetailPageProps) => {
   // 삭제된 게시글 처리 (알림에서 진입했을 경우)
   useEffect(() => {
     if (isError && from === 'notification') {
-      alert('삭제된 게시글입니다.');
+      showToast('삭제된 게시글입니다.');
       router.replace(PAGE_ROUTES.NOTIFICATION);
     }
-  }, [isError, from, router]);
+  });
 
   // 일정 조회 API
   const scheduleId = post?.scheduleId;
@@ -140,7 +140,7 @@ const PostDetailPage = ({ postId }: PostDetailPageProps) => {
             ],
           });
         },
-        onReport: () => alert('신고 기능 준비 중입니다.'),
+        onReport: () => showToast('신고 기능은 준비 중입니다.'),
       },
     });
   };
@@ -162,7 +162,7 @@ const PostDetailPage = ({ postId }: PostDetailPageProps) => {
           icons: [
             {
               label: 'FatCornerUpRight',
-              onClickIcon: () => alert('공유 기능 준비중'),
+              onClickIcon: () => showToast('공유 기능은 준비 중입니다.'),
             },
             {
               label: 'Dots',

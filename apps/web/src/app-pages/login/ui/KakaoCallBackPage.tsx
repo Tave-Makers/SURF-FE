@@ -5,7 +5,6 @@ import { useEffect, useRef } from 'react';
 import { getKakaoLoginCallback } from '@/features/auth/api/getKakaoLoginCallback';
 import { useOnboardingStore } from '@/features/onboarding/model/useOnboardingStore';
 import { PAGE_ROUTES } from '@/shared/config/path';
-import { axiosInstance } from '@/shared/lib/axiosInstance';
 
 const KakaoCallBackPage = () => {
   const searchParams = useSearchParams();
@@ -44,14 +43,7 @@ const KakaoCallBackPage = () => {
 
         console.log('[KAKAO][CALLBACK] <- backend response', response);
 
-        const { accessToken, nickname, email, profileImageUrl } = response.data;
-
-        console.log('[KAKAO][CALLBACK] accessToken', accessToken);
-
-        // axios 전역 Authorization 헤더 세팅
-        axiosInstance.defaults.headers.common.Authorization = `Bearer ${accessToken}`;
-
-        console.log('[KAKAO][CALLBACK] Authorization header set');
+        const { nickname, email, profileImageUrl } = response.data;
 
         setOnboarding({
           nickname,

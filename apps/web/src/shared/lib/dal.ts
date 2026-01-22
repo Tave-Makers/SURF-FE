@@ -108,7 +108,7 @@ export async function verifySession() {
       return handleBusinessRedirect(json);
     }
 
-    // 401이면 refresh -> retry
+    // 401이면 refresh 후 retry
     if (res.status === 401) {
       const refresh = await fetchWithTimeout(`${baseUrl}${REFRESH_PATH}`, {
         method: 'POST',

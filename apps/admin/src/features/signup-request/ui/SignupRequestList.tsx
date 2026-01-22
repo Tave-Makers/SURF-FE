@@ -3,6 +3,9 @@ import { SignupRequestItem } from '@/entities/signup-request/ui/SignupRequestIte
 
 interface SignupRequestListProps {
   members: SignupRequestMember[];
+  isSelectionEnabled: boolean;
+  selectedIds: Set<number>;
+  onToggleSelect: (memberId: number) => void;
 }
 
 /**
@@ -10,7 +13,12 @@ interface SignupRequestListProps {
  *
  * members 배열을 받아서 SignupRequestItem으로 렌더링합니다.
  */
-export const SignupRequestList = ({ members }: SignupRequestListProps) => {
+export const SignupRequestList = ({
+  members,
+  isSelectionEnabled,
+  selectedIds,
+  onToggleSelect,
+}: SignupRequestListProps) => {
   //TODO: Empty Space 적용 필요
   if (members.length === 0) {
     return <div>가입 신청 내역이 없습니다.</div>;
@@ -25,8 +33,10 @@ export const SignupRequestList = ({ members }: SignupRequestListProps) => {
           university={member.university}
           tracks={member.tracks}
           registeredAt={member.registeredAt}
-          checked={false}
+          checked={selectedIds.has(member.id)}
           status={member.status}
+          isSelectionEnabled={isSelectionEnabled}
+          onToggle={() => onToggleSelect(member.id)}
         />
       ))}
     </div>

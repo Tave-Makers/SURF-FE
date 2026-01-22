@@ -22,8 +22,8 @@ export async function buildHeroCardViewModel(home: HomeApiResponseData): Promise
 
   return {
     noticeData: {
-      title: home.mainText,
-      sender: home.sender ?? 'TAVE 운영진',
+      message: home.message ?? '',
+      sender: home.sender ?? '',
     },
     userData: {
       name: home.memberName,

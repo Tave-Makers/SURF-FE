@@ -8,15 +8,15 @@ export interface HomeBanner {
 }
 
 export interface HomeApiResponseData {
-  mainText: string;
+  message?: string;
   sender?: string | null;
   banners: HomeBanner[];
   memberName: string;
   memberGeneration: number;
   memberPart: string;
-  nextScheduleTitle: string | null;
-  nextScheduleDate: string | null;
-  nextScheduleDeepLink: string | null;
+  nextScheduleTitle?: string;
+  nextScheduleDate?: string;
+  nextScheduleDeepLink?: string;
 }
 
 export type HomeApiResponse = CommonResponse<HomeApiResponseData>;

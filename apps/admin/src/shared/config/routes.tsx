@@ -22,4 +22,74 @@ export const createRouteConfig = (_router: RouterInstance): RouteConfig[] => [
       hasLeftIcon: true,
     },
   },
+  {
+    id: 'setting-active-generation',
+    path: PAGE_ROUTES.SETTING_ACTIVE_GENERATION,
+    backPath: PAGE_ROUTES.HOME,
+    header: {
+      mode: HeaderMode.Default,
+      title: '활동기수 설정',
+      hasLeftIcon: true,
+    },
+  },
+  {
+    id: 'member',
+    path: PAGE_ROUTES.MEMBER_MNG,
+    backPath: PAGE_ROUTES.HOME,
+    header: {
+      mode: HeaderMode.Default,
+      title: '전체멤버 관리',
+      hasLeftIcon: true,
+    },
+  },
+  {
+    id: 'banner',
+    path: PAGE_ROUTES.BANNER,
+    backPath: PAGE_ROUTES.HOME,
+    header: {
+      mode: HeaderMode.Default,
+      title: '홈배너 관리',
+      hasLeftIcon: true,
+    },
+  },
+  {
+    id: 'dashboard',
+    path: PAGE_ROUTES.DASHBOARD,
+    backPath: PAGE_ROUTES.HOME,
+    header: {
+      mode: HeaderMode.Default,
+      title: 'SURF 대시보드',
+      hasLeftIcon: true,
+    },
+  },
+  {
+    id: 'group',
+    path: PAGE_ROUTES.GROUP_MNG,
+    backPath: PAGE_ROUTES.HOME,
+    header: {
+      mode: HeaderMode.Default,
+      title: '회원그룹 관리',
+      hasLeftIcon: true,
+    },
+  },
+  {
+    id: 'score',
+    path: PAGE_ROUTES.SCORE_MNG,
+    backPath: PAGE_ROUTES.HOME,
+    header: {
+      mode: HeaderMode.Default,
+      title: '활동점수 관리',
+      hasLeftIcon: true,
+    },
+  },
+  {
+    id: 'badge',
+    path: PAGE_ROUTES.BADGE_MNG,
+    backPath: PAGE_ROUTES.HOME,
+    header: {
+      mode: HeaderMode.Default,
+      title: '활동배지 관리',
+      hasLeftIcon: true,
+    },
+  },
 ];

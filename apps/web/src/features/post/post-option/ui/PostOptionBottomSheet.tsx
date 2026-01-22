@@ -31,8 +31,8 @@ export const PostOptionBottomSheet = ({
     <ModalSheet isOpen={isOpen} onClose={onClose}>
       <ModalSheet.Container className="!right-0 !left-0 mx-auto w-full sm:max-w-[min(100dvw,calc(100dvh*375/812))]">
         <ModalSheet.Content>
-          <Sheet title="게시글 옵션">
-            <div className="flex flex-col">
+          <Sheet>
+            <div className="flex w-full flex-col">
               {isMine ? (
                 <>
                   {/* 수정하기 */}
@@ -48,12 +48,14 @@ export const PostOptionBottomSheet = ({
                   {/* 삭제하기 */}
                   <SheetItem
                     title="삭제하기"
-                    node={<SurfIcon name="TrashOneSolid" className="text-foreground-danger" />}
+                    textColor="danger"
                     onClick={() => {
                       onDelete();
                       onClose();
                     }}
-                    textColor="danger"
+                    node={
+                      <SurfIcon name="TrashOneSolid" size="m" className="text-foreground-danger" />
+                    }
                   />
                 </>
               ) : (

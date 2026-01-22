@@ -168,7 +168,7 @@ export const Input = forwardRef<HTMLInputElement, InputProps>(
               onClick={() => setIsPasswordVisible((prev) => !prev)}
               className="text-foreground-tertiary flex items-center"
             >
-              <SurfIcon name={isPasswordVisible ? 'SmileCircleSolid' : 'SmileCircle'} size="m" />
+              <SurfIcon name={isPasswordVisible ? 'EyeSolid' : 'Eye'} size="m" />
             </button>
           ) : null}
 

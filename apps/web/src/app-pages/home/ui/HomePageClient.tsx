@@ -86,7 +86,6 @@ export const HomePageClient = ({ heroProps }: { heroProps: HeroCardProps }) => {
           />
 
           {/* 앱 내 바로가기 링크 */}
-          {/* 기획 측 정리 문서 필요 */}
           <div className="flex flex-row gap-11">
             <div className="flex w-full gap-11">
               {SHORTCUT_LINKS.map((link) => (
@@ -94,7 +93,7 @@ export const HomePageClient = ({ heroProps }: { heroProps: HeroCardProps }) => {
                   key={link.id}
                   type="rectangle"
                   label={link.label}
-                  imageSrc={link.imageSrc}
+                  imageSrc={link.imageSrc ?? ''}
                   onClick={() => handleShortcutClick(link.link, link.label)}
                 />
               ))}
@@ -110,7 +109,7 @@ export const HomePageClient = ({ heroProps }: { heroProps: HeroCardProps }) => {
                   key={channel.id}
                   type="circle"
                   label={channel.label}
-                  imageSrc={channel.imageSrc}
+                  imageSrc={channel.imageSrc ?? ''}
                   onClick={() => handleShortcutClick(channel.link, channel.label)}
                 />
               ))}
@@ -126,7 +125,7 @@ export const HomePageClient = ({ heroProps }: { heroProps: HeroCardProps }) => {
                   key={sponsor.id}
                   type="circle"
                   label={sponsor.label}
-                  imageSrc={sponsor.imageSrc}
+                  imageSrc={sponsor.imageSrc ?? ''}
                   onClick={() => handleShortcutClick(sponsor.link, sponsor.label)}
                 />
               ))}

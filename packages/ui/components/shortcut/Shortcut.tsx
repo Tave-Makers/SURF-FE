@@ -1,7 +1,7 @@
 interface ShortcutProps {
   type: 'circle' | 'rectangle';
   label: string;
-  imageSrc?: string;
+  imageSrc: string;
   onClick?: () => void;
 }
 
@@ -10,7 +10,7 @@ export const Shortcut = ({ type, label, imageSrc, onClick }: ShortcutProps) => {
     return (
       <button className="flex w-full flex-col items-center gap-7" onClick={onClick}>
         <div className="h-[2.5rem] w-[2.5rem] overflow-hidden rounded-full bg-gray-200">
-          <img src={imageSrc} alt="" className="h-full w-full object-cover" />
+          <img src={imageSrc} alt={label} className="h-full w-full object-cover" />
         </div>
         <span className="text-caption-caption6">{label}</span>
       </button>
@@ -28,7 +28,7 @@ export const Shortcut = ({ type, label, imageSrc, onClick }: ShortcutProps) => {
 
       {/* 이미지 영역 */}
       <div className="w-full flex-1 bg-gray-200">
-        <img src={imageSrc} alt="" className="h-full w-full object-cover" />
+        <img src={imageSrc} alt={label} className="h-full w-full object-cover" />
       </div>
     </button>
   );

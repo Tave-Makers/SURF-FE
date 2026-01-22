@@ -29,7 +29,7 @@ export const CommentOptionBottomSheet = ({
     <ModalSheet isOpen={isOpen} onClose={onClose}>
       <ModalSheet.Container className="!right-0 !left-0 mx-auto max-w-[min(100dvw,calc(100dvh*375/812))]">
         <ModalSheet.Content>
-          <Sheet title="댓글 옵션">
+          <Sheet>
             <div className="flex flex-col">
               {isMine ? (
                 <SheetItem

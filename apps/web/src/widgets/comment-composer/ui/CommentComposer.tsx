@@ -205,10 +205,7 @@ export const CommentComposer = ({
   };
 
   return (
-    <div
-      className="absolute right-0 bottom-0 left-0 z-[130]"
-      style={{ paddingBottom: keyboardOffset }}
-    >
+    <div className="sticky bottom-0 w-full flex-none" style={{ paddingBottom: keyboardOffset }}>
       <div className="relative">
         {mentionOpen && (
           <>
@@ -223,7 +220,7 @@ export const CommentComposer = ({
             {/* Mention Sheet */}
             <div className="absolute right-0 bottom-[calc(100%)] left-0 z-[120]">
               <Sheet title="멘션하기">
-                <div className="flex min-h-[100px] flex-col">
+                <div className="mt-12 flex min-h-[100px] flex-col">
                   {mentionKeyword.trim().length < 2 ? (
                     <div className="py-10 text-center text-sm text-gray-500">
                       두 글자 이상 입력하면 검색됩니다.
@@ -258,7 +255,7 @@ export const CommentComposer = ({
             value={value}
             onChange={onChange}
             placeholder={replyParentId ? '답글을 입력해주세요' : '댓글을 입력해주세요'}
-            onSend={(val) => void onSend(val)}
+            onSend={onSend}
           />
         </div>
       </div>

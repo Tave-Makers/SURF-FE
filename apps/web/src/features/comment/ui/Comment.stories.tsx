@@ -21,6 +21,10 @@ const meta: Meta<typeof Comment> = {
       action: '좋아요 상태 변경됨',
       description: '좋아요 버튼 클릭 시 호출되는 콜백 (newState: true=좋아요, false=취소)',
     },
+    onProfileClick: {
+      action: '프로필 클릭됨',
+      description: '프로필 이미지 클릭 시 호출되는 콜백',
+    },
     onReplyClick: {
       action: '답글 클릭됨',
       description: '답글 버튼 클릭 시 호출되는 콜백',

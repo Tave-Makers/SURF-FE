@@ -27,7 +27,6 @@ interface Props {
 export const CommentSection = ({ postId, memberId, scrollRootRef, onStartReply }: Props) => {
   const router = useRouter();
   const myId = useAuthStore((s) => s.memberId);
-  const isClickable = memberId != null;
   const openBottomSheet = useBottomSheetStore((s) => s.open);
 
   const showToast = useToastStore((s) => s.show);
@@ -136,6 +135,8 @@ export const CommentSection = ({ postId, memberId, scrollRootRef, onStartReply }
             {comments.map((c) => {
               const createdAtKst = toKST(toDate(c.createdAt));
               const dateText = formatDateTime(createdAtKst);
+
+              const isClickable = c.memberId != null;
 
               return (
                 <div key={c.id} className="flex flex-col">

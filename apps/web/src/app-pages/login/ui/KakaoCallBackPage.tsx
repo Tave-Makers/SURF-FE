@@ -29,7 +29,6 @@ const KakaoCallBackPage = () => {
 
     if (!code) {
       console.error('[KAKAO][CALLBACK] code is null');
-      alert('잘못된 접근이에요. 다시 로그인해주세요.');
       router.push(PAGE_ROUTES.LOGIN);
       return;
     }

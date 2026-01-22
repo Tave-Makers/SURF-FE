@@ -43,6 +43,7 @@ export function useDeleteCommentMutation(postId: number) {
                 return {
                   ...pageData,
                   comments: removeComment(pageData.comments, commentId),
+                  totalCount: Math.max(0, pageData.totalCount - 1),
                 };
               }),
             };
@@ -55,6 +56,7 @@ export function useDeleteCommentMutation(postId: number) {
             return {
               ...data,
               comments: removeComment(data.comments, commentId),
+              totalCount: Math.max(0, data.totalCount - 1),
             };
           }
           return old;

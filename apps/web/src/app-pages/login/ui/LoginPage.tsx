@@ -46,7 +46,7 @@ export const LoginPage = () => {
   return (
     <div className="flex h-dvh w-dvw flex-col items-center gap-[6.75rem] px-15 pt-[16.81rem]">
       <Logo width={163.684} height={55.04} />
-      {/* <KakaoLoginButton /> */}
+      {/* 임시 처리 <KakaoLoginButton /> */}
       <div className="flex w-full flex-col items-center gap-[1.25rem]">
         <KakaoLoginButton />
 

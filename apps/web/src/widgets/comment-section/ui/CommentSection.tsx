@@ -27,7 +27,7 @@ interface Props {
 export const CommentSection = ({ postId, memberId, scrollRootRef, onStartReply }: Props) => {
   const router = useRouter();
   const myId = useAuthStore((s) => s.memberId);
-  const isClickable = memberId !== null;
+  const isClickable = memberId != null;
   const openBottomSheet = useBottomSheetStore((s) => s.open);
 
   const showToast = useToastStore((s) => s.show);

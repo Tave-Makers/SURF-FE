@@ -137,6 +137,8 @@ export const EventCard = ({
                       type: 'scheduleAction',
                       props: {
                         scheduleId,
+                        hasNotice,
+                        postId,
                         onDeleteSuccess: () => {
                           onDeleteSchedule?.();
                         },

@@ -5,14 +5,17 @@ import { useToastStore } from '@surf/ui/store/toastStore';
 import { Tab } from '@surf/ui/tab';
 import { useRouter, useSearchParams } from 'next/navigation';
 import { useEffect } from 'react';
-import type { NotificationTab } from '@/entities/notification/model/notificationTab';
+import {
+  NOTIFICATION_TABS,
+  type NotificationTab,
+} from '@/entities/notification/model/notificationTab';
 import { useGetNotifications } from '@/entities/notification/model/useGetNotifications';
 import { useReadNotification } from '@/entities/notification/model/useReadNotification';
 import { NotificationList } from '@/entities/notification/ui/NotificationList';
 import NotificationEmpty from '@/shared/assets/icons/empty-space/notification-empty.svg';
 import { AppHeader } from '@/widgets/header/ui/AppHeader';
 
-const tabItems = [
+const tabItems: { value: NotificationTab; label: string }[] = [
   { value: 'ALL', label: '전체' },
   { value: 'ACTIVITY', label: '활동' },
   { value: 'SCHEDULE', label: '일정' },
@@ -21,7 +24,11 @@ const tabItems = [
 export const NotificationPage = () => {
   const router = useRouter();
   const searchParams = useSearchParams();
-  const currentTab = (searchParams.get('tab') as NotificationTab) || 'ALL';
+  const tabParam = searchParams.get('tab');
+  const currentTab: NotificationTab =
+    tabParam && (NOTIFICATION_TABS as readonly string[]).includes(tabParam)
+      ? (tabParam as NotificationTab)
+      : 'ALL';
   const showToast = useToastStore((state) => state.show);
 
   useEffect(() => {

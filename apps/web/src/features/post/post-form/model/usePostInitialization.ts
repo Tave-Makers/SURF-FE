@@ -146,7 +146,6 @@ export const usePostInitialization = ({
     content,
     images,
     isScheduleFetching,
-
     canInitialize,
   ]);
 };

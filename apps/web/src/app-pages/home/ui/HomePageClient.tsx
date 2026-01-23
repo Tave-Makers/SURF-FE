@@ -4,6 +4,7 @@ import { Carousel } from '@surf/ui/carousel';
 import { HeaderMode } from '@surf/ui/header';
 import { Shortcut } from '@surf/ui/shortcut';
 import { useRouter } from 'next/navigation';
+import { useEffect, useRef, useState } from 'react';
 import HeaderLogo from '../../../../public/header-logo.svg';
 import { useGetHome } from '@/entities/home/api/useGetHome';
 import { TAVE_CHANNEL_LINKS, SPONSOR_LINKS, SHORTCUT_LINKS } from '@/entities/home/model/constants';
@@ -16,6 +17,8 @@ import { AppHeader } from '@/widgets/header/ui/AppHeader';
 
 export const HomePageClient = ({ heroProps }: { heroProps: HeroCardProps }) => {
   const router = useRouter();
+  const scrollRef = useRef<HTMLDivElement | null>(null);
+  const [isHeaderSolid, setIsHeaderSolid] = useState(false);
 
   const { data: homeData } = useGetHome();
   const deepLink = homeData?.announcementDeepLink ?? '';
@@ -30,9 +33,24 @@ export const HomePageClient = ({ heroProps }: { heroProps: HeroCardProps }) => {
     router.push(link);
   };
 
+  useEffect(() => {
+    const el = scrollRef.current;
+    if (!el) return;
+
+    const threshold = 5;
+
+    const handleScroll = () => {
+      setIsHeaderSolid(el.scrollTop > threshold);
+    };
+
+    handleScroll();
+    el.addEventListener('scroll', handleScroll, { passive: true });
+    return () => el.removeEventListener('scroll', handleScroll);
+  }, []);
+
   return (
-    <div className="flex flex-col overflow-y-auto pb-[1.61rem]">
-      <div className="absolute z-10 w-full sm:w-[min(100dvw,calc(100dvh*375/812))]">
+    <div ref={scrollRef} className="flex flex-col overflow-y-auto pb-[1.61rem]">
+      <div className="absolute z-100 w-[min(100dvw,calc(100dvh*375/812))]">
         {/* AppHeader */}
         <AppHeader
           overrideHeader={{
@@ -48,7 +66,9 @@ export const HomePageClient = ({ heroProps }: { heroProps: HeroCardProps }) => {
               },
             ],
           }}
-          className="bg-transparent"
+          className={`transition-colors duration-150 ${
+            isHeaderSolid ? 'bg-background-normal' : 'bg-transparent'
+          }`}
         />
       </div>
 

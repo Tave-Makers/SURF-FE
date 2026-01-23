@@ -40,7 +40,7 @@ export const PostLikeBottomSheet = ({
       <ModalSheet.Container className="!right-0 !left-0 mx-auto w-full sm:max-w-[min(100dvw,calc(100dvh*375/812))]">
         <ModalSheet.Content>
           <Sheet title="좋아요를 누른 사람">
-            <div className="flex flex-col">
+            <div className="flex flex-col pt-12">
               {/* 로딩 */}
               {isLoading && <div className="py-4 text-center text-gray-500">불러오는 중...</div>}
 

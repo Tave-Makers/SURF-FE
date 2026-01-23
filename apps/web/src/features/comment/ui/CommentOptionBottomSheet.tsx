@@ -27,7 +27,7 @@ export const CommentOptionBottomSheet = ({
 
   return (
     <ModalSheet isOpen={isOpen} onClose={onClose}>
-      <ModalSheet.Container className="!right-0 !left-0 mx-auto max-w-[min(100dvw,calc(100dvh*375/812))]">
+      <ModalSheet.Container className="!right-0 !left-0 mx-auto sm:max-w-[min(100dvw,calc(100dvh*375/812))]">
         <ModalSheet.Content>
           <Sheet>
             <div className="flex flex-col">

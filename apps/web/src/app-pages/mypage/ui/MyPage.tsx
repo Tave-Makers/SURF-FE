@@ -61,7 +61,7 @@ export const MyPage = ({ userProfile }: Props) => {
                 ))}
               </ul>
             ) : (
-              <div className="flex flex-col items-center gap-3 pt-16">
+              <div className="flex flex-col items-center gap-3 py-16">
                 <CareerEmpty aria-hidden="true" />
                 <span className="text-body-body8 text-foreground-tertiary">
                   등록된 경력이 없어요

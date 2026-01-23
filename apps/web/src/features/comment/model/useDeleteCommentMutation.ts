@@ -1,6 +1,7 @@
 import { useMutation, useQueryClient, type InfiniteData } from '@tanstack/react-query';
 import { deleteComment } from '../api/deleteComment.client';
 import type { CommentListResponse, CommentResponse } from '../api/types';
+import { postQueryKeys } from '@/entities/post/api/queryKeys';
 
 const isInfiniteData = (
   data: CommentListResponse | InfiniteData<CommentListResponse>,
@@ -77,6 +78,8 @@ export function useDeleteCommentMutation(postId: number) {
 
     onSettled: async () => {
       await queryClient.invalidateQueries({ queryKey: baseKey });
+      await queryClient.invalidateQueries({ queryKey: postQueryKeys.lists() });
+      await queryClient.invalidateQueries({ queryKey: postQueryKeys.detail(postId) });
     },
   });
 }

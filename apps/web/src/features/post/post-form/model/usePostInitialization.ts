@@ -18,7 +18,6 @@ interface Props extends PostFormActions {
   setLinkedSchedule: (data: ScheduleFormData) => void;
   isInitializedRef: React.RefObject<boolean>;
   isScheduleFetching: boolean;
-  isScheduleError: boolean;
 }
 
 export const usePostInitialization = ({
@@ -31,7 +30,6 @@ export const usePostInitialization = ({
   setLinkedSchedule,
   isInitializedRef,
   isScheduleFetching,
-  isScheduleError,
 }: Props) => {
   const { initialSnapshot, setSnapshot, content, images, canInitialize } = usePostFormStore();
 
@@ -41,12 +39,7 @@ export const usePostInitialization = ({
     if (mode === 'create' || isInitializedRef.current) return;
     if (mode === 'edit' && !postDetail) return;
     // 일정이 있는 게시글인데, 일정을 아직 가져오지 못했거나 '새로 가져오는 중(Fetching)'이면 대기
-    // 단, 일정 조회 중 에러가 발생했다면(isScheduleError) 일정이 없는 것으로 간주하고 진행
-    if (
-      postDetail?.hasSchedule &&
-      !isScheduleError &&
-      (postSchedule === undefined || isScheduleFetching)
-    ) {
+    if (postDetail?.hasSchedule && (postSchedule === undefined || isScheduleFetching)) {
       return;
     }
 
@@ -58,7 +51,7 @@ export const usePostInitialization = ({
     }
 
     // 게시글에 연동된 일정이 있으나, 일정 데이터가 아직 로딩 중인 경우 대기
-    if (postDetail?.hasSchedule && !isScheduleError && postSchedule === undefined) {
+    if (postDetail?.hasSchedule && postSchedule === undefined) {
       return;
     }
 
@@ -153,7 +146,7 @@ export const usePostInitialization = ({
     content,
     images,
     isScheduleFetching,
-    isScheduleError,
+
     canInitialize,
   ]);
 };

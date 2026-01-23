@@ -7,7 +7,7 @@ import { POST_CATEGORIES, PostCategoryKey } from '@/entities/post/model/category
 import { POST_VALIDATION } from '@/entities/post/model/validation';
 
 import { usePostDetail } from '@/entities/post/api/usePostDetail';
-import { useGetSingleSchedule } from '@/features/schedule/edit/model/useGetSingleSchedule';
+import { useGetPostScheduleQuery } from '@/features/post/model/useGetPostScheduleQuery';
 import { useCreatePost } from '@/features/post/create-post/model/useCreatePost';
 import { useUpdatePost } from '@/features/post/update-post/model/useUpdatePost';
 import { useCreatePostSchedule } from '@/features/schedule/create-post-schedule/model/useCreatePostSchedule';
@@ -64,14 +64,11 @@ export const usePostForm = ({ mode, boardId, postId }: Props) => {
   // 일정 조회 API
   const scheduleId = postDetail?.scheduleId;
   const shouldFetchSchedule = !!scheduleId;
-  const {
-    data: postSchedule,
-    isFetching: isScheduleFetching,
-    isError: isScheduleError,
-  } = useGetSingleSchedule(scheduleId, {
-    enabled: shouldFetchSchedule,
-    staleTime: 0,
-  });
+  const { data: postSchedule, isFetching: isScheduleFetching } = useGetPostScheduleQuery(
+    numericPostId!,
+    scheduleId,
+    shouldFetchSchedule,
+  );
 
   // 생성/수정 뮤테이션
   const { mutateAsync: createMutate, isPending: isCreating } = useCreatePost();
@@ -93,7 +90,6 @@ export const usePostForm = ({ mode, boardId, postId }: Props) => {
     setLinkedSchedule,
     isInitializedRef: isScheduleInitializedRef,
     isScheduleFetching,
-    isScheduleError,
   });
 
   // 변경 사항 감지

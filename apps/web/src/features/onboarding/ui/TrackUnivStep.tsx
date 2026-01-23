@@ -5,9 +5,10 @@ import { Checkbox } from '@surf/ui/checkbox';
 import { FieldGroup } from '@surf/ui/field-group';
 import { SurfIcon } from '@surf/ui/icon';
 import { SelectField } from '@surf/ui/select-field';
+import { useToastStore } from '@surf/ui/store/toastStore';
 import { TextArea } from '@surf/ui/text-area';
 import { useState } from 'react';
-import { Controller, useFieldArray, useFormContext } from 'react-hook-form';
+import { Controller, useFieldArray, useFormContext, useWatch } from 'react-hook-form';
 import { formatTrackLabel } from '../lib/trackMapper';
 import { trackOnBoardingEvent } from '../lib/trackOnBoardingEvent';
 import { TrackPart } from '@/entities/user/model/types';
@@ -20,10 +21,12 @@ export const TrackUnivStep = () => {
     control,
     name: 'tracks',
   });
+  const watchedTracks = useWatch({ control, name: 'tracks' }) ?? [];
 
   const [_editingIndex, setEditingIndex] = useState<number | null>(null);
   const openBottomSheet = useBottomSheetStore((s) => s.open);
   const closeBottomSheet = useBottomSheetStore((s) => s.close);
+  const showToast = useToastStore((s) => s.show);
 
   const [isGraduateStudent, setIsGraduateStudent] = useState(false);
 
@@ -38,15 +41,31 @@ export const TrackUnivStep = () => {
     });
   }
 
+  function isDuplicateGeneration(
+    tracks: { generation: number | null; part: TrackPart | null }[],
+    target: { generation: number; part: TrackPart },
+    editingIndex: number | null,
+  ) {
+    return tracks.some((t, idx) => {
+      if (editingIndex !== null && idx === editingIndex) return false;
+      return t.generation === target.generation && t.part !== target.part;
+    });
+  }
+
   function openTrackPicker(index: number) {
     setEditingIndex(index);
     openBottomSheet({
       type: 'trackPicker',
       props: {
         onSelect: (selectedTrack) => {
-          const isDuplicate = isDuplicateTrack(fields, selectedTrack, index);
+          const isDuplicate = isDuplicateTrack(watchedTracks, selectedTrack, index);
           if (isDuplicate) {
-            // TODO: 이미 선택된 기수 및 파트임을 안내하는 문구 추가
+            showToast('이미 선택된 기수 및 파트입니다.');
+            return;
+          }
+          const isDuplicateGen = isDuplicateGeneration(watchedTracks, selectedTrack, index);
+          if (isDuplicateGen) {
+            showToast('동일 기수는 하나의 파트만 선택할 수 있어요.');
             return;
           }
           update(index, selectedTrack);

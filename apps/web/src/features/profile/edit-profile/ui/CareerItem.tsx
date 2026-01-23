@@ -8,10 +8,10 @@ import {
   Control,
   Controller,
   FieldErrors,
+  useWatch,
   UseFormClearErrors,
   UseFormSetValue,
   UseFormTrigger,
-  useWatch,
 } from 'react-hook-form';
 import type { FormValues } from '../model/types';
 import { formatYearMonth } from '@/shared/lib/validator';
@@ -38,6 +38,10 @@ const CareerItemComponent = ({
   const isWorking = useWatch({
     control,
     name: `careers.${index}.isWorking`,
+  });
+  const startDate = useWatch({
+    control,
+    name: `careers.${index}.startDate`,
   });
 
   const startErr = errors.careers?.[index]?.startDate?.message;
@@ -130,6 +134,11 @@ const CareerItemComponent = ({
               validate: (value) => {
                 if (isWorking) return true;
                 if (!value || !value.trim()) return '종료일은 필수에요.';
+                const start = formatYearMonth(startDate ?? '');
+                const end = formatYearMonth(value);
+                if (start && end && start > end) {
+                  return '시작일이 종료일보다 뒤에 있어요.';
+                }
                 return true;
               },
             }}

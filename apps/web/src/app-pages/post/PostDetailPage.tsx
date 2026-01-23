@@ -72,7 +72,7 @@ const PostDetailPage = ({ postId }: PostDetailPageProps) => {
   if (isLoading || (scheduleId && isScheduleLoading))
     return (
       <div className="flex h-full w-full items-center justify-center">
-        <span>불러오는 중...</span>
+        {/* <span>불러오는 중...</span> */}
       </div>
     );
 

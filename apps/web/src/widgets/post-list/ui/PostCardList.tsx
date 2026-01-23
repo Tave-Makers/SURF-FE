@@ -1,15 +1,17 @@
 'use client';
 
-import dynamic from 'next/dynamic';
+// import dynamic from 'next/dynamic';
 import { memo } from 'react';
 import type { TabCategoryLabel } from '@/entities/post/model/tab';
 import type { Post } from '@/entities/post/model/types';
 import { PostCard } from '@/entities/post/ui/post-card/PostCard';
 import type { UserLevel } from '@/entities/user/model/types';
+import PostEmpty from '@/shared/assets/icons/empty-space/posts-empty.svg';
 
-const PostEmpty = dynamic(() => import('@/shared/assets/icons/empty-space/posts-empty.svg'), {
-  ssr: false,
-});
+// const PostEmpty = dynamic(() => import('@/shared/assets/icons/empty-space/posts-empty.svg'), {
+//   ssr: false,
+//     loading: () => <div className="h-[90px] w-[90px] rounded-5 bg-background-normal-lighter" aria-hidden="true" />,
+// });
 
 type PostCardListProps = {
   posts: Post[];
@@ -38,11 +40,7 @@ const PostCardListComponent = ({
 }: PostCardListProps) => {
   if (isLoading) {
     // 임시
-    return (
-      <div role="status" aria-live="polite">
-        게시글을 불러오는 중...
-      </div>
-    );
+    return <div role="status" aria-live="polite" />;
   }
   if (error) {
     // 임시

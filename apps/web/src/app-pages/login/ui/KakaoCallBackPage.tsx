@@ -1,11 +1,20 @@
 'use client';
 
+// import dynamic from 'next/dynamic';
 import { useSearchParams, useRouter } from 'next/navigation';
 import { useEffect, useRef } from 'react';
 import { getKakaoLoginCallback } from '@/features/auth/api/getKakaoLoginCallback';
 import { useOnboardingStore } from '@/features/onboarding/model/useOnboardingStore';
+import CallbackEmpty from '@/shared/assets/icons/empty-space/callback-empty.svg';
 import { PAGE_ROUTES } from '@/shared/config/path';
-import { axiosInstance } from '@/shared/lib/axiosInstance';
+
+// const CallbackEmpty = dynamic(
+//   () => import('@/shared/assets/icons/empty-space/callback-empty.svg'),
+//   {
+//     ssr: false,
+//       loading: () => <div className="h-[90px] w-[90px] rounded-5 bg-background-normal-lighter" aria-hidden="true" />,
+//   },
+// );
 
 const KakaoCallBackPage = () => {
   const searchParams = useSearchParams();
@@ -15,43 +24,27 @@ const KakaoCallBackPage = () => {
 
   const code = searchParams.get('code');
 
-  // 렌더 단계 로그
-  console.log('[KAKAO][CALLBACK] render');
-  console.log('[KAKAO][CALLBACK] code from query =', code);
-
   useEffect(() => {
-    console.log('[KAKAO][CALLBACK] useEffect entered');
-
     if (didRun.current) {
-      console.log('[KAKAO][CALLBACK] already ran -> skip');
       return;
     }
     didRun.current = true;
 
     if (!code) {
-      console.error('[KAKAO][CALLBACK] code is null');
       alert('잘못된 접근이에요. 다시 로그인해주세요.');
       router.push(PAGE_ROUTES.LOGIN);
       return;
     }
 
-    console.log('[KAKAO][CALLBACK] code exists, start backend call');
-
     void (async () => {
       try {
-        console.log('[KAKAO][CALLBACK] -> calling getKakaoLoginCallback');
         const response = await getKakaoLoginCallback(code);
 
-        console.log('[KAKAO][CALLBACK] <- backend response', response);
+        if (!response?.data) {
+          throw new Error('로그인 응답이 비어있어요.');
+        }
 
-        const { accessToken, nickname, email, profileImageUrl } = response.data;
-
-        console.log('[KAKAO][CALLBACK] accessToken', accessToken);
-
-        // axios 전역 Authorization 헤더 세팅
-        axiosInstance.defaults.headers.common.Authorization = `Bearer ${accessToken}`;
-
-        console.log('[KAKAO][CALLBACK] Authorization header set');
+        const { nickname, email, profileImageUrl } = response.data;
 
         setOnboarding({
           nickname,
@@ -59,11 +52,8 @@ const KakaoCallBackPage = () => {
           profileImageUrl,
         });
 
-        console.log('[KAKAO][CALLBACK] onboarding set -> move HOME');
         router.push(PAGE_ROUTES.HOME);
       } catch (err) {
-        console.error('[KAKAO][CALLBACK] error during login', err);
-
         const message =
           err instanceof Error
             ? err.message
@@ -74,7 +64,14 @@ const KakaoCallBackPage = () => {
     })();
   }, [code, router, setOnboarding]);
 
-  return <div>로그인 콜백 처리중...</div>;
+  return (
+    <div className="flex h-full w-full flex-col items-center justify-center">
+      <div className="flex flex-col items-center gap-[0.625rem]">
+        <CallbackEmpty className="h-[3.54325rem] w-[16.3125rem]" />
+        <span className="text-body-body8 text-foreground-tertiary">잠시만 기다려 주세요...</span>
+      </div>
+    </div>
+  );
 };
 
 export default KakaoCallBackPage;

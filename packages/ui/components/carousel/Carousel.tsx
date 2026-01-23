@@ -18,7 +18,7 @@ interface CarouselProps {
 }
 
 const baseStyle =
-  'rounded-5 w-full h-[9.375rem] relative overflow-hidden bg-white bg-gradient-to-b from-background-carousel-start to-background-carousel-end shadow-embossed';
+  'rounded-5 aspect-[343/150] w-full min-w-[343px] relative overflow-hidden from-background-carousel-start to-background-carousel-end bg-gradient-to-b shadow-embossed';
 
 export const Carousel = ({ images, className = '' }: CarouselProps) => {
   const [current, setCurrent] = useState(0);
@@ -73,48 +73,50 @@ export const Carousel = ({ images, className = '' }: CarouselProps) => {
 
   return (
     <div className={`${baseStyle} ${className} group`}>
-      <div
-        className="flex h-full transition-transform duration-500 ease-in-out"
-        style={{ transform: `translateX(-${current * 100}%)` }}
-      >
-        {sortedImages.map((img, idx) => (
-          <button
-            key={idx}
-            onClick={() => {
-              if (!img.linkUrl) return;
-              window.open(img.linkUrl, '_blank');
-            }}
-            className="relative h-full w-full flex-shrink-0"
-          >
-            <Image src={img.src} alt={img.alt} fill className="object-cover" />
-          </button>
-        ))}
+      <div className="bg-background-normal z-[-10]">
+        <div
+          className="flex h-full transition-transform duration-500 ease-in-out"
+          style={{ transform: `translateX(-${current * 100}%)` }}
+        >
+          {sortedImages.map((img, idx) => (
+            <button
+              key={idx}
+              onClick={() => {
+                if (!img.linkUrl) return;
+                window.open(img.linkUrl, '_blank');
+              }}
+              className="relative h-full w-full flex-shrink-0"
+            >
+              <Image src={img.src} alt={img.alt} fill className="object-contain object-center" />
+            </button>
+          ))}
+        </div>
+
+        {length > 1 && (
+          <>
+            {/* 좌측 버튼 */}
+            <Control
+              direction="left"
+              onClick={handlePrev}
+              className="absolute left-[10px] top-1/2 -translate-y-1/2 opacity-0 transition-opacity group-hover:opacity-100"
+            />
+
+            {/* 우측 버튼 */}
+            <Control
+              direction="right"
+              onClick={handleNext}
+              className="absolute right-[10px] top-1/2 -translate-y-1/2 opacity-0 transition-opacity group-hover:opacity-100"
+            />
+          </>
+        )}
+
+        {/* 페이지네이션 */}
+        <Pagenation
+          currentPage={current + 1}
+          totalPages={length}
+          className="absolute bottom-[10px] right-[10px]"
+        />
       </div>
-
-      {length > 1 && (
-        <>
-          {/* 좌측 버튼 */}
-          <Control
-            direction="left"
-            onClick={handlePrev}
-            className="absolute left-[10px] top-1/2 -translate-y-1/2 opacity-0 transition-opacity group-hover:opacity-100"
-          />
-
-          {/* 우측 버튼 */}
-          <Control
-            direction="right"
-            onClick={handleNext}
-            className="absolute right-[10px] top-1/2 -translate-y-1/2 opacity-0 transition-opacity group-hover:opacity-100"
-          />
-        </>
-      )}
-
-      {/* 페이지네이션 */}
-      <Pagenation
-        currentPage={current + 1}
-        totalPages={length}
-        className="absolute bottom-[10px] right-[10px]"
-      />
     </div>
   );
 };

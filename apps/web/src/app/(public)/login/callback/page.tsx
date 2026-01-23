@@ -1,13 +1,11 @@
-import { Suspense } from 'react';
 import KakaoCallBackPage from '@/app-pages/login/ui/KakaoCallBackPage';
 
+export const dynamic = 'force-dynamic';
+export const revalidate = 0;
+
+// suspense 임시 삭제
 const Page = () => {
-  return (
-    // fallback은 추후 로딩 중 화면으로 대체
-    <Suspense fallback={<div>로딩중...</div>}>
-      <KakaoCallBackPage />
-    </Suspense>
-  );
+  return <KakaoCallBackPage />;
 };
 
 export default Page;

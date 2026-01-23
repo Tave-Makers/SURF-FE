@@ -42,7 +42,7 @@ export const PostLikeBottomSheet = ({
           <Sheet title="좋아요를 누른 사람">
             <div className="flex flex-col pt-12">
               {/* 로딩 */}
-              {isLoading && <div className="py-4 text-center text-gray-500">불러오는 중...</div>}
+              {isLoading && <div className="py-4 text-center text-gray-500" />}
 
               {/* 에러 */}
               {isError && (

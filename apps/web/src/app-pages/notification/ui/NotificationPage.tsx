@@ -15,6 +15,14 @@ import { NotificationList } from '@/entities/notification/ui/NotificationList';
 import NotificationEmpty from '@/shared/assets/icons/empty-space/notification-empty.svg';
 import { AppHeader } from '@/widgets/header/ui/AppHeader';
 
+// const NotificationEmpty = dynamic(
+//   () => import('@/shared/assets/icons/empty-space/notification-empty.svg'),
+//   {
+//     ssr: false,
+//       loading: () => <div className="h-[90px] w-[90px] rounded-5 bg-background-normal-lighter" aria-hidden="true" />,
+//   },
+// );
+
 const tabItems: { value: NotificationTab; label: string }[] = [
   { value: 'ALL', label: '전체' },
   { value: 'ACTIVITY', label: '활동' },
@@ -68,7 +76,7 @@ export const NotificationPage = () => {
   const renderContent = () => {
     // 로딩 중일 때(임시)
     if (isLoading) {
-      return <div className="p-20 text-center text-gray-500">로딩 중...</div>;
+      return <div className="p-20 text-center text-gray-500" />;
     }
 
     // 데이터가 없거나 비어있을 때 (탭 별 메시지 분기)
@@ -80,7 +88,7 @@ export const NotificationPage = () => {
       };
       return (
         <div className="text-body-body8 text-foreground-tertiary flex h-full w-full flex-col items-center justify-center gap-[0.43rem] text-center">
-          <NotificationEmpty />
+          <NotificationEmpty className="h-[4.90913rem] w-[4.90913rem]" />
           {emptyMessages[currentTab]}
         </div>
       );

@@ -11,8 +11,8 @@ const PUBLIC_PREFIX = [
   '/onboarding',
   '/icons',
   '/images',
-  'header-logo.svg',
-  'header-logo.svg',
+  '/header-logo.svg',
+  '/logo.svg',
 ];
 const PUBLIC_EXACT = ['/'];
 

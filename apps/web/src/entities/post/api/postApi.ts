@@ -7,6 +7,7 @@ import type {
   PostDetailResponse,
   PostScheduleResponse,
 } from './types';
+import { getValidCategory } from '@/entities/schedule/model/constants';
 
 export const postApi = {
   getMyPosts: async (params: Partial<PostApiRequest>): Promise<PostListApiResponse> => {
@@ -51,7 +52,11 @@ export const postApi = {
       const { data } = await axiosInstance.get<PostScheduleResponse>(
         `/v1/user/post/${postId}/schedule`,
       );
-      return data.data;
+      const rawData = data.data;
+      return {
+        ...rawData,
+        category: getValidCategory(rawData.category),
+      };
     } catch (error) {
       console.error('Error fetching post schedule:', error);
       throw error;

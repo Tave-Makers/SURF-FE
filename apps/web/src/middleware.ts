@@ -9,6 +9,10 @@ const PUBLIC_PREFIX = [
   '/robots.txt',
   '/sitemap.xml',
   '/onboarding',
+  '/icons',
+  '/images',
+  'header-logo.svg',
+  'header-logo.svg',
 ];
 const PUBLIC_EXACT = ['/'];
 

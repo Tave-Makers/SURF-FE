@@ -13,6 +13,16 @@ export const postQueryKeys = {
   detail: (postId: number) => [...postQueryKeys.details(), postId] as const,
 
   /* --------------------
+   * 좋아요
+   * -------------------- */
+
+  // 특정 게시글의 좋아요 관련 모든 쿼리 (목록, 개수 등)
+  likes: (postId: number) => [...postQueryKeys.detail(postId), 'likes'] as const,
+
+  // 좋아요를 누른 사용자 목록
+  likeUsers: (postId: number) => [...postQueryKeys.likes(postId), 'users'] as const,
+
+  /* --------------------
    * 게시판 기준 목록
    * -------------------- */
   board: (boardId: number) => [...postQueryKeys.lists(), 'board', boardId] as const,

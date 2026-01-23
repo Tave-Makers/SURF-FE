@@ -1,18 +1,20 @@
 'use client';
 
 import { ActivityBadge } from '@surf/ui/activity-badge';
-import dynamic from 'next/dynamic';
+// import dynamic from 'next/dynamic';
 import { useMemo, useRef } from 'react';
 import { dedupeAndSortBadges } from '../model/utils';
 import { useInfiniteBadges } from '@/entities/user/model/useInfiniteBadges';
+import ActivityBadgeEmpty from '@/shared/assets/icons/empty-space/activity-badge-empty.svg';
 import { useInfiniteScroll } from '@/shared/hooks/useInfiniteScroll';
 
-const ActivityBadgeEmpty = dynamic(
-  () => import('@/shared/assets/icons/empty-space/activity-badge-empty.svg'),
-  {
-    ssr: false,
-  },
-);
+// const ActivityBadgeEmpty = dynamic(
+//   () => import('@/shared/assets/icons/empty-space/activity-badge-empty.svg'),
+//   {
+//     ssr: false,
+//       loading: () => <div className="h-[90px] w-[90px] rounded-5 bg-background-normal-lighter" aria-hidden="true" />,
+//   },
+// );
 
 interface Props {
   memberId?: number; // 없으면 내 뱃지

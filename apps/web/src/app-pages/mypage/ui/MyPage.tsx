@@ -1,20 +1,22 @@
 'use client';
 
 import { FieldGroup } from '@surf/ui/field-group';
-import dynamic from 'next/dynamic';
+// import dynamic from 'next/dynamic';
 import { useEffect, useRef } from 'react';
 import type { UserProfile } from '@/entities/user/model/types';
 import { CareerCard } from '@/entities/user/ui/career-card/CareerCard';
 import { useAuthStore } from '@/features/auth/model/useAuthStore';
 import { trackProfileEvent } from '@/features/profile/lib/trackProfileEvent';
 import { PROFILE_EVENTS } from '@/features/profile/model/types';
+import CareerEmpty from '@/shared/assets/icons/empty-space/career-empty.svg';
 import { MyPageActions } from '@/widgets/mypage-actions/ui/MyPageActions';
 import { ProfileBadge } from '@/widgets/profile-badge/ui/ProfileBadge';
 import { ProfileHeader } from '@/widgets/profile-header/ui/ProfileHeader';
 
-const CareerEmpty = dynamic(() => import('@/shared/assets/icons/empty-space/career-empty.svg'), {
-  ssr: false,
-});
+// const CareerEmpty = dynamic(() => import('@/shared/assets/icons/empty-space/career-empty.svg'), {
+//   ssr: false,
+//     loading: () => <div className="h-[90px] w-[90px] rounded-5 bg-background-normal-lighter" aria-hidden="true" />,
+// });
 
 interface Props {
   userProfile: UserProfile;

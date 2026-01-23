@@ -1,18 +1,20 @@
 'use client';
 
-import dynamic from 'next/dynamic';
+// import dynamic from 'next/dynamic';
 import { useSearchParams, useRouter } from 'next/navigation';
 import { useEffect, useRef } from 'react';
 import { getKakaoLoginCallback } from '@/features/auth/api/getKakaoLoginCallback';
 import { useOnboardingStore } from '@/features/onboarding/model/useOnboardingStore';
+import CallbackEmpty from '@/shared/assets/icons/empty-space/callback-empty.svg';
 import { PAGE_ROUTES } from '@/shared/config/path';
 
-const CallbackEmpty = dynamic(
-  () => import('@/shared/assets/icons/empty-space/callback-empty.svg'),
-  {
-    ssr: false,
-  },
-);
+// const CallbackEmpty = dynamic(
+//   () => import('@/shared/assets/icons/empty-space/callback-empty.svg'),
+//   {
+//     ssr: false,
+//       loading: () => <div className="h-[90px] w-[90px] rounded-5 bg-background-normal-lighter" aria-hidden="true" />,
+//   },
+// );
 
 const KakaoCallBackPage = () => {
   const searchParams = useSearchParams();

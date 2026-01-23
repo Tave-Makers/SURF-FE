@@ -2,18 +2,20 @@
 
 import { SearchHistoryItem } from '@surf/ui/search-history-item';
 import { useAlertStore } from '@surf/ui/store/alertStore';
-import dynamic from 'next/dynamic';
+// import dynamic from 'next/dynamic';
 import { useRouter } from 'next/navigation';
 import { useState } from 'react';
 import { deleteAllRecentSearches } from '../api/deleteAllRecentSearches.client';
 import { deleteOneRecentSearch } from '../api/deleteOneRecentSearch.client';
+import SearchEmpty from '@/shared/assets/icons/empty-space/search-empty.svg';
 import { PAGE_ROUTES } from '@/shared/config/path';
 
 const textStyle = 'text-body-body6 text-foreground-normal';
 
-const SearchEmpty = dynamic(() => import('@/shared/assets/icons/empty-space/search-empty.svg'), {
-  ssr: false,
-});
+// const SearchEmpty = dynamic(() => import('@/shared/assets/icons/empty-space/search-empty.svg'), {
+//   ssr: false,
+//     loading: () => <div className="h-[90px] w-[90px] rounded-5 bg-background-normal-lighter" aria-hidden="true" />,
+// });
 
 interface RecentSearchProps {
   recentKeywords: string[];

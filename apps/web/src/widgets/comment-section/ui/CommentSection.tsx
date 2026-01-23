@@ -2,7 +2,7 @@
 
 import { useAlertStore } from '@surf/ui/store/alertStore';
 import { useToastStore } from '@surf/ui/store/toastStore';
-import dynamic from 'next/dynamic';
+// import dynamic from 'next/dynamic';
 import { useRouter } from 'next/navigation';
 import { useEffect, useRef } from 'react';
 import { useAuthStore } from '@/features/auth/model/useAuthStore';
@@ -12,16 +12,18 @@ import { useDeleteCommentMutation } from '@/features/comment/model/useDeleteComm
 import { useInfiniteCommentsQuery } from '@/features/comment/model/useInfiniteCommentsQuery';
 import { useToggleCommentLikeMutation } from '@/features/comment/model/useToggleCommentLikeMutation';
 import { Comment } from '@/features/comment/ui/Comment';
+import CommentsEmpty from '@/shared/assets/icons/empty-space/comments-empty.svg';
 import { PAGE_ROUTES } from '@/shared/config/path';
 import { useBottomSheetStore } from '@/shared/store/bottomSheetStore';
 import { toDate, toKST, formatDateTime } from '@/shared/utils/date';
 
-const CommentsEmpty = dynamic(
-  () => import('@/shared/assets/icons/empty-space/comments-empty.svg'),
-  {
-    ssr: false,
-  },
-);
+// const CommentsEmpty = dynamic(
+//   () => import('@/shared/assets/icons/empty-space/comments-empty.svg'),
+//   {
+//     ssr: false,
+//       loading: () => <div className="h-[90px] w-[90px] rounded-5 bg-background-normal-lighter" aria-hidden="true" />,
+//   },
+// );
 
 interface Props {
   postId: number;
@@ -125,7 +127,7 @@ export const CommentSection = ({ postId, memberId, scrollRootRef, onStartReply }
   };
 
   if (isLoading) {
-    return <div className="px-13 pt-16 text-center text-gray-500">댓글을 불러오는 중...</div>;
+    return <div className="px-13 pt-16 text-center text-gray-500" />; //임시
   }
   if (isError) {
     return <div className="px-13 py-16 text-center text-red-500">댓글을 불러오지 못했습니다.</div>;

@@ -1,18 +1,20 @@
 'use client';
 
-import dynamic from 'next/dynamic';
+// import dynamic from 'next/dynamic';
 import { useEffect, useCallback } from 'react';
 import { useAuthStore } from '@/features/auth/model/useAuthStore';
 import { trackScrapsEvent } from '@/features/post/lib/trackScrapsEvent';
 import { SCRAPS_EVENTS } from '@/features/post/model/types';
 import { useInfiniteScraps } from '@/features/post/model/useScraps';
 import { usePageName } from '@/shared/analytics/lib/getPageName';
+import ScrapsEmpty from '@/shared/assets/icons/empty-space/scraps-empty.svg';
 import { useDynamicScrollTracking } from '@/shared/hooks/useDynamicScrollTracking';
 import { PostListPage } from '@/widgets/post-list/ui/PostListPage';
 
-const ScrapsEmpty = dynamic(() => import('@/shared/assets/icons/empty-space/scraps-empty.svg'), {
-  ssr: false,
-});
+// const ScrapsEmpty = dynamic(() => import('@/shared/assets/icons/empty-space/scraps-empty.svg'), {
+//   ssr: false,
+//     loading: () => <div className="h-[90px] w-[90px] rounded-5 bg-background-normal-lighter" aria-hidden="true" />,
+// });
 
 const ScrapsPage = () => {
   const pageName = usePageName();

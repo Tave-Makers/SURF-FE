@@ -1,7 +1,7 @@
 'use client';
 
 import { Tab } from '@surf/ui/tab';
-import dynamic from 'next/dynamic';
+// import dynamic from 'next/dynamic';
 import { useState, useRef, useEffect } from 'react';
 import { ScoreMode } from '@/entities/activity-score/model/types';
 import { useInfiniteActivityHistory } from '@/entities/activity-score/model/useActivityHistory';
@@ -10,14 +10,18 @@ import { ActivityHistoryList } from '@/entities/activity-score/ui/ActivityHistor
 import { trackActivityScoreEvent } from '@/features/activity-score/lib/trackActivityScoreEvent';
 import { ACTIVITY_SCORE_EVENTS } from '@/features/activity-score/model/types';
 import { usePageName } from '@/shared/analytics/lib/getPageName';
+import PenaltyEmpty from '@/shared/assets/icons/empty-space/penalty-empty.svg';
+import RewardEmpty from '@/shared/assets/icons/empty-space/reward-empty.svg';
 import { ActivityScoreCard } from '@/widgets/activity-score/ui/ActivityScoreCard';
 
-const PenaltyEmpty = dynamic(() => import('@/shared/assets/icons/empty-space/penalty-empty.svg'), {
-  ssr: false,
-});
-const RewardEmpty = dynamic(() => import('@/shared/assets/icons/empty-space/reward-empty.svg'), {
-  ssr: false,
-});
+// const PenaltyEmpty = dynamic(() => import('@/shared/assets/icons/empty-space/penalty-empty.svg'), {
+//   ssr: false,
+//     loading: () => <div className="h-[90px] w-[90px] rounded-5 bg-background-normal-lighter" aria-hidden="true" />,
+// });
+// const RewardEmpty = dynamic(() => import('@/shared/assets/icons/empty-space/reward-empty.svg'), {
+//   ssr: false,
+//     loading: () => <div className="h-[90px] w-[90px] rounded-5 bg-background-normal-lighter" aria-hidden="true" />,
+// });
 
 const ActivityScorePage = () => {
   // 탭 상태
@@ -84,9 +88,7 @@ const ActivityScorePage = () => {
       {/* 활동 점수 카드 */}
       <div className="pt-17 pb-19">
         {isSummaryLoading && (
-          <div aria-live="polite" aria-busy="true">
-            불러오는 중...
-          </div>
+          <div aria-live="polite" aria-busy="true" /> // 임시
         )}
         {isSummaryError && (
           <div role="alert" className="flex flex-col items-center gap-[0.5rem]">
@@ -121,9 +123,7 @@ const ActivityScorePage = () => {
       {(isHistoryLoading || isHistoryError || isHistoryEmpty) && (
         <div className="flex flex-col items-center pt-20">
           {isHistoryLoading && (
-            <div aria-live="polite" aria-busy="true" className="">
-              불러오는 중...
-            </div>
+            <div aria-live="polite" aria-busy="true" className="" /> // 임시
           )}
 
           {isHistoryError && (

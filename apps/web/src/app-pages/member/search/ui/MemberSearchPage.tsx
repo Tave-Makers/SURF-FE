@@ -1,16 +1,18 @@
 'use client';
 
 import { HeaderMode } from '@surf/ui/header';
-import dynamic from 'next/dynamic';
+// import dynamic from 'next/dynamic';
 import { useMemberSearch } from '@/features/member-search/api/useMemberSearch';
 import { useMemberFilters } from '@/features/member-search/model/useMemberFilters';
+import SearchEmpty from '@/shared/assets/icons/empty-space/search-empty.svg';
 import { AppHeader } from '@/widgets/header/ui/AppHeader';
 import { MemberListWidget } from '@/widgets/member-search/ui/MemberListWidget';
 import { MemberSearchWidget } from '@/widgets/member-search/ui/MemberSearchWidget';
 
-const SearchEmpty = dynamic(() => import('@/shared/assets/icons/empty-space/search-empty.svg'), {
-  ssr: false,
-});
+// const SearchEmpty = dynamic(() => import('@/shared/assets/icons/empty-space/search-empty.svg'), {
+//   ssr: false,
+//     loading: () => <div className="h-[90px] w-[90px] rounded-5 bg-background-normal-lighter" aria-hidden="true" />,
+// });
 
 export const MemberSearchPage = () => {
   const filters = useMemberFilters();
@@ -54,7 +56,7 @@ export const MemberSearchPage = () => {
             )}
 
             {isLoading && (
-              <span className="text-body-body8 text-foreground-tertiary">불러오는 중...</span>
+              <></> //임시
             )}
 
             {isEmpty && (

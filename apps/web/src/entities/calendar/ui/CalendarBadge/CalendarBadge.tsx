@@ -1,8 +1,10 @@
+import { ScheduleCategory } from '@/entities/schedule/model/types';
+
 type CalendarBadgeProps = {
-  variation: 'regular' | 'operation' | 'other';
+  variation: ScheduleCategory;
 };
 
-const BADGE_STYLE = {
+const BADGE_STYLE: Record<ScheduleCategory, { text: string; color: string }> = {
   regular: {
     text: '정규행사',
     color:

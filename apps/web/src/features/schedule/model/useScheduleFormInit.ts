@@ -3,7 +3,6 @@ import { useCreatePostScheduleStore } from '../create-post-schedule/model/useCre
 import { useGetSingleSchedule } from '../edit/model/useGetSingleSchedule';
 import { toFormLocation } from '../create/api/mapper';
 import { ScheduleFormData } from '../create/model/types';
-import { CATEGORY_MAP } from '@/entities/schedule/model/constants';
 
 type InitProps = {
   entryPoint: 'calendar' | 'post';
@@ -54,7 +53,7 @@ export const useScheduleFormInit = ({
         startDate: new Date(serverData.startAt),
         endDate: new Date(serverData.endAt),
         location: toFormLocation(serverData.location),
-        category: CATEGORY_MAP[serverData.category] || 'regular',
+        category: serverData.category || 'regular',
       } as ScheduleFormData;
     }
     return null;

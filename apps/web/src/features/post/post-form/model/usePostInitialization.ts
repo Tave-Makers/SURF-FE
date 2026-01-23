@@ -66,12 +66,9 @@ export const usePostInitialization = ({
     // 예약 정보 계산
     let initialReserved = false;
     let initialReservedAt: Date | null = null;
-    if (postDetail?.postedAt) {
-      const postedDate = new Date(postDetail.postedAt);
-      if (postedDate > new Date()) {
-        initialReserved = true;
-        initialReservedAt = postedDate;
-      }
+    if (postDetail?.isReserved && postDetail?.reservedAt) {
+      initialReserved = true;
+      initialReservedAt = new Date(postDetail.reservedAt);
     }
 
     // 일정 정보 매핑

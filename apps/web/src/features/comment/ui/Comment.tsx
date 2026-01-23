@@ -81,7 +81,7 @@ export const Comment = ({
         onClick={onProfileClick}
       />
 
-      <div className="flex flex-col gap-7">
+      <div className="flex w-full flex-col gap-7">
         {/* 이름, 날짜, 시간, 더보기 */}
         <header className="flex items-center">
           <div className="flex gap-8">

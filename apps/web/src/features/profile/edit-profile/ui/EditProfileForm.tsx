@@ -46,6 +46,7 @@ export interface EditProfileFormHandle {
 interface Props {
   initialProfile: UserProfile;
   onCanSubmitChange?: (canSubmit: boolean) => void;
+  onDirtyChange?: (isDirty: boolean) => void;
 }
 
 function toLocalDateOrNull(value: string): DateString | null {
@@ -103,7 +104,7 @@ function findFirstErrorPath<TFieldValues extends FieldValues>(
 }
 
 export const EditProfileForm = forwardRef<EditProfileFormHandle, Props>(
-  ({ initialProfile, onCanSubmitChange }, ref) => {
+  ({ initialProfile, onCanSubmitChange, onDirtyChange }, ref) => {
     const router = useRouter();
     const toast = useToastStore((s) => s.show);
     const { isActive, startRequest } = useAbortableLifeCycle();
@@ -193,6 +194,10 @@ export const EditProfileForm = forwardRef<EditProfileFormHandle, Props>(
     useEffect(() => {
       onCanSubmitChange?.(canSubmit);
     }, [canSubmit, onCanSubmitChange]);
+
+    useEffect(() => {
+      onDirtyChange?.(isDirty || careerIdsToDelete.length > 0);
+    }, [isDirty, careerIdsToDelete.length, onDirtyChange]);
 
     const onSubmit = useCallback(
       async (values: FormValues) => {

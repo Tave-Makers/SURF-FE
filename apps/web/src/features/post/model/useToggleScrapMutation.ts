@@ -1,30 +1,35 @@
-import { useMutation, useQueryClient } from '@tanstack/react-query';
+import { InfiniteData, useMutation, useQueryClient } from '@tanstack/react-query';
 import { toggleScrap } from '../api/toggleScrap';
 import { PostDetail } from '@/entities/post/model/types';
 import { postQueryKeys } from '@/entities/post/api/queryKeys';
+import { PostListApiResponse } from '@/entities/post/api/types';
 
 export const useToggleScrapMutation = () => {
   const queryClient = useQueryClient();
 
   return useMutation({
-    mutationKey: ['post', 'toggleScrap'],
+    mutationKey: [...postQueryKeys.all, 'toggleScrap'],
     mutationFn: ({ postId, scrapped }: { postId: number; scrapped: boolean }) =>
       toggleScrap(postId, scrapped),
 
     // Optimistic update
     onMutate: async ({ postId, scrapped }) => {
-      const queryKey = postQueryKeys.detail(postId);
+      const detailKey = postQueryKeys.detail(postId);
+      const listKey = postQueryKeys.lists();
 
-      // 1) 기존 요청 취소
-      await queryClient.cancelQueries({ queryKey });
+      await queryClient.cancelQueries({ queryKey: detailKey });
+      await queryClient.cancelQueries({ queryKey: listKey });
 
-      // 2) 이전 데이터 백업
-      const prevData = queryClient.getQueryData<PostDetail>(queryKey);
+      const prevDetail = queryClient.getQueryData<PostDetail>(detailKey);
+      const prevLists = queryClient.getQueriesData<
+        InfiniteData<PostListApiResponse> | PostListApiResponse
+      >({
+        queryKey: listKey,
+      });
 
-      // 3) 캐시 직접 수정 → UI 즉시 반영
-      queryClient.setQueryData<PostDetail | undefined>(queryKey, (old) => {
+      // 1. 상세 페이지 캐시 업데이트
+      queryClient.setQueryData<PostDetail>(detailKey, (old) => {
         if (!old) return old;
-
         return {
           ...old,
           scrappedByMe: !scrapped,
@@ -32,23 +37,58 @@ export const useToggleScrapMutation = () => {
         };
       });
 
-      return { prevData };
+      // 2. 목록 캐시 업데이트
+      queryClient.setQueriesData<InfiniteData<PostListApiResponse> | PostListApiResponse>(
+        { queryKey: listKey },
+        (old) => {
+          if (!old) return old;
+
+          // 무한 스크롤 구조
+          if ('pages' in old) {
+            return {
+              ...old,
+              pages: old.pages.map((page) => ({
+                ...page,
+                content: page.content.map((post) =>
+                  post.postId === postId ? { ...post, scrappedByMe: !scrapped } : post,
+                ),
+              })),
+            };
+          }
+
+          // 일반 페이징 구조
+          if ('content' in old) {
+            return {
+              ...old,
+              content: old.content.map((post) =>
+                post.postId === postId ? { ...post, scrappedByMe: !scrapped } : post,
+              ),
+            };
+          }
+
+          return old;
+        },
+      );
+
+      return { prevDetail, prevLists };
     },
 
-    // 실패 시 롤백
     onError: (_err, variables, context) => {
-      const queryKey = postQueryKeys.detail(variables.postId);
-
-      if (context?.prevData) {
-        queryClient.setQueryData(queryKey, context.prevData);
+      if (context?.prevDetail) {
+        queryClient.setQueryData(postQueryKeys.detail(variables.postId), context.prevDetail);
+      }
+      if (context?.prevLists) {
+        context.prevLists.forEach(([queryKey, oldData]) => {
+          queryClient.setQueryData(queryKey, oldData);
+        });
       }
     },
 
-    // 성공/실패 관계없이 최종 서버 상태로 동기화
     onSettled: (_data, _error, variables) => {
-      const queryKey = postQueryKeys.detail(variables.postId);
-
-      void queryClient.invalidateQueries({ queryKey });
+      // 게시글 상세 무효화
+      void queryClient.invalidateQueries({ queryKey: postQueryKeys.detail(variables.postId) });
+      // 내가 스크랩한 게시글 무효화
+      void queryClient.invalidateQueries({ queryKey: postQueryKeys.scraps() });
     },
   });
 };

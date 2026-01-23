@@ -133,7 +133,7 @@ export const ScheduleActionSheet = ({
                   disabled={isDeletePending}
                   className="flex w-full items-center gap-8 self-stretch px-12 py-10"
                 >
-                  <SurfIcon size="m" name="Trash" className="fill-foreground-danger" />
+                  <SurfIcon size="m" name="TrashOneSolid" className="text-foreground-danger" />
                   <span className="text-body-body6 text-foreground-danger-darker">삭제하기</span>
                 </button>
               </div>

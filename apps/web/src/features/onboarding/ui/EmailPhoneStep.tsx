@@ -3,6 +3,7 @@ import { TextArea } from '@surf/ui/text-area';
 import { Controller, useFormContext } from 'react-hook-form';
 import { trackOnBoardingEvent } from '../lib/trackOnBoardingEvent';
 import { ONBOARDING_EVENTS, OnBoardingFormData } from '@/features/onboarding/model/types';
+import { formatPhoneNumber, onlyDigits } from '@/shared/lib/validator';
 
 export const EmailPhoneStep = () => {
   const { control } = useFormContext<OnBoardingFormData>();
@@ -38,28 +39,22 @@ export const EmailPhoneStep = () => {
       </FieldGroup>
       <FieldGroup title="전화번호" isRequired>
         <Controller
-          name="phoneNumber"
           control={control}
+          name="phoneNumber"
           rules={{
-            required: '전화번호는 필수 입력값입니다.',
-            pattern: {
-              value: /^[0-9]{10,11}$/,
-              message: '10~11 자리 숫자만 입력해주세요.',
-            },
+            required: '전화번호는 필수 입력값입니다',
+            pattern: { value: /^01[0-9]\d{8}$/, message: '11자리 숫자로 입력해주세요.' },
           }}
           render={({ field, fieldState }) => (
             <TextArea
-              {...field}
-              onBlur={(_e) => {
-                trackOnBoardingEvent(ONBOARDING_EVENTS.INPUT_SIGNUP_FIELD, {
-                  field_name: 'phone',
-                });
-                field.onBlur();
-              }}
-              value={field.value || ''}
+              id={field.name}
+              mode="oneLine"
+              value={formatPhoneNumber(field.value ?? '')}
+              onChange={(v) => field.onChange(onlyDigits(v))}
+              onBlur={field.onBlur}
+              placeholder="01012345678"
               errorMessage={fieldState.error?.message}
-              placeholder="전화번호를 입력해주세요."
-              guideMessage="정확한 전화번호를 입력해주세요."
+              guideMessage="정확한 전화번호를 숫자만 입력해주세요."
             />
           )}
         />

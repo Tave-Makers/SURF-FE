@@ -3,8 +3,8 @@
 import { HeaderMode } from '@surf/ui/header';
 import { useToastStore } from '@surf/ui/store/toastStore';
 import { Tab } from '@surf/ui/tab';
-import { useRouter } from 'next/navigation';
-import { useState, useEffect } from 'react';
+import { useRouter, useSearchParams } from 'next/navigation';
+import { useEffect } from 'react';
 import type { NotificationTab } from '@/entities/notification/model/notificationTab';
 import { useGetNotifications } from '@/entities/notification/model/useGetNotifications';
 import { useReadNotification } from '@/entities/notification/model/useReadNotification';
@@ -20,7 +20,8 @@ const tabItems = [
 
 export const NotificationPage = () => {
   const router = useRouter();
-  const [currentTab, setCurrentTab] = useState<NotificationTab>('ALL');
+  const searchParams = useSearchParams();
+  const currentTab = (searchParams.get('tab') as NotificationTab) || 'ALL';
   const showToast = useToastStore((state) => state.show);
 
   useEffect(() => {
@@ -32,14 +33,16 @@ export const NotificationPage = () => {
   }, [showToast]);
 
   const { data, isLoading } = useGetNotifications(currentTab);
-  const { mutate: readNotification, isPending } = useReadNotification();
+  const { mutate: readNotification } = useReadNotification();
 
   const handleBack = () => {
     router.back();
   };
 
   const handleTabChange = (value: string) => {
-    setCurrentTab(value as NotificationTab);
+    const newParams = new URLSearchParams(searchParams.toString());
+    newParams.set('tab', value);
+    router.replace(`?${newParams.toString()}`);
   };
 
   const handleNotificationClick = (id: number, deepLink: string, isRead: boolean) => {
@@ -57,7 +60,7 @@ export const NotificationPage = () => {
 
   const renderContent = () => {
     // 로딩 중일 때(임시)
-    if (isLoading || isPending) {
+    if (isLoading) {
       return <div className="p-20 text-center text-gray-500">로딩 중...</div>;
     }
 
@@ -74,10 +77,6 @@ export const NotificationPage = () => {
           {emptyMessages[currentTab]}
         </div>
       );
-    }
-
-    if (isPending) {
-      return <div className="p-20 text-center text-gray-500">로딩 중...</div>;
     }
 
     // 데이터가 있을 때

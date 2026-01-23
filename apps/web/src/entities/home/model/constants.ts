@@ -23,25 +23,25 @@ export const SHORTCUT_LINKS: ShortcutItem[] = [
 export const TAVE_CHANNEL_LINKS: ShortcutItem[] = [
   {
     id: 1,
-    label: 'Homepage',
+    label: '공식 홈페이지',
     link: 'https://www.tave-wave.com/',
     imageSrc: '/images/tave-channel/homepage.svg',
   },
   {
     id: 2,
-    label: 'Agit',
+    label: '아지트',
     link: 'https://tave.agit.io/home/',
     imageSrc: '/images/tave-channel/agit.webp',
   },
   {
     id: 3,
-    label: 'Instagram',
+    label: '인스타그램',
     link: 'https://www.instagram.com/tave_wave/',
     imageSrc: '/images/tave-channel/instagram.webp',
   },
   {
     id: 4,
-    label: 'Blog',
+    label: '블로그',
     link: 'https://blog.naver.com/t-ave/',
     imageSrc: '/images/tave-channel/blog.webp',
   },

@@ -9,6 +9,7 @@ import {
   EditProfileForm,
   type EditProfileFormHandle,
 } from '@/features/profile/edit-profile/ui/EditProfileForm';
+import { PAGE_ROUTES } from '@/shared/config/path';
 import { AppHeader } from '@/widgets/header/ui/AppHeader';
 
 interface Props {
@@ -19,7 +20,8 @@ export const MyEditPage = ({ initialProfile }: Props) => {
   const formRef = useRef<EditProfileFormHandle>(null);
   const [canSubmit, setCanSubmit] = useState(false);
   const [isDirty, setIsDirty] = useState(false);
-  const allowPopRef = useRef(false);
+  const hasPushedStateRef = useRef(false);
+  const isDirtyRef = useRef(false);
   const router = useRouter();
   const openAlert = useAlertStore((s) => s.open);
   const closeAlert = useAlertStore((s) => s.close);
@@ -47,50 +49,63 @@ export const MyEditPage = ({ initialProfile }: Props) => {
     [closeAlert, openAlert],
   );
 
+  const navigateToMyPage = useCallback(() => {
+    router.push(PAGE_ROUTES.MYPAGE.MAIN);
+  }, [router]);
+
   const handleBack = () => {
     if (!isDirty) {
-      router.back();
+      navigateToMyPage();
       return;
     }
 
-    openExitAlert(() => router.back());
+    openExitAlert(navigateToMyPage);
   };
 
   useEffect(() => {
-    if (!isDirty) return;
+    isDirtyRef.current = isDirty;
+  }, [isDirty]);
+
+  useEffect(() => {
+    if (!hasPushedStateRef.current) {
+      hasPushedStateRef.current = true;
+      history.pushState({ __exitGuard: true }, '', window.location.href);
+    }
 
     const handleBeforeUnload = (event: BeforeUnloadEvent) => {
+      if (!isDirtyRef.current) return;
       event.preventDefault();
       event.returnValue = '';
     };
 
     const handlePopState = () => {
-      if (allowPopRef.current) {
-        allowPopRef.current = false;
+      history.go(1);
+      if (!isDirtyRef.current) {
+        navigateToMyPage();
         return;
       }
-
-      history.pushState(null, '', window.location.href);
-      openExitAlert(() => {
-        allowPopRef.current = true;
-        history.back();
-      });
+      openExitAlert(navigateToMyPage);
     };
 
     const handleClick = (event: MouseEvent) => {
-      if (!isDirty) return;
+      if (!isDirtyRef.current) return;
 
       const target = event.target as HTMLElement | null;
       const anchor = target?.closest('a');
       if (!anchor) return;
 
       const href = anchor.getAttribute('href');
-      if (!href || href.startsWith('#') || href.startsWith('mailto:') || href.startsWith('tel:')) {
+      if (!href || href.startsWith('mailto:') || href.startsWith('tel:')) {
         return;
       }
 
+      const linkTarget = anchor.getAttribute('target');
       event.preventDefault();
       openExitAlert(() => {
+        if (linkTarget === '_blank') {
+          window.open(href, '_blank', 'noopener,noreferrer');
+          return;
+        }
         if (href.startsWith('http')) {
           window.location.assign(href);
           return;
@@ -99,7 +114,6 @@ export const MyEditPage = ({ initialProfile }: Props) => {
       });
     };
 
-    history.pushState(null, '', window.location.href);
     window.addEventListener('beforeunload', handleBeforeUnload);
     window.addEventListener('popstate', handlePopState);
     document.addEventListener('click', handleClick, true);
@@ -109,11 +123,12 @@ export const MyEditPage = ({ initialProfile }: Props) => {
       window.removeEventListener('popstate', handlePopState);
       document.removeEventListener('click', handleClick, true);
     };
-  }, [isDirty, openExitAlert, router]);
+  }, [navigateToMyPage, openExitAlert, router]);
 
   return (
     <div className="flex h-full w-full flex-col overflow-y-auto">
       <AppHeader
+        customBack={handleBack}
         overrideHeader={{
           mode: HeaderMode.TextBtn,
           title: '프로필 수정',
@@ -122,7 +137,6 @@ export const MyEditPage = ({ initialProfile }: Props) => {
           btnVariant: 'secondary',
           isDisabled: !canSubmit,
           onClickTextBtn: () => formRef.current?.submit(),
-          onClickBack: handleBack,
         }}
       />
 

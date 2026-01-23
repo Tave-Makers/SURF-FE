@@ -1,14 +1,18 @@
 'use client';
 
+import dynamic from 'next/dynamic';
 import { useEffect, useCallback } from 'react';
 import { useAuthStore } from '@/features/auth/model/useAuthStore';
 import { trackScrapsEvent } from '@/features/post/lib/trackScrapsEvent';
 import { SCRAPS_EVENTS } from '@/features/post/model/types';
 import { useInfiniteScraps } from '@/features/post/model/useScraps';
 import { usePageName } from '@/shared/analytics/lib/getPageName';
-import ScrapsEmpty from '@/shared/assets/icons/empty-space/scraps-empty.svg';
 import { useDynamicScrollTracking } from '@/shared/hooks/useDynamicScrollTracking';
 import { PostListPage } from '@/widgets/post-list/ui/PostListPage';
+
+const ScrapsEmpty = dynamic(() => import('@/shared/assets/icons/empty-space/scraps-empty.svg'), {
+  ssr: false,
+});
 
 const ScrapsPage = () => {
   const pageName = usePageName();
@@ -33,7 +37,9 @@ const ScrapsPage = () => {
   const emptyView = (
     <div className="flex h-full flex-col items-center justify-center gap-12">
       <ScrapsEmpty className="h-[4.46rem] w-[4.41rem]" />
-      <div className="text-body-body8 text-foreground-tertiary">아직 스크랩한 게시글이 없어요</div>
+      <span className="text-body-body8 text-foreground-tertiary">
+        아직 스크랩한 게시글이 없어요
+      </span>
     </div>
   );
 

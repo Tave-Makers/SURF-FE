@@ -1,6 +1,7 @@
 'use client';
 
 import { Tab } from '@surf/ui/tab';
+import dynamic from 'next/dynamic';
 import { useState, useRef, useEffect } from 'react';
 import { ScoreMode } from '@/entities/activity-score/model/types';
 import { useInfiniteActivityHistory } from '@/entities/activity-score/model/useActivityHistory';
@@ -9,9 +10,14 @@ import { ActivityHistoryList } from '@/entities/activity-score/ui/ActivityHistor
 import { trackActivityScoreEvent } from '@/features/activity-score/lib/trackActivityScoreEvent';
 import { ACTIVITY_SCORE_EVENTS } from '@/features/activity-score/model/types';
 import { usePageName } from '@/shared/analytics/lib/getPageName';
-import PenaltyEmptyIcon from '@/shared/assets/icons/empty-space/penalty-empty.svg';
-import RewardEmptyIcon from '@/shared/assets/icons/empty-space/reward-empty.svg';
 import { ActivityScoreCard } from '@/widgets/activity-score/ui/ActivityScoreCard';
+
+const PenaltyEmpty = dynamic(() => import('@/shared/assets/icons/empty-space/penalty-empty.svg'), {
+  ssr: false,
+});
+const RewardEmpty = dynamic(() => import('@/shared/assets/icons/empty-space/reward-empty.svg'), {
+  ssr: false,
+});
 
 const ActivityScorePage = () => {
   // 탭 상태
@@ -137,17 +143,17 @@ const ActivityScorePage = () => {
             <div className="flex flex-col items-center gap-12">
               {mode === 'REWARD' ? (
                 <>
-                  <RewardEmptyIcon className="h-[60px] w-[60px]" />
-                  <p className="text-body-body8 text-foreground-tertiary">
+                  <RewardEmpty className="h-[60px] w-[60px]" />
+                  <span className="text-body-body8 text-foreground-tertiary">
                     아직 등록된 상점이 없어요
-                  </p>
+                  </span>
                 </>
               ) : (
                 <>
-                  <PenaltyEmptyIcon className="h-[60px] w-[60px]" />
-                  <p className="text-body-body8 text-foreground-tertiary">
+                  <PenaltyEmpty className="h-[60px] w-[60px]" />
+                  <span className="text-body-body8 text-foreground-tertiary">
                     아직 등록된 벌점이 없어요
-                  </p>
+                  </span>
                 </>
               )}
             </div>

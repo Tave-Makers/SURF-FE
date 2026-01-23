@@ -1,6 +1,7 @@
 'use client';
 
 import { FieldGroup } from '@surf/ui/field-group';
+import dynamic from 'next/dynamic';
 import { useEffect, useRef } from 'react';
 import type { UserProfile } from '@/entities/user/model/types';
 import { CareerCard } from '@/entities/user/ui/career-card/CareerCard';
@@ -10,6 +11,10 @@ import { PROFILE_EVENTS } from '@/features/profile/model/types';
 import { MyPageActions } from '@/widgets/mypage-actions/ui/MyPageActions';
 import { ProfileBadge } from '@/widgets/profile-badge/ui/ProfileBadge';
 import { ProfileHeader } from '@/widgets/profile-header/ui/ProfileHeader';
+
+const CareerEmpty = dynamic(() => import('@/shared/assets/icons/empty-space/career-empty.svg'), {
+  ssr: false,
+});
 
 interface Props {
   userProfile: UserProfile;
@@ -45,7 +50,7 @@ export const MyPage = ({ userProfile }: Props) => {
       <section className="flex flex-col gap-16 px-13 pt-16">
         <div className="flex flex-col gap-10">
           <FieldGroup title="경력">
-            {userProfile.careers.length > 0 && (
+            {userProfile.careers.length > 0 ? (
               <ul className="flex flex-col gap-10">
                 {userProfile.careers.map((c) => (
                   <li key={c.careerId ?? `${c.companyName}-${c.startDate}`}>
@@ -53,6 +58,13 @@ export const MyPage = ({ userProfile }: Props) => {
                   </li>
                 ))}
               </ul>
+            ) : (
+              <div className="flex flex-col items-center gap-3 pt-16">
+                <CareerEmpty aria-hidden="true" />
+                <span className="text-body-body8 text-foreground-tertiary">
+                  등록된 경력이 없어요
+                </span>
+              </div>
             )}
           </FieldGroup>
         </div>

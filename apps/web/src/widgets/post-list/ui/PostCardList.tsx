@@ -1,11 +1,15 @@
 'use client';
 
+import dynamic from 'next/dynamic';
 import { memo } from 'react';
 import type { TabCategoryLabel } from '@/entities/post/model/tab';
 import type { Post } from '@/entities/post/model/types';
 import { PostCard } from '@/entities/post/ui/post-card/PostCard';
 import type { UserLevel } from '@/entities/user/model/types';
-import PostEmpty from '@/shared/assets/icons/empty-space/posts-empty.svg';
+
+const PostEmpty = dynamic(() => import('@/shared/assets/icons/empty-space/posts-empty.svg'), {
+  ssr: false,
+});
 
 type PostCardListProps = {
   posts: Post[];

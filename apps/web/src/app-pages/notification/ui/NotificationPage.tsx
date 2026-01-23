@@ -3,14 +3,21 @@
 import { HeaderMode } from '@surf/ui/header';
 import { useToastStore } from '@surf/ui/store/toastStore';
 import { Tab } from '@surf/ui/tab';
+import dynamic from 'next/dynamic';
 import { useRouter } from 'next/navigation';
 import { useState, useEffect } from 'react';
 import type { NotificationTab } from '@/entities/notification/model/notificationTab';
 import { useGetNotifications } from '@/entities/notification/model/useGetNotifications';
 import { useReadNotification } from '@/entities/notification/model/useReadNotification';
 import { NotificationList } from '@/entities/notification/ui/NotificationList';
-import NotificationEmpty from '@/shared/assets/icons/empty-space/notification-empty.svg';
 import { AppHeader } from '@/widgets/header/ui/AppHeader';
+
+const NotificationEmpty = dynamic(
+  () => import('@/shared/assets/icons/empty-space/notification-empty.svg'),
+  {
+    ssr: false,
+  },
+);
 
 const tabItems = [
   { value: 'ALL', label: '전체' },
@@ -70,7 +77,7 @@ export const NotificationPage = () => {
       };
       return (
         <div className="text-body-body8 text-foreground-tertiary flex h-full w-full flex-col items-center justify-center gap-[0.43rem] text-center">
-          <NotificationEmpty />
+          <NotificationEmpty className="h-[4.90913rem] w-[4.90913rem]" />
           {emptyMessages[currentTab]}
         </div>
       );

@@ -1,14 +1,18 @@
 'use client';
 
+import dynamic from 'next/dynamic';
 import { useEffect, useCallback } from 'react';
 import { useAuthStore } from '@/features/auth/model/useAuthStore';
 import { trackMyPostsEvent } from '@/features/post/lib/trackMyPostsEvent';
 import { MY_POSTS_EVENTS } from '@/features/post/model/types';
 import { useInfiniteMyPosts } from '@/features/post/model/useMyPosts';
 import { usePageName } from '@/shared/analytics/lib/getPageName';
-import MyPostsEmpty from '@/shared/assets/icons/empty-space/myposts-empty.svg';
 import { useDynamicScrollTracking } from '@/shared/hooks/useDynamicScrollTracking';
 import { PostListPage } from '@/widgets/post-list/ui/PostListPage';
+
+const MyPostsEmpty = dynamic(() => import('@/shared/assets/icons/empty-space/myposts-empty.svg'), {
+  ssr: false,
+});
 
 const MyPostsPage = () => {
   const pageName = usePageName();
@@ -33,7 +37,7 @@ const MyPostsPage = () => {
   const emptyView = (
     <div className="flex h-full flex-col items-center justify-center gap-12">
       <MyPostsEmpty className="h-[4.72rem] w-[5.68rem]" />
-      <div className="text-body-body8 text-foreground-tertiary">아직 작성한 게시글이 없어요</div>
+      <span className="text-body-body8 text-foreground-tertiary">아직 작성한 게시글이 없어요</span>
     </div>
   );
 

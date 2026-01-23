@@ -1,10 +1,18 @@
 'use client';
 
 import { ActivityBadge } from '@surf/ui/activity-badge';
+import dynamic from 'next/dynamic';
 import { useMemo, useRef } from 'react';
 import { dedupeAndSortBadges } from '../model/utils';
 import { useInfiniteBadges } from '@/entities/user/model/useInfiniteBadges';
 import { useInfiniteScroll } from '@/shared/hooks/useInfiniteScroll';
+
+const ActivityBadgeEmpty = dynamic(
+  () => import('@/shared/assets/icons/empty-space/activity-badge-empty.svg'),
+  {
+    ssr: false,
+  },
+);
 
 interface Props {
   memberId?: number; // 없으면 내 뱃지
@@ -36,7 +44,7 @@ export const ProfileBadge = ({ memberId }: Props) => {
         <h2 className="text-title-title2 text-foreground-normal">활동 뱃지</h2>
         {!isLoading ? (
           <>
-            {badges.length > 0 && (
+            {badges.length > 0 ? (
               <div className="grid grid-cols-3 gap-20 p-6">
                 {badges.map((b) => (
                   <ActivityBadge
@@ -45,6 +53,13 @@ export const ProfileBadge = ({ memberId }: Props) => {
                     timestamp={b.awardedAt}
                   />
                 ))}
+              </div>
+            ) : (
+              <div className="flex flex-col items-center gap-3 pt-16">
+                <ActivityBadgeEmpty aria-hidden="true" />
+                <span className="text-body-body8 text-foreground-tertiary">
+                  아직 활동뱃지는 준비 중이에요.
+                </span>
               </div>
             )}
 

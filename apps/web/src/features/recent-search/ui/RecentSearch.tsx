@@ -2,14 +2,18 @@
 
 import { SearchHistoryItem } from '@surf/ui/search-history-item';
 import { useAlertStore } from '@surf/ui/store/alertStore';
+import dynamic from 'next/dynamic';
 import { useRouter } from 'next/navigation';
 import { useState } from 'react';
 import { deleteAllRecentSearches } from '../api/deleteAllRecentSearches.client';
 import { deleteOneRecentSearch } from '../api/deleteOneRecentSearch.client';
-import SearchEmpty from '@/shared/assets/icons/empty-space/search-empty.svg';
 import { PAGE_ROUTES } from '@/shared/config/path';
 
 const textStyle = 'text-body-body6 text-foreground-normal';
+
+const SearchEmpty = dynamic(() => import('@/shared/assets/icons/empty-space/search-empty.svg'), {
+  ssr: false,
+});
 
 interface RecentSearchProps {
   recentKeywords: string[];
@@ -114,7 +118,7 @@ export const RecentSearch = ({ recentKeywords }: RecentSearchProps) => {
       {items.length === 0 && (
         <div className="flex flex-col items-center justify-center gap-4 pt-[3.37rem]">
           <SearchEmpty className="h-[4.34rem] w-[4.34rem]" />
-          <div className="text-body-body8 text-foreground-tertiary">검색 결과가 없어요</div>
+          <span className="text-body-body8 text-foreground-tertiary">검색 결과가 없어요</span>
         </div>
       )}
 

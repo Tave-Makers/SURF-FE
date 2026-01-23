@@ -6,6 +6,7 @@ import { useRouter } from 'next/navigation';
 import type { UserProfile } from '@/entities/user/model/types';
 import { CareerCard } from '@/entities/user/ui/career-card/CareerCard';
 import { useAuthStore } from '@/features/auth/model/useAuthStore';
+import CareerEmpty from '@/shared/assets/icons/empty-space/career-empty.svg';
 import { PAGE_ROUTES } from '@/shared/config/path';
 import { ProfileBadge } from '@/widgets/profile-badge/ui/ProfileBadge';
 import { ProfileHeader } from '@/widgets/profile-header/ui/ProfileHeader';
@@ -43,7 +44,7 @@ export const MemberProfilePage = ({ userProfile, memberId }: Props) => {
       <section className="flex flex-col gap-16 px-13 pt-16">
         <div className="flex flex-col gap-10">
           <FieldGroup title="경력">
-            {userProfile.careers.length > 0 && (
+            {userProfile.careers.length > 0 ? (
               <ul className="flex flex-col gap-10">
                 {userProfile.careers.map((c) => (
                   <li key={c.careerId ?? `${c.companyName}-${c.startDate}`}>
@@ -51,6 +52,13 @@ export const MemberProfilePage = ({ userProfile, memberId }: Props) => {
                   </li>
                 ))}
               </ul>
+            ) : (
+              <div className="flex flex-col items-center gap-3 py-16">
+                <CareerEmpty aria-hidden="true" />
+                <span className="text-body-body8 text-foreground-tertiary">
+                  등록된 경력이 없어요
+                </span>
+              </div>
             )}
           </FieldGroup>
         </div>

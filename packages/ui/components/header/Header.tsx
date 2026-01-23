@@ -96,7 +96,7 @@ const renderRightIcons = (icons: MaxThree<HeaderIcon> = []) => (
           >
             <SurfIcon name={icon.label} size="l" className="text-foreground-normal" />
             {icon.isNew && (
-              <span className="bg-foreground-primary absolute right-8 top-8 h-4 w-4 rounded-full" />
+              <span className="bg-foreground-primary absolute right-8 top-8 h-7 w-7 rounded-full" />
             )}
           </button>
         ),

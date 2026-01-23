@@ -4,6 +4,7 @@ import { useAlertStore } from '@surf/ui/store/alertStore';
 import { useToastStore } from '@surf/ui/store/toastStore';
 import { useRouter } from 'next/navigation';
 import { Sheet as ModalSheet } from 'react-modal-sheet';
+import { useDeletePostSchedule } from '@/features/schedule/delete/model/useDelPostSchedule';
 import { useDeleteSchedule } from '@/features/schedule/delete/model/useDelSchedule';
 import { useEditSchedule } from '@/features/schedule/edit/model/useEditSchedule';
 import { PAGE_ROUTES } from '@/shared/config/path';
@@ -19,6 +20,8 @@ export type ScheduleActionSheetProps = {
   isOpen: boolean;
   onClose: () => void;
   onDeleteSuccess?: () => void;
+  hasNotice?: boolean;
+  postId?: number;
 };
 
 /**
@@ -29,6 +32,8 @@ export const ScheduleActionSheet = ({
   isOpen,
   onClose,
   onDeleteSuccess,
+  hasNotice,
+  postId,
 }: ScheduleActionSheetProps) => {
   const router = useRouter();
   const scheduleIdNum = typeof scheduleId === 'string' ? parseInt(scheduleId, 10) : scheduleId;
@@ -38,6 +43,8 @@ export const ScheduleActionSheet = ({
 
   // 삭제 훅 사용
   const deleteScheduleMutation = useDeleteSchedule();
+  // 공지사항 연동된 일정 삭제 훅 사용
+  const deletePostScheduleMutation = useDeletePostSchedule();
 
   // 수정 훅 사용
   const editScheduleMutation = useEditSchedule();
@@ -50,18 +57,29 @@ export const ScheduleActionSheet = ({
 
   const handleDeleteConfirm = () => {
     closeAlert();
-    deleteScheduleMutation.mutate(scheduleIdNum, {
-      onSuccess: () => {
-        onDeleteSuccess?.();
-        showToast('일정이 삭제되었습니다.');
-        onClose();
-      },
-      onError: () => {
-        showToast('일정 삭제에 실패했습니다.');
-        onClose();
-      },
-    });
+
+    const onSuccess = () => {
+      onDeleteSuccess?.();
+      showToast('일정이 삭제되었습니다.');
+      onClose();
+    };
+
+    const onError = () => {
+      showToast('일정 삭제에 실패했습니다.');
+      onClose();
+    };
+
+    if (hasNotice && postId) {
+      deletePostScheduleMutation.mutate(
+        { postId: postId, scheduleId: scheduleIdNum },
+        { onSuccess, onError },
+      );
+    } else {
+      deleteScheduleMutation.mutate(scheduleIdNum, { onSuccess, onError });
+    }
   };
+
+  const isDeletePending = deleteScheduleMutation.isPending || deletePostScheduleMutation.isPending;
 
   const handleDeleteClick = () => {
     openAlert({
@@ -80,7 +98,7 @@ export const ScheduleActionSheet = ({
           variant: 'danger',
           label: '삭제',
           onClick: handleDeleteConfirm,
-          isDisabled: deleteScheduleMutation.isPending,
+          isDisabled: isDeletePending,
         },
       ],
     });
@@ -112,7 +130,7 @@ export const ScheduleActionSheet = ({
                 {/* 삭제하기 버튼 */}
                 <button
                   onClick={handleDeleteClick}
-                  disabled={deleteScheduleMutation.isPending}
+                  disabled={isDeletePending}
                   className="flex w-full items-center gap-8 self-stretch px-12 py-10"
                 >
                   <SurfIcon size="m" name="Trash" className="fill-foreground-danger" />

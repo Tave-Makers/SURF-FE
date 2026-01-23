@@ -63,7 +63,7 @@ export const HomePageClient = ({ heroProps }: { heroProps: HeroCardProps }) => {
           <AnnouncementBar
             title={homeData?.announcementTitle ?? 'Title'}
             date={homeData?.announcementDate ?? '00.00'}
-            category="regular" // TODO: 카테고리 데이터 필요 {homeData?.announcementCategory ?? 'regular'}
+            category="regular" // 정규 행사만 보여줌
             onClick={() => {
               if (!deepLink) {
                 if (process.env.NODE_ENV === 'development') {

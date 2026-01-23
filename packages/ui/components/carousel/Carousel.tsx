@@ -18,7 +18,7 @@ interface CarouselProps {
 }
 
 const baseStyle =
-  'rounded-5 h-[150px] w-[343px] relative overflow-hidden bg-background-normal shadow-embossed';
+  'rounded-5 aspect-[343/150] w-full min-w-[343px] relative overflow-hidden from-background-carousel-start to-background-carousel-end bg-gradient-to-b shadow-embossed';
 
 export const Carousel = ({ images, className = '' }: CarouselProps) => {
   const [current, setCurrent] = useState(0);
@@ -73,7 +73,7 @@ export const Carousel = ({ images, className = '' }: CarouselProps) => {
 
   return (
     <div className={`${baseStyle} ${className} group`}>
-      <div className="from-background-carousel-start to-background-carousel-end bg-gradient-to-b">
+      <div className="bg-background-normal z-[-10]">
         <div
           className="flex h-full transition-transform duration-500 ease-in-out"
           style={{ transform: `translateX(-${current * 100}%)` }}

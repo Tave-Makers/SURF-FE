@@ -26,6 +26,23 @@ export const HomePageClient = ({ heroProps }: { heroProps: HeroCardProps }) => {
   const { data: notifications } = useGetNotifications('ALL');
   const hasUnread = notifications?.some((noti) => !noti.isRead);
 
+  const fallbackCarouselImages = [
+    { src: '/images/home/17th.svg', alt: '17th Banner' },
+    { src: '/images/home/sprint.svg', alt: 'Sprint Banner' },
+    { src: '/images/home/conference.svg', alt: 'Conference Banner' },
+  ];
+
+  const carouselImages = (() => {
+    if (!homeData?.carouselImages?.length) return fallbackCarouselImages;
+    const normalized = homeData.carouselImages
+      .filter((img) => Boolean(img.src))
+      .map((img) => ({
+        ...img,
+        linkUrl: img.linkUrl === null ? undefined : img.linkUrl,
+      }));
+    return normalized.length > 0 ? normalized : fallbackCarouselImages;
+  })();
+
   const handleShortcutClick = (link: string, label: string) => {
     if (process.env.NODE_ENV === 'development') {
       console.log(`${label} 클릭 - ${link}로 이동`);
@@ -96,14 +113,7 @@ export const HomePageClient = ({ heroProps }: { heroProps: HeroCardProps }) => {
           />
 
           {/* Carousel */}
-          <Carousel
-            images={
-              homeData?.carouselImages?.map((img) => ({
-                ...img,
-                linkUrl: img.linkUrl === null ? undefined : img.linkUrl,
-              })) ?? []
-            }
-          />
+          <Carousel images={carouselImages} />
 
           {/* 앱 내 바로가기 링크 */}
           <div className="flex flex-row gap-11">

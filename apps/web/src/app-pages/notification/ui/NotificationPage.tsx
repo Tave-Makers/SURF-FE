@@ -30,8 +30,8 @@ export const NotificationPage = () => {
     }
   }, [showToast]);
 
-  const { data, isLoading } = useGetNotifications(currentTab);
-  const { mutate: readNotification, isPending } = useReadNotification();
+  const { data } = useGetNotifications(currentTab);
+  const { mutate: readNotification } = useReadNotification();
 
   const handleBack = () => {
     router.back();
@@ -55,11 +55,6 @@ export const NotificationPage = () => {
   };
 
   const renderContent = () => {
-    // 로딩 중일 때(임시)
-    if (isLoading || isPending) {
-      return <div className="p-20 text-center text-gray-500">로딩 중...</div>;
-    }
-
     // 데이터가 없거나 비어있을 때 (탭 별 메시지 분기)
     if (!data || data.length === 0) {
       const emptyMessages = {
@@ -69,14 +64,10 @@ export const NotificationPage = () => {
       };
       return (
         <div className="text-body-body8 text-foreground-tertiary flex h-full w-full flex-col items-center justify-center gap-[0.43rem] text-center">
-          <NotificationEmpty />
+          <NotificationEmpty className="h-[4.90rem] w-[4.90rem]" />
           {emptyMessages[currentTab]}
         </div>
       );
-    }
-
-    if (isPending) {
-      return <div className="p-20 text-center text-gray-500">로딩 중...</div>;
     }
 
     // 데이터가 있을 때

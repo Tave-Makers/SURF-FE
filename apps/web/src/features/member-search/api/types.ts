@@ -1,4 +1,4 @@
-import { ServerUserLevel } from '@/entities/user/model/types';
+import { ServerUserLevel, TrackPart } from '@/entities/user/model/types';
 import { CommonResponse, PageMeta } from '@/shared/api/types';
 
 export interface MemberSearchRequestDTO {
@@ -6,7 +6,7 @@ export interface MemberSearchRequestDTO {
   pageSize: number;
   keyword?: string;
   generation?: number;
-  part?: string;
+  part?: TrackPart;
 }
 
 export interface MemberSearchItemDTO {
@@ -18,7 +18,7 @@ export interface MemberSearchItemDTO {
   role: ServerUserLevel;
   trackList: {
     generation: number;
-    part: string;
+    part: TrackPart;
   }[];
 }
 

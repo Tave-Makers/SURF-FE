@@ -3,7 +3,6 @@ import 'keen-slider/keen-slider.min.css';
 import { ReactQueryDevtools } from '@tanstack/react-query-devtools';
 import { ThemeProvider } from 'next-themes';
 import type { ReactNode } from 'react';
-import { PathWatcher } from './providers/PathWatcher';
 import { AnalyticsProvider } from '@/app/providers/AnalyticsProvider';
 import { FCMInitializer } from '@/app/providers/FCMInitializer';
 import { QueryProvider } from '@/app/providers/QueryProvider';
@@ -33,7 +32,6 @@ const RootLayout = ({ children }: { children: ReactNode }) => {
         <ThemeProvider attribute="data-theme" defaultTheme="system" enableSystem>
           <QueryProvider>
             <FCMInitializer />
-            <PathWatcher />
             <PageTrackingProvider>
               <main className="bg-background-normal box-content flex h-full w-dvw sm:h-[min(100dvh,calc(100dvw*812/375))] sm:w-[min(100dvw,calc(100dvh*375/812))]">
                 {children}

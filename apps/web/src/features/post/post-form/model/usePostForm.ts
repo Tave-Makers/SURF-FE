@@ -104,8 +104,13 @@ export const usePostForm = ({ mode, boardId, postId }: Props) => {
 
   const isSubmitDisabled = useMemo(() => {
     const { isEmpty } = checkHasChanges();
-    return !title.trim() || isEmpty;
-  }, [title, checkHasChanges]);
+    return (
+      !title.trim() ||
+      stripHtml(content).trim() === '' ||
+      stripHtml(content).trim() === '<p></p>' ||
+      isEmpty
+    );
+  }, [title, content, checkHasChanges]);
 
   // 이미 발행된 글인지 판단 (툴바 비활성화용)
   // 수정 모드이고 서버 데이터상 예약 중이 아닌 경우
@@ -283,7 +288,11 @@ export const usePostForm = ({ mode, boardId, postId }: Props) => {
 
       resetPostState();
       setCanInitialize(false);
-      if (targetPostId) router.replace(PAGE_ROUTES.BOARD.POST_DETAIL(boardId, targetPostId));
+      if (mode === 'create') {
+        if (targetPostId) router.replace(PAGE_ROUTES.BOARD.POST_DETAIL(boardId, targetPostId));
+      } else {
+        router.back();
+      }
     } catch (err) {
       console.error('게시글 처리 실패', err);
       alert('게시글 저장 중 오류가 발생했습니다.');

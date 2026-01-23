@@ -24,6 +24,7 @@ export const NotificationPage = () => {
   const showToast = useToastStore((state) => state.show);
 
   useEffect(() => {
+    if (typeof Notification === 'undefined') return;
     if (Notification.permission === 'denied') {
       // 이미 거부된 경우 브라우저 설정 유도
       showToast('알림 권한이 차단되어 있습니다. 브라우저 설정에서 알림을 허용해주세요.');

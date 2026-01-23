@@ -7,11 +7,14 @@ import { AnalyticsProvider } from '@/app/providers/AnalyticsProvider';
 import { FCMInitializer } from '@/app/providers/FCMInitializer';
 import { QueryProvider } from '@/app/providers/QueryProvider';
 import { PageTrackingProvider } from '@/shared/analytics/providers/PageTrackingProvider';
+import { DEFAULT_METADATA } from '@/shared/constants/metadata';
 import { GlobalComponents } from '@/widgets/global-components/GlobalComponents';
+
+export const metadata = DEFAULT_METADATA;
 
 const RootLayout = ({ children }: { children: ReactNode }) => {
   return (
-    <html lang="ko">
+    <html lang="ko" suppressHydrationWarning>
       <head>
         <link rel="preconnect" href="https://cdn.jsdelivr.net" crossOrigin="anonymous" />
         <link
@@ -37,9 +40,6 @@ const RootLayout = ({ children }: { children: ReactNode }) => {
                 {children}
               </main>
               <GlobalComponents />
-              <div id="bottom-sheet-root" className="relative z-[9999]" />
-              <div id="toast-root" className="relative z-[10001]" />
-              <div id="alert-root" className="relative z-[20000]" />
             </PageTrackingProvider>
             <ReactQueryDevtools initialIsOpen={false} />
           </QueryProvider>

@@ -9,7 +9,7 @@ const metadataBase = defaultURL ? new URL(defaultURL) : undefined;
 
 const images = [
   {
-    url: `/og-image.png?v=${ASSET_VERSION}`,
+    url: `icons/og-image.png?v=${ASSET_VERSION}`,
     width: 800,
     height: 400,
     alt: 'SURF 대표 이미지',

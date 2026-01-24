@@ -8,6 +8,7 @@ export type GetNotificationsResponse = CommonResponse<Notification[]>;
 
 export type Notification = {
   id: number;
+  actorProfileImageUrl?: string | null;
   type: NotificationType;
   category: NotificationCategory;
   body: string;

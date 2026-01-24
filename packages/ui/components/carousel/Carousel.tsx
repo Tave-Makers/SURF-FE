@@ -63,7 +63,7 @@ export const Carousel = ({ images, className = '', autoPlayMs = 0 }: Props) => {
         className,
       ].join(' ')}
     >
-      {/* 1) IMAGE LAYER */}
+      {/* 1) 이미지 */}
       <div
         className="flex h-full w-full transition-transform duration-500 ease-in-out"
         style={{ transform: `translateX(-${index * 100}%)` }}
@@ -71,12 +71,10 @@ export const Carousel = ({ images, className = '', autoPlayMs = 0 }: Props) => {
         {safeImages.map((img, i) => {
           const content = (
             <div className="relative h-full w-full flex-shrink-0">
-              {/* Next/Image fill은 부모가 relative여야 함 */}
               <Image
                 src={img.src}
                 alt={img.alt}
                 fill
-                // cover가 너가 준 CSS 의도(cover)와 가장 일치
                 className="object-cover object-center"
                 priority={i === 0}
                 sizes="(max-width: 768px) 100vw, 343px"
@@ -84,7 +82,6 @@ export const Carousel = ({ images, className = '', autoPlayMs = 0 }: Props) => {
             </div>
           );
 
-          // 링크가 있으면 a로 감싸기
           return img.linkUrl ? (
             <a key={`${img.src}-${i}`} href={img.linkUrl} className="h-full w-full flex-shrink-0">
               {content}
@@ -102,10 +99,10 @@ export const Carousel = ({ images, className = '', autoPlayMs = 0 }: Props) => {
         })}
       </div>
 
-      {/* 2) DIM LAYER (이미지 위) */}
+      {/* 2) dim */}
       <div className="from-background-carousel-start to-background-carousel-end pointer-events-none absolute inset-0 z-10 bg-gradient-to-b" />
 
-      {/* 3) CONTROLS & PAGINATION (최상단) */}
+      {/* 3)controlls, pagination */}
       {total > 1 && (
         <>
           <button

@@ -194,8 +194,6 @@ export const CommentComposer = ({
       setMentionMap({});
       setMentionMemberIds([]);
       closeMentionPanel();
-
-      showToast('댓글이 등록됐어요');
       return true;
     } catch (e) {
       console.error(e);

@@ -85,7 +85,7 @@ export const TrackUnivStep = () => {
             <div key={field.id} className="flex items-center gap-5">
               <SelectField
                 size="l"
-                placeholder="기수 및 파트를 선택해주세요"
+                placeholder="기수 및 파트를 선택해주세요."
                 selectedValue={
                   field.generation && field.part
                     ? formatTrackLabel(field.generation, field.part)
@@ -138,7 +138,7 @@ export const TrackUnivStep = () => {
                 }}
                 value={field.value || ''}
                 errorMessage={fieldState.error?.message}
-                placeholder="대학교를 입력해주세요."
+                placeholder="대학교를 공식 학교명으로 입력해주세요."
               />
             )}
           />
@@ -151,7 +151,7 @@ export const TrackUnivStep = () => {
                   {...field}
                   value={field.value || ''}
                   errorMessage={fieldState.error?.message}
-                  placeholder="대학원을 입력해주세요."
+                  placeholder="대학원을 공식 학교명으로 입력해주세요."
                 />
               )}
             />

@@ -50,7 +50,7 @@ const BoardPage = ({ boardId: boardIdProp }: { boardId: string }) => {
   };
 
   return (
-    <>
+    <div className="flex h-full min-h-0 flex-col">
       <AppHeader
         overrideHeader={{
           mode: HeaderMode.Default,
@@ -64,10 +64,10 @@ const BoardPage = ({ boardId: boardIdProp }: { boardId: string }) => {
           ],
         }}
       />
-      <div className="flex h-full flex-col">
+      <div className="flex min-h-0 flex-1 flex-col">
         <Tab items={TAB_CATEGORY_LIST} value={categoryKey} onValueChange={handleCategoryChange} />
 
-        <div className="flex flex-1 overflow-auto px-13 pt-13">
+        <div className="flex min-h-0 flex-1 flex-col overflow-auto px-13 pt-13 pb-13">
           <PostListContainer boardId={boardId} category={categoryKey} userLevel={userLevel} />
         </div>
       </div>
@@ -80,7 +80,7 @@ const BoardPage = ({ boardId: boardIdProp }: { boardId: string }) => {
           </div>
         </div>
       )}
-    </>
+    </div>
   );
 };
 

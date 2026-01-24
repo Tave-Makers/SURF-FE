@@ -46,7 +46,7 @@ export const PostListContainer = ({ boardId, category, userLevel }: Props) => {
   );
 
   return (
-    <div className="flex flex-1 flex-col">
+    <div className="flex flex-col">
       <PostCardList
         posts={posts}
         currentTabCategory={tabCategoryLabel}

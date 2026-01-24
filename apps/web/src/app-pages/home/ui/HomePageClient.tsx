@@ -27,9 +27,9 @@ export const HomePageClient = ({ heroProps }: { heroProps: HeroCardProps }) => {
   const hasUnread = notifications?.some((noti) => !noti.isRead);
 
   const fallbackCarouselImages = [
+    { src: '/images/home/conference.svg', alt: 'Conference Banner' },
     { src: '/images/home/17th.svg', alt: '17th Banner' },
     { src: '/images/home/sprint.svg', alt: 'Sprint Banner' },
-    { src: '/images/home/conference.svg', alt: 'Conference Banner' },
   ];
 
   const carouselImages = (() => {
@@ -54,7 +54,7 @@ export const HomePageClient = ({ heroProps }: { heroProps: HeroCardProps }) => {
     const el = scrollRef.current;
     if (!el) return;
 
-    const threshold = 5;
+    const threshold = 20;
 
     const handleScroll = () => {
       setIsHeaderSolid(el.scrollTop > threshold);
@@ -67,7 +67,7 @@ export const HomePageClient = ({ heroProps }: { heroProps: HeroCardProps }) => {
 
   return (
     <div ref={scrollRef} className="flex flex-col overflow-y-auto pb-[1.61rem]">
-      <div className="absolute z-100 w-[min(100dvw,calc(100dvh*375/812))]">
+      <div className="sticky top-0 z-100 w-full flex-1 flex-col">
         {/* AppHeader */}
         <AppHeader
           overrideHeader={{
@@ -84,18 +84,18 @@ export const HomePageClient = ({ heroProps }: { heroProps: HeroCardProps }) => {
             ],
           }}
           className={`transition-colors duration-150 ${
-            isHeaderSolid ? 'bg-background-normal' : 'bg-transparent'
+            isHeaderSolid ? 'bg-background-normal' : '!border-transparent !bg-transparent'
           }`}
         />
       </div>
 
-      <div>
+      <div className="relative -mt-[3rem]">
         {/* Hero Card */}
         <div className="flex w-full flex-col">
           <HeroCard {...heroProps} />
         </div>
 
-        <div className="flex flex-col gap-16 px-13 pt-15">
+        <div className="relative mt-15 flex flex-col gap-16 px-13">
           {/* Announcement Bar */}
           <AnnouncementBar
             title={homeData?.announcementTitle ?? 'Title'}

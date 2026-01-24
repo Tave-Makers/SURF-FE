@@ -59,7 +59,9 @@ export const MemberItem = ({ user, keyword, onClick }: MemberItemProps) => {
         </header>
 
         {/* 한 줄 소개 */}
-        <p className="text-foreground-normal text-caption-caption4 truncate">{subText ?? ''}</p>
+        <p className="text-foreground-normal text-caption-caption4 w-full min-w-0 truncate text-left">
+          {subText ?? ''}
+        </p>
       </div>
 
       {/* [Ghost Container]

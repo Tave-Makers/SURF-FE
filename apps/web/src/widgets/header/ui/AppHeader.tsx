@@ -3,6 +3,7 @@
 import { Header, HeaderMode, HeaderProps } from '@surf/ui/header';
 import { usePathname, useRouter } from 'next/navigation';
 import { useMemo } from 'react';
+import { PAGE_ROUTES } from '@/shared/config/path';
 import { createRouteConfig } from '@/shared/config/routes';
 
 type AppHeaderProps = {
@@ -48,7 +49,28 @@ export const AppHeader = ({ customBack, overrideHeader, className }: AppHeaderPr
 
   if (!baseHeader) return null;
 
-  const headerProps = getHeaderProps(baseHeader, handleBack);
+  const headerWithHomeLink =
+    baseHeader.mode === HeaderMode.Logo
+      ? {
+          ...baseHeader,
+          logo: (
+            <button
+              type="button"
+              onClick={() => {
+                if (pathname !== PAGE_ROUTES.HOME) {
+                  router.push(PAGE_ROUTES.HOME);
+                }
+              }}
+              className="flex h-full items-center border-none bg-transparent p-0"
+              aria-label="홈으로 이동"
+            >
+              {baseHeader.logo}
+            </button>
+          ),
+        }
+      : baseHeader;
+
+  const headerProps = getHeaderProps(headerWithHomeLink, handleBack);
 
   return <Header {...headerProps} className={className} />;
 };

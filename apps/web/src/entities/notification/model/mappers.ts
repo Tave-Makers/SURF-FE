@@ -30,8 +30,7 @@ export function mapNotificationToItem(dto: Notification): NotificationUIModel {
     time: new Date(dto.createdAt),
     isRead: dto.read,
     badge: mapTypeToBadge(dto.type),
-    // TODO: 프로필 이미지 연결 필요
-    userImageUrl: undefined,
+    userImageUrl: dto.actorProfileImageUrl ?? undefined,
     deepLink: dto.deepLink,
   };
 }

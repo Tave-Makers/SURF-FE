@@ -1,6 +1,5 @@
 import '@/shared/styles/globals.css';
 import 'keen-slider/keen-slider.min.css';
-import { ReactQueryDevtools } from '@tanstack/react-query-devtools';
 import { Analytics } from '@vercel/analytics/next';
 import { SpeedInsights } from '@vercel/speed-insights/next';
 import { ThemeProvider } from 'next-themes';
@@ -33,9 +32,6 @@ const RootLayout = ({ children }: { children: ReactNode }) => {
       </head>
 
       <body className="flex min-h-dvh items-center justify-center bg-gray-200">
-        <AnalyticsProvider />
-        <Analytics />
-        <SpeedInsights />
         <ThemeProvider attribute="data-theme" defaultTheme="system" enableSystem>
           <QueryProvider>
             <FCMInitializer />
@@ -45,9 +41,12 @@ const RootLayout = ({ children }: { children: ReactNode }) => {
               </main>
               <GlobalComponents />
             </PageTrackingProvider>
-            <ReactQueryDevtools initialIsOpen={false} />
           </QueryProvider>
         </ThemeProvider>
+
+        <AnalyticsProvider />
+        <Analytics />
+        <SpeedInsights />
       </body>
     </html>
   );

@@ -54,7 +54,7 @@ export const HomePageClient = ({ heroProps }: { heroProps: HeroCardProps }) => {
     const el = scrollRef.current;
     if (!el) return;
 
-    const threshold = 40;
+    const threshold = 20;
 
     const handleScroll = () => {
       setIsHeaderSolid(el.scrollTop > threshold);
@@ -84,7 +84,7 @@ export const HomePageClient = ({ heroProps }: { heroProps: HeroCardProps }) => {
             ],
           }}
           className={`transition-colors duration-150 ${
-            isHeaderSolid ? 'bg-backgroun-normal' : '!border-transparent !bg-transparent'
+            isHeaderSolid ? 'bg-background-normal' : '!border-transparent !bg-transparent'
           }`}
         />
       </div>

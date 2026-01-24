@@ -77,7 +77,7 @@ const PostCardListComponent = ({
 
       <div
         ref={loadMoreRef}
-        className="text-body-body8 text-foreground-tertiary flex items-center justify-center py-[1rem]"
+        className="text-body-body8 text-foreground-tertiary flex items-center justify-center"
       >
         {isFetchingNextPage ? '더 많은 게시글을 불러오는 중...' : hasNextPage ? '더 불러오기' : ''}
       </div>

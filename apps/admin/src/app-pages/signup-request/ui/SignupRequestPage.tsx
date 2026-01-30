@@ -3,6 +3,7 @@
 import { TextInput } from '@surf/ui/text-input';
 import { useState } from 'react';
 
+import { useDebouncedValue } from '@/shared/hooks/useDebouncedValue';
 import { SignupRequestListWidget } from '@/widgets/signup-request/ui/SignupRequestListWidget';
 
 /**
@@ -10,6 +11,7 @@ import { SignupRequestListWidget } from '@/widgets/signup-request/ui/SignupReque
  */
 export const SignupRequestPage = () => {
   const [keyword, setKeyword] = useState('');
+  const debouncedKeyword = useDebouncedValue(keyword, 300);
 
   return (
     <main className="flex h-full w-full flex-col">
@@ -24,7 +26,7 @@ export const SignupRequestPage = () => {
         />
       </div>
       {/* 회원가입 요청 리스트 위젯, 승인/거절 액션 수행 */}
-      <SignupRequestListWidget keyword={keyword} />
+      <SignupRequestListWidget keyword={debouncedKeyword} />
     </main>
   );
 };

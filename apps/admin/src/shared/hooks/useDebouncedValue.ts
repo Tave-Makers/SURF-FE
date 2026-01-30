@@ -57,11 +57,13 @@ export function useDebouncedValue<T>(
     if (leading && !timeoutRef.current) {
       setDebouncedValue(value);
       lastUpdateTime.current = Date.now();
+      timeoutRef.current = null;
     }
 
     // 기존 타이머 정리
     if (timeoutRef.current) {
       clearTimeout(timeoutRef.current);
+      timeoutRef.current = null;
     }
 
     // maxWait 처리
@@ -83,7 +85,7 @@ export function useDebouncedValue<T>(
     }
 
     // trailing 타이머 설정
-    timeoutRef.current = setTimeout(() => {
+    const timeoutId = setTimeout(() => {
       setDebouncedValue(value);
       lastUpdateTime.current = Date.now();
       timeoutRef.current = null;
@@ -94,13 +96,16 @@ export function useDebouncedValue<T>(
         maxWaitTimeoutRef.current = null;
       }
     }, delay);
+    timeoutRef.current = timeoutId;
 
     return () => {
       if (timeoutRef.current) {
         clearTimeout(timeoutRef.current);
+        timeoutRef.current = null;
       }
       if (maxWaitTimeoutRef.current) {
         clearTimeout(maxWaitTimeoutRef.current);
+        maxWaitTimeoutRef.current = null;
       }
     };
   }, [value, delay, leading, maxWait]);

@@ -11,6 +11,7 @@ import {
 } from '@/features/signup-request/model/selectionPolicy';
 import { useUpdateSignupRequestStatusMutation } from '@/features/signup-request/model/useUpdateRequestStatusMutation';
 import { RequestListTopBar } from '@/features/signup-request/ui/RequestListTopBar';
+import { useBottomSheetStore } from '@/shared/store/bottomSheetStore';
 import { BottomActionBar } from '@/shared/ui/BottomActionBar';
 import { ErrorBoundary } from '@/shared/ui/ErrorBoundary';
 
@@ -35,6 +36,7 @@ export const SignupRequestListWidget = ({ keyword }: SignupRequestListWidgetProp
     useSignupRequestList(filters);
 
   const showErrorToast = useToastStore((s) => s.show);
+  const openBottomSheet = useBottomSheetStore((s) => s.open);
 
   const { mutate, isPending } = useUpdateSignupRequestStatusMutation();
 
@@ -159,6 +161,18 @@ export const SignupRequestListWidget = ({ keyword }: SignupRequestListWidgetProp
     });
   }, [closeAlert, handleReject, openAlert]);
 
+  const handleOpenDetail = useCallback(
+    (_memberId: number) => {
+      openBottomSheet({
+        type: 'signup',
+        props: {
+          status: 'waiting',
+        },
+      });
+    },
+    [openBottomSheet],
+  );
+
   const bottomActions = [
     {
       key: 'approve',
@@ -195,6 +209,7 @@ export const SignupRequestListWidget = ({ keyword }: SignupRequestListWidgetProp
             isSelectionEnabled={mode === 'select'}
             selectedIds={selectedIds}
             onToggleSelect={handleToggleSelect}
+            onClickMore={handleOpenDetail}
             hasNextPage={hasNextPage}
             isFetchingNextPage={isFetchingNextPage}
             onLoadMore={() => {

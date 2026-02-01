@@ -16,6 +16,7 @@ interface SignupRequestItemProps {
   status: SignupRequestStatus;
   isSelectionEnabled?: boolean;
   onToggle: (e: ChangeEvent<HTMLInputElement>) => void;
+  onClick: () => void;
 }
 export const SignupRequestItem = ({
   name,
@@ -25,6 +26,7 @@ export const SignupRequestItem = ({
   checked,
   isSelectionEnabled = false,
   onToggle,
+  onClick,
 }: SignupRequestItemProps) => {
   return (
     <div
@@ -57,7 +59,9 @@ export const SignupRequestItem = ({
       </div>
       <div className="mt-7 flex flex-row gap-8">
         <RequestStatusBadge status={status} />
-        <SurfIcon name="ChevronRight" />
+        <button type="button" onClick={onClick} aria-label={`${name} 상세 보기`}>
+          <SurfIcon name="ChevronRight" />
+        </button>
       </div>
     </div>
   );

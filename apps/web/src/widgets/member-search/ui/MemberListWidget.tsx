@@ -4,6 +4,8 @@ import { useRouter } from 'next/navigation';
 import { useCallback, useEffect, useRef } from 'react';
 import { MemberList } from '@/entities/search/ui/MemberList';
 import { useMemberSearch } from '@/features/member-search/api/useMemberSearch';
+import { trackMemberSearchEvent } from '@/features/member-search/lib/trackMemberSearchEvent';
+import { MEMBER_SEARCH_EVENTS } from '@/features/member-search/model/constants';
 import { PAGE_ROUTES } from '@/shared/config/path';
 
 interface MemberListWidgetProps {
@@ -17,6 +19,7 @@ export const MemberListWidget = ({ keyword, queryResult }: MemberListWidgetProps
   const { members, fetchNextPage, hasNextPage, isFetchingNextPage, isLoading } = queryResult;
 
   function handleClick(userId: number) {
+    trackMemberSearchEvent(MEMBER_SEARCH_EVENTS.MEMBER_CLICK, { member_id: String(userId) });
     router.push(PAGE_ROUTES.MEMBER.PROFILE(userId));
   }
 

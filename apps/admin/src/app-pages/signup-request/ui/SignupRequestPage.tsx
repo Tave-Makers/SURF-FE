@@ -1,9 +1,7 @@
 'use client';
-
+import { useDebouncedValue } from '@surf/hooks';
 import { TextInput } from '@surf/ui/text-input';
-import { useState } from 'react';
-
-import { useDebouncedValue } from '@/shared/hooks/useDebouncedValue';
+import { useEffect, useState } from 'react';
 import { SignupRequestListWidget } from '@/widgets/signup-request/ui/SignupRequestListWidget';
 
 /**
@@ -12,6 +10,10 @@ import { SignupRequestListWidget } from '@/widgets/signup-request/ui/SignupReque
 export const SignupRequestPage = () => {
   const [keyword, setKeyword] = useState('');
   const debouncedKeyword = useDebouncedValue(keyword, 300);
+
+  useEffect(() => {
+    console.log('[debouncedKeyword]', debouncedKeyword);
+  }, [debouncedKeyword]);
 
   return (
     <main className="flex h-full w-full flex-col">

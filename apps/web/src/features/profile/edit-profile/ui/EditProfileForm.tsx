@@ -1,11 +1,13 @@
 'use client';
 
+import { useAbortableLifeCycle } from '@surf/hooks';
 import { TextButton } from '@surf/ui/button';
 import { Checkbox } from '@surf/ui/checkbox';
 import { FieldGroup } from '@surf/ui/field-group';
 import { useToastStore } from '@surf/ui/store/toastStore';
 import { TextArea } from '@surf/ui/text-area';
 import { Toggle } from '@surf/ui/toggle';
+import { isYearMonth, isValidUrl } from '@surf/utils';
 import { useRouter } from 'next/navigation';
 import {
   forwardRef,
@@ -36,8 +38,7 @@ import type { DateString, UpdateProfileRequestDTO, UserProfile } from '@/entitie
 import { ProfileImageUploader } from '@/features/profile/ui/upload-profile-image/ProfileImageUploader';
 
 import { PAGE_ROUTES } from '@/shared/config/path';
-import { useAbortableLifeCycle } from '@/shared/hooks/useAbortableLifeCycle';
-import { formatPhoneNumber, isYearMonth, isValidUrl, onlyDigits } from '@/shared/lib/validator';
+import { formatPhoneNumber, onlyDigits } from '@/shared/lib/phoneNumber';
 
 export interface EditProfileFormHandle {
   submit: () => void;

@@ -1,12 +1,12 @@
 'use client';
 
 import { SurfIcon } from '@surf/ui/icon';
+import { toDate, toKST, timeAgo } from '@surf/utils';
 import Image from 'next/image';
 import { memo } from 'react';
 import { Post } from '../../model/types';
 import { PostBadge } from '@/entities/post/ui/post-badge/PostBadge';
 import { stripHtml } from '@/shared/lib/stripHtml';
-import { toDate, toKST, timeAgo } from '@/shared/utils/date';
 
 type PostCardProps = {
   post: Post;

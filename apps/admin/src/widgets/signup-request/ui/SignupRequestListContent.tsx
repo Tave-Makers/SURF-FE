@@ -1,8 +1,8 @@
 'use client';
 
+import { useInfiniteScroll } from '@surf/hooks';
 import { SignupRequestMember } from '@/entities/signup-request/model/types';
 import { SignupRequestList } from '@/features/signup-request/ui/SignupRequestList';
-import { useInfiniteScroll } from '@/shared/hooks/useInfiniteScroll';
 
 interface SignupRequestListContentProps {
   members: SignupRequestMember[];

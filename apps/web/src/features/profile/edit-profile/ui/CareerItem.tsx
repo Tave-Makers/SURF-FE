@@ -3,6 +3,7 @@
 import { FieldGroup } from '@surf/ui/field-group';
 import { TextArea } from '@surf/ui/text-area';
 import { Toggle } from '@surf/ui/toggle';
+import { formatYearMonth } from '@surf/utils';
 import { memo } from 'react';
 import {
   Control,
@@ -14,7 +15,6 @@ import {
   UseFormTrigger,
 } from 'react-hook-form';
 import type { FormValues } from '../model/types';
-import { formatYearMonth } from '@/shared/lib/validator';
 
 interface CareerItemProps {
   index: number;

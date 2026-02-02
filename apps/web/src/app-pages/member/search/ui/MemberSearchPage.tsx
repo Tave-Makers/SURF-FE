@@ -40,6 +40,23 @@ export const MemberSearchPage = () => {
     trackMemberSearchEvent(MEMBER_SEARCH_EVENTS.PAGE_VIEW, { page_name: pageName });
   }, [pageName]);
 
+  // 필터 적용 트래킹
+  useEffect(() => {
+    if (!part) return;
+    trackMemberSearchEvent(MEMBER_SEARCH_EVENTS.FILTER_APPLY, {
+      filter_type: 'part',
+      filter_value: part,
+    });
+  }, [part]);
+
+  useEffect(() => {
+    if (!generation) return;
+    trackMemberSearchEvent(MEMBER_SEARCH_EVENTS.FILTER_APPLY, {
+      filter_type: 'generation',
+      filter_value: String(generation),
+    });
+  }, [generation]);
+
   return (
     <div className="flex h-full flex-col">
       <AppHeader

@@ -1,10 +1,7 @@
 'use client';
 
 import { InfiniteData, useMutation, useQueryClient } from '@tanstack/react-query';
-import type {
-  SignupRequestMember,
-  SignupRequestStatus,
-} from '@/entities/signup-request/model/types';
+import type { SignupRequestMember } from '@/entities/signup-request/model/types';
 import type { PageWithContent } from '@/shared/lib/tanstack-query/infiniteQueryUtils';
 import type { CommonResponse } from '@/shared/api/types';
 import {
@@ -13,10 +10,11 @@ import {
   normalizeSignupRequestFilters,
 } from './queries/signupRequestQueryKeys';
 import { updateSignupRequest } from '../api/updateSignupRequest';
+import { MemberStatus } from '@/entities/member/model/types';
 
 type UpdateSignupRequestStatusParams = {
   memberIds: number[];
-  nextStatus: SignupRequestStatus;
+  nextStatus: MemberStatus;
   filters: SignupRequestFilters;
 };
 

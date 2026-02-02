@@ -2,11 +2,11 @@ import { Avatar } from '@surf/ui/avatar';
 import { SurfIcon } from '@surf/ui/icon';
 import { InfoBadge } from '@surf/ui/info-badge';
 import { PART_LABELS } from '../model/constants';
-import { Member } from '../model/types';
+import { MemberBase } from '../model/types';
 
 const infoRow = 'text-caption-caption6 text-foreground-normal flex flex-row items-center gap-5';
 
-type MemberDetailProps = { member: Member };
+type MemberDetailProps = { member: MemberBase };
 
 export const MemberDetail = ({ member }: MemberDetailProps) => {
   const { tracks, email, phoneNumber, university, registeredAt } = member;

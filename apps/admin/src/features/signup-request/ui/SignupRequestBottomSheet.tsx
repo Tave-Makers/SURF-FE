@@ -1,8 +1,9 @@
 import { SolidButton } from '@surf/ui/button';
 import { Sheet } from '@surf/ui/sheet';
 import { Sheet as ModalSheet } from 'react-modal-sheet';
+import { MemberStatus } from '@/entities/member/model/types';
 import { MemberDetail } from '@/entities/member/ui/MemberDetail';
-import { SignupRequestStatus } from '@/entities/signup-request/model/types';
+
 import { StatusBadge } from '@/shared/ui/StatusBadge';
 
 declare module '@/shared/store/bottomSheetStore' {
@@ -14,7 +15,7 @@ declare module '@/shared/store/bottomSheetStore' {
 export type SignupRequestBottomSheetProps = {
   isOpen: boolean;
   onClose: () => void;
-  status: SignupRequestStatus;
+  status: MemberStatus;
   //   likedUsers: LikedUser[];
   //   isLoading: boolean;
   //   isError: boolean;

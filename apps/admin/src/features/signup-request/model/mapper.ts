@@ -28,7 +28,7 @@ function toMemberTrack(trackDto: Track): MemberTrack {
 export function toSignupRequestMember(dto: SignupRequestItem): SignupRequestMember {
   return {
     id: dto.memberId, // memberId → id
-    name: dto.username, // username → name
+    name: dto.username, // username → namex
     university: dto.university,
     profileImageUrl: dto.profileImageUrl,
     tracks: dto.trackList.map(toMemberTrack), // trackList → tracks

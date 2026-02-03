@@ -42,9 +42,6 @@ export interface Career {
 export interface MemberBase {
   id: number;
   name: string;
-  email: string;
-  phoneNumber: string;
-  role: string;
   university: string;
   profileImageUrl: string;
   tracks: MemberTrack[];
@@ -54,7 +51,10 @@ export interface MemberBase {
 /**
  * 멤버 상세 정보 (상세/관리 화면에서 사용하는 확장 필드)
  */
-export interface MemberDetail {
+export interface MemberDetail extends MemberBase {
+  email: string;
+  phoneNumber: string;
+  role: string;
   status: MemberStatus;
   link: Nullable<string>;
   graduateSchool: Nullable<string>;
@@ -62,3 +62,8 @@ export interface MemberDetail {
   isActive: boolean;
   careers: Career[];
 }
+
+/**
+ * 멤버 상세 도메인 모델 (요약 + 상세 정보)
+ */
+export type Member = MemberBase & MemberDetail;

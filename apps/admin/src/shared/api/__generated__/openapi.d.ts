@@ -682,6 +682,46 @@ export interface paths {
         patch: operations["approveMember"];
         trace?: never;
     };
+    "/v1/admin/home/banners/{id}/deactivate": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        /**
+         * 홈 배너 비활성화
+         * @description 특정 ID의 홈 배너를 비활성화합니다.
+         */
+        patch: operations["deactivate"];
+        trace?: never;
+    };
+    "/v1/admin/home/banners/{id}/activate": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        /**
+         * 홈 배너 활성화
+         * @description 특정 ID의 홈 배너를 활성화합니다.
+         */
+        patch: operations["activate"];
+        trace?: never;
+    };
     "/v1/admin/boards/{boardId}": {
         parameters: {
             query?: never;
@@ -1171,6 +1211,26 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/v1/manager/members-count/generation": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * [전체 회원수]와 회원들의 [기수] 조회
+         * @description APPROVED 상태의 전체 회원수, 존재하는 모든 기수 조회
+         */
+        get: operations["readAllMemberCountAndGeneration"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/v1/manager/member/{memberId}": {
         parameters: {
             query?: never;
@@ -1183,6 +1243,26 @@ export interface paths {
          * @description 관리자 페이지에서 유저 정보를 상세 조회합니다.
          */
         get: operations["readMemberInformation"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/v1/manager/approved-members": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * 승인된 [전체 회원 목록] 조회
+         * @description APPROVED 상태의 전체 회원 목록을 스크롤 조회
+         */
+        get: operations["readApprovedMemberList"];
         put?: never;
         post?: never;
         delete?: never;
@@ -1410,6 +1490,11 @@ export interface components {
         };
         HomeBannerUpdateReqDTO: {
             /**
+             * @description 배너 이름
+             * @example 새로운 17기 환영 배너
+             */
+            name: string;
+            /**
              * @description 배너 이미지 URL
              * @example https://example-bucket.s3.amazonaws.com/banner1.png
              */
@@ -1418,7 +1503,7 @@ export interface components {
              * @description 배너 링크 URL
              * @example https://www.example.com/promotion
              */
-            linkUrl?: string;
+            linkUrl: string;
         };
         ApiResponseHomeBannerResDTO: {
             /** Format: int32 */
@@ -2098,6 +2183,11 @@ export interface components {
         };
         HomeBannerCreateReqDTO: {
             /**
+             * @description 배너 이름
+             * @example 새로운 17기 환영 배너
+             */
+            name: string;
+            /**
              * @description 배너 이미지 URL
              * @example https://example-bucket.s3.amazonaws.com/banner1.png
              */
@@ -2106,7 +2196,7 @@ export interface components {
              * @description 배너 링크 URL
              * @example https://www.example.com/promotion
              */
-            linkUrl?: string;
+            linkUrl: string;
         };
         /** @description 게시판 생성 요청 DTO */
         BoardCreateReqDTO: {
@@ -2277,7 +2367,7 @@ export interface components {
              */
             location?: string;
         };
-        RoleChangeRequestDto: {
+        RoleChangeReqDTO: {
             /**
              * @description 변경할 역할
              * @example MANAGER
@@ -2929,7 +3019,8 @@ export interface components {
              * @example APPROVED
              * @enum {string}
              */
-            memberStatus?: "REGISTERING" | "WAITING" | "APPROVED" | "REJECTED" | "WITHDRAWN";
+            role?: "REGISTERING" | "WAITING" | "APPROVED" | "REJECTED" | "WITHDRAWN";
+            memberStatus?: string;
             createdAt?: string;
         };
         MemberRegistrationSliceResDTO: {
@@ -2943,6 +3034,22 @@ export interface components {
             isLast?: boolean;
             /** Format: int64 */
             totalMemberCount?: number;
+        };
+        AdminTotalMemberListResDTO: {
+            /** Format: int64 */
+            totalMemberCount?: number;
+            generations?: components["schemas"]["GenerationResDTO"][];
+        };
+        ApiResponseAdminTotalMemberListResDTO: {
+            /** Format: int32 */
+            code?: number;
+            message?: string;
+            data?: components["schemas"]["AdminTotalMemberListResDTO"];
+        };
+        GenerationResDTO: {
+            /** Format: int32 */
+            generation?: number;
+            name?: string;
         };
         ApiResponseMemberInformationResDTO: {
             /** Format: int32 */
@@ -2962,6 +3069,7 @@ export interface components {
             graduateSchool?: string;
             role?: string;
             activityScore?: number;
+            createdAt?: string;
             /**
              * @description 가입 상태 (REGISTERING: 가입중, WAITING: 대기, APPROVED: 승인, REJECTED: 거절, WITHDRAWN: 탈퇴)
              * @example APPROVED
@@ -2971,6 +3079,22 @@ export interface components {
             isActive?: boolean;
             trackList?: components["schemas"]["TrackResDTO"][];
             careerList?: components["schemas"]["CareerResDTO"][];
+        };
+        ApiResponseApprovedMemberSliceResDTO: {
+            /** Format: int32 */
+            code?: number;
+            message?: string;
+            data?: components["schemas"]["ApprovedMemberSliceResDTO"];
+        };
+        ApprovedMemberSliceResDTO: {
+            content?: components["schemas"]["MemberRegistrationDetailResDTO"][];
+            /** Format: int32 */
+            pageNumber?: number;
+            /** Format: int32 */
+            pageSize?: number;
+            /** Format: int32 */
+            numberOfElements?: number;
+            isLast?: boolean;
         };
         ApiResponseListMemberSearchResDTO: {
             /** Format: int32 */
@@ -4000,7 +4124,7 @@ export interface operations {
         };
         requestBody: {
             content: {
-                "application/json": components["schemas"]["RoleChangeRequestDto"];
+                "application/json": components["schemas"]["RoleChangeReqDTO"];
             };
         };
         responses: {
@@ -4059,6 +4183,50 @@ export interface operations {
                 };
                 content: {
                     "*/*": components["schemas"]["ApiResponseVoid"];
+                };
+            };
+        };
+    };
+    deactivate: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                id: number;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description OK */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "*/*": components["schemas"]["ApiResponseHomeBannerResDTO"];
+                };
+            };
+        };
+    };
+    activate: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                id: number;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description OK */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "*/*": components["schemas"]["ApiResponseHomeBannerResDTO"];
                 };
             };
         };
@@ -4667,6 +4835,26 @@ export interface operations {
             };
         };
     };
+    readAllMemberCountAndGeneration: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description OK */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "*/*": components["schemas"]["ApiResponseAdminTotalMemberListResDTO"];
+                };
+            };
+        };
+    };
     readMemberInformation: {
         parameters: {
             query?: never;
@@ -4685,6 +4873,31 @@ export interface operations {
                 };
                 content: {
                     "*/*": components["schemas"]["ApiResponseMemberInformationResDTO"];
+                };
+            };
+        };
+    };
+    readApprovedMemberList: {
+        parameters: {
+            query: {
+                generation: number;
+                keyword?: string;
+                pageSize?: number;
+                pageNum?: number;
+            };
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description OK */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "*/*": components["schemas"]["ApiResponseApprovedMemberSliceResDTO"];
                 };
             };
         };

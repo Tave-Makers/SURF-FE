@@ -15,7 +15,7 @@ import { MemberStatus } from '@/entities/member/model/types';
 type UpdateSignupRequestStatusParams = {
   memberIds: number[];
   nextStatus: MemberStatus;
-  filters: SignupRequestFilters;
+  filters?: SignupRequestFilters;
 };
 
 export const useUpdateSignupRequestStatusMutation = () => {
@@ -25,7 +25,7 @@ export const useUpdateSignupRequestStatusMutation = () => {
     mutationKey: ['signup-request', 'update'],
     mutationFn: (params) => updateSignupRequest(params.memberIds, params.nextStatus),
     onSuccess: (_data, params) => {
-      const normalizedFilters = normalizeSignupRequestFilters(params.filters);
+      const normalizedFilters = normalizeSignupRequestFilters(params.filters ?? {});
       const queryKey = signupRequestQueryKeys.list(normalizedFilters);
 
       const idSet = new Set(params.memberIds);

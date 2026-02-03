@@ -162,15 +162,18 @@ export const SignupRequestListWidget = ({ keyword }: SignupRequestListWidgetProp
   }, [closeAlert, handleReject, openAlert]);
 
   const handleOpenDetail = useCallback(
-    (_memberId: number) => {
+    (memberId: number) => {
+      const member = members.find((item) => item.id === memberId);
+
       openBottomSheet({
         type: 'signup',
         props: {
-          status: 'waiting',
+          memberId,
+          status: member?.status ?? 'waiting',
         },
       });
     },
-    [openBottomSheet],
+    [members, openBottomSheet],
   );
 
   const bottomActions = [

@@ -11,14 +11,20 @@ import { PAGE_ROUTES } from '@/shared/config/path';
 interface MemberListWidgetProps {
   keyword?: string; // 검색어가 있으면 학교를, 없으면 소개글을 보여줌
   queryResult: ReturnType<typeof useMemberSearch>;
+  onTrackMemberSearch: (rawKeyword?: string) => void;
 }
 
-export const MemberListWidget = ({ keyword, queryResult }: MemberListWidgetProps) => {
+export const MemberListWidget = ({
+  keyword,
+  queryResult,
+  onTrackMemberSearch,
+}: MemberListWidgetProps) => {
   const router = useRouter();
 
   const { members, fetchNextPage, hasNextPage, isFetchingNextPage, isLoading } = queryResult;
 
   function handleClick(userId: number) {
+    onTrackMemberSearch(keyword);
     trackMemberSearchEvent(MEMBER_SEARCH_EVENTS.MEMBER_CLICK, { member_id: String(userId) });
     router.push(PAGE_ROUTES.MEMBER.PROFILE(userId));
   }

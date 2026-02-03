@@ -57,6 +57,11 @@ export const MemberSearchPage = () => {
     });
   }, [generation]);
 
+  const trackMemberSearchOnMemberClick = (rawKeyword?: string) => {
+    const keywordLength = (rawKeyword ?? '').trim().length;
+    trackMemberSearchEvent(MEMBER_SEARCH_EVENTS.MEMBER_SEARCH, { keyword_length: keywordLength });
+  };
+
   return (
     <div className="flex h-full flex-col">
       <AppHeader
@@ -99,7 +104,13 @@ export const MemberSearchPage = () => {
           </div>
         )}
 
-        {!showState && <MemberListWidget keyword={filters.keyword} queryResult={queryResult} />}
+        {!showState && (
+          <MemberListWidget
+            keyword={filters.keyword}
+            queryResult={queryResult}
+            onTrackMemberSearch={trackMemberSearchOnMemberClick}
+          />
+        )}
       </main>
     </div>
   );

@@ -2,7 +2,7 @@ import { NotificationItem, NotificationItemProps } from './NotificationItem';
 
 type NotificationListProps = {
   items: NotificationItemProps[];
-  onItemClick: (id: number, deepLink: string, isRead: boolean) => void;
+  onItemClick: (id: number, deepLink: string, isRead: boolean, notificationType: string) => void;
 };
 
 export const NotificationList = ({ items, onItemClick }: NotificationListProps) => {
@@ -12,7 +12,7 @@ export const NotificationList = ({ items, onItemClick }: NotificationListProps) 
         <NotificationItem
           key={item.id}
           {...item}
-          onClick={() => onItemClick(item.id, item.deepLink, item.isRead)}
+          onClick={() => onItemClick(item.id, item.deepLink, item.isRead, item.notificationType)}
         />
       ))}
     </div>

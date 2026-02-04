@@ -14,6 +14,7 @@ export interface NotificationItemProps {
   isRead: boolean;
   onClick?: () => void;
   deepLink: string;
+  notificationType: string;
 }
 
 export const NotificationItem = ({

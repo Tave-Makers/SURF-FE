@@ -20,6 +20,7 @@ const mockData: NotificationItemProps[] = [
     badge: 'LIKE',
     isRead: false,
     deepLink: '/notification',
+    notificationType: 'LIKE',
   },
   {
     id: 2,
@@ -30,6 +31,7 @@ const mockData: NotificationItemProps[] = [
     badge: 'MENTION',
     isRead: true,
     deepLink: '/notification',
+    notificationType: 'MENTION',
   },
   {
     id: 3,
@@ -37,6 +39,7 @@ const mockData: NotificationItemProps[] = [
     time: new Date('2025-01-15T09:30:00Z'),
     isRead: false,
     deepLink: '/notification',
+    notificationType: 'SYSTEM',
   },
 ];
 

@@ -32,5 +32,6 @@ export function mapNotificationToItem(dto: Notification): NotificationUIModel {
     badge: mapTypeToBadge(dto.type),
     userImageUrl: dto.actorProfileImageUrl ?? undefined,
     deepLink: dto.deepLink,
+    notificationType: dto.type,
   };
 }

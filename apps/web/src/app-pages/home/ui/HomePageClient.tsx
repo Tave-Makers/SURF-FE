@@ -12,6 +12,8 @@ import { useGetNotifications } from '@/entities/notification/model/useGetNotific
 import { AnnouncementBar } from '@/entities/schedule/ui/announcement-bar/AnnouncementBar';
 import type { HeroCardProps } from '@/features/home-theme/ui/hero-card/HeroCard';
 import { HeroCard } from '@/features/home-theme/ui/hero-card/HeroCard';
+import { trackNotificationEvent } from '@/features/notification-tracking/lib/trackNotificationEvent';
+import { NOTIFICATION_EVENTS } from '@/features/notification-tracking/model/constants';
 import { PAGE_ROUTES } from '@/shared/config/path';
 import { AppHeader } from '@/widgets/header/ui/AppHeader';
 
@@ -79,6 +81,9 @@ export const HomePageClient = ({ heroProps }: { heroProps: HeroCardProps }) => {
                 isNew: hasUnread,
                 onClickIcon: () => {
                   router.push(PAGE_ROUTES.NOTIFICATION);
+                  trackNotificationEvent(NOTIFICATION_EVENTS.ALARM_ICON_CLICK, {
+                    has_unread: hasUnread || false,
+                  });
                 },
               },
             ],

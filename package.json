@@ -22,7 +22,9 @@
     "build:admin": "turbo run build --filter=surf-admin",
     "lint:admin": "turbo run lint --filter=surf-admin",
     "lint:fix:admin": "turbo run lint --filter=surf-admin -- --fix",
-    "storybook:admin": "turbo run storybook --filter=surf-admin"
+    "storybook:admin": "turbo run storybook --filter=surf-admin",
+    "test:admin": "pnpm --filter surf-admin test",
+    "test:ui:admin": "pnpm --filter surf-admin test:ui"
   },
   "lint-staged": {
     "apps/web/**/*.{js,jsx,ts,tsx}": [

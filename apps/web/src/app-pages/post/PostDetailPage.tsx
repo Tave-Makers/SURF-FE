@@ -9,9 +9,12 @@ import { usePostDetail } from '@/entities/post/api/usePostDetail';
 import { categoryIdToKey } from '@/entities/post/model/category';
 import { PostHeader } from '@/entities/post/ui/post-header/PostHeader';
 import { useAuthStore } from '@/features/auth/model/useAuthStore';
+import { trackPostDetailEvent } from '@/features/post/lib/trackPostDetailEvent';
+import { POST_DETAIL_EVENTS } from '@/features/post/model/types';
 import { useDeletePostMutation } from '@/features/post/model/useDeletePostMutation';
 import { useGetPostLikesQuery } from '@/features/post/model/useGetPostLikesQuery';
 import { useGetPostScheduleQuery } from '@/features/post/model/useGetPostScheduleQuery';
+import { usePageName } from '@/shared/analytics/lib/getPageName';
 import { useKeyboardOffset } from '@/shared/hooks/useKeyboardOffset';
 import { useBottomSheetStore } from '@/shared/store/bottomSheetStore';
 import { CommentComposer } from '@/widgets/comment-composer/ui/CommentComposer';
@@ -38,6 +41,8 @@ const PostDetailPage = ({ postId }: PostDetailPageProps) => {
   const searchParams = useSearchParams();
   const from = searchParams.get('from');
 
+  const pageName = usePageName();
+
   // 게시글 상세 조회 API
   const { data: post, isLoading, isError } = usePostDetail(numericPostId);
 
@@ -48,6 +53,13 @@ const PostDetailPage = ({ postId }: PostDetailPageProps) => {
       router.back();
     }
   }, [isError, from, router, showToast]);
+
+  useEffect(() => {
+    trackPostDetailEvent(POST_DETAIL_EVENTS.PAGE_VIEW, {
+      page_name: pageName,
+      post_id: numericPostId,
+    });
+  }, [pageName, numericPostId]);
 
   // 일정 조회 API
   const scheduleId = post?.scheduleId;
@@ -91,6 +103,11 @@ const PostDetailPage = ({ postId }: PostDetailPageProps) => {
 
   const openLikedUsers = async () => {
     const result = await refetchLikedUsers();
+    if (result.data) {
+      trackPostDetailEvent(POST_DETAIL_EVENTS.LIKE_LIST_VIEW, {
+        post_id: numericPostId,
+      });
+    }
     openBottomSheet({
       type: 'postLike',
       props: {

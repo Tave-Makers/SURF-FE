@@ -53,6 +53,7 @@ export const HomePageClient = ({ heroProps }: { heroProps: HeroCardProps }) => {
       console.log(`${label} 클릭 - ${link}로 이동`);
     }
     router.push(link);
+    trackHomeEvent(HOME_EVENTS.SHORTCUT_CLICK, { target: label });
   };
 
   useEffect(() => {

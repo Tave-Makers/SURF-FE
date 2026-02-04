@@ -1,4 +1,5 @@
 import { useAlertStore } from '@surf/ui/store/alertStore';
+import { safeUUID } from '@surf/utils';
 import axios from 'axios';
 import { useRouter } from 'next/navigation';
 import { useEffect, useState } from 'react';
@@ -14,7 +15,6 @@ import { ProfileStep } from '@/features/onboarding/ui/ProfileStep';
 import { TrackUnivStep } from '@/features/onboarding/ui/TrackUnivStep';
 import { PAGE_ROUTES } from '@/shared/config/path';
 import { DefaultError } from '@/shared/lib/handleApiError';
-import { safeUUID } from '@/shared/utils/uuid';
 
 const STEP_ANALYTICS_NAMES: Record<number, 'nickname' | 'track' | 'contact'> = {
   0: 'nickname',

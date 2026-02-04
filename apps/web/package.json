@@ -29,6 +29,8 @@
     "@dnd-kit/sortable": "^10.0.0",
     "@dnd-kit/utilities": "^3.2.2",
     "@surf/ui": "workspace:*",
+    "@surf/hooks": "workspace:*",
+    "@surf/utils": "workspace:*",
     "@tanstack/react-query": "^5.90.2",
     "@tiptap/extension-character-count": "^3.13.0",
     "@tiptap/extension-placeholder": "^3.13.0",

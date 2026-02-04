@@ -8,6 +8,8 @@
     "lint:fix": "turbo run lint -- --fix",
     "format": "pnpm -w exec prettier --write .",
     "check-types": "turbo run check-types",
+    "build:hooks": "turbo run build --filter=@surf/hooks",
+    "build:utils": "turbo run build --filter=@surf/utils",
     "build:ui": "turbo run build --filter=@surf/ui",
     "storybook:ui": "turbo run storybook --filter=@surf/ui",
     "prepare": "husky",
@@ -29,8 +31,16 @@
       "pnpm --filter surf-web exec eslint --max-warnings=0 --fix --no-warn-ignored",
       "pnpm -w exec prettier --write"
     ],
-    "packages/**/*.{js,jsx,ts,tsx}": [
-      "pnpm -w exec eslint --max-warnings=0 --fix --no-warn-ignored",
+    "packages/hooks/**/*.{js,jsx,ts,tsx}": [
+      "pnpm -C packages/hooks exec eslint --max-warnings=0 --fix --no-warn-ignored",
+      "pnpm -w exec prettier --write"
+    ],
+    "packages/utils/**/*.{js,jsx,ts,tsx}": [
+      "pnpm -C packages/utils exec eslint --max-warnings=0 --fix --no-warn-ignored",
+      "pnpm -w exec prettier --write"
+    ],
+    "packages/ui/**/*.{js,jsx,ts,tsx}": [
+      "pnpm -C packages/ui exec eslint --max-warnings=0 --fix --no-warn-ignored",
       "pnpm -w exec prettier --write"
     ],
     "*.{json,md,css,scss,html}": "pnpm -w exec prettier --write"

@@ -9,12 +9,12 @@ const infoRow = 'text-caption-caption6 text-foreground-normal flex flex-row item
 type MemberDetailProps = { member: MemberDetailType };
 
 export const MemberDetail = ({ member }: MemberDetailProps) => {
-  const { tracks, email, phoneNumber, university, registeredAt, profileImageUrl } = member;
+  const { name, tracks, email, phoneNumber, university, registeredAt, profileImageUrl } = member;
   return (
     <div className="flex w-full flex-col gap-11">
       <div className="flex w-full flex-row justify-between gap-13">
         <div className="flex flex-col gap-[0.375rem]">
-          <span className="text-body-body2">테이비</span>
+          <span className="text-body-body2">{name}</span>
           <div className="flex flex-row flex-wrap gap-7">
             {tracks.map((track, idx) => (
               <InfoBadge key={idx} text={`${track.generation}기 ${PART_LABELS[track.part]}`} />

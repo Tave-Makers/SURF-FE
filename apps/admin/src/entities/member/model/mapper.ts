@@ -45,7 +45,7 @@ function toCareer(career: ApiCareer): Career {
   const endDate = formatYearMonth(career.endDate);
 
   return {
-    carreerId: career.careerId ?? 0,
+    careerId: career.careerId ?? 0,
     companyName: career.companyName ?? '',
     position: career.position ?? '',
     startDate: formatYearMonth(career.startDate),

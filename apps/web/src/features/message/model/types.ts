@@ -9,7 +9,7 @@ export const MESSAGE_EVENTS = {
   INPUT_BODY: 'input_body',
   LETTER_SEND: 'letter_send',
   LEAVE_CONFIRM: 'leave_confirm',
-};
+} as const;
 
 /**
  * 이벤트별 속성 타입 매핑

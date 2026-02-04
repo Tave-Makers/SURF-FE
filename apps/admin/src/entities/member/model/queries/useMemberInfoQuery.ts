@@ -10,7 +10,7 @@ import { Nullable } from '@/shared/types/nullable';
 
 type UseMemberInfoQueryOptions = Omit<
   UseQueryOptions<MemberInfoResponse, Error, MemberInfoQueryData>,
-  'queryKey' | 'queryFn'
+  'queryKey' | 'queryFn' | 'enabled'
 >;
 
 type MemberInfoQueryData = Nullable<Member>;
@@ -20,7 +20,7 @@ type MemberInfoQueryData = Nullable<Member>;
  */
 export function useMemberInfoQuery(memberId?: number, options?: UseMemberInfoQueryOptions) {
   return useQuery<MemberInfoResponse, Error, MemberInfoQueryData>({
-    queryKey: memberQueryKeys.detail(memberId?.toString() ?? 'unknown'),
+    queryKey: memberQueryKeys.detail(memberId ?? -1),
     queryFn: () => getMemberInfo(memberId!),
     enabled: !!memberId,
     select: (response) => (response.data ? toMemberDetail(response.data, memberId!) : null),

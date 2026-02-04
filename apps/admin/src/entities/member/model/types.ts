@@ -28,7 +28,7 @@ export type MemberStatus = 'reject' | 'waiting' | 'approve';
  * 멤버 커리어 정보
  */
 export interface Career {
-  carreerId: number;
+  careerId: number;
   companyName: string;
   position: string;
   startDate: string;

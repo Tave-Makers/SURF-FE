@@ -76,7 +76,7 @@ const MemberInfoContent = ({ memberId, onClose }: { memberId: number; onClose: (
     memberIds: [memberId],
     onSuccess: () => {
       void queryClient.invalidateQueries({
-        queryKey: memberQueryKeys.detail(memberId.toString()),
+        queryKey: memberQueryKeys.detail(memberId),
       });
       onClose();
     },

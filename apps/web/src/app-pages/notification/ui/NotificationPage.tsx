@@ -83,9 +83,12 @@ export const NotificationPage = () => {
 
     // 읽지 않은 알림인 경우에만 요청 보내기
     if (!isRead) {
-      readNotification(id);
-      trackNotificationEvent(NOTIFICATION_EVENTS.NOTIFICATION_READ, {
-        notification_id: `noti_${id}`,
+      readNotification(id, {
+        onSuccess: () => {
+          trackNotificationEvent(NOTIFICATION_EVENTS.NOTIFICATION_READ, {
+            notification_id: `noti_${id}`,
+          });
+        },
       });
     }
 

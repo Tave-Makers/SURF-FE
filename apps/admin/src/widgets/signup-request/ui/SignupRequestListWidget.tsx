@@ -1,6 +1,6 @@
 'use client';
 
-import { Suspense, useEffect, useMemo, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import { SignupRequestListContent } from './SignupRequestListContent';
 import { useSignupRequestList } from '@/features/signup-request/model/queries/useSignupRequestList';
 import {
@@ -11,7 +11,6 @@ import { useSignupStatusActions } from '@/features/signup-request/model/useSignu
 import { RequestListTopBar } from '@/features/signup-request/ui/RequestListTopBar';
 import { useBottomSheetStore } from '@/shared/store/bottomSheetStore';
 import { BottomActionBar } from '@/shared/ui/BottomActionBar';
-import { ErrorBoundary } from '@/shared/ui/ErrorBoundary';
 
 interface SignupRequestListWidgetProps {
   keyword: string;
@@ -45,11 +44,13 @@ export const SignupRequestListWidget = ({ keyword }: SignupRequestListWidgetProp
   const statuses = getSelectedStatuses(members, selectedIds);
   const { selectedCount, canApprove, canReject } = getSelectionPolicy(statuses);
 
+  //회원가입 상태 처리 액션 훅
   const { openApproveAlert, openRejectAlert, isPending } = useSignupStatusActions({
     memberIds: Array.from(selectedIds),
     onSuccess: handleReset,
   });
 
+  //멤버 선택 핸들러
   const handleToggleSelect = (memberId: number) => {
     setSelectedIds((prev) => {
       const next = new Set(prev);
@@ -62,6 +63,7 @@ export const SignupRequestListWidget = ({ keyword }: SignupRequestListWidgetProp
     });
   };
 
+  //상세 바텀시트 오픈 핸들러
   const handleOpenDetail = (memberId: number) => {
     openBottomSheet({
       type: 'signup',
@@ -97,22 +99,18 @@ export const SignupRequestListWidget = ({ keyword }: SignupRequestListWidgetProp
         onClickCancel={handleReset}
       />
       {/* 회원가입 요청 멤버 리스트*/}
-      <ErrorBoundary fallback={<div>error</div>}>
-        <Suspense fallback={<div>loading...</div>}>
-          <SignupRequestListContent
-            members={members}
-            isSelectionEnabled={mode === 'select'}
-            selectedIds={selectedIds}
-            onToggleSelect={handleToggleSelect}
-            onClickMore={handleOpenDetail}
-            hasNextPage={hasNextPage}
-            isFetchingNextPage={isFetchingNextPage}
-            onLoadMore={() => {
-              void fetchNextPage();
-            }}
-          />
-        </Suspense>
-      </ErrorBoundary>
+      <SignupRequestListContent
+        members={members}
+        isSelectionEnabled={mode === 'select'}
+        selectedIds={selectedIds}
+        onToggleSelect={handleToggleSelect}
+        onClickMore={handleOpenDetail}
+        hasNextPage={hasNextPage}
+        isFetchingNextPage={isFetchingNextPage}
+        onLoadMore={() => {
+          void fetchNextPage();
+        }}
+      />
       {mode === 'select' && selectedCount > 0 && <BottomActionBar actions={bottomActions} />}
     </div>
   );

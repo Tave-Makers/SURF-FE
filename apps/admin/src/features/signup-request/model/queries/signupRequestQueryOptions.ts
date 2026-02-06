@@ -66,6 +66,7 @@ export function signupRequestQueryOptions({
     initialPageParam: 0,
     getNextPageParam: getNextPageNumber,
     select: createInfiniteDataSelector<SignupRequestMember>(),
+    throwOnError: true,
     staleTime: SIGNUP_REQUEST_STALE_TIME,
   });
 }

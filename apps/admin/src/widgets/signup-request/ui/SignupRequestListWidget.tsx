@@ -69,6 +69,7 @@ export const SignupRequestListWidget = ({ keyword }: SignupRequestListWidgetProp
       type: 'signup',
       props: {
         memberId,
+        showAction: mode === 'view',
       },
     });
   };

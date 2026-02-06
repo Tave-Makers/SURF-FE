@@ -4,18 +4,14 @@ import { InfiniteData, useMutation, useQueryClient } from '@tanstack/react-query
 import type { SignupRequestMember } from '@/entities/signup-request/model/types';
 import type { PageWithContent } from '@/shared/lib/tanstack-query/infiniteQueryUtils';
 import type { CommonResponse } from '@/shared/api/types';
-import {
-  signupRequestQueryKeys,
-  SignupRequestFilters,
-  normalizeSignupRequestFilters,
-} from './queries/signupRequestQueryKeys';
+import { signupRequestQueryKeys } from './queries/signupRequestQueryKeys';
+import { memberQueryKeys } from '@/entities/member/model/queries/memberQueryKeys';
 import { updateSignupRequest } from '../api/updateSignupRequest';
 import { MemberStatus } from '@/entities/member/model/types';
 
 type UpdateSignupRequestStatusParams = {
   memberIds: number[];
   nextStatus: MemberStatus;
-  filters?: SignupRequestFilters;
 };
 
 export const useUpdateSignupRequestStatusMutation = () => {
@@ -25,12 +21,9 @@ export const useUpdateSignupRequestStatusMutation = () => {
     mutationKey: ['signup-request', 'update'],
     mutationFn: (params) => updateSignupRequest(params.memberIds, params.nextStatus),
     onSuccess: (_data, params) => {
-      const normalizedFilters = normalizeSignupRequestFilters(params.filters ?? {});
-      const queryKey = signupRequestQueryKeys.list(normalizedFilters);
-
       const idSet = new Set(params.memberIds);
-      queryClient.setQueryData<InfiniteData<PageWithContent<SignupRequestMember>, number>>(
-        queryKey,
+      queryClient.setQueriesData<InfiniteData<PageWithContent<SignupRequestMember>, number>>(
+        { queryKey: signupRequestQueryKeys.lists() },
         (data) => {
           if (!data) {
             return data;
@@ -47,11 +40,13 @@ export const useUpdateSignupRequestStatusMutation = () => {
           };
         },
       );
+
+      params.memberIds.forEach((memberId) => {
+        void queryClient.invalidateQueries({ queryKey: memberQueryKeys.detail(memberId) });
+      });
     },
     onError: (error) => {
-      if (error instanceof Error) {
-        console.error('[Signup Request Status Update Error]', error.message);
-      }
+      console.error('[Signup Request Status Update Error]', error.message);
     },
   });
 };

@@ -33,9 +33,13 @@ export const SignupRequestListWidget = ({ keyword }: SignupRequestListWidgetProp
 
   const openBottomSheet = useBottomSheetStore((s) => s.open);
 
-  useEffect(() => {
-    setMode('view');
+  const handleReset = () => {
     setSelectedIds(new Set());
+    setMode('view');
+  };
+
+  useEffect(() => {
+    handleReset();
   }, [keyword]);
 
   const statuses = getSelectedStatuses(members, selectedIds);
@@ -43,10 +47,7 @@ export const SignupRequestListWidget = ({ keyword }: SignupRequestListWidgetProp
 
   const { openApproveAlert, openRejectAlert, isPending } = useSignupStatusActions({
     memberIds: Array.from(selectedIds),
-    filters,
-    onSuccess: () => {
-      setSelectedIds(new Set());
-    },
+    onSuccess: handleReset,
   });
 
   const handleToggleSelect = (memberId: number) => {
@@ -93,10 +94,7 @@ export const SignupRequestListWidget = ({ keyword }: SignupRequestListWidgetProp
         selectCount={selectedCount}
         totalCount={totalCount}
         onClickSelect={() => setMode('select')}
-        onClickCancel={() => {
-          setMode('view');
-          setSelectedIds(new Set());
-        }}
+        onClickCancel={handleReset}
       />
       {/* 회원가입 요청 멤버 리스트*/}
       <ErrorBoundary fallback={<div>error</div>}>

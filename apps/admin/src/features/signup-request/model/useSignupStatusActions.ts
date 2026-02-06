@@ -3,8 +3,6 @@
 import { useAlertStore } from '@surf/ui/store/alertStore';
 import { useToastStore } from '@surf/ui/store/toastStore';
 import { useUpdateSignupRequestStatusMutation } from './useUpdateRequestStatusMutation';
-import type { SignupRequestFilters } from './queries/signupRequestQueryKeys';
-
 /** 가입 신청 상태 변경 타입 */
 export type SignupStatusAction = 'approve' | 'reject';
 
@@ -41,8 +39,6 @@ const ALERT_CONFIGS: Record<SignupStatusAction, AlertConfig> = {
 type UseSignupStatusActionsParams = {
   /** 상태 변경 대상 회원 ID 목록 */
   memberIds: number[];
-  /** 목록 필터 (캐시 업데이트용) */
-  filters?: SignupRequestFilters;
   /** 상태 변경 성공 시 콜백 */
   onSuccess?: () => void;
 };
@@ -53,7 +49,6 @@ type UseSignupStatusActionsParams = {
  */
 export const useSignupStatusActions = ({
   memberIds,
-  filters,
   onSuccess,
 }: UseSignupStatusActionsParams) => {
   const { mutate, isPending } = useUpdateSignupRequestStatusMutation();
@@ -73,7 +68,6 @@ export const useSignupStatusActions = ({
       {
         memberIds,
         nextStatus: action,
-        filters,
       },
       {
         onSuccess: () => {

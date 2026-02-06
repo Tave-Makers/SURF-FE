@@ -2,7 +2,6 @@ import type { MemberInformationResDTO } from '../api/types';
 
 import type { Career, Member, MemberStatus, MemberTrack, TrackPart } from './types';
 
-type ApiTrack = NonNullable<MemberInformationResDTO['trackList']>[number];
 type ApiCareer = NonNullable<MemberInformationResDTO['careerList']>[number];
 type ApiDate = NonNullable<ApiCareer['startDate']>;
 
@@ -14,7 +13,7 @@ export const MEMBER_STATUS_MAP: Record<string, MemberStatus> = {
   WITHDRAWN: 'reject',
 };
 
-function toMemberStatus(status?: MemberInformationResDTO['memberStatus']): MemberStatus {
+export function toMemberStatus(status?: string): MemberStatus {
   if (!status) {
     return 'waiting';
   }
@@ -22,7 +21,7 @@ function toMemberStatus(status?: MemberInformationResDTO['memberStatus']): Membe
   return MEMBER_STATUS_MAP[status] ?? 'waiting';
 }
 
-function toMemberTrack(track: ApiTrack): MemberTrack {
+export function toMemberTrack(track: { generation?: number; part?: string }): MemberTrack {
   return {
     generation: track.generation ?? 0,
     part: (track.part ?? 'BACKEND') as TrackPart,

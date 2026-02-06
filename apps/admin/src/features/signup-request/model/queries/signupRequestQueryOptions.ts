@@ -6,11 +6,7 @@ import {
   InfiniteSelectResult,
   PageWithContent,
 } from '@/shared/lib/tanstack-query/infiniteQueryUtils';
-import {
-  signupRequestQueryKeys,
-  SignupRequestFilters,
-  normalizeSignupRequestFilters,
-} from './signupRequestQueryKeys';
+import { signupRequestQueryKeys, SignupRequestFilters } from './signupRequestQueryKeys';
 
 import { toSignupRequestMember } from '../mapper';
 import { SIGNUP_REQUEST_PAGE_SIZE, SIGNUP_REQUEST_STALE_TIME } from '../constants';
@@ -36,8 +32,6 @@ export function signupRequestQueryOptions({
   filters,
   fetcher = getSignupRequestListClient,
 }: SignupRequestQueryOptionsParams) {
-  const normalizedFilters = normalizeSignupRequestFilters(filters);
-
   return infiniteQueryOptions<
     PageWithContent<SignupRequestMember>,
     Error,
@@ -45,26 +39,27 @@ export function signupRequestQueryOptions({
     ReturnType<typeof signupRequestQueryKeys.list>,
     number
   >({
-    queryKey: signupRequestQueryKeys.list(normalizedFilters),
+    queryKey: signupRequestQueryKeys.list(filters),
 
     queryFn: async ({ pageParam = 0 }) => {
       const params: SignupRequestListParams = {
         pageNum: pageParam,
-        pageSize: normalizedFilters.pageSize || SIGNUP_REQUEST_PAGE_SIZE,
+        pageSize: filters.pageSize || SIGNUP_REQUEST_PAGE_SIZE,
       };
 
       // keyword가 있을 때만 파라미터에 추가
-      if (normalizedFilters.keyword) {
-        params.keyword = normalizedFilters.keyword;
+      if (filters.keyword) {
+        params.keyword = filters.keyword;
       }
 
       const response = await fetcher(params);
-      const { content, ...pageMeta } = response.data;
+      const { content, totalMemberCount, ...pageMeta } = response.data;
 
       // queryFn에서 매핑: 캐시에 Domain Model로 저장
       return {
         ...pageMeta,
         content: content.map(toSignupRequestMember),
+        totalCount: totalMemberCount,
       };
     },
 

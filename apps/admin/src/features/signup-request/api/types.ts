@@ -10,6 +10,11 @@ export interface Track {
 }
 
 /**
+ * 멤버 상태
+ */
+export type MemberStatus = 'REGISTERING' | 'WAITING' | 'APPROVED' | 'REJECTED' | 'WITHDRAWN';
+
+/**
  * 가입 신청 아이템
  */
 export interface SignupRequestItem {
@@ -19,6 +24,7 @@ export interface SignupRequestItem {
   profileImageUrl: string;
   trackList: Track[];
   createdAt: string;
+  memberStatus: MemberStatus;
 }
 
 /**
@@ -26,6 +32,7 @@ export interface SignupRequestItem {
  */
 export interface SignupRequestListData extends PageMeta {
   content: SignupRequestItem[];
+  totalMemberCount: number;
 }
 
 /**

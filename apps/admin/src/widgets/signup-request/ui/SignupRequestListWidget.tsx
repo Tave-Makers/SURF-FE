@@ -8,9 +8,9 @@ import {
   getSelectionPolicy,
 } from '@/features/signup-request/model/selectionPolicy';
 import { useSignupStatusActions } from '@/features/signup-request/model/useSignupStatusActions';
-import { RequestListTopBar } from '@/features/signup-request/ui/RequestListTopBar';
 import { useBottomSheetStore } from '@/shared/store/bottomSheetStore';
 import { BottomActionBar } from '@/shared/ui/BottomActionBar';
+import { SelectableListTopBar } from '@/shared/ui/SelectableListTopBar';
 
 interface SignupRequestListWidgetProps {
   keyword: string;
@@ -92,12 +92,12 @@ export const SignupRequestListWidget = ({ keyword }: SignupRequestListWidgetProp
   return (
     <div className="flex h-full flex-col overflow-hidden">
       {/* 회원가입 요청 상단 바 */}
-      <RequestListTopBar
+      <SelectableListTopBar
         mode={mode}
-        selectCount={selectedCount}
         totalCount={totalCount}
-        onClickSelect={() => setMode('select')}
-        onClickCancel={handleReset}
+        onEnterSelectMode={() => setMode('select')}
+        onExitSelectMode={handleReset}
+        selectedCount={selectedIds.size}
       />
       {/* 회원가입 요청 멤버 리스트*/}
       <SignupRequestListContent

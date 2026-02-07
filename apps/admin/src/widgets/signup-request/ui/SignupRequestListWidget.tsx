@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useMemo, useState } from 'react';
+import { useEffect, useMemo } from 'react';
 import { SignupRequestListContent } from './SignupRequestListContent';
 import { useSignupRequestList } from '@/features/signup-request/model/queries/useSignupRequestList';
 import {
@@ -8,6 +8,7 @@ import {
   getSelectionPolicy,
 } from '@/features/signup-request/model/selectionPolicy';
 import { useSignupStatusActions } from '@/features/signup-request/model/useSignupStatusActions';
+import { useSelectableListState } from '@/shared/hooks/useSelectableListState';
 import { useBottomSheetStore } from '@/shared/store/bottomSheetStore';
 import { BottomActionBar } from '@/shared/ui/BottomActionBar';
 import { SelectableListTopBar } from '@/shared/ui/SelectableListTopBar';
@@ -23,8 +24,15 @@ interface SignupRequestListWidgetProps {
  * - 가입 신청 목록 (스크롤 가능) - Suspense로 로딩 처리
  */
 export const SignupRequestListWidget = ({ keyword }: SignupRequestListWidgetProps) => {
-  const [mode, setMode] = useState<'view' | 'select'>('view');
-  const [selectedIds, setSelectedIds] = useState<Set<number>>(new Set());
+  const {
+    mode,
+    selectedIds,
+    selectedCount,
+    enterSelectMode,
+    exitSelectMode,
+    toggleSelect,
+    resetSelectionState,
+  } = useSelectableListState<number>();
 
   const filters = useMemo(() => (keyword ? { keyword } : {}), [keyword]);
   const { members, totalCount, fetchNextPage, hasNextPage, isFetchingNextPage } =
@@ -32,36 +40,18 @@ export const SignupRequestListWidget = ({ keyword }: SignupRequestListWidgetProp
 
   const openBottomSheet = useBottomSheetStore((s) => s.open);
 
-  const handleReset = () => {
-    setSelectedIds(new Set());
-    setMode('view');
-  };
-
   useEffect(() => {
-    handleReset();
-  }, [keyword]);
+    resetSelectionState();
+  }, [keyword, resetSelectionState]);
 
   const statuses = getSelectedStatuses(members, selectedIds);
-  const { selectedCount, canApprove, canReject } = getSelectionPolicy(statuses);
+  const { canApprove, canReject } = getSelectionPolicy(statuses);
 
   //회원가입 상태 처리 액션 훅
   const { openApproveAlert, openRejectAlert, isPending } = useSignupStatusActions({
     memberIds: Array.from(selectedIds),
-    onSuccess: handleReset,
+    onSuccess: resetSelectionState,
   });
-
-  //멤버 선택 핸들러
-  const handleToggleSelect = (memberId: number) => {
-    setSelectedIds((prev) => {
-      const next = new Set(prev);
-      if (next.has(memberId)) {
-        next.delete(memberId);
-      } else {
-        next.add(memberId);
-      }
-      return next;
-    });
-  };
 
   //상세 바텀시트 오픈 핸들러
   const handleOpenDetail = (memberId: number) => {
@@ -95,16 +85,16 @@ export const SignupRequestListWidget = ({ keyword }: SignupRequestListWidgetProp
       <SelectableListTopBar
         mode={mode}
         totalCount={totalCount}
-        onEnterSelectMode={() => setMode('select')}
-        onExitSelectMode={handleReset}
-        selectedCount={selectedIds.size}
+        selectedCount={selectedCount}
+        onEnterSelectMode={enterSelectMode}
+        onExitSelectMode={exitSelectMode}
       />
       {/* 회원가입 요청 멤버 리스트*/}
       <SignupRequestListContent
         members={members}
         isSelectionEnabled={mode === 'select'}
         selectedIds={selectedIds}
-        onToggleSelect={handleToggleSelect}
+        onToggleSelect={toggleSelect}
         onClickMore={handleOpenDetail}
         hasNextPage={hasNextPage}
         isFetchingNextPage={isFetchingNextPage}

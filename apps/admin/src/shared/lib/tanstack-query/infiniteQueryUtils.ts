@@ -6,6 +6,7 @@ import { PageMeta } from '@/shared/api/types';
  */
 export interface PageWithContent<T> extends PageMeta {
   content: T[];
+  totalCount?: number;
 }
 
 /**
@@ -63,7 +64,7 @@ export function createInfiniteDataSelector<T>(): (
       pages: data.pages,
       pageParams: data.pageParams,
       items,
-      totalCount: data.pages[0]?.numberOfElements ?? 0,
+      totalCount: data.pages[0]?.totalCount ?? 0,
       isLast: lastPage?.isLast ?? true,
     };
   };

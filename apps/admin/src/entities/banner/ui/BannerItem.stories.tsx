@@ -8,11 +8,10 @@ const meta: Meta<typeof BannerItem> = {
     layout: 'centered',
   },
   argTypes: {
-    id: { control: false },
     imageUrl: { control: 'text' },
     name: { control: 'text' },
     isActive: { control: 'boolean' },
-    onClickMore: { action: 'click more' },
+    onClick: { action: 'click more' },
   },
 };
 
@@ -29,7 +28,6 @@ const WithWidth = (args: React.ComponentProps<typeof BannerItem>) => (
 export const Active: Story = {
   render: WithWidth,
   args: {
-    id: 1,
     name: 'BannerNameBannerNameBannerNameBannerName',
     isActive: true,
     imageUrl: '',
@@ -42,7 +40,6 @@ export const Active: Story = {
 export const Inactive: Story = {
   render: WithWidth,
   args: {
-    id: 2,
     name: '비활성 배너',
     isActive: false,
     imageUrl: '',
@@ -55,12 +52,11 @@ export const Inactive: Story = {
 export const Playground: Story = {
   render: WithWidth,
   args: {
-    id: 1,
     name: 'Banner Name',
     isActive: true,
     imageUrl: '',
-    onClickMore: () => {
-      alert('더보기 클릭');
+    onClick: () => {
+      alert('배너 클릭');
     },
   },
 };

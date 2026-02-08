@@ -47,11 +47,10 @@ export const BannerPage = () => {
         {inactive.map((b) => (
           <BannerItem
             key={b.id}
-            id={b.id}
             name={b.name}
             imageUrl={b.imageUrl}
             isActive={b.isActive}
-            onClickMore={() => {}}
+            onClick={() => {}}
           />
         ))}
       </div>

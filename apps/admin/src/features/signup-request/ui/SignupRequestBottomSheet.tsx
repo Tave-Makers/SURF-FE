@@ -1,10 +1,8 @@
 import { SolidButton } from '@surf/ui/button';
 import { Sheet } from '@surf/ui/sheet';
-import { useQueryClient } from '@tanstack/react-query';
 import { Suspense } from 'react';
 import { Sheet as ModalSheet } from 'react-modal-sheet';
 import { useSignupStatusActions } from '../model/useSignupStatusActions';
-import { memberQueryKeys } from '@/entities/member/model/queries/memberQueryKeys';
 import { useMemberInfoQuery } from '@/entities/member/model/queries/useMemberInfoQuery';
 import { MemberDetail } from '@/entities/member/ui/MemberDetail';
 import { RequestStatusBadge } from '@/entities/signup-request/ui/RequestStatusBadge';
@@ -77,14 +75,9 @@ const MemberInfoContent = ({
 }) => {
   const { data: member } = useMemberInfoQuery(memberId);
 
-  const queryClient = useQueryClient();
-
   const { openApproveAlert, openRejectAlert, isPending } = useSignupStatusActions({
     memberIds: [memberId],
     onSuccess: () => {
-      void queryClient.invalidateQueries({
-        queryKey: memberQueryKeys.detail(memberId),
-      });
       onClose();
     },
   });

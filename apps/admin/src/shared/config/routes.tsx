@@ -43,16 +43,6 @@ export const createRouteConfig = (_router: RouterInstance): RouteConfig[] => [
     },
   },
   {
-    id: 'banner',
-    path: PAGE_ROUTES.BANNER,
-    backPath: PAGE_ROUTES.HOME,
-    header: {
-      mode: HeaderMode.Default,
-      title: '홈배너 관리',
-      hasLeftIcon: true,
-    },
-  },
-  {
     id: 'dashboard',
     path: PAGE_ROUTES.DASHBOARD,
     backPath: PAGE_ROUTES.HOME,

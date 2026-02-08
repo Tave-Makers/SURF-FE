@@ -59,5 +59,8 @@ export const Playground: Story = {
     name: 'Banner Name',
     isActive: true,
     imageUrl: '',
+    onClickMore: () => {
+      alert('더보기 클릭');
+    },
   },
 };

@@ -1,8 +1,8 @@
-import { SignupRequestStatus } from '../model/types';
+import { MemberStatus } from '@/entities/member/model/types';
 import { StatusBadge } from '@/shared/ui/StatusBadge';
 
 interface RequestStatusBadgeProps {
-  status: SignupRequestStatus;
+  status: MemberStatus;
 }
 
 const map = {

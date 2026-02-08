@@ -1,5 +1,6 @@
 'use client';
 
+import { useKeyboardOffset } from '@surf/hooks';
 import { useAlertStore } from '@surf/ui/store/alertStore';
 import { EditorContent } from '@tiptap/react';
 import { useCallback, useEffect, useRef } from 'react';
@@ -16,7 +17,6 @@ import { PostEditorToolbar } from '@/features/post/post-editor/ui/PostEditorTool
 import { PostPageMode } from '@/features/post/post-form/model/types';
 import { usePostFormStore } from '@/features/post/post-form/model/usePostFormStore';
 import { ScheduleFormData } from '@/features/schedule/create/model/types';
-import { useKeyboardOffset } from '@/shared/hooks/useKeyboardOffset';
 
 export type PostEditorProps = {
   mode: PostPageMode;

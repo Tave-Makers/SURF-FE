@@ -2,6 +2,7 @@
 
 import { useAlertStore } from '@surf/ui/store/alertStore';
 import { useToastStore } from '@surf/ui/store/toastStore';
+import { toDate, toKST, formatDateTime } from '@surf/utils';
 // import dynamic from 'next/dynamic';
 import { useRouter } from 'next/navigation';
 import { useEffect, useRef } from 'react';
@@ -15,7 +16,6 @@ import { Comment } from '@/features/comment/ui/Comment';
 import CommentsEmpty from '@/shared/assets/icons/empty-space/comments-empty.svg';
 import { PAGE_ROUTES } from '@/shared/config/path';
 import { useBottomSheetStore } from '@/shared/store/bottomSheetStore';
-import { toDate, toKST, formatDateTime } from '@/shared/utils/date';
 
 // const CommentsEmpty = dynamic(
 //   () => import('@/shared/assets/icons/empty-space/comments-empty.svg'),

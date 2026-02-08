@@ -27,6 +27,7 @@ function createMockSignupRequestItem(index: number): SignupRequestItem {
     profileImageUrl: 'https://example.com/profile.png',
     trackList: [{ generation: 15, part: 'BACKEND' }],
     createdAt: '2026-01-20T10:00:00.000Z',
+    memberStatus: 'WAITING',
   };
 }
 
@@ -58,6 +59,7 @@ export function createMockSignupRequestList(
       pageSize,
       numberOfElements: content.length,
       isLast,
+      totalMemberCount: totalElements,
     },
   };
 }

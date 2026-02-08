@@ -23,6 +23,7 @@ export type SignupRequestBottomSheetProps = {
   onClose: () => void;
   /** 조회할 회원 ID */
   memberId: number;
+  showAction: boolean;
 };
 
 /**
@@ -33,6 +34,7 @@ export const SignupRequestBottomSheet = ({
   isOpen,
   onClose,
   memberId,
+  showAction,
 }: SignupRequestBottomSheetProps) => {
   return (
     <ModalSheet isOpen={isOpen} onClose={onClose}>
@@ -51,7 +53,7 @@ export const SignupRequestBottomSheet = ({
                   <div className="text-body-body6 text-foreground-secondary">로딩중...</div>
                 }
               >
-                <MemberInfoContent memberId={memberId} onClose={onClose} />
+                <MemberInfoContent memberId={memberId} showAction={showAction} onClose={onClose} />
               </Suspense>
             </ErrorBoundary>
           </Sheet>
@@ -63,12 +65,17 @@ export const SignupRequestBottomSheet = ({
 
 /**
  * 회원 정보 및 승인/거절 액션을 표시하는 내부 컴포넌트
- * @description Suspense와 ErrorBoundary 내부에서 사용되며, 회원 데이터를 페칭하고 상태 변경 기능을 제공합니다.
  */
-const MemberInfoContent = ({ memberId, onClose }: { memberId: number; onClose: () => void }) => {
-  const { data: member } = useMemberInfoQuery(memberId, {
-    throwOnError: true,
-  });
+const MemberInfoContent = ({
+  memberId,
+  showAction,
+  onClose,
+}: {
+  memberId: number;
+  showAction: boolean;
+  onClose: () => void;
+}) => {
+  const { data: member } = useMemberInfoQuery(memberId);
 
   const queryClient = useQueryClient();
 
@@ -82,17 +89,13 @@ const MemberInfoContent = ({ memberId, onClose }: { memberId: number; onClose: (
     },
   });
 
-  if (!member) {
-    return <div className="text-body-body6 text-foreground-secondary">회원 정보가 없습니다.</div>;
-  }
-
   return (
     <>
       <div className="flex size-full flex-col gap-[0.375rem] py-13">
         <RequestStatusBadge status={member.status} />
         <MemberDetail member={member} />
       </div>
-      {member.status === 'waiting' && (
+      {member.status === 'waiting' && showAction && (
         <div className="mt-13 flex w-full flex-row gap-13">
           <SolidButton size="l" variant="danger" isDisabled={isPending} onClick={openRejectAlert}>
             거절하기

@@ -1,8 +1,8 @@
 'use client';
 
+import { useDebouncedValue } from '@surf/hooks';
 import { ActionBar } from '@surf/ui/action-bar';
 import { Avatar } from '@surf/ui/avatar';
-import { useDebouncedValue } from '@surf/ui/hooks/useDebouncedValue';
 import { Sheet } from '@surf/ui/sheet';
 import { SheetItem } from '@surf/ui/sheet';
 import { useToastStore } from '@surf/ui/store/toastStore';

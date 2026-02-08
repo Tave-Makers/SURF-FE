@@ -1,9 +1,7 @@
 'use client';
-
+import { useDebouncedValue } from '@surf/hooks';
 import { TextInput } from '@surf/ui/text-input';
 import { useState } from 'react';
-
-import { useDebouncedValue } from '@/shared/hooks/useDebouncedValue';
 import { SignupRequestListWidget } from '@/widgets/signup-request/ui/SignupRequestListWidget';
 
 /**

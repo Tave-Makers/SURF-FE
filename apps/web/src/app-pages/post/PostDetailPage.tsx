@@ -1,5 +1,6 @@
 'use client';
 
+import { useKeyboardOffset } from '@surf/hooks';
 import { HeaderMode } from '@surf/ui/header';
 import { useAlertStore } from '@surf/ui/store/alertStore';
 import { useToastStore } from '@surf/ui/store/toastStore';
@@ -15,7 +16,6 @@ import { useDeletePostMutation } from '@/features/post/model/useDeletePostMutati
 import { useGetPostLikesQuery } from '@/features/post/model/useGetPostLikesQuery';
 import { useGetPostScheduleQuery } from '@/features/post/model/useGetPostScheduleQuery';
 import { usePageName } from '@/shared/analytics/lib/getPageName';
-import { useKeyboardOffset } from '@/shared/hooks/useKeyboardOffset';
 import { useBottomSheetStore } from '@/shared/store/bottomSheetStore';
 import { CommentComposer } from '@/widgets/comment-composer/ui/CommentComposer';
 import { CommentSection } from '@/widgets/comment-section/ui/CommentSection';

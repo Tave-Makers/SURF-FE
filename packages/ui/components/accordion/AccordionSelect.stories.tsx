@@ -1,5 +1,5 @@
 import type { Meta, StoryObj } from '@storybook/nextjs';
-import { usePicker } from '../../hooks/usePicker';
+import { useMemo, useState } from 'react';
 import { AccordionSelect } from './AccordionSelect';
 import { Sheet as ModalSheet } from 'react-modal-sheet';
 
@@ -14,8 +14,11 @@ type Story = StoryObj<typeof AccordionSelect>;
 /** 단순 시트 열기/닫기용 (토글형) */
 export const ToggleAccordionSelect: Story = {
   render: () => {
-    const { isOpen, open, close } = usePicker(); // open/close만 사용
+    const [isOpen, setIsOpen] = useState(false);
     const sheetId = 'toggle-sheet';
+
+    const open = () => setIsOpen(true);
+    const close = () => setIsOpen(false);
 
     return (
       <div>
@@ -55,13 +58,28 @@ export const ToggleAccordionSelect: Story = {
 /** 항목 선택형 (값 선택 후 시트 닫힘) */
 export const SelectAccordion: Story = {
   render: () => {
-    const { isOpen, open, close, value, select } = usePicker<string>();
-    const items = ['행사', '활동', '제휴', '릴리즈', '기타'];
+    const [isOpen, setIsOpen] = useState(false);
+    const [value, setValue] = useState<string | null>(null);
+
+    const items = useMemo(() => ['행사', '활동', '제휴', '릴리즈', '기타'], []);
     const sheetId = 'select-sheet';
+
+    const open = () => setIsOpen(true);
+    const close = () => setIsOpen(false);
+
+    const select = (next: string) => {
+      setValue(next);
+      close(); // 선택 후 닫힘
+    };
 
     return (
       <div>
-        <AccordionSelect title={value ?? '행사 종류 선택'} isOpen={isOpen} onClick={open} />
+        <AccordionSelect
+          title={value ?? '행사 종류 선택'}
+          isOpen={isOpen}
+          onClick={open}
+          controlsId={sheetId}
+        />
 
         <ModalSheet
           isOpen={isOpen}

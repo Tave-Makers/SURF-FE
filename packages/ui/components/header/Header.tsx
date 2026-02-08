@@ -80,7 +80,7 @@ const renderLeftIcon = (hasLeftIcon?: boolean, onClickBack?: () => void) =>
 
 const renderTitle = (title?: string) =>
   title ? (
-    <div className="text-title-title1 text-foreground-normal leading-14! flex-1">{title}</div>
+    <div className="text-title-title1 text-foreground-normal leading-14! ml-8 flex-1">{title}</div>
   ) : null;
 
 const renderRightIcons = (icons: MaxThree<HeaderIcon> = []) => (

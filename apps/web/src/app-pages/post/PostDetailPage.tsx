@@ -103,11 +103,11 @@ const PostDetailPage = ({ postId }: PostDetailPageProps) => {
 
   const openLikedUsers = async () => {
     const result = await refetchLikedUsers();
-    if (result.data) {
-      trackPostDetailEvent(POST_DETAIL_EVENTS.LIKE_LIST_VIEW, {
-        post_id: numericPostId,
-      });
-    }
+
+    trackPostDetailEvent(POST_DETAIL_EVENTS.LIKE_LIST_VIEW, {
+      post_id: numericPostId,
+    });
+
     openBottomSheet({
       type: 'postLike',
       props: {
@@ -119,6 +119,7 @@ const PostDetailPage = ({ postId }: PostDetailPageProps) => {
   };
 
   const handleDelete = () => {
+    trackPostDetailEvent(POST_DETAIL_EVENTS.CLICK_POST_DELETE, { post_id: numericPostId });
     deletePostMutate(numericPostId, {
       onSuccess: () => {
         closeAlert();
@@ -133,7 +134,10 @@ const PostDetailPage = ({ postId }: PostDetailPageProps) => {
       type: 'postOption',
       props: {
         isMine: post.isMine,
-        onEdit: () => router.push(`${pathname}/edit`),
+        onEdit: () => {
+          trackPostDetailEvent(POST_DETAIL_EVENTS.CLICK_POST_EDIT, { post_id: numericPostId });
+          router.push(`${pathname}/edit`);
+        },
         onDelete: () => {
           openAlert({
             state: 'default',

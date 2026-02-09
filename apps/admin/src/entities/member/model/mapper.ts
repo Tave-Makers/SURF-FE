@@ -1,6 +1,6 @@
 import type { MemberInformationResDTO } from '../api/types';
 
-import type { Career, Member, MemberStatus, MemberTrack, TrackPart } from './types';
+import type { Career, Member, MemberRole, MemberStatus, MemberTrack, TrackPart } from './types';
 
 type ApiCareer = NonNullable<MemberInformationResDTO['careerList']>[number];
 type ApiDate = NonNullable<ApiCareer['startDate']>;
@@ -19,6 +19,16 @@ export function toMemberStatus(status?: string): MemberStatus {
   }
 
   return MEMBER_STATUS_MAP[status] ?? 'waiting';
+}
+
+const MEMBER_ROLE_VALUES: MemberRole[] = ['ADMIN', 'PRESIDENT', 'MANAGER', 'MEMBER'];
+
+export function toMemberRole(role?: string): MemberRole {
+  if (!role) {
+    return 'MEMBER';
+  }
+
+  return MEMBER_ROLE_VALUES.includes(role as MemberRole) ? (role as MemberRole) : 'MEMBER';
 }
 
 export function toMemberTrack(track: { generation?: number; part?: string }): MemberTrack {
@@ -62,7 +72,7 @@ export function toMemberDetail(dto: MemberInformationResDTO, memberId: number): 
     name: dto.username ?? '',
     email: dto.email ?? '',
     phoneNumber: formatPhoneNumber(dto.phoneNumber ?? ''),
-    role: dto.role ?? '',
+    role: toMemberRole(dto.role),
     university: dto.university ?? '',
     profileImageUrl: dto.profileImageUrl ?? '',
     tracks: (dto.trackList ?? []).map(toMemberTrack),

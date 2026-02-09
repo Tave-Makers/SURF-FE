@@ -12,6 +12,7 @@ export function createSignupRequestMember(
     tracks: [{ generation: 15, part: 'BACKEND' }],
     registeredAt: '2026-01-20T10:00:00.000Z',
     status: 'waiting',
+    role: 'MEMBER',
     ...overrides,
   };
 }
@@ -28,6 +29,7 @@ function createMockSignupRequestItem(index: number): SignupRequestItem {
     trackList: [{ generation: 15, part: 'BACKEND' }],
     createdAt: '2026-01-20T10:00:00.000Z',
     memberStatus: 'WAITING',
+    role: 'MEMBER',
   };
 }
 

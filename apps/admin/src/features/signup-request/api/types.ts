@@ -20,6 +20,7 @@ export interface SignupRequestItem {
   trackList: Track[];
   createdAt: string;
   memberStatus: string;
+  role: string;
 }
 
 /**

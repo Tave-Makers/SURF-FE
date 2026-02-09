@@ -1,5 +1,6 @@
+import { MemberCard } from '@/entities/member/ui/MemberCard';
+import { MemberStatusBadge } from '@/entities/member/ui/MemberStatusBadge';
 import { SignupRequestMember } from '@/entities/signup-request/model/types';
-import { SignupRequestItem } from '@/entities/signup-request/ui/SignupRequestItem';
 
 interface SignupRequestListProps {
   members: SignupRequestMember[];
@@ -29,17 +30,16 @@ export const SignupRequestList = ({
   return (
     <div className="scrollbar-hide flex w-full grow flex-col">
       {members.map((member) => (
-        <SignupRequestItem
+        <MemberCard
           key={member.id}
           name={member.name}
-          university={member.university}
           tracks={member.tracks}
           registeredAt={member.registeredAt}
           checked={selectedIds.has(member.id)}
-          status={member.status}
           isSelectionEnabled={isSelectionEnabled}
           onToggle={() => onToggleSelect(member.id)}
           onClick={() => onClickMore(member.id)}
+          rightSlot={<MemberStatusBadge status={member.status} />}
         />
       ))}
     </div>

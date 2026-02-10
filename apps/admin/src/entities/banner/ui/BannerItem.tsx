@@ -23,13 +23,15 @@ export const BannerItem = ({
       onClick={onClick}
       disabled={isReorderMode}
     >
-      <Image
-        src={imageUrl || DEFAULT_BANNER_IMAGE}
-        alt={name}
-        width={78}
-        height={48}
-        className="shrink-0 object-cover"
-      />
+      {imageUrl ? (
+        <Image
+          src={imageUrl || DEFAULT_BANNER_IMAGE}
+          alt={name}
+          width={78}
+          height={48}
+          className="shrink-0 object-cover"
+        />
+      ) : null}
       <div className="flex min-w-0 flex-1 flex-col items-start gap-5">
         <div className="text-body-body6 text-foreground-normal w-full min-w-0 flex-1 truncate">
           {name}

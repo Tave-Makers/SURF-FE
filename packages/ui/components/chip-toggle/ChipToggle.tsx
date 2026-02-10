@@ -35,7 +35,7 @@ import { SurfIcon } from '../icon/SurfIcon';
 type SurfIconName = ComponentProps<typeof SurfIcon>['name'];
 
 export type ChipToggleProps = {
-  iconName: SurfIconName;
+  iconName?: SurfIconName;
   mode: 'count' | 'text';
   highlightType?: 'hover' | 'toggle';
   isClicked: boolean;
@@ -84,7 +84,7 @@ export const ChipToggle = ({
     // hover 모드일 때만 hover/active 효과
     highlightType === 'hover' && hoverStyle,
 
-    // toggle 모드일 때는 클릭 상태면 항상 진하게
+    // toggle 모드일 때는 클릭 상태면 진하게
     highlightType === 'toggle' && isClicked && toggledStyle,
   ]
     .filter(Boolean)
@@ -92,13 +92,14 @@ export const ChipToggle = ({
 
   return (
     <div className={containerClassName} role="group" aria-label={`${iconName} 토글 버튼 그룹`}>
-      {/* 실제 콘텐츠 */}
       <div className="pointer-events-none relative flex h-full items-center justify-center gap-8">
-        <SurfIcon
-          name={iconName}
-          size="s"
-          className={`shrink-0 ${isClicked ? colorMap[activeColor] : 'text-foreground-normal'}`}
-        />
+        {iconName && (
+          <SurfIcon
+            name={iconName}
+            size="s"
+            className={`shrink-0 ${isClicked ? colorMap[activeColor] : 'text-foreground-normal'}`}
+          />
+        )}
         {/* count일 경우 숫자 표시 / text일 경우 children 표시 */}
         <span className="text-body-body8 text-foreground-normal">
           {mode === 'count' ? count : children}

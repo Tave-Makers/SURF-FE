@@ -1,12 +1,13 @@
 'use client';
-
+import { ChipToggle } from '@surf/ui/chip-toggle';
 import { HeaderMode } from '@surf/ui/header';
 import { reorderArray } from '@surf/utils';
-import { useState } from 'react';
+import { useMemo, useState } from 'react';
 import { Banner } from '@/entities/banner/model/types';
 import { BannerDnd } from '@/entities/banner/ui/BannerDnd';
 import { AppHeader } from '@/widgets/header/ui/AppHeader';
-import { ChipToggle } from '@surf/ui/chip-toggle';
+
+type Filter = 'all' | 'active' | 'inactive';
 
 export const BannerPage = () => {
   const [banners, setBanners] = useState<Banner[]>([
@@ -24,18 +25,55 @@ export const BannerPage = () => {
 
   //   setBanners([...newActive, ...inactive]);
   // };
-  const handleReorder = (from: number, to: number) => {
-    const newArray = reorderArray(banners, from, to);
-    setBanners(newArray);
-  };
+
   // const inactive = banners.filter((b) => !b.isActive);
   const [isReorderMode, setIsReorderMode] = useState(false);
+  const [filter, setFilter] = useState<Filter>('all');
+
+  const filteredBanners = useMemo(() => {
+    // 순서 변경 모드: 실제 순서 유지
+    if (isReorderMode) {
+      if (filter === 'active') return banners.filter((b) => b.isActive);
+      if (filter === 'inactive') return banners.filter((b) => !b.isActive);
+      return banners;
+    }
+
+    // 일반 모드: 전체는 활성 위/비활성 아래로 정렬
+    if (filter === 'active') return banners.filter((b) => b.isActive);
+    if (filter === 'inactive') return banners.filter((b) => !b.isActive);
+
+    const active = banners.filter((b) => b.isActive);
+    const inactive = banners.filter((b) => !b.isActive);
+    return [...active, ...inactive];
+  }, [banners, filter, isReorderMode]);
+
+  const handleReorder = (from: number, to: number) => {
+    const nextFiltered = reorderArray(filteredBanners, from, to);
+
+    if (filter === 'all') {
+      setBanners(nextFiltered);
+      return;
+    }
+
+    const movedIds = new Set(nextFiltered.map((b) => b.id));
+    const rest = banners.filter((b) => !movedIds.has(b.id));
+
+    if (filter === 'active') {
+      const inactive = rest.filter((b) => !b.isActive);
+      setBanners([...nextFiltered, ...inactive]);
+      return;
+    }
+
+    const active = rest.filter((b) => b.isActive);
+    setBanners([...active, ...nextFiltered]);
+  };
+
   return (
     <>
       <AppHeader
         overrideHeader={{
           mode: HeaderMode.TextBtn,
-          title: '홈 배너 관리',
+          title: isReorderMode ? '순서 변경' : '홈 배너 관리',
           text: isReorderMode ? '완료' : '순서 변경',
           btnVariant: isReorderMode ? 'primary' : 'secondary',
           hasLeftIcon: true,
@@ -45,34 +83,45 @@ export const BannerPage = () => {
         }}
       />
       <div className="flex h-full w-full flex-col">
-        <div className="flex gap-10 px-13 pb-10">
-          <ChipToggle mode="text" onToggleIcon={() => console.log('전체')} isActive={true}>
-            전체
-          </ChipToggle>
-          <ChipToggle mode="text" onToggleIcon={() => console.log('활성화')}>
-            활성화
-          </ChipToggle>
-          <ChipToggle mode="text" onToggleIcon={() => console.log('비활성화')}>
-            비활성화
-          </ChipToggle>
-        </div>
+        {!isReorderMode && (
+          <div className="flex gap-10 px-13 pb-10">
+            <ChipToggle
+              mode="text"
+              highlightType="toggle"
+              isClicked={filter === 'all'}
+              activeColor="blue"
+              onToggleIcon={() => setFilter('all')}
+            >
+              전체
+            </ChipToggle>
+
+            <ChipToggle
+              mode="text"
+              highlightType="toggle"
+              isClicked={filter === 'active'}
+              activeColor="blue"
+              onToggleIcon={() => setFilter('active')}
+            >
+              활성화
+            </ChipToggle>
+
+            <ChipToggle
+              mode="text"
+              highlightType="toggle"
+              isClicked={filter === 'inactive'}
+              activeColor="blue"
+              onToggleIcon={() => setFilter('inactive')}
+            >
+              비활성화
+            </ChipToggle>
+          </div>
+        )}
         <BannerDnd
-          banners={banners}
+          banners={filteredBanners}
           isReorderMode={isReorderMode}
           onReorder={handleReorder}
           onClick={(id) => console.log('click more:', id)}
         />
-
-        {/* {inactive.map((b) => (
-          <BannerItem
-            key={b.id}
-            name={b.name}
-            imageUrl={b.imageUrl}
-            isActive={b.isActive}
-            isReorderMode={isReorderMode}
-            onClick={() => console.log('click')}
-          />
-        ))} */}
       </div>
     </>
   );

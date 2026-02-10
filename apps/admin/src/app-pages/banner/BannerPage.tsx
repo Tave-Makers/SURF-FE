@@ -6,6 +6,7 @@ import { useState } from 'react';
 import { Banner } from '@/entities/banner/model/types';
 import { BannerDnd } from '@/entities/banner/ui/BannerDnd';
 import { AppHeader } from '@/widgets/header/ui/AppHeader';
+import { ChipToggle } from '@surf/ui/chip-toggle';
 
 export const BannerPage = () => {
   const [banners, setBanners] = useState<Banner[]>([
@@ -44,6 +45,17 @@ export const BannerPage = () => {
         }}
       />
       <div className="flex h-full w-full flex-col">
+        <div className="flex gap-10 px-13 pb-10">
+          <ChipToggle mode="text" onToggleIcon={() => console.log('전체')} isActive={true}>
+            전체
+          </ChipToggle>
+          <ChipToggle mode="text" onToggleIcon={() => console.log('활성화')}>
+            활성화
+          </ChipToggle>
+          <ChipToggle mode="text" onToggleIcon={() => console.log('비활성화')}>
+            비활성화
+          </ChipToggle>
+        </div>
         <BannerDnd
           banners={banners}
           isReorderMode={isReorderMode}

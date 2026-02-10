@@ -1,18 +1,27 @@
 import Image from 'next/image';
 import { BannerActiveBadge } from './BannerActiveBadge';
 import DEFAULT_BANNER_IMAGE from '@/shared/assets/images/banner/banner-default-item.png';
+
 interface BannerItemProps {
   imageUrl?: string;
   name: string;
   isActive: boolean;
+  isReorderMode: boolean;
   onClick: () => void;
 }
 
-export const BannerItem = ({ imageUrl, name, isActive, onClick }: BannerItemProps) => {
+export const BannerItem = ({
+  imageUrl,
+  name,
+  isActive,
+  isReorderMode,
+  onClick,
+}: BannerItemProps) => {
   return (
     <button
-      className="border-border-normal flex w-full min-w-0 items-center gap-10 border-b px-14 py-11 text-left"
+      className={`flex w-full min-w-0 items-center gap-10 px-14 py-11 text-left ${isReorderMode ? 'pl-0' : ''}`}
       onClick={onClick}
+      disabled={isReorderMode}
     >
       <Image
         src={imageUrl || DEFAULT_BANNER_IMAGE}

@@ -5,7 +5,6 @@ import { reorderArray } from '@surf/utils';
 import { useState } from 'react';
 import { Banner } from '@/entities/banner/model/types';
 import { BannerDnd } from '@/entities/banner/ui/BannerDnd';
-import { BannerItem } from '@/entities/banner/ui/BannerItem';
 import { AppHeader } from '@/widgets/header/ui/AppHeader';
 
 export const BannerPage = () => {
@@ -16,43 +15,52 @@ export const BannerPage = () => {
     { id: 4, name: '배너 4', imageUrl: '', isActive: true, linkUrl: '' },
   ]);
 
+  // const handleReorder = (from: number, to: number) => {
+  //   const active = banners.filter((b) => b.isActive);
+  //   const inactive = banners.filter((b) => !b.isActive);
+
+  //   const newActive = reorderArray(active, from, to);
+
+  //   setBanners([...newActive, ...inactive]);
+  // };
   const handleReorder = (from: number, to: number) => {
-    const active = banners.filter((b) => b.isActive);
-    const inactive = banners.filter((b) => !b.isActive);
-
-    const newActive = reorderArray(active, from, to);
-
-    setBanners([...newActive, ...inactive]);
+    const newArray = reorderArray(banners, from, to);
+    setBanners(newArray);
   };
-
-  const inactive = banners.filter((b) => !b.isActive);
-
+  // const inactive = banners.filter((b) => !b.isActive);
+  const [isReorderMode, setIsReorderMode] = useState(false);
   return (
     <>
       <AppHeader
         overrideHeader={{
           mode: HeaderMode.TextBtn,
           title: '홈 배너 관리',
-          text: '순서 변경',
+          text: isReorderMode ? '완료' : '순서 변경',
+          btnVariant: isReorderMode ? 'primary' : 'secondary',
           hasLeftIcon: true,
+          onClickTextBtn() {
+            setIsReorderMode((prev) => !prev);
+          },
         }}
       />
       <div className="flex h-full w-full flex-col">
         <BannerDnd
           banners={banners}
+          isReorderMode={isReorderMode}
           onReorder={handleReorder}
-          onClickMore={(id) => console.log('click more:', id)}
+          onClick={(id) => console.log('click more:', id)}
         />
 
-        {inactive.map((b) => (
+        {/* {inactive.map((b) => (
           <BannerItem
             key={b.id}
             name={b.name}
             imageUrl={b.imageUrl}
             isActive={b.isActive}
-            onClick={() => {}}
+            isReorderMode={isReorderMode}
+            onClick={() => console.log('click')}
           />
-        ))}
+        ))} */}
       </div>
     </>
   );

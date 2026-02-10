@@ -18,39 +18,41 @@ import {
   verticalListSortingStrategy,
 } from '@dnd-kit/sortable';
 import { CSS } from '@dnd-kit/utilities';
-import React, { useMemo, useState } from 'react';
+import { SurfIcon } from '@surf/ui/icon';
+import React, { useState } from 'react';
 import type { Banner } from '../model/types';
 import { BannerItem } from './BannerItem';
 
 type BannerDndProps = {
   banners: Banner[];
+  isReorderMode: boolean;
   onReorder: (from: number, to: number) => void;
-  onClickMore?: (bannerId: number) => void;
+  onClick?: (bannerId: number) => void;
 };
 
-export const BannerDnd = ({ banners, onReorder, onClickMore }: BannerDndProps) => {
+export const BannerDnd = ({ banners, isReorderMode, onReorder, onClick }: BannerDndProps) => {
   const sensors = useSensors(
     useSensor(PointerSensor),
     useSensor(KeyboardSensor, { coordinateGetter: sortableKeyboardCoordinates }),
   );
 
-  const activeBanners = useMemo(() => banners.filter((b) => b.isActive), [banners]);
-
   const [activeId, setActiveId] = useState<number | null>(null);
-  const activeBanner = activeId != null ? activeBanners.find((b) => b.id === activeId) : null;
+  const activeBanner = activeId != null ? banners.find((b) => b.id === activeId) : null;
 
   const handleDragStart = (event: DragStartEvent) => {
+    if (!isReorderMode) return;
     setActiveId(event.active.id as number);
   };
 
   const handleDragEnd = (event: DragEndEvent) => {
+    if (!isReorderMode) return;
     const { active, over } = event;
     setActiveId(null);
 
     if (!over || active.id === over.id) return;
 
-    const oldIndex = activeBanners.findIndex((b) => b.id === active.id);
-    const newIndex = activeBanners.findIndex((b) => b.id === over.id);
+    const oldIndex = banners.findIndex((b) => b.id === active.id);
+    const newIndex = banners.findIndex((b) => b.id === over.id);
 
     if (oldIndex === -1 || newIndex === -1) return;
 
@@ -65,30 +67,26 @@ export const BannerDnd = ({ banners, onReorder, onClickMore }: BannerDndProps) =
       onDragEnd={handleDragEnd}
       modifiers={[restrictToParentElement]}
     >
-      <SortableContext
-        items={activeBanners.map((b) => b.id)}
-        strategy={verticalListSortingStrategy}
-      >
+      <SortableContext items={banners.map((b) => b.id)} strategy={verticalListSortingStrategy}>
         <div className="flex w-full flex-col overflow-x-auto">
-          {activeBanners.map((banner) => (
+          {banners.map((banner) => (
             <SortableBanner
               key={banner.id}
+              isReorderMode={isReorderMode}
               banner={banner}
-              onClickMore={() => onClickMore?.(banner.id)}
+              onClick={() => onClick?.(banner.id)}
             />
           ))}
         </div>
       </SortableContext>
 
       <DragOverlay>
-        {activeBanner ? (
-          <div className="scale-105 cursor-grabbing opacity-80">
-            <BannerItem
-              id={activeBanner.id}
-              imageUrl={activeBanner.imageUrl}
-              name={activeBanner.name}
-              isActive={activeBanner.isActive}
-              onClickMore={() => {}}
+        {isReorderMode && activeBanner ? (
+          <div className="cursor-grabbing opacity-80">
+            <SortableBanner
+              banner={activeBanner}
+              isReorderMode={isReorderMode}
+              onClick={() => {}}
             />
           </div>
         ) : null}
@@ -99,14 +97,23 @@ export const BannerDnd = ({ banners, onReorder, onClickMore }: BannerDndProps) =
 
 type SortableBannerProps = {
   banner: Banner;
-  onClickMore?: () => void;
+  isReorderMode: boolean;
+  onClick?: (bannerId: number) => void;
 };
 
 const SortableBanner = React.memo(
-  ({ banner, onClickMore }: SortableBannerProps) => {
-    const { attributes, listeners, setNodeRef, transform, transition, isDragging } = useSortable({
+  ({ banner, isReorderMode, onClick }: SortableBannerProps) => {
+    const {
+      attributes,
+      listeners,
+      setNodeRef,
+      transform,
+      transition,
+      isDragging,
+      setActivatorNodeRef,
+    } = useSortable({
       id: banner.id,
-      disabled: !banner.isActive, // 활성화만 드래그 가능
+      disabled: !isReorderMode,
     });
 
     const style: React.CSSProperties = {
@@ -119,16 +126,29 @@ const SortableBanner = React.memo(
       <div
         ref={setNodeRef}
         style={style}
-        {...attributes}
-        {...listeners}
-        className={banner.isActive ? 'cursor-grab' : 'cursor-default'}
+        className={`border-border-normal flex gap-10 border-b ${isReorderMode ? 'pl-14' : 'pl-0'}`}
       >
+        {/* 핸들 */}
+        {isReorderMode && (
+          <button
+            className="cursor-grab"
+            {...attributes}
+            {...listeners}
+            ref={setActivatorNodeRef}
+            onClick={(e) => {
+              e.stopPropagation();
+            }}
+          >
+            <SurfIcon name="Menu" />
+          </button>
+        )}
+
         <BannerItem
-          id={banner.id}
           imageUrl={banner.imageUrl}
           name={banner.name}
           isActive={banner.isActive}
-          onClickMore={onClickMore ?? (() => {})}
+          isReorderMode={isReorderMode}
+          onClick={() => onClick?.(banner.id)}
         />
       </div>
     );
@@ -138,7 +158,7 @@ const SortableBanner = React.memo(
     prev.banner.name === next.banner.name &&
     prev.banner.imageUrl === next.banner.imageUrl &&
     prev.banner.isActive === next.banner.isActive &&
-    prev.onClickMore === next.onClickMore,
+    prev.onClick === next.onClick,
 );
 
 SortableBanner.displayName = 'SortableBanner';

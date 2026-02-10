@@ -1,7 +1,11 @@
 'use client';
 
+import { Avatar } from '@surf/ui/avatar';
 import { useEffect } from 'react';
-import { MemberGenerationAccordian } from './MemberGenerationAccordian';
+
+import { MemberCard } from '@/entities/member/ui/MemberCard';
+import { RoleBadge } from '@/entities/member/ui/RoleBadge';
+import { MemberGenerationAccordion } from '@/features/member-by-generation/ui/MemberGenerationAccordion';
 import { useSelectableListState } from '@/shared/hooks/useSelectableListState';
 import { SelectableListTopBar } from '@/shared/ui/SelectableListTopBar';
 
@@ -28,7 +32,20 @@ export const MemberDirectoryWidget = ({ keyword }: MemberDirectoryWidgetProps) =
       />
       {/* 멤버 아코디언 리스트 */}
       <div className="scrollbar-hide flex-1 overflow-y-auto">
-        <MemberGenerationAccordian generation={12} />
+        <MemberGenerationAccordion
+          generation={12}
+          renderItem={(m) => (
+            <MemberCard
+              checked={false}
+              name={m.name}
+              tracks={m.tracks}
+              isSelectionEnabled
+              onToggle={() => {}}
+              leftAddon={<Avatar size="s" alt="테이비 프로필 이미지" src={m.profileImageUrl} />}
+              rightSlot={<RoleBadge type={m.role} />}
+            />
+          )}
+        />
       </div>
     </div>
   );

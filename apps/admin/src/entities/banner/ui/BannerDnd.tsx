@@ -21,7 +21,7 @@ import { CSS } from '@dnd-kit/utilities';
 import { SurfIcon } from '@surf/ui/icon';
 import React, { useState } from 'react';
 import type { Banner } from '../model/types';
-import { BannerItem } from './BannerItem';
+import { ContentItem } from '@/shared/ui/ContentItem';
 
 type BannerDndProps = {
   banners: Banner[];
@@ -143,11 +143,12 @@ const SortableBanner = React.memo(
           </button>
         )}
 
-        <BannerItem
+        <ContentItem
           imageUrl={banner.imageUrl}
           name={banner.name}
-          isActive={banner.isActive}
           isReorderMode={isReorderMode}
+          hasThumbnail
+          badge={{ kind: 'active', active: banner.isActive }}
           onClick={() => onClick?.(banner.id)}
         />
       </div>

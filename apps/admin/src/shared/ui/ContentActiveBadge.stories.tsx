@@ -1,9 +1,9 @@
 import type { Meta, StoryObj } from '@storybook/nextjs';
-import { BannerActiveBadge } from './BannerActiveBadge';
+import { ContentActiveBadge } from './ContentActiveBadge';
 
-const meta: Meta<typeof BannerActiveBadge> = {
-  title: 'Entities/Ui/Banner/BannerActiveBadge',
-  component: BannerActiveBadge,
+const meta: Meta<typeof ContentActiveBadge> = {
+  title: 'Shared/Ui/ContentActiveBadge',
+  component: ContentActiveBadge,
   parameters: {
     layout: 'centered',
   },
@@ -17,7 +17,7 @@ const meta: Meta<typeof BannerActiveBadge> = {
 
 export default meta;
 
-type Story = StoryObj<typeof BannerActiveBadge>;
+type Story = StoryObj<typeof ContentActiveBadge>;
 
 export const Active: Story = {
   args: {

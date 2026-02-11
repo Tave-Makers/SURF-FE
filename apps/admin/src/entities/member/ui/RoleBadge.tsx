@@ -1,5 +1,6 @@
 import { StatusBadge } from '@/shared/ui/StatusBadge';
 
+//TODO: MemberRole 타입으로 변경 필요
 interface RoleBadgeProps {
   type: string;
 }

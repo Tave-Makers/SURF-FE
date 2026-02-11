@@ -1,9 +1,6 @@
-import type { MemberInformationResDTO } from '../api/types';
+import type { ApiCareer, MemberInformationResDTO } from '../api/types';
 
-import type { Career, Member, MemberRole, MemberStatus, MemberTrack, TrackPart } from './types';
-
-type ApiCareer = NonNullable<MemberInformationResDTO['careerList']>[number];
-type ApiDate = NonNullable<ApiCareer['startDate']>;
+import type { Career, Member, MemberStatus, MemberTrack, TrackPart } from './types';
 
 export const MEMBER_STATUS_MAP: Record<string, MemberStatus> = {
   REGISTERING: 'waiting',
@@ -21,16 +18,6 @@ export function toMemberStatus(status?: string): MemberStatus {
   return MEMBER_STATUS_MAP[status] ?? 'waiting';
 }
 
-const MEMBER_ROLE_VALUES: MemberRole[] = ['ADMIN', 'PRESIDENT', 'MANAGER', 'MEMBER'];
-
-export function toMemberRole(role?: string): MemberRole {
-  if (!role) {
-    return 'MEMBER';
-  }
-
-  return MEMBER_ROLE_VALUES.includes(role as MemberRole) ? (role as MemberRole) : 'MEMBER';
-}
-
 export function toMemberTrack(track: { generation?: number; part?: string }): MemberTrack {
   return {
     generation: track.generation ?? 0,
@@ -38,27 +25,17 @@ export function toMemberTrack(track: { generation?: number; part?: string }): Me
   };
 }
 
-function formatYearMonth(date?: ApiDate): string {
-  if (!date?.year || !date?.monthValue) {
-    return '';
-  }
-
-  return `${date.year}-${String(date.monthValue).padStart(2, '0')}`;
-}
-
 function formatPhoneNumber(digits: string) {
   return `${digits.substring(0, 3)}.${digits.substring(3, 7)}.${digits.substring(7)}`;
 }
 
 function toCareer(career: ApiCareer): Career {
-  const endDate = formatYearMonth(career.endDate);
-
   return {
     careerId: career.careerId ?? 0,
     companyName: career.companyName ?? '',
     position: career.position ?? '',
-    startDate: formatYearMonth(career.startDate),
-    endDate: endDate || null,
+    startDate: career.startDate,
+    endDate: career.endDate ?? null,
     isWorking: career.isWorking ?? false,
   };
 }
@@ -72,7 +49,7 @@ export function toMemberDetail(dto: MemberInformationResDTO, memberId: number): 
     name: dto.username ?? '',
     email: dto.email ?? '',
     phoneNumber: formatPhoneNumber(dto.phoneNumber ?? ''),
-    role: toMemberRole(dto.role),
+    role: dto.role ?? 'MEMBER',
     university: dto.university ?? '',
     profileImageUrl: dto.profileImageUrl ?? '',
     tracks: (dto.trackList ?? []).map(toMemberTrack),

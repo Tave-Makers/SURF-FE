@@ -1,4 +1,4 @@
-import { toMemberRole, toMemberStatus, toMemberTrack } from '@/entities/member/model/mapper';
+import { toMemberStatus, toMemberTrack } from '@/entities/member/model/mapper';
 import { SignupRequestItem } from '../api/types';
 import { SignupRequestMember } from '@/entities/signup-request/model/types';
 
@@ -21,6 +21,6 @@ export function toSignupRequestMember(dto: SignupRequestItem): SignupRequestMemb
     tracks: dto.trackList.map(toMemberTrack),
     registeredAt: dto.createdAt,
     status: toMemberStatus(dto.memberStatus),
-    role: toMemberRole(dto.role),
+    role: dto.role ?? 'MEMBER',
   };
 }

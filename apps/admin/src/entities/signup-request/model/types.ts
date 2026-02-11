@@ -1,6 +1,4 @@
-import { Member } from '@/entities/member/model/types';
-
-export type SignupRequestStatus = 'reject' | 'waiting' | 'approve';
+import { MemberBase, MemberStatus } from '@/entities/member/model/types';
 
 /**
  * 가입 신청 회원
@@ -16,9 +14,6 @@ export type SignupRequestStatus = 'reject' | 'waiting' | 'approve';
  *   status: 'waiting',
  * };
  */
-export type SignupRequestMember = Pick<
-  Member,
-  'id' | 'name' | 'university' | 'profileImageUrl' | 'tracks' | 'registeredAt'
-> & {
-  status: SignupRequestStatus;
-};
+export interface SignupRequestMember extends MemberBase {
+  status: MemberStatus;
+}

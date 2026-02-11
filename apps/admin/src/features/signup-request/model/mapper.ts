@@ -1,19 +1,6 @@
-import { MemberTrack } from '@/entities/member/model/types';
+import { toMemberStatus, toMemberTrack } from '@/entities/member/model/mapper';
 import { SignupRequestMember } from '@/entities/signup-request/model/types';
-import { SignupRequestItem, Track } from '../api/types';
-
-/**
- * API Track DTO → 도메인 MemberTrack 변환
- *
- * @param trackDto - API Track DTO
- * @returns 도메인 MemberTrack
- */
-function toMemberTrack(trackDto: Track): MemberTrack {
-  return {
-    generation: trackDto.generation,
-    part: trackDto.part,
-  };
-}
+import { SignupRequestItem } from '../api/types';
 
 /**
  * API SignupRequestItem DTO → 도메인 SignupRequestMember 변환
@@ -27,12 +14,12 @@ function toMemberTrack(trackDto: Track): MemberTrack {
  */
 export function toSignupRequestMember(dto: SignupRequestItem): SignupRequestMember {
   return {
-    id: dto.memberId, // memberId → id
-    name: dto.username, // username → name
+    id: dto.memberId,
+    name: dto.username,
     university: dto.university,
     profileImageUrl: dto.profileImageUrl,
-    tracks: dto.trackList.map(toMemberTrack), // trackList → tracks
+    tracks: dto.trackList.map(toMemberTrack),
     registeredAt: dto.createdAt,
-    status: 'waiting', // 초기값 설정 (서버에서 제공하지 않음)
+    status: toMemberStatus(dto.memberStatus),
   };
 }

@@ -1,3 +1,5 @@
+import { Nullable } from '@/shared/types/nullable';
+
 /**
  * 파트 타입
  */
@@ -18,31 +20,50 @@ export interface MemberTrack {
 }
 
 /**
- * 멤버 엔티티 (전체 정보)
- *
- * 멤버 관리, 상세 정보 등에서 사용하는 완전한 멤버 정보입니다.
- *
- * @example
- * const member: Member = {
- *   id: 1,
- *   name: '홍길동',
- *   email: 'hong@example.com',
- *   phoneNumber: '010-1234-5678',
- *   role: 'MEMBER',
- *   university: '서울대학교',
- *   profileImageUrl: 'https://...',
- *   tracks: [{ generation: 15, part: 'BACKEND' }],
- *   registeredAt: new Date('2026-01-20'),
- * };
+ * 멤버 가입 상태
  */
-export interface Member {
+export type MemberStatus = 'reject' | 'waiting' | 'approve';
+
+/**
+ * 멤버 커리어 정보
+ */
+export interface Career {
+  careerId: number;
+  companyName: string;
+  position: string;
+  startDate: string;
+  endDate: Nullable<string>;
+  isWorking: boolean;
+}
+
+/**
+ * 멤버 요약 정보 (목록/요약 뷰에서 사용하는 최소 필드)
+ */
+export interface MemberBase {
   id: number;
   name: string;
-  email: string;
-  phoneNumber: string;
-  role: string;
   university: string;
   profileImageUrl: string;
   tracks: MemberTrack[];
   registeredAt: string;
 }
+
+/**
+ * 멤버 상세 정보 (상세/관리 화면에서 사용하는 확장 필드)
+ */
+export interface MemberDetail extends MemberBase {
+  email: string;
+  phoneNumber: string;
+  role: string;
+  status: MemberStatus;
+  link: Nullable<string>;
+  graduateSchool: Nullable<string>;
+  activityScore: number;
+  isActive: boolean;
+  careers: Career[];
+}
+
+/**
+ * 멤버 상세 도메인 모델 (요약 + 상세 정보)
+ */
+export type Member = MemberBase & MemberDetail;

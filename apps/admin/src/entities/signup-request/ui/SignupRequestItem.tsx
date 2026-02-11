@@ -2,10 +2,9 @@ import { Checkbox } from '@surf/ui/checkbox';
 import { SurfIcon } from '@surf/ui/icon';
 import { InfoBadge } from '@surf/ui/info-badge';
 import type { ChangeEvent } from 'react';
-import { SignupRequestStatus } from '../model/types';
 import { RequestStatusBadge } from './RequestStatusBadge';
 import { PART_LABELS } from '@/entities/member/model/constants';
-import { MemberTrack } from '@/entities/member/model/types';
+import { MemberStatus, MemberTrack } from '@/entities/member/model/types';
 
 interface SignupRequestItemProps {
   name: string;
@@ -13,9 +12,10 @@ interface SignupRequestItemProps {
   tracks: MemberTrack[];
   registeredAt: string;
   checked: boolean;
-  status: SignupRequestStatus;
+  status: MemberStatus;
   isSelectionEnabled?: boolean;
   onToggle: (e: ChangeEvent<HTMLInputElement>) => void;
+  onClick: () => void;
 }
 export const SignupRequestItem = ({
   name,
@@ -25,6 +25,7 @@ export const SignupRequestItem = ({
   checked,
   isSelectionEnabled = false,
   onToggle,
+  onClick,
 }: SignupRequestItemProps) => {
   return (
     <div
@@ -57,7 +58,9 @@ export const SignupRequestItem = ({
       </div>
       <div className="mt-7 flex flex-row gap-8">
         <RequestStatusBadge status={status} />
-        <SurfIcon name="ChevronRight" />
+        <button type="button" onClick={onClick} aria-label={`${name} 상세 보기`}>
+          <SurfIcon name="ChevronRight" />
+        </button>
       </div>
     </div>
   );

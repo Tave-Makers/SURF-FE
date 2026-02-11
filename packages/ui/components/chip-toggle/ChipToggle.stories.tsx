@@ -49,7 +49,7 @@ export const Default: Story = {
     isClicked: false,
     count: 23,
     activeColor: 'red',
-    mode: 'like',
+    mode: 'count',
     onToggleIcon: () => {},
   },
 };
@@ -61,7 +61,7 @@ export const Clicked: Story = {
     isClicked: true,
     count: 23,
     activeColor: 'red',
-    mode: 'like',
+    mode: 'count',
     onToggleIcon: () => {},
   },
 };
@@ -93,7 +93,7 @@ export const WithoutNumberClick: Story = {
     isClicked: false,
     count: 42,
     activeColor: 'red',
-    mode: 'like',
+    mode: 'count',
   },
 };
 
@@ -129,7 +129,7 @@ export const WithNumberClick: Story = {
     isClicked: false,
     count: 42,
     activeColor: 'red',
-    mode: 'like',
+    mode: 'count',
   },
 };
 
@@ -152,13 +152,38 @@ export const ScrapButton: Story = {
         count={count}
         onToggleIcon={handleToggle}
         activeColor="blue"
-      />
+      >
+        스크랩
+      </ChipToggle>
     );
   },
   args: {
     iconName: 'Bookmark',
     isClicked: false,
     count: 42,
-    mode: 'scrap',
+    mode: 'text',
+  },
+};
+
+// 6. HighlightType = toggle
+export const ToggleHighlight: Story = {
+  render: (args) => {
+    const [clicked, setClicked] = useState(args.isClicked);
+
+    const handleToggle = (newState: boolean) => {
+      setClicked(newState);
+      args.onToggleIcon?.(newState);
+    };
+
+    return (
+      <ChipToggle {...args} isClicked={clicked} onToggleIcon={handleToggle} highlightType="toggle">
+        토글 하이라이트
+      </ChipToggle>
+    );
+  },
+  args: {
+    isClicked: false,
+    activeColor: 'blue',
+    mode: 'text',
   },
 };

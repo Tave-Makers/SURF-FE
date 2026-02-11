@@ -1,3 +1,5 @@
+'use client';
+
 import { Filter } from '@/entities/group-management/model/types';
 import { GenerationGroup } from '@/entities/group-management/model/types';
 import { useMemo, useState } from 'react';

@@ -13,7 +13,7 @@ const CONTENT_STATE = {
   },
 } as const;
 
-const baseClass = 'rounded-3 w-[3.4375rem] items-center flex justify-center';
+const baseClass = 'rounded-3 w-[3.4375rem] h-[1.1875rem] items-center flex justify-center';
 
 export const ContentBadge = ({ type }: ContentActiveBadgeProps) => {
   const { label, variantColor } = type === 'study' ? CONTENT_STATE.study : CONTENT_STATE.project;

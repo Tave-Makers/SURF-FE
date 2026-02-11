@@ -1,5 +1,6 @@
 'use client';
 
+import { useKeyboardOffset } from '@surf/hooks';
 import { SolidButton } from '@surf/ui/button';
 import { FieldGroup } from '@surf/ui/field-group';
 import { HeaderMode } from '@surf/ui/header';
@@ -13,8 +14,6 @@ import { Callout } from '@/entities/message/ui/callout/Callout';
 import { trackMessageEvent } from '@/features/message/lib/trackMessageEvent';
 import { MESSAGE_EVENTS } from '@/features/message/model/types';
 import { usePageName } from '@/shared/analytics/lib/getPageName';
-import { useKeyboardOffset } from '@/shared/hooks/useKeyboardOffset';
-import { kakaoImgNormalize } from '@/shared/lib/kakaoImgNormalize';
 import { AppHeader } from '@/widgets/header/ui/AppHeader';
 
 export const SendMessagePage = () => {
@@ -22,8 +21,7 @@ export const SendMessagePage = () => {
   const searchParams = useSearchParams();
   const memberId = searchParams.get('memberId');
   const nickname = searchParams.get('nickname') ?? undefined;
-  const rawProfileImageUrl = searchParams.get('profileImageUrl') ?? undefined;
-  const profileImageUrl = kakaoImgNormalize(rawProfileImageUrl);
+  const profileImageUrl = searchParams.get('profileImageUrl') ?? undefined;
 
   // 폼 상태
   const [senderEmail, setSenderEmail] = useState<string>('');

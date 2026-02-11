@@ -1,12 +1,13 @@
 import type { Meta, StoryObj } from '@storybook/nextjs';
+import { useState } from 'react';
 import { MenuTrigger } from './MenuTrigger';
-import { usePicker } from '../../../hooks/usePicker';
 
 const meta: Meta<typeof MenuTrigger> = {
   title: 'Shared/UI/Menu/MenuTrigger',
   component: MenuTrigger,
   tags: ['autodocs'],
 };
+
 export default meta;
 type Story = StoryObj<typeof MenuTrigger>;
 
@@ -25,13 +26,13 @@ export const Opened: Story = {
 };
 
 export const Interactive: Story = {
-  args: {
-    label: 'Click Me',
-    isOpen: false,
-  },
   render: () => {
-    const { isOpen, toggle } = usePicker();
+    const [isOpen, setIsOpen] = useState(false);
 
-    return <MenuTrigger label="메뉴열기" isOpen={isOpen} onClick={toggle} />;
+    const toggle = () => setIsOpen((prev) => !prev);
+
+    return (
+      <MenuTrigger label={isOpen ? '메뉴 닫기' : '메뉴 열기'} isOpen={isOpen} onClick={toggle} />
+    );
   },
 };

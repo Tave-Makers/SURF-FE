@@ -40,3 +40,41 @@ export function formatMonthDay(date: Date) {
   const d = String(date.getDate()).padStart(2, '0');
   return `${m}.${d}`;
 }
+
+export const onlyDigitsYearMonth = (raw: string) => raw.replace(/\D/g, '').slice(0, 6); // YYYYMM (최대 6자리)
+
+export const formatYearMonth = (raw: string) => {
+  const digits = onlyDigitsYearMonth(raw);
+
+  // YYYY
+  if (digits.length <= 4) return digits;
+
+  // YYYY-M
+  if (digits.length === 5) {
+    const month1 = digits[4];
+    // 0,1만 허용
+    if (!/[01]/.test(month1)) return digits.slice(0, 4);
+    return `${digits.slice(0, 4)}-${month1}`;
+  }
+
+  // YYYY-MM
+  if (digits.length === 6) {
+    const month = digits.slice(4, 6);
+    const m = Number(month);
+
+    if (m < 1 || m > 12) {
+      // 잘못된 월이면 마지막 입력 무시
+      return `${digits.slice(0, 4)}-${digits[4]}`;
+    }
+
+    return `${digits.slice(0, 4)}-${month}`;
+  }
+
+  return digits;
+};
+
+export const isYearMonth = (value: string) => {
+  if (!/^\d{4}-\d{2}$/.test(value)) return false;
+  const m = Number(value.slice(5, 7));
+  return m >= 1 && m <= 12;
+};

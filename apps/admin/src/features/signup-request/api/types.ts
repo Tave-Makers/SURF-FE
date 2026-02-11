@@ -19,6 +19,7 @@ export interface SignupRequestItem {
   profileImageUrl: string;
   trackList: Track[];
   createdAt: string;
+  memberStatus: string;
 }
 
 /**
@@ -26,6 +27,7 @@ export interface SignupRequestItem {
  */
 export interface SignupRequestListData extends PageMeta {
   content: SignupRequestItem[];
+  totalMemberCount: number;
 }
 
 /**

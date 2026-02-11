@@ -1,5 +1,6 @@
 'use client';
 
+import { useInfiniteScroll } from '@surf/hooks';
 import { useRouter } from 'next/navigation';
 import { useCallback } from 'react';
 import { useInfiniteBoardPosts } from '@/entities/post/api/useInfiniteBoardPosts';
@@ -9,7 +10,6 @@ import { TAB_CATEGORIES } from '@/entities/post/model/tab';
 import type { Post } from '@/entities/post/model/types';
 import type { UserLevel } from '@/entities/user/model/types';
 import { PAGE_ROUTES } from '@/shared/config/path';
-import { useInfiniteScroll } from '@/shared/hooks/useInfiniteScroll';
 import { PostCardList } from '@/widgets/post-list/ui/PostCardList';
 
 type Props = {

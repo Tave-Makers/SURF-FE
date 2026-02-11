@@ -6,6 +6,7 @@ interface SignupRequestListProps {
   isSelectionEnabled: boolean;
   selectedIds: Set<number>;
   onToggleSelect: (memberId: number) => void;
+  onClickMore: (memberId: number) => void;
 }
 
 /**
@@ -18,6 +19,7 @@ export const SignupRequestList = ({
   isSelectionEnabled,
   selectedIds,
   onToggleSelect,
+  onClickMore,
 }: SignupRequestListProps) => {
   //TODO: Empty Space 적용 필요
   if (members.length === 0) {
@@ -37,6 +39,7 @@ export const SignupRequestList = ({
           status={member.status}
           isSelectionEnabled={isSelectionEnabled}
           onToggle={() => onToggleSelect(member.id)}
+          onClick={() => onClickMore(member.id)}
         />
       ))}
     </div>

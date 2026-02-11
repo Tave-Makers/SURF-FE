@@ -1,9 +1,9 @@
 'use client';
 
+import { upgradeHttpToHttps } from '@surf/utils';
 import Image from 'next/image';
 import { useState } from 'react';
 import DEFAULT_PROFILE_IMAGE from '../../assets/profile/profile-default.png';
-import { kakaoImgNormalize } from '../../lib/kakaoImgNormalize';
 
 /**
  *
@@ -47,7 +47,7 @@ export const Avatar = ({
 
   const base = `relative flex items-center justify-center flex-shrink-0 aspect-square ${sizesStyle[size].rounded} overflow-hidden ${sizesStyle[size].cls}`;
 
-  const normalizedSrc = kakaoImgNormalize(src);
+  const normalizedSrc = upgradeHttpToHttps(src);
   const imageSrc = !error && normalizedSrc ? normalizedSrc : DEFAULT_PROFILE_IMAGE;
 
   // interactive 여부에 따라 wrapper element 결정

@@ -3,7 +3,7 @@ import { TextArea } from '@surf/ui/text-area';
 import { Controller, useFormContext } from 'react-hook-form';
 import { trackOnBoardingEvent } from '../lib/trackOnBoardingEvent';
 import { ONBOARDING_EVENTS, OnBoardingFormData } from '@/features/onboarding/model/types';
-import { formatPhoneNumber, onlyDigits } from '@/shared/lib/validator';
+import { formatPhoneNumber, onlyDigits } from '@/shared/lib/phoneNumber';
 
 export const EmailPhoneStep = () => {
   const { control } = useFormContext<OnBoardingFormData>();

@@ -50,6 +50,13 @@ export const SelectableMemberCard = ({
               onClick: () => onToggle(),
               role: 'checkbox',
               'aria-checked': checked,
+              tabIndex: 0,
+              onKeyDown: (e) => {
+                if (e.key === ' ' || e.key === 'Enter') {
+                  e.preventDefault();
+                  onToggle();
+                }
+              },
               className: 'cursor-pointer',
             }
           : undefined

@@ -12,7 +12,7 @@ const OPTIONS: Array<{ label: string; value: Filter }> = [
   { label: '프로젝트', value: 'project' },
 ];
 
-export const CategoryWidget = ({ filter, onChange }: Props) => {
+export const FilterWidget = ({ filter, onChange }: Props) => {
   return (
     <div className="flex gap-10 px-13 pb-10">
       {OPTIONS.map(({ label, value }) => (

@@ -1,19 +1,20 @@
+import { GenerationGroup } from '@/entities/group-management/model/types';
 import { GroupManagementAccordionItem } from '@/entities/group-management/ui/GroupManagementAccordionItem';
-import { ContentsType } from '@/shared/ui/ContentItem';
 
 interface Props {
-  groupedByGeneration: {
-    generation: number;
-    groupList: { id: number; name: string; type: ContentsType }[];
-  }[];
+  generationGroups: GenerationGroup[];
+  onClick?: (id: number) => void;
 }
-export const GroupManagementAccordionList = ({ groupedByGeneration }: Props) => {
+
+export const GroupManagementAccordionList = ({ generationGroups, onClick }: Props) => {
   return (
     <div className="flex flex-col">
-      {groupedByGeneration.map(({ generation, groupList }) => (
-        <div key={generation}>
-          <GroupManagementAccordionItem generation={generation} groupList={groupList} />
-        </div>
+      {generationGroups.map((group) => (
+        <GroupManagementAccordionItem
+          key={group.generation}
+          generationGroup={group}
+          onClick={onClick}
+        />
       ))}
     </div>
   );

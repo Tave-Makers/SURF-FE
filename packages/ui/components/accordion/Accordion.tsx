@@ -35,7 +35,7 @@ export const Accordion = ({
     } else {
       setMaxHeight('0px');
     }
-  }, [isOpen]);
+  }, [isOpen, children]);
 
   return (
     <div
@@ -70,7 +70,7 @@ export const Accordion = ({
         style={{ maxHeight }}
         className="overflow-hidden transition-all duration-300 ease-in-out"
       >
-        <div className="px-13 py-15">{children}</div>
+        {children}
       </div>
     </div>
   );

@@ -84,7 +84,7 @@ export const BannerPage = () => {
       />
       <div className="flex h-full w-full flex-col">
         {!isReorderMode && (
-          <div className="flex gap-10 px-13 pb-10">
+          <div className="border-border-normal flex gap-10 border-b-[0.4px] px-13 pb-10">
             <ChipToggle
               mode="text"
               highlightType="toggle"

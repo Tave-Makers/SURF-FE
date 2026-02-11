@@ -82,4 +82,14 @@ export const createRouteConfig = (_router: RouterInstance): RouteConfig[] => [
       hasLeftIcon: true,
     },
   },
+  {
+    id: 'create-banner',
+    path: PAGE_ROUTES.BANNER.CREATE,
+    backPath: PAGE_ROUTES.BANNER.LIST,
+    header: {
+      mode: HeaderMode.Default,
+      title: '신규 배너 생성',
+      hasLeftIcon: true,
+    },
+  },
 ];

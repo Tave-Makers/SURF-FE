@@ -46,7 +46,8 @@
     "@mynaui/icons-react": "^0.3.9",
     "keen-slider": "^6.8.6",
     "react-modal-sheet": "^5.1.2",
-    "zustand": "^5.0.8"
+    "zustand": "^5.0.8",
+    "@surf/utils": "workspace:*"
   },
   "peerDependencies": {
     "next": "^15",

@@ -3,12 +3,12 @@
 import { Avatar } from '@surf/ui/avatar';
 import { SurfIcon } from '@surf/ui/icon';
 import { InfoBadge } from '@surf/ui/info-badge';
+import { normalizeUrl } from '@surf/utils';
 import Link from 'next/link';
 
 import type { UserProfile } from '@/entities/user/model/types';
 import { USER_LEVEL_BADGE } from '@/entities/user/ui/user-level/UserLevelBadges';
-import { kakaoImgNormalize } from '@/shared/lib/kakaoImgNormalize';
-import { normalizeUrl, formatPhoneNumber } from '@/shared/lib/validator';
+import { formatPhoneNumber } from '@/shared/lib/phoneNumber';
 
 const infoRow = 'text-caption-caption6 text-foreground-normal flex flex-row items-center gap-5';
 
@@ -26,7 +26,7 @@ export const ProfileHeader = ({ userProfile }: Props) => {
   const BadgeIcon = USER_LEVEL_BADGE[userProfile.level];
   const showBadge = userProfile.level !== 'member' && !!BadgeIcon;
 
-  const profileImg = kakaoImgNormalize(userProfile.profileImgUrl);
+  const profileImg = userProfile.profileImgUrl;
 
   const introText = nonEmptyText(userProfile.selfIntroduction);
   const linkText = nonEmptyText(userProfile.link);

@@ -3,7 +3,7 @@ import { TAB_CATEGORIES, TabCategoryLabel, TabCategoryKey } from '@/entities/pos
 import { categoryIdToLabel } from './category';
 import type { Post, PostDetail } from './types';
 import { POST_BOARDS } from './board';
-import { formatDate, formatDateTime, toKST } from '@/shared/utils/date';
+import { formatDate, formatDateTime, toKST } from '@surf/utils';
 import { toDate } from 'date-fns';
 
 export const transformListItemToPost = (item: PostListItemResponse): Post => ({

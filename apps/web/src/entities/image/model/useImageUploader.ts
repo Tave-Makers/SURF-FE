@@ -1,6 +1,6 @@
+import { safeUUID } from '@surf/utils';
 import { UploadImage } from './types';
 import { postPresignedUrl } from '../api/postPresignedUrl';
-import { safeUUID } from '@/shared/utils/uuid';
 
 /**
  * presigned URL을 받아 S3에 업로드하는 훅.

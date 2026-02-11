@@ -1,7 +1,9 @@
 'use client';
 import { ChipToggle } from '@surf/ui/chip-toggle';
 import { HeaderMode } from '@surf/ui/header';
+import { PostFab } from '@surf/ui/post-fab';
 import { reorderArray } from '@surf/utils';
+import { useRouter } from 'next/navigation';
 import { useMemo, useState } from 'react';
 import { Banner } from '@/entities/banner/model/types';
 import { BannerDnd } from '@/entities/banner/ui/BannerDnd';
@@ -27,6 +29,8 @@ export const BannerPage = () => {
   // };
 
   // const inactive = banners.filter((b) => !b.isActive);
+
+  const router = useRouter();
   const [isReorderMode, setIsReorderMode] = useState(false);
   const [filter, setFilter] = useState<Filter>('all');
 
@@ -120,8 +124,16 @@ export const BannerPage = () => {
           banners={filteredBanners}
           isReorderMode={isReorderMode}
           onReorder={handleReorder}
-          onClick={(id) => console.log('click more:', id)}
+          onClick={(id) => router.push(`/banner/edit/${id}`)}
         />
+
+        <div className="pointer-events-none fixed inset-0 z-50">
+          <div className="relative mx-auto h-full sm:max-w-[min(100dvw,calc(100dvh*375/812))]">
+            <div className="pointer-events-auto absolute right-15 bottom-15">
+              <PostFab onClick={() => router.push('/banner/create')} />
+            </div>
+          </div>
+        </div>
       </div>
     </>
   );

@@ -72,8 +72,8 @@ export const BannerCreatePage = () => {
       // const imageUrl = result.uploadedUrl;
       // 최종 API 호출 시 imageUrl 넣기
       // await createBanner({ ...form, imageUrl });
-      // console.log({ ...form, imageUrl: result.uploadedUrl });
       showToast('배너가 생성되었습니다.');
+      // console.log({ ...form, imageUrl: result.uploadedUrl });
       router.replace(PAGE_ROUTES.BANNER.LIST);
     } finally {
       setIsSubmitting(false);
@@ -84,6 +84,7 @@ export const BannerCreatePage = () => {
     openAlert({
       state: 'default',
       title: '저장하시겠습니까?',
+      infoText: '저장하기 버튼을 누를 시, 해당 배너가 새롭게 SURF의 홈 화면에 추가됩니다.',
       actions: [
         {
           type: 'solid',

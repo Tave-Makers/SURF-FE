@@ -1,5 +1,6 @@
-import { MemberCard } from '@/entities/member/ui/MemberCard';
+import { SurfIcon } from '@surf/ui/icon';
 import { MemberStatusBadge } from '@/entities/member/ui/MemberStatusBadge';
+import { SelectableMemberCard } from '@/entities/member/ui/SelectableMemberCard';
 import { SignupRequestMember } from '@/entities/signup-request/model/types';
 
 interface SignupRequestListProps {
@@ -30,16 +31,28 @@ export const SignupRequestList = ({
   return (
     <div className="scrollbar-hide flex w-full grow flex-col">
       {members.map((member) => (
-        <MemberCard
+        <SelectableMemberCard
           key={member.id}
           name={member.name}
           tracks={member.tracks}
           registeredAt={member.registeredAt}
-          checked={selectedIds.has(member.id)}
           isSelectionEnabled={isSelectionEnabled}
+          checked={selectedIds.has(member.id)}
           onToggle={() => onToggleSelect(member.id)}
-          onClick={() => onClickMore(member.id)}
-          rightSlot={<MemberStatusBadge status={member.status} />}
+          rightSlot={
+            <>
+              <MemberStatusBadge status={member.status} />
+              <button
+                type="button"
+                onClick={() => {
+                  onClickMore(member.id);
+                }}
+                aria-label={`${member.name} 상세 보기`}
+              >
+                <SurfIcon name="ChevronRight" />
+              </button>
+            </>
+          }
         />
       ))}
     </div>

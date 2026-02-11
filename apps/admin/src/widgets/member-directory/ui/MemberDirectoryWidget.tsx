@@ -3,8 +3,8 @@
 import { Avatar } from '@surf/ui/avatar';
 import { useEffect } from 'react';
 
-import { MemberCard } from '@/entities/member/ui/MemberCard';
 import { RoleBadge } from '@/entities/member/ui/RoleBadge';
+import { SelectableMemberCard } from '@/entities/member/ui/SelectableMemberCard';
 import { MemberGenerationAccordion } from '@/features/member-by-generation/ui/MemberGenerationAccordion';
 import { useSelectableListState } from '@/shared/hooks/useSelectableListState';
 import { SelectableListTopBar } from '@/shared/ui/SelectableListTopBar';
@@ -35,13 +35,12 @@ export const MemberDirectoryWidget = ({ keyword }: MemberDirectoryWidgetProps) =
         <MemberGenerationAccordion
           generation={12}
           renderItem={(m) => (
-            <MemberCard
-              checked={false}
+            <SelectableMemberCard
               name={m.name}
               tracks={m.tracks}
-              isSelectionEnabled
+              checked={false}
               onToggle={() => {}}
-              leftAddon={<Avatar size="s" alt="테이비 프로필 이미지" src={m.profileImageUrl} />}
+              leftSlot={<Avatar size="s" alt="테이비 프로필 이미지" src={m.profileImageUrl} />}
               rightSlot={<RoleBadge type={m.role} />}
             />
           )}

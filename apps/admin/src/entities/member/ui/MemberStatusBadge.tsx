@@ -1,7 +1,7 @@
 import { MemberStatus } from '@/entities/member/model/types';
 import { StatusBadge } from '@/shared/ui/StatusBadge';
 
-interface RequestStatusBadgeProps {
+interface MemberStatusBadgeProps {
   status: MemberStatus;
 }
 
@@ -11,7 +11,7 @@ const map = {
   approve: { label: '승인', variant: 'green' },
 } as const;
 
-export const RequestStatusBadge = ({ status }: RequestStatusBadgeProps) => {
+export const MemberStatusBadge = ({ status }: MemberStatusBadgeProps) => {
   const { label, variant } = map[status];
 
   return <StatusBadge variant={variant}>{label}</StatusBadge>;

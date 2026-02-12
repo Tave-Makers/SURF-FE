@@ -1,6 +1,6 @@
 import { toMemberStatus, toMemberTrack } from '@/entities/member/model/mapper';
-import { SignupRequestMember } from '@/entities/signup-request/model/types';
 import { SignupRequestItem } from '../api/types';
+import { SignupRequestMember } from '@/entities/signup-request/model/types';
 
 /**
  * API SignupRequestItem DTO → 도메인 SignupRequestMember 변환
@@ -21,5 +21,6 @@ export function toSignupRequestMember(dto: SignupRequestItem): SignupRequestMemb
     tracks: dto.trackList.map(toMemberTrack),
     registeredAt: dto.createdAt,
     status: toMemberStatus(dto.memberStatus),
+    role: dto.role ?? 'MEMBER',
   };
 }

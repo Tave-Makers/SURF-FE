@@ -1,9 +1,9 @@
 'use client';
 
+import { PostFab } from '@surf/ui/post-fab';
 import { useRouter } from 'next/navigation';
 import { useSearchParams } from 'next/navigation';
 import { useState } from 'react';
-import { PostFab } from '@/entities/post/ui/post-fab/PostFab';
 import { useAuthStore } from '@/features/auth/model/useAuthStore';
 import { useGetCalendarSchedule } from '@/features/calendar/model/useGetCalendarSchedule';
 import { PAGE_ROUTES } from '@/shared/config/path';

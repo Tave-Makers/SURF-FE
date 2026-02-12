@@ -7,6 +7,7 @@ import { useRouter } from 'next/navigation';
 import { useMemo, useState } from 'react';
 import { Banner } from '@/entities/banner/model/types';
 import { BannerDnd } from '@/entities/banner/ui/BannerDnd';
+import { PAGE_ROUTES } from '@/shared/config/path';
 import { AppHeader } from '@/widgets/header/ui/AppHeader';
 
 type Filter = 'all' | 'active' | 'inactive';
@@ -18,17 +19,6 @@ export const BannerPage = () => {
     { id: 3, name: '배너 3', imageUrl: '', isActive: false, linkUrl: '' },
     { id: 4, name: '배너 4', imageUrl: '', isActive: true, linkUrl: '' },
   ]);
-
-  // const handleReorder = (from: number, to: number) => {
-  //   const active = banners.filter((b) => b.isActive);
-  //   const inactive = banners.filter((b) => !b.isActive);
-
-  //   const newActive = reorderArray(active, from, to);
-
-  //   setBanners([...newActive, ...inactive]);
-  // };
-
-  // const inactive = banners.filter((b) => !b.isActive);
 
   const router = useRouter();
   const [isReorderMode, setIsReorderMode] = useState(false);
@@ -130,7 +120,7 @@ export const BannerPage = () => {
         <div className="pointer-events-none fixed inset-0 z-50">
           <div className="relative mx-auto h-full sm:max-w-[min(100dvw,calc(100dvh*375/812))]">
             <div className="pointer-events-auto absolute right-15 bottom-15">
-              <PostFab onClick={() => router.push('/banner/create')} />
+              <PostFab onClick={() => router.push(PAGE_ROUTES.BANNER.CREATE)} />
             </div>
           </div>
         </div>

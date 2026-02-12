@@ -1,11 +1,11 @@
 'use client';
 
 import { HeaderMode } from '@surf/ui/header';
+import { PostFab } from '@surf/ui/post-fab';
 import { Tab } from '@surf/ui/tab';
 import { useSearchParams, useRouter } from 'next/navigation';
 import { POST_BOARDS } from '@/entities/post/model/board';
 import { TAB_CATEGORIES, TAB_CATEGORY_LIST } from '@/entities/post/model/tab';
-import { PostFab } from '@/entities/post/ui/post-fab/PostFab';
 import { useAuthStore } from '@/features/auth/model/useAuthStore';
 import { usePostFormStore } from '@/features/post/post-form/model/usePostFormStore';
 import { useCreatePostScheduleStore } from '@/features/schedule/create-post-schedule/model/useCreatePostScheduleStore';

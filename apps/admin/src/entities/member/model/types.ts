@@ -11,6 +11,7 @@ export type TrackPart =
   | 'DATA_ANALYSIS'
   | 'DEEP_LEARNING';
 
+export type MemberRole = 'ADMIN' | 'PRESIDENT' | 'MANAGER' | 'MEMBER';
 /**
  * 멤버 트랙 정보
  */
@@ -46,6 +47,8 @@ export interface MemberBase {
   profileImageUrl: string;
   tracks: MemberTrack[];
   registeredAt: string;
+  role: MemberRole;
+  status: MemberStatus;
 }
 
 /**
@@ -54,8 +57,6 @@ export interface MemberBase {
 export interface MemberDetail extends MemberBase {
   email: string;
   phoneNumber: string;
-  role: string;
-  status: MemberStatus;
   link: Nullable<string>;
   graduateSchool: Nullable<string>;
   activityScore: number;

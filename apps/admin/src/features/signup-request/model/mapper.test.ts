@@ -10,6 +10,7 @@ describe('toSignupRequestMember', () => {
     trackList: [{ generation: 17, part: 'WEB_FRONTEND' }],
     createdAt: '2026-01-21T12:00:00.000Z',
     memberStatus: 'WAITING',
+    role: 'MEMBER',
   };
 
   test('API DTO 필드를 도메인 모델로 매핑한다', () => {
@@ -23,6 +24,7 @@ describe('toSignupRequestMember', () => {
       tracks: [{ generation: 17, part: 'WEB_FRONTEND' }],
       registeredAt: '2026-01-21T12:00:00.000Z',
       status: 'waiting',
+      role: 'MEMBER',
     });
   });
 

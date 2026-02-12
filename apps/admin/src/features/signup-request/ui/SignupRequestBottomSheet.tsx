@@ -5,7 +5,7 @@ import { Sheet as ModalSheet } from 'react-modal-sheet';
 import { useSignupStatusActions } from '../model/useSignupStatusActions';
 import { useMemberInfoQuery } from '@/entities/member/model/queries/useMemberInfoQuery';
 import { MemberDetail } from '@/entities/member/ui/MemberDetail';
-import { RequestStatusBadge } from '@/entities/signup-request/ui/RequestStatusBadge';
+import { MemberStatusBadge } from '@/entities/member/ui/MemberStatusBadge';
 import { ErrorBoundary } from '@/shared/ui/ErrorBoundary';
 
 declare module '@/shared/store/bottomSheetStore' {
@@ -21,7 +21,7 @@ export type SignupRequestBottomSheetProps = {
   onClose: () => void;
   /** 조회할 회원 ID */
   memberId: number;
-  showAction: boolean;
+  showAction?: boolean;
 };
 
 /**
@@ -32,7 +32,7 @@ export const SignupRequestBottomSheet = ({
   isOpen,
   onClose,
   memberId,
-  showAction,
+  showAction = true,
 }: SignupRequestBottomSheetProps) => {
   return (
     <ModalSheet isOpen={isOpen} onClose={onClose}>
@@ -57,6 +57,7 @@ export const SignupRequestBottomSheet = ({
           </Sheet>
         </ModalSheet.Content>
       </ModalSheet.Container>
+      <ModalSheet.Backdrop onTap={onClose} />
     </ModalSheet>
   );
 };
@@ -85,7 +86,7 @@ const MemberInfoContent = ({
   return (
     <>
       <div className="flex size-full flex-col gap-[0.375rem] py-13">
-        <RequestStatusBadge status={member.status} />
+        <MemberStatusBadge status={member.status} />
         <MemberDetail member={member} />
       </div>
       {member.status === 'waiting' && showAction && (

@@ -27,11 +27,16 @@ export const ScheduleDateBottomSheet = ({
   onSave,
 }: ScheduleDateBottomSheetProps) => {
   const [tempDate, setTempDate] = useState<Date>(initialDate || new Date());
+  const [mountPicker, setMountPicker] = useState(false);
 
   useEffect(() => {
-    if (isOpen) {
-      setTempDate(initialDate || new Date());
-    }
+    if (!isOpen) return;
+    setTempDate(initialDate || new Date());
+
+    // 바텀시트 먼저 렌더 → 다음 프레임에 picker 마운트
+    setMountPicker(false);
+    const id = requestAnimationFrame(() => setMountPicker(true));
+    return () => cancelAnimationFrame(id);
   }, [isOpen, initialDate]);
 
   const handleSave = () => {
@@ -62,7 +67,12 @@ export const ScheduleDateBottomSheet = ({
             }}
           >
             <div className="py-15">
-              <DateTimePicker value={tempDate} onChange={setTempDate} mode="all" />
+              {mountPicker ? (
+                <DateTimePicker value={tempDate} onChange={setTempDate} mode="all" />
+              ) : (
+                // 레이아웃 점프 방지용 placeholder
+                <div className="h-44" />
+              )}
             </div>
           </Sheet>
         </ModalSheet.Content>

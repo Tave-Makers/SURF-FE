@@ -3,6 +3,33 @@
 import { KeenSliderOptions, useKeenSlider } from 'keen-slider/react';
 import React, { useRef, useMemo, useState } from 'react';
 
+type Props = {
+  value: number;
+  onChange: (val: number) => void;
+  length: number;
+  loop?: boolean;
+  perspective?: 'left' | 'right' | 'center';
+  setValue?: (relative: number, absolute: number) => string;
+  width: number;
+  disableHighlight?: boolean;
+  windowSize?: number; // value 기준으로 앞뒤 몇 개만 렌더할지. 예: 12면 총 25개
+};
+
+function clamp(n: number, min: number, max: number) {
+  return Math.max(min, Math.min(max, n));
+}
+
+// loop에서 최소 거리(예: 0과 length-1은 거리 1로 취급)
+function circularDistance(i: number, a: number, n: number) {
+  const d = i - a;
+  const alt = d > 0 ? d - n : d + n;
+  return Math.abs(d) <= Math.abs(alt) ? d : alt;
+}
+
+function mod(n: number, m: number) {
+  return ((n % m) + m) % m;
+}
+
 export const Wheel = ({
   value,
   onChange,
@@ -12,16 +39,8 @@ export const Wheel = ({
   setValue,
   width,
   disableHighlight = false,
-}: {
-  value: number;
-  onChange: (val: number) => void;
-  length: number;
-  loop?: boolean;
-  perspective?: 'left' | 'right' | 'center';
-  setValue?: (relative: number, absolute: number) => string;
-  width: number;
-  disableHighlight?: boolean;
-}) => {
+  windowSize = 12,
+}: Props) => {
   const wheelSize = 20;
   const slideDegree = 360 / wheelSize;
   const slidesPerView = loop ? 9 : 1;
@@ -65,27 +84,42 @@ export const Wheel = ({
 
   const [sliderRef] = useKeenSlider<HTMLDivElement>(options);
 
-  function slideValues() {
-    const activeIndex = value;
-    const values: { style: React.CSSProperties; value: string }[] = [];
+  const windowedSlides = useMemo(() => {
+    if (length <= 0) return [];
 
-    for (let i = 0; i < length; i++) {
-      const distance = i - activeIndex;
-      const rotate = Math.abs(distance) > wheelSize / 2 ? 180 : distance * (360 / wheelSize) * -1;
-      const isActive = i === activeIndex;
+    // 렌더할 index 리스트 만들기
+    let indices: number[] = [];
 
-      const style = {
+    if (loop) {
+      const start = value - windowSize;
+      const end = value + windowSize;
+      for (let x = start; x <= end; x++) indices.push(mod(x, length));
+      // 중복 제거 (length가 작으면 window가 겹칠 수 있음)
+      indices = Array.from(new Set(indices));
+    } else {
+      const start = clamp(value - windowSize, 0, length - 1);
+      const end = clamp(value + windowSize, 0, length - 1);
+      for (let i = start; i <= end; i++) indices.push(i);
+    }
+
+    return indices.map((i) => {
+      const dist = loop ? circularDistance(i, value, length) : i - value;
+
+      // 멀리 있는 건 뒷면 처리 (원래 로직 유지)
+      const rotate = Math.abs(dist) > wheelSize / 2 ? 180 : dist * (360 / wheelSize) * -1;
+      const isActive = i === value;
+
+      const style: React.CSSProperties = {
         transform: `rotateX(${rotate}deg) translateZ(${radius}px)`,
         WebkitTransform: `rotateX(${rotate}deg) translateZ(${radius}px)`,
         color: isActive ? '#222' : '#c4c4c4',
       };
 
-      const valueLabel = setValue ? setValue(i, i) : String(i);
+      const label = setValue ? setValue(i, i) : String(i);
 
-      values.push({ style, value: valueLabel });
-    }
-    return values;
-  }
+      return { key: i, style, label };
+    });
+  }, [length, loop, value, windowSize, wheelSize, radius, setValue]);
 
   return (
     <div className={'wheel keen-slider wheel--perspective-' + perspective} ref={sliderRef}>
@@ -107,10 +141,11 @@ export const Wheel = ({
             }}
           />
         )}
+
         <div className="wheel__slides" style={{ width: width + 'px' }}>
-          {slideValues().map(({ style, value }, idx) => (
-            <div className="wheel__slide" style={{ ...style, zIndex: 2 }} key={idx}>
-              <span>{value}</span>
+          {windowedSlides.map(({ key, style, label }) => (
+            <div className="wheel__slide" style={{ ...style, zIndex: 2 }} key={key}>
+              <span>{label}</span>
             </div>
           ))}
         </div>

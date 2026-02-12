@@ -62,7 +62,6 @@
     "eslint-plugin-storybook": "9.1.5",
     "globals": "^16.3.0",
     "msw": "^2.12.7",
-    "openapi-typescript": "^7.10.1",
     "storybook": "9.1.16",
     "tailwindcss": "^4",
     "typescript": "^5",

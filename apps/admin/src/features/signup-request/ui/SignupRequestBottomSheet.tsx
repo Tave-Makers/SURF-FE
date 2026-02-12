@@ -57,6 +57,7 @@ export const SignupRequestBottomSheet = ({
           </Sheet>
         </ModalSheet.Content>
       </ModalSheet.Container>
+      <ModalSheet.Backdrop onClick={onClose} />
     </ModalSheet>
   );
 };

@@ -1,8 +1,8 @@
 'use client';
 
+import Image from 'next/image';
 import { useEffect, useMemo, useRef, useState } from 'react';
 import DEFAULT_IMAGE from '@/shared/assets/images/default-item.png';
-import Image from 'next/image';
 
 type Mode = 'create' | 'edit';
 
@@ -98,7 +98,7 @@ export const ImgUploader = ({
       >
         {hasImage ? (
           <>
-            <Image src={displayUrl} alt="banner" fill className="object-cover" />
+            <Image src={displayUrl} alt="banner" className="object-cover" />
 
             {/* 수정 모드 오버레이 */}
             {showOverlayText && (

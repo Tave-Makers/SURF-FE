@@ -23,9 +23,7 @@ export interface ChangeRoleProps {
   initialRole: MemberRole;
 }
 
-type ChangeableMemberRole = Exclude<MemberRole, 'ADMIN'>;
-
-const MEMBER_ROLE_OPTIONS: readonly ChangeableMemberRole[] = ['PRESIDENT', 'MANAGER', 'MEMBER'];
+const MEMBER_ROLE_OPTIONS: readonly MemberRole[] = ['ADMIN', 'PRESIDENT', 'MANAGER', 'MEMBER'];
 
 export const ChangeRoleSheet = ({ isOpen, onClose, initialRole }: ChangeRoleProps) => {
   const initialRoleIndex = useMemo(() => {

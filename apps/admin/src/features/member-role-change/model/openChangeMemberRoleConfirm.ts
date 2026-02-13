@@ -14,7 +14,7 @@ export function openChangeMemberRoleConfirm({
 }) {
   const title =
     role === 'PRESIDENT'
-      ? '해당 회원을 Presidnet 등급으로 변경하시겠습니까?'
+      ? '해당 회원을 President 등급으로 변경하시겠습니까?'
       : '회원의 등급을 변경하시겠습니까?';
   const infoText =
     role === 'PRESIDENT'
@@ -36,7 +36,10 @@ export function openChangeMemberRoleConfirm({
         type: 'solid',
         variant: 'primary',
         label: '승인하기',
-        onClick: onConfirm,
+        onClick: () => {
+          onConfirm();
+          closeAlert();
+        },
       },
     ],
   });

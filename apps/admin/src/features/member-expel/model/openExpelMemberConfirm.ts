@@ -19,7 +19,10 @@ export function openExpelMemberConfirm({
         type: 'solid',
         variant: 'danger',
         label: '퇴출/제명하기',
-        onClick: onConfirm,
+        onClick: () => {
+          onConfirm();
+          closeAlert();
+        },
       },
     ],
   });

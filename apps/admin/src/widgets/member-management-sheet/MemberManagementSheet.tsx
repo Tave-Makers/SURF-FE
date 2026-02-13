@@ -28,12 +28,12 @@ export const MemberManagementSheet = ({
   onClose,
   memberId,
 }: MemberManagementSheetProps) => {
-  //더미데이터
+  // TODO: memberId를 이용한 실제 멤버 조회 API 연동 필요
   const member: Member = {
-    email: 'ej070961@gmail.com',
-    name: '이은지',
+    email: 'test@example.com',
+    name: '홍길동',
     role: 'MEMBER',
-    phoneNumber: '01071890709',
+    phoneNumber: '01012341234',
     status: 'approve',
     tracks: [
       {
@@ -48,12 +48,12 @@ export const MemberManagementSheet = ({
     activityScore: 0,
     careers: [],
     profileImageUrl: '',
-    university: '서울과기대',
+    university: '000대',
     graduateSchool: '',
     id: 1,
     isActive: true,
     link: '',
-    registeredAt: '',
+    registeredAt: '25.01.12',
   };
 
   const openAlert = useAlertStore((s) => s.open);
@@ -62,11 +62,15 @@ export const MemberManagementSheet = ({
   const openBottomSheet = useBottomSheetStore((state) => state.open);
 
   const handleExpel = () => {
-    closeAlert();
+    // TODO: 제명 API 호출 및 에러 처리 구현 필요
   };
   return (
     <ModalSheet isOpen={isOpen} onClose={onClose}>
-      <ModalSheet.Container className="!right-0 !left-0 mx-auto w-full sm:max-w-[min(100dvw,calc(100dvh*375/812))]">
+      <ModalSheet.Container
+        role="dialog"
+        aria-label="멤버 관리"
+        className="!right-0 !left-0 mx-auto w-full sm:max-w-[min(100dvw,calc(100dvh*375/812))]"
+      >
         <ModalSheet.Content>
           <Sheet
             primaryBtn={{

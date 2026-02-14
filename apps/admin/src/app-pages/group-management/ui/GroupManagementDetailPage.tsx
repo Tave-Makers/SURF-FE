@@ -51,7 +51,7 @@ export const GroupManagementDetailPage = ({ mode }: GroupManagementDetailPagePro
   return (
     <div className="flex h-full flex-col">
       <AppHeader overrideHeader={headerProps} />
-      <div className="flex flex-1 flex-col gap-20 overflow-y-auto">
+      <div className="scrollbar-hide flex flex-1 flex-col gap-20 overflow-y-auto">
         <GroupMemberSection
           mode={mode}
           teamLeader={leader}
@@ -61,9 +61,11 @@ export const GroupManagementDetailPage = ({ mode }: GroupManagementDetailPagePro
           onRemoveMember={handleRemoveMember}
         />
         {mode === 'edit' && (
-          <SolidButton size="m" variant="warning" onClick={() => {}} className="shrink-0">
-            해당 그룹 삭제하기
-          </SolidButton>
+          <div className="px-13 pb-15">
+            <SolidButton size="m" variant="warning" onClick={() => {}} className="shrink-0">
+              해당 그룹 삭제하기
+            </SolidButton>
+          </div>
         )}
       </div>
       <div className="sticky bottom-0 px-13 py-16 pt-13">{mapModeToStickyButton(mode)}</div>

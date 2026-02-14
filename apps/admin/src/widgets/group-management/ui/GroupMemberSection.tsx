@@ -37,7 +37,7 @@ export const GroupMemberSection = ({
     <div className="flex flex-col gap-14">
       {/* 팀장 */}
       <section className="flex flex-col gap-10">
-        <FieldGroup title="팀장" isRequired>
+        <FieldGroup title="팀장" titleClassName="px-14" isRequired>
           {leaderEmpty ? (
             isEditable ? (
               <SolidButton size="s" variant="secondary" onClick={() => onPickLeader?.()}>
@@ -67,7 +67,7 @@ export const GroupMemberSection = ({
 
       {/* 팀원 */}
       <section className="flex flex-col gap-10">
-        <FieldGroup title="팀원" isRequired>
+        <FieldGroup title="팀원" titleClassName="px-14" isRequired>
           {membersEmpty ? (
             isEditable ? (
               <SolidButton size="s" variant="secondary" onClick={() => onAddMembers?.()}>
@@ -91,16 +91,15 @@ export const GroupMemberSection = ({
               ))}
             </div>
           )}
-
-          {/* edit/create에서만 하단 “추가하기” 버튼 노출 (멤버가 있어도 추가 가능) */}
-          {isEditable && !membersEmpty && (
-            <div className="mt-10">
-              <SolidButton size="s" variant="secondary" onClick={() => onAddMembers?.()}>
-                추가하기
-              </SolidButton>
-            </div>
-          )}
         </FieldGroup>
+        {/* edit/create에서만 하단 “추가하기” 버튼 노출 (멤버가 있어도 추가 가능) */}
+        {isEditable && !membersEmpty && (
+          <div className="px-13">
+            <SolidButton size="s" variant="secondary" onClick={() => onAddMembers?.()}>
+              추가하기
+            </SolidButton>
+          </div>
+        )}
       </section>
     </div>
   );

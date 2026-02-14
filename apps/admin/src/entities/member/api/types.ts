@@ -19,6 +19,8 @@ export interface ApiCareer {
   isWorking: boolean;
 }
 
+export type ApiMemberStatus = 'REGISTERING' | 'WAITING' | 'APPROVED' | 'REJECTED' | 'WITHDRAWN';
+
 export type MemberInformationResDTO = {
   username?: string;
   profileImageUrl?: string;
@@ -32,11 +34,25 @@ export type MemberInformationResDTO = {
   role?: MemberRole;
   activityScore?: number;
   createdAt?: string;
-  memberStatus?: 'REGISTERING' | 'WAITING' | 'APPROVED' | 'REJECTED' | 'WITHDRAWN';
+  memberStatus?: ApiMemberStatus;
   isActive?: boolean;
   trackList?: ApiTrack[];
   careerList?: ApiCareer[];
 };
+
+/**
+ * 멤버 아이템
+ */
+export interface MemberItem {
+  memberId: number;
+  username?: string;
+  profileImageUrl?: string;
+  university?: string;
+  role?: MemberRole;
+  createdAt?: string;
+  memberStatus?: ApiMemberStatus;
+  trackList?: ApiTrack[];
+}
 
 /**
  * 멤버 정보 조회 응답

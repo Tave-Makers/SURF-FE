@@ -3,9 +3,11 @@ import { MemberBase } from '@/entities/member/model/types';
 
 export const MemberGenerationAccordion = ({
   generation,
+  label,
   renderItem,
 }: {
   generation: number;
+  label?: string;
   renderItem: (member: MemberBase) => React.ReactNode;
 }) => {
   const m: MemberBase = {
@@ -26,7 +28,7 @@ export const MemberGenerationAccordion = ({
 
   //TODO: 배열 기반 렌더링으로 변경
   return (
-    <Accordion title={`${generation}기`}>
+    <Accordion title={label ?? `${generation}기`}>
       <div>
         <div key={m.id}>{renderItem(m)}</div>
       </div>

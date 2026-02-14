@@ -4,12 +4,12 @@ import { RoleBadge } from '@/entities/member/ui/RoleBadge';
 import { SelectableMemberCard } from '@/entities/member/ui/SelectableMemberCard';
 import { MemberGenerationAccordion } from '@/features/member-by-generation/ui/MemberGenerationAccordion';
 
-export interface MemberGenerationAccordianListProps {
+export interface MemberGenerationAccordionListProps {
   generations: MemberGeneration[];
 }
 export const MemberGenerationAccordionList = ({
   generations,
-}: MemberGenerationAccordianListProps) => {
+}: MemberGenerationAccordionListProps) => {
   if (generations.length === 0)
     return (
       <div className="flex h-full flex-col items-center justify-center gap-12">

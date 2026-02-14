@@ -1,4 +1,4 @@
-import { ChangeRoleSheet } from '@/features/member-role-change/ui/ChangeRoleSheet';
+import { ChangeRoleSheet } from '@/features/member/role-change/ui/ChangeRoleSheet';
 import { SignupRequestBottomSheet } from '@/features/signup-request/ui/SignupRequestBottomSheet';
 import type { BottomSheetMap, BottomSheetType } from '@/shared/store/bottomSheetStore';
 import { MemberManagementSheet } from '@/widgets/member-management-sheet/MemberManagementSheet';

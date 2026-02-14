@@ -5,7 +5,7 @@ import { Sheet as ModalSheet } from 'react-modal-sheet';
 import { MEMBER_ROLE_LABELS } from '@/entities/member/model/constants';
 import { Member } from '@/entities/member/model/types';
 import { MemberProfileSummary } from '@/entities/member/ui/MemberProfileSummary';
-import { openExpelMemberConfirm } from '@/features/member-expel/model/openExpelMemberConfirm';
+import { openExpelMemberConfirm } from '@/features/member/expel/model/openExpelMemberConfirm';
 import { useBottomSheetStore } from '@/shared/store/bottomSheetStore';
 
 declare module '@/shared/store/bottomSheetStore' {
@@ -87,6 +87,7 @@ export const MemberManagementSheet = ({
               <MemberProfileSummary member={member} />
               <SelectField
                 size="l"
+                aria-label="멤버 역할"
                 selectedValue={MEMBER_ROLE_LABELS[member.role]}
                 onClick={() =>
                   openBottomSheet({

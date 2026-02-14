@@ -42,7 +42,7 @@ export type ChipToggleProps = {
   count?: number; // count 모드
   children?: React.ReactNode; // text 모드
   onToggleIcon: (newState: boolean) => void;
-  activeColor: ActiveColorVariant;
+  activeColor?: ActiveColorVariant;
   onClickNumber?: () => void;
 };
 
@@ -93,7 +93,7 @@ export const ChipToggle = ({
   return (
     <div className={containerClassName} role="group" aria-label={`${iconName} 토글 버튼 그룹`}>
       <div className="pointer-events-none relative flex h-full items-center justify-center gap-8">
-        {iconName && (
+        {iconName && activeColor && (
           <SurfIcon
             name={iconName}
             size="s"

@@ -1,5 +1,5 @@
 'use client';
-import { ChipToggle } from '@surf/ui/chip-toggle';
+
 import { HeaderMode } from '@surf/ui/header';
 import { PostFab } from '@surf/ui/post-fab';
 import { reorderArray } from '@surf/utils';
@@ -7,6 +7,7 @@ import { useRouter } from 'next/navigation';
 import { useMemo, useState } from 'react';
 import { Banner } from '@/entities/banner/model/types';
 import { BannerDnd } from '@/entities/banner/ui/BannerDnd';
+import { BannerFilter } from '@/features/banner-filter/BannerFilter';
 import { PAGE_ROUTES } from '@/shared/config/path';
 import { AppHeader } from '@/widgets/header/ui/AppHeader';
 
@@ -77,39 +78,7 @@ export const BannerPage = () => {
         }}
       />
       <div className="flex h-full w-full flex-col">
-        {!isReorderMode && (
-          <div className="border-border-normal flex gap-10 border-b-[0.4px] px-13 pb-10">
-            <ChipToggle
-              mode="text"
-              highlightType="toggle"
-              isClicked={filter === 'all'}
-              activeColor="blue"
-              onToggleIcon={() => setFilter('all')}
-            >
-              전체
-            </ChipToggle>
-
-            <ChipToggle
-              mode="text"
-              highlightType="toggle"
-              isClicked={filter === 'active'}
-              activeColor="blue"
-              onToggleIcon={() => setFilter('active')}
-            >
-              활성화
-            </ChipToggle>
-
-            <ChipToggle
-              mode="text"
-              highlightType="toggle"
-              isClicked={filter === 'inactive'}
-              activeColor="blue"
-              onToggleIcon={() => setFilter('inactive')}
-            >
-              비활성화
-            </ChipToggle>
-          </div>
-        )}
+        {!isReorderMode && <BannerFilter currentFilter={filter} onFilterChange={setFilter} />}
         <BannerDnd
           banners={filteredBanners}
           isReorderMode={isReorderMode}

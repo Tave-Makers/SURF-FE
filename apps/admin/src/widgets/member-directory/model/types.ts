@@ -3,16 +3,9 @@ export interface MemberCountSummary {
   totalMemberCount: number;
 }
 
-export interface MemberGeneration {
-  /**기수 번호 */
-  generation: number;
-  /**기수 명 */
-  label: string;
-}
-
 export interface MemberGenerationList {
   /** 기수 목록 */
-  generations: MemberGeneration[];
+  generations: number[];
 }
 
 export type MemberDirectoryInfo = MemberCountSummary & MemberGenerationList;

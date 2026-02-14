@@ -5,10 +5,12 @@ import { MemberDirectoryInfo } from './types';
  * API DTO -> 도메인 모델 변환
  */
 export function toMemberGenerationList(dto: AdminTotalMemberListResDTO): MemberDirectoryInfo {
-  const generations = (dto.generations ?? []).filter(
-    (item): item is { generation: number; name: string } =>
-      item.generation != null && item.name != null,
+  const picked = (dto?.generations ?? []).filter(
+    (item): item is { generation: number } => typeof item?.generation === 'number',
   );
+
+  //  number[]로 변환
+  const generations = picked.map((item) => item.generation);
 
   if (process.env.NODE_ENV !== 'production') {
     const dropped = (dto.generations?.length ?? 0) - generations.length;
@@ -19,9 +21,6 @@ export function toMemberGenerationList(dto: AdminTotalMemberListResDTO): MemberD
 
   return {
     totalMemberCount: dto.totalMemberCount ?? 0,
-    generations: generations.map((item) => ({
-      generation: item.generation,
-      label: item.name,
-    })),
+    generations,
   };
 }

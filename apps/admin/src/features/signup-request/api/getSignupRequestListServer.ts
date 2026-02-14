@@ -18,6 +18,7 @@ export async function getSignupRequestListServer(
     searchParams.set('keyword', params.keyword);
   }
   const queryString = searchParams.toString();
-  const response = await serverFetchWithCookies(`/v1/manager/registration-list?${queryString}`);
-  return response.json() as Promise<SignupRequestListResponse>;
+  return serverFetchWithCookies<SignupRequestListResponse>(
+    `/v1/manager/registration-list?${queryString}`,
+  );
 }

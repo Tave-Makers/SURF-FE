@@ -7,7 +7,7 @@ import { MemberDirectoryInfo } from './types';
 export function toMemberGenerationList(dto: AdminTotalMemberListResDTO): MemberDirectoryInfo {
   const generations = (dto.generations ?? []).filter(
     (item): item is { generation: number; name: string } =>
-      item.generation !== undefined && item.name !== undefined,
+      item.generation != null && item.name != null,
   );
 
   if (process.env.NODE_ENV !== 'production') {

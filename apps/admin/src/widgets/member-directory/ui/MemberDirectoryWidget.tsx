@@ -4,7 +4,7 @@ import { useEffect } from 'react';
 
 import { useMemberGenerationListQuery } from '../model/queries/useMemberGenerationListQuery';
 
-import { MemberGenerationAccordianList } from './MemberGenerationAccordianList';
+import { MemberGenerationAccordionList } from './MemberGenerationAccordionList';
 import { useSelectableListState } from '@/shared/hooks/useSelectableListState';
 import { SelectableListTopBar } from '@/shared/ui/SelectableListTopBar';
 
@@ -33,7 +33,7 @@ export const MemberDirectoryWidget = ({ keyword }: MemberDirectoryWidgetProps) =
       />
 
       {/* 기수별 멤버 목록 아코디언 리스트 */}
-      <MemberGenerationAccordianList generations={data.generations} />
+      <MemberGenerationAccordionList generations={data.generations} />
     </div>
   );
 };

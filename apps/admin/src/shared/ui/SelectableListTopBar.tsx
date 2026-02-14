@@ -29,13 +29,12 @@ export const SelectableListTopBar = ({
         <span className="text-body-body8 text-foreground-normal-lighter text-nowrap">
           {selectedCountLabel(selectedCount)}
         </span>
-        {selectedCount > 0 && (
-          <div className="inline-block">
-            <TextButton type="button" size="s" variant="secondary" onClick={onExitSelectMode}>
-              {cancelButtonLabel}
-            </TextButton>
-          </div>
-        )}
+
+        <div className="inline-block">
+          <TextButton type="button" size="s" variant="secondary" onClick={onExitSelectMode}>
+            {cancelButtonLabel}
+          </TextButton>
+        </div>
       </div>
     );
   }
@@ -46,7 +45,7 @@ export const SelectableListTopBar = ({
         {viewCountLabel(totalCount)}
       </span>
 
-      {selectedCount > 0 && (
+      {totalCount > 0 && (
         <div className="inline-block">
           <TextButton type="button" size="s" variant="primary" onClick={onEnterSelectMode}>
             {selectButtonLabel}

@@ -1,7 +1,9 @@
 'use client';
 import { useDebouncedValue } from '@surf/hooks';
 import { TextInput } from '@surf/ui/text-input';
+
 import { Suspense, useState } from 'react';
+import { ErrorBoundary } from '@/shared/ui/ErrorBoundary';
 import { MemberDirectoryWidget } from '@/widgets/member-directory/ui/MemberDirectoryWidget';
 
 /**
@@ -24,9 +26,13 @@ export const MemberManagementPage = () => {
           onChange={(value) => setKeyword(value)}
         />
       </div>
-      <Suspense fallback={<div>loading...</div>}>
-        <MemberDirectoryWidget keyword={debouncedKeyword} />
-      </Suspense>
+      <ErrorBoundary
+        fallback={<div className="p-4">데이터를 불러오는 중 오류가 발생했습니다.</div>}
+      >
+        <Suspense fallback={<div>loading...</div>}>
+          <MemberDirectoryWidget keyword={debouncedKeyword} />
+        </Suspense>
+      </ErrorBoundary>
     </main>
   );
 };

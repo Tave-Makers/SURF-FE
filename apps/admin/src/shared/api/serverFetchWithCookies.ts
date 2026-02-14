@@ -50,5 +50,11 @@ export async function serverFetchWithCookies<TResponse = unknown>(
     cache: options.cache ?? 'no-store',
   });
 
+  if (!response.ok) {
+    const errorBody = (await response.json().catch(() => null)) as { message?: string } | null;
+
+    throw new Error(errorBody?.message ?? `Request failed (${response.status})`);
+  }
+
   return response.json() as Promise<TResponse>;
 }

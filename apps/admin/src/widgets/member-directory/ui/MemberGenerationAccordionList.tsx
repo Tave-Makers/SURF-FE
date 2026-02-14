@@ -7,7 +7,7 @@ import { MemberGenerationAccordion } from '@/features/member-by-generation/ui/Me
 export interface MemberGenerationAccordianListProps {
   generations: MemberGeneration[];
 }
-export const MemberGenerationAccordianList = ({
+export const MemberGenerationAccordionList = ({
   generations,
 }: MemberGenerationAccordianListProps) => {
   if (generations.length === 0)

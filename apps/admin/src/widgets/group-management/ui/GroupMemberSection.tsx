@@ -1,6 +1,8 @@
+import { Avatar } from '@surf/ui/avatar';
 import { SolidButton } from '@surf/ui/button';
 import { FieldGroup } from '@surf/ui/field-group';
 import { MemberBase } from '@/entities/member/model/types';
+import { MemberCardBase } from '@/entities/member/ui/MemberCardBase';
 import { RemovableMemberCard } from '@/entities/member/ui/RemovableMemberCard/RemovableMemberCard';
 
 export type GroupManagementMode = 'view' | 'edit' | 'create';
@@ -46,13 +48,17 @@ export const GroupMemberSection = ({
             )
           ) : (
             <div className="flex flex-col gap-8">
-              <RemovableMemberCard
-                id={teamLeader.id}
+              <MemberCardBase
                 name={teamLeader.name}
-                profileImageUrl={teamLeader.profileImageUrl}
                 tracks={teamLeader.tracks}
-                isRemovalEnabled={false} // 팀장은 삭제 불가
-                onRemoveMember={() => onPickLeader?.()} // 팀장 클릭시 팀장 변경
+                leftSlot={
+                  <Avatar
+                    src={teamLeader.profileImageUrl}
+                    size="m"
+                    alt={`${teamLeader.name} 프로필 이미지`}
+                  />
+                }
+                mainProps={{ onClick: () => onPickLeader?.(), className: 'cursor-pointer' }}
               />
             </div>
           )}

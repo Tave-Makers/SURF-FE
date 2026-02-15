@@ -1,15 +1,6 @@
 import { axiosInstance } from '@/shared/lib/axiosInstance';
-import { MemberListDTO, MemberListResponse } from './types';
 
-/**
- * 멤버 목록 조회 요청 파라미터
- */
-export interface MemberListParams {
-  generation: number;
-  keyword?: string;
-  pageNum: number;
-  pageSize: number;
-}
+import { MemberListDTO, MemberListParams, MemberListResponse } from './types';
 
 /**
  * 기수별 승인 멤버 목록을 페이지 단위로 조회합니다.

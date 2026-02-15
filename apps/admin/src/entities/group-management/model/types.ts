@@ -1,4 +1,4 @@
-import { ContentsType } from '@/shared/ui/ContentItem';
+import { ContentsType } from '@/shared/types/contents';
 
 export type Filter = 'all' | ContentsType;
 

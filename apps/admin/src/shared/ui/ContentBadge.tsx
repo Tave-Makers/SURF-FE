@@ -1,5 +1,7 @@
-interface ContentActiveBadgeProps {
-  type: 'study' | 'project';
+import { ContentsType } from '@/shared/types/contents';
+
+interface ContentBadgeProps {
+  type: ContentsType;
 }
 
 const CONTENT_STATE = {
@@ -15,7 +17,7 @@ const CONTENT_STATE = {
 
 const baseClass = 'rounded-3 w-[3.4375rem] h-[1.1875rem] items-center flex justify-center';
 
-export const ContentBadge = ({ type }: ContentActiveBadgeProps) => {
+export const ContentBadge = ({ type }: ContentBadgeProps) => {
   const { label, variantColor } = type === 'study' ? CONTENT_STATE.study : CONTENT_STATE.project;
   return (
     <div className={`${baseClass} ${variantColor}`}>

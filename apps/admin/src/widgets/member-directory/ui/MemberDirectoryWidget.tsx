@@ -7,6 +7,7 @@ import { RoleBadge } from '@/entities/member/ui/RoleBadge';
 import { SelectableMemberCard } from '@/entities/member/ui/SelectableMemberCard';
 import { MemberGenerationAccordion } from '@/features/member-by-generation/ui/MemberGenerationAccordion';
 import { useSelectableListState } from '@/shared/hooks/useSelectableListState';
+import { useBottomSheetStore } from '@/shared/store/bottomSheetStore';
 import { SelectableListTopBar } from '@/shared/ui/SelectableListTopBar';
 
 interface MemberDirectoryWidgetProps {
@@ -15,6 +16,7 @@ interface MemberDirectoryWidgetProps {
 export const MemberDirectoryWidget = ({ keyword }: MemberDirectoryWidgetProps) => {
   const { mode, selectedCount, enterSelectMode, exitSelectMode, resetSelectionState } =
     useSelectableListState<number>();
+  const openBottomSheet = useBottomSheetStore((s) => s.open);
 
   useEffect(() => {
     resetSelectionState();
@@ -46,6 +48,18 @@ export const MemberDirectoryWidget = ({ keyword }: MemberDirectoryWidgetProps) =
           )}
         />
       </div>
+      <button
+        onClick={() =>
+          openBottomSheet({
+            type: 'member',
+            props: {
+              memberId: 1,
+            },
+          })
+        }
+      >
+        멤버 바텀시트 트리거
+      </button>
     </div>
   );
 };

@@ -10,10 +10,12 @@ export function useGroupFilter(generationGroups: GenerationGroup[]) {
   const filtered = useMemo(() => {
     if (filter === 'all') return generationGroups;
 
-    return generationGroups.map((g) => ({
-      ...g,
-      groupList: g.groupList.filter((item) => item.type === filter),
-    }));
+    return generationGroups
+      .map((g) => ({
+        ...g,
+        groupList: g.groupList.filter((item) => item.type === filter),
+      }))
+      .filter((g) => g.groupList.length > 0);
   }, [filter, generationGroups]);
 
   return {

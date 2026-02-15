@@ -11,7 +11,7 @@ export const GroupManagementPage = () => {
   return (
     <div className="flex h-full flex-col overflow-y-auto">
       <FilterWidget filter={filter} onChange={setFilter} />
-      <GroupManagementAccordionList generationGroups={filtered} />
+      <GroupManagementAccordionList generationGroups={filtered} onClick={() => {}} />
     </div>
   );
 };

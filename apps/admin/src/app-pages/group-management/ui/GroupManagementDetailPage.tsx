@@ -29,6 +29,7 @@ export const GroupManagementDetailPage = ({ mode }: GroupManagementDetailPagePro
   };
   const headerProps = mapModeToHeaderProps({ mode, onClickEdit: handleSwitchToEdit });
 
+  // TODO : API 연동 후 mockData 제거
   const { leader, members, removeMember } = useGroupMembersField({
     leader: mockLeader,
     members: mockMembers,
@@ -68,7 +69,7 @@ export const GroupManagementDetailPage = ({ mode }: GroupManagementDetailPagePro
           </div>
         )}
       </div>
-      <div className="sticky bottom-0 px-13 py-16 pt-13">{mapModeToStickyButton(mode)}</div>
+      <div className="px-13 py-16 pt-13">{mapModeToStickyButton(mode)}</div>
     </div>
   );
 };

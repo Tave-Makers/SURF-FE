@@ -2,7 +2,7 @@ import { GroupManagementDetailPage } from '@/app-pages/group-management/ui/Group
 import type { GroupManagementMode } from '@/widgets/group-management/ui/GroupMemberSection';
 
 type PageProps = {
-  params: Promise<{ id: number }>;
+  params: Promise<{ id: string }>;
   searchParams: Promise<{
     mode?: string;
   }>;

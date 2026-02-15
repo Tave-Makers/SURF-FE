@@ -58,7 +58,11 @@ export const GroupMemberSection = ({
                     alt={`${teamLeader.name} 프로필 이미지`}
                   />
                 }
-                mainProps={{ onClick: () => onPickLeader?.(), className: 'cursor-pointer' }}
+                mainProps={
+                  isEditable
+                    ? { onClick: () => onPickLeader?.(), className: 'cursor-pointer' }
+                    : undefined
+                }
               />
             </div>
           )}

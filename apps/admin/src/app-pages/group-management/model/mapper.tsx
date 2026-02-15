@@ -1,5 +1,6 @@
 import { SolidButton } from '@surf/ui/button';
 import { HeaderProps, HeaderMode } from '@surf/ui/header';
+import type React from 'react';
 import { GroupManagementMode } from '@/widgets/group-management/ui/GroupMemberSection';
 
 interface MapModeToHeaderProps {

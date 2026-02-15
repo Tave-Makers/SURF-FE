@@ -40,6 +40,7 @@ export const RemovableMemberCard = ({
         <div className="flex items-center gap-11">
           {isRemovalEnabled && (
             <button
+              type="button"
               onClick={(e) => {
                 e.stopPropagation();
                 onRemoveMember(id);

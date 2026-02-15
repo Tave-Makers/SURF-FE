@@ -1,12 +1,11 @@
-import { SelectField } from '@surf/ui/select-field';
 import { Sheet } from '@surf/ui/sheet';
 import { useAlertStore } from '@surf/ui/store/alertStore';
+import { useEffect, useState } from 'react';
 import { Sheet as ModalSheet } from 'react-modal-sheet';
-import { MEMBER_ROLE_LABELS } from '@/entities/member/model/constants';
 import { Member } from '@/entities/member/model/types';
 import { MemberProfileSummary } from '@/entities/member/ui/MemberProfileSummary';
 import { openExpelMemberConfirm } from '@/features/member/expel/model/openExpelMemberConfirm';
-import { useBottomSheetStore } from '@/shared/store/bottomSheetStore';
+import { MemberRoleChangeField } from '@/features/member/role-change/ui/MemberRoleChangeField';
 
 declare module '@/shared/store/bottomSheetStore' {
   interface BottomSheetMap {
@@ -56,16 +55,23 @@ export const MemberManagementSheet = ({
     registeredAt: '25.01.12',
   };
 
+  const [isChangeRoleOpen, setIsChangeRoleOpen] = useState(false);
+
   const openAlert = useAlertStore((s) => s.open);
   const closeAlert = useAlertStore((s) => s.close);
 
-  const openBottomSheet = useBottomSheetStore((state) => state.open);
+  useEffect(() => {
+    if (!isOpen) {
+      setIsChangeRoleOpen(false);
+    }
+  }, [isOpen]);
 
   const handleExpel = () => {
     // TODO: 제명 API 호출 및 에러 처리 구현 필요
   };
+
   return (
-    <ModalSheet isOpen={isOpen} onClose={onClose}>
+    <ModalSheet isOpen={isOpen} onClose={onClose} disableDrag={isChangeRoleOpen}>
       <ModalSheet.Container
         role="dialog"
         aria-label="멤버 관리"
@@ -85,19 +91,11 @@ export const MemberManagementSheet = ({
           >
             <div className="mb-13 flex w-full flex-col gap-11">
               <MemberProfileSummary member={member} />
-              <SelectField
-                size="l"
-                aria-label="멤버 역할"
-                selectedValue={MEMBER_ROLE_LABELS[member.role]}
-                onClick={() =>
-                  openBottomSheet({
-                    type: 'changeRole',
-                    props: {
-                      memberId,
-                      initialRole: member.role,
-                    },
-                  })
-                }
+              <MemberRoleChangeField
+                memberId={memberId}
+                role={member.role}
+                isOpen={isChangeRoleOpen}
+                onOpenChange={setIsChangeRoleOpen}
               />
             </div>
           </Sheet>

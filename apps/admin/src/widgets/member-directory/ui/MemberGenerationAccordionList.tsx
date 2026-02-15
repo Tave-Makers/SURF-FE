@@ -1,13 +1,15 @@
 import { Avatar } from '@surf/ui/avatar';
 import { RoleBadge } from '@/entities/member/ui/RoleBadge';
 import { SelectableMemberCard } from '@/entities/member/ui/SelectableMemberCard';
-import { MemberGenerationAccordion } from '@/features/member-by-generation/ui/MemberGenerationAccordion';
+import { MemberGenerationAccordionInfinite } from '@/features/member-by-generation/ui/MemberGenerationAccordionInfinite';
 
 export interface MemberGenerationAccordionListProps {
   generations: number[];
+  keyword: string;
 }
 export const MemberGenerationAccordionList = ({
   generations,
+  keyword,
 }: MemberGenerationAccordionListProps) => {
   if (generations.length === 0)
     return (
@@ -19,10 +21,11 @@ export const MemberGenerationAccordionList = ({
   return (
     <div className="scrollbar-hide flex-1 overflow-y-auto">
       {generations.map((generation) => (
-        <MemberGenerationAccordion
+        <MemberGenerationAccordionInfinite
           key={generation}
           generation={generation}
           label={`${generation}기`}
+          keyword={keyword}
           renderItem={(m) => (
             <SelectableMemberCard
               name={m.name}

@@ -6,6 +6,7 @@ type Props = {
   enabled?: boolean;
   hasNextPage?: boolean;
   isFetching?: boolean;
+  root?: Element | null;
   onLoadMore: () => void;
 };
 
@@ -13,6 +14,7 @@ export function useInfiniteScroll({
   enabled = true,
   hasNextPage = false,
   isFetching = false,
+  root = null,
   onLoadMore,
 }: Props) {
   const ref = useRef<HTMLDivElement | null>(null);
@@ -26,17 +28,21 @@ export function useInfiniteScroll({
     if (!ref.current) return;
     const target = ref.current;
 
-    const observer = new IntersectionObserver((entries) => {
-      const [entry] = entries;
-      if (entry.isIntersecting) {
-        callback();
-      }
-    });
+    const observer = new IntersectionObserver(
+      (entries) => {
+        const [entry] = entries;
+        if (!entry) return;
+        if (entry.isIntersecting) {
+          callback();
+        }
+      },
+      { root },
+    );
 
     observer.observe(target);
 
     return () => observer.unobserve(target);
-  }, [callback]);
+  }, [callback, root]);
 
   return ref;
 }

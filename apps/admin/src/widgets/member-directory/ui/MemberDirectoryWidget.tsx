@@ -33,7 +33,7 @@ export const MemberDirectoryWidget = ({ keyword }: MemberDirectoryWidgetProps) =
       />
 
       {/* 기수별 멤버 목록 아코디언 리스트 */}
-      <MemberGenerationAccordionList generations={data.generations} />
+      <MemberGenerationAccordionList generations={data.generations} keyword={keyword} />
     </div>
   );
 };

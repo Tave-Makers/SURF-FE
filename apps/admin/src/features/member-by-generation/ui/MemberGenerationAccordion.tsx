@@ -1,11 +1,13 @@
 'use client';
 
 import { useInfiniteScroll } from '@surf/hooks';
-import { useCallback, useState } from 'react';
+import { Accordion } from '@surf/ui/accordion';
+import { useState } from 'react';
 import type { ReactNode } from 'react';
 import { useMemberBaseListQuery } from '@/entities/member/model/queries/useMemberBaseListQuery';
 import type { MemberBase } from '@/entities/member/model/types';
-import { MemberGenerationAccordion } from '@/entities/member/ui/MemberGenerationAccordion';
+
+import { MemberList } from '@/entities/member/ui/MemberList';
 import { useMembersByGenerationInfiniteQuery } from '@/features/member-by-generation/model/useMembersByGenerationInfiniteQuery';
 
 type Props = {
@@ -15,12 +17,7 @@ type Props = {
   renderItem: (m: MemberBase) => ReactNode;
 };
 
-export const MemberGenerationAccordionInfinite = ({
-  generation,
-  label,
-  keyword,
-  renderItem,
-}: Props) => {
+export const MemberGenerationAccordion = ({ generation, label, keyword, renderItem }: Props) => {
   const [open, setOpen] = useState(false);
   const [contentRoot, setContentRoot] = useState<HTMLDivElement | null>(null);
 
@@ -33,16 +30,13 @@ export const MemberGenerationAccordionInfinite = ({
 
   const { members, isHydrated } = useMemberBaseListQuery(memberIds);
 
-  const onToggle = useCallback(
-    (nextOpen: boolean) => {
-      // 다시 열 때 이전 스크롤 위치가 유지되면 footer가 바로 보일 수 있어 상단으로 리셋
-      if (nextOpen && contentRoot) {
-        contentRoot.scrollTop = 0;
-      }
-      setOpen(nextOpen);
-    },
-    [contentRoot],
-  );
+  const onToggle = (nextOpen: boolean) => {
+    // 다시 열 때 이전 스크롤 위치가 유지되면 footer가 바로 보일 수 있어 상단으로 리셋
+    if (nextOpen && contentRoot) {
+      contentRoot.scrollTop = 0;
+    }
+    setOpen(nextOpen);
+  };
 
   const triggerRef = useInfiniteScroll({
     enabled: open && Boolean(contentRoot),
@@ -55,25 +49,20 @@ export const MemberGenerationAccordionInfinite = ({
   });
 
   return (
-    <MemberGenerationAccordion
-      generation={generation}
-      label={label}
-      members={members}
-      isLoading={open && (isLoading || !isHydrated)}
-      contentRef={setContentRoot}
-      contentClassName="max-h-[56vh] overflow-y-auto"
-      renderItem={renderItem}
-      onToggle={onToggle}
-      footer={
-        <>
-          <div ref={triggerRef} className="h-10" />
-          {isFetchingNextPage && (
-            <div className="flex justify-center py-4">
-              <div className="h-6 w-6 animate-spin rounded-full border-b-2 border-blue-600" />
-            </div>
-          )}
-        </>
-      }
-    />
+    <Accordion title={label ?? `${generation}기`} onToggle={onToggle}>
+      <div ref={setContentRoot} className="max-h-[36vh] overflow-y-auto">
+        <MemberList
+          members={members}
+          isLoading={open && (isLoading || !isHydrated)}
+          renderItem={renderItem}
+        />
+        <div ref={triggerRef} className="h-10" />
+        {isFetchingNextPage && (
+          <div className="flex justify-center py-4">
+            <div className="h-6 w-6 animate-spin rounded-full border-b-2 border-blue-600" />
+          </div>
+        )}
+      </div>
+    </Accordion>
   );
 };

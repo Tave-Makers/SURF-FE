@@ -1,7 +1,7 @@
 import { Avatar } from '@surf/ui/avatar';
 import { RoleBadge } from '@/entities/member/ui/RoleBadge';
 import { SelectableMemberCard } from '@/entities/member/ui/SelectableMemberCard';
-import { MemberGenerationAccordionInfinite } from '@/features/member-by-generation/ui/MemberGenerationAccordionInfinite';
+import { MemberGenerationAccordion } from '@/features/member-by-generation/ui/MemberGenerationAccordion';
 
 export interface MemberGenerationAccordionListProps {
   generations: number[];
@@ -21,7 +21,7 @@ export const MemberGenerationAccordionList = ({
   return (
     <div className="scrollbar-hide flex-1 overflow-y-auto">
       {generations.map((generation) => (
-        <MemberGenerationAccordionInfinite
+        <MemberGenerationAccordion
           key={generation}
           generation={generation}
           label={`${generation}기`}

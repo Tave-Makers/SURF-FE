@@ -77,7 +77,6 @@ export const useBannerEdit = (bannerId: string, initialData: Banner[]) => {
 
       console.log('배너 수정 API 호출:', payload);
       // TODO: await updateBanner(payload);
-      showToast('배너가 수정되었습니다.');
       router.replace(PAGE_ROUTES.BANNER.LIST);
     } catch {
       showToast('배너 수정에 실패했습니다.');

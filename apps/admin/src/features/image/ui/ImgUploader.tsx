@@ -98,7 +98,7 @@ export const ImgUploader = ({
       >
         {hasImage ? (
           <>
-            <Image src={displayUrl} alt="banner" className="object-cover" />
+            <Image src={displayUrl} alt="banner" className="object-cover" fill />
 
             {/* 수정 모드 오버레이 */}
             {showOverlayText && (

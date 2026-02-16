@@ -4,20 +4,34 @@ import { HeaderMode } from '@surf/ui/header';
 import { PostFab } from '@surf/ui/post-fab';
 import { useRouter } from 'next/navigation';
 import { useState } from 'react';
+import { Banner } from '@/entities/banner/model/types';
 import { PAGE_ROUTES } from '@/shared/config/path';
-import { BannerListWidget } from '@/widgets/banner/BannerListWidget';
+import { BannerListWidget } from '@/widgets/banner/ui/BannerListWidget';
 import { AppHeader } from '@/widgets/header/ui/AppHeader';
 
 export const BannerPage = () => {
   const MOCK_DATA = [
-    { id: 1, name: '배너 1', imageUrl: '', isActive: true, linkUrl: '' },
-    { id: 2, name: '배너 2', imageUrl: '', isActive: true, linkUrl: '' },
-    { id: 3, name: '배너 3', imageUrl: '', isActive: false, linkUrl: '' },
-    { id: 4, name: '배너 4', imageUrl: '', isActive: true, linkUrl: '' },
+    { id: 1, name: '배너 1', imageUrl: '', isActive: true, linkUrl: '', displayOrder: 1 },
+    { id: 2, name: '배너 2', imageUrl: '', isActive: true, linkUrl: '', displayOrder: 2 },
+    { id: 3, name: '배너 3', imageUrl: '', isActive: false, linkUrl: '', displayOrder: 3 },
+    { id: 4, name: '배너 4', imageUrl: '', isActive: true, linkUrl: '', displayOrder: 4 },
   ];
 
   const router = useRouter();
   const [isReorderMode, setIsReorderMode] = useState(false);
+  // 위젯에서 변경된 최신 순서 데이터 상태
+  const [tempBanners, setTempBanners] = useState<Banner[]>(MOCK_DATA);
+
+  // const handleSaveOrder = async () => {
+  const handleSaveOrder = () => {
+    // TODO: updateBannerOrder(tempBanners.map(({ id, displayOrder }) => ({ id, displayOrder })))
+    console.log(
+      '서버에 저장될 최종 순서:',
+      tempBanners.map((b) => ({ id: b.id, order: b.displayOrder })),
+    );
+
+    setIsReorderMode(false);
+  };
 
   return (
     <>
@@ -29,20 +43,30 @@ export const BannerPage = () => {
           btnVariant: isReorderMode ? 'primary' : 'secondary',
           hasLeftIcon: true,
           onClickTextBtn() {
-            setIsReorderMode((prev) => !prev);
+            if (isReorderMode) {
+              handleSaveOrder();
+            } else {
+              setIsReorderMode(true);
+            }
           },
         }}
       />
       <div className="flex h-full w-full flex-col">
-        <BannerListWidget initialBanners={MOCK_DATA} isReorderMode={isReorderMode} />
+        <BannerListWidget
+          initialBanners={MOCK_DATA}
+          isReorderMode={isReorderMode}
+          onBannersChange={setTempBanners}
+        />
 
-        <div className="pointer-events-none fixed inset-0 z-50">
-          <div className="relative mx-auto h-full sm:max-w-[min(100dvw,calc(100dvh*375/812))]">
-            <div className="pointer-events-auto absolute right-15 bottom-15">
-              <PostFab onClick={() => router.push(PAGE_ROUTES.BANNER.CREATE)} />
+        {!isReorderMode && (
+          <div className="pointer-events-none fixed inset-0 z-50">
+            <div className="relative mx-auto h-full sm:max-w-[min(100dvw,calc(100dvh*375/812))]">
+              <div className="pointer-events-auto absolute right-15 bottom-15">
+                <PostFab onClick={() => router.push(PAGE_ROUTES.BANNER.CREATE)} />
+              </div>
             </div>
           </div>
-        </div>
+        )}
       </div>
     </>
   );

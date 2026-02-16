@@ -11,11 +11,19 @@ import { BannerFilter } from '@/features/banner/ui/BannerFilter';
 interface BannerListWidgetProps {
   initialBanners: Banner[];
   isReorderMode: boolean;
+  // 순서가 변경될 때마다 부모에게 최신 리스트 전달
+  onBannersChange?: (updatedBanners: Banner[]) => void;
 }
 
-export const BannerListWidget = ({ initialBanners, isReorderMode }: BannerListWidgetProps) => {
+export const BannerListWidget = ({
+  initialBanners,
+  isReorderMode,
+  onBannersChange,
+}: BannerListWidgetProps) => {
   const router = useRouter();
-  const [banners, setBanners] = useState<Banner[]>(initialBanners);
+  const [banners, setBanners] = useState<Banner[]>(() =>
+    [...initialBanners].sort((a, b) => a.displayOrder - b.displayOrder),
+  );
   const [filter, setFilter] = useState<BannerFilterType>('all');
 
   const filteredBanners = useMemo(() => {
@@ -35,22 +43,32 @@ export const BannerListWidget = ({ initialBanners, isReorderMode }: BannerListWi
   const handleReorder = (from: number, to: number) => {
     const nextFiltered = reorderArray(filteredBanners, from, to);
 
+    let nextAllBanners: Banner[] = [];
+
+    // 필터 상태에 따라 전체 리스트 재구성
     if (filter === 'all') {
-      setBanners(nextFiltered);
-      return;
+      nextAllBanners = nextFiltered;
+    } else {
+      const movedIds = new Set(nextFiltered.map((b) => b.id));
+      const rest = banners.filter((b) => !movedIds.has(b.id));
+
+      if (filter === 'active') {
+        const inactive = rest.filter((b) => !b.isActive);
+        nextAllBanners = [...nextFiltered, ...inactive];
+      } else {
+        const active = rest.filter((b) => b.isActive);
+        nextAllBanners = [...active, ...nextFiltered];
+      }
     }
 
-    const movedIds = new Set(nextFiltered.map((b) => b.id));
-    const rest = banners.filter((b) => !movedIds.has(b.id));
+    // displayOrder 재할당
+    const updatedBanners = nextAllBanners.map((banner, index) => ({
+      ...banner,
+      displayOrder: index + 1,
+    }));
 
-    if (filter === 'active') {
-      const inactive = rest.filter((b) => !b.isActive);
-      setBanners([...nextFiltered, ...inactive]);
-      return;
-    }
-
-    const active = rest.filter((b) => b.isActive);
-    setBanners([...active, ...nextFiltered]);
+    setBanners(updatedBanners);
+    onBannersChange?.(updatedBanners);
   };
   return (
     <div className="flex flex-col">

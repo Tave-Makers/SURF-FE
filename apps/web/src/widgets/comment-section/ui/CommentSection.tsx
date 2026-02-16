@@ -171,11 +171,17 @@ export const CommentSection = ({ postId, memberId, scrollRootRef, onStartReply }
                           }
                         : undefined
                     }
-                    onLikeToggle={() =>
+                    onLikeToggle={() => {
+                      const nextState = c.liked ? 'off' : 'on';
+                      trackCommentEvent(COMMENT_EVENTS.LIKE, {
+                        target_type: 'comment',
+                        target_id: c.id,
+                        state: nextState,
+                      });
                       toggleLikeMutation.mutate(c.id, {
                         onError: () => showToast('좋아요 처리에 실패했어요'),
-                      })
-                    }
+                      });
+                    }}
                     onReplyClick={() =>
                       onStartReply({ commentId: c.id, memberId: c.memberId, nickname: c.nickname })
                     }

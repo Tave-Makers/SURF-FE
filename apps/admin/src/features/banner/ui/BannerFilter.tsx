@@ -1,8 +1,9 @@
 import { ChipToggle } from '@surf/ui/chip-toggle';
+import { BannerFilterType } from '../model/types';
 
 interface BannerFilterProps {
-  currentFilter: 'all' | 'active' | 'inactive';
-  onFilterChange: (filter: 'all' | 'active' | 'inactive') => void;
+  currentFilter: BannerFilterType;
+  onFilterChange: (filter: BannerFilterType) => void;
 }
 
 export const BannerFilter = ({ currentFilter, onFilterChange }: BannerFilterProps) => {

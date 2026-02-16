@@ -2,66 +2,22 @@
 
 import { HeaderMode } from '@surf/ui/header';
 import { PostFab } from '@surf/ui/post-fab';
-import { reorderArray } from '@surf/utils';
 import { useRouter } from 'next/navigation';
-import { useMemo, useState } from 'react';
-import { Banner } from '@/entities/banner/model/types';
-import { BannerDnd } from '@/entities/banner/ui/BannerDnd';
-import { BannerFilter } from '@/features/banner-filter/BannerFilter';
+import { useState } from 'react';
 import { PAGE_ROUTES } from '@/shared/config/path';
+import { BannerListWidget } from '@/widgets/banner/BannerListWidget';
 import { AppHeader } from '@/widgets/header/ui/AppHeader';
 
-type Filter = 'all' | 'active' | 'inactive';
-
 export const BannerPage = () => {
-  const [banners, setBanners] = useState<Banner[]>([
+  const MOCK_DATA = [
     { id: 1, name: '배너 1', imageUrl: '', isActive: true, linkUrl: '' },
     { id: 2, name: '배너 2', imageUrl: '', isActive: true, linkUrl: '' },
     { id: 3, name: '배너 3', imageUrl: '', isActive: false, linkUrl: '' },
     { id: 4, name: '배너 4', imageUrl: '', isActive: true, linkUrl: '' },
-  ]);
+  ];
 
   const router = useRouter();
   const [isReorderMode, setIsReorderMode] = useState(false);
-  const [filter, setFilter] = useState<Filter>('all');
-
-  const filteredBanners = useMemo(() => {
-    // 순서 변경 모드: 실제 순서 유지
-    if (isReorderMode) {
-      if (filter === 'active') return banners.filter((b) => b.isActive);
-      if (filter === 'inactive') return banners.filter((b) => !b.isActive);
-      return banners;
-    }
-
-    // 일반 모드: 전체는 활성 위/비활성 아래로 정렬
-    if (filter === 'active') return banners.filter((b) => b.isActive);
-    if (filter === 'inactive') return banners.filter((b) => !b.isActive);
-
-    const active = banners.filter((b) => b.isActive);
-    const inactive = banners.filter((b) => !b.isActive);
-    return [...active, ...inactive];
-  }, [banners, filter, isReorderMode]);
-
-  const handleReorder = (from: number, to: number) => {
-    const nextFiltered = reorderArray(filteredBanners, from, to);
-
-    if (filter === 'all') {
-      setBanners(nextFiltered);
-      return;
-    }
-
-    const movedIds = new Set(nextFiltered.map((b) => b.id));
-    const rest = banners.filter((b) => !movedIds.has(b.id));
-
-    if (filter === 'active') {
-      const inactive = rest.filter((b) => !b.isActive);
-      setBanners([...nextFiltered, ...inactive]);
-      return;
-    }
-
-    const active = rest.filter((b) => b.isActive);
-    setBanners([...active, ...nextFiltered]);
-  };
 
   return (
     <>
@@ -78,13 +34,7 @@ export const BannerPage = () => {
         }}
       />
       <div className="flex h-full w-full flex-col">
-        {!isReorderMode && <BannerFilter currentFilter={filter} onFilterChange={setFilter} />}
-        <BannerDnd
-          banners={filteredBanners}
-          isReorderMode={isReorderMode}
-          onReorder={handleReorder}
-          onClick={(id) => router.push(`/banner/edit/${id}`)}
-        />
+        <BannerListWidget initialBanners={MOCK_DATA} isReorderMode={isReorderMode} />
 
         <div className="pointer-events-none fixed inset-0 z-50">
           <div className="relative mx-auto h-full sm:max-w-[min(100dvw,calc(100dvh*375/812))]">

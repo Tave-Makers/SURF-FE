@@ -70,7 +70,7 @@ export type HeaderProps = (
 const renderLeftIcon = (hasLeftIcon?: boolean, onClickBack?: () => void) =>
   hasLeftIcon && (
     <button
-      className="cursor-pointer border-none bg-transparent p-8"
+      className="-m-8 shrink-0 border-none bg-transparent p-8"
       onClick={onClickBack}
       type="button"
     >
@@ -80,7 +80,7 @@ const renderLeftIcon = (hasLeftIcon?: boolean, onClickBack?: () => void) =>
 
 const renderTitle = (title?: string) =>
   title ? (
-    <div className="text-title-title1 text-foreground-normal leading-14! flex-1">{title}</div>
+    <div className="text-title-title1 text-foreground-normal leading-14! ml-8 flex-1">{title}</div>
   ) : null;
 
 const renderRightIcons = (icons: MaxThree<HeaderIcon> = []) => (
@@ -90,7 +90,7 @@ const renderRightIcons = (icons: MaxThree<HeaderIcon> = []) => (
         icon.label && (
           <button
             key={idx}
-            className="relative cursor-pointer border-none bg-transparent p-8"
+            className="relative -m-8 shrink-0 border-none bg-transparent p-8"
             onClick={icon.onClickIcon}
             type="button"
           >

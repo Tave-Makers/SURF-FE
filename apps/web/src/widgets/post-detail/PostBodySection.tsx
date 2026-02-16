@@ -9,6 +9,8 @@ import { PostScheduleData } from '@/entities/post/api/types';
 import { PostDetail } from '@/entities/post/model/types';
 import { PostImage } from '@/entities/post/ui/post-image/PostImage';
 import { PostProfile } from '@/entities/post/ui/post-profile/PostProfile';
+import { trackPostDetailEvent } from '@/features/post/lib/trackPostDetailEvent';
+import { POST_DETAIL_EVENTS } from '@/features/post/model/types';
 import { useToggleLikeMutation } from '@/features/post/model/useToggleLikeMutation';
 import { useToggleScrapMutation } from '@/features/post/model/useToggleScrapMutation';
 import { PAGE_ROUTES } from '@/shared/config/path';
@@ -30,6 +32,14 @@ export const PostBodySection = ({ post, schedule, onClickLikeCount }: PostBodySe
   const handleLikeToggle = () => {
     if (likeMutation.isPending) return;
 
+    const nextState = post.likedByMe ? 'off' : 'on';
+
+    trackPostDetailEvent(POST_DETAIL_EVENTS.LIKE, {
+      target_type: 'post',
+      target_id: post.postId,
+      state: nextState,
+    });
+
     likeMutation.mutate({
       postId: post.postId,
       liked: post.likedByMe,
@@ -39,6 +49,14 @@ export const PostBodySection = ({ post, schedule, onClickLikeCount }: PostBodySe
   // 스크랩 토글
   const handleScrapToggle = () => {
     if (scrapMutation.isPending) return;
+
+    const nextState = post.scrappedByMe ? 'off' : 'on';
+
+    trackPostDetailEvent(POST_DETAIL_EVENTS.SCRAP, {
+      target_type: 'post',
+      target_id: post.postId,
+      state: nextState,
+    });
 
     scrapMutation.mutate({
       postId: post.postId,

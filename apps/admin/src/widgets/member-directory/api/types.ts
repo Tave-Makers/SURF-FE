@@ -6,7 +6,6 @@ export interface GenerationResDTO {
 }
 
 export interface AdminTotalMemberListResDTO {
-  totalMemberCount?: number; //전체 회원 수
   generations?: GenerationResDTO[]; //기수 리스트
 }
 

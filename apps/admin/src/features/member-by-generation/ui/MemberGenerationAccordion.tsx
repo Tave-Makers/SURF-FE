@@ -2,7 +2,7 @@
 
 import { useInfiniteScroll } from '@surf/hooks';
 import { Accordion } from '@surf/ui/accordion';
-import { useState } from 'react';
+import { useRef, useState } from 'react';
 import type { ReactNode } from 'react';
 import { useMemberBaseListQuery } from '@/entities/member/model/queries/useMemberBaseListQuery';
 import type { MemberBase } from '@/entities/member/model/types';
@@ -19,7 +19,7 @@ type Props = {
 
 export const MemberGenerationAccordion = ({ generation, label, keyword, renderItem }: Props) => {
   const [open, setOpen] = useState(false);
-  const [contentRoot, setContentRoot] = useState<HTMLDivElement | null>(null);
+  const contentRef = useRef<HTMLDivElement>(null);
 
   //아코디언이 열리면 데이터 fetch
   const { memberIds, fetchNextPage, hasNextPage, isFetchingNextPage, isLoading } =
@@ -32,17 +32,16 @@ export const MemberGenerationAccordion = ({ generation, label, keyword, renderIt
 
   const onToggle = (nextOpen: boolean) => {
     // 다시 열 때 이전 스크롤 위치가 유지되면 footer가 바로 보일 수 있어 상단으로 리셋
-    if (nextOpen && contentRoot) {
-      contentRoot.scrollTop = 0;
+    if (nextOpen && contentRef.current) {
+      contentRef.current.scrollTop = 0;
     }
     setOpen(nextOpen);
   };
 
   const triggerRef = useInfiniteScroll({
-    enabled: open && Boolean(contentRoot),
-    root: contentRoot,
+    enabled: open,
     isFetching: isFetchingNextPage,
-    hasNextPage: open && Boolean(hasNextPage),
+    hasNextPage: Boolean(hasNextPage),
     onLoadMore: () => {
       void fetchNextPage();
     },
@@ -50,7 +49,7 @@ export const MemberGenerationAccordion = ({ generation, label, keyword, renderIt
 
   return (
     <Accordion title={label ?? `${generation}기`} onToggle={onToggle}>
-      <div ref={setContentRoot} className="max-h-[36vh] overflow-y-auto">
+      <div ref={contentRef} className="max-h-[36vh] overflow-y-auto">
         <MemberList
           members={members}
           isLoading={open && (isLoading || !isHydrated)}

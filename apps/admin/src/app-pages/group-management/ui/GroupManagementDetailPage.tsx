@@ -42,7 +42,7 @@ export const GroupManagementDetailPage = ({ mode }: GroupManagementDetailPagePro
   const [groupIntroduction, setGroupIntroduction] = useState('');
 
   // TODO : API 연동 후 mockData 제거
-  const { leader, members, removeMember } = useGroupMembersField({
+  const { leader, members, pickLeader, removeMember } = useGroupMembersField({
     leader: mockLeader,
     members: mockMembers,
   });
@@ -75,8 +75,16 @@ export const GroupManagementDetailPage = ({ mode }: GroupManagementDetailPagePro
   };
 
   const openPickLeaderBottomSheet = () => {
-    // 오픈 바텀 시트
-    // 선택 완료 시 pickLeader 호출
+    openBottomSheet({
+      type: 'pickLeader',
+      props: {
+        members: members,
+        onSelect: (member) => {
+          pickLeader(member);
+          closeBottomSheet();
+        },
+      },
+    });
   };
 
   const handleAddMembers = () => {

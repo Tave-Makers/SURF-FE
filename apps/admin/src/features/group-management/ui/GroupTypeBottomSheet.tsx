@@ -38,7 +38,7 @@ export const GroupTypeBottomSheet = ({
                 key={value}
                 type="button"
                 onClick={() => onSelect(value)}
-                className={`rounded-md px-12 py-10 text-left transition-colors ${
+                className={`text-body-body6 text-foreground-normal rounded-md px-12 py-10 text-left transition-colors ${
                   groupType === value
                     ? 'bg-background-secondary font-semibold'
                     : 'hover:bg-background-secondary'
@@ -50,8 +50,6 @@ export const GroupTypeBottomSheet = ({
           </div>
         </ModalSheet.Content>
       </ModalSheet.Container>
-
-      {/* 타입 에러 나면 onClick으로 교체 */}
       <ModalSheet.Backdrop onTap={onClose} />
     </ModalSheet>
   );

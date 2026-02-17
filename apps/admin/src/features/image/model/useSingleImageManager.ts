@@ -32,14 +32,15 @@ export function useSingleImageUpload() {
       try {
         const [result] = await uploadImages([uploadItem], (progress) => {
           const p = progress[0];
-          setImage((prev) => (prev ? { ...prev, ...p, preview: prev.preview } : p));
+          setImage((prev) => (prev?.id === id ? { ...prev, ...p, preview: prev.preview } : prev));
         });
 
-        setImage((prev) => (prev ? { ...prev, ...result, preview: prev.preview } : result));
-
+        setImage((prev) =>
+          prev?.id === id ? { ...prev, ...result, preview: prev.preview } : prev,
+        );
         return result.uploadedUrl ?? '';
       } catch {
-        setImage((prev) => (prev ? { ...prev, status: 'error' } : null));
+        setImage((prev) => (prev?.id === id ? { ...prev, status: 'error' } : prev));
         return '';
       }
     },

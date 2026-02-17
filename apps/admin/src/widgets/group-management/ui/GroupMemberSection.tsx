@@ -4,8 +4,7 @@ import { FieldGroup } from '@surf/ui/field-group';
 import { MemberBase } from '@/entities/member/model/types';
 import { MemberCardBase } from '@/entities/member/ui/MemberCardBase';
 import { RemovableMemberCard } from '@/entities/member/ui/RemovableMemberCard/RemovableMemberCard';
-
-export type GroupManagementMode = 'view' | 'edit' | 'create';
+import { GroupManagementMode } from '@/widgets/group-management/model/types';
 
 interface GroupMemberSectionProps {
   mode: GroupManagementMode;

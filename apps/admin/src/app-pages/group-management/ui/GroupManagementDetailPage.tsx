@@ -8,10 +8,8 @@ import {
 } from '@/app-pages/group-management/model/mapper';
 import { mockLeader, mockMembers } from '@/app-pages/group-management/model/mock';
 import { useGroupMembersField } from '@/features/group-management/model/useGroupMembersField';
-import {
-  GroupManagementMode,
-  GroupMemberSection,
-} from '@/widgets/group-management/ui/GroupMemberSection';
+import { GroupManagementMode } from '@/widgets/group-management/model/types';
+import { GroupMemberSection } from '@/widgets/group-management/ui/GroupMemberSection';
 import { AppHeader } from '@/widgets/header/ui/AppHeader';
 
 interface GroupManagementDetailPageProps {

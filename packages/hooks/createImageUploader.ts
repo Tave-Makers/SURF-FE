@@ -27,7 +27,7 @@ export function createImageUploader({ fetchPresignedUrls, bucketUrl }: createIma
       // 확장자가 없거나 이상한 경우 → MIME 타입 기반
       if (!ext) {
         const mimeExt = file.type.split('/')[1];
-        ext = mimeExt || 'jpg';
+        ext = mimeExt?.split('+')[0] || 'jpg';
       }
 
       return `${safeUUID()}.${ext}`;
@@ -62,7 +62,10 @@ export function createImageUploader({ fetchPresignedUrls, bucketUrl }: createIma
       images: UploadImage[],
       onProgress?: (updated: UploadImage[]) => void,
     ): Promise<UploadImage[]> => {
-      // Deep copy
+      if (!bucketUrl) {
+        throw new Error('NEXT_PUBLIC_S3_BUCKET_URL 환경 변수가 설정되지 않았습니다.');
+      }
+
       let updated = [...images];
 
       // 1) S3에 저장될 파일명 생성
@@ -82,10 +85,6 @@ export function createImageUploader({ fetchPresignedUrls, bucketUrl }: createIma
         key: presignedItems[idx].key,
       }));
       onProgress?.(updated);
-
-      if (!bucketUrl) {
-        throw new Error('NEXT_PUBLIC_S3_BUCKET_URL 환경 변수가 설정되지 않았습니다.');
-      }
 
       // 4) presigned URL로 병렬 업로드
       const uploadPromises = updated.map(async (img, idx) => {

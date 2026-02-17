@@ -82,11 +82,22 @@ export const BannerDnd = ({ banners, isReorderMode, onReorder, onClick }: Banner
 
       <DragOverlay>
         {isReorderMode && activeBanner ? (
-          <div className="cursor-grabbing opacity-80">
-            <SortableBanner
-              banner={activeBanner}
+          <div className="flex cursor-grabbing gap-10 pl-14 opacity-80">
+            <button
+              className="cursor-grab"
+              onClick={(e) => {
+                e.stopPropagation();
+              }}
+            >
+              <SurfIcon name="Menu" />
+            </button>
+            <ContentItem
+              id={activeBanner.id}
+              imageUrl={activeBanner.imageUrl}
+              name={activeBanner.name}
               isReorderMode={isReorderMode}
-              onClick={() => {}}
+              hasThumbnail
+              badge={{ kind: 'active', active: activeBanner.isActive }}
             />
           </div>
         ) : null}
@@ -160,6 +171,7 @@ const SortableBanner = React.memo(
     prev.banner.name === next.banner.name &&
     prev.banner.imageUrl === next.banner.imageUrl &&
     prev.banner.isActive === next.banner.isActive &&
+    prev.isReorderMode === next.isReorderMode &&
     prev.onClick === next.onClick,
 );
 

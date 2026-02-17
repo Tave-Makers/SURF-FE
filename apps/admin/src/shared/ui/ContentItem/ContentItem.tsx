@@ -2,7 +2,7 @@ import Image from 'next/image';
 
 import DEFAULT_BANNER_IMAGE from '@/shared/assets/images/banner/banner-default-item.png';
 import { ContentsType } from '@/shared/types/contents';
-import { ContentActiveBadge } from '@/shared/ui/ContentActiveBadge';
+import { ContentActiveBadge } from '@/shared/ui/ContentItem/ContentActiveBadge';
 import { ContentBadge } from '@/shared/ui/ContentBadge';
 
 type BadgeSpec = { kind: 'contents'; type: ContentsType } | { kind: 'active'; active: boolean };

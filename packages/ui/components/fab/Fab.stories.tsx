@@ -1,9 +1,9 @@
 import type { Meta, StoryObj } from '@storybook/nextjs';
-import { PostFab } from './PostFab';
+import { Fab } from './Fab';
 
 const meta = {
-  title: 'Shared/UI/PostFab',
-  component: PostFab,
+  title: 'Shared/UI/Fab',
+  component: Fab,
   tags: ['autodocs'],
   parameters: {
     docs: {
@@ -20,7 +20,7 @@ const meta = {
       table: { category: 'Events' },
     },
   },
-} satisfies Meta<typeof PostFab>;
+} satisfies Meta<typeof Fab>;
 
 export default meta;
 type Story = StoryObj<typeof meta>;
@@ -33,7 +33,7 @@ export const WithClickAction: Story = {
   name: 'With click action',
   args: {
     onClick: () => {
-      alert('PostFab 클릭!');
+      alert('Fab 클릭!');
     },
   },
   parameters: {

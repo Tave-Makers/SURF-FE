@@ -1,6 +1,6 @@
 'use client';
 
-import { PostFab } from '@surf/ui/post-fab';
+import { Fab } from '@surf/ui/fab';
 import { useRouter } from 'next/navigation';
 import { useSearchParams } from 'next/navigation';
 import { useState } from 'react';
@@ -44,7 +44,7 @@ export const CalendarPage = () => {
 
       {memberRole !== 'member' && (
         <div className="absolute right-15 bottom-15 z-50">
-          <PostFab onClick={handleCreateSchedule} />
+          <Fab onClick={handleCreateSchedule} />
         </div>
       )}
     </div>

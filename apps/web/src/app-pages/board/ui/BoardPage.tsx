@@ -1,7 +1,7 @@
 'use client';
 
+import { Fab } from '@surf/ui/fab';
 import { HeaderMode } from '@surf/ui/header';
-import { PostFab } from '@surf/ui/post-fab';
 import { Tab } from '@surf/ui/tab';
 import { useSearchParams, useRouter } from 'next/navigation';
 import { POST_BOARDS } from '@/entities/post/model/board';
@@ -75,7 +75,7 @@ const BoardPage = ({ boardId: boardIdProp }: { boardId: string }) => {
         <div className="pointer-events-none fixed inset-0 z-50">
           <div className="relative mx-auto h-full sm:max-w-[min(100dvw,calc(100dvh*375/812))]">
             <div className="pointer-events-auto absolute right-15 bottom-15">
-              <PostFab onClick={handlePostClick} />
+              <Fab onClick={handlePostClick} />
             </div>
           </div>
         </div>

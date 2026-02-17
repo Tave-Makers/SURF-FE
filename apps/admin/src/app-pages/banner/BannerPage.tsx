@@ -1,7 +1,6 @@
 'use client';
-
+import { Fab } from '@surf/ui/fab';
 import { HeaderMode } from '@surf/ui/header';
-import { PostFab } from '@surf/ui/post-fab';
 import { useRouter } from 'next/navigation';
 import { useState } from 'react';
 import { Banner } from '@/entities/banner/model/types';
@@ -62,7 +61,7 @@ export const BannerPage = () => {
           <div className="pointer-events-none fixed inset-0 z-50">
             <div className="relative mx-auto h-full sm:max-w-[min(100dvw,calc(100dvh*375/812))]">
               <div className="pointer-events-auto absolute right-15 bottom-15">
-                <PostFab onClick={() => router.push(PAGE_ROUTES.BANNER.CREATE)} />
+                <Fab onClick={() => router.push(PAGE_ROUTES.BANNER.CREATE)} />
               </div>
             </div>
           </div>

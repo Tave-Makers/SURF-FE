@@ -144,12 +144,13 @@ const SortableBanner = React.memo(
         )}
 
         <ContentItem
+          id={banner.id}
           imageUrl={banner.imageUrl}
           name={banner.name}
           isReorderMode={isReorderMode}
           hasThumbnail
           badge={{ kind: 'active', active: banner.isActive }}
-          onClick={() => onClick?.(banner.id)}
+          onClick={onClick}
         />
       </div>
     );

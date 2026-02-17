@@ -6,12 +6,13 @@ import { ContentActiveBadge } from '@/shared/ui/ContentActiveBadge';
 type BadgeSpec = { kind: 'contents'; type: ContentsType } | { kind: 'active'; active: boolean };
 
 interface ContentItemProps {
+  id: number;
   imageUrl?: string;
   name: string;
   isReorderMode: boolean;
   badge?: BadgeSpec;
   hasThumbnail?: boolean;
-  onClick: () => void;
+  onClick?: (id: number) => void;
 }
 
 function renderBadge(badge?: BadgeSpec) {
@@ -27,6 +28,7 @@ function renderBadge(badge?: BadgeSpec) {
 }
 
 export const ContentItem = ({
+  id,
   imageUrl,
   name,
   badge,
@@ -38,7 +40,7 @@ export const ContentItem = ({
   return (
     <button
       className={`flex w-full min-w-0 items-center gap-10 px-14 py-11 text-left ${isReorderMode ? 'pl-0' : ''}`}
-      onClick={onClick}
+      onClick={() => onClick?.(id)}
       disabled={isReorderMode}
       type="button"
     >

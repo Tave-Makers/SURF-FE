@@ -9,6 +9,7 @@ import {
 } from '@/app-pages/group-management/model/mapper';
 import { mockLeader, mockMembers } from '@/app-pages/group-management/model/mock';
 import { useGroupMembersField } from '@/features/group-management/model/useGroupMembersField';
+import { useBottomSheetStore } from '@/shared/store/bottomSheetStore';
 import { ContentsType } from '@/shared/types/contents';
 import { GroupManagementMode } from '@/widgets/group-management/model/types';
 import { GroupInfoSection } from '@/widgets/group-management/ui/GroupInfoSection';
@@ -18,6 +19,8 @@ import { AppHeader } from '@/widgets/header/ui/AppHeader';
 interface GroupManagementDetailPageProps {
   mode: GroupManagementMode;
 }
+
+export const CURRENT_GENERATION = 17; // TODO: API로 가장 최근 기수 받아오기
 
 export const GroupManagementDetailPage = ({ mode }: GroupManagementDetailPageProps) => {
   const router = useRouter();
@@ -30,8 +33,11 @@ export const GroupManagementDetailPage = ({ mode }: GroupManagementDetailPagePro
   };
   const headerProps = mapModeToHeaderProps({ mode, onClickEdit: handleSwitchToEdit });
 
-  const [generation, _setGeneration] = useState<number>(17); // TODO: 가장 최근 기수 API로 초기값 설정
-  const [groupType, _setGroupType] = useState<ContentsType>('study');
+  const openBottomSheet = useBottomSheetStore((s) => s.open);
+  const closeBottomSheet = useBottomSheetStore((s) => s.close);
+
+  const [generation, setGeneration] = useState<number>(CURRENT_GENERATION);
+  const [groupType, setGroupType] = useState<ContentsType>('study');
   const [groupName, setGroupName] = useState('');
   const [groupIntroduction, setGroupIntroduction] = useState('');
 
@@ -42,11 +48,30 @@ export const GroupManagementDetailPage = ({ mode }: GroupManagementDetailPagePro
   });
 
   const openGenerationBottomSheet = () => {
-    // 기수 선택 바텀시트 오픈
+    openBottomSheet({
+      type: 'generation',
+      props: {
+        maxGeneration: CURRENT_GENERATION,
+        selectedGeneration: generation,
+        onSelect: (val) => {
+          setGeneration(val);
+          closeBottomSheet();
+        },
+      },
+    });
   };
 
   const openGroupTypeBottomSheet = () => {
-    // 그룹 유형 선택 바텀시트 오픈
+    openBottomSheet({
+      type: 'groupType',
+      props: {
+        groupType: groupType,
+        onSelect: (val) => {
+          setGroupType(val);
+          closeBottomSheet();
+        },
+      },
+    });
   };
 
   const openPickLeaderBottomSheet = () => {

@@ -1,3 +1,4 @@
+import { GenerationBottomSheet } from '@/features/group-management/ui/GenerationBottomSheet';
 import { SignupRequestBottomSheet } from '@/features/signup-request/ui/SignupRequestBottomSheet';
 import type { BottomSheetMap, BottomSheetType } from '@/shared/store/bottomSheetStore';
 import { MemberManagementSheet } from '@/widgets/member-management-sheet/MemberManagementSheet';
@@ -15,4 +16,5 @@ type BottomSheetComponents = {
 export const SHEET_COMPONENTS = {
   signup: SignupRequestBottomSheet,
   member: MemberManagementSheet,
+  generation: GenerationBottomSheet,
 } satisfies BottomSheetComponents;

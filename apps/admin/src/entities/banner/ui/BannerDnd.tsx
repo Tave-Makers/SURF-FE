@@ -21,7 +21,7 @@ import { CSS } from '@dnd-kit/utilities';
 import { SurfIcon } from '@surf/ui/icon';
 import React, { useState } from 'react';
 import type { Banner } from '../model/types';
-import { ContentItem } from '@/shared/ui/ContentItem';
+import { ContentItem } from '@/shared/ui/content-item';
 
 type BannerDndProps = {
   banners: Banner[];

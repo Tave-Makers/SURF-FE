@@ -22,7 +22,6 @@ export const FilterWidget = ({ filter, onChange }: Props) => {
           highlightType="toggle"
           isClicked={filter === value}
           onToggleIcon={() => onChange(value)}
-          activeColor="blue"
         >
           {label}
         </ChipToggle>

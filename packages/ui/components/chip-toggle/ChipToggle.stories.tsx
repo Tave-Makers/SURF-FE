@@ -146,13 +146,7 @@ export const ScrapButton: Story = {
     };
 
     return (
-      <ChipToggle
-        {...args}
-        isClicked={clicked}
-        count={count}
-        onToggleIcon={handleToggle}
-        activeColor="blue"
-      >
+      <ChipToggle {...args} isClicked={clicked} count={count} onToggleIcon={handleToggle}>
         스크랩
       </ChipToggle>
     );
@@ -162,6 +156,7 @@ export const ScrapButton: Story = {
     isClicked: false,
     count: 42,
     mode: 'text',
+    activeColor: 'blue',
   },
 };
 
@@ -183,7 +178,6 @@ export const ToggleHighlight: Story = {
   },
   args: {
     isClicked: false,
-    activeColor: 'blue',
     mode: 'text',
   },
 };

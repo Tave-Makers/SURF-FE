@@ -1,34 +1,66 @@
-import { Accordion } from '@surf/ui/accordion';
-import { MemberBase } from '@/entities/member/model/types';
+'use client';
 
-export const MemberGenerationAccordion = ({
-  generation,
-  renderItem,
-}: {
+import { useInfiniteScroll } from '@surf/hooks';
+import { Accordion } from '@surf/ui/accordion';
+import { useRef, useState } from 'react';
+import type { ReactNode } from 'react';
+import { useMemberBaseListQuery } from '@/entities/member/model/queries/useMemberBaseListQuery';
+import type { MemberBase } from '@/entities/member/model/types';
+
+import { MemberList } from '@/entities/member/ui/MemberList';
+import { useMembersByGenerationInfiniteQuery } from '@/features/member-by-generation/model/useMembersByGenerationInfiniteQuery';
+
+type Props = {
   generation: number;
-  renderItem: (member: MemberBase) => React.ReactNode;
-}) => {
-  const m: MemberBase = {
-    id: 1,
-    name: '테이비',
-    role: 'MEMBER',
-    status: 'approve',
-    tracks: [
-      {
-        generation: 12,
-        part: 'APP_FRONTEND',
-      },
-    ],
-    university: '서울과기대',
-    profileImageUrl: '',
-    registeredAt: '',
+  label?: string;
+  keyword?: string;
+  renderItem: (m: MemberBase) => ReactNode;
+};
+
+export const MemberGenerationAccordion = ({ generation, label, keyword, renderItem }: Props) => {
+  const [open, setOpen] = useState(false);
+  const contentRef = useRef<HTMLDivElement>(null);
+
+  //아코디언이 열리면 데이터 fetch
+  const { memberIds, fetchNextPage, hasNextPage, isFetchingNextPage, isLoading } =
+    useMembersByGenerationInfiniteQuery({
+      filters: { generation, keyword },
+      enabled: open,
+    });
+
+  const { members, isHydrated } = useMemberBaseListQuery(memberIds);
+
+  const onToggle = (nextOpen: boolean) => {
+    // 다시 열 때 이전 스크롤 위치가 유지되면 footer가 바로 보일 수 있어 상단으로 리셋
+    if (nextOpen && contentRef.current) {
+      contentRef.current.scrollTop = 0;
+    }
+    setOpen(nextOpen);
   };
 
-  //TODO: 배열 기반 렌더링으로 변경
+  const triggerRef = useInfiniteScroll({
+    enabled: open,
+    isFetching: isFetchingNextPage,
+    hasNextPage: Boolean(hasNextPage),
+    onLoadMore: () => {
+      void fetchNextPage();
+    },
+  });
+
   return (
-    <Accordion title={`${generation}기`}>
-      <div>
-        <div key={m.id}>{renderItem(m)}</div>
+    <Accordion title={label ?? `${generation}기`} onToggle={onToggle}>
+      <div ref={contentRef} className="max-h-[36vh] overflow-y-auto">
+        <MemberList
+          members={members}
+          isLoading={open && (isLoading || !isHydrated)}
+          renderItem={renderItem}
+        />
+        <div ref={triggerRef} className="h-10" />
+        {isFetchingNextPage && (
+          <div className="flex justify-center py-4">
+            <div className="h-6 w-6 animate-spin rounded-full border-b-2 border-blue-600" />
+          </div>
+        )}
       </div>
     </Accordion>
   );

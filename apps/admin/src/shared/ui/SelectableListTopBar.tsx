@@ -25,10 +25,11 @@ export const SelectableListTopBar = ({
 }: SelectableListTopBarProps) => {
   if (mode === 'select') {
     return (
-      <div className="flex w-full flex-row items-center justify-between px-16 py-10">
+      <div className="border-b-border-normal flex w-full flex-row items-center justify-between border-b px-13 py-10">
         <span className="text-body-body8 text-foreground-normal-lighter text-nowrap">
           {selectedCountLabel(selectedCount)}
         </span>
+
         <div className="inline-block">
           <TextButton type="button" size="s" variant="secondary" onClick={onExitSelectMode}>
             {cancelButtonLabel}
@@ -39,16 +40,18 @@ export const SelectableListTopBar = ({
   }
 
   return (
-    <div className="flex w-full flex-row items-center justify-between px-16 py-10">
+    <div className="border-b-border-normal flex w-full flex-row items-center justify-between border-b px-13 py-10">
       <span className="text-body-body8 text-foreground-normal-lighter text-nowrap">
         {viewCountLabel(totalCount)}
       </span>
 
-      <div className="inline-block">
-        <TextButton type="button" size="s" variant="primary" onClick={onEnterSelectMode}>
-          {selectButtonLabel}
-        </TextButton>
-      </div>
+      {totalCount > 0 && (
+        <div className="inline-block">
+          <TextButton type="button" size="s" variant="primary" onClick={onEnterSelectMode}>
+            {selectButtonLabel}
+          </TextButton>
+        </div>
+      )}
     </div>
   );
 };

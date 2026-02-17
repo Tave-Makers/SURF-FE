@@ -21,7 +21,6 @@ export const BannerFilter = ({ currentFilter, onFilterChange }: BannerFilterProp
           mode="text"
           highlightType="toggle"
           isClicked={currentFilter === opt.id}
-          activeColor="blue"
           onToggleIcon={() => onFilterChange(opt.id)}
         >
           {opt.label}

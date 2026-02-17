@@ -2,11 +2,17 @@
 
 import { reorderArray } from '@surf/utils';
 import { useRouter } from 'next/navigation';
-import { useMemo, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import { Banner } from '@/entities/banner/model/types';
 import { BannerDnd } from '@/entities/banner/ui/BannerDnd';
+import {
+  getGroupedByStatus,
+  mergeReorderedList,
+  reassignDisplayOrders,
+} from '@/features/banner/lib/bannerUtils';
 import { BannerFilterType } from '@/features/banner/model/types';
 import { BannerFilter } from '@/features/banner/ui/BannerFilter';
+import { PAGE_ROUTES } from '@/shared/config/path';
 
 interface BannerListWidgetProps {
   initialBanners: Banner[];
@@ -22,54 +28,31 @@ export const BannerListWidget = ({
 }: BannerListWidgetProps) => {
   const router = useRouter();
   const [banners, setBanners] = useState<Banner[]>(() =>
-    [...initialBanners].sort((a, b) => a.displayOrder - b.displayOrder),
+    reassignDisplayOrders([...initialBanners].sort((a, b) => a.displayOrder - b.displayOrder)),
   );
   const [filter, setFilter] = useState<BannerFilterType>('all');
 
   const filteredBanners = useMemo(() => {
-    if (isReorderMode) {
-      if (filter === 'active') return banners.filter((b) => b.isActive);
-      if (filter === 'inactive') return banners.filter((b) => !b.isActive);
-      return banners;
-    }
-    const active = banners.filter((b) => b.isActive);
-    const inactive = banners.filter((b) => !b.isActive);
-
-    if (filter === 'active') return active;
-    if (filter === 'inactive') return inactive;
-    return [...active, ...inactive];
+    const targetList = isReorderMode ? banners : getGroupedByStatus(banners);
+    if (filter === 'all') return targetList;
+    return targetList.filter((b) => (filter === 'active' ? b.isActive : !b.isActive));
   }, [banners, filter, isReorderMode]);
+
+  // 순서 변경 모드 진입 시 순서 동기화
+  useEffect(() => {
+    if (isReorderMode) {
+      setBanners((current) => reassignDisplayOrders(getGroupedByStatus(current)));
+    }
+  }, [isReorderMode]);
 
   const handleReorder = (from: number, to: number) => {
     const nextFiltered = reorderArray(filteredBanners, from, to);
-
-    let nextAllBanners: Banner[] = [];
-
-    // 필터 상태에 따라 전체 리스트 재구성
-    if (filter === 'all') {
-      nextAllBanners = nextFiltered;
-    } else {
-      const movedIds = new Set(nextFiltered.map((b) => b.id));
-      const rest = banners.filter((b) => !movedIds.has(b.id));
-
-      if (filter === 'active') {
-        const inactive = rest.filter((b) => !b.isActive);
-        nextAllBanners = [...nextFiltered, ...inactive];
-      } else {
-        const active = rest.filter((b) => b.isActive);
-        nextAllBanners = [...active, ...nextFiltered];
-      }
-    }
-
-    // displayOrder 재할당
-    const updatedBanners = nextAllBanners.map((banner, index) => ({
-      ...banner,
-      displayOrder: index + 1,
-    }));
-
-    setBanners(updatedBanners);
-    onBannersChange?.(updatedBanners);
+    const nextAll = mergeReorderedList(banners, nextFiltered, filter);
+    const updated = reassignDisplayOrders(nextAll);
+    setBanners(updated);
+    onBannersChange?.(updated);
   };
+
   return (
     <div className="flex flex-col">
       {!isReorderMode && <BannerFilter currentFilter={filter} onFilterChange={setFilter} />}
@@ -77,7 +60,7 @@ export const BannerListWidget = ({
         banners={filteredBanners}
         isReorderMode={isReorderMode}
         onReorder={handleReorder}
-        onClick={(id) => router.push(`/banner/edit/${id}`)}
+        onClick={(id) => router.push(PAGE_ROUTES.BANNER.EDIT(id))}
       />
     </div>
   );

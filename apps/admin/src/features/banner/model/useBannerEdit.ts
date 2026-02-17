@@ -89,7 +89,7 @@ export const useBannerEdit = (bannerId: string, initialData: Banner[]) => {
     openAlert({
       state: 'default',
       title: '수정하시겠습니까?',
-      infoText: '수정하기 버튼을 누를 시, 수정된 내용이  SURF의 홈 화면에 반영됩니다.',
+      infoText: '수정하기 버튼을 누를 시, 수정된 내용이 SURF의 홈 화면에 반영됩니다.',
       actions: [
         { type: 'solid', variant: 'secondary', label: '취소', onClick: closeAlert },
         {

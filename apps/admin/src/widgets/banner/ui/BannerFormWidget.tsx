@@ -6,14 +6,8 @@ import { FieldGroup } from '@surf/ui/field-group';
 import { TextArea } from '@surf/ui/text-area';
 import { Toggle } from '@surf/ui/toggle';
 import { useCallback } from 'react';
+import { BannerFormData } from '@/entities/banner/model/types';
 import { ImgUploader } from '@/features/image/ui/ImgUploader';
-
-export interface BannerFormData {
-  imageUrl: string;
-  name: string;
-  linkUrl: string;
-  isActive: boolean;
-}
 
 interface BannerFormWidgetProps {
   mode: 'create' | 'edit';

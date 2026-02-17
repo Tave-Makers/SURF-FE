@@ -5,19 +5,13 @@ import { useToastStore } from '@surf/ui/store/toastStore';
 import { safeUUID } from '@surf/utils';
 import { useRouter } from 'next/navigation';
 import { useCallback, useMemo, useState } from 'react';
+import { BannerFormData } from '@/entities/banner/model/types';
 import type { UploadImage } from '@/entities/image/model/types';
 import { useImageUploader } from '@/entities/image/model/useImageUploader';
 import { PAGE_ROUTES } from '@/shared/config/path';
 import { BannerFormWidget } from '@/widgets/banner/ui/BannerFormWidget';
 
-interface BannerCreateForm {
-  isActive: boolean;
-  imageUrl: string;
-  name: string;
-  linkUrl: string;
-}
-
-const INITIAL_FORM: BannerCreateForm = {
+const INITIAL_FORM: BannerFormData = {
   imageUrl: '',
   name: '',
   linkUrl: '',
@@ -27,7 +21,7 @@ const INITIAL_FORM: BannerCreateForm = {
 export const BannerCreatePage = () => {
   const router = useRouter();
 
-  const [form, setForm] = useState<BannerCreateForm>(INITIAL_FORM);
+  const [form, setForm] = useState<BannerFormData>(INITIAL_FORM);
   const [bannerFile, setBannerFile] = useState<File | null>(null);
   const [isSubmitting, setIsSubmitting] = useState(false);
 

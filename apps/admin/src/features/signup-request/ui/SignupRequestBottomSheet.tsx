@@ -4,7 +4,7 @@ import { Suspense } from 'react';
 import { Sheet as ModalSheet } from 'react-modal-sheet';
 import { useSignupStatusActions } from '../model/useSignupStatusActions';
 import { useMemberInfoQuery } from '@/entities/member/model/queries/useMemberInfoQuery';
-import { MemberDetail } from '@/entities/member/ui/MemberDetail';
+import { MemberProfileSummary } from '@/entities/member/ui/MemberProfileSummary';
 import { MemberStatusBadge } from '@/entities/member/ui/MemberStatusBadge';
 import { ErrorBoundary } from '@/shared/ui/ErrorBoundary';
 
@@ -38,7 +38,7 @@ export const SignupRequestBottomSheet = ({
     <ModalSheet isOpen={isOpen} onClose={onClose}>
       <ModalSheet.Container className="!right-0 !left-0 mx-auto w-full sm:max-w-[min(100dvw,calc(100dvh*375/812))]">
         <ModalSheet.Content>
-          <Sheet title="회원 정보">
+          <Sheet>
             <ErrorBoundary
               fallback={
                 <div className="text-body-body6 text-foreground-secondary">
@@ -87,7 +87,7 @@ const MemberInfoContent = ({
     <>
       <div className="flex size-full flex-col gap-[0.375rem] py-13">
         <MemberStatusBadge status={member.status} />
-        <MemberDetail member={member} />
+        <MemberProfileSummary member={member} />
       </div>
       {member.status === 'waiting' && showAction && (
         <div className="mt-13 flex w-full flex-row gap-13">

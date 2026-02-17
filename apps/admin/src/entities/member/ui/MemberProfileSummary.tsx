@@ -1,15 +1,24 @@
 import { Avatar } from '@surf/ui/avatar';
 import { SurfIcon } from '@surf/ui/icon';
 import { InfoBadge } from '@surf/ui/info-badge';
+import type { ComponentProps } from 'react';
 import { PART_LABELS } from '../model/constants';
-import { MemberDetail as MemberDetailType } from '../model/types';
+import type { MemberDetail as MemberDetailModel } from '../model/types';
 
 const infoRow = 'text-caption-caption6 text-foreground-normal flex flex-row items-center gap-5';
+type InfoIconName = ComponentProps<typeof SurfIcon>['name'];
 
-type MemberDetailProps = { member: MemberDetailType };
+type MemberProfileSummaryProps = { member: MemberDetailModel };
 
-export const MemberDetail = ({ member }: MemberDetailProps) => {
+export const MemberProfileSummary = ({ member }: MemberProfileSummaryProps) => {
   const { name, tracks, email, phoneNumber, university, registeredAt, profileImageUrl } = member;
+  const infoSchema: Array<{ key: string; icon: InfoIconName; value: string }> = [
+    { key: 'email', icon: 'Envelope', value: email },
+    { key: 'phoneNumber', icon: 'Telephone', value: phoneNumber },
+    { key: 'university', icon: 'AcademicHat', value: university },
+    { key: 'registeredAt', icon: 'Alarm', value: registeredAt },
+  ];
+
   return (
     <div className="flex w-full flex-col gap-11">
       <div className="flex w-full flex-row justify-between gap-13">
@@ -25,24 +34,12 @@ export const MemberDetail = ({ member }: MemberDetailProps) => {
       </div>
 
       <div className="flex flex-col gap-8">
-        <div className={infoRow}>
-          <SurfIcon name="Envelope" size="s" />
-          <span>{email}</span>
-        </div>
-
-        <div className={infoRow}>
-          <SurfIcon name="Telephone" size="s" />
-          <span>{phoneNumber}</span>
-        </div>
-
-        <div className={infoRow}>
-          <SurfIcon name="AcademicHat" size="s" />
-          <span>{university}</span>
-        </div>
-        <div className={infoRow}>
-          <SurfIcon name="Alarm" size="s" />
-          <span>{registeredAt}</span>
-        </div>
+        {infoSchema.map(({ key, icon, value }) => (
+          <div key={key} className={infoRow}>
+            <SurfIcon name={icon} size="s" />
+            <span>{value}</span>
+          </div>
+        ))}
       </div>
     </div>
   );

@@ -16,7 +16,7 @@ export const reassignDisplayOrders = (banners: Banner[]): Banner[] => {
   }));
 };
 
-// 드래그 앤 드롭으로 변경된 필터링 리스트를 전체 리스트와 병합
+// 드래그 앤 드롭으로 변경된 필터링 리스트를 전체 리스트와 병합하는 함수
 export const mergeReorderedList = (
   allBanners: Banner[],
   reorderedFiltered: Banner[],
@@ -31,6 +31,6 @@ export const mergeReorderedList = (
     return [...reorderedFiltered, ...restBanners.filter((b) => !b.isActive)];
   }
 
-  // 'inactive' 필터일 경우
+  // inactive 필터
   return [...restBanners.filter((b) => b.isActive), ...reorderedFiltered];
 };

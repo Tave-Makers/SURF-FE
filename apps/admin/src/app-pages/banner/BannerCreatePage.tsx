@@ -2,11 +2,10 @@
 
 import { useAlertStore } from '@surf/ui/store/alertStore';
 import { useToastStore } from '@surf/ui/store/toastStore';
-import { safeUUID } from '@surf/utils';
+import { safeUUID, UploadImage } from '@surf/utils';
 import { useRouter } from 'next/navigation';
 import { useCallback, useMemo, useState } from 'react';
 import { BannerFormData } from '@/entities/banner/model/types';
-import type { UploadImage } from '@/entities/image/model/types';
 import { useImageUploader } from '@/entities/image/model/useImageUploader';
 import { PAGE_ROUTES } from '@/shared/config/path';
 import { BannerFormWidget } from '@/widgets/banner/ui/BannerFormWidget';

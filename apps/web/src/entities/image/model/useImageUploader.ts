@@ -1,5 +1,5 @@
-import { safeUUID } from '@surf/utils';
-import { UploadImage } from './types';
+import { safeUUID, UploadImage } from '@surf/utils';
+
 import { postPresignedUrl } from '../api/postPresignedUrl';
 
 /**

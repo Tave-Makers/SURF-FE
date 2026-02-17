@@ -120,7 +120,7 @@ export const PostBodySection = ({ post, schedule, onClickLikeCount }: PostBodySe
           iconName="Heart"
           activeColor="red"
           onClickNumber={onClickLikeCount}
-          mode="like"
+          mode="count"
         />
 
         <ChipToggle
@@ -129,8 +129,10 @@ export const PostBodySection = ({ post, schedule, onClickLikeCount }: PostBodySe
           onToggleIcon={handleScrapToggle}
           iconName="Bookmark"
           activeColor="blue"
-          mode="scrap"
-        />
+          mode="text"
+        >
+          스크랩
+        </ChipToggle>
       </div>
     </div>
   );

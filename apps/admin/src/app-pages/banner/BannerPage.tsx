@@ -9,14 +9,14 @@ import { PAGE_ROUTES } from '@/shared/config/path';
 import { BannerListWidget } from '@/widgets/banner/ui/BannerListWidget';
 import { AppHeader } from '@/widgets/header/ui/AppHeader';
 
-export const BannerPage = () => {
-  const MOCK_DATA = [
-    { id: 1, name: '배너 1', imageUrl: '', isActive: true, linkUrl: '', displayOrder: 1 },
-    { id: 2, name: '배너 2', imageUrl: '', isActive: true, linkUrl: '', displayOrder: 2 },
-    { id: 3, name: '배너 3', imageUrl: '', isActive: false, linkUrl: '', displayOrder: 3 },
-    { id: 4, name: '배너 4', imageUrl: '', isActive: true, linkUrl: '', displayOrder: 4 },
-  ];
+const MOCK_DATA = [
+  { id: 1, name: '배너 1', imageUrl: '', isActive: true, linkUrl: '', displayOrder: 1 },
+  { id: 2, name: '배너 2', imageUrl: '', isActive: true, linkUrl: '', displayOrder: 2 },
+  { id: 3, name: '배너 3', imageUrl: '', isActive: false, linkUrl: '', displayOrder: 3 },
+  { id: 4, name: '배너 4', imageUrl: '', isActive: true, linkUrl: '', displayOrder: 4 },
+];
 
+export const BannerPage = () => {
   const router = useRouter();
   const [isReorderMode, setIsReorderMode] = useState(false);
   // 위젯에서 변경된 최신 순서 데이터 상태

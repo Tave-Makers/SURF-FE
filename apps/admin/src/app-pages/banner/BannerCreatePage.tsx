@@ -58,6 +58,8 @@ export const BannerCreatePage = () => {
       showToast('배너가 생성되었습니다.');
       // console.log({ ...form, imageUrl: result.uploadedUrl });
       router.replace(PAGE_ROUTES.BANNER.LIST);
+    } catch {
+      showToast('배너 생성에 실패했습니다.');
     } finally {
       setIsSubmitting(false);
     }

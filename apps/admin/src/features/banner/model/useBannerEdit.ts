@@ -26,16 +26,21 @@ export const useBannerEdit = (bannerId: string, initialData: Banner[]) => {
 
   // 초기 데이터 로드
   useEffect(() => {
-    const target = initialData.find((b) => b.id === parseInt(bannerId)) || initialData[0];
-    if (target) {
-      setInitial(target);
-      setForm({
-        imageUrl: target.imageUrl,
-        name: target.name,
-        linkUrl: target.linkUrl,
-        isActive: target.isActive,
-      });
+    const parsedId = Number(bannerId);
+    const target = Number.isNaN(parsedId) ? undefined : initialData.find((b) => b.id === parsedId);
+
+    if (!target) {
+      router.replace(PAGE_ROUTES.BANNER.LIST);
+      return;
     }
+
+    setInitial(target);
+    setForm({
+      imageUrl: target.imageUrl,
+      name: target.name,
+      linkUrl: target.linkUrl,
+      isActive: target.isActive,
+    });
   }, [bannerId, initialData]);
 
   // 변경 감지 및 유효성 검사

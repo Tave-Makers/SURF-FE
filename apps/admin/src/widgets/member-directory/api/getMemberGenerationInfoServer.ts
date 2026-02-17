@@ -8,9 +8,8 @@ import { MemberGenerationInfoResponse, AdminTotalMemberListResDTO } from './type
  * @returns 전체 회원수 + 기수 목록 응답
  */
 export async function getMemberGenerationInfoServer(): Promise<AdminTotalMemberListResDTO> {
-  const response = await serverFetchWithCookies<MemberGenerationInfoResponse>(
-    '/v1/manager/members-count/generation',
-  );
+  const response =
+    await serverFetchWithCookies<MemberGenerationInfoResponse>('/v1/manager/generations');
 
   return response.data;
 }

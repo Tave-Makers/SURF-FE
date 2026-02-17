@@ -26,7 +26,7 @@ export const MemberDirectoryWidget = ({ keyword }: MemberDirectoryWidgetProps) =
       {/* 멤버 디렉토리 상단 바 */}
       <SelectableListTopBar
         mode={mode}
-        totalCount={data.totalMemberCount}
+        totalCount={0} //TODO: 멤버 카운트 API 연동 필요
         selectedCount={selectedCount}
         onEnterSelectMode={enterSelectMode}
         onExitSelectMode={exitSelectMode}

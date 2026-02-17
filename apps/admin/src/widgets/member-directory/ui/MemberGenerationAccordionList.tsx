@@ -5,9 +5,11 @@ import { MemberGenerationAccordion } from '@/features/member-by-generation/ui/Me
 
 export interface MemberGenerationAccordionListProps {
   generations: number[];
+  keyword: string;
 }
 export const MemberGenerationAccordionList = ({
   generations,
+  keyword,
 }: MemberGenerationAccordionListProps) => {
   if (generations.length === 0)
     return (
@@ -23,6 +25,7 @@ export const MemberGenerationAccordionList = ({
           key={generation}
           generation={generation}
           label={`${generation}기`}
+          keyword={keyword}
           renderItem={(m) => (
             <SelectableMemberCard
               name={m.name}

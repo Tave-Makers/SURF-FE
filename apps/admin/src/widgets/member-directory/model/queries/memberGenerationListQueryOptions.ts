@@ -2,9 +2,10 @@ import { queryOptions } from '@tanstack/react-query';
 
 import { toMemberGenerationList } from '../mapper';
 import { MemberDirectoryInfo } from '../types';
-import { memberGenerationKeys } from './queryKeys';
+
 import { getMemberGenerationInfoClient } from '../../api/getMemberGenerationInfoClient';
 import { AdminTotalMemberListResDTO } from '../../api/types';
+import { memberQueryKeys } from '@/entities/member/model/queries/memberQueryKeys';
 
 interface MemberGenerationListQueryOptionsParams {
   fetcher?: () => Promise<AdminTotalMemberListResDTO>;
@@ -19,7 +20,7 @@ export function memberGenerationListQueryOptions({
   fetcher = getMemberGenerationInfoClient,
 }: MemberGenerationListQueryOptionsParams = {}) {
   return queryOptions<MemberDirectoryInfo, Error, MemberDirectoryInfo>({
-    queryKey: memberGenerationKeys.lists(),
+    queryKey: memberQueryKeys.directory(),
     queryFn: async () => {
       const dto = await fetcher();
       return toMemberGenerationList(dto);

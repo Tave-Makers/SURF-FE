@@ -1,6 +1,6 @@
-import type { ApiCareer, MemberInformationResDTO } from '../api/types';
+import type { ApiCareer, MemberInformationResDTO, MemberItem } from '../api/types';
 
-import type { Career, Member, MemberStatus, MemberTrack, TrackPart } from './types';
+import type { Career, Member, MemberBase, MemberStatus, MemberTrack, TrackPart } from './types';
 
 export const MEMBER_STATUS_MAP: Record<string, MemberStatus> = {
   REGISTERING: 'waiting',
@@ -37,6 +37,22 @@ function toCareer(career: ApiCareer): Career {
     startDate: career.startDate,
     endDate: career.endDate ?? null,
     isWorking: career.isWorking ?? false,
+  };
+}
+
+/**
+ * API 멤버 아이템 DTO → 도메인 MemberBase 변환
+ */
+export function toMemberBase(dto: MemberItem): MemberBase {
+  return {
+    id: dto.memberId,
+    name: dto.username ?? '',
+    university: dto.university ?? '',
+    profileImageUrl: dto.profileImageUrl ?? '',
+    tracks: (dto.trackList ?? []).map(toMemberTrack),
+    registeredAt: dto.createdAt ?? '',
+    status: toMemberStatus(dto.memberStatus),
+    role: dto.role ?? 'MEMBER',
   };
 }
 

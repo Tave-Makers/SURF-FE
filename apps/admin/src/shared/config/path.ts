@@ -7,7 +7,6 @@ export const PAGE_ROUTES = {
   BANNER: {
     CREATE: '/banner/create',
     EDIT: (id: string | number) => `/banner/edit/${id}`,
-    EDIT_PATTERN: '/banner/edit/:bannerId',
     LIST: '/banner',
   },
   DASHBOARD: '/dashboard',

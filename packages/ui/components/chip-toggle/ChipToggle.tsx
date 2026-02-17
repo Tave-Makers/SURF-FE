@@ -34,18 +34,27 @@ import { SurfIcon } from '../icon/SurfIcon';
 
 type SurfIconName = ComponentProps<typeof SurfIcon>['name'];
 
-export type ChipToggleProps = {
-  iconName?: SurfIconName;
+type BaseChipProps = {
   mode: 'count' | 'text';
   highlightType?: 'hover' | 'toggle';
   isClicked: boolean;
-  count?: number; // count 모드
-  children?: React.ReactNode; // text 모드
+  count?: number;
+  children?: React.ReactNode;
   onToggleIcon: (newState: boolean) => void;
-  activeColor?: ActiveColorVariant;
   onClickNumber?: () => void;
 };
 
+type ChipWithIcon = BaseChipProps & {
+  iconName: SurfIconName;
+  activeColor: ActiveColorVariant;
+};
+
+type ChipWithoutIcon = BaseChipProps & {
+  iconName?: never;
+  activeColor?: never;
+};
+
+export type ChipToggleProps = ChipWithIcon | ChipWithoutIcon;
 export type ActiveColorVariant = 'red' | 'blue';
 
 const baseStyle =

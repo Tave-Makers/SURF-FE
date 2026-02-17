@@ -1,13 +1,6 @@
-import { TrackPart } from '@/entities/member/model/types';
+import { ApiTrack } from '@/entities/member/api/types';
+import { MemberRole } from '@/entities/member/model/types';
 import { CommonResponse, PageMeta } from '@/shared/api/types';
-
-/**
- * 트랙 정보
- */
-export interface Track {
-  generation: number;
-  part: TrackPart;
-}
 
 /**
  * 가입 신청 아이템
@@ -17,9 +10,10 @@ export interface SignupRequestItem {
   username: string;
   university: string;
   profileImageUrl: string;
-  trackList: Track[];
+  trackList: ApiTrack[];
   createdAt: string;
   memberStatus: string;
+  role: MemberRole;
 }
 
 /**

@@ -21,7 +21,18 @@ function buildCookieHeader(store: { getAll(): { name: string; value: string }[] 
     .join('; ');
 }
 
-export async function serverFetchWithCookies(path: string, options: ServerFetchOptions = {}) {
+/**
+ * Server Component/Route Handler 환경에서 현재 요청의 쿠키를 전달해
+ * 내부 `/api/proxy/*` 경로를 호출합니다.
+ *
+ * - 전달받은 `path`는 자동으로 `/api/proxy` prefix가 보정됩니다.
+ * - `options.cache`를 지정하지 않으면 기본값으로 `no-store`를 사용합니다.
+ * - 응답 본문은 JSON으로 파싱해 반환합니다.
+ */
+export async function serverFetchWithCookies<TResponse = unknown>(
+  path: string,
+  options: ServerFetchOptions = {},
+): Promise<TResponse> {
   const baseUrl = await getBaseUrl();
   const url = `${baseUrl}${toProxyPath(path)}`;
 
@@ -33,9 +44,17 @@ export async function serverFetchWithCookies(path: string, options: ServerFetchO
     ...(cookie ? { cookie } : {}),
   };
 
-  return fetch(url, {
+  const response = await fetch(url, {
     ...options,
     headers: headersObj,
     cache: options.cache ?? 'no-store',
   });
+
+  if (!response.ok) {
+    const errorBody = (await response.json().catch(() => null)) as { message?: string } | null;
+
+    throw new Error(errorBody?.message ?? `Request failed (${response.status})`);
+  }
+
+  return response.json() as Promise<TResponse>;
 }

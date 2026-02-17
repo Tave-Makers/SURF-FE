@@ -15,7 +15,7 @@ export const SignupRequestPage = () => {
   return (
     <main className="flex h-full w-full flex-col">
       {/* 회원 이름 검색 인풋  */}
-      <div className="px-16">
+      <div className="px-13">
         <TextInput
           mode="search"
           placeholder="회원이름을 검색해주세요"

@@ -1,6 +1,6 @@
 import { Accordion } from '@surf/ui/accordion';
 import { GenerationGroup } from '@/entities/group-management/model/types';
-import { ContentItem } from '@/shared/ui/ContentItem';
+import { ContentItem } from '@/shared/ui/content-item';
 
 interface Props {
   generationGroup: GenerationGroup;

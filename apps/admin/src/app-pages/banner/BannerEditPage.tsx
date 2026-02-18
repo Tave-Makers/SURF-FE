@@ -2,6 +2,7 @@
 
 import { Header, HeaderMode } from '@surf/ui/header';
 import { useRouter } from 'next/navigation';
+import { useBannerFromCache } from '@/features/banner/api/useGetBannerFromCache';
 import { useBannerEdit } from '@/features/banner/model/useBannerEdit';
 import { BannerFormWidget } from '@/widgets/banner/ui/BannerFormWidget';
 
@@ -9,19 +10,15 @@ interface BannerEditPageProps {
   bannerId: string;
 }
 
-const MOCK_DATA = [
-  { id: 1, name: '배너 1', imageUrl: '', isActive: true, linkUrl: '', displayOrder: 1 },
-  { id: 2, name: '배너 2', imageUrl: '', isActive: true, linkUrl: '', displayOrder: 2 },
-  { id: 3, name: '배너 3', imageUrl: '', isActive: false, linkUrl: '', displayOrder: 3 },
-  { id: 4, name: '배너 4', imageUrl: '', isActive: true, linkUrl: '', displayOrder: 4 },
-];
-
 export const BannerEditPage = ({ bannerId }: BannerEditPageProps) => {
   const router = useRouter();
-  const { state, actions } = useBannerEdit(bannerId, MOCK_DATA);
+  const { data: targetBanner } = useBannerFromCache(bannerId);
 
+  const { state, actions } = useBannerEdit(bannerId, targetBanner);
+  if (!targetBanner) {
+    return <div>해당 배너를 찾을 수 없습니다.</div>;
+  }
   if (state.isLoading) return <div>loading...</div>;
-
   return (
     <>
       <Header

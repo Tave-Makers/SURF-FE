@@ -8,7 +8,7 @@ import { PAGE_ROUTES } from '@/shared/config/path';
 import { useAlertStore } from '@surf/ui/store/alertStore';
 import { useToastStore } from '@surf/ui/store/toastStore';
 
-export const useBannerEdit = (bannerId: string, initialData: Banner[]) => {
+export const useBannerEdit = (bannerId: string, initialData: Banner) => {
   const router = useRouter();
   const { uploadImages } = useImageUploader();
   const { open: openAlert, close: closeAlert } = useAlertStore();
@@ -26,22 +26,16 @@ export const useBannerEdit = (bannerId: string, initialData: Banner[]) => {
 
   // 초기 데이터 로드
   useEffect(() => {
-    const parsedId = Number(bannerId);
-    const target = Number.isNaN(parsedId) ? undefined : initialData.find((b) => b.id === parsedId);
+    if (!initialData || initial) return;
 
-    if (!target) {
-      router.replace(PAGE_ROUTES.BANNER.LIST);
-      return;
-    }
-
-    setInitial(target);
+    setInitial(initialData);
     setForm({
-      imageUrl: target.imageUrl,
-      name: target.name,
-      linkUrl: target.linkUrl,
-      isActive: target.isActive,
+      imageUrl: initialData.imageUrl,
+      name: initialData.name,
+      linkUrl: initialData.linkUrl,
+      isActive: initialData.isActive,
     });
-  }, [bannerId, initialData]);
+  }, [bannerId, initialData, initial]);
 
   // 변경 감지 및 유효성 검사
   const isChanged = useMemo(() => {

@@ -9,6 +9,7 @@ import { useAlertStore } from '@surf/ui/store/alertStore';
 import { useToastStore } from '@surf/ui/store/toastStore';
 import { useUpdateBannerMutation } from '../api/useUpdateBannerMutation';
 import { useToggleBannerStatusMutation } from '../api/useToggleBannerStatusMutation';
+import { useDeleteBannerMutation } from '../api/useDeleteBannerMutation';
 
 export const useBannerEdit = (bannerId: string, initialData: Banner | undefined) => {
   const router = useRouter();
@@ -18,6 +19,7 @@ export const useBannerEdit = (bannerId: string, initialData: Banner | undefined)
 
   const { mutateAsync: updateInfo } = useUpdateBannerMutation(Number(bannerId));
   const { mutateAsync: toggleStatus } = useToggleBannerStatusMutation(Number(bannerId));
+  const { mutateAsync: deleteBanner } = useDeleteBannerMutation(Number(bannerId));
 
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [initial, setInitial] = useState<Banner | null>(null);
@@ -116,6 +118,20 @@ export const useBannerEdit = (bannerId: string, initialData: Banner | undefined)
     toggleStatus,
   ]);
 
+  const handleDelete = useCallback(async () => {
+    if (isSubmitting) return;
+    setIsSubmitting(true);
+
+    try {
+      await deleteBanner();
+      showToast('배너가 삭제되었습니다.');
+      router.replace(PAGE_ROUTES.BANNER.LIST);
+    } catch {
+      showToast('배너 삭제에 실패했습니다.');
+    } finally {
+      setIsSubmitting(false);
+    }
+  }, [deleteBanner, router, showToast, isSubmitting]);
   const handleOpenSaveAlert = () => {
     openAlert({
       state: 'default',
@@ -150,7 +166,7 @@ export const useBannerEdit = (bannerId: string, initialData: Banner | undefined)
           label: '삭제하기',
           onClick: () => {
             closeAlert();
-            // TODO: onDelete 로직 실행
+            void handleDelete();
           },
         },
       ],

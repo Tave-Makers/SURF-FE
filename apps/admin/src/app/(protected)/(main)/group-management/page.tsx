@@ -1,5 +1,7 @@
+import { GroupManagementPage } from '@/app-pages/group-management/ui/GroupManagementPage';
+
 const Page = () => {
-  return <div className="p-6 text-title-title2 text-foreground-normal">회원그룹 관리</div>;
+  return <GroupManagementPage />;
 };
 
 export default Page;

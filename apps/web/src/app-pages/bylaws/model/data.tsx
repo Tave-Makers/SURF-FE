@@ -6,7 +6,7 @@ export const bylawsData: AccordionGroupProps['accordions'] = [
   {
     title: '출결 안내',
     children: (
-      <>
+      <div className="px-13 py-15">
         <AccordionTextList
           items={[
             {
@@ -47,134 +47,138 @@ export const bylawsData: AccordionGroupProps['accordions'] = [
           </p>
           <p>* 정규 세션은 20분 전부터 입장 가능</p>
         </div>
-      </>
+      </div>
     ),
   },
   {
     title: '활동 점수 득점',
     children: (
-      <AccordionTextList
-        items={[
-          {
-            title: '얼리버드',
-            scoreChange: '+5',
-            descriptions: ['정규 세션 시작 20~10분 전 출석'],
-          },
-          {
-            title: '뒤풀이',
-            scoreChange: '+5',
-          },
-          {
-            title: '번개',
-            scoreChange: '+5 / +10',
-            descriptions: [
-              'YB가 개설할 경우, 운영진 1인에게 사진 제출',
-              '생성 시 +10 / 참여 시 +5',
-            ],
-          },
-          {
-            title: '아지트 정보 공유',
-            scoreChange: '1회 +3',
-            descriptions: ['1일 1회 제한'],
-          },
-          {
-            title: '기획안 발표',
-            scoreChange: '+10',
-            descriptions: ['전, 후반기 만남의 장'],
-          },
-          {
-            title: '팀장 역할 수행',
-            scoreChange: '+10',
-            descriptions: ['스터디 및 프로젝트'],
-          },
-          {
-            title: '기술 세미나 참여',
-            scoreChange: '+10',
-          },
-          {
-            title: 'TAVE 활동 후기 업로드',
-            scoreChange: '+20',
-            descriptions: ['개인블로그 혹은 티스토리에 업로드'],
-          },
-          {
-            title: '기술 블로그 (Week I Learn)',
-            scoreChange: '+3',
-            descriptions: [
-              '개인블로그 혹은 티스토리에 업로드',
-              `기술 블로그 제목에 'TAVE 스터디 n주차'와 같은 형식으로 기재`,
-            ],
-          },
-          {
-            title: '소모임 생성/활동 (운동, 여행 등)',
-            scoreChange: '+15 / +5',
-            descriptions: ['생성자는 3회 이상 활동 및 관리', '생성 시 +15 / 활동 시 +5'],
-          },
-          {
-            title: '인스타 스토리 업로드',
-            scoreChange: '+3',
-            descriptions: [
-              '행사, 팀 활동, 번개, 소모임 활동 당일 업로드',
-              '태그 필수, 올린 사람만 해당 (집계: 홍보부)',
-            ],
-          },
-        ]}
-      />
+      <div className="px-13 py-15">
+        <AccordionTextList
+          items={[
+            {
+              title: '얼리버드',
+              scoreChange: '+5',
+              descriptions: ['정규 세션 시작 20~10분 전 출석'],
+            },
+            {
+              title: '뒤풀이',
+              scoreChange: '+5',
+            },
+            {
+              title: '번개',
+              scoreChange: '+5 / +10',
+              descriptions: [
+                'YB가 개설할 경우, 운영진 1인에게 사진 제출',
+                '생성 시 +10 / 참여 시 +5',
+              ],
+            },
+            {
+              title: '아지트 정보 공유',
+              scoreChange: '1회 +3',
+              descriptions: ['1일 1회 제한'],
+            },
+            {
+              title: '기획안 발표',
+              scoreChange: '+10',
+              descriptions: ['전, 후반기 만남의 장'],
+            },
+            {
+              title: '팀장 역할 수행',
+              scoreChange: '+10',
+              descriptions: ['스터디 및 프로젝트'],
+            },
+            {
+              title: '기술 세미나 참여',
+              scoreChange: '+10',
+            },
+            {
+              title: 'TAVE 활동 후기 업로드',
+              scoreChange: '+20',
+              descriptions: ['개인블로그 혹은 티스토리에 업로드'],
+            },
+            {
+              title: '기술 블로그 (Week I Learn)',
+              scoreChange: '+3',
+              descriptions: [
+                '개인블로그 혹은 티스토리에 업로드',
+                `기술 블로그 제목에 'TAVE 스터디 n주차'와 같은 형식으로 기재`,
+              ],
+            },
+            {
+              title: '소모임 생성/활동 (운동, 여행 등)',
+              scoreChange: '+15 / +5',
+              descriptions: ['생성자는 3회 이상 활동 및 관리', '생성 시 +15 / 활동 시 +5'],
+            },
+            {
+              title: '인스타 스토리 업로드',
+              scoreChange: '+3',
+              descriptions: [
+                '행사, 팀 활동, 번개, 소모임 활동 당일 업로드',
+                '태그 필수, 올린 사람만 해당 (집계: 홍보부)',
+              ],
+            },
+          ]}
+        />
+      </div>
     ),
   },
   {
     title: '활동 점수 감점',
     children: (
-      <AccordionTextList
-        items={[
-          {
-            title: '조별 활동 지각',
-            scoreChange: '-5 to -15',
-            descriptions: [
-              '10분당 감점 처리되며 최대 30분까지 지각 처리',
-              '시작 후 5분까지 참작 가능',
-            ],
-          },
-          {
-            title: '조별 활동 결석',
-            scoreChange: '-30',
-            descriptions: ['30분 이상 지각 또는 결석'],
-          },
-          {
-            title: '정규 세션 지각',
-            scoreChange: '-10 to -30',
-            descriptions: ['10분당 감점 처리 (최대 30분)'],
-          },
-          {
-            title: '정규 세션 결석',
-            scoreChange: '-30 / -100',
-            descriptions: [
-              '필수 정규세션 결석 시 탈퇴 처리 (OT, 전반기 만남의 장, 후반기 만남의 장)',
-              '사전 공유 시 -30 / 무단 결석 시 -100',
-            ],
-          },
-          {
-            title: '투표 미참여',
-            scoreChange: '-15',
-            descriptions: ['참석 여부 투표 등 (투표 종료 시부터 적용)'],
-          },
-          {
-            title: '보증금 입금 지연',
-            scoreChange: '-5',
-            descriptions: ['초과 1일마다'],
-          },
-          {
-            title: '뒤풀이 불참',
-            scoreChange: '-10',
-            descriptions: ['뒤풀이 신청 후 불참한 경우'],
-          },
-        ]}
-      />
+      <div className="px-13 py-15">
+        <AccordionTextList
+          items={[
+            {
+              title: '조별 활동 지각',
+              scoreChange: '-5 to -15',
+              descriptions: [
+                '10분당 감점 처리되며 최대 30분까지 지각 처리',
+                '시작 후 5분까지 참작 가능',
+              ],
+            },
+            {
+              title: '조별 활동 결석',
+              scoreChange: '-30',
+              descriptions: ['30분 이상 지각 또는 결석'],
+            },
+            {
+              title: '정규 세션 지각',
+              scoreChange: '-10 to -30',
+              descriptions: ['10분당 감점 처리 (최대 30분)'],
+            },
+            {
+              title: '정규 세션 결석',
+              scoreChange: '-30 / -100',
+              descriptions: [
+                '필수 정규세션 결석 시 탈퇴 처리 (OT, 전반기 만남의 장, 후반기 만남의 장)',
+                '사전 공유 시 -30 / 무단 결석 시 -100',
+              ],
+            },
+            {
+              title: '투표 미참여',
+              scoreChange: '-15',
+              descriptions: ['참석 여부 투표 등 (투표 종료 시부터 적용)'],
+            },
+            {
+              title: '보증금 입금 지연',
+              scoreChange: '-5',
+              descriptions: ['초과 1일마다'],
+            },
+            {
+              title: '뒤풀이 불참',
+              scoreChange: '-10',
+              descriptions: ['뒤풀이 신청 후 불참한 경우'],
+            },
+          ]}
+        />
+      </div>
     ),
   },
   {
     title: '조별 활동 관련',
     children: (
-      <div className="flex items-center justify-center">
+      <div className="flex items-center justify-center px-13 py-15">
         <GroupActivityTable role="img" aria-label="지각 시간별 차감 점수와 보증금 안내 테이블" />
       </div>
     ),
@@ -182,34 +186,38 @@ export const bylawsData: AccordionGroupProps['accordions'] = [
   {
     title: 'OB 전환',
     children: (
-      <AccordionTextList
-        items={[
-          {
-            title: 'OB 전환 기준',
-            descriptions: [
-              '활동 점수에 문제가 없는 경우 OB 전환 가능',
-              '컨퍼런스 출결 처리 이후의 최종 활동점수가 1점 이상일 경우',
-            ],
-          },
-        ]}
-      />
+      <div className="px-13 py-15">
+        <AccordionTextList
+          items={[
+            {
+              title: 'OB 전환 기준',
+              descriptions: [
+                '활동 점수에 문제가 없는 경우 OB 전환 가능',
+                '컨퍼런스 출결 처리 이후의 최종 활동점수가 1점 이상일 경우',
+              ],
+            },
+          ]}
+        />
+      </div>
     ),
   },
   {
     title: '탈퇴',
     children: (
-      <AccordionTextList
-        items={[
-          {
-            title: '탈퇴 처리 기준',
-            descriptions: [
-              '활동 점수가 0점 이하일 경우',
-              '회원간 혹은 운영진과의 불미스러운 일이 발생할 경우',
-              '처장단 회의 후 처분 결정 (증빙)',
-            ],
-          },
-        ]}
-      />
+      <div className="px-13 py-15">
+        <AccordionTextList
+          items={[
+            {
+              title: '탈퇴 처리 기준',
+              descriptions: [
+                '활동 점수가 0점 이하일 경우',
+                '회원간 혹은 운영진과의 불미스러운 일이 발생할 경우',
+                '처장단 회의 후 처분 결정 (증빙)',
+              ],
+            },
+          ]}
+        />
+      </div>
     ),
   },
 ];

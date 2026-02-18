@@ -7,6 +7,7 @@ import { useRouter } from 'next/navigation';
 import { useCallback, useMemo, useState } from 'react';
 import { BannerFormData } from '@/entities/banner/model/types';
 import { useImageUploader } from '@/entities/image/model/useImageUploader';
+import { useCreateBannerMutation } from '@/features/banner/api/useCreateBannerMutation';
 import { PAGE_ROUTES } from '@/shared/config/path';
 import { BannerFormWidget } from '@/widgets/banner/ui/BannerFormWidget';
 
@@ -25,6 +26,8 @@ export const BannerCreatePage = () => {
   const [isSubmitting, setIsSubmitting] = useState(false);
 
   const { uploadImages } = useImageUploader();
+  const { mutateAsync: createBanner } = useCreateBannerMutation();
+
   const openAlert = useAlertStore((s) => s.open);
   const closeAlert = useAlertStore((s) => s.close);
   const showToast = useToastStore((s) => s.show);
@@ -52,18 +55,19 @@ export const BannerCreatePage = () => {
         return;
       }
 
-      // const imageUrl = result.uploadedUrl;
-      // 최종 API 호출 시 imageUrl 넣기
-      // await createBanner({ ...form, imageUrl });
+      await createBanner({
+        name: form.name,
+        linkUrl: form.linkUrl,
+        imageUrl: result.uploadedUrl,
+      });
       showToast('배너가 생성되었습니다.');
-      // console.log({ ...form, imageUrl: result.uploadedUrl });
       router.replace(PAGE_ROUTES.BANNER.LIST);
     } catch {
       showToast('배너 생성에 실패했습니다.');
     } finally {
       setIsSubmitting(false);
     }
-  }, [bannerFile, form, uploadImages, showToast, router, isSubmitting]);
+  }, [bannerFile, form, uploadImages, showToast, router, isSubmitting, createBanner]);
 
   const handleOpenSaveAlert = () => {
     openAlert({

@@ -5,13 +5,13 @@ import { useRouter } from 'next/navigation';
 import { useEffect, useMemo, useState } from 'react';
 import { Banner } from '@/entities/banner/model/types';
 import { BannerDnd } from '@/entities/banner/ui/BannerDnd';
-import { useBannerListQuery } from '@/features/banner/model/useGetBannerList';
 import {
   getGroupedByStatus,
   mergeReorderedList,
   reassignDisplayOrders,
 } from '@/features/banner/lib/bannerUtils';
 import { BannerFilterType } from '@/features/banner/model/types';
+import { useBannerListQuery } from '@/features/banner/model/useGetBannerList';
 import { BannerFilter } from '@/features/banner/ui/BannerFilter';
 import { PAGE_ROUTES } from '@/shared/config/path';
 

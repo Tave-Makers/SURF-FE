@@ -131,9 +131,11 @@ export const GroupManagementDetailPage = ({ mode, id }: GroupManagementDetailPag
   };
 
   const handleAddMembers = () => {
-    // 페이지 이동
-    // 선택 완료 시 addMembers 호출 또는 쿼리 파라미터로 데이터 전달
-    // 예: addMembers(formKey, selectedMembers)
+    const params = new URLSearchParams();
+    params.set('generation', String(draft.generation));
+    params.set('formKey', formKey);
+
+    router.push(`/group-management/member-search?${params.toString()}`);
   };
 
   const handleRemoveMember = (memberId: number) => {
@@ -168,7 +170,7 @@ export const GroupManagementDetailPage = ({ mode, id }: GroupManagementDetailPag
 
         {mode === 'edit' && (
           <div className="px-13 py-15">
-            <SolidButton size="m" variant="warning" onClick={() => {}} className="shrink-0">
+            <SolidButton size="m" variant="warning" onClick={() => {}}>
               해당 그룹 삭제하기
             </SolidButton>
           </div>

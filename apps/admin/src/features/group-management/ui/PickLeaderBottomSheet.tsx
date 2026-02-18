@@ -11,7 +11,6 @@ declare module '@/shared/store/bottomSheetStore' {
 export type PickLeaderBottomSheetProps = {
   isOpen: boolean;
   onClose: () => void;
-  leader?: MemberBase;
   members: MemberBase[]; // 팀장 제외된 팀원 목록
   onSelect: (member: MemberBase) => void;
 };

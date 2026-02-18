@@ -15,12 +15,11 @@ import { GroupManagementMode } from '@/widgets/group-management/model/types';
 import { GroupInfoSection } from '@/widgets/group-management/ui/GroupInfoSection';
 import { GroupMemberSection } from '@/widgets/group-management/ui/GroupMemberSection';
 import { AppHeader } from '@/widgets/header/ui/AppHeader';
+import { useMemberGenerationListQuery } from '@/widgets/member-directory/model/queries/useMemberGenerationListQuery';
 
 interface GroupManagementDetailPageProps {
   mode: GroupManagementMode;
 }
-
-export const CURRENT_GENERATION = 17; // TODO: API로 가장 최근 기수 받아오기
 
 export const GroupManagementDetailPage = ({ mode }: GroupManagementDetailPageProps) => {
   const router = useRouter();
@@ -36,7 +35,11 @@ export const GroupManagementDetailPage = ({ mode }: GroupManagementDetailPagePro
   const openBottomSheet = useBottomSheetStore((s) => s.open);
   const closeBottomSheet = useBottomSheetStore((s) => s.close);
 
-  const [generation, setGeneration] = useState<number>(CURRENT_GENERATION);
+  // 모든 기수 정보 조회
+  const { data } = useMemberGenerationListQuery();
+  const MAX_GENERATION = Math.max(...data.generations);
+
+  const [generation, setGeneration] = useState<number>(MAX_GENERATION);
   const [groupType, setGroupType] = useState<ContentsType>('study');
   const [groupName, setGroupName] = useState('');
   const [groupIntroduction, setGroupIntroduction] = useState('');
@@ -51,7 +54,7 @@ export const GroupManagementDetailPage = ({ mode }: GroupManagementDetailPagePro
     openBottomSheet({
       type: 'generation',
       props: {
-        maxGeneration: CURRENT_GENERATION,
+        maxGeneration: MAX_GENERATION,
         selectedGeneration: generation,
         onSelect: (val) => {
           setGeneration(val);

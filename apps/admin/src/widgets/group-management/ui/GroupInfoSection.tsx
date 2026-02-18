@@ -1,6 +1,7 @@
 import { FieldGroup } from '@surf/ui/field-group';
 import { SelectField } from '@surf/ui/select-field';
 import { TextArea } from '@surf/ui/text-area';
+import { CONTENTS_TYPE_LABEL } from '@/shared/constants/contents';
 import { ContentsType } from '@/shared/types/contents';
 import { GroupManagementMode } from '@/widgets/group-management/model/types';
 
@@ -41,7 +42,7 @@ export const GroupInfoSection = ({
       <FieldGroup title="그룹 유형" isRequired>
         <SelectField
           size="l"
-          selectedValue={groupType === 'study' ? '스터디' : '프로젝트'}
+          selectedValue={CONTENTS_TYPE_LABEL[groupType]}
           isDisabled={isDisabled}
           onClick={onOpenGroupType}
         />

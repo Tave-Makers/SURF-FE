@@ -1,18 +1,18 @@
 'use client';
 
-import { useEffect } from 'react';
-
-import { useMemberGenerationListQuery } from '../model/queries/useMemberGenerationListQuery';
+import { Suspense, useEffect } from 'react';
 
 import { MemberGenerationAccordionList } from './MemberGenerationAccordionList';
+import { useApprovedMemberCountQuery } from '@/entities/member/model/queries/useMemberCountQuery';
 import { useSelectableListState } from '@/shared/hooks/useSelectableListState';
+import { ErrorBoundary } from '@/shared/ui/ErrorBoundary';
 import { SelectableListTopBar } from '@/shared/ui/SelectableListTopBar';
 
 interface MemberDirectoryWidgetProps {
   keyword: string;
 }
 export const MemberDirectoryWidget = ({ keyword }: MemberDirectoryWidgetProps) => {
-  const { data } = useMemberGenerationListQuery();
+  const { data: totalCount } = useApprovedMemberCountQuery(keyword); //승인된 전체 멤버수 조회
 
   const { mode, selectedCount, enterSelectMode, exitSelectMode, resetSelectionState } =
     useSelectableListState<number>();
@@ -26,14 +26,20 @@ export const MemberDirectoryWidget = ({ keyword }: MemberDirectoryWidgetProps) =
       {/* 멤버 디렉토리 상단 바 */}
       <SelectableListTopBar
         mode={mode}
-        totalCount={0} //TODO: 멤버 카운트 API 연동 필요
+        totalCount={totalCount ?? 0}
         selectedCount={selectedCount}
         onEnterSelectMode={enterSelectMode}
         onExitSelectMode={exitSelectMode}
       />
 
       {/* 기수별 멤버 목록 아코디언 리스트 */}
-      <MemberGenerationAccordionList generations={data.generations} keyword={keyword} />
+      <ErrorBoundary
+        fallback={<div className="p-4">데이터를 불러오는 중 오류가 발생했습니다.</div>}
+      >
+        <Suspense fallback={<div className="p-4">loading...</div>}>
+          <MemberGenerationAccordionList keyword={keyword} />
+        </Suspense>
+      </ErrorBoundary>
     </div>
   );
 };

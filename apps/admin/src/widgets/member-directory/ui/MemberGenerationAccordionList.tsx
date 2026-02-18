@@ -1,16 +1,17 @@
 import { Avatar } from '@surf/ui/avatar';
+import { useMemberGenerationListQuery } from '../model/queries/useMemberGenerationListQuery';
 import { RoleBadge } from '@/entities/member/ui/RoleBadge';
 import { SelectableMemberCard } from '@/entities/member/ui/SelectableMemberCard';
 import { MemberGenerationAccordion } from '@/features/member-by-generation/ui/MemberGenerationAccordion';
 
 export interface MemberGenerationAccordionListProps {
-  generations: number[];
   keyword: string;
 }
-export const MemberGenerationAccordionList = ({
-  generations,
-  keyword,
-}: MemberGenerationAccordionListProps) => {
+export const MemberGenerationAccordionList = ({ keyword }: MemberGenerationAccordionListProps) => {
+  const {
+    data: { generations },
+  } = useMemberGenerationListQuery();
+
   if (generations.length === 0)
     return (
       <div className="flex h-full flex-col items-center justify-center gap-12">

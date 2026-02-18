@@ -46,13 +46,6 @@ const nextConfig = {
             },
           ]
         : []),
-
-        // TODO: 테스트용 임시 S3 호스트 제거
-        {
-        protocol: "https",
-        hostname: EXAMPLE_S3_HOSTNAME,
-        pathname: "/**",
-      },
     ],
   },
 

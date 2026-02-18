@@ -1,11 +1,11 @@
-import { SignupRequestStatus } from '@/entities/signup-request/model/types';
+import { MemberStatus } from '@/entities/member/model/types';
 import { CommonResponse } from '@/shared/api/types';
 import { axiosInstance } from '@/shared/lib/axiosInstance';
 import { handleApiError } from '@/shared/lib/handleApiError';
 
 export async function updateSignupRequest(
   memberIds: number[],
-  nextStatus: SignupRequestStatus,
+  nextStatus: MemberStatus,
 ): Promise<CommonResponse<null>> {
   try {
     const response = await axiosInstance.patch<CommonResponse<null>>(

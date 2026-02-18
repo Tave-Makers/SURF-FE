@@ -1,0 +1,80 @@
+name: Update OpenAPI Types (Admin)
+
+on:
+  workflow_dispatch:
+    inputs:
+      api_docs_url:
+        description: 'OpenAPI JSON URL (비우면 repo variable 사용)'
+        required: false
+        default: ''
+      output_file:
+        description: 'Generated types output file'
+        required: true
+        default: 'apps/admin/src/shared/api/__generated__/openapi.d.ts'
+      base_branch:
+        description: 'Base branch to run on'
+        required: true
+        default: 'develop'
+
+permissions:
+  contents: write
+  pull-requests: write
+
+concurrency:
+  group: openapi-types-admin
+  cancel-in-progress: true
+
+jobs:
+  update-openapi:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          ref: ${{ inputs.base_branch }}
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+
+      - name: Ensure output dir
+        run: mkdir -p "$(dirname "${{ inputs.output_file }}")"
+
+      - name: Generate OpenAPI types
+        run: |
+          API_URL="${{ inputs.api_docs_url }}"
+          if [ -z "$API_URL" ]; then API_URL="${{ vars.ADMIN_OPENAPI_URL }}"; fi
+
+          if [ -z "$API_URL" ]; then
+            echo "❌ OpenAPI URL is empty. Provide inputs.api_docs_url or set vars.ADMIN_OPENAPI_URL."
+            exit 1
+          fi
+
+          npx -y openapi-typescript@7.10.1 "$API_URL" -o "${{ inputs.output_file }}"
+
+      - name: Check changes
+        id: diff
+        run: |
+          if [ -n "$(git status --porcelain)" ]; then
+            echo "changed=true" >> "$GITHUB_OUTPUT"
+          else
+            echo "changed=false" >> "$GITHUB_OUTPUT"
+          fi
+
+      - name: Create PR
+        if: steps.diff.outputs.changed == 'true'
+        uses: peter-evans/create-pull-request@v6
+        with:
+          base: ${{ inputs.base_branch }}
+          commit-message: 'chore: 서버 타입 업데이트'
+          title: '[Chore] 서버 타입 업데이트'
+          body: |
+            ## 📌 작업 목적
+            - OpenAPI 스펙을 기준으로 타입 파일을 재생성
+            - 대상 파일: `${{ inputs.output_file }}`
+
+          branch: 'chore/update-openapi-types'
+          delete-branch: true
+          add-paths: |
+            ${{ inputs.output_file }}

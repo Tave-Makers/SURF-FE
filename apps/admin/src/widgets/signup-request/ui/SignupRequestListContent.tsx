@@ -9,6 +9,7 @@ interface SignupRequestListContentProps {
   isSelectionEnabled: boolean;
   selectedIds: Set<number>;
   onToggleSelect: (memberId: number) => void;
+  onClickMore: (memberId: number) => void;
   hasNextPage: boolean;
   isFetchingNextPage: boolean;
   onLoadMore: () => void;
@@ -23,6 +24,7 @@ export const SignupRequestListContent = ({
   isSelectionEnabled,
   selectedIds,
   onToggleSelect,
+  onClickMore,
   hasNextPage,
   isFetchingNextPage,
   onLoadMore,
@@ -41,6 +43,7 @@ export const SignupRequestListContent = ({
         isSelectionEnabled={isSelectionEnabled}
         selectedIds={selectedIds}
         onToggleSelect={onToggleSelect}
+        onClickMore={onClickMore}
       />
       {/* 무한 스크롤 트리거 */}
       <div ref={triggerRef} className="h-10" />

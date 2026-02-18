@@ -1,6 +1,6 @@
 'use client';
 
-import { UploadImage } from '@/entities/image/model/types';
+import { UploadImage } from '@surf/utils';
 import { useImageSelector } from './useImageSelector';
 import { useImageUploader } from '@/entities/image/model/useImageUploader';
 import { useCallback } from 'react';

@@ -1,5 +1,5 @@
 import { http, HttpResponse } from 'msw';
-import { createMockSignupRequestList } from '@/features/signup-request/api/mockData';
+import { createMockSignupRequestList } from '@/test/factories/signupRequest';
 
 export const signupRequestHandlers = [
   http.get('/api/proxy/v1/manager/registration-list', ({ request }) => {

@@ -2,8 +2,12 @@
 
 import { HeaderMode } from '@surf/ui/header';
 // import dynamic from 'next/dynamic';
+import { useEffect, useRef } from 'react';
 import { useMemberSearch } from '@/features/member-search/api/useMemberSearch';
+import { trackMemberSearchEvent } from '@/features/member-search/lib/trackMemberSearchEvent';
+import { MEMBER_SEARCH_EVENTS } from '@/features/member-search/model/constants';
 import { useMemberFilters } from '@/features/member-search/model/useMemberFilters';
+import { usePageName } from '@/shared/analytics/lib/getPageName';
 import SearchEmpty from '@/shared/assets/icons/empty-space/search-empty.svg';
 import { AppHeader } from '@/widgets/header/ui/AppHeader';
 import { MemberListWidget } from '@/widgets/member-search/ui/MemberListWidget';
@@ -25,6 +29,38 @@ export const MemberSearchPage = () => {
   const isEmpty = !isError && !isLoading && queryResult.totalCount === 0;
 
   const showState = isError || isLoading || isEmpty;
+
+  // 페이지 진입 트래킹 (최초 1회)
+  const trackRef = useRef(false);
+  const pageName = usePageName();
+
+  useEffect(() => {
+    if (trackRef.current) return;
+    trackRef.current = true;
+    trackMemberSearchEvent(MEMBER_SEARCH_EVENTS.PAGE_VIEW, { page_name: pageName });
+  }, [pageName]);
+
+  // 필터 적용 트래킹
+  useEffect(() => {
+    if (!part) return;
+    trackMemberSearchEvent(MEMBER_SEARCH_EVENTS.FILTER_APPLY, {
+      filter_type: 'part',
+      filter_value: part,
+    });
+  }, [part]);
+
+  useEffect(() => {
+    if (!generation) return;
+    trackMemberSearchEvent(MEMBER_SEARCH_EVENTS.FILTER_APPLY, {
+      filter_type: 'generation',
+      filter_value: String(generation),
+    });
+  }, [generation]);
+
+  const trackMemberSearchOnMemberClick = (rawKeyword?: string) => {
+    const keywordLength = (rawKeyword ?? '').trim().length;
+    trackMemberSearchEvent(MEMBER_SEARCH_EVENTS.MEMBER_SEARCH, { keyword_length: keywordLength });
+  };
 
   return (
     <div className="flex h-full flex-col">
@@ -68,7 +104,13 @@ export const MemberSearchPage = () => {
           </div>
         )}
 
-        {!showState && <MemberListWidget keyword={filters.keyword} queryResult={queryResult} />}
+        {!showState && (
+          <MemberListWidget
+            keyword={filters.keyword}
+            queryResult={queryResult}
+            onTrackMemberSearch={trackMemberSearchOnMemberClick}
+          />
+        )}
       </main>
     </div>
   );

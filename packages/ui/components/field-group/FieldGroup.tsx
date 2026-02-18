@@ -4,6 +4,7 @@ import { ReactNode } from 'react';
 
 type FieldGroupProps = {
   title: string;
+  titleClassName?: string;
   isRequired?: boolean;
   children: ReactNode;
   className?: string;
@@ -12,6 +13,7 @@ type FieldGroupProps = {
 
 export const FieldGroup = ({
   title,
+  titleClassName = '',
   isRequired = false,
   children,
   className = '',
@@ -20,7 +22,9 @@ export const FieldGroup = ({
   return (
     <fieldset className={`m-0 flex flex-col border-0 p-0 ${className}`} role="group">
       <div className="flex flex-row gap-5 pb-10">
-        <span className="text-title-title2 text-foreground-normal flex flex-row gap-5">
+        <span
+          className={`text-title-title2 text-foreground-normal flex flex-row gap-5 ${titleClassName}`}
+        >
           {title}
           {isRequired && (
             <>

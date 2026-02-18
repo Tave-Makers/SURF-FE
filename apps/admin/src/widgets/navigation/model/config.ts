@@ -19,7 +19,7 @@ export const NAV_ITEMS = [
   {
     id: 'banner',
     label: '홈배너 관리',
-    path: PAGE_ROUTES.BANNER,
+    path: PAGE_ROUTES.BANNER.LIST,
   },
   {
     id: 'dashboard',

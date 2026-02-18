@@ -8,9 +8,12 @@ import { useAlertStore } from '@surf/ui/store/alertStore';
 import { useToastStore } from '@surf/ui/store/toastStore';
 import { TextArea } from '@surf/ui/text-area';
 import { useRouter, useSearchParams } from 'next/navigation';
-import { useMemo, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import { useSendMessage } from '@/entities/message/model/useSendMessage';
 import { Callout } from '@/entities/message/ui/callout/Callout';
+import { trackMessageEvent } from '@/features/message/lib/trackMessageEvent';
+import { MESSAGE_EVENTS } from '@/features/message/model/types';
+import { usePageName } from '@/shared/analytics/lib/getPageName';
 import { AppHeader } from '@/widgets/header/ui/AppHeader';
 
 export const SendMessagePage = () => {
@@ -36,6 +39,7 @@ export const SendMessagePage = () => {
 
   const keyboardOffset = useKeyboardOffset();
   const router = useRouter();
+  const pageName = usePageName();
 
   // 쪽지 전송 mutation
   const { mutate: sendMessage, isPending } = useSendMessage();
@@ -51,13 +55,17 @@ export const SendMessagePage = () => {
           type: 'solid',
           variant: 'secondary',
           label: '취소',
-          onClick: () => closeAlert(),
+          onClick: () => {
+            trackMessageEvent(MESSAGE_EVENTS.LEAVE_CONFIRM, { action: 'cancel' });
+            closeAlert();
+          },
         },
         {
           type: 'solid',
           variant: 'danger',
           label: '나가기',
           onClick: () => {
+            trackMessageEvent(MESSAGE_EVENTS.LEAVE_CONFIRM, { action: 'exit' });
             closeAlert();
             router.back();
           },
@@ -83,6 +91,10 @@ export const SendMessagePage = () => {
           showToast('상대방의 이메일로 쪽지가 발송되었습니다.');
           closeAlert();
           router.back();
+          trackMessageEvent(MESSAGE_EVENTS.LETTER_SEND, { success: true });
+        },
+        onError: () => {
+          trackMessageEvent(MESSAGE_EVENTS.LETTER_SEND, { success: false });
         },
       },
     );
@@ -141,6 +153,10 @@ export const SendMessagePage = () => {
     title.trim().length >= MIN_LENGTH &&
     content.trim().length >= MIN_LENGTH;
 
+  useEffect(() => {
+    trackMessageEvent(MESSAGE_EVENTS.PAGE_VIEW, { page_name: pageName });
+  }, [pageName]);
+
   return (
     <div className="flex h-full flex-col">
       <AppHeader
@@ -162,6 +178,9 @@ export const SendMessagePage = () => {
             onChange={setSenderEmail}
             readOnly={isPending}
             errorMessage={emailErrorMessage}
+            onBlur={(_e) => {
+              trackMessageEvent(MESSAGE_EVENTS.INPUT_EMAIL, { field_name: 'email' });
+            }}
           />
         </FieldGroup>
         <FieldGroup title="추가로 연락받고 싶은 SNS">
@@ -170,6 +189,9 @@ export const SendMessagePage = () => {
             value={additionalSns}
             onChange={setAdditionalSns}
             readOnly={isPending}
+            onBlur={(_e) => {
+              trackMessageEvent(MESSAGE_EVENTS.INPUT_SNS, { field_name: 'sns' });
+            }}
           />
         </FieldGroup>
         <FieldGroup title="제목" isRequired>
@@ -179,6 +201,9 @@ export const SendMessagePage = () => {
             onChange={setTitle}
             guideMessage={`${MIN_LENGTH}자 이상 작성해주세요.`}
             readOnly={isPending}
+            onBlur={(_e) => {
+              trackMessageEvent(MESSAGE_EVENTS.INPUT_TITLE, { text_length: title.length });
+            }}
           />
         </FieldGroup>
         <FieldGroup title="본문" isRequired>
@@ -189,6 +214,9 @@ export const SendMessagePage = () => {
             mode="multiLine"
             guideMessage={`${MIN_LENGTH}자 이상 작성해주세요.`}
             readOnly={isPending}
+            onBlur={(_e) => {
+              trackMessageEvent(MESSAGE_EVENTS.INPUT_BODY, { text_length: content.length });
+            }}
           />
         </FieldGroup>
       </div>

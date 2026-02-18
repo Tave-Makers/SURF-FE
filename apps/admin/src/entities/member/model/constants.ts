@@ -1,4 +1,4 @@
-import { TrackPart } from './types';
+import { MemberRole, TrackPart } from './types';
 
 /**
  * 파트 타입을 한글로 변환
@@ -10,4 +10,15 @@ export const PART_LABELS: Record<TrackPart, string> = {
   DESIGN: '디자인',
   DATA_ANALYSIS: '데이터 분석',
   DEEP_LEARNING: '딥러닝',
+};
+
+/**
+ * 멤버 롤 라벨 매핑
+ */
+
+export const MEMBER_ROLE_LABELS: Record<MemberRole, string> = {
+  ADMIN: 'Admin',
+  MANAGER: 'Manager',
+  MEMBER: 'Member',
+  PRESIDENT: 'President',
 };

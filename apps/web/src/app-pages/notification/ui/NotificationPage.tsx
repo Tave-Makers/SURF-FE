@@ -86,7 +86,7 @@ export const NotificationPage = () => {
       readNotification(id, {
         onSuccess: () => {
           trackNotificationEvent(NOTIFICATION_EVENTS.NOTIFICATION_READ, {
-            notification_id: `noti_${id}`,
+            notification_id: `${id}`,
           });
         },
       });

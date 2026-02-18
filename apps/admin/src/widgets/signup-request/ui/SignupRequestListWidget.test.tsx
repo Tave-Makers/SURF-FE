@@ -18,7 +18,7 @@ describe('SignupRequestListWidget', () => {
     const user = userEvent.setup();
     renderWithProviders(<SignupRequestListWidget keyword="" />);
 
-    await screen.findByText('전체 20');
+    await screen.findByText('전체 40');
     await user.click(screen.getByRole('button', { name: '선택하기' }));
 
     const checkbox = await screen.findByLabelText('테스트유저1 선택');

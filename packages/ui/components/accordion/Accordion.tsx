@@ -30,8 +30,18 @@ export const Accordion = ({
   };
 
   useEffect(() => {
-    if (isOpen && contentRef.current) {
-      setMaxHeight(`${contentRef.current.scrollHeight}px`);
+    const el = contentRef.current;
+    if (!el) return;
+
+    if (isOpen) {
+      setMaxHeight(`${el.scrollHeight}px`);
+
+      const observer = new ResizeObserver(() => {
+        setMaxHeight(`${el.scrollHeight}px`);
+      });
+      observer.observe(el);
+
+      return () => observer.disconnect();
     } else {
       setMaxHeight('0px');
     }
@@ -70,7 +80,7 @@ export const Accordion = ({
         style={{ maxHeight }}
         className="overflow-hidden transition-all duration-300 ease-in-out"
       >
-        <div className="px-13 py-15">{children}</div>
+        {children}
       </div>
     </div>
   );

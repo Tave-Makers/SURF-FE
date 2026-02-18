@@ -1,10 +1,9 @@
 'use client';
 
-import { format } from 'date-fns';
+import { Fab } from '@surf/ui/fab';
 import { useRouter } from 'next/navigation';
 import { useSearchParams } from 'next/navigation';
-import { useEffect, useRef, useState } from 'react';
-import { PostFab } from '@/entities/post/ui/post-fab/PostFab';
+import { useState } from 'react';
 import { useAuthStore } from '@/features/auth/model/useAuthStore';
 import { trackCalendarEvent } from '@/features/calendar/lib/trackCalendarEvent';
 import { CALENDAR_EVENTS } from '@/features/calendar/model/constants';
@@ -72,7 +71,7 @@ export const CalendarPage = () => {
 
       {memberRole !== 'member' && (
         <div className="absolute right-15 bottom-15 z-50">
-          <PostFab onClick={handleCreateSchedule} />
+          <Fab onClick={handleCreateSchedule} />
         </div>
       )}
     </div>

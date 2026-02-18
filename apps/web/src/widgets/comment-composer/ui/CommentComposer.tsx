@@ -8,6 +8,8 @@ import { SheetItem } from '@surf/ui/sheet';
 import { useToastStore } from '@surf/ui/store/toastStore';
 import { useEffect, useRef, useState } from 'react';
 import type { MentionSearchResponse } from '@/features/comment/api/types';
+import { trackCommentEvent } from '@/features/comment/lib/trackCommentEvent';
+import { COMMENT_EVENTS } from '@/features/comment/model/types';
 import { useCreateCommentMutation } from '@/features/comment/model/useCreateCommentMutation';
 import { useMentionSearchQuery } from '@/features/comment/model/useMentionSearchQuery';
 
@@ -182,13 +184,16 @@ export const CommentComposer = ({
   }, [mentionOpen]);
 
   const onSend = async (text: string) => {
+    trackCommentEvent(COMMENT_EVENTS.CLICK_COMMENT_SUBMIT, {
+      post_id: postId,
+      comment_length: text.length,
+    });
     try {
       await createMutation.mutateAsync({
         parentId: replyParentId,
         content: text,
         mentionMemberIds,
       });
-
       setValue('');
       setReplyParentId(null);
       setMentionMap({});

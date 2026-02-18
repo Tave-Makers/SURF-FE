@@ -2,7 +2,7 @@
 
 import { Header, HeaderMode } from '@surf/ui/header';
 import { useRouter } from 'next/navigation';
-import { useBannerFromCache } from '@/features/banner/api/useGetBannerFromCache';
+import { useBannerFromCache } from '@/features/banner/model/useGetBannerFromCache';
 import { useBannerEdit } from '@/features/banner/model/useBannerEdit';
 import { BannerFormWidget } from '@/widgets/banner/ui/BannerFormWidget';
 

@@ -5,7 +5,7 @@ import { useRouter } from 'next/navigation';
 import { useEffect, useMemo, useState } from 'react';
 import { Banner } from '@/entities/banner/model/types';
 import { BannerDnd } from '@/entities/banner/ui/BannerDnd';
-import { useBannerListQuery } from '@/features/banner/api/useGetBannerList';
+import { useBannerListQuery } from '@/features/banner/model/useGetBannerList';
 import {
   getGroupedByStatus,
   mergeReorderedList,

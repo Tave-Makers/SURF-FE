@@ -1,10 +1,10 @@
 import { useMutation, useQueryClient } from '@tanstack/react-query';
-import { createBanner } from './createBanner';
-import { CreateBannerRequest, UpdateBannerRequest } from './types';
-import { deleteBanner } from './deleteBanner';
-import { activateBanner } from './activateBanner';
-import { deactivateBanner } from './deactivateBanner';
-import { updateBanner } from './updateBanner';
+import { createBanner } from '../api/createBanner';
+import { CreateBannerRequest, UpdateBannerRequest } from '../api/types';
+import { deleteBanner } from '../api/deleteBanner';
+import { activateBanner } from '../api/activateBanner';
+import { deactivateBanner } from '../api/deactivateBanner';
+import { updateBanner } from '../api/updateBanner';
 
 // 홈 배너 생성 Mutation
 export const useCreateBannerMutation = () => {

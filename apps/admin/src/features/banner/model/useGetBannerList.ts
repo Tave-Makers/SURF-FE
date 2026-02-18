@@ -1,6 +1,6 @@
 import { useSuspenseQuery, type UseSuspenseQueryOptions } from '@tanstack/react-query';
 import { Banner } from '@/entities/banner/model/types';
-import { bannerListQueryOptions } from './queryOptions';
+import { bannerListQueryOptions } from '../api/queryOptions';
 
 type BannerListQueryKey = ReturnType<typeof bannerListQueryOptions>['queryKey'];
 

@@ -4,7 +4,7 @@ import { HeaderMode } from '@surf/ui/header';
 import { useRouter } from 'next/navigation';
 import { Suspense, useCallback, useMemo, useState } from 'react';
 import { Banner } from '@/entities/banner/model/types';
-import { useBannerListQuery } from '@/features/banner/api/useGetBannerList';
+import { useBannerListQuery } from '@/features/banner/model/useGetBannerList';
 import { PAGE_ROUTES } from '@/shared/config/path';
 import { BannerListWidget } from '@/widgets/banner/ui/BannerListWidget';
 import { AppHeader } from '@/widgets/header/ui/AppHeader';

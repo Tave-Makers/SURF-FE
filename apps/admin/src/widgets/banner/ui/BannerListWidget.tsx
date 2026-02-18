@@ -43,7 +43,12 @@ export const BannerListWidget = ({ isReorderMode, onBannersChange }: BannerListW
   // 순서 변경 모드 진입 시 순서 동기화
   useEffect(() => {
     if (isReorderMode) {
-      setBanners((current) => reassignDisplayOrders(getGroupedByStatus(current)));
+      const initialOrder = reassignDisplayOrders(getGroupedByStatus(banners));
+      setBanners(initialOrder);
+
+      // 모드 진입 시점의 리스트를 부모에게 전달
+      onBannersChange?.(initialOrder);
+      setFilter('all');
     }
   }, [isReorderMode]);
 

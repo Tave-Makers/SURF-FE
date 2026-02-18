@@ -7,12 +7,17 @@ import { useImageUploader } from '@/entities/image/model/useImageUploader';
 import { PAGE_ROUTES } from '@/shared/config/path';
 import { useAlertStore } from '@surf/ui/store/alertStore';
 import { useToastStore } from '@surf/ui/store/toastStore';
+import { useUpdateBannerMutation } from '../api/useUpdateBannerMutation';
+import { useToggleBannerStatusMutation } from '../api/useToggleBannerStatusMutation';
 
-export const useBannerEdit = (bannerId: string, initialData: Banner) => {
+export const useBannerEdit = (bannerId: string, initialData: Banner | undefined) => {
   const router = useRouter();
   const { uploadImages } = useImageUploader();
   const { open: openAlert, close: closeAlert } = useAlertStore();
   const { show: showToast } = useToastStore();
+
+  const { mutateAsync: updateInfo } = useUpdateBannerMutation(Number(bannerId));
+  const { mutateAsync: toggleStatus } = useToggleBannerStatusMutation(Number(bannerId));
 
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [initial, setInitial] = useState<Banner | null>(null);
@@ -26,7 +31,7 @@ export const useBannerEdit = (bannerId: string, initialData: Banner) => {
 
   // 초기 데이터 로드
   useEffect(() => {
-    if (!initialData || initial) return;
+    if (!initialData) return;
 
     setInitial(initialData);
     setForm({
@@ -35,7 +40,7 @@ export const useBannerEdit = (bannerId: string, initialData: Banner) => {
       linkUrl: initialData.linkUrl,
       isActive: initialData.isActive,
     });
-  }, [bannerId, initialData, initial]);
+  }, [bannerId, initialData]);
 
   // 변경 감지 및 유효성 검사
   const isChanged = useMemo(() => {
@@ -67,22 +72,49 @@ export const useBannerEdit = (bannerId: string, initialData: Banner) => {
         if (result.status !== 'uploaded' || !result.uploadedUrl) throw new Error();
         finalUrl = result.uploadedUrl;
       }
-      const payload = {
-        name: form.name,
-        linkUrl: form.linkUrl,
-        imageUrl: finalUrl,
-        status: form.isActive,
-      };
 
-      console.log('배너 수정 API 호출:', payload);
-      // TODO: await updateBanner(payload);
+      const apiTasks = [];
+
+      // 정보(이름, URL, 이미지)가 하나라도 바뀌었다면 PUT 호출
+      const hasInfoChanged =
+        initial.name !== form.name ||
+        initial.linkUrl !== form.linkUrl ||
+        initial.imageUrl !== finalUrl;
+
+      if (hasInfoChanged) {
+        apiTasks.push(
+          updateInfo({
+            name: form.name,
+            linkUrl: form.linkUrl,
+            imageUrl: finalUrl,
+          }),
+        );
+      }
+
+      // 활성 상태가 바뀌었다면 PATCH 호출
+      if (initial.isActive !== form.isActive) {
+        apiTasks.push(toggleStatus(form.isActive));
+      }
+
+      // 모든 API가 완료될 때까지 대기
+      await Promise.all(apiTasks);
       router.replace(PAGE_ROUTES.BANNER.LIST);
     } catch {
       showToast('배너 수정에 실패했습니다.');
     } finally {
       setIsSubmitting(false);
     }
-  }, [initial, isSubmitting, form, bannerFile, uploadImages, router, showToast]);
+  }, [
+    initial,
+    isSubmitting,
+    form,
+    bannerFile,
+    uploadImages,
+    router,
+    showToast,
+    updateInfo,
+    toggleStatus,
+  ]);
 
   const handleOpenSaveAlert = () => {
     openAlert({

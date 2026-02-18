@@ -34,7 +34,7 @@ type Store = {
   setGroupName: (key: FormKey, v: string) => void;
   setGroupIntroduction: (key: FormKey, v: string) => void;
 
-  // members (여기에 훅 로직 이관)
+  // members
   pickLeader: (key: FormKey, nextLeader: MemberBase | undefined) => void;
   addMembers: (key: FormKey, newMembers: MemberBase[]) => void;
   removeMember: (key: FormKey, memberId: number) => void;
@@ -56,7 +56,6 @@ function normalize(d: GroupFormDraft): GroupFormDraft {
 }
 
 function equalDraft(a: GroupFormDraft, b: GroupFormDraft) {
-  // Draft가 JSON-safe라는 전제 (MemberBase에 함수/Date 없음)
   return JSON.stringify(normalize(a)) === JSON.stringify(normalize(b));
 }
 
@@ -168,7 +167,7 @@ export const useGroupFormStore = create<Store>((set, get) => ({
       };
     }),
 
-  /** 팀장 설정 (너 훅 로직 그대로) */
+  /** 팀장 설정 */
   pickLeader: (key, nextLeader) =>
     set((s) => {
       const cur = s.forms[key];

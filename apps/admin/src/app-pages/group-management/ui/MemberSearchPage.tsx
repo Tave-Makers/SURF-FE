@@ -48,6 +48,7 @@ export const MemberSearchPage = ({ generation, formKey }: MemberSearchPageProps)
       <AppHeader
         overrideHeader={{ mode: HeaderMode.Default, title: '팀원 설정', hasLeftIcon: true }}
       />
+      {/** 검색어 입력창 */}
       <div className="px-13">
         <TextInput
           mode="search"
@@ -57,6 +58,7 @@ export const MemberSearchPage = ({ generation, formKey }: MemberSearchPageProps)
           onChange={(value) => setKeyword(value)}
         />
       </div>
+      {/** 상세 화면에서 선택한 기수의 회원 목록 리스트 */}
       <MemberSearchAccordionList
         generations={[generation]}
         keyword={debouncedKeyword}

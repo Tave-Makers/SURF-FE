@@ -2,34 +2,39 @@ import { MemberStatus } from '@/entities/member/model/types';
 import { SignupRequestMember } from '@/entities/signup-request/model/types';
 
 export type SelectionPolicy = {
-  selectedCount: number;
   canApprove: boolean;
   canReject: boolean;
 };
 
-export function getSelectedStatuses(
+export function createMemberStatusMap(
   members: SignupRequestMember[],
-  selectedIds: Set<number>,
-): MemberStatus[] {
-  const statuses: MemberStatus[] = [];
+): ReadonlyMap<number, MemberStatus> {
+  return new Map(members.map((member) => [member.id, member.status]));
+}
 
-  for (const member of members) {
-    if (selectedIds.has(member.id)) {
-      statuses.push(member.status);
+export function getSelectionPolicy(
+  memberStatusMap: ReadonlyMap<number, MemberStatus>,
+  selectedIds: Set<number>,
+): SelectionPolicy {
+  if (selectedIds.size === 0) {
+    return {
+      canApprove: false,
+      canReject: false,
+    };
+  }
+
+  for (const selectedId of selectedIds) {
+    const status = memberStatusMap.get(selectedId);
+    if (status !== 'waiting') {
+      return {
+        canApprove: false,
+        canReject: false,
+      };
     }
   }
 
-  return statuses;
-}
-
-export function getSelectionPolicy(statuses: MemberStatus[]): SelectionPolicy {
-  const selectedCount = statuses.length;
-  const hasSelection = selectedCount > 0;
-  const allWaiting = hasSelection && statuses.every((status) => status === 'waiting');
-
   return {
-    selectedCount,
-    canApprove: allWaiting,
-    canReject: allWaiting,
+    canApprove: true,
+    canReject: true,
   };
 }

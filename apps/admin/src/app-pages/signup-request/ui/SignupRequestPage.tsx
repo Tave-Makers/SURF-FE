@@ -1,8 +1,7 @@
 'use client';
 import { useDebouncedValue } from '@surf/hooks';
 import { TextInput } from '@surf/ui/text-input';
-import { Suspense, useState } from 'react';
-import { ErrorBoundary } from '@/shared/ui/ErrorBoundary';
+import { useState } from 'react';
 import { SignupRequestListWidget } from '@/widgets/signup-request/ui/SignupRequestListWidget';
 
 /**
@@ -24,14 +23,7 @@ export const SignupRequestPage = () => {
           onChange={(value) => setKeyword(value)}
         />
       </div>
-      {/* 회원가입 요청 리스트 위젯, 승인/거절 액션 수행 
-        TODO: 에러/로딩 컴포넌트 적용 필요
-      */}
-      <ErrorBoundary fallback={<div>error</div>}>
-        <Suspense fallback={<div>loading...</div>}>
-          <SignupRequestListWidget keyword={debouncedKeyword} />
-        </Suspense>
-      </ErrorBoundary>
+      <SignupRequestListWidget keyword={debouncedKeyword} />
     </main>
   );
 };

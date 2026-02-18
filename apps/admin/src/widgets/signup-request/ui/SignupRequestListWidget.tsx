@@ -1,16 +1,10 @@
 'use client';
 
-import { useEffect, useMemo } from 'react';
-import { SignupRequestListContent } from './SignupRequestListContent';
-import { useSignupRequestList } from '@/features/signup-request/model/queries/useSignupRequestList';
-import {
-  getSelectedStatuses,
-  getSelectionPolicy,
-} from '@/features/signup-request/model/selectionPolicy';
-import { useSignupStatusActions } from '@/features/signup-request/model/useSignupStatusActions';
+import { Suspense, useEffect } from 'react';
+import { SignupRequestListContainer } from './SignupRequestListContainer';
+import { useSignupRequestCountQuery } from '@/entities/member/model/queries/useMemberCountQuery';
 import { useSelectableListState } from '@/shared/hooks/useSelectableListState';
-import { useBottomSheetStore } from '@/shared/store/bottomSheetStore';
-import { BottomActionBar } from '@/shared/ui/BottomActionBar';
+import { ErrorBoundary } from '@/shared/ui/ErrorBoundary';
 import { SelectableListTopBar } from '@/shared/ui/SelectableListTopBar';
 
 interface SignupRequestListWidgetProps {
@@ -34,75 +28,36 @@ export const SignupRequestListWidget = ({ keyword }: SignupRequestListWidgetProp
     resetSelectionState,
   } = useSelectableListState<number>();
 
-  const filters = useMemo(() => (keyword ? { keyword } : {}), [keyword]);
-  const { members, totalCount, fetchNextPage, hasNextPage, isFetchingNextPage } =
-    useSignupRequestList(filters);
-
-  const openBottomSheet = useBottomSheetStore((s) => s.open);
+  const { data: totalCount } = useSignupRequestCountQuery(keyword);
 
   useEffect(() => {
     resetSelectionState();
   }, [keyword, resetSelectionState]);
-
-  const statuses = getSelectedStatuses(members, selectedIds);
-  const { canApprove, canReject } = getSelectionPolicy(statuses);
-
-  //회원가입 상태 처리 액션 훅
-  const { openApproveAlert, openRejectAlert, isPending } = useSignupStatusActions({
-    memberIds: Array.from(selectedIds),
-    onSuccess: resetSelectionState,
-  });
-
-  //상세 바텀시트 오픈 핸들러
-  const handleOpenDetail = (memberId: number) => {
-    openBottomSheet({
-      type: 'signup',
-      props: {
-        memberId,
-        showAction: mode === 'view',
-      },
-    });
-  };
-
-  const bottomActions = [
-    {
-      key: 'approve',
-      label: '승인하기',
-      onClick: openApproveAlert,
-      disabled: !canApprove || isPending,
-    },
-    {
-      key: 'reject',
-      label: '거절하기',
-      onClick: openRejectAlert,
-      disabled: !canReject || isPending,
-    },
-  ];
 
   return (
     <div className="flex h-full flex-col overflow-hidden">
       {/* 회원가입 요청 상단 바 */}
       <SelectableListTopBar
         mode={mode}
-        totalCount={totalCount}
+        totalCount={totalCount ?? 0}
         selectedCount={selectedCount}
         onEnterSelectMode={enterSelectMode}
         onExitSelectMode={exitSelectMode}
       />
-      {/* 회원가입 요청 멤버 리스트*/}
-      <SignupRequestListContent
-        members={members}
-        isSelectionEnabled={mode === 'select'}
-        selectedIds={selectedIds}
-        onToggleSelect={toggleSelect}
-        onClickMore={handleOpenDetail}
-        hasNextPage={hasNextPage}
-        isFetchingNextPage={isFetchingNextPage}
-        onLoadMore={() => {
-          void fetchNextPage();
-        }}
-      />
-      {mode === 'select' && selectedCount > 0 && <BottomActionBar actions={bottomActions} />}
+      {/* 회원가입 목록 */}
+      <ErrorBoundary
+        fallback={<div className="p-4">데이터를 불러오는 중 오류가 발생했습니다.</div>}
+      >
+        <Suspense fallback={<div className="p-4">loading...</div>}>
+          <SignupRequestListContainer
+            keyword={keyword}
+            mode={mode}
+            selectedIds={selectedIds}
+            onToggleSelect={toggleSelect}
+            resetSelectionState={resetSelectionState}
+          />
+        </Suspense>
+      </ErrorBoundary>
     </div>
   );
 };

@@ -19,8 +19,8 @@ import {
   sortableKeyboardCoordinates,
 } from '@dnd-kit/sortable';
 import { CSS } from '@dnd-kit/utilities';
+import { UploadImage } from '@surf/utils';
 import React, { useState } from 'react';
-import { UploadImage } from '@/entities/image/model/types';
 import { ImageItem } from '@/entities/post/post-image/ui/ImageItem';
 
 type ImageDnDProps = {

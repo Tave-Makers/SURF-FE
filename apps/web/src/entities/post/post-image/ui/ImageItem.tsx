@@ -1,5 +1,5 @@
 'use client';
-import { UploadImage } from '@/entities/image/model/types';
+import { UploadImage } from '@surf/utils';
 import DeleteIcon from '@/shared/assets/icons/post/post-image/x-circle-fill.svg';
 
 type ImageItemProps = {

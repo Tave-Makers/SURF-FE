@@ -54,6 +54,11 @@ export interface MemberItem {
   trackList?: ApiTrack[];
 }
 
+/** 전체 멤버 수(전체 합) */
+export interface MemberCountDTO {
+  membersCount: number;
+}
+export type MemberCountResponse = CommonResponse<MemberCountDTO>;
 /**
  * 멤버 정보 조회 응답
  */

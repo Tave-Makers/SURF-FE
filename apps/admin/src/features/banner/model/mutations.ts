@@ -5,6 +5,7 @@ import { deleteBanner } from '../api/deleteBanner';
 import { activateBanner } from '../api/activateBanner';
 import { deactivateBanner } from '../api/deactivateBanner';
 import { updateBanner } from '../api/updateBanner';
+import { bannerQueryKeys } from '../api/queryKeys';
 
 // 홈 배너 생성 Mutation
 export const useCreateBannerMutation = () => {
@@ -13,7 +14,7 @@ export const useCreateBannerMutation = () => {
   return useMutation({
     mutationFn: (data: CreateBannerRequest) => createBanner(data),
     onSuccess: async () => {
-      await queryClient.invalidateQueries({ queryKey: ['banner', 'list'] });
+      await queryClient.invalidateQueries({ queryKey: bannerQueryKeys.list() });
     },
     onError: (error) => {
       console.error('[useCreateBannerMutation] 배너 생성 실패:', error);
@@ -28,7 +29,7 @@ export const useDeleteBannerMutation = (bannerId: number) => {
   return useMutation({
     mutationFn: () => deleteBanner(bannerId),
     onSuccess: async () => {
-      await queryClient.invalidateQueries({ queryKey: ['banner', 'list'] });
+      await queryClient.invalidateQueries({ queryKey: bannerQueryKeys.list() });
     },
     onError: (error) => {
       console.error('[useDeleteBannerMutation] 배너 삭제 실패:', error);
@@ -44,7 +45,7 @@ export const useToggleBannerStatusMutation = (bannerId: number) => {
     mutationFn: (isActive: boolean) =>
       isActive ? activateBanner(bannerId) : deactivateBanner(bannerId),
     onSuccess: async (_) => {
-      await queryClient.invalidateQueries({ queryKey: ['banner', 'list'] });
+      await queryClient.invalidateQueries({ queryKey: bannerQueryKeys.list() });
     },
     onError: (error) => {
       console.error('[useToggleBannerStatusMutation] 배너 상태 토글 실패:', error);
@@ -58,7 +59,7 @@ export const useUpdateBannerMutation = (bannerId: number) => {
   return useMutation({
     mutationFn: (data: UpdateBannerRequest) => updateBanner(bannerId, data),
     onSuccess: async () => {
-      await queryClient.invalidateQueries({ queryKey: ['banner', 'list'] });
+      await queryClient.invalidateQueries({ queryKey: bannerQueryKeys.list() });
     },
     onError: (error) => {
       console.error('[useUpdateBannerMutation] 배너 업데이트 실패:', error);

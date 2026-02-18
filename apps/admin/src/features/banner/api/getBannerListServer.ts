@@ -1,5 +1,5 @@
-import { serverFetchWithCookies } from '@/shared/api/serverFetchWithCookies';
 import 'server-only';
+import { serverFetchWithCookies } from '@/shared/api/serverFetchWithCookies';
 import { BannerListResponse } from './types';
 
 export async function getBannerListServer() {

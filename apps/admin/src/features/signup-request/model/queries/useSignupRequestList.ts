@@ -23,7 +23,6 @@ export function useSignupRequestList(keyword = '') {
 
     // 리스트 캐시에는 멤버 ID 목록만 유지
     memberIds: data.items,
-    totalCount: data.totalCount,
     isLast: data.isLast,
 
     // 무한스크롤 메커니즘

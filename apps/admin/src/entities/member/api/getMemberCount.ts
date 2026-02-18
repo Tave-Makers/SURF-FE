@@ -14,6 +14,7 @@ export async function getMemberCount({
       memberStatuses: statuses,
       keyword,
     },
+    paramsSerializer: { indexes: null },
   });
 
   return response.data.data;

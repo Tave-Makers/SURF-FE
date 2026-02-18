@@ -14,6 +14,11 @@ interface SignupRequestListContainerProps {
   resetSelectionState: () => void;
 }
 
+const Spinner = () => (
+  <div className="flex justify-center py-4">
+    <div className="h-6 w-6 animate-spin rounded-full border-b-2 border-blue-600" />
+  </div>
+);
 export const SignupRequestListContainer = ({
   keyword,
   mode,
@@ -46,12 +51,6 @@ export const SignupRequestListContainer = ({
       });
     },
     [mode, openBottomSheet],
-  );
-
-  const Spinner = () => (
-    <div className="flex justify-center py-4">
-      <div className="h-6 w-6 animate-spin rounded-full border-b-2 border-blue-600" />
-    </div>
   );
 
   return (

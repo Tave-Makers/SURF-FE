@@ -3,15 +3,15 @@
 import { MemberSearchPage } from '@/app-pages/group-management/ui/MemberSearchPage';
 
 type PageProps = {
-  searchParams: {
+  searchParams: Promise<{
     generation: string;
     formKey: string;
-  };
+  }>;
 };
 
-const Page = ({ searchParams }: PageProps) => {
-  const formKey = searchParams.formKey;
-  const raw = searchParams.generation;
+const Page = async ({ searchParams }: PageProps) => {
+  const { formKey } = await searchParams;
+  const { generation: raw } = await searchParams;
   const generation = Number(raw);
   return <MemberSearchPage generation={generation} formKey={formKey} />;
 };

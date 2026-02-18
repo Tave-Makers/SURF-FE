@@ -43,16 +43,6 @@ export const createRouteConfig = (_router: RouterInstance): RouteConfig[] => [
     },
   },
   {
-    id: 'banner',
-    path: PAGE_ROUTES.BANNER,
-    backPath: PAGE_ROUTES.HOME,
-    header: {
-      mode: HeaderMode.Default,
-      title: '홈배너 관리',
-      hasLeftIcon: true,
-    },
-  },
-  {
     id: 'dashboard',
     path: PAGE_ROUTES.DASHBOARD,
     backPath: PAGE_ROUTES.HOME,
@@ -89,6 +79,16 @@ export const createRouteConfig = (_router: RouterInstance): RouteConfig[] => [
     header: {
       mode: HeaderMode.Default,
       title: '활동배지 관리',
+      hasLeftIcon: true,
+    },
+  },
+  {
+    id: 'create-banner',
+    path: PAGE_ROUTES.BANNER.CREATE,
+    backPath: PAGE_ROUTES.BANNER.LIST,
+    header: {
+      mode: HeaderMode.Default,
+      title: '신규 배너 생성',
       hasLeftIcon: true,
     },
   },

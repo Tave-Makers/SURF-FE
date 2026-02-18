@@ -1,5 +1,5 @@
+import { UploadImage } from '@surf/utils';
 import { ImageDnD } from './ImageDnD';
-import type { UploadImage } from '@/entities/image/model/types';
 
 type ImageListProps = {
   images: UploadImage[];

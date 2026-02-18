@@ -2,12 +2,11 @@
 
 import { useKeyboardOffset } from '@surf/hooks';
 import { useAlertStore } from '@surf/ui/store/alertStore';
+import { UploadImage } from '@surf/utils';
 import { EditorContent } from '@tiptap/react';
 import { useCallback, useEffect, useRef } from 'react';
-
 import '@/features/post/post-editor/ui/PostEditor.style.css';
 import { EventCard } from '@/entities/calendar/ui/EventCard/EventCard';
-import { UploadImage } from '@/entities/image/model/types';
 import { POST_VALIDATION } from '@/entities/post/model/validation';
 import { ImageList } from '@/entities/post/post-image/ui/ImageList';
 import { useImageManager } from '@/features/image/model/useImageManager';

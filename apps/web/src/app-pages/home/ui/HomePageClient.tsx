@@ -12,13 +12,16 @@ import { useGetNotifications } from '@/entities/notification/model/useGetNotific
 import { AnnouncementBar } from '@/entities/schedule/ui/announcement-bar/AnnouncementBar';
 import type { HeroCardProps } from '@/features/home-theme/ui/hero-card/HeroCard';
 import { HeroCard } from '@/features/home-theme/ui/hero-card/HeroCard';
-import { trackNotificationEvent } from '@/features/notification-tracking/lib/trackNotificationEvent';
-import { NOTIFICATION_EVENTS } from '@/features/notification-tracking/model/constants';
+import { trackHomeEvent } from '@/features/home-tracking/lib/trackHomeEvent';
+import { HOME_EVENTS } from '@/features/home-tracking/model/constants';
+import { usePageName } from '@/shared/analytics/lib/getPageName';
 import { PAGE_ROUTES } from '@/shared/config/path';
 import { AppHeader } from '@/widgets/header/ui/AppHeader';
 
 export const HomePageClient = ({ heroProps }: { heroProps: HeroCardProps }) => {
   const router = useRouter();
+  const trackRef = useRef(false);
+  const pageName = usePageName();
   const scrollRef = useRef<HTMLDivElement | null>(null);
   const [isHeaderSolid, setIsHeaderSolid] = useState(false);
 
@@ -50,7 +53,14 @@ export const HomePageClient = ({ heroProps }: { heroProps: HeroCardProps }) => {
       console.log(`${label} 클릭 - ${link}로 이동`);
     }
     router.push(link);
+    trackHomeEvent(HOME_EVENTS.SHORTCUT_CLICK, { target: label });
   };
+
+  useEffect(() => {
+    if (trackRef.current) return;
+    trackRef.current = true;
+    trackHomeEvent(HOME_EVENTS.PAGE_VIEW, { page_name: pageName });
+  }, [pageName]);
 
   useEffect(() => {
     const el = scrollRef.current;
@@ -81,9 +91,6 @@ export const HomePageClient = ({ heroProps }: { heroProps: HeroCardProps }) => {
                 isNew: hasUnread,
                 onClickIcon: () => {
                   router.push(PAGE_ROUTES.NOTIFICATION);
-                  trackNotificationEvent(NOTIFICATION_EVENTS.ALARM_ICON_CLICK, {
-                    has_unread: hasUnread || false,
-                  });
                 },
               },
             ],

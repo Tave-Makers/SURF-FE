@@ -5,7 +5,7 @@ import { PostFormState, PostPageMode } from '@/features/post/post-form/model/typ
 import { ScheduleFormData } from '@/features/schedule/create/model/types';
 import { PostDetail } from '@/entities/post/model/types';
 import { PostScheduleData } from '@/entities/post/api/types';
-import { UploadImage } from '@/entities/image/model/types';
+import { UploadImage } from '@surf/utils';
 import { usePostFormStore } from './usePostFormStore';
 
 type PostFormActions = Pick<PostFormState, 'setField' | 'setEditorState'>;

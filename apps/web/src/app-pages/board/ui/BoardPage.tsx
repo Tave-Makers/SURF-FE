@@ -1,11 +1,11 @@
 'use client';
 
+import { Fab } from '@surf/ui/fab';
 import { HeaderMode } from '@surf/ui/header';
 import { Tab } from '@surf/ui/tab';
 import { useSearchParams, useRouter } from 'next/navigation';
 import { POST_BOARDS } from '@/entities/post/model/board';
 import { TAB_CATEGORIES, TAB_CATEGORY_LIST } from '@/entities/post/model/tab';
-import { PostFab } from '@/entities/post/ui/post-fab/PostFab';
 import { useAuthStore } from '@/features/auth/model/useAuthStore';
 import { usePostFormStore } from '@/features/post/post-form/model/usePostFormStore';
 import { useCreatePostScheduleStore } from '@/features/schedule/create-post-schedule/model/useCreatePostScheduleStore';
@@ -75,7 +75,7 @@ const BoardPage = ({ boardId: boardIdProp }: { boardId: string }) => {
         <div className="pointer-events-none fixed inset-0 z-50">
           <div className="relative mx-auto h-full sm:max-w-[min(100dvw,calc(100dvh*375/812))]">
             <div className="pointer-events-auto absolute right-15 bottom-15">
-              <PostFab onClick={handlePostClick} />
+              <Fab onClick={handlePostClick} />
             </div>
           </div>
         </div>

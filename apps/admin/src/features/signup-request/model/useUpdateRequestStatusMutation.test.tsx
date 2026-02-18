@@ -35,7 +35,6 @@ describe('useUpdateSignupRequestStatusMutation', () => {
       await result.current.mutateAsync({
         memberIds: [1],
         nextStatus: 'approve',
-        filters: {},
       });
     });
 

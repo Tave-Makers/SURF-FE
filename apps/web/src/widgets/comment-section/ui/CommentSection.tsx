@@ -6,9 +6,12 @@ import { toDate, toKST, formatDateTime } from '@surf/utils';
 // import dynamic from 'next/dynamic';
 import { useRouter } from 'next/navigation';
 import { useEffect, useRef } from 'react';
+
 import { useAuthStore } from '@/features/auth/model/useAuthStore';
 import type { CommentResponse } from '@/features/comment/api/types';
+import { trackCommentEvent } from '@/features/comment/lib/trackCommentEvent';
 import { COMMENT_PAGE_SIZE } from '@/features/comment/model/constant';
+import { COMMENT_EVENTS } from '@/features/comment/model/types';
 import { useDeleteCommentMutation } from '@/features/comment/model/useDeleteCommentMutation';
 import { useInfiniteCommentsQuery } from '@/features/comment/model/useInfiniteCommentsQuery';
 import { useToggleCommentLikeMutation } from '@/features/comment/model/useToggleCommentLikeMutation';
@@ -106,6 +109,10 @@ export const CommentSection = ({ postId, memberId, scrollRootRef, onStartReply }
           variant: 'danger',
           label: '삭제하기',
           onClick: () => {
+            trackCommentEvent(COMMENT_EVENTS.CLICK_COMMENT_DELETE, {
+              post_id: postId,
+              comment_id: commentId,
+            });
             closeAlert();
             void (async () => {
               try {
@@ -164,11 +171,17 @@ export const CommentSection = ({ postId, memberId, scrollRootRef, onStartReply }
                           }
                         : undefined
                     }
-                    onLikeToggle={() =>
+                    onLikeToggle={() => {
+                      const nextState = c.liked ? 'off' : 'on';
+                      trackCommentEvent(COMMENT_EVENTS.LIKE, {
+                        target_type: 'comment',
+                        target_id: c.id,
+                        state: nextState,
+                      });
                       toggleLikeMutation.mutate(c.id, {
                         onError: () => showToast('좋아요 처리에 실패했어요'),
-                      })
-                    }
+                      });
+                    }}
                     onReplyClick={() =>
                       onStartReply({ commentId: c.id, memberId: c.memberId, nickname: c.nickname })
                     }

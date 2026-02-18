@@ -25,3 +25,23 @@ export type ScrapsEventPropsMap = {
   [SCRAPS_EVENTS.SCROLL_SCRAPS_PAGE]: { percent: number };
   [SCRAPS_EVENTS.CLICK_POST_CARD]: { post_id: string };
 };
+
+// Post Detail 관련 이벤트 이름
+export const POST_DETAIL_EVENTS = {
+  PAGE_VIEW: 'page_view',
+  LIKE: 'like',
+  SCRAP: 'scrap',
+  LIKE_LIST_VIEW: 'like_list_view',
+  CLICK_POST_EDIT: 'click_post_edit',
+  CLICK_POST_DELETE: 'click_post_delete',
+} as const;
+
+// Post Detail 관련 이벤트별 속성 타입 매핑
+export type PostDetailEventPropsMap = {
+  [POST_DETAIL_EVENTS.PAGE_VIEW]: { page_name: string; post_id: number };
+  [POST_DETAIL_EVENTS.LIKE]: { target_type: string; target_id: number; state: string };
+  [POST_DETAIL_EVENTS.SCRAP]: { target_type: string; target_id: number; state: string };
+  [POST_DETAIL_EVENTS.LIKE_LIST_VIEW]: { post_id: number };
+  [POST_DETAIL_EVENTS.CLICK_POST_EDIT]: { post_id: number };
+  [POST_DETAIL_EVENTS.CLICK_POST_DELETE]: { post_id: number };
+};

@@ -1,4 +1,5 @@
-import { SignupRequestMember, SignupRequestStatus } from '@/entities/signup-request/model/types';
+import { MemberStatus } from '@/entities/member/model/types';
+import { SignupRequestMember } from '@/entities/signup-request/model/types';
 
 export type SelectionPolicy = {
   selectedCount: number;
@@ -9,8 +10,8 @@ export type SelectionPolicy = {
 export function getSelectedStatuses(
   members: SignupRequestMember[],
   selectedIds: Set<number>,
-): SignupRequestStatus[] {
-  const statuses: SignupRequestStatus[] = [];
+): MemberStatus[] {
+  const statuses: MemberStatus[] = [];
 
   for (const member of members) {
     if (selectedIds.has(member.id)) {
@@ -21,7 +22,7 @@ export function getSelectedStatuses(
   return statuses;
 }
 
-export function getSelectionPolicy(statuses: SignupRequestStatus[]): SelectionPolicy {
+export function getSelectionPolicy(statuses: MemberStatus[]): SelectionPolicy {
   const selectedCount = statuses.length;
   const hasSelection = selectedCount > 0;
   const allWaiting = hasSelection && statuses.every((status) => status === 'waiting');

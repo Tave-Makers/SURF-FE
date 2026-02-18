@@ -17,6 +17,7 @@ function hostnameFromUrl(url) {
 }
 
 const S3_HOSTNAME = hostnameFromUrl(process.env.NEXT_PUBLIC_S3_BUCKET_URL);
+const EXAMPLE_S3_HOSTNAME = hostnameFromUrl(process.env.NEXT_PUBLIC_EXAMPLE_S3_BUCKET_URL);
 
 const nextConfig = {
   experimental: { reactCompiler: true },
@@ -45,6 +46,13 @@ const nextConfig = {
             },
           ]
         : []),
+
+        // TODO: 테스트용 임시 S3 호스트 제거
+        {
+        protocol: "https",
+        hostname: EXAMPLE_S3_HOSTNAME,
+        pathname: "/**",
+      },
     ],
   },
 

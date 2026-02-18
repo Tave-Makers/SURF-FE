@@ -2,24 +2,17 @@
 import { Fab } from '@surf/ui/fab';
 import { HeaderMode } from '@surf/ui/header';
 import { useRouter } from 'next/navigation';
-import { useState } from 'react';
+import { Suspense, useState } from 'react';
 import { Banner } from '@/entities/banner/model/types';
 import { PAGE_ROUTES } from '@/shared/config/path';
 import { BannerListWidget } from '@/widgets/banner/ui/BannerListWidget';
 import { AppHeader } from '@/widgets/header/ui/AppHeader';
 
-const MOCK_DATA = [
-  { id: 1, name: '배너 1', imageUrl: '', isActive: true, linkUrl: '', displayOrder: 1 },
-  { id: 2, name: '배너 2', imageUrl: '', isActive: true, linkUrl: '', displayOrder: 2 },
-  { id: 3, name: '배너 3', imageUrl: '', isActive: false, linkUrl: '', displayOrder: 3 },
-  { id: 4, name: '배너 4', imageUrl: '', isActive: true, linkUrl: '', displayOrder: 4 },
-];
-
 export const BannerPage = () => {
   const router = useRouter();
   const [isReorderMode, setIsReorderMode] = useState(false);
   // 위젯에서 변경된 최신 순서 데이터 상태
-  const [tempBanners, setTempBanners] = useState<Banner[]>(MOCK_DATA);
+  const [tempBanners, setTempBanners] = useState<Banner[]>([]);
 
   // const handleSaveOrder = async () => {
   const handleSaveOrder = () => {
@@ -51,11 +44,9 @@ export const BannerPage = () => {
         }}
       />
       <div className="flex h-full w-full flex-col">
-        <BannerListWidget
-          initialBanners={MOCK_DATA}
-          isReorderMode={isReorderMode}
-          onBannersChange={setTempBanners}
-        />
+        <Suspense fallback={<div>Loading...</div>}>
+          <BannerListWidget isReorderMode={isReorderMode} onBannersChange={setTempBanners} />
+        </Suspense>
 
         {!isReorderMode && (
           <div className="pointer-events-none fixed inset-0 z-50">

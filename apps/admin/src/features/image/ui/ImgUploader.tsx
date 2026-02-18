@@ -53,6 +53,7 @@ export const ImgUploader = ({
   const displayUrl = useMemo(() => {
     if (preview) return preview;
     if (mode === 'edit' && value && !isError) return value;
+    if (mode === 'create') return '';
     return DEFAULT_IMAGE.src;
   }, [preview, value, mode, isError]);
 

@@ -7,7 +7,7 @@ import { useBannerFromCache } from '@/features/banner/model/useGetBannerFromCach
 import { BannerFormWidget } from '@/widgets/banner/ui/BannerFormWidget';
 
 interface BannerEditPageProps {
-  bannerId: string;
+  bannerId: number;
 }
 
 export const BannerEditPage = ({ bannerId }: BannerEditPageProps) => {

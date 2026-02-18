@@ -1,12 +1,20 @@
 'use client';
 
-import { useParams } from 'next/navigation';
+import { useParams, useRouter } from 'next/navigation';
 import { BannerEditPage } from '@/app-pages/banner/BannerEditPage';
+import { PAGE_ROUTES } from '@/shared/config/path';
 
 const Page = () => {
-  const { bannerId } = useParams<{ bannerId: string }>();
+  const router = useRouter();
+  const params = useParams<{ bannerId: string }>();
+  const numericId = Number(params.bannerId);
 
-  return <BannerEditPage bannerId={bannerId} />;
+  if (isNaN(numericId)) {
+    router.replace(PAGE_ROUTES.BANNER.LIST);
+    return null;
+  }
+
+  return <BannerEditPage bannerId={numericId} />;
 };
 
 export default Page;

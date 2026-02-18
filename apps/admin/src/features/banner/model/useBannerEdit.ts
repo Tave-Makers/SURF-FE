@@ -11,15 +11,14 @@ import { useUpdateBannerMutation } from './mutations';
 import { useToggleBannerStatusMutation } from './mutations';
 import { useDeleteBannerMutation } from './mutations';
 
-export const useBannerEdit = (bannerId: string, initialData: Banner | undefined) => {
+export const useBannerEdit = (bannerId: number, initialData: Banner | undefined) => {
   const router = useRouter();
   const { uploadImages } = useImageUploader();
   const { open: openAlert, close: closeAlert } = useAlertStore();
   const { show: showToast } = useToastStore();
-
-  const { mutateAsync: updateInfo } = useUpdateBannerMutation(Number(bannerId));
-  const { mutateAsync: toggleStatus } = useToggleBannerStatusMutation(Number(bannerId));
-  const { mutateAsync: deleteBanner } = useDeleteBannerMutation(Number(bannerId));
+  const { mutateAsync: updateInfo } = useUpdateBannerMutation(bannerId);
+  const { mutateAsync: toggleStatus } = useToggleBannerStatusMutation(bannerId);
+  const { mutateAsync: deleteBanner } = useDeleteBannerMutation(bannerId);
 
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [initial, setInitial] = useState<Banner | null>(null);

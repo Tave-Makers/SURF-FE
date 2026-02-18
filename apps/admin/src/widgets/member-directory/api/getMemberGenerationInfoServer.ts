@@ -9,7 +9,7 @@ import { MemberGenerationInfoResponse, AdminTotalMemberListResDTO } from './type
  */
 export async function getMemberGenerationInfoServer(): Promise<AdminTotalMemberListResDTO> {
   const response =
-    await serverFetchWithCookies<MemberGenerationInfoResponse>('/v1/manager/generations');
+    await serverFetchWithCookies<MemberGenerationInfoResponse>('/v1/user/generations');
 
   return response.data;
 }

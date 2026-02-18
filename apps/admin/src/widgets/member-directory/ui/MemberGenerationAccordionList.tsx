@@ -8,9 +8,8 @@ export interface MemberGenerationAccordionListProps {
   keyword: string;
 }
 export const MemberGenerationAccordionList = ({ keyword }: MemberGenerationAccordionListProps) => {
-  const {
-    data: { generations },
-  } = useMemberGenerationListQuery();
+  //기수 목록 조회
+  const { data: generations } = useMemberGenerationListQuery();
 
   if (generations.length === 0)
     return (

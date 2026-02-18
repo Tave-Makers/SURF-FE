@@ -1,8 +1,9 @@
 import { useInfiniteScroll } from '@surf/hooks';
 import { useCallback } from 'react';
-import { SignupRequestActionBar } from '../../../features/signup-request/ui/SignupRequestActionBar';
+
 import { useMemberBaseListQuery } from '@/entities/member/model/queries/useMemberBaseListQuery';
 import { useSignupRequestList } from '@/features/signup-request/model/queries/useSignupRequestList';
+import { SignupRequestActionBar } from '@/features/signup-request/ui/SignupRequestActionBar';
 import { SignupRequestList } from '@/features/signup-request/ui/SignupRequestList';
 import { useBottomSheetStore } from '@/shared/store/bottomSheetStore';
 
@@ -15,7 +16,7 @@ interface SignupRequestListContainerProps {
 }
 
 const Spinner = () => (
-  <div className="flex justify-center py-4">
+  <div className="flex justify-center py-4" role="status" aria-label="로딩 중">
     <div className="h-6 w-6 animate-spin rounded-full border-b-2 border-blue-600" />
   </div>
 );
@@ -67,7 +68,7 @@ export const SignupRequestListContainer = ({
         ) : (
           <Spinner />
         )}
-        <div ref={triggerRef} className="h-10" />
+        <div ref={triggerRef} className="h-10" aria-hidden="true" />
         {isFetchingNextPage && <Spinner />}
       </div>
       <SignupRequestActionBar

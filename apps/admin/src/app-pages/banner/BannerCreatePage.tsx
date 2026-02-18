@@ -7,7 +7,7 @@ import { useRouter } from 'next/navigation';
 import { useCallback, useMemo, useState } from 'react';
 import { BannerFormData } from '@/entities/banner/model/types';
 import { useImageUploader } from '@/entities/image/model/useImageUploader';
-import { useCreateBannerMutation } from '@/features/banner/api/useCreateBannerMutation';
+import { useCreateBannerMutation } from '@/features/banner/api/mutations';
 import { PAGE_ROUTES } from '@/shared/config/path';
 import { BannerFormWidget } from '@/widgets/banner/ui/BannerFormWidget';
 

@@ -1,0 +1,67 @@
+import { useMutation, useQueryClient } from '@tanstack/react-query';
+import { createBanner } from './createBanner';
+import { CreateBannerRequest, UpdateBannerRequest } from './types';
+import { deleteBanner } from './deleteBanner';
+import { activateBanner } from './activateBanner';
+import { deactivateBanner } from './deactivateBanner';
+import { updateBanner } from './updateBanner';
+
+// 홈 배너 생성 Mutation
+export const useCreateBannerMutation = () => {
+  const queryClient = useQueryClient();
+
+  return useMutation({
+    mutationFn: (data: CreateBannerRequest) => createBanner(data),
+    onSuccess: async () => {
+      await queryClient.invalidateQueries({ queryKey: ['banner', 'list'] });
+    },
+    onError: (error) => {
+      console.error('[useCreateBannerMutation] 배너 생성 실패:', error);
+    },
+  });
+};
+
+// 홈 배너 삭제 Mutation
+export const useDeleteBannerMutation = (bannerId: number) => {
+  const queryClient = useQueryClient();
+
+  return useMutation({
+    mutationFn: () => deleteBanner(bannerId),
+    onSuccess: async () => {
+      await queryClient.invalidateQueries({ queryKey: ['banner', 'list'] });
+    },
+    onError: (error) => {
+      console.error('[useDeleteBannerMutation] 배너 삭제 실패:', error);
+    },
+  });
+};
+
+// 홈 배너 활성화/비활성화 토글 Mutation
+export const useToggleBannerStatusMutation = (bannerId: number) => {
+  const queryClient = useQueryClient();
+
+  return useMutation({
+    mutationFn: (isActive: boolean) =>
+      isActive ? activateBanner(bannerId) : deactivateBanner(bannerId),
+    onSuccess: async (_) => {
+      await queryClient.invalidateQueries({ queryKey: ['banner', 'list'] });
+    },
+    onError: (error) => {
+      console.error('[useToggleBannerStatusMutation] 배너 상태 토글 실패:', error);
+    },
+  });
+};
+
+// 홈 배너 업데이트 Mutation
+export const useUpdateBannerMutation = (bannerId: number) => {
+  const queryClient = useQueryClient();
+  return useMutation({
+    mutationFn: (data: UpdateBannerRequest) => updateBanner(bannerId, data),
+    onSuccess: async () => {
+      await queryClient.invalidateQueries({ queryKey: ['banner', 'list'] });
+    },
+    onError: (error) => {
+      console.error('[useUpdateBannerMutation] 배너 업데이트 실패:', error);
+    },
+  });
+};

@@ -7,9 +7,9 @@ import { useImageUploader } from '@/entities/image/model/useImageUploader';
 import { PAGE_ROUTES } from '@/shared/config/path';
 import { useAlertStore } from '@surf/ui/store/alertStore';
 import { useToastStore } from '@surf/ui/store/toastStore';
-import { useUpdateBannerMutation } from '../api/useUpdateBannerMutation';
-import { useToggleBannerStatusMutation } from '../api/useToggleBannerStatusMutation';
-import { useDeleteBannerMutation } from '../api/useDeleteBannerMutation';
+import { useUpdateBannerMutation } from '../api/mutations';
+import { useToggleBannerStatusMutation } from '../api/mutations';
+import { useDeleteBannerMutation } from '../api/mutations';
 
 export const useBannerEdit = (bannerId: string, initialData: Banner | undefined) => {
   const router = useRouter();

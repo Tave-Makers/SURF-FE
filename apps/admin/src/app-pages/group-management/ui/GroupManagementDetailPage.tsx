@@ -142,6 +142,16 @@ export const GroupManagementDetailPage = ({ mode, id }: GroupManagementDetailPag
     removeMember(formKey, memberId);
   };
 
+  const handleSubmit = () => {
+    if (mode === 'create') {
+      // 생성 API 호출 로직 (draft 데이터 사용)
+      alert(`그룹 생성 API 연동 예정`);
+    } else if (mode === 'edit') {
+      // 수정 API 호출 로직 (formKey + draft)
+      alert('그룹 수정 API 연동 예정');
+    }
+  };
+
   return (
     <div className="flex h-full flex-col">
       <AppHeader overrideHeader={headerProps} />
@@ -177,7 +187,9 @@ export const GroupManagementDetailPage = ({ mode, id }: GroupManagementDetailPag
         )}
       </div>
 
-      <div className="px-13 py-16 pt-13">{mapModeToStickyButton(mode)}</div>
+      <div className="px-13 py-16 pt-13">
+        {mapModeToStickyButton({ mode: mode, onClick: handleSubmit })}
+      </div>
     </div>
   );
 };

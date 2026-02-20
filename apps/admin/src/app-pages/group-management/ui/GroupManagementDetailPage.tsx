@@ -66,8 +66,6 @@ export const GroupManagementDetailPage = ({ mode, id }: GroupManagementDetailPag
 
   // 초기 hydrate (폼이 없을 때만)
   useEffect(() => {
-    if (hasForm) return;
-
     // TODO: API 연동 후 mockData 제거
     hydrate(formKey, {
       generation: maxGeneration,

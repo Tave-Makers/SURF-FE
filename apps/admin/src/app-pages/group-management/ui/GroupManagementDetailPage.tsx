@@ -150,6 +150,10 @@ export const GroupManagementDetailPage = ({ mode, id }: GroupManagementDetailPag
     }
   };
 
+  const handleDeleteGroup = () => {
+    alert('그룹 삭제 확인 Alert 구현 예정');
+  };
+
   return (
     <div className="flex h-full flex-col">
       <AppHeader overrideHeader={headerProps} />
@@ -178,7 +182,7 @@ export const GroupManagementDetailPage = ({ mode, id }: GroupManagementDetailPag
 
         {mode === 'edit' && (
           <div className="px-13 py-15">
-            <SolidButton size="m" variant="warning" onClick={() => {}}>
+            <SolidButton size="m" variant="warning" onClick={handleDeleteGroup}>
               해당 그룹 삭제하기
             </SolidButton>
           </div>

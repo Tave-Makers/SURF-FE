@@ -40,8 +40,7 @@ export const MemberSearchPage = ({ generation, formKey }: MemberSearchPageProps)
 
   useEffect(() => {
     resetSelectionState();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  }, [resetSelectionState]);
 
   return (
     <div className="flex h-full w-full flex-col">

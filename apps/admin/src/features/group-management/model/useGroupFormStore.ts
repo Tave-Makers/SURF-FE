@@ -24,8 +24,10 @@ type FormState = {
 
 type Store = {
   forms: Record<FormKey, FormState | undefined>;
+  // 생성 forKey에서 상세 id formKey로 draft 이관
   moveForm: (fromKey: string, toKey: string, opts?: { overwrite?: boolean }) => void;
 
+  // draft 덮어쓰기
   hydrate: (key: FormKey, next: GroupFormDraft, opts?: { force?: boolean }) => void;
 
   // group info
@@ -71,6 +73,8 @@ export const useGroupFormStore = create<Store>((set, get) => ({
 
   moveForm: (fromKey, toKey, opts) =>
     set((s) => {
+      if (fromKey === toKey) return s;
+
       const from = s.forms[fromKey];
       if (!from) return s;
 
@@ -176,7 +180,12 @@ export const useGroupFormStore = create<Store>((set, get) => ({
 
       const next = updateDraft(cur, (prev) => {
         // 팀장 해제
-        if (!nextLeader) return { ...prev, leader: undefined };
+        if (!nextLeader) {
+          const backToMembers = prev.leader
+            ? [prev.leader, ...prev.members.filter((m) => m.id !== prev.leader!.id)]
+            : prev.members;
+          return { ...prev, leader: undefined, members: backToMembers };
+        }
 
         // 새 팀장은 members에서 제거
         const membersWithoutNext = prev.members.filter((m) => m.id !== nextLeader.id);

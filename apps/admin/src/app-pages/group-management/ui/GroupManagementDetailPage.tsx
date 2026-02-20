@@ -64,6 +64,9 @@ export const GroupManagementDetailPage = ({ mode, id }: GroupManagementDetailPag
   // const addMembers = useGroupFormStore((s) => s.addMembers);
   const removeMember = useGroupFormStore((s) => s.removeMember);
 
+  const isValid = useGroupFormStore((s) => s.isValid(formKey));
+  const dirty = useGroupFormStore((s) => s.forms[formKey]?.dirty ?? false);
+
   // 초기 hydrate (폼이 없을 때만)
   useEffect(() => {
     // TODO: API 연동 후 mockData 제거
@@ -86,6 +89,8 @@ export const GroupManagementDetailPage = ({ mode, id }: GroupManagementDetailPag
       </div>
     );
   }
+
+  const canSubmit = dirty && isValid;
 
   const openGenerationBottomSheet = () => {
     openBottomSheet({
@@ -190,7 +195,7 @@ export const GroupManagementDetailPage = ({ mode, id }: GroupManagementDetailPag
       </div>
 
       <div className="px-13 py-16 pt-13">
-        {mapModeToStickyButton({ mode: mode, onClick: handleSubmit })}
+        {mapModeToStickyButton({ mode: mode, onClick: handleSubmit, isDisabled: !canSubmit })}
       </div>
     </div>
   );

@@ -46,6 +46,7 @@ type Store = {
   // derived
   getLeaderId: (key: FormKey) => number | null;
   getMemberIds: (key: FormKey) => number[];
+  isValid: (key: FormKey) => boolean;
 };
 
 function normalize(d: GroupFormDraft): GroupFormDraft {
@@ -256,4 +257,19 @@ export const useGroupFormStore = create<Store>((set, get) => ({
 
   getLeaderId: (key) => get().forms[key]?.draft.leader?.id ?? null,
   getMemberIds: (key) => get().forms[key]?.draft.members.map((m) => m.id) ?? [],
+
+  isValid: (key) => {
+    const form = get().forms[key];
+    if (!form) return false;
+
+    const d = form.draft;
+
+    return (
+      d.generation > 0 &&
+      d.groupName.trim().length > 0 &&
+      d.groupIntroduction.trim().length > 0 &&
+      !!d.leader &&
+      d.members.length > 0
+    );
+  },
 }));

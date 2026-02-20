@@ -66,7 +66,12 @@ export const MemberSearchPage = ({ generation, formKey }: MemberSearchPageProps)
         onToggle={toggleSelect}
       />
       <div className="px-13 pt-13 pb-16">
-        <SolidButton size="l" variant="primary" onClick={handleComplete}>
+        <SolidButton
+          size="l"
+          variant="primary"
+          onClick={handleComplete}
+          isDisabled={selectedIds.size === 0}
+        >
           적용하기
         </SolidButton>
       </div>

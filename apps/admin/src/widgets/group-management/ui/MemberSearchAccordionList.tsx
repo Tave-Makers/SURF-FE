@@ -36,7 +36,7 @@ export const MemberSearchAccordionList = ({
               isSelectionEnabled={true}
               checked={selectedIds.has(m.id)}
               onToggle={() => onToggle(m.id)}
-              leftSlot={<Avatar size="s" alt="테이비 프로필 이미지" src={m.profileImageUrl} />}
+              leftSlot={<Avatar size="s" alt={`${m.name} 프로필 이미지`} src={m.profileImageUrl} />}
             />
           )}
         />

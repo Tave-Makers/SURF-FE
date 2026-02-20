@@ -56,6 +56,7 @@ export const MemberSearchPage = ({ generation, formKey }: MemberSearchPageProps)
           iconName="Search"
           value={keyword}
           onChange={(value) => setKeyword(value)}
+          aria-label="회원이름 검색"
         />
       </div>
       {/** 상세 화면에서 선택한 기수의 회원 목록 리스트 */}

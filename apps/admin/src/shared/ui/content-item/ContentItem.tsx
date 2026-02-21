@@ -4,7 +4,6 @@ import DEFAULT_BANNER_IMAGE from '@/shared/assets/images/banner/banner-default-i
 import { ContentsType } from '@/shared/types/contents';
 import { ContentActiveBadge } from '@/shared/ui/content-item/ContentActiveBadge';
 import { ContentBadge } from '@/shared/ui/content-item/ContentBadge';
-import { set } from 'react-hook-form';
 
 type BadgeSpec = { kind: 'contents'; type: ContentsType } | { kind: 'active'; active: boolean };
 

@@ -1,7 +1,7 @@
 'use client';
 
 import Image from 'next/image';
-import { useEffect, useMemo, useRef, useState } from 'react';
+import { use, useEffect, useMemo, useRef, useState } from 'react';
 import DEFAULT_IMAGE from '@/shared/assets/images/default-item.png';
 
 type Mode = 'create' | 'edit';
@@ -29,6 +29,10 @@ export const ImgUploader = ({
   const [file, setFile] = useState<File | null>(null);
   const [preview, setPreview] = useState<string>('');
   const [isError, setIsError] = useState(false);
+
+  useEffect(() => {
+    setIsError(false);
+  }, [value]);
 
   /**
    * 파일 선택 시 브라우저 objectURL 생성

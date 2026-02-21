@@ -74,7 +74,7 @@ export const useBannerEdit = (bannerId: number, initialData: Banner | undefined)
         finalUrl = result.uploadedUrl;
       }
 
-      const apiTasks = [];
+      const apiTasks: Promise<unknown>[] = [];
 
       // 정보(이름, URL, 이미지)가 하나라도 바뀌었다면 PUT 호출
       const hasInfoChanged =

@@ -1,11 +1,14 @@
 'use client';
 
+import { useRouter } from 'next/navigation';
 import { useGroupListQuery } from '@/features/group-management/model/queries/useGroupListQuery';
 import { useGroupFilter } from '@/features/group-management/model/useGroupFilter';
+import { PAGE_ROUTES } from '@/shared/config/path';
 import { FilterWidget } from '@/widgets/group-management/ui/FilterWidget';
 import { GroupManagementAccordionList } from '@/widgets/group-management/ui/GroupManagementAccordionList';
 
 export const GroupManagementPage = () => {
+  const router = useRouter();
   const { data, isLoading, isError } = useGroupListQuery();
   const generationGroups = data ?? [];
 
@@ -18,10 +21,14 @@ export const GroupManagementPage = () => {
     return <div className="flex h-full items-center justify-center">Failed to load</div>;
   }
 
+  const handleNavigate = (groupId: number) => {
+    router.push(PAGE_ROUTES.GROUP_MNG.VIEW(groupId));
+  };
+
   return (
     <div className="flex h-full flex-col overflow-y-auto">
       <FilterWidget filter={filter} onChange={setFilter} />
-      <GroupManagementAccordionList generationGroups={filtered} onClick={() => {}} />
+      <GroupManagementAccordionList generationGroups={filtered} onClick={handleNavigate} />
     </div>
   );
 };

@@ -12,6 +12,7 @@ import { MemberSummary } from '@/entities/member/model/types';
 import { useCreateGroupMutatioin } from '@/features/group-management/model/queries/useCreateGroupMutation';
 import { useGroupDetailQuery } from '@/features/group-management/model/queries/useGroupDetailQuery';
 import { useGroupFormStore } from '@/features/group-management/model/useGroupFormStore';
+import { PAGE_ROUTES } from '@/shared/config/path';
 import { useBottomSheetStore } from '@/shared/store/bottomSheetStore';
 import type { ContentsType } from '@/shared/types/contents';
 import { GroupManagementMode } from '@/widgets/group-management/model/types';
@@ -49,7 +50,7 @@ export const GroupManagementDetailPage = ({ mode, id }: GroupManagementDetailPag
   }, [data]);
 
   const { data: groupDetail } = useGroupDetailQuery(mode, Number(id));
-  const { mutate: createGroup } = useCreateGroupMutatioin();
+  const { mutateAsync: createGroup } = useCreateGroupMutatioin();
 
   const formKey = mode === 'create' ? 'create' : String(id);
 
@@ -71,10 +72,10 @@ export const GroupManagementDetailPage = ({ mode, id }: GroupManagementDetailPag
 
   const isValid = useGroupFormStore((s) => s.isValid(formKey));
   const dirty = useGroupFormStore((s) => s.forms[formKey]?.dirty ?? false);
+  const canSubmit = dirty && isValid;
 
   // 초기 hydrate (폼이 없을 때만)
   useEffect(() => {
-    // TODO: API 연동 후 mockData 제거
     hydrate(formKey, {
       generation: groupDetail?.generation ?? maxGeneration,
       groupType: groupDetail?.groupType ?? ('study' as ContentsType),
@@ -94,8 +95,6 @@ export const GroupManagementDetailPage = ({ mode, id }: GroupManagementDetailPag
       </div>
     );
   }
-
-  const canSubmit = dirty && isValid;
 
   const openGenerationBottomSheet = () => {
     openBottomSheet({
@@ -142,17 +141,19 @@ export const GroupManagementDetailPage = ({ mode, id }: GroupManagementDetailPag
     params.set('generation', String(draft.generation));
     params.set('formKey', formKey);
 
-    router.push(`/group-management/member-search?${params.toString()}`);
+    router.push(`${PAGE_ROUTES.GROUP_MGN.MEMBER_SEARCH}?${params.toString()}`);
   };
 
   const handleRemoveMember = (memberId: number) => {
     removeMember(formKey, memberId);
   };
 
-  const handleSubmit = () => {
+  const handleSubmit = async () => {
     if (mode === 'create') {
       if (!draft) return;
-      createGroup(draft);
+      const created = await createGroup(draft);
+      const groupId = created.teamId;
+      router.push(PAGE_ROUTES.GROUP_MGN.VIEW(groupId));
     } else if (mode === 'edit') {
       // 수정 API 호출 로직 (formKey + draft)
       alert('그룹 수정 API 연동 예정');
@@ -199,7 +200,11 @@ export const GroupManagementDetailPage = ({ mode, id }: GroupManagementDetailPag
       </div>
 
       <div className="px-13 py-16 pt-13">
-        {mapModeToStickyButton({ mode: mode, onClick: handleSubmit, isDisabled: !canSubmit })}
+        {mapModeToStickyButton({
+          mode: mode,
+          onClick: () => void handleSubmit(),
+          isDisabled: !canSubmit,
+        })}
       </div>
     </div>
   );

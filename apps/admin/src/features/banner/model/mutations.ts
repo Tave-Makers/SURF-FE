@@ -6,6 +6,7 @@ import { activateBanner } from '../api/activateBanner';
 import { deactivateBanner } from '../api/deactivateBanner';
 import { updateBanner } from '../api/updateBanner';
 import { bannerQueryKeys } from '../api/queryKeys';
+import { reorderBanner } from '../api/reorderBanner';
 
 // 홈 배너 생성 Mutation
 export const useCreateBannerMutation = () => {
@@ -63,6 +64,19 @@ export const useUpdateBannerMutation = (bannerId: number) => {
     },
     onError: (error) => {
       console.error('[useUpdateBannerMutation] 배너 업데이트 실패:', error);
+    },
+  });
+};
+
+export const useReorderBannerMutation = () => {
+  const queryClient = useQueryClient();
+  return useMutation({
+    mutationFn: (data: { orderedIds: number[] }) => reorderBanner(data),
+    onSuccess: async () => {
+      await queryClient.invalidateQueries({ queryKey: bannerQueryKeys.list() });
+    },
+    onError: (error) => {
+      console.error('[useReorderBannerMutation] 배너 순서 변경 실패:', error);
     },
   });
 };

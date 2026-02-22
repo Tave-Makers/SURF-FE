@@ -14,7 +14,7 @@ const Page = async () => {
 
   // Server-side prefetch: 첫 페이지 데이터 미리 로드
   await queryClient.prefetchInfiniteQuery(
-    signupRequestQueryOptions({ filters: {}, fetcher: getSignupRequestListServer }),
+    signupRequestQueryOptions({ fetcher: getSignupRequestListServer, queryClient }),
   );
 
   return (

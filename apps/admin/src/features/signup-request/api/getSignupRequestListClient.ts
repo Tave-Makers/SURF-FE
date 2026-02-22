@@ -1,5 +1,5 @@
 import { axiosInstance } from '@/shared/lib/axiosInstance';
-import { SignupRequestListResponse, SignupRequestListParams } from './types';
+import { SignupRequestListResponse, SignupRequestListParams, SignupRequestListData } from './types';
 
 /**
  * 가입 신청 목록 조회 API
@@ -9,12 +9,12 @@ import { SignupRequestListResponse, SignupRequestListParams } from './types';
  */
 export async function getSignupRequestListClient(
   params: SignupRequestListParams,
-): Promise<SignupRequestListResponse> {
+): Promise<SignupRequestListData> {
   // 클라이언트에서 호출 시 axiosInstance 사용
   const response = await axiosInstance.get<SignupRequestListResponse>(
     '/v1/manager/registration-list',
     { params },
   );
 
-  return response.data;
+  return response.data.data;
 }

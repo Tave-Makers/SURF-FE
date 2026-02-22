@@ -1,18 +1,18 @@
 import { Avatar } from '@surf/ui/avatar';
 import { SurfIcon } from '@surf/ui/icon';
+import { useMemberGenerationListQuery } from '../model/queries/useMemberGenerationListQuery';
 import { RoleBadge } from '@/entities/member/ui/RoleBadge';
 import { SelectableMemberCard } from '@/entities/member/ui/SelectableMemberCard';
 import { MemberGenerationAccordion } from '@/features/member-by-generation/ui/MemberGenerationAccordion';
 import { useBottomSheetStore } from '@/shared/store/bottomSheetStore';
 
 export interface MemberGenerationAccordionListProps {
-  generations: number[];
   keyword: string;
 }
-export const MemberGenerationAccordionList = ({
-  generations,
-  keyword,
-}: MemberGenerationAccordionListProps) => {
+export const MemberGenerationAccordionList = ({ keyword }: MemberGenerationAccordionListProps) => {
+  //기수 목록 조회
+  const { data: generations } = useMemberGenerationListQuery();
+
   const openBottomSheet = useBottomSheetStore((state) => state.open);
 
   const handleOpenMemberSheet = (memberId: number) => {

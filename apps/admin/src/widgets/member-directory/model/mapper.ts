@@ -12,7 +12,5 @@ export function toMemberGenerationList(dto: AdminTotalMemberListResDTO): MemberG
   //  number[]로 변환
   const generations = picked.map((item) => item.generation);
 
-  return {
-    generations,
-  };
+  return generations;
 }

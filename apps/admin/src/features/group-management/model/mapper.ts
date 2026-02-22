@@ -64,6 +64,16 @@ export const mapGroupDetailResDtoToGroupFormDraft = (dto: GroupDetailResDto): Gr
   };
 };
 
+// memberIds에 팀장 id 추가
+const buildMemberIdsIncludingLeader = (draft: GroupFormDraft): number[] => {
+  const ids = new Set<number>();
+
+  if (draft.leader) ids.add(draft.leader.id);
+  draft.members.forEach((m) => ids.add(m.id));
+
+  return Array.from(ids);
+};
+
 // 그룹 생성 요청 바디 매핑
 export const mapGroupDraftToCreateReq = (draft: GroupFormDraft): CreateGroupRequest => {
   return {
@@ -72,6 +82,6 @@ export const mapGroupDraftToCreateReq = (draft: GroupFormDraft): CreateGroupRequ
     name: draft.groupName,
     description: draft.groupIntroduction,
     leaderMemberId: draft.leader!.id,
-    memberIds: draft.members.map((m) => m.id),
+    memberIds: buildMemberIdsIncludingLeader(draft),
   };
 };

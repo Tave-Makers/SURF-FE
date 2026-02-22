@@ -1,4 +1,4 @@
-import { getSelectedStatuses, getSelectionPolicy } from './selectionPolicy';
+import { createMemberStatusMap, getSelectionPolicy } from './selectionPolicy';
 import { createSignupRequestMember } from '@/test/factories/signupRequest';
 
 describe('selectionPolicy', () => {
@@ -9,10 +9,8 @@ describe('selectionPolicy', () => {
     ];
     const selectedIds = new Set([1, 2]);
 
-    const statuses = getSelectedStatuses(members, selectedIds);
-    const policy = getSelectionPolicy(statuses);
+    const policy = getSelectionPolicy(createMemberStatusMap(members), selectedIds);
 
-    expect(policy.selectedCount).toBe(2);
     expect(policy.canApprove).toBe(true);
     expect(policy.canReject).toBe(true);
   });
@@ -24,10 +22,8 @@ describe('selectionPolicy', () => {
     ];
     const selectedIds = new Set([1, 2]);
 
-    const statuses = getSelectedStatuses(members, selectedIds);
-    const policy = getSelectionPolicy(statuses);
+    const policy = getSelectionPolicy(createMemberStatusMap(members), selectedIds);
 
-    expect(policy.selectedCount).toBe(2);
     expect(policy.canApprove).toBe(false);
     expect(policy.canReject).toBe(false);
   });

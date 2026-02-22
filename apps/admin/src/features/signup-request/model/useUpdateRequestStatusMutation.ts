@@ -1,13 +1,10 @@
 'use client';
 
-import { InfiniteData, useMutation, useQueryClient } from '@tanstack/react-query';
-import type { SignupRequestMember } from '@/entities/signup-request/model/types';
-import type { PageWithContent } from '@/shared/lib/tanstack-query/infiniteQueryUtils';
+import { useMutation, useQueryClient } from '@tanstack/react-query';
+import type { Member, MemberBase, MemberStatus } from '@/entities/member/model/types';
 import type { CommonResponse } from '@/shared/api/types';
-import { signupRequestQueryKeys } from './queries/signupRequestQueryKeys';
 import { memberQueryKeys } from '@/entities/member/model/queries/memberQueryKeys';
 import { updateSignupRequest } from '../api/updateSignupRequest';
-import { MemberStatus } from '@/entities/member/model/types';
 
 type UpdateSignupRequestStatusParams = {
   memberIds: number[];
@@ -21,29 +18,20 @@ export const useUpdateSignupRequestStatusMutation = () => {
     mutationKey: ['signup-request', 'update'],
     mutationFn: (params) => updateSignupRequest(params.memberIds, params.nextStatus),
     onSuccess: (_data, params) => {
-      const idSet = new Set(params.memberIds);
-      queryClient.setQueriesData<InfiniteData<PageWithContent<SignupRequestMember>, number>>(
-        { queryKey: signupRequestQueryKeys.lists() },
-        (data) => {
-          if (!data) {
-            return data;
-          }
-
-          return {
-            ...data,
-            pages: data.pages.map((page) => ({
-              ...page,
-              content: page.content.map((member) =>
-                idSet.has(member.id) ? { ...member, status: params.nextStatus } : member,
-              ),
-            })),
-          };
-        },
-      );
-
+      //멤버 별 캐시 업데이트 진행
       params.memberIds.forEach((memberId) => {
-        void queryClient.invalidateQueries({ queryKey: memberQueryKeys.detail(memberId) });
+        //멤버 상세 캐시 업데이트
+        queryClient.setQueryData<Member | undefined>(memberQueryKeys.detail(memberId), (data) => {
+          if (!data) return data;
+          return { ...data, status: params.nextStatus };
+        });
+        //멤버 기존 정보 캐시 업데이트
+        queryClient.setQueryData<MemberBase | undefined>(memberQueryKeys.base(memberId), (data) =>
+          data ? { ...data, status: params.nextStatus } : data,
+        );
       });
+
+      void queryClient.invalidateQueries({ queryKey: memberQueryKeys.counts() });
     },
     onError: (error) => {
       console.error('[Signup Request Status Update Error]', error.message);

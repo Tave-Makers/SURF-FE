@@ -1,9 +1,7 @@
-import { InfiniteData } from '@tanstack/react-query';
 import { renderHook, act, waitFor } from '@testing-library/react';
-import { signupRequestQueryKeys } from './queries/signupRequestQueryKeys';
 import { useUpdateSignupRequestStatusMutation } from './useUpdateRequestStatusMutation';
+import { memberQueryKeys } from '@/entities/member/model/queries/memberQueryKeys';
 import type { SignupRequestMember } from '@/entities/signup-request/model/types';
-import type { PageWithContent } from '@/shared/lib/tanstack-query/infiniteQueryUtils';
 import { createSignupRequestMember } from '@/test/factories/signupRequest';
 import { createTestQueryClient, createTestWrapper } from '@/test/utils/renderWithProviders';
 
@@ -13,20 +11,8 @@ describe('useUpdateSignupRequestStatusMutation', () => {
     const memberA = createSignupRequestMember({ id: 1, status: 'waiting' });
     const memberB = createSignupRequestMember({ id: 2, status: 'waiting' });
 
-    const seededData: InfiniteData<PageWithContent<SignupRequestMember>, number> = {
-      pages: [
-        {
-          pageNumber: 0,
-          pageSize: 20,
-          numberOfElements: 2,
-          isLast: true,
-          content: [memberA, memberB],
-        },
-      ],
-      pageParams: [0],
-    };
-
-    queryClient.setQueryData(signupRequestQueryKeys.list({}), seededData);
+    queryClient.setQueryData<SignupRequestMember>(memberQueryKeys.base(memberA.id), memberA);
+    queryClient.setQueryData<SignupRequestMember>(memberQueryKeys.base(memberB.id), memberB);
 
     const wrapper = createTestWrapper(queryClient);
     const { result } = renderHook(() => useUpdateSignupRequestStatusMutation(), { wrapper });
@@ -39,12 +25,11 @@ describe('useUpdateSignupRequestStatusMutation', () => {
     });
 
     await waitFor(() => {
-      const updated = queryClient.getQueryData<
-        InfiniteData<PageWithContent<SignupRequestMember>, number>
-      >(signupRequestQueryKeys.list({}));
+      const updatedA = queryClient.getQueryData<SignupRequestMember>(memberQueryKeys.base(memberA.id));
+      const updatedB = queryClient.getQueryData<SignupRequestMember>(memberQueryKeys.base(memberB.id));
 
-      expect(updated?.pages[0]?.content[0]?.status).toBe('approve');
-      expect(updated?.pages[0]?.content[1]?.status).toBe('waiting');
+      expect(updatedA?.status).toBe('approve');
+      expect(updatedB?.status).toBe('waiting');
     });
   });
 });

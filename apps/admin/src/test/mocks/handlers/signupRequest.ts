@@ -23,6 +23,29 @@ export const signupRequestHandlers = [
     );
   }),
 
+  http.get('/api/proxy/v1/user/members-count', ({ request }) => {
+    const url = new URL(request.url);
+    const keyword = url.searchParams.get('keyword') ?? '';
+    const statuses = [
+      ...url.searchParams.getAll('memberStatuses[]'),
+      ...url.searchParams.getAll('memberStatuses'),
+    ];
+    const hasApproved = statuses.includes('APPROVED');
+
+    const membersCount = hasApproved ? (keyword ? 5 : 40) : keyword ? 5 : 40;
+
+    return HttpResponse.json(
+      {
+        code: 200,
+        message: 'SUCCESS',
+        data: {
+          membersCount,
+        },
+      },
+      { status: 200 },
+    );
+  }),
+
   http.get('/api/proxy/__msw_smoke', () => {
     return HttpResponse.json({ ok: true }, { status: 200 });
   }),

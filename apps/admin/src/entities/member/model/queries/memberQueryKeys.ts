@@ -1,5 +1,11 @@
+import { GetMemberCountParams } from '../../api/getMemberCount';
+
 export const memberQueryKeys = {
   all: ['member'] as const,
+
+  //멤버 수 카운트
+  counts: () => [...memberQueryKeys.all, 'count'] as const,
+  count: (filters: GetMemberCountParams) => [...memberQueryKeys.counts(), filters] as const,
 
   // 기수 요약(총원/기수 목록)
   directory: () => [...memberQueryKeys.all, 'directory'] as const,

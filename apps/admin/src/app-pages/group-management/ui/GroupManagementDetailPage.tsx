@@ -40,11 +40,11 @@ export const GroupManagementDetailPage = ({ mode, id }: GroupManagementDetailPag
   const closeBottomSheet = useBottomSheetStore((s) => s.close);
 
   // 모든 기수 정보 조회
-  const { data } = useMemberGenerationListQuery();
+  const { data: generations } = useMemberGenerationListQuery();
   const maxGeneration = useMemo(() => {
-    const gens = data?.generations ?? [];
+    const gens = generations ?? [];
     return gens.length > 0 ? Math.max(...gens) : 0;
-  }, [data]);
+  }, [generations]);
 
   const formKey = mode === 'create' ? 'create' : String(id);
 

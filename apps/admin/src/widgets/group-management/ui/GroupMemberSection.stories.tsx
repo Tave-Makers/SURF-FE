@@ -1,6 +1,7 @@
 import type { Meta, StoryObj } from '@storybook/nextjs';
-import { GroupMemberSection, type GroupManagementMode } from './GroupMemberSection';
+import { GroupMemberSection } from './GroupMemberSection';
 import { MemberBase, MemberTrack } from '@/entities/member/model/types';
+import { GroupManagementMode } from '@/widgets/group-management/model/types';
 
 const tracks = [{ generation: 15, part: 'DESIGN' }] as MemberTrack[];
 

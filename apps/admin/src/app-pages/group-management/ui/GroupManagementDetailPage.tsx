@@ -9,6 +9,7 @@ import {
   mapModeToStickyButton,
 } from '@/app-pages/group-management/model/mapper';
 import { MemberSummary } from '@/entities/member/model/types';
+import { useCreateGroupMutatioin } from '@/features/group-management/model/queries/useCreateGroupMutation';
 import { useGroupDetailQuery } from '@/features/group-management/model/queries/useGroupDetailQuery';
 import { useGroupFormStore } from '@/features/group-management/model/useGroupFormStore';
 import { useBottomSheetStore } from '@/shared/store/bottomSheetStore';
@@ -39,6 +40,7 @@ export const GroupManagementDetailPage = ({ mode, id }: GroupManagementDetailPag
   const openBottomSheet = useBottomSheetStore((s) => s.open);
   const closeBottomSheet = useBottomSheetStore((s) => s.close);
 
+  // hooks
   // 모든 기수 정보 조회
   const { data } = useMemberGenerationListQuery();
   const maxGeneration = useMemo(() => {
@@ -46,8 +48,8 @@ export const GroupManagementDetailPage = ({ mode, id }: GroupManagementDetailPag
     return gens.length > 0 ? Math.max(...gens) : 0;
   }, [data]);
 
-  // 그룹 상세 정보 조회
   const { data: groupDetail } = useGroupDetailQuery(mode, Number(id));
+  const { mutate: createGroup } = useCreateGroupMutatioin();
 
   const formKey = mode === 'create' ? 'create' : String(id);
 
@@ -128,7 +130,6 @@ export const GroupManagementDetailPage = ({ mode, id }: GroupManagementDetailPag
       props: {
         members: draft.members,
         onSelect: (member: MemberSummary) => {
-          // member 타입은 실제 bottomSheet props 타입에 맞춰서 교체
           pickLeader(formKey, member);
           closeBottomSheet();
         },
@@ -150,8 +151,8 @@ export const GroupManagementDetailPage = ({ mode, id }: GroupManagementDetailPag
 
   const handleSubmit = () => {
     if (mode === 'create') {
-      // 생성 API 호출 로직 (draft 데이터 사용)
-      alert(`그룹 생성 API 연동 예정`);
+      if (!draft) return;
+      createGroup(draft);
     } else if (mode === 'edit') {
       // 수정 API 호출 로직 (formKey + draft)
       alert('그룹 수정 API 연동 예정');

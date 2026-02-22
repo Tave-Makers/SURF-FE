@@ -7,13 +7,13 @@ import { CommonResponse, PageMeta } from '@/shared/api/types';
  */
 export interface SignupRequestItem {
   memberId: number;
-  username: string;
-  university: string;
-  profileImageUrl: string;
-  trackList: ApiTrack[];
-  createdAt: string;
-  memberStatus: string;
-  role: MemberRole;
+  username?: string;
+  university?: string;
+  profileImageUrl?: string;
+  trackList?: ApiTrack[];
+  createdAt?: string;
+  memberStatus?: string;
+  role?: MemberRole;
 }
 
 /**
@@ -21,7 +21,6 @@ export interface SignupRequestItem {
  */
 export interface SignupRequestListData extends PageMeta {
   content: SignupRequestItem[];
-  totalMemberCount: number;
 }
 
 /**

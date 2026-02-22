@@ -5,6 +5,8 @@ import {
   GroupApiType,
   GroupGenerationResDto,
   GroupGenerationListResponse,
+  GroupDetailResDto,
+  GroupDetailResponse,
 } from '@/features/group-management/api/types';
 import { axiosInstance } from '@/shared/lib/axiosInstance';
 
@@ -15,9 +17,11 @@ export const groupApi = {
   },
   getGroupList: async (params: { type: GroupApiType }): Promise<GroupGenerationResDto[]> => {
     const res = await axiosInstance.get<GroupGenerationListResponse>('/v1/admin/teams', { params });
+  getGroupDetail: async (params: { teamId: number }): Promise<GroupDetailResDto> => {
+    const { teamId } = params;
+    const res = await axiosInstance.get<GroupDetailResponse>(`/v1/admin/teams/${teamId}`);
     return res.data.data;
   },
-  getGroupDetail: () => {},
   updateGroup: () => {},
   deleteGroup: () => {},
 };

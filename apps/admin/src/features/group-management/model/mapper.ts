@@ -1,0 +1,68 @@
+import { GenerationGroup } from '@/entities/group-management/model/types';
+import { toMemberTrack } from '@/entities/member/model/mapper';
+import { MemberBase } from '@/entities/member/model/types';
+import {
+  GroupApiType,
+  GroupDetailResDto,
+  GroupGenerationResDto,
+  MemberCardDto,
+} from '@/features/group-management/api/types';
+import { GroupFormDraft } from '@/features/group-management/model/useGroupFormStore';
+import { ContentsType } from '@/shared/types/contents';
+
+// type 변환 함수
+const mapGroupApiTypeToContentsType = (type: GroupApiType): ContentsType => {
+  switch (type) {
+    case 'STUDY':
+      return 'study';
+    case 'PROJECT':
+      return 'project';
+    default: {
+      const _exhaustive: never = type;
+      return _exhaustive;
+    }
+  }
+};
+
+// 그룹 리스트 조회 매핑
+// GroupGenerationResDto[] → GenerationGroup[]
+
+export const mapGroupGenerationResDtoToGenerationGroups = (
+  dtoList: GroupGenerationResDto[],
+): GenerationGroup[] => {
+  return dtoList.map((dto) => ({
+    generation: dto.generation,
+    groupList: dto.teams.map((team) => ({
+      id: team.teamId,
+      name: team.name,
+      type: mapGroupApiTypeToContentsType(team.type),
+    })),
+  }));
+};
+
+// MemberCardDto -> MemberBase (부족 필드는 기본값으로)
+const mapMemberCardDtoToMemberBase = (dto: MemberCardDto): MemberBase => {
+  return {
+    id: dto.memberId,
+    name: dto.name,
+    university: '', // MemberCardDto에 없음 -> 빈 값
+    profileImageUrl: dto.profileImageUrl ?? '',
+    tracks: (dto.tracks ?? []).map(toMemberTrack),
+    registeredAt: '', // 없음 -> 빈 값
+    role: 'MEMBER', // 없음 -> 기본값
+    status: 'approve', // 없음 -> 가본값
+  };
+};
+
+// 그룹 상세 조회 매핑
+// GroupDetailResDto -> GroupFormDraft
+export const mapGroupDetailResDtoToGroupFormDraft = (dto: GroupDetailResDto): GroupFormDraft => {
+  return {
+    generation: dto.generation,
+    groupType: mapGroupApiTypeToContentsType(dto.type),
+    groupName: dto.name,
+    groupIntroduction: dto.description,
+    leader: dto.leader ? mapMemberCardDtoToMemberBase(dto.leader) : undefined,
+    members: dto.members.map(mapMemberCardDtoToMemberBase),
+  };
+};

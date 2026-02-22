@@ -1,5 +1,5 @@
 import { GroupManagementDetailPage } from '@/app-pages/group-management/ui/GroupManagementDetailPage';
-import type { GroupManagementMode } from '@/widgets/group-management/ui/GroupMemberSection';
+import { GroupManagementMode } from '@/widgets/group-management/model/types';
 
 type PageProps = {
   params: Promise<{ id: string }>;

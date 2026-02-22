@@ -2,7 +2,7 @@ import { Sheet } from '@surf/ui/sheet';
 import { useAlertStore } from '@surf/ui/store/alertStore';
 import { useEffect, useState } from 'react';
 import { Sheet as ModalSheet } from 'react-modal-sheet';
-import { Member } from '@/entities/member/model/types';
+import { useMemberInfoQuery } from '@/entities/member/model/queries/useMemberInfoQuery';
 import { MemberProfileSummary } from '@/entities/member/ui/MemberProfileSummary';
 import { openExpelMemberConfirm } from '@/features/member/expel/model/openExpelMemberConfirm';
 import { MemberRoleChangeField } from '@/features/member/role-change/ui/MemberRoleChangeField';
@@ -27,33 +27,7 @@ export const MemberManagementSheet = ({
   onClose,
   memberId,
 }: MemberManagementSheetProps) => {
-  // TODO: memberId를 이용한 실제 멤버 조회 API 연동 필요
-  const member: Member = {
-    email: 'test@example.com',
-    name: '홍길동',
-    role: 'MEMBER',
-    phoneNumber: '01012341234',
-    status: 'approve',
-    tracks: [
-      {
-        generation: 12,
-        part: 'BACKEND',
-      },
-      {
-        generation: 11,
-        part: 'DESIGN',
-      },
-    ],
-    activityScore: 0,
-    careers: [],
-    profileImageUrl: '',
-    university: '000대',
-    graduateSchool: '',
-    id: 1,
-    isActive: true,
-    link: '',
-    registeredAt: '25.01.12',
-  };
+  const { data: member } = useMemberInfoQuery(memberId);
 
   const [isChangeRoleOpen, setIsChangeRoleOpen] = useState(false);
 

@@ -36,8 +36,9 @@ export const GroupManagementDetailPage = ({ mode }: GroupManagementDetailPagePro
   const closeBottomSheet = useBottomSheetStore((s) => s.close);
 
   // 모든 기수 정보 조회
-  const { data } = useMemberGenerationListQuery();
-  const MAX_GENERATION = data.generations.length > 0 ? Math.max(...data.generations) : 0;
+  const { data: generations } = useMemberGenerationListQuery();
+
+  const MAX_GENERATION = generations.length > 0 ? Math.max(...generations) : 0;
 
   const [generation, setGeneration] = useState<number>(MAX_GENERATION);
   const [groupType, setGroupType] = useState<ContentsType>('study');

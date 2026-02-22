@@ -10,6 +10,9 @@ export interface MemberGenerationAccordionListProps {
   keyword: string;
 }
 export const MemberGenerationAccordionList = ({ keyword }: MemberGenerationAccordionListProps) => {
+  //기수 목록 조회
+  const { data: generations } = useMemberGenerationListQuery();
+
   const openBottomSheet = useBottomSheetStore((state) => state.open);
 
   const handleOpenMemberSheet = (memberId: number) => {
@@ -20,9 +23,6 @@ export const MemberGenerationAccordionList = ({ keyword }: MemberGenerationAccor
       },
     });
   };
-
-  //기수 목록 조회
-  const { data: generations } = useMemberGenerationListQuery();
 
   if (generations.length === 0)
     return (

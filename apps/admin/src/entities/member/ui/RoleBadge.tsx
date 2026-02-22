@@ -1,20 +1,19 @@
-import { StatusBadge } from '@/shared/ui/StatusBadge';
+import { MemberRole } from '../model/types';
+import { StatusBadge, StatusBadgeVariant } from '@/shared/ui/StatusBadge';
 
-//TODO: MemberRole 타입으로 변경 필요
 interface RoleBadgeProps {
-  type: string;
+  type: MemberRole;
 }
 
-const ROLE_MAP: Record<string, { label: string; variant: 'pink' | 'purple' | 'green' }> = {
+const MEMBER_ROLE_MAP: Record<MemberRole, { label: string; variant: StatusBadgeVariant }> = {
+  ADMIN: { label: 'Admin', variant: 'neutral' },
   PRESIDENT: { label: 'President', variant: 'pink' },
   MANAGER: { label: 'Manager', variant: 'green' },
   MEMBER: { label: 'Member', variant: 'purple' },
 };
 
-const DEFAULT_ROLE = { label: 'Member', variant: 'purple' } as const;
-
 export const RoleBadge = ({ type }: RoleBadgeProps) => {
-  const { label, variant } = ROLE_MAP[type] ?? DEFAULT_ROLE;
+  const { label, variant } = MEMBER_ROLE_MAP[type];
 
   return <StatusBadge variant={variant}>{label}</StatusBadge>;
 };

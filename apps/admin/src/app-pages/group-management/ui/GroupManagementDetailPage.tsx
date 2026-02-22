@@ -42,11 +42,11 @@ export const GroupManagementDetailPage = ({ mode, id }: GroupManagementDetailPag
   const closeBottomSheet = useBottomSheetStore((s) => s.close);
 
   // hooks
-  const { data } = useMemberGenerationListQuery(); // 모든 기수 정보 조회
-  const maxGeneration = useMemo(() => {
-    const gens = data?.generations ?? [];
+  const { data: generations } = useMemberGenerationListQuery(); // 모든 기수 정보 조회
+  const MAX_GENERATION = useMemo(() => {
+    const gens = generations ?? [];
     return gens.length > 0 ? Math.max(...gens) : 0;
-  }, [data]); // 최대 기수 계산
+  }, [generations]); // 최대 기수 계산
 
   const { data: groupDetail } = useGroupDetailQuery(mode, Number(id)); // 'view', 'edit' 모드일 때 그룹 상세 조회
   const { mutateAsync: createGroup } = useCreateGroupMutatioin(); // 'create' 모드일 때 그룹 생성
@@ -73,14 +73,14 @@ export const GroupManagementDetailPage = ({ mode, id }: GroupManagementDetailPag
   // 초기 hydrate (폼이 없을 때만)
   useEffect(() => {
     hydrate(formKey, {
-      generation: groupDetail?.generation ?? maxGeneration,
+      generation: groupDetail?.generation ?? MAX_GENERATION,
       groupType: groupDetail?.groupType ?? ('study' as ContentsType),
       groupName: groupDetail?.groupName ?? '',
       groupIntroduction: groupDetail?.groupIntroduction ?? '',
       leader: groupDetail?.leader,
       members: groupDetail?.members ?? [],
     });
-  }, [hasForm, hydrate, formKey, maxGeneration, groupDetail]);
+  }, [hasForm, hydrate, formKey, MAX_GENERATION, groupDetail]);
 
   // draft가 아직 없으면(초기 hydrate 전) 안전 가드
   if (!draft) {
@@ -97,7 +97,7 @@ export const GroupManagementDetailPage = ({ mode, id }: GroupManagementDetailPag
     openBottomSheet({
       type: 'generation',
       props: {
-        maxGeneration,
+        maxGeneration: MAX_GENERATION,
         selectedGeneration: draft.generation,
         onSelect: (val: number) => {
           setGeneration(formKey, val);

@@ -1,8 +1,10 @@
 import { SolidButton } from '@surf/ui/button';
 import { useAlertStore } from '@surf/ui/store/alertStore';
+import { useToastStore } from '@surf/ui/store/toastStore';
 import { Wheel } from '@surf/ui/wheel-picker';
-import { useCallback, useEffect, useMemo, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import { openChangeMemberRoleConfirm } from '../model/openChangeMemberRoleConfirm';
+import { useUpdateMemberRoleMutation } from '../model/useUpdateMemberRoleMutation';
 import { MEMBER_ROLE_LABELS } from '@/entities/member/model/constants';
 import type { MemberRole } from '@/entities/member/model/types';
 
@@ -15,17 +17,29 @@ export interface ChangeRoleDialogProps {
   initialRole: MemberRole;
 }
 
-const MEMBER_ROLE_OPTIONS: readonly MemberRole[] = ['ADMIN', 'PRESIDENT', 'MANAGER', 'MEMBER'];
+const MEMBER_ROLE_OPTIONS: readonly MemberRole[] = ['MEMBER', 'MANAGER', 'PRESIDENT', 'ADMIN'];
+const MEMBER_ROLE_INDEX: Record<MemberRole, number> = {
+  MEMBER: 0,
+  MANAGER: 1,
+  PRESIDENT: 2,
+  ADMIN: 3,
+};
 
-export const ChangeRoleDialog = ({ isOpen, onClose, initialRole }: ChangeRoleDialogProps) => {
-  const initialRoleIndex = useMemo(() => {
-    const idx = MEMBER_ROLE_OPTIONS.findIndex((role) => role === initialRole);
-    return idx >= 0 ? idx : 0;
-  }, [initialRole]);
+export const ChangeRoleDialog = ({
+  isOpen,
+  onClose,
+  memberId,
+  initialRole,
+}: ChangeRoleDialogProps) => {
+  const initialRoleIndex = MEMBER_ROLE_INDEX[initialRole];
 
   const [selectedIdx, setSelectedIdx] = useState(initialRoleIndex);
+
+  const { mutate, isPending } = useUpdateMemberRoleMutation();
+
   const openAlert = useAlertStore((s) => s.open);
   const closeAlert = useAlertStore((s) => s.close);
+  const showToast = useToastStore((s) => s.show);
 
   useEffect(() => {
     if (!isOpen) return;
@@ -33,6 +47,7 @@ export const ChangeRoleDialog = ({ isOpen, onClose, initialRole }: ChangeRoleDia
   }, [isOpen, initialRoleIndex]);
 
   const selectedRole = MEMBER_ROLE_OPTIONS[selectedIdx] ?? MEMBER_ROLE_OPTIONS[0];
+  const hasRoleChanged = selectedRole !== initialRole;
 
   const setRoleLabel = useCallback((_relative: number, absolute: number): string => {
     const role = MEMBER_ROLE_OPTIONS[absolute];
@@ -40,7 +55,28 @@ export const ChangeRoleDialog = ({ isOpen, onClose, initialRole }: ChangeRoleDia
   }, []);
 
   const handleChangeRole = () => {
-    //TODO: role 변경 API 호출 로직 추가
+    if (isPending || !hasRoleChanged) return;
+
+    mutate(
+      { memberId, role: selectedRole },
+      {
+        onSuccess: () => {
+          showToast('회원 등급이 변경되었습니다.');
+          onClose();
+        },
+        onError: (error) => {
+          showToast(error.message);
+        },
+      },
+    );
+  };
+  const handleOpenConfirm = () => {
+    openChangeMemberRoleConfirm({
+      openAlert,
+      closeAlert,
+      role: selectedRole,
+      onConfirm: handleChangeRole,
+    });
   };
 
   if (!isOpen) return null;
@@ -77,15 +113,8 @@ export const ChangeRoleDialog = ({ isOpen, onClose, initialRole }: ChangeRoleDia
           <SolidButton
             size="l"
             variant="primary"
-            onClick={() =>
-              openChangeMemberRoleConfirm({
-                openAlert,
-                closeAlert,
-                role: selectedRole,
-                onConfirm: handleChangeRole,
-              })
-            }
-            isDisabled={initialRoleIndex === selectedIdx}
+            onClick={handleOpenConfirm}
+            isDisabled={!hasRoleChanged || isPending}
           >
             선택하기
           </SolidButton>

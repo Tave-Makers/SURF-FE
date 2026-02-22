@@ -1,13 +1,26 @@
 import { Avatar } from '@surf/ui/avatar';
+import { SurfIcon } from '@surf/ui/icon';
 import { useMemberGenerationListQuery } from '../model/queries/useMemberGenerationListQuery';
 import { RoleBadge } from '@/entities/member/ui/RoleBadge';
 import { SelectableMemberCard } from '@/entities/member/ui/SelectableMemberCard';
 import { MemberGenerationAccordion } from '@/features/member-by-generation/ui/MemberGenerationAccordion';
+import { useBottomSheetStore } from '@/shared/store/bottomSheetStore';
 
 export interface MemberGenerationAccordionListProps {
   keyword: string;
 }
 export const MemberGenerationAccordionList = ({ keyword }: MemberGenerationAccordionListProps) => {
+  const openBottomSheet = useBottomSheetStore((state) => state.open);
+
+  const handleOpenMemberSheet = (memberId: number) => {
+    openBottomSheet({
+      type: 'member',
+      props: {
+        memberId,
+      },
+    });
+  };
+
   //기수 목록 조회
   const { data: generations } = useMemberGenerationListQuery();
 
@@ -32,8 +45,27 @@ export const MemberGenerationAccordionList = ({ keyword }: MemberGenerationAccor
               tracks={m.tracks}
               checked={false}
               onToggle={() => {}}
-              leftSlot={<Avatar size="s" alt="테이비 프로필 이미지" src={m.profileImageUrl} />}
-              rightSlot={<RoleBadge type={m.role} />}
+              leftSlot={
+                <div className="relative">
+                  <Avatar src={m.profileImageUrl} size="m" />
+                  {/**TODO: 퇴출/제명 상태에 따라 색 변경 필요  */}
+                  <div
+                    className={`bg-background-primary absolute -right-4 -bottom-4 h-10 w-10 rounded-full`}
+                  />
+                </div>
+              }
+              rightSlot={
+                <>
+                  <RoleBadge type={m.role} />
+                  <button
+                    type="button"
+                    onClick={() => handleOpenMemberSheet(m.id)}
+                    aria-label={`${m.name} 상세 보기`}
+                  >
+                    <SurfIcon name="ChevronRight" />
+                  </button>
+                </>
+              }
             />
           )}
         />

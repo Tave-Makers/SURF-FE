@@ -146,7 +146,18 @@ export const useGroupFormStore = create<Store>((set, get) => ({
     set((s) => {
       const cur = s.forms[key];
       if (!cur) return s;
-      return { forms: { ...s.forms, [key]: updateDraft(cur, (d) => ({ ...d, generation: v })) } };
+      return {
+        forms: {
+          ...s.forms,
+          [key]: updateDraft(cur, (d) => ({
+            ...d,
+            generation: v,
+            // 기수 변경 시 멤버 초기화
+            leader: undefined,
+            members: [],
+          })),
+        },
+      };
     }),
 
   setGroupType: (key, v) =>

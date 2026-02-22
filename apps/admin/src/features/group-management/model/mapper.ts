@@ -2,6 +2,7 @@ import { GenerationGroup } from '@/entities/group-management/model/types';
 import { toMemberTrack } from '@/entities/member/model/mapper';
 import { MemberSummary } from '@/entities/member/model/types';
 import {
+  CreateGroupRequest,
   GroupApiType,
   GroupDetailResDto,
   GroupGenerationResDto,
@@ -60,5 +61,17 @@ export const mapGroupDetailResDtoToGroupFormDraft = (dto: GroupDetailResDto): Gr
     groupIntroduction: dto.description,
     leader: dto.leader ? mapMemberCardDtoToMemberSummary(dto.leader) : undefined,
     members: dto.members.map(mapMemberCardDtoToMemberSummary),
+  };
+};
+
+// 그룹 생성 요청 바디 매핑
+export const mapGroupDraftToCreateReq = (draft: GroupFormDraft): CreateGroupRequest => {
+  return {
+    generation: draft.generation,
+    type: mapContentsTypeToGroupApiType(draft.groupType),
+    name: draft.groupName,
+    description: draft.groupIntroduction,
+    leaderMemberId: draft.leader!.id,
+    memberIds: draft.members.map((m) => m.id),
   };
 };

@@ -8,6 +8,7 @@ export type GroupApiType = 'STUDY' | 'PROJECT';
 export interface CreateGroupRequest {
   generation: number;
   type: GroupApiType;
+  name: string;
   description: string;
   leaderMemberId: number;
   memberIds: number[];

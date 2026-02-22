@@ -1,7 +1,7 @@
 'use client';
 
 import Image from 'next/image';
-import { use, useEffect, useMemo, useRef, useState } from 'react';
+import { useEffect, useMemo, useRef, useState } from 'react';
 import DEFAULT_IMAGE from '@/shared/assets/images/default-item.png';
 
 type Mode = 'create' | 'edit';

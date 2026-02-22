@@ -15,8 +15,13 @@ export const groupApi = {
     const res = await axiosInstance.post<CreateGroupResponse>('/v1/admin/teams', body);
     return res.data.data;
   },
-  getGroupList: async (params: { type: GroupApiType }): Promise<GroupGenerationResDto[]> => {
-    const res = await axiosInstance.get<GroupGenerationListResponse>('/v1/admin/teams', { params });
+  getGroupList: async (params?: { type: GroupApiType }): Promise<GroupGenerationResDto[]> => {
+    const res = await axiosInstance.get<GroupGenerationListResponse>(
+      '/v1/admin/teams',
+      params ? { params } : undefined,
+    );
+    return res.data.data;
+  },
   getGroupDetail: async (params: { teamId: number }): Promise<GroupDetailResDto> => {
     const { teamId } = params;
     const res = await axiosInstance.get<GroupDetailResponse>(`/v1/admin/teams/${teamId}`);

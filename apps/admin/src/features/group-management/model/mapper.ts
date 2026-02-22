@@ -10,19 +10,19 @@ import {
 import { GroupFormDraft } from '@/features/group-management/model/useGroupFormStore';
 import { ContentsType } from '@/shared/types/contents';
 
-// type 변환 함수
-const mapGroupApiTypeToContentsType = (type: GroupApiType): ContentsType => {
-  switch (type) {
-    case 'STUDY':
-      return 'study';
-    case 'PROJECT':
-      return 'project';
-    default: {
-      const _exhaustive: never = type;
-      return _exhaustive;
-    }
-  }
+const contentsToApiMap: Record<ContentsType, GroupApiType> = {
+  study: 'STUDY',
+  project: 'PROJECT',
 };
+
+const apiToContentsMap: Record<GroupApiType, ContentsType> = {
+  STUDY: 'study',
+  PROJECT: 'project',
+};
+
+export const mapContentsTypeToGroupApiType = (type: ContentsType) => contentsToApiMap[type];
+
+export const mapGroupApiTypeToContentsType = (type: GroupApiType) => apiToContentsMap[type];
 
 // 그룹 리스트 조회 매핑
 // GroupGenerationResDto[] → GenerationGroup[]

@@ -21,13 +21,13 @@ export const useBannerEdit = (bannerId: number, initialData: Banner | undefined)
   const { mutateAsync: deleteBanner } = useDeleteBannerMutation(bannerId);
 
   const [isSubmitting, setIsSubmitting] = useState(false);
-  const [initial, setInitial] = useState<Banner | null>(() => initialData ?? null);
-  const [form, setForm] = useState<BannerFormData>(() => ({
-    imageUrl: initialData?.imageUrl ?? '',
-    name: initialData?.name ?? '',
-    linkUrl: initialData?.linkUrl ?? '',
-    isActive: initialData?.isActive ?? true,
-  }));
+  const [initial, setInitial] = useState<Banner | null>(null);
+  const [form, setForm] = useState<BannerFormData>({
+    imageUrl: '',
+    name: '',
+    linkUrl: '',
+    isActive: true,
+  });
   const [bannerFile, setBannerFile] = useState<File | null>(null);
 
   // 초기 데이터 로드

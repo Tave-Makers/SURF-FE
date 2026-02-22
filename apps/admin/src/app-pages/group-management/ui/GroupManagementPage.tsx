@@ -1,5 +1,6 @@
 'use client';
 
+import { Fab } from '@surf/ui/fab';
 import { useRouter } from 'next/navigation';
 import { useGroupListQuery } from '@/features/group-management/model/queries/useGroupListQuery';
 import { useGroupFilter } from '@/features/group-management/model/useGroupFilter';
@@ -29,6 +30,13 @@ export const GroupManagementPage = () => {
     <div className="flex h-full flex-col overflow-y-auto">
       <FilterWidget filter={filter} onChange={setFilter} />
       <GroupManagementAccordionList generationGroups={filtered} onClick={handleNavigate} />
+      <div className="pointer-events-none fixed inset-0 z-50">
+        <div className="relative mx-auto h-full sm:max-w-[min(100dvw,calc(100dvh*375/812))]">
+          <div className="pointer-events-auto absolute right-15 bottom-15">
+            <Fab onClick={() => router.push(PAGE_ROUTES.GROUP_MNG.CREATE)} />
+          </div>
+        </div>
+      </div>
     </div>
   );
 };

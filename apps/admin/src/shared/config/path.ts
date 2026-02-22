@@ -14,6 +14,7 @@ export const PAGE_ROUTES = {
   DASHBOARD: '/dashboard',
   GROUP_MNG: {
     LIST: GROUP_ROOT,
+    CREATE: `${GROUP_ROOT}/create`,
     VIEW: (id: string | number) => `${GROUP_ROOT}/${id}`,
     EDIT: (id: string | number) => `${GROUP_ROOT}/${id}?mode=edit`,
     MEMBER_SEARCH: `${GROUP_ROOT}/member-search`,

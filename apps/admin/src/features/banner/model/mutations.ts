@@ -1,6 +1,6 @@
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { createBanner } from '../api/createBanner';
-import { CreateBannerRequest, UpdateBannerRequest } from '../api/types';
+import { BannerItem, CreateBannerRequest, UpdateBannerRequest } from '../api/types';
 import { deleteBanner } from '../api/deleteBanner';
 import { activateBanner } from '../api/activateBanner';
 import { deactivateBanner } from '../api/deactivateBanner';
@@ -70,13 +70,44 @@ export const useUpdateBannerMutation = (bannerId: number) => {
 
 export const useReorderBannerMutation = () => {
   const queryClient = useQueryClient();
+
   return useMutation({
     mutationFn: (data: { orderedIds: number[] }) => reorderBanner(data),
-    onSuccess: async () => {
-      await queryClient.invalidateQueries({ queryKey: bannerQueryKeys.list() });
+
+    onMutate: async (newData) => {
+      // 진행 중인 쿼리 취소
+      await queryClient.cancelQueries({ queryKey: bannerQueryKeys.list() });
+
+      // 이전 값 스냅샷 저장
+      const previousBanners = queryClient.getQueryData<BannerItem[]>(bannerQueryKeys.list());
+
+      // 캐시 업데이트
+      if (previousBanners) {
+        queryClient.setQueryData<BannerItem[]>(bannerQueryKeys.list(), (old) => {
+          if (!old) return [];
+
+          // 기존 배열을 복사하여 정렬
+          return [...old].sort((a, b) => {
+            const indexA = newData.orderedIds.indexOf(a.id);
+            const indexB = newData.orderedIds.indexOf(b.id);
+            return indexA - indexB;
+          });
+        });
+      }
+
+      return { previousBanners };
     },
-    onError: (error) => {
-      console.error('[useReorderBannerMutation] 배너 순서 변경 실패:', error);
+
+    onError: (err, _newData, context) => {
+      // 에러 시 복구
+      if (context?.previousBanners) {
+        queryClient.setQueryData(bannerQueryKeys.list(), context.previousBanners);
+      }
+      console.error('순서 변경 실패:', err);
+    },
+
+    onSettled: async () => {
+      await queryClient.invalidateQueries({ queryKey: bannerQueryKeys.list() });
     },
   });
 };

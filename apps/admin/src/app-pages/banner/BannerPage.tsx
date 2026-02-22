@@ -49,9 +49,10 @@ export const BannerPage = () => {
           },
         },
       );
+    } else {
+      setTempBanners([]);
+      setIsReorderMode(false);
     }
-    setTempBanners([]);
-    setIsReorderMode(false);
   };
 
   return (

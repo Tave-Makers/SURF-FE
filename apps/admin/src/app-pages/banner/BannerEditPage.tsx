@@ -3,7 +3,7 @@
 import { Header, HeaderMode } from '@surf/ui/header';
 import { useRouter } from 'next/navigation';
 import { useBannerEdit } from '@/features/banner/model/useBannerEdit';
-import { useBannerFromCache } from '@/features/banner/model/useGetBannerFromCache';
+import { useBannerById } from '@/features/banner/model/useGetBannerById';
 import { BannerFormWidget } from '@/widgets/banner/ui/BannerFormWidget';
 
 interface BannerEditPageProps {
@@ -12,13 +12,9 @@ interface BannerEditPageProps {
 
 export const BannerEditPage = ({ bannerId }: BannerEditPageProps) => {
   const router = useRouter();
-  const { data: targetBanner } = useBannerFromCache(bannerId);
-
+  const { data: targetBanner } = useBannerById(bannerId);
   const { state, actions } = useBannerEdit(bannerId, targetBanner);
-  if (!targetBanner) {
-    return <div>해당 배너를 찾을 수 없습니다.</div>;
-  }
-  if (state.isLoading) return <div>loading...</div>;
+
   return (
     <>
       <Header
@@ -27,17 +23,21 @@ export const BannerEditPage = ({ bannerId }: BannerEditPageProps) => {
         hasLeftIcon
         onClickBack={() => router.back()}
       />
-      <BannerFormWidget
-        mode="edit"
-        data={state.form}
-        onChange={actions.setForm}
-        onSelectFile={actions.setBannerFile}
-        onSubmit={actions.handleOpenSaveAlert}
-        onDelete={actions.handleOpenDeleteAlert}
-        isSubmitting={state.isSubmitting}
-        canSubmit={state.canSubmit}
-        submitLabel="수정하기"
-      />
+      {state.isLoading || !targetBanner ? (
+        <div>{state.isLoading ? 'loading...' : '배너를 찾을 수 없습니다.'}</div>
+      ) : (
+        <BannerFormWidget
+          mode="edit"
+          data={state.form}
+          onChange={actions.setForm}
+          onSelectFile={actions.setBannerFile}
+          onSubmit={actions.handleOpenSaveAlert}
+          onDelete={actions.handleOpenDeleteAlert}
+          isSubmitting={state.isSubmitting}
+          canSubmit={state.canSubmit}
+          submitLabel="수정하기"
+        />
+      )}
     </>
   );
 };

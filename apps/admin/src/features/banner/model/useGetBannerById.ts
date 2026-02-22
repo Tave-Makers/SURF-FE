@@ -1,6 +1,6 @@
 import { useBannerListQuery } from './useGetBannerList';
 
-export const useBannerFromCache = (bannerId: number) => {
+export const useBannerById = (bannerId: number) => {
   return useBannerListQuery({
     select: (banners) => banners.find((b) => b.id === bannerId),
   });

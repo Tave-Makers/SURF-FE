@@ -1,12 +1,13 @@
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { createBanner } from '../api/createBanner';
-import { BannerItem, CreateBannerRequest, UpdateBannerRequest } from '../api/types';
+import { CreateBannerRequest, ReorderBannerRequest, UpdateBannerRequest } from '../api/types';
 import { deleteBanner } from '../api/deleteBanner';
 import { activateBanner } from '../api/activateBanner';
 import { deactivateBanner } from '../api/deactivateBanner';
 import { updateBanner } from '../api/updateBanner';
 import { bannerQueryKeys } from '../api/queryKeys';
 import { reorderBanner } from '../api/reorderBanner';
+import { Banner } from '@/entities/banner/model/types';
 
 // 홈 배너 생성 Mutation
 export const useCreateBannerMutation = () => {
@@ -72,18 +73,18 @@ export const useReorderBannerMutation = () => {
   const queryClient = useQueryClient();
 
   return useMutation({
-    mutationFn: (data: { orderedIds: number[] }) => reorderBanner(data),
+    mutationFn: (data: ReorderBannerRequest) => reorderBanner(data),
 
     onMutate: async (newData) => {
       // 진행 중인 쿼리 취소
       await queryClient.cancelQueries({ queryKey: bannerQueryKeys.list() });
 
       // 이전 값 스냅샷 저장
-      const previousBanners = queryClient.getQueryData<BannerItem[]>(bannerQueryKeys.list());
+      const previousBanners = queryClient.getQueryData<Banner[]>(bannerQueryKeys.list());
 
       // 캐시 업데이트
       if (previousBanners) {
-        queryClient.setQueryData<BannerItem[]>(bannerQueryKeys.list(), (old) => {
+        queryClient.setQueryData<Banner[]>(bannerQueryKeys.list(), (old) => {
           if (!old) return [];
 
           // 기존 배열을 복사하여 정렬

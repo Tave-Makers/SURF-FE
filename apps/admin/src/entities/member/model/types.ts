@@ -38,17 +38,24 @@ export interface Career {
 }
 
 /**
- * 멤버 요약 정보 (목록/요약 뷰에서 사용하는 최소 필드)
+ * 멤버 요약 정보 (최소 필드)
  */
-export interface MemberBase {
+export interface MemberSummary {
   id: number;
   name: string;
-  university: string;
   profileImageUrl: string;
   tracks: MemberTrack[];
+}
+
+/**
+ * 멤버 기본 정보 (목록/요약 뷰에서 사용하는 필드)
+ */
+export interface MemberBase extends MemberSummary {
+  university: string;
   registeredAt: string;
   role: MemberRole;
   status: MemberStatus;
+  isActive?: boolean;
 }
 
 /**
@@ -67,4 +74,4 @@ export interface MemberDetail extends MemberBase {
 /**
  * 멤버 상세 도메인 모델 (요약 + 상세 정보)
  */
-export type Member = MemberBase & MemberDetail;
+export type Member = MemberDetail;

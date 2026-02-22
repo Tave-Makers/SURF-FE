@@ -9,7 +9,7 @@ import {
   mapModeToStickyButton,
 } from '@/app-pages/group-management/model/mapper';
 import { mockLeader, mockMembers } from '@/app-pages/group-management/model/mock';
-import { MemberBase } from '@/entities/member/model/types';
+import { MemberSummary } from '@/entities/member/model/types';
 import { useGroupFormStore } from '@/features/group-management/model/useGroupFormStore';
 import { useBottomSheetStore } from '@/shared/store/bottomSheetStore';
 import type { ContentsType } from '@/shared/types/contents';
@@ -124,7 +124,7 @@ export const GroupManagementDetailPage = ({ mode, id }: GroupManagementDetailPag
       type: 'pickLeader',
       props: {
         members: draft.members,
-        onSelect: (member: MemberBase) => {
+        onSelect: (member: MemberSummary) => {
           // member 타입은 실제 bottomSheet props 타입에 맞춰서 교체
           pickLeader(formKey, member);
           closeBottomSheet();

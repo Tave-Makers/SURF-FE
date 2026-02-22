@@ -1,6 +1,6 @@
 import { GenerationGroup } from '@/entities/group-management/model/types';
 import { toMemberTrack } from '@/entities/member/model/mapper';
-import { MemberBase } from '@/entities/member/model/types';
+import { MemberSummary } from '@/entities/member/model/types';
 import {
   GroupApiType,
   GroupDetailResDto,
@@ -40,17 +40,13 @@ export const mapGroupGenerationResDtoToGenerationGroups = (
   }));
 };
 
-// MemberCardDto -> MemberBase (부족 필드는 기본값으로)
-const mapMemberCardDtoToMemberBase = (dto: MemberCardDto): MemberBase => {
+// MemberCardDto -> MemberSummary
+const mapMemberCardDtoToMemberSummary = (dto: MemberCardDto): MemberSummary => {
   return {
     id: dto.memberId,
     name: dto.name,
-    university: '', // MemberCardDto에 없음 -> 빈 값
     profileImageUrl: dto.profileImageUrl ?? '',
     tracks: (dto.tracks ?? []).map(toMemberTrack),
-    registeredAt: '', // 없음 -> 빈 값
-    role: 'MEMBER', // 없음 -> 기본값
-    status: 'approve', // 없음 -> 가본값
   };
 };
 
@@ -62,7 +58,7 @@ export const mapGroupDetailResDtoToGroupFormDraft = (dto: GroupDetailResDto): Gr
     groupType: mapGroupApiTypeToContentsType(dto.type),
     groupName: dto.name,
     groupIntroduction: dto.description,
-    leader: dto.leader ? mapMemberCardDtoToMemberBase(dto.leader) : undefined,
-    members: dto.members.map(mapMemberCardDtoToMemberBase),
+    leader: dto.leader ? mapMemberCardDtoToMemberSummary(dto.leader) : undefined,
+    members: dto.members.map(mapMemberCardDtoToMemberSummary),
   };
 };

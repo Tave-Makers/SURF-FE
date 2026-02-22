@@ -1,15 +1,15 @@
 import { Avatar } from '@surf/ui/avatar';
 import { SolidButton } from '@surf/ui/button';
 import { FieldGroup } from '@surf/ui/field-group';
-import { MemberBase } from '@/entities/member/model/types';
+import { MemberSummary } from '@/entities/member/model/types';
 import { MemberCardBase } from '@/entities/member/ui/MemberCardBase';
 import { RemovableMemberCard } from '@/entities/member/ui/RemovableMemberCard/RemovableMemberCard';
 import { GroupManagementMode } from '@/widgets/group-management/model/types';
 
 interface GroupMemberSectionProps {
   mode: GroupManagementMode;
-  teamLeader?: MemberBase;
-  teamMembers?: MemberBase[];
+  teamLeader?: MemberSummary;
+  teamMembers?: MemberSummary[];
   /** 팀장 선택 (또는 변경) */
   onPickLeader?: () => void;
   /** 팀원 추가 */

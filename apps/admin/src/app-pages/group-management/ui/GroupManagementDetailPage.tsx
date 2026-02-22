@@ -8,8 +8,8 @@ import {
   mapModeToHeaderProps,
   mapModeToStickyButton,
 } from '@/app-pages/group-management/model/mapper';
-import { mockLeader, mockMembers } from '@/app-pages/group-management/model/mock';
 import { MemberSummary } from '@/entities/member/model/types';
+import { useGroupDetailQuery } from '@/features/group-management/model/queries/useGroupDetailQuery';
 import { useGroupFormStore } from '@/features/group-management/model/useGroupFormStore';
 import { useBottomSheetStore } from '@/shared/store/bottomSheetStore';
 import type { ContentsType } from '@/shared/types/contents';
@@ -46,6 +46,9 @@ export const GroupManagementDetailPage = ({ mode, id }: GroupManagementDetailPag
     return gens.length > 0 ? Math.max(...gens) : 0;
   }, [data]);
 
+  // 그룹 상세 정보 조회
+  const { data: groupDetail } = useGroupDetailQuery(mode, Number(id));
+
   const formKey = mode === 'create' ? 'create' : String(id);
 
   // store selectors
@@ -71,14 +74,14 @@ export const GroupManagementDetailPage = ({ mode, id }: GroupManagementDetailPag
   useEffect(() => {
     // TODO: API 연동 후 mockData 제거
     hydrate(formKey, {
-      generation: maxGeneration,
-      groupType: 'study' as ContentsType,
-      groupName: '',
-      groupIntroduction: '',
-      leader: mockLeader,
-      members: mockMembers,
+      generation: groupDetail?.generation ?? maxGeneration,
+      groupType: groupDetail?.groupType ?? ('study' as ContentsType),
+      groupName: groupDetail?.groupName ?? '',
+      groupIntroduction: groupDetail?.groupIntroduction ?? '',
+      leader: groupDetail?.leader,
+      members: groupDetail?.members ?? [],
     });
-  }, [hasForm, hydrate, formKey, maxGeneration]);
+  }, [hasForm, hydrate, formKey, maxGeneration, groupDetail]);
 
   // draft가 아직 없으면(초기 hydrate 전) 안전 가드
   if (!draft) {

@@ -141,7 +141,7 @@ export const GroupManagementDetailPage = ({ mode, id }: GroupManagementDetailPag
     params.set('generation', String(draft.generation));
     params.set('formKey', formKey);
 
-    router.push(`${PAGE_ROUTES.GROUP_MGN.MEMBER_SEARCH}?${params.toString()}`);
+    router.push(`${PAGE_ROUTES.GROUP_MNG.MEMBER_SEARCH}?${params.toString()}`);
   };
 
   const handleRemoveMember = (memberId: number) => {
@@ -153,7 +153,7 @@ export const GroupManagementDetailPage = ({ mode, id }: GroupManagementDetailPag
       if (!draft) return;
       const created = await createGroup(draft);
       const groupId = created.teamId;
-      router.push(PAGE_ROUTES.GROUP_MGN.VIEW(groupId));
+      router.push(PAGE_ROUTES.GROUP_MNG.VIEW(groupId));
     } else if (mode === 'edit') {
       // 수정 API 호출 로직 (formKey + draft)
       alert('그룹 수정 API 연동 예정');

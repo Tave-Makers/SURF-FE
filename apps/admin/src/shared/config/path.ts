@@ -12,7 +12,7 @@ export const PAGE_ROUTES = {
     LIST: '/banner',
   },
   DASHBOARD: '/dashboard',
-  GROUP_MGN: {
+  GROUP_MNG: {
     LIST: GROUP_ROOT,
     VIEW: (id: string | number) => `${GROUP_ROOT}/${id}`,
     EDIT: (id: string | number) => `${GROUP_ROOT}/${id}?mode=edit`,

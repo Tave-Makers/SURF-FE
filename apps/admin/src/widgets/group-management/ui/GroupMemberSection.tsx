@@ -81,7 +81,7 @@ export const GroupMemberSection = ({
                 </SolidButton>
               ) : (
                 <div>등록된 팀원이 없습니다.</div>
-              )}{' '}
+              )}
             </div>
           ) : (
             <div className="flex flex-col">

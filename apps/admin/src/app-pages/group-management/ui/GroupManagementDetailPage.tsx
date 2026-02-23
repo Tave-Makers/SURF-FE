@@ -11,6 +11,7 @@ import {
 import { MemberSummary } from '@/entities/member/model/types';
 import { useCreateGroupMutation } from '@/features/group-management/model/queries/useCreateGroupMutation';
 import { useGroupDetailQuery } from '@/features/group-management/model/queries/useGroupDetailQuery';
+import { useUpdateGroupMutation } from '@/features/group-management/model/queries/useUpdateGroupMutation';
 import { useGroupFormStore } from '@/features/group-management/model/useGroupFormStore';
 import { PAGE_ROUTES } from '@/shared/config/path';
 import { useBottomSheetStore } from '@/shared/store/bottomSheetStore';
@@ -51,6 +52,7 @@ export const GroupManagementDetailPage = ({ mode, id }: GroupManagementDetailPag
   const groupId = id ? Number(id) : undefined;
   const { data: groupDetail } = useGroupDetailQuery(mode, groupId); // 'view', 'edit' 모드일 때 그룹 상세 조회
   const { mutateAsync: createGroup } = useCreateGroupMutation(); // 'create' 모드일 때 그룹 생성
+  const { mutateAsync: updateGroup } = useUpdateGroupMutation(groupId); // 'edit' 모드일 때 그룹 수정
 
   // store selectors
   const formKey = mode === 'create' ? 'create' : String(id);
@@ -154,8 +156,9 @@ export const GroupManagementDetailPage = ({ mode, id }: GroupManagementDetailPag
       const groupId = created.teamId;
       router.push(PAGE_ROUTES.GROUP_MNG.VIEW(groupId));
     } else if (mode === 'edit') {
-      // 수정 API 호출 로직 (formKey + draft)
-      alert('그룹 수정 API 연동 예정');
+      if (!groupId) return;
+      await updateGroup(draft);
+      router.back();
     }
   };
 

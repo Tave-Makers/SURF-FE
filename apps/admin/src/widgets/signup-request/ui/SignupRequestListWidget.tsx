@@ -4,7 +4,7 @@ import { Suspense, useEffect } from 'react';
 import { SignupRequestListContainer } from './SignupRequestListContainer';
 import { useSignupRequestCountQuery } from '@/entities/member/model/queries/useMemberCountQuery';
 import { useSelectableListState } from '@/shared/hooks/useSelectableListState';
-import { ErrorBoundary } from '@/shared/ui/ErrorBoundary';
+import { ErrorBoundary } from '@/shared/ui/error/ErrorBoundary';
 import { SelectableListTopBar } from '@/shared/ui/SelectableListTopBar';
 
 interface SignupRequestListWidgetProps {
@@ -45,9 +45,7 @@ export const SignupRequestListWidget = ({ keyword }: SignupRequestListWidgetProp
         onExitSelectMode={exitSelectMode}
       />
       {/* 회원가입 목록 */}
-      <ErrorBoundary
-        fallback={<div className="p-4">데이터를 불러오는 중 오류가 발생했습니다.</div>}
-      >
+      <ErrorBoundary>
         <Suspense fallback={<div className="p-4">loading...</div>}>
           <SignupRequestListContainer
             keyword={keyword}

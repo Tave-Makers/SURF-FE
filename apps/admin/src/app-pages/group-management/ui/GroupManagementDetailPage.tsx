@@ -10,6 +10,7 @@ import {
 } from '@/app-pages/group-management/model/mapper';
 import { MemberSummary } from '@/entities/member/model/types';
 import { useCreateGroupMutation } from '@/features/group-management/model/queries/useCreateGroupMutation';
+import { useDeleteGroupMutation } from '@/features/group-management/model/queries/useDeleteGroupMutation';
 import { useGroupDetailQuery } from '@/features/group-management/model/queries/useGroupDetailQuery';
 import { useUpdateGroupMutation } from '@/features/group-management/model/queries/useUpdateGroupMutation';
 import { useGroupFormStore } from '@/features/group-management/model/useGroupFormStore';
@@ -34,7 +35,7 @@ export const GroupManagementDetailPage = ({ mode, id }: GroupManagementDetailPag
   const handleSwitchToEdit = () => {
     const params = new URLSearchParams(searchParams.toString());
     params.set('mode', 'edit');
-    router.push(`?${params.toString()}`);
+    router.replace(`?${params.toString()}`);
   };
 
   const headerProps = mapModeToHeaderProps({ mode, onClickEdit: handleSwitchToEdit });
@@ -53,6 +54,7 @@ export const GroupManagementDetailPage = ({ mode, id }: GroupManagementDetailPag
   const { data: groupDetail } = useGroupDetailQuery(mode, groupId); // 'view', 'edit' 모드일 때 그룹 상세 조회
   const { mutateAsync: createGroup } = useCreateGroupMutation(); // 'create' 모드일 때 그룹 생성
   const { mutateAsync: updateGroup } = useUpdateGroupMutation(groupId); // 'edit' 모드일 때 그룹 수정
+  const { mutateAsync: deleteGroup } = useDeleteGroupMutation(groupId); // 'edit' 모드 그룹 삭제
 
   // store selectors
   const formKey = mode === 'create' ? 'create' : String(id);
@@ -154,16 +156,19 @@ export const GroupManagementDetailPage = ({ mode, id }: GroupManagementDetailPag
       if (!draft) return;
       const created = await createGroup(draft);
       const groupId = created.teamId;
-      router.push(PAGE_ROUTES.GROUP_MNG.VIEW(groupId));
+      router.replace(PAGE_ROUTES.GROUP_MNG.VIEW(groupId));
     } else if (mode === 'edit') {
       if (!groupId) return;
       await updateGroup(draft);
-      router.back();
+      router.replace(PAGE_ROUTES.GROUP_MNG.VIEW(groupId));
     }
   };
 
-  const handleDeleteGroup = () => {
-    alert('그룹 삭제 확인 Alert 구현 예정');
+  const handleDeleteGroup = async () => {
+    if (mode === 'edit') {
+      await deleteGroup();
+      router.back();
+    }
   };
 
   return (
@@ -194,7 +199,7 @@ export const GroupManagementDetailPage = ({ mode, id }: GroupManagementDetailPag
 
         {mode === 'edit' && (
           <div className="px-13 py-15">
-            <SolidButton size="m" variant="warning" onClick={handleDeleteGroup}>
+            <SolidButton size="m" variant="warning" onClick={() => void handleDeleteGroup()}>
               해당 그룹 삭제하기
             </SolidButton>
           </div>

@@ -30,5 +30,8 @@ export const useCreateGroupMutation = () => {
       // 캐시 갱신: 리스트 invalidate
       void qc.invalidateQueries({ queryKey: groupQueryKeys.lists() });
     },
+    onError: (err) => {
+      console.error('[Group Create Error]', err.message);
+    },
   });
 };

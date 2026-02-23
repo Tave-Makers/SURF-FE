@@ -5,7 +5,7 @@ export type GroupApiType = 'STUDY' | 'PROJECT';
 
 // 그룹 생성
 
-export interface CreateGroupRequest {
+export interface GroupRequest {
   generation: number;
   type: GroupApiType;
   name: string;
@@ -14,7 +14,7 @@ export interface CreateGroupRequest {
   memberIds: number[];
 }
 
-export interface CreateGroupResDto {
+export interface GroupResDto {
   teamId: number;
   generation: number;
   name: string;
@@ -24,7 +24,7 @@ export interface CreateGroupResDto {
   memberCount: number;
 }
 
-export type CreateGroupResponse = CommonResponse<CreateGroupResDto>;
+export type GroupResponse = CommonResponse<GroupResDto>;
 
 // 그룹 목록 조회
 

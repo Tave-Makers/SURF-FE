@@ -1,7 +1,7 @@
 import {
-  CreateGroupRequest,
-  CreateGroupResDto,
-  CreateGroupResponse,
+  GroupRequest,
+  GroupResDto,
+  GroupResponse,
   GroupApiType,
   GroupGenerationResDto,
   GroupGenerationListResponse,
@@ -11,8 +11,8 @@ import {
 import { axiosInstance } from '@/shared/lib/axiosInstance';
 
 export const groupApi = {
-  createGroup: async (body: CreateGroupRequest): Promise<CreateGroupResDto> => {
-    const res = await axiosInstance.post<CreateGroupResponse>('/v1/admin/teams', body);
+  createGroup: async (body: GroupRequest): Promise<GroupResDto> => {
+    const res = await axiosInstance.post<GroupResponse>('/v1/admin/teams', body);
     return res.data.data;
   },
   getGroupList: async (params?: { type: GroupApiType }): Promise<GroupGenerationResDto[]> => {

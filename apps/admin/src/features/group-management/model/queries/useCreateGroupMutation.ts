@@ -1,6 +1,6 @@
 import { groupApi } from '@/features/group-management/api/groupApi';
-import { CreateGroupResDto } from '@/features/group-management/api/types';
-import { mapGroupDraftToCreateReq } from '@/features/group-management/model/mapper';
+import { GroupResDto } from '@/features/group-management/api/types';
+import { mapGroupDraftToReq } from '@/features/group-management/model/mapper';
 import { groupQueryKeys } from '@/features/group-management/model/queries/queryKeys';
 import {
   GroupFormDraft,
@@ -17,8 +17,8 @@ export const useCreateGroupMutation = () => {
   const commit = useGroupFormStore((s) => s.commit);
 
   return useMutation({
-    mutationFn: async (draft: GroupFormDraft): Promise<CreateGroupResDto> => {
-      const body = mapGroupDraftToCreateReq(draft);
+    mutationFn: async (draft: GroupFormDraft): Promise<GroupResDto> => {
+      const body = mapGroupDraftToReq(draft);
       return groupApi.createGroup(body);
     },
     onSuccess: (created) => {

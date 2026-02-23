@@ -181,8 +181,11 @@ export const GroupManagementDetailPage = ({ mode, id }: GroupManagementDetailPag
           onClick: () => {
             closeAlert();
             resetForm(formKey);
-            if (groupId) router.replace(PAGE_ROUTES.GROUP_MNG.VIEW(groupId));
-            else router.back();
+            if (mode === 'edit' && groupId) {
+              router.replace(PAGE_ROUTES.GROUP_MNG.VIEW(groupId));
+            } else {
+              router.back();
+            }
           },
         },
       ],

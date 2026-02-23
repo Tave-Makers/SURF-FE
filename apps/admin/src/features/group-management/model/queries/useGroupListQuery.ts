@@ -7,18 +7,11 @@ import { groupQueryKeys } from '@/features/group-management/model/queries/queryK
 import { ContentsType } from '@/shared/types/contents';
 import { useQuery } from '@tanstack/react-query';
 
-export type GroupListParams = {
-  generation?: number;
-  type?: ContentsType;
-};
-
-export const useGroupListQuery = (params?: GroupListParams) => {
+export const useGroupListQuery = (type?: ContentsType) => {
   return useQuery({
-    queryKey: groupQueryKeys.list(params),
-    queryFn: ({ queryKey }) => {
-      const [, , uiParams] = queryKey;
-      const apiParams =
-        uiParams?.type != null ? { type: mapContentsTypeToGroupApiType(uiParams.type) } : undefined;
+    queryKey: groupQueryKeys.list(type),
+    queryFn: () => {
+      const apiParams = type ? { type: mapContentsTypeToGroupApiType(type) } : undefined;
       return groupApi.getGroupList(apiParams);
     },
     select: mapGroupGenerationResDtoToGenerationGroups,

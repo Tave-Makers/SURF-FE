@@ -173,6 +173,22 @@ export const GroupManagementDetailPage = ({ mode, id }: GroupManagementDetailPag
     });
   };
 
+  const openPickLeaderAlert = () => {
+    openAlert({
+      state: 'error',
+      title: '팀원을 먼저 선택해주세요',
+      infoText: '팀장은 먼저 팀원을 선택한 뒤에 선택이 가능합니다.',
+      actions: [
+        {
+          type: 'text',
+          variant: 'primary',
+          label: '확인',
+          onClick: () => closeAlert(),
+        },
+      ],
+    });
+  };
+
   const headerProps = mapModeToHeaderProps({
     mode,
     onClickEdit: handleSwitchToEdit,
@@ -284,7 +300,9 @@ export const GroupManagementDetailPage = ({ mode, id }: GroupManagementDetailPag
           mode={mode}
           teamLeader={draft.leader}
           teamMembers={draft.members}
-          onPickLeader={openPickLeaderBottomSheet}
+          onPickLeader={
+            draft.members.length === 0 ? openPickLeaderAlert : openPickLeaderBottomSheet
+          }
           onAddMembers={handleAddMembers}
           onRemoveMember={handleRemoveMember}
         />

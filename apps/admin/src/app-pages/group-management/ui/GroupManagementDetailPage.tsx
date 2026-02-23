@@ -1,6 +1,7 @@
 'use client';
 
 import { SolidButton } from '@surf/ui/button';
+import { useAlertStore } from '@surf/ui/store/alertStore';
 import { useRouter, useSearchParams } from 'next/navigation';
 import { useEffect, useMemo } from 'react';
 
@@ -38,10 +39,12 @@ export const GroupManagementDetailPage = ({ mode, id }: GroupManagementDetailPag
     router.replace(`?${params.toString()}`);
   };
 
-  const headerProps = mapModeToHeaderProps({ mode, onClickEdit: handleSwitchToEdit });
-
+  // stores
   const openBottomSheet = useBottomSheetStore((s) => s.open);
   const closeBottomSheet = useBottomSheetStore((s) => s.close);
+
+  const openAlert = useAlertStore((s) => s.open);
+  const closeAlert = useAlertStore((s) => s.close);
 
   // hooks
   const { data: generations } = useMemberGenerationListQuery(); // 모든 기수 정보 조회
@@ -70,6 +73,7 @@ export const GroupManagementDetailPage = ({ mode, id }: GroupManagementDetailPag
 
   const pickLeader = useGroupFormStore((s) => s.pickLeader);
   const removeMember = useGroupFormStore((s) => s.removeMember);
+  const resetForm = useGroupFormStore((s) => s.removeForm);
 
   const isValid = useGroupFormStore((s) => s.isValid(formKey));
   const dirty = useGroupFormStore((s) => s.forms[formKey]?.dirty ?? false);
@@ -86,6 +90,90 @@ export const GroupManagementDetailPage = ({ mode, id }: GroupManagementDetailPag
       members: groupDetail?.members ?? [],
     });
   }, [hasForm, hydrate, formKey, MAX_GENERATION, groupDetail]);
+
+  // alerts
+  const openSaveEditAlert = () => {
+    openAlert({
+      state: 'default',
+      title: '수정하시겠습니까?',
+      infoText: '수정하기 버튼을 누를 시, 수정된 내용이 그룹 정보에 반영됩니다.',
+      actions: [
+        {
+          type: 'solid',
+          variant: 'secondary',
+          label: '취소',
+          onClick: () => closeAlert(),
+        },
+        {
+          type: 'solid',
+          variant: 'primary',
+          label: '저장하기',
+          onClick: () => {
+            closeAlert();
+            void handleSubmit();
+          },
+        },
+      ],
+    });
+  };
+
+  const openDeleteAlert = () => {
+    openAlert({
+      state: 'default',
+      title: '삭제하시겠습니까?',
+      infoText:
+        '삭제하기 버튼을 누를 시, 그룹 리스트에서 해당 그룹 데이터가 영구적으로 삭제됩니다.',
+      actions: [
+        {
+          type: 'solid',
+          variant: 'secondary',
+          label: '취소',
+          onClick: () => closeAlert(),
+        },
+        {
+          type: 'solid',
+          variant: 'danger',
+          label: '삭제하기',
+          onClick: () => {
+            void handleDeleteGroup();
+            closeAlert();
+          },
+        },
+      ],
+    });
+  };
+
+  const openGoBackAlert = () => {
+    openAlert({
+      state: 'default',
+      title: '나가시겠습니까?',
+      infoText: '현재 페이지에서 이탈할 경우 변경한 내용이 저장되지 않습니다.',
+      actions: [
+        {
+          type: 'solid',
+          variant: 'secondary',
+          label: '취소',
+          onClick: () => closeAlert(),
+        },
+        {
+          type: 'solid',
+          variant: 'danger',
+          label: '나가기',
+          onClick: () => {
+            closeAlert();
+            resetForm(formKey);
+            if (groupId) router.replace(PAGE_ROUTES.GROUP_MNG.VIEW(groupId));
+            else router.back();
+          },
+        },
+      ],
+    });
+  };
+
+  const headerProps = mapModeToHeaderProps({
+    mode,
+    onClickEdit: handleSwitchToEdit,
+  });
 
   // draft가 아직 없으면(초기 hydrate 전) 안전 가드
   if (!draft) {
@@ -173,7 +261,7 @@ export const GroupManagementDetailPage = ({ mode, id }: GroupManagementDetailPag
 
   return (
     <div className="flex h-full flex-col">
-      <AppHeader overrideHeader={headerProps} />
+      <AppHeader overrideHeader={headerProps} customBack={dirty ? openGoBackAlert : undefined} />
 
       <div className="scrollbar-hide flex flex-1 flex-col gap-14 overflow-y-auto">
         <GroupInfoSection
@@ -199,7 +287,7 @@ export const GroupManagementDetailPage = ({ mode, id }: GroupManagementDetailPag
 
         {mode === 'edit' && (
           <div className="px-13 py-15">
-            <SolidButton size="m" variant="warning" onClick={() => void handleDeleteGroup()}>
+            <SolidButton size="m" variant="warning" onClick={openDeleteAlert}>
               해당 그룹 삭제하기
             </SolidButton>
           </div>
@@ -209,7 +297,7 @@ export const GroupManagementDetailPage = ({ mode, id }: GroupManagementDetailPag
       <div className="px-13 py-16 pt-13">
         {mapModeToStickyButton({
           mode: mode,
-          onClick: () => void handleSubmit(),
+          onClick: mode === 'create' ? () => void handleSubmit() : openSaveEditAlert,
           isDisabled: !canSubmit,
         })}
       </div>

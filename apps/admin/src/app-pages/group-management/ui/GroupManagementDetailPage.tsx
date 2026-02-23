@@ -2,6 +2,7 @@
 
 import { SolidButton } from '@surf/ui/button';
 import { useAlertStore } from '@surf/ui/store/alertStore';
+import { useToastStore } from '@surf/ui/store/toastStore';
 import { useRouter, useSearchParams } from 'next/navigation';
 import { useEffect, useMemo } from 'react';
 
@@ -45,6 +46,8 @@ export const GroupManagementDetailPage = ({ mode, id }: GroupManagementDetailPag
 
   const openAlert = useAlertStore((s) => s.open);
   const closeAlert = useAlertStore((s) => s.close);
+
+  const showToast = useToastStore((s) => s.show);
 
   // hooks
   const { data: generations } = useMemberGenerationListQuery(); // 모든 기수 정보 조회
@@ -255,6 +258,7 @@ export const GroupManagementDetailPage = ({ mode, id }: GroupManagementDetailPag
   const handleDeleteGroup = async () => {
     if (mode === 'edit') {
       await deleteGroup();
+      showToast('그룹이 삭제되었습니다.');
       router.back();
     }
   };

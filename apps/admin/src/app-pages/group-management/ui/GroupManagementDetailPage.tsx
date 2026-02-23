@@ -9,7 +9,7 @@ import {
   mapModeToStickyButton,
 } from '@/app-pages/group-management/model/mapper';
 import { MemberSummary } from '@/entities/member/model/types';
-import { useCreateGroupMutatioin } from '@/features/group-management/model/queries/useCreateGroupMutation';
+import { useCreateGroupMutation } from '@/features/group-management/model/queries/useCreateGroupMutation';
 import { useGroupDetailQuery } from '@/features/group-management/model/queries/useGroupDetailQuery';
 import { useGroupFormStore } from '@/features/group-management/model/useGroupFormStore';
 import { PAGE_ROUTES } from '@/shared/config/path';
@@ -49,7 +49,7 @@ export const GroupManagementDetailPage = ({ mode, id }: GroupManagementDetailPag
   }, [generations]); // 최대 기수 계산
 
   const { data: groupDetail } = useGroupDetailQuery(mode, Number(id)); // 'view', 'edit' 모드일 때 그룹 상세 조회
-  const { mutateAsync: createGroup } = useCreateGroupMutatioin(); // 'create' 모드일 때 그룹 생성
+  const { mutateAsync: createGroup } = useCreateGroupMutation(); // 'create' 모드일 때 그룹 생성
 
   // store selectors
   const formKey = mode === 'create' ? 'create' : String(id);

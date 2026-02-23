@@ -8,7 +8,7 @@ import {
 } from '@/features/group-management/model/useGroupFormStore';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 
-export const useCreateGroupMutatioin = () => {
+export const useCreateGroupMutation = () => {
   const qc = useQueryClient();
 
   const moveForm = useGroupFormStore((s) => s.moveForm);

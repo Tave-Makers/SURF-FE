@@ -76,12 +76,16 @@ const buildMemberIdsIncludingLeader = (draft: GroupFormDraft): number[] => {
 
 // 그룹 생성 요청 바디 매핑
 export const mapGroupDraftToCreateReq = (draft: GroupFormDraft): CreateGroupRequest => {
+  if (!draft.leader) {
+    throw new Error('Leader is required to create a group');
+  }
+
   return {
     generation: draft.generation,
     type: mapContentsTypeToGroupApiType(draft.groupType),
     name: draft.groupName,
     description: draft.groupIntroduction,
-    leaderMemberId: draft.leader!.id,
+    leaderMemberId: draft.leader.id,
     memberIds: buildMemberIdsIncludingLeader(draft),
   };
 };

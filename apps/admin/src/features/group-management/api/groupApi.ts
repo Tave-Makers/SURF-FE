@@ -27,6 +27,10 @@ export const groupApi = {
     const res = await axiosInstance.get<GroupDetailResponse>(`/v1/admin/teams/${teamId}`);
     return res.data.data;
   },
-  updateGroup: () => {},
+  updateGroup: async (params: { teamId: number }, body: GroupRequest): Promise<GroupResDto> => {
+    const { teamId } = params;
+    const res = await axiosInstance.put<GroupResponse>(`/v1/admin/teams/${teamId}`, body);
+    return res.data.data;
+  },
   deleteGroup: () => {},
 };

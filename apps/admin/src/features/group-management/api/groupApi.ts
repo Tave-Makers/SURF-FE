@@ -32,5 +32,8 @@ export const groupApi = {
     const res = await axiosInstance.put<GroupResponse>(`/v1/admin/teams/${teamId}`, body);
     return res.data.data;
   },
-  deleteGroup: () => {},
+  deleteGroup: async (params: { teamId: number }): Promise<void> => {
+    const { teamId } = params;
+    await axiosInstance.delete(`/v1/admin/teams/${teamId}`);
+  },
 };

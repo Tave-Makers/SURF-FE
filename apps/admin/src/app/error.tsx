@@ -21,7 +21,7 @@ type ErrorPageProps = {
  * - 런타임 에러를 공통 ErrorState UI로 표시합니다.
  * - "다시 시도" 버튼 클릭 시 `reset()`을 호출해 현재 세그먼트를 재시도합니다.
  */
-const Error = ({ error, reset }: ErrorPageProps) => {
+const ErrorPage = ({ error, reset }: ErrorPageProps) => {
   useEffect(() => {
     console.error(error);
   }, [error]);
@@ -39,4 +39,4 @@ const Error = ({ error, reset }: ErrorPageProps) => {
   );
 };
 
-export default Error;
+export default ErrorPage;

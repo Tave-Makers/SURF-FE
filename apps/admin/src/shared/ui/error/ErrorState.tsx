@@ -34,7 +34,7 @@ export const ErrorState = ({
     .join(' ');
 
   return (
-    <div className={containerClassName}>
+    <div className={containerClassName} role="alert">
       <div className="flex flex-col items-center gap-11 text-center">
         <ErrorSpaceIcon aria-hidden="true" />
         <p className="text-body-body8 text-foreground-tertiary">{message}</p>

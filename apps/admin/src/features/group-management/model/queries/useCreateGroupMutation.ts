@@ -6,10 +6,12 @@ import {
   GroupFormDraft,
   useGroupFormStore,
 } from '@/features/group-management/model/useGroupFormStore';
+import { useToastStore } from '@surf/ui/store/toastStore';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 
 export const useCreateGroupMutation = () => {
   const qc = useQueryClient();
+  const showToast = useToastStore((s) => s.show);
 
   const moveForm = useGroupFormStore((s) => s.moveForm);
   const commit = useGroupFormStore((s) => s.commit);
@@ -32,6 +34,7 @@ export const useCreateGroupMutation = () => {
     },
     onError: (err) => {
       console.error('[Group Create Error]', err.message);
+      showToast(err.message);
     },
   });
 };

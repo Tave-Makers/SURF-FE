@@ -33,7 +33,10 @@ export const GroupManagementPage = () => {
       <div className="pointer-events-none fixed inset-0 z-50">
         <div className="relative mx-auto h-full sm:max-w-[min(100dvw,calc(100dvh*375/812))]">
           <div className="pointer-events-auto absolute right-15 bottom-15">
-            <Fab onClick={() => router.push(PAGE_ROUTES.GROUP_MNG.CREATE)} />
+            <Fab
+              ariaLabel="그룹 생성 버튼"
+              onClick={() => router.push(PAGE_ROUTES.GROUP_MNG.CREATE)}
+            />
           </div>
         </div>
       </div>

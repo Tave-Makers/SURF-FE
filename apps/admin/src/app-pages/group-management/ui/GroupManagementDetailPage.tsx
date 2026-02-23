@@ -34,12 +34,6 @@ export const GroupManagementDetailPage = ({ mode, id }: GroupManagementDetailPag
   const router = useRouter();
   const searchParams = useSearchParams();
 
-  const handleSwitchToEdit = () => {
-    const params = new URLSearchParams(searchParams.toString());
-    params.set('mode', 'edit');
-    router.replace(`?${params.toString()}`);
-  };
-
   // stores
   const openBottomSheet = useBottomSheetStore((s) => s.open);
   const closeBottomSheet = useBottomSheetStore((s) => s.close);
@@ -57,9 +51,9 @@ export const GroupManagementDetailPage = ({ mode, id }: GroupManagementDetailPag
   }, [generations]); // 최대 기수 계산
 
   const groupId = id ? Number(id) : undefined;
-  const { data: groupDetail } = useGroupDetailQuery(mode, groupId); // 'view', 'edit' 모드일 때 그룹 상세 조회
-  const { mutateAsync: createGroup } = useCreateGroupMutation(); // 'create' 모드일 때 그룹 생성
-  const { mutateAsync: updateGroup } = useUpdateGroupMutation(groupId); // 'edit' 모드일 때 그룹 수정
+  const { data: groupDetail } = useGroupDetailQuery(mode, groupId); // 'view', 'edit' 모드 그룹 상세 조회
+  const { mutateAsync: createGroup } = useCreateGroupMutation(); // 'create' 모드 그룹 생성
+  const { mutateAsync: updateGroup } = useUpdateGroupMutation(groupId); // 'edit' 모드 그룹 수정
   const { mutateAsync: deleteGroup } = useDeleteGroupMutation(groupId); // 'edit' 모드 그룹 삭제
 
   // store selectors
@@ -93,6 +87,28 @@ export const GroupManagementDetailPage = ({ mode, id }: GroupManagementDetailPag
       members: groupDetail?.members ?? [],
     });
   }, [hasForm, hydrate, formKey, MAX_GENERATION, groupDetail]);
+
+  // 헤더 '수정' 버튼 클릭 시 'edit' 모드로 변경
+  const handleSwitchToEdit = () => {
+    const params = new URLSearchParams(searchParams.toString());
+    params.set('mode', 'edit');
+    router.replace(`?${params.toString()}`);
+  };
+
+  const headerProps = mapModeToHeaderProps({
+    mode,
+    onClickEdit: handleSwitchToEdit,
+  });
+
+  // draft가 아직 없으면(초기 hydrate 전) 안전 가드
+  if (!draft) {
+    return (
+      <div className="flex h-full flex-col">
+        <AppHeader overrideHeader={headerProps} />
+        <div className="flex flex-1 items-center justify-center">Loading...</div>
+      </div>
+    );
+  }
 
   // alerts
   const openSaveEditAlert = () => {
@@ -188,21 +204,6 @@ export const GroupManagementDetailPage = ({ mode, id }: GroupManagementDetailPag
       ],
     });
   };
-
-  const headerProps = mapModeToHeaderProps({
-    mode,
-    onClickEdit: handleSwitchToEdit,
-  });
-
-  // draft가 아직 없으면(초기 hydrate 전) 안전 가드
-  if (!draft) {
-    return (
-      <div className="flex h-full flex-col">
-        <AppHeader overrideHeader={headerProps} />
-        <div className="flex flex-1 items-center justify-center">Loading...</div>
-      </div>
-    );
-  }
 
   // bottom sheets
   const openGenerationBottomSheet = () => {

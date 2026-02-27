@@ -70,7 +70,7 @@ export const GroupManagementDetailPage = ({ mode, id }: GroupManagementDetailPag
 
   const pickLeader = useGroupFormStore((s) => s.pickLeader);
   const removeMember = useGroupFormStore((s) => s.removeMember);
-  const resetForm = useGroupFormStore((s) => s.removeForm);
+  const removeForm = useGroupFormStore((s) => s.removeForm);
 
   const isValid = useGroupFormStore((s) => s.isValid(formKey));
   const dirty = useGroupFormStore((s) => s.forms[formKey]?.dirty ?? false);
@@ -180,7 +180,7 @@ export const GroupManagementDetailPage = ({ mode, id }: GroupManagementDetailPag
           label: '나가기',
           onClick: () => {
             closeAlert();
-            resetForm(formKey);
+            removeForm(formKey);
             if (mode === 'edit' && groupId) {
               router.replace(PAGE_ROUTES.GROUP_MNG.VIEW(groupId));
             } else {

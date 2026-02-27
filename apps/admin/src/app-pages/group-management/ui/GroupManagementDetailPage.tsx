@@ -51,7 +51,7 @@ export const GroupManagementDetailPage = ({ mode, id }: GroupManagementDetailPag
   }, [generations]); // 최대 기수 계산
 
   const groupId = id ? Number(id) : undefined;
-  const { data: groupDetail } = useGroupDetailQuery(mode, groupId); // 'view', 'edit' 모드 그룹 상세 조회
+  const { data: groupDetail } = useGroupDetailQuery(groupId); // 'view', 'edit' 모드 그룹 상세 조회
   const { mutateAsync: createGroup } = useCreateGroupMutation(); // 'create' 모드 그룹 생성
   const { mutateAsync: updateGroup } = useUpdateGroupMutation(groupId); // 'edit' 모드 그룹 수정
   const { mutateAsync: deleteGroup } = useDeleteGroupMutation(groupId); // 'edit' 모드 그룹 삭제

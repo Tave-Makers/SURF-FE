@@ -75,9 +75,6 @@ export const GroupManagementDetailPage = ({ mode, id }: GroupManagementDetailPag
 
   // 초기 hydrate (폼이 없을 때만)
   useEffect(() => {
-    if (hasForm) return;
-    if (mode === 'create' && isGenerationLoading) return;
-
     hydrate(formKey, {
       generation: groupDetail?.generation ?? MAX_GENERATION,
       groupType: groupDetail?.groupType ?? ('study' as ContentsType),

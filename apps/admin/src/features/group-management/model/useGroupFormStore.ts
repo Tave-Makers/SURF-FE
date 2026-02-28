@@ -1,7 +1,7 @@
 'use client';
 
 import { create } from 'zustand';
-import type { MemberBase } from '@/entities/member/model/types';
+import type { MemberSummary } from '@/entities/member/model/types';
 import type { ContentsType } from '@/shared/types/contents';
 
 export type GroupFormDraft = {
@@ -9,8 +9,8 @@ export type GroupFormDraft = {
   groupType: ContentsType;
   groupName: string;
   groupIntroduction: string;
-  leader?: MemberBase;
-  members: MemberBase[];
+  leader?: MemberSummary;
+  members: MemberSummary[];
 };
 
 type FormKey = string;
@@ -37,8 +37,8 @@ type Store = {
   setGroupIntroduction: (key: FormKey, v: string) => void;
 
   // members
-  pickLeader: (key: FormKey, nextLeader: MemberBase | undefined) => void;
-  addMembers: (key: FormKey, newMembers: MemberBase[]) => void;
+  pickLeader: (key: FormKey, nextLeader: MemberSummary | undefined) => void;
+  addMembers: (key: FormKey, newMembers: MemberSummary[]) => void;
   removeMember: (key: FormKey, memberId: number) => void;
 
   // misc
@@ -146,7 +146,18 @@ export const useGroupFormStore = create<Store>((set, get) => ({
     set((s) => {
       const cur = s.forms[key];
       if (!cur) return s;
-      return { forms: { ...s.forms, [key]: updateDraft(cur, (d) => ({ ...d, generation: v })) } };
+      return {
+        forms: {
+          ...s.forms,
+          [key]: updateDraft(cur, (d) => ({
+            ...d,
+            generation: v,
+            // 기수 변경 시 멤버 초기화
+            leader: undefined,
+            members: [],
+          })),
+        },
+      };
     }),
 
   setGroupType: (key, v) =>
@@ -209,7 +220,7 @@ export const useGroupFormStore = create<Store>((set, get) => ({
       if (!cur) return s;
 
       const next = updateDraft(cur, (prev) => {
-        const map = new Map<number, MemberBase>();
+        const map = new Map<number, MemberSummary>();
         const leaderId = prev.leader?.id;
 
         prev.members.forEach((m) => {

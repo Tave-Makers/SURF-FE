@@ -54,7 +54,7 @@ export const createRouteConfig = (_router: RouterInstance): RouteConfig[] => [
   },
   {
     id: 'group',
-    path: PAGE_ROUTES.GROUP_MNG,
+    path: PAGE_ROUTES.GROUP_MNG.LIST,
     backPath: PAGE_ROUTES.HOME,
     header: {
       mode: HeaderMode.Default,

@@ -29,7 +29,7 @@ export const NAV_ITEMS = [
   {
     id: 'group',
     label: '회원그룹 관리',
-    path: PAGE_ROUTES.GROUP_MNG,
+    path: PAGE_ROUTES.GROUP_MNG.LIST,
   },
   {
     id: 'score',

@@ -1,6 +1,6 @@
 import type { Meta, StoryObj } from '@storybook/nextjs';
 import { GroupMemberSection } from './GroupMemberSection';
-import { MemberBase, MemberTrack } from '@/entities/member/model/types';
+import { MemberSummary, MemberTrack } from '@/entities/member/model/types';
 import { GroupManagementMode } from '@/widgets/group-management/model/types';
 
 const tracks = [{ generation: 15, part: 'DESIGN' }] as MemberTrack[];
@@ -10,14 +10,14 @@ const leader = {
   name: '테이버',
   profileImageUrl: '',
   tracks,
-} as MemberBase;
+} as MemberSummary;
 
 const members = [
   { id: 2, name: '테이버', profileImageUrl: '', tracks },
   { id: 3, name: '테이버', profileImageUrl: '', tracks },
   { id: 4, name: '테이버', profileImageUrl: '', tracks },
   { id: 5, name: '테이버', profileImageUrl: '', tracks },
-] as MemberBase[];
+] as MemberSummary[];
 
 const meta: Meta<typeof GroupMemberSection> = {
   title: 'features/ui/group-management/GroupMemberSection',

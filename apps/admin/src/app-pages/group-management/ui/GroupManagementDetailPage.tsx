@@ -3,7 +3,7 @@
 import { SolidButton } from '@surf/ui/button';
 import { useRouter, useSearchParams } from 'next/navigation';
 
-import { useGroupManagementDetailController } from '@/app-pages/group-management/model/useGroupManagementDetailController';
+import { useController } from '@/app-pages/group-management/detail/model/useController';
 
 import type { GroupManagementMode } from '@/widgets/group-management/model/types';
 import { GroupInfoSection } from '@/widgets/group-management/ui/GroupInfoSection';
@@ -19,7 +19,7 @@ export const GroupManagementDetailPage = ({ mode, id }: Props) => {
   const router = useRouter();
   const searchParams = useSearchParams();
 
-  const c = useGroupManagementDetailController({ mode, id, router, searchParams });
+  const c = useController({ mode, id, router, searchParams });
 
   if (!c.draft) {
     return (

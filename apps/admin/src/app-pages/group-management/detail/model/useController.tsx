@@ -5,10 +5,10 @@ import type { AppRouterInstance } from 'next/dist/shared/lib/app-router-context.
 import type { ReadonlyURLSearchParams } from 'next/navigation';
 import { useEffect, useMemo } from 'react';
 
-import { getHeaderConfig } from '@/app-pages/group-management/model/getHeaderConfig';
-import { getStickyButtonConfig } from '@/app-pages/group-management/model/getStickyButtonConfig';
-import { useGroupManagementAlerts } from '@/app-pages/group-management/model/useGroupManagementAlerts';
-import { useGroupManagementBottomSheets } from '@/app-pages/group-management/model/useGroupManagementBottomSheets';
+import { getHeaderConfig } from '@/app-pages/group-management/detail/model/getHeaderConfig';
+import { getStickyButtonConfig } from '@/app-pages/group-management/detail/model/getStickyButtonConfig';
+import { useAlerts } from '@/app-pages/group-management/detail/model/useAlerts';
+import { useBottomSheets } from '@/app-pages/group-management/detail/model/useBottomSheets';
 
 import { useCreateGroupMutation } from '@/features/group-management/model/queries/useCreateGroupMutation';
 import { useDeleteGroupMutation } from '@/features/group-management/model/queries/useDeleteGroupMutation';
@@ -30,7 +30,7 @@ type Params = {
   searchParams: ReadonlyURLSearchParams;
 };
 
-export const useGroupManagementDetailController = ({ mode, id, router, searchParams }: Params) => {
+export const useController = ({ mode, id, router, searchParams }: Params) => {
   const showToast = useToastStore((s) => s.show);
 
   const groupId = id ? Number(id) : undefined;
@@ -91,7 +91,7 @@ export const useGroupManagementDetailController = ({ mode, id, router, searchPar
 
   // bottom sheets
   const { openGenerationBottomSheet, openGroupTypeBottomSheet, openPickLeaderBottomSheet } =
-    useGroupManagementBottomSheets({
+    useBottomSheets({
       maxGeneration: maxGeneration,
       selectedGeneration: safeDraft.generation,
       onSelectGeneration: (v) => setGeneration(formKey, v),
@@ -148,12 +148,11 @@ export const useGroupManagementDetailController = ({ mode, id, router, searchPar
   };
 
   // alerts
-  const { openSaveEditAlert, openDeleteAlert, openGoBackAlert, openPickLeaderAlert } =
-    useGroupManagementAlerts({
-      onSubmitEdit: () => void handleSubmit(),
-      onDeleteGroup: () => void handleDeleteGroup(),
-      onLeavePage: handleLeavePage,
-    });
+  const { openSaveEditAlert, openDeleteAlert, openGoBackAlert, openPickLeaderAlert } = useAlerts({
+    onSubmitEdit: () => void handleSubmit(),
+    onDeleteGroup: () => void handleDeleteGroup(),
+    onLeavePage: handleLeavePage,
+  });
 
   // header / sticky
   const header = getHeaderConfig({ mode, onClickEdit: handleSwitchToEdit });

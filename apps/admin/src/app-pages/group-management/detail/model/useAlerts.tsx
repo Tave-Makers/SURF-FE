@@ -6,7 +6,7 @@ type Params = {
   onLeavePage: () => void;
 };
 
-export const useGroupManagementAlerts = ({ onSubmitEdit, onDeleteGroup, onLeavePage }: Params) => {
+export const useAlerts = ({ onSubmitEdit, onDeleteGroup, onLeavePage }: Params) => {
   const openAlert = useAlertStore((s) => s.open);
   const closeAlert = useAlertStore((s) => s.close);
 

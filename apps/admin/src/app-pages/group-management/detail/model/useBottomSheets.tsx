@@ -18,7 +18,7 @@ type Params = {
   onSelectLeader: (m: MemberSummary) => void;
 };
 
-export const useGroupManagementBottomSheets = ({
+export const useBottomSheets = ({
   maxGeneration,
   selectedGeneration,
   onSelectGeneration,

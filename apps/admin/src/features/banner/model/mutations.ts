@@ -8,6 +8,7 @@ import { updateBanner } from '../api/updateBanner';
 import { bannerQueryKeys } from '../api/queryKeys';
 import { reorderBanner } from '../api/reorderBanner';
 import { Banner } from '@/entities/banner/model/types';
+import { mapBannerItemToBannerUI } from './mapper';
 
 // 홈 배너 생성 Mutation
 export const useCreateBannerMutation = () => {
@@ -15,8 +16,11 @@ export const useCreateBannerMutation = () => {
 
   return useMutation({
     mutationFn: (data: CreateBannerRequest) => createBanner(data),
-    onSuccess: async () => {
-      await queryClient.invalidateQueries({ queryKey: bannerQueryKeys.list() });
+    onSuccess: (dto) => {
+      const newBanner = mapBannerItemToBannerUI(dto);
+      queryClient.setQueryData<Banner[]>(bannerQueryKeys.list(), (old) =>
+        old ? [newBanner, ...old] : [newBanner],
+      );
     },
     onError: (error) => {
       console.error('[useCreateBannerMutation] 배너 생성 실패:', error);
@@ -30,8 +34,10 @@ export const useDeleteBannerMutation = (bannerId: number) => {
 
   return useMutation({
     mutationFn: () => deleteBanner(bannerId),
-    onSuccess: async () => {
-      await queryClient.invalidateQueries({ queryKey: bannerQueryKeys.list() });
+    onSuccess: () => {
+      queryClient.setQueryData<Banner[]>(bannerQueryKeys.list(), (old) =>
+        old ? old.filter((banner) => banner.id !== bannerId) : [],
+      );
     },
     onError: (error) => {
       console.error('[useDeleteBannerMutation] 배너 삭제 실패:', error);
@@ -46,8 +52,11 @@ export const useToggleBannerStatusMutation = (bannerId: number) => {
   return useMutation({
     mutationFn: (isActive: boolean) =>
       isActive ? activateBanner(bannerId) : deactivateBanner(bannerId),
-    onSuccess: async (_) => {
-      await queryClient.invalidateQueries({ queryKey: bannerQueryKeys.list() });
+    onSuccess: (dto) => {
+      const updatedBanner = mapBannerItemToBannerUI(dto);
+      queryClient.setQueryData<Banner[]>(bannerQueryKeys.list(), (old) =>
+        old ? old.map((b) => (b.id === updatedBanner.id ? updatedBanner : b)) : [],
+      );
     },
     onError: (error) => {
       console.error('[useToggleBannerStatusMutation] 배너 상태 토글 실패:', error);
@@ -60,8 +69,11 @@ export const useUpdateBannerMutation = (bannerId: number) => {
   const queryClient = useQueryClient();
   return useMutation({
     mutationFn: (data: UpdateBannerRequest) => updateBanner(bannerId, data),
-    onSuccess: async () => {
-      await queryClient.invalidateQueries({ queryKey: bannerQueryKeys.list() });
+    onSuccess: (dto) => {
+      const updatedBanner = mapBannerItemToBannerUI(dto);
+      queryClient.setQueryData<Banner[]>(bannerQueryKeys.list(), (old) =>
+        old ? old.map((b) => (b.id === updatedBanner.id ? updatedBanner : b)) : [],
+      );
     },
     onError: (error) => {
       console.error('[useUpdateBannerMutation] 배너 업데이트 실패:', error);

@@ -5,11 +5,8 @@ import { useAlertStore } from '@surf/ui/store/alertStore';
 import { useToastStore } from '@surf/ui/store/toastStore';
 import { useRouter, useSearchParams } from 'next/navigation';
 import { useEffect, useMemo } from 'react';
-
-import {
-  mapModeToHeaderProps,
-  mapModeToStickyButton,
-} from '@/app-pages/group-management/model/mapper';
+import { getStickyButtonConfig } from '@/app-pages/group-management/model/getStickyButtonConfig';
+import { mapModeToHeaderProps } from '@/app-pages/group-management/model/mapper';
 import { MemberSummary } from '@/entities/member/model/types';
 import { useCreateGroupMutation } from '@/features/group-management/model/queries/useCreateGroupMutation';
 import { useDeleteGroupMutation } from '@/features/group-management/model/queries/useDeleteGroupMutation';
@@ -52,8 +49,8 @@ export const GroupManagementDetailPage = ({ mode, id }: GroupManagementDetailPag
 
   const groupId = id ? Number(id) : undefined;
   const { data: groupDetail } = useGroupDetailQuery(groupId); // 'view', 'edit' 모드 그룹 상세 조회
-  const { mutateAsync: createGroup } = useCreateGroupMutation(); // 'create' 모드 그룹 생성
-  const { mutateAsync: updateGroup } = useUpdateGroupMutation(groupId); // 'edit' 모드 그룹 수정
+  const { mutateAsync: createGroup, isPending: isCreatePending } = useCreateGroupMutation(); // 'create' 모드 그룹 생성
+  const { mutateAsync: updateGroup, isPending: isEditPending } = useUpdateGroupMutation(groupId); // 'edit' 모드 그룹 수정
   const { mutateAsync: deleteGroup } = useDeleteGroupMutation(groupId); // 'edit' 모드 그룹 삭제
 
   // store selectors
@@ -265,14 +262,21 @@ export const GroupManagementDetailPage = ({ mode, id }: GroupManagementDetailPag
     removeMember(formKey, memberId);
   };
 
+  const isSubmitPending = mode === 'create' ? isCreatePending : isEditPending;
+
   const handleSubmit = async () => {
+    if (isSubmitPending) return;
+
     if (mode === 'create') {
       if (!draft) return;
+
       const created = await createGroup(draft);
       const groupId = created.teamId;
+
       router.replace(PAGE_ROUTES.GROUP_MNG.VIEW(groupId));
     } else if (mode === 'edit') {
       if (!groupId) return;
+
       await updateGroup(draft);
       router.replace(PAGE_ROUTES.GROUP_MNG.VIEW(groupId));
     }
@@ -285,6 +289,16 @@ export const GroupManagementDetailPage = ({ mode, id }: GroupManagementDetailPag
       router.back();
     }
   };
+
+  // bottom stickyButton policy load
+  const sticky = getStickyButtonConfig({
+    mode,
+    canSubmit,
+    isCreatePending,
+    isEditPending,
+    onCreate: () => void handleSubmit(),
+    onEdit: openSaveEditAlert,
+  });
 
   return (
     <div className="flex h-full flex-col">
@@ -323,12 +337,19 @@ export const GroupManagementDetailPage = ({ mode, id }: GroupManagementDetailPag
         )}
       </div>
 
+      {/** bottom sticky button
+       * view: null, create: 생성하기, edit: 수정하기 */}
       <div className="px-13 py-16 pt-13">
-        {mapModeToStickyButton({
-          mode: mode,
-          onClick: mode === 'create' ? () => void handleSubmit() : openSaveEditAlert,
-          isDisabled: !canSubmit,
-        })}
+        {sticky && (
+          <SolidButton
+            size="l"
+            variant="primary"
+            isDisabled={sticky.disabled}
+            onClick={sticky.onClick}
+          >
+            {sticky.label}
+          </SolidButton>
+        )}
       </div>
     </div>
   );

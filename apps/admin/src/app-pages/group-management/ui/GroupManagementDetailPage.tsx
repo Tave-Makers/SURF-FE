@@ -1,12 +1,12 @@
 'use client';
 
 import { SolidButton } from '@surf/ui/button';
-import { useAlertStore } from '@surf/ui/store/alertStore';
 import { useToastStore } from '@surf/ui/store/toastStore';
 import { useRouter, useSearchParams } from 'next/navigation';
 import { useEffect, useMemo } from 'react';
 import { getHeaderConfig } from '@/app-pages/group-management/model/getHeaderConfig';
 import { getStickyButtonConfig } from '@/app-pages/group-management/model/getStickyButtonConfig';
+import { useGroupManagementAlerts } from '@/app-pages/group-management/model/useGroupManagementAlerts';
 import { MemberSummary } from '@/entities/member/model/types';
 import { useCreateGroupMutation } from '@/features/group-management/model/queries/useCreateGroupMutation';
 import { useDeleteGroupMutation } from '@/features/group-management/model/queries/useDeleteGroupMutation';
@@ -35,9 +35,6 @@ export const GroupManagementDetailPage = ({ mode, id }: GroupManagementDetailPag
   const openBottomSheet = useBottomSheetStore((s) => s.open);
   const closeBottomSheet = useBottomSheetStore((s) => s.close);
 
-  const openAlert = useAlertStore((s) => s.open);
-  const closeAlert = useAlertStore((s) => s.close);
-
   const showToast = useToastStore((s) => s.show);
 
   // hooks
@@ -52,6 +49,31 @@ export const GroupManagementDetailPage = ({ mode, id }: GroupManagementDetailPag
   const { mutateAsync: createGroup, isPending: isCreatePending } = useCreateGroupMutation(); // 'create' 모드 그룹 생성
   const { mutateAsync: updateGroup, isPending: isEditPending } = useUpdateGroupMutation(groupId); // 'edit' 모드 그룹 수정
   const { mutateAsync: deleteGroup } = useDeleteGroupMutation(groupId); // 'edit' 모드 그룹 삭제
+
+  // alerts handler
+  const handleLeavePage = () => {
+    removeForm(formKey);
+    if (mode === 'edit' && groupId) router.replace(PAGE_ROUTES.GROUP_MNG.VIEW(groupId));
+    else router.back();
+  };
+
+  const handleDeleteGroup = async () => {
+    if (mode !== 'edit') return;
+    await deleteGroup();
+    showToast('그룹이 삭제되었습니다.');
+    router.back();
+  };
+
+  const handleSubmitEdit = () => {
+    void handleSubmit();
+  };
+
+  const { openSaveEditAlert, openDeleteAlert, openGoBackAlert, openPickLeaderAlert } =
+    useGroupManagementAlerts({
+      onSubmitEdit: handleSubmitEdit,
+      onDeleteGroup: () => void handleDeleteGroup(),
+      onLeavePage: handleLeavePage,
+    });
 
   // store selectors
   const formKey = mode === 'create' ? 'create' : String(id);
@@ -107,104 +129,6 @@ export const GroupManagementDetailPage = ({ mode, id }: GroupManagementDetailPag
       </div>
     );
   }
-
-  // alerts
-  const openSaveEditAlert = () => {
-    openAlert({
-      state: 'default',
-      title: '수정하시겠습니까?',
-      infoText: '수정하기 버튼을 누를 시, 수정된 내용이 그룹 정보에 반영됩니다.',
-      actions: [
-        {
-          type: 'solid',
-          variant: 'secondary',
-          label: '취소',
-          onClick: () => closeAlert(),
-        },
-        {
-          type: 'solid',
-          variant: 'primary',
-          label: '저장하기',
-          onClick: () => {
-            closeAlert();
-            void handleSubmit();
-          },
-        },
-      ],
-    });
-  };
-
-  const openDeleteAlert = () => {
-    openAlert({
-      state: 'default',
-      title: '삭제하시겠습니까?',
-      infoText:
-        '삭제하기 버튼을 누를 시, 그룹 리스트에서 해당 그룹 데이터가 영구적으로 삭제됩니다.',
-      actions: [
-        {
-          type: 'solid',
-          variant: 'secondary',
-          label: '취소',
-          onClick: () => closeAlert(),
-        },
-        {
-          type: 'solid',
-          variant: 'danger',
-          label: '삭제하기',
-          onClick: () => {
-            void handleDeleteGroup();
-            closeAlert();
-          },
-        },
-      ],
-    });
-  };
-
-  const openGoBackAlert = () => {
-    openAlert({
-      state: 'default',
-      title: '나가시겠습니까?',
-      infoText: '현재 페이지에서 이탈할 경우 변경한 내용이 저장되지 않습니다.',
-      actions: [
-        {
-          type: 'solid',
-          variant: 'secondary',
-          label: '취소',
-          onClick: () => closeAlert(),
-        },
-        {
-          type: 'solid',
-          variant: 'danger',
-          label: '나가기',
-          onClick: () => {
-            closeAlert();
-            removeForm(formKey);
-            if (mode === 'edit' && groupId) {
-              router.replace(PAGE_ROUTES.GROUP_MNG.VIEW(groupId));
-            } else {
-              router.back();
-            }
-          },
-        },
-      ],
-    });
-  };
-
-  const openPickLeaderAlert = () => {
-    openAlert({
-      state: 'error',
-      title: '팀원을 먼저 선택해주세요',
-      infoText: '팀장은 먼저 팀원을 선택한 뒤에 선택이 가능합니다.',
-      actions: [
-        {
-          type: 'text',
-          variant: 'primary',
-          label: '확인',
-          onClick: () => closeAlert(),
-        },
-      ],
-    });
-  };
 
   // bottom sheets
   const openGenerationBottomSheet = () => {
@@ -277,14 +201,6 @@ export const GroupManagementDetailPage = ({ mode, id }: GroupManagementDetailPag
 
       await updateGroup(draft);
       router.replace(PAGE_ROUTES.GROUP_MNG.VIEW(groupId));
-    }
-  };
-
-  const handleDeleteGroup = async () => {
-    if (mode === 'edit') {
-      await deleteGroup();
-      showToast('그룹이 삭제되었습니다.');
-      router.back();
     }
   };
 

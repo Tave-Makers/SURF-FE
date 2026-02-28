@@ -2,15 +2,17 @@
 
 import { SolidButton } from '@surf/ui/button';
 import { useRouter, useSearchParams } from 'next/navigation';
-import { useState } from 'react';
+import { useEffect, useMemo } from 'react';
+
 import {
-  mapModeToStickyButton,
   mapModeToHeaderProps,
+  mapModeToStickyButton,
 } from '@/app-pages/group-management/model/mapper';
 import { mockLeader, mockMembers } from '@/app-pages/group-management/model/mock';
-import { useGroupMembersField } from '@/features/group-management/model/useGroupMembersField';
+import { MemberBase } from '@/entities/member/model/types';
+import { useGroupFormStore } from '@/features/group-management/model/useGroupFormStore';
 import { useBottomSheetStore } from '@/shared/store/bottomSheetStore';
-import { ContentsType } from '@/shared/types/contents';
+import type { ContentsType } from '@/shared/types/contents';
 import { GroupManagementMode } from '@/widgets/group-management/model/types';
 import { GroupInfoSection } from '@/widgets/group-management/ui/GroupInfoSection';
 import { GroupMemberSection } from '@/widgets/group-management/ui/GroupMemberSection';
@@ -19,9 +21,10 @@ import { useMemberGenerationListQuery } from '@/widgets/member-directory/model/q
 
 interface GroupManagementDetailPageProps {
   mode: GroupManagementMode;
+  id?: string;
 }
 
-export const GroupManagementDetailPage = ({ mode }: GroupManagementDetailPageProps) => {
+export const GroupManagementDetailPage = ({ mode, id }: GroupManagementDetailPageProps) => {
   const router = useRouter();
   const searchParams = useSearchParams();
 
@@ -30,6 +33,7 @@ export const GroupManagementDetailPage = ({ mode }: GroupManagementDetailPagePro
     params.set('mode', 'edit');
     router.push(`?${params.toString()}`);
   };
+
   const headerProps = mapModeToHeaderProps({ mode, onClickEdit: handleSwitchToEdit });
 
   const openBottomSheet = useBottomSheetStore((s) => s.open);
@@ -37,28 +41,65 @@ export const GroupManagementDetailPage = ({ mode }: GroupManagementDetailPagePro
 
   // 모든 기수 정보 조회
   const { data: generations } = useMemberGenerationListQuery();
+  const maxGeneration = useMemo(() => {
+    const gens = generations ?? [];
+    return gens.length > 0 ? Math.max(...gens) : 0;
+  }, [generations]);
 
-  const MAX_GENERATION = generations.length > 0 ? Math.max(...generations) : 0;
+  const formKey = mode === 'create' ? 'create' : String(id);
 
-  const [generation, setGeneration] = useState<number>(MAX_GENERATION);
-  const [groupType, setGroupType] = useState<ContentsType>('study');
-  const [groupName, setGroupName] = useState('');
-  const [groupIntroduction, setGroupIntroduction] = useState('');
+  // store selectors
+  const hasForm = useGroupFormStore((s) => s.forms[formKey] != null);
 
-  // TODO : API 연동 후 mockData 제거
-  const { leader, members, pickLeader, removeMember } = useGroupMembersField({
-    leader: mockLeader,
-    members: mockMembers,
-  });
+  const draft = useGroupFormStore((s) => s.forms[formKey]?.draft);
+
+  const hydrate = useGroupFormStore((s) => s.hydrate);
+
+  const setGeneration = useGroupFormStore((s) => s.setGeneration);
+  const setGroupType = useGroupFormStore((s) => s.setGroupType);
+  const setGroupName = useGroupFormStore((s) => s.setGroupName);
+  const setGroupIntroduction = useGroupFormStore((s) => s.setGroupIntroduction);
+
+  const pickLeader = useGroupFormStore((s) => s.pickLeader);
+  // const addMembers = useGroupFormStore((s) => s.addMembers);
+  const removeMember = useGroupFormStore((s) => s.removeMember);
+
+  const isValid = useGroupFormStore((s) => s.isValid(formKey));
+  const dirty = useGroupFormStore((s) => s.forms[formKey]?.dirty ?? false);
+
+  // 초기 hydrate (폼이 없을 때만)
+  useEffect(() => {
+    // TODO: API 연동 후 mockData 제거
+    hydrate(formKey, {
+      generation: maxGeneration,
+      groupType: 'study' as ContentsType,
+      groupName: '',
+      groupIntroduction: '',
+      leader: mockLeader,
+      members: mockMembers,
+    });
+  }, [hasForm, hydrate, formKey, maxGeneration]);
+
+  // draft가 아직 없으면(초기 hydrate 전) 안전 가드
+  if (!draft) {
+    return (
+      <div className="flex h-full flex-col">
+        <AppHeader overrideHeader={headerProps} />
+        <div className="flex flex-1 items-center justify-center">Loading...</div>
+      </div>
+    );
+  }
+
+  const canSubmit = dirty && isValid;
 
   const openGenerationBottomSheet = () => {
     openBottomSheet({
       type: 'generation',
       props: {
-        maxGeneration: MAX_GENERATION,
-        selectedGeneration: generation,
-        onSelect: (val) => {
-          setGeneration(val);
+        maxGeneration,
+        selectedGeneration: draft.generation,
+        onSelect: (val: number) => {
+          setGeneration(formKey, val);
           closeBottomSheet();
         },
       },
@@ -69,9 +110,9 @@ export const GroupManagementDetailPage = ({ mode }: GroupManagementDetailPagePro
     openBottomSheet({
       type: 'groupType',
       props: {
-        groupType: groupType,
-        onSelect: (val) => {
-          setGroupType(val);
+        groupType: draft.groupType,
+        onSelect: (val: ContentsType) => {
+          setGroupType(formKey, val);
           closeBottomSheet();
         },
       },
@@ -82,9 +123,10 @@ export const GroupManagementDetailPage = ({ mode }: GroupManagementDetailPagePro
     openBottomSheet({
       type: 'pickLeader',
       props: {
-        members: members,
-        onSelect: (member) => {
-          pickLeader(member);
+        members: draft.members,
+        onSelect: (member: MemberBase) => {
+          // member 타입은 실제 bottomSheet props 타입에 맞춰서 교체
+          pickLeader(formKey, member);
           closeBottomSheet();
         },
       },
@@ -92,46 +134,69 @@ export const GroupManagementDetailPage = ({ mode }: GroupManagementDetailPagePro
   };
 
   const handleAddMembers = () => {
-    // 페이지 이동
-    // 선택 완료 시 addMembers 호출 또는 쿼리 파라미터로 데이터 전달
+    const params = new URLSearchParams();
+    params.set('generation', String(draft.generation));
+    params.set('formKey', formKey);
+
+    router.push(`/group-management/member-search?${params.toString()}`);
   };
 
   const handleRemoveMember = (memberId: number) => {
-    removeMember(memberId);
+    removeMember(formKey, memberId);
+  };
+
+  const handleSubmit = () => {
+    if (mode === 'create') {
+      // 생성 API 호출 로직 (draft 데이터 사용)
+      alert(`그룹 생성 API 연동 예정`);
+    } else if (mode === 'edit') {
+      // 수정 API 호출 로직 (formKey + draft)
+      alert('그룹 수정 API 연동 예정');
+    }
+  };
+
+  const handleDeleteGroup = () => {
+    alert('그룹 삭제 확인 Alert 구현 예정');
   };
 
   return (
     <div className="flex h-full flex-col">
       <AppHeader overrideHeader={headerProps} />
+
       <div className="scrollbar-hide flex flex-1 flex-col gap-14 overflow-y-auto">
         <GroupInfoSection
           mode={mode}
-          generation={generation}
-          groupType={groupType}
-          groupName={groupName}
-          groupIntroduction={groupIntroduction}
+          generation={draft.generation}
+          groupType={draft.groupType}
+          groupName={draft.groupName}
+          groupIntroduction={draft.groupIntroduction}
           onOpenGeneration={openGenerationBottomSheet}
           onOpenGroupType={openGroupTypeBottomSheet}
-          onChangeGroupName={setGroupName}
-          onChangeGroupIntroduction={setGroupIntroduction}
+          onChangeGroupName={(v) => setGroupName(formKey, v)}
+          onChangeGroupIntroduction={(v) => setGroupIntroduction(formKey, v)}
         />
+
         <GroupMemberSection
           mode={mode}
-          teamLeader={leader}
-          teamMembers={members}
+          teamLeader={draft.leader}
+          teamMembers={draft.members}
           onPickLeader={openPickLeaderBottomSheet}
           onAddMembers={handleAddMembers}
           onRemoveMember={handleRemoveMember}
         />
+
         {mode === 'edit' && (
           <div className="px-13 py-15">
-            <SolidButton size="m" variant="warning" onClick={() => {}} className="shrink-0">
+            <SolidButton size="m" variant="warning" onClick={handleDeleteGroup}>
               해당 그룹 삭제하기
             </SolidButton>
           </div>
         )}
       </div>
-      <div className="px-13 py-16 pt-13">{mapModeToStickyButton(mode)}</div>
+
+      <div className="px-13 py-16 pt-13">
+        {mapModeToStickyButton({ mode: mode, onClick: handleSubmit, isDisabled: !canSubmit })}
+      </div>
     </div>
   );
 };

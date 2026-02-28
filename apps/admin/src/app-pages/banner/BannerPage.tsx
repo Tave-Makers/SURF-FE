@@ -1,9 +1,11 @@
 'use client';
 import { Fab } from '@surf/ui/fab';
 import { HeaderMode } from '@surf/ui/header';
+import { useToastStore } from '@surf/ui/store/toastStore';
 import { useRouter } from 'next/navigation';
 import { Suspense, useCallback, useMemo, useState } from 'react';
 import { Banner } from '@/entities/banner/model/types';
+import { useReorderBannerMutation } from '@/features/banner/model/mutations';
 import { useBannerListQuery } from '@/features/banner/model/useGetBannerList';
 import { PAGE_ROUTES } from '@/shared/config/path';
 import { BannerListWidget } from '@/widgets/banner/ui/BannerListWidget';
@@ -16,7 +18,7 @@ export const BannerPage = () => {
   const { data: serverBanners } = useBannerListQuery();
   // 위젯에서 변경된 최신 순서 데이터 상태
   const [tempBanners, setTempBanners] = useState<Banner[]>([]);
-
+  const { mutate: reorderBanners, isPending } = useReorderBannerMutation();
   // 서버 원본 데이터와 로컬 데이터 비교
   const isOrderUnchanged = useMemo(() => {
     if (!isReorderMode || tempBanners.length === 0) return true;
@@ -25,23 +27,32 @@ export const BannerPage = () => {
 
     return serverIds === tempIds;
   }, [serverBanners, tempBanners, isReorderMode]);
+  const showToast = useToastStore((s) => s.show);
 
   const handleBannersChange = useCallback((updatedBanners: Banner[]) => {
     setTempBanners(updatedBanners);
   }, []);
 
-  // const handleSaveOrder = async () => {
   const handleSaveOrder = () => {
-    // TODO: updateBannerOrder(tempBanners.map(({ id, displayOrder }) => ({ id, displayOrder })))
     // 변경사항이 있을 때만 저장 로직 실행
     if (!isOrderUnchanged) {
-      console.log(
-        '서버에 저장될 최종 순서:',
-        tempBanners.map((b) => ({ id: b.id, order: b.displayOrder })),
+      const orderedIds = tempBanners.map((b) => b.id);
+      reorderBanners(
+        { orderedIds },
+        {
+          onSuccess: () => {
+            setTempBanners([]);
+            setIsReorderMode(false);
+          },
+          onError: () => {
+            showToast('배너 순서 변경에 실패했습니다. 다시 시도해주세요.');
+          },
+        },
       );
+    } else {
+      setTempBanners([]);
+      setIsReorderMode(false);
     }
-    setTempBanners([]);
-    setIsReorderMode(false);
   };
 
   return (
@@ -53,7 +64,7 @@ export const BannerPage = () => {
           text: isReorderMode ? '완료' : '순서 변경',
           btnVariant: isReorderMode ? 'primary' : 'secondary',
           hasLeftIcon: true,
-          isDisabled: isReorderMode && isOrderUnchanged,
+          isDisabled: (isReorderMode && isOrderUnchanged) || isPending,
           onClickTextBtn() {
             if (isReorderMode) {
               handleSaveOrder();

@@ -21,7 +21,7 @@ const Page = () => {
 
   return (
     <Suspense fallback={<div>Loading...</div>}>
-      <BannerEditPage bannerId={numericId} />;
+      <BannerEditPage bannerId={numericId} />
     </Suspense>
   );
 };

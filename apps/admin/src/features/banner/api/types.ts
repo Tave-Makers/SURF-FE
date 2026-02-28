@@ -22,3 +22,9 @@ export type UpdateBannerResponse = CommonResponse<UpdateBannerDTO>;
 export type CreateBannerRequest = BannerBase;
 export type CreateBannerDTO = BannerItem;
 export type CreateBannerResponse = CommonResponse<CreateBannerDTO>;
+
+export type ReorderBannerRequest = {
+  orderedIds: number[];
+};
+export type ReorderBannerDTO = BannerItem[];
+export type ReorderBannerResponse = CommonResponse<ReorderBannerDTO>;

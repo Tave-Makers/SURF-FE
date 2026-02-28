@@ -44,7 +44,7 @@ export const GroupManagementDetailPage = ({ mode, id }: GroupManagementDetailPag
   const showToast = useToastStore((s) => s.show);
 
   // hooks
-  const { data: generations } = useMemberGenerationListQuery(); // 모든 기수 정보 조회
+  const { data: generations, isLoading: isGenerationLoading } = useMemberGenerationListQuery(); // 모든 기수 정보 조회
   const MAX_GENERATION = useMemo(() => {
     const gens = generations ?? [];
     return gens.length > 0 ? Math.max(...gens) : 0;
@@ -78,6 +78,9 @@ export const GroupManagementDetailPage = ({ mode, id }: GroupManagementDetailPag
 
   // 초기 hydrate (폼이 없을 때만)
   useEffect(() => {
+    if (hasForm) return;
+    if (mode === 'create' && isGenerationLoading) return;
+
     hydrate(formKey, {
       generation: groupDetail?.generation ?? MAX_GENERATION,
       groupType: groupDetail?.groupType ?? ('study' as ContentsType),
@@ -86,7 +89,7 @@ export const GroupManagementDetailPage = ({ mode, id }: GroupManagementDetailPag
       leader: groupDetail?.leader,
       members: groupDetail?.members ?? [],
     });
-  }, [hasForm, hydrate, formKey, MAX_GENERATION, groupDetail]);
+  }, [hasForm, mode, isGenerationLoading, hydrate, formKey, MAX_GENERATION, groupDetail]);
 
   // 헤더 '수정' 버튼 클릭 시 'edit' 모드로 변경
   const handleSwitchToEdit = () => {

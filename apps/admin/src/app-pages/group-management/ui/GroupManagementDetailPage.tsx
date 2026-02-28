@@ -5,8 +5,8 @@ import { useAlertStore } from '@surf/ui/store/alertStore';
 import { useToastStore } from '@surf/ui/store/toastStore';
 import { useRouter, useSearchParams } from 'next/navigation';
 import { useEffect, useMemo } from 'react';
+import { getHeaderConfig } from '@/app-pages/group-management/model/getHeaderConfig';
 import { getStickyButtonConfig } from '@/app-pages/group-management/model/getStickyButtonConfig';
-import { mapModeToHeaderProps } from '@/app-pages/group-management/model/mapper';
 import { MemberSummary } from '@/entities/member/model/types';
 import { useCreateGroupMutation } from '@/features/group-management/model/queries/useCreateGroupMutation';
 import { useDeleteGroupMutation } from '@/features/group-management/model/queries/useDeleteGroupMutation';
@@ -85,14 +85,15 @@ export const GroupManagementDetailPage = ({ mode, id }: GroupManagementDetailPag
     });
   }, [hasForm, mode, isGenerationLoading, hydrate, formKey, MAX_GENERATION, groupDetail]);
 
-  // 헤더 '수정' 버튼 클릭 시 'edit' 모드로 변경
+  // header '수정' 버튼 클릭 시 'edit' 모드로 변경
   const handleSwitchToEdit = () => {
     const params = new URLSearchParams(searchParams.toString());
     params.set('mode', 'edit');
     router.replace(`?${params.toString()}`);
   };
 
-  const headerProps = mapModeToHeaderProps({
+  // header config
+  const headerConfig = getHeaderConfig({
     mode,
     onClickEdit: handleSwitchToEdit,
   });
@@ -101,7 +102,7 @@ export const GroupManagementDetailPage = ({ mode, id }: GroupManagementDetailPag
   if (!draft) {
     return (
       <div className="flex h-full flex-col">
-        <AppHeader overrideHeader={headerProps} />
+        <AppHeader overrideHeader={headerConfig} />
         <div className="flex flex-1 items-center justify-center">Loading...</div>
       </div>
     );
@@ -299,7 +300,7 @@ export const GroupManagementDetailPage = ({ mode, id }: GroupManagementDetailPag
 
   return (
     <div className="flex h-full flex-col">
-      <AppHeader overrideHeader={headerProps} customBack={dirty ? openGoBackAlert : undefined} />
+      <AppHeader overrideHeader={headerConfig} customBack={dirty ? openGoBackAlert : undefined} />
 
       <div className="scrollbar-hide flex flex-1 flex-col gap-14 overflow-y-auto">
         <GroupInfoSection

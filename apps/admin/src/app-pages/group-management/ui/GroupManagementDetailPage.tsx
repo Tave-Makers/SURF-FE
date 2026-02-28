@@ -7,14 +7,13 @@ import { useEffect, useMemo } from 'react';
 import { getHeaderConfig } from '@/app-pages/group-management/model/getHeaderConfig';
 import { getStickyButtonConfig } from '@/app-pages/group-management/model/getStickyButtonConfig';
 import { useGroupManagementAlerts } from '@/app-pages/group-management/model/useGroupManagementAlerts';
-import { MemberSummary } from '@/entities/member/model/types';
+import { useGroupManagementBottomSheets } from '@/app-pages/group-management/model/useGroupManagementBottomSheets';
 import { useCreateGroupMutation } from '@/features/group-management/model/queries/useCreateGroupMutation';
 import { useDeleteGroupMutation } from '@/features/group-management/model/queries/useDeleteGroupMutation';
 import { useGroupDetailQuery } from '@/features/group-management/model/queries/useGroupDetailQuery';
 import { useUpdateGroupMutation } from '@/features/group-management/model/queries/useUpdateGroupMutation';
 import { useGroupFormStore } from '@/features/group-management/model/useGroupFormStore';
 import { PAGE_ROUTES } from '@/shared/config/path';
-import { useBottomSheetStore } from '@/shared/store/bottomSheetStore';
 import type { ContentsType } from '@/shared/types/contents';
 import { GroupManagementMode } from '@/widgets/group-management/model/types';
 import { GroupInfoSection } from '@/widgets/group-management/ui/GroupInfoSection';
@@ -30,10 +29,6 @@ interface GroupManagementDetailPageProps {
 export const GroupManagementDetailPage = ({ mode, id }: GroupManagementDetailPageProps) => {
   const router = useRouter();
   const searchParams = useSearchParams();
-
-  // stores
-  const openBottomSheet = useBottomSheetStore((s) => s.open);
-  const closeBottomSheet = useBottomSheetStore((s) => s.close);
 
   const showToast = useToastStore((s) => s.show);
 
@@ -95,6 +90,30 @@ export const GroupManagementDetailPage = ({ mode, id }: GroupManagementDetailPag
   const dirty = useGroupFormStore((s) => s.forms[formKey]?.dirty ?? false);
   const canSubmit = dirty && isValid;
 
+  // 훅 호출을 위한 safeDraft
+  const safeDraft = draft ?? {
+    generation: MAX_GENERATION,
+    groupType: 'study' as ContentsType,
+    groupName: '',
+    groupIntroduction: '',
+    leader: undefined,
+    members: [],
+  };
+
+  // bottom sheets
+  const { openGenerationBottomSheet, openGroupTypeBottomSheet, openPickLeaderBottomSheet } =
+    useGroupManagementBottomSheets({
+      maxGeneration: MAX_GENERATION,
+      selectedGeneration: safeDraft.generation,
+      onSelectGeneration: (v) => setGeneration(formKey, v),
+
+      selectedGroupType: safeDraft.groupType,
+      onSelectGroupType: (v) => setGroupType(formKey, v),
+
+      members: safeDraft.members,
+      onSelectLeader: (m) => pickLeader(formKey, m),
+    });
+
   // 초기 hydrate (폼이 없을 때만)
   useEffect(() => {
     hydrate(formKey, {
@@ -129,47 +148,6 @@ export const GroupManagementDetailPage = ({ mode, id }: GroupManagementDetailPag
       </div>
     );
   }
-
-  // bottom sheets
-  const openGenerationBottomSheet = () => {
-    openBottomSheet({
-      type: 'generation',
-      props: {
-        maxGeneration: MAX_GENERATION,
-        selectedGeneration: draft.generation,
-        onSelect: (val: number) => {
-          setGeneration(formKey, val);
-          closeBottomSheet();
-        },
-      },
-    });
-  };
-
-  const openGroupTypeBottomSheet = () => {
-    openBottomSheet({
-      type: 'groupType',
-      props: {
-        groupType: draft.groupType,
-        onSelect: (val: ContentsType) => {
-          setGroupType(formKey, val);
-          closeBottomSheet();
-        },
-      },
-    });
-  };
-
-  const openPickLeaderBottomSheet = () => {
-    openBottomSheet({
-      type: 'pickLeader',
-      props: {
-        members: draft.members,
-        onSelect: (member: MemberSummary) => {
-          pickLeader(formKey, member);
-          closeBottomSheet();
-        },
-      },
-    });
-  };
 
   // handlers
   const handleAddMembers = () => {

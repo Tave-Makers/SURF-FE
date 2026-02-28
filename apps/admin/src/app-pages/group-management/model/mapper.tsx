@@ -35,17 +35,27 @@ export const mapModeToHeaderProps = ({ mode, onClickEdit }: MapModeToHeaderProps
   }
 };
 
-export const mapModeToStickyButton = (mode: GroupManagementMode): React.ReactNode | null => {
+interface mapModeToStickyButtonProps {
+  mode: GroupManagementMode;
+  onClick: () => void;
+  isDisabled: boolean;
+}
+
+export const mapModeToStickyButton = ({
+  mode,
+  onClick,
+  isDisabled,
+}: mapModeToStickyButtonProps): React.ReactNode | null => {
   switch (mode) {
     case 'create':
       return (
-        <SolidButton size="l" variant="primary" isDisabled={false}>
+        <SolidButton size="l" variant="primary" isDisabled={isDisabled} onClick={onClick}>
           생성하기
         </SolidButton>
       );
     case 'edit':
       return (
-        <SolidButton size="l" variant="primary" isDisabled={false}>
+        <SolidButton size="l" variant="primary" isDisabled={isDisabled} onClick={onClick}>
           수정하기
         </SolidButton>
       );

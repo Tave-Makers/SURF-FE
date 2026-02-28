@@ -8,9 +8,11 @@ import {
   mapModeToHeaderProps,
   mapModeToStickyButton,
 } from '@/app-pages/group-management/model/mapper';
-import { mockLeader, mockMembers } from '@/app-pages/group-management/model/mock';
-import { MemberBase } from '@/entities/member/model/types';
+import { MemberSummary } from '@/entities/member/model/types';
+import { useCreateGroupMutation } from '@/features/group-management/model/queries/useCreateGroupMutation';
+import { useGroupDetailQuery } from '@/features/group-management/model/queries/useGroupDetailQuery';
 import { useGroupFormStore } from '@/features/group-management/model/useGroupFormStore';
+import { PAGE_ROUTES } from '@/shared/config/path';
 import { useBottomSheetStore } from '@/shared/store/bottomSheetStore';
 import type { ContentsType } from '@/shared/types/contents';
 import { GroupManagementMode } from '@/widgets/group-management/model/types';
@@ -39,20 +41,22 @@ export const GroupManagementDetailPage = ({ mode, id }: GroupManagementDetailPag
   const openBottomSheet = useBottomSheetStore((s) => s.open);
   const closeBottomSheet = useBottomSheetStore((s) => s.close);
 
-  // 모든 기수 정보 조회
-  const { data: generations } = useMemberGenerationListQuery();
-  const maxGeneration = useMemo(() => {
+  // hooks
+  const { data: generations } = useMemberGenerationListQuery(); // 모든 기수 정보 조회
+  const MAX_GENERATION = useMemo(() => {
     const gens = generations ?? [];
     return gens.length > 0 ? Math.max(...gens) : 0;
-  }, [generations]);
+  }, [generations]); // 최대 기수 계산
 
-  const formKey = mode === 'create' ? 'create' : String(id);
+  const groupId = id ? Number(id) : undefined;
+  const { data: groupDetail } = useGroupDetailQuery(mode, groupId); // 'view', 'edit' 모드일 때 그룹 상세 조회
+  const { mutateAsync: createGroup } = useCreateGroupMutation(); // 'create' 모드일 때 그룹 생성
 
   // store selectors
+  const formKey = mode === 'create' ? 'create' : String(id);
+
   const hasForm = useGroupFormStore((s) => s.forms[formKey] != null);
-
   const draft = useGroupFormStore((s) => s.forms[formKey]?.draft);
-
   const hydrate = useGroupFormStore((s) => s.hydrate);
 
   const setGeneration = useGroupFormStore((s) => s.setGeneration);
@@ -61,24 +65,23 @@ export const GroupManagementDetailPage = ({ mode, id }: GroupManagementDetailPag
   const setGroupIntroduction = useGroupFormStore((s) => s.setGroupIntroduction);
 
   const pickLeader = useGroupFormStore((s) => s.pickLeader);
-  // const addMembers = useGroupFormStore((s) => s.addMembers);
   const removeMember = useGroupFormStore((s) => s.removeMember);
 
   const isValid = useGroupFormStore((s) => s.isValid(formKey));
   const dirty = useGroupFormStore((s) => s.forms[formKey]?.dirty ?? false);
+  const canSubmit = dirty && isValid;
 
   // 초기 hydrate (폼이 없을 때만)
   useEffect(() => {
-    // TODO: API 연동 후 mockData 제거
     hydrate(formKey, {
-      generation: maxGeneration,
-      groupType: 'study' as ContentsType,
-      groupName: '',
-      groupIntroduction: '',
-      leader: mockLeader,
-      members: mockMembers,
+      generation: groupDetail?.generation ?? MAX_GENERATION,
+      groupType: groupDetail?.groupType ?? ('study' as ContentsType),
+      groupName: groupDetail?.groupName ?? '',
+      groupIntroduction: groupDetail?.groupIntroduction ?? '',
+      leader: groupDetail?.leader,
+      members: groupDetail?.members ?? [],
     });
-  }, [hasForm, hydrate, formKey, maxGeneration]);
+  }, [hasForm, hydrate, formKey, MAX_GENERATION, groupDetail]);
 
   // draft가 아직 없으면(초기 hydrate 전) 안전 가드
   if (!draft) {
@@ -90,13 +93,12 @@ export const GroupManagementDetailPage = ({ mode, id }: GroupManagementDetailPag
     );
   }
 
-  const canSubmit = dirty && isValid;
-
+  // bottom sheets
   const openGenerationBottomSheet = () => {
     openBottomSheet({
       type: 'generation',
       props: {
-        maxGeneration,
+        maxGeneration: MAX_GENERATION,
         selectedGeneration: draft.generation,
         onSelect: (val: number) => {
           setGeneration(formKey, val);
@@ -124,8 +126,7 @@ export const GroupManagementDetailPage = ({ mode, id }: GroupManagementDetailPag
       type: 'pickLeader',
       props: {
         members: draft.members,
-        onSelect: (member: MemberBase) => {
-          // member 타입은 실제 bottomSheet props 타입에 맞춰서 교체
+        onSelect: (member: MemberSummary) => {
           pickLeader(formKey, member);
           closeBottomSheet();
         },
@@ -133,22 +134,25 @@ export const GroupManagementDetailPage = ({ mode, id }: GroupManagementDetailPag
     });
   };
 
+  // handlers
   const handleAddMembers = () => {
     const params = new URLSearchParams();
     params.set('generation', String(draft.generation));
     params.set('formKey', formKey);
 
-    router.push(`/group-management/member-search?${params.toString()}`);
+    router.push(`${PAGE_ROUTES.GROUP_MNG.MEMBER_SEARCH}?${params.toString()}`);
   };
 
   const handleRemoveMember = (memberId: number) => {
     removeMember(formKey, memberId);
   };
 
-  const handleSubmit = () => {
+  const handleSubmit = async () => {
     if (mode === 'create') {
-      // 생성 API 호출 로직 (draft 데이터 사용)
-      alert(`그룹 생성 API 연동 예정`);
+      if (!draft) return;
+      const created = await createGroup(draft);
+      const groupId = created.teamId;
+      router.push(PAGE_ROUTES.GROUP_MNG.VIEW(groupId));
     } else if (mode === 'edit') {
       // 수정 API 호출 로직 (formKey + draft)
       alert('그룹 수정 API 연동 예정');
@@ -195,7 +199,11 @@ export const GroupManagementDetailPage = ({ mode, id }: GroupManagementDetailPag
       </div>
 
       <div className="px-13 py-16 pt-13">
-        {mapModeToStickyButton({ mode: mode, onClick: handleSubmit, isDisabled: !canSubmit })}
+        {mapModeToStickyButton({
+          mode: mode,
+          onClick: () => void handleSubmit(),
+          isDisabled: !canSubmit,
+        })}
       </div>
     </div>
   );

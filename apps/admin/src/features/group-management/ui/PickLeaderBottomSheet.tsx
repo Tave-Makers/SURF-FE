@@ -1,6 +1,6 @@
 import { Avatar } from '@surf/ui/avatar';
 import { Sheet as ModalSheet } from 'react-modal-sheet';
-import type { MemberBase } from '@/entities/member/model/types';
+import type { MemberSummary } from '@/entities/member/model/types';
 
 declare module '@/shared/store/bottomSheetStore' {
   interface BottomSheetMap {
@@ -11,8 +11,8 @@ declare module '@/shared/store/bottomSheetStore' {
 export type PickLeaderBottomSheetProps = {
   isOpen: boolean;
   onClose: () => void;
-  members: MemberBase[]; // 팀장 제외된 팀원 목록
-  onSelect: (member: MemberBase) => void;
+  members: MemberSummary[]; // 팀장 제외된 팀원 목록
+  onSelect: (member: MemberSummary) => void;
 };
 
 export const PickLeaderBottomSheet = ({

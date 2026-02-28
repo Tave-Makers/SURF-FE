@@ -7,6 +7,7 @@ interface Props {
 }
 
 export const GroupManagementAccordionList = ({ generationGroups, onClick }: Props) => {
+  if (generationGroups.length === 0) return <div>그룹 목록이 존재하지 않습니다.</div>;
   return (
     <div className="flex flex-col">
       {generationGroups.map((group) => (

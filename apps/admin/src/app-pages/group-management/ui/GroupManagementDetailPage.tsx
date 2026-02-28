@@ -1,172 +1,30 @@
 'use client';
 
 import { SolidButton } from '@surf/ui/button';
-import { useToastStore } from '@surf/ui/store/toastStore';
 import { useRouter, useSearchParams } from 'next/navigation';
-import { useEffect, useMemo } from 'react';
 
-import { getHeaderConfig } from '@/app-pages/group-management/model/getHeaderConfig';
-import { getStickyButtonConfig } from '@/app-pages/group-management/model/getStickyButtonConfig';
-import { useGroupManagementAlerts } from '@/app-pages/group-management/model/useGroupManagementAlerts';
-import { useGroupManagementBottomSheets } from '@/app-pages/group-management/model/useGroupManagementBottomSheets';
+import { useGroupManagementDetailController } from '@/app-pages/group-management/model/useGroupManagementDetailController';
 
-import { useCreateGroupMutation } from '@/features/group-management/model/queries/useCreateGroupMutation';
-import { useDeleteGroupMutation } from '@/features/group-management/model/queries/useDeleteGroupMutation';
-import { useGroupDetailQuery } from '@/features/group-management/model/queries/useGroupDetailQuery';
-import { useUpdateGroupMutation } from '@/features/group-management/model/queries/useUpdateGroupMutation';
-import { useGroupFormStore } from '@/features/group-management/model/useGroupFormStore';
-
-import { PAGE_ROUTES } from '@/shared/config/path';
-import type { ContentsType } from '@/shared/types/contents';
-
-import { GroupManagementMode } from '@/widgets/group-management/model/types';
+import type { GroupManagementMode } from '@/widgets/group-management/model/types';
 import { GroupInfoSection } from '@/widgets/group-management/ui/GroupInfoSection';
 import { GroupMemberSection } from '@/widgets/group-management/ui/GroupMemberSection';
 import { AppHeader } from '@/widgets/header/ui/AppHeader';
-import { useMemberGenerationListQuery } from '@/widgets/member-directory/model/queries/useMemberGenerationListQuery';
 
-interface GroupManagementDetailPageProps {
+interface Props {
   mode: GroupManagementMode;
   id?: string;
 }
 
-export const GroupManagementDetailPage = ({ mode, id }: GroupManagementDetailPageProps) => {
+export const GroupManagementDetailPage = ({ mode, id }: Props) => {
   const router = useRouter();
   const searchParams = useSearchParams();
-  const showToast = useToastStore((s) => s.show);
 
-  const groupId = id ? Number(id) : undefined;
-  const formKey = mode === 'create' ? 'create' : String(id);
+  const c = useGroupManagementDetailController({ mode, id, router, searchParams });
 
-  // queries / mutations
-  const { data: generations } = useMemberGenerationListQuery();
-  const MAX_GENERATION = useMemo(() => {
-    const gens = generations ?? [];
-    return gens.length > 0 ? Math.max(...gens) : 0;
-  }, [generations]);
-
-  const { data: groupDetail } = useGroupDetailQuery(groupId);
-
-  const { mutateAsync: createGroup, isPending: isCreatePending } = useCreateGroupMutation();
-  const { mutateAsync: updateGroup, isPending: isEditPending } = useUpdateGroupMutation(groupId);
-  const { mutateAsync: deleteGroup } = useDeleteGroupMutation(groupId);
-
-  // store selectors / actions
-  const draft = useGroupFormStore((s) => s.forms[formKey]?.draft);
-  const dirty = useGroupFormStore((s) => s.forms[formKey]?.dirty ?? false);
-  const isValid = useGroupFormStore((s) => s.isValid(formKey));
-  const canSubmit = dirty && isValid;
-
-  const hydrate = useGroupFormStore((s) => s.hydrate);
-  const removeForm = useGroupFormStore((s) => s.removeForm);
-
-  const setGeneration = useGroupFormStore((s) => s.setGeneration);
-  const setGroupType = useGroupFormStore((s) => s.setGroupType);
-  const setGroupName = useGroupFormStore((s) => s.setGroupName);
-  const setGroupIntroduction = useGroupFormStore((s) => s.setGroupIntroduction);
-
-  const pickLeader = useGroupFormStore((s) => s.pickLeader);
-  const removeMember = useGroupFormStore((s) => s.removeMember);
-
-  // hydrate (re-run when queries arrive)
-  useEffect(() => {
-    hydrate(formKey, {
-      generation: groupDetail?.generation ?? MAX_GENERATION,
-      groupType: groupDetail?.groupType ?? ('study' as ContentsType),
-      groupName: groupDetail?.groupName ?? '',
-      groupIntroduction: groupDetail?.groupIntroduction ?? '',
-      leader: groupDetail?.leader,
-      members: groupDetail?.members ?? [],
-    });
-  }, [hydrate, formKey, groupDetail, MAX_GENERATION]);
-
-  const safeDraft = draft ?? {
-    generation: MAX_GENERATION,
-    groupType: 'study' as ContentsType,
-    groupName: '',
-    groupIntroduction: '',
-    leader: undefined,
-    members: [],
-  };
-
-  // bottom sheets
-  const { openGenerationBottomSheet, openGroupTypeBottomSheet, openPickLeaderBottomSheet } =
-    useGroupManagementBottomSheets({
-      maxGeneration: MAX_GENERATION,
-      selectedGeneration: safeDraft.generation,
-      onSelectGeneration: (v) => setGeneration(formKey, v),
-
-      selectedGroupType: safeDraft.groupType,
-      onSelectGroupType: (v) => setGroupType(formKey, v),
-
-      members: safeDraft.members,
-      onSelectLeader: (m) => pickLeader(formKey, m),
-    });
-
-  // handlers
-  const handleLeavePage = () => {
-    removeForm(formKey);
-    if (mode === 'edit' && groupId) router.replace(PAGE_ROUTES.GROUP_MNG.VIEW(groupId));
-    else router.back();
-  };
-
-  const handleDeleteGroup = async () => {
-    if (mode !== 'edit') return;
-    await deleteGroup();
-    showToast('그룹이 삭제되었습니다.');
-    router.back();
-  };
-
-  const handleSubmit = async () => {
-    if (mode === 'create') {
-      const created = await createGroup(safeDraft);
-      router.replace(PAGE_ROUTES.GROUP_MNG.VIEW(created.teamId));
-    } else if (mode === 'edit' && groupId) {
-      await updateGroup(safeDraft);
-      router.replace(PAGE_ROUTES.GROUP_MNG.VIEW(groupId));
-    }
-  };
-
-  const handleSwitchToEdit = () => {
-    const params = new URLSearchParams(searchParams.toString());
-    params.set('mode', 'edit');
-    router.replace(`?${params.toString()}`);
-  };
-
-  const handleAddMembers = () => {
-    const params = new URLSearchParams();
-    params.set('generation', String(safeDraft.generation));
-    params.set('formKey', formKey);
-    router.push(`${PAGE_ROUTES.GROUP_MNG.MEMBER_SEARCH}?${params.toString()}`);
-  };
-
-  // alerts / header / sticky
-  const { openSaveEditAlert, openDeleteAlert, openGoBackAlert, openPickLeaderAlert } =
-    useGroupManagementAlerts({
-      onSubmitEdit: () => void handleSubmit(),
-      onDeleteGroup: () => void handleDeleteGroup(),
-      onLeavePage: handleLeavePage,
-    });
-
-  const header = getHeaderConfig({
-    mode,
-    onClickEdit: handleSwitchToEdit,
-  });
-
-  const sticky = getStickyButtonConfig({
-    mode,
-    canSubmit,
-    isCreatePending,
-    isEditPending,
-    onCreate: () => void handleSubmit(),
-    onEdit: openSaveEditAlert,
-  });
-
-  // render
-  if (!draft) {
+  if (!c.draft) {
     return (
       <div className="flex h-full flex-col">
-        <AppHeader overrideHeader={header} />
+        <AppHeader overrideHeader={c.header} />
         <div className="flex flex-1 items-center justify-center">Loading...</div>
       </div>
     );
@@ -174,35 +32,35 @@ export const GroupManagementDetailPage = ({ mode, id }: GroupManagementDetailPag
 
   return (
     <div className="flex h-full flex-col">
-      <AppHeader overrideHeader={header} customBack={dirty ? openGoBackAlert : undefined} />
+      <AppHeader overrideHeader={c.header} customBack={c.dirty ? c.openGoBackAlert : undefined} />
 
       <div className="scrollbar-hide flex flex-1 flex-col gap-14 overflow-y-auto">
         <GroupInfoSection
           mode={mode}
-          generation={draft.generation}
-          groupType={draft.groupType}
-          groupName={draft.groupName}
-          groupIntroduction={draft.groupIntroduction}
-          onOpenGeneration={openGenerationBottomSheet}
-          onOpenGroupType={openGroupTypeBottomSheet}
-          onChangeGroupName={(v) => setGroupName(formKey, v)}
-          onChangeGroupIntroduction={(v) => setGroupIntroduction(formKey, v)}
+          generation={c.draft.generation}
+          groupType={c.draft.groupType}
+          groupName={c.draft.groupName}
+          groupIntroduction={c.draft.groupIntroduction}
+          onOpenGeneration={c.openGenerationBottomSheet}
+          onOpenGroupType={c.openGroupTypeBottomSheet}
+          onChangeGroupName={c.setGroupName}
+          onChangeGroupIntroduction={c.setGroupIntroduction}
         />
 
         <GroupMemberSection
           mode={mode}
-          teamLeader={draft.leader}
-          teamMembers={draft.members}
+          teamLeader={c.draft.leader}
+          teamMembers={c.draft.members}
           onPickLeader={
-            draft.members.length === 0 ? openPickLeaderAlert : openPickLeaderBottomSheet
+            c.draft.members.length === 0 ? c.openPickLeaderAlert : c.openPickLeaderBottomSheet
           }
-          onAddMembers={handleAddMembers}
-          onRemoveMember={(memberId) => removeMember(formKey, memberId)}
+          onAddMembers={c.handleAddMembers}
+          onRemoveMember={c.removeMember}
         />
 
         {mode === 'edit' && (
           <div className="px-13 py-15">
-            <SolidButton size="m" variant="warning" onClick={openDeleteAlert}>
+            <SolidButton size="m" variant="warning" onClick={c.openDeleteAlert}>
               해당 그룹 삭제하기
             </SolidButton>
           </div>
@@ -210,14 +68,14 @@ export const GroupManagementDetailPage = ({ mode, id }: GroupManagementDetailPag
       </div>
 
       <div className="px-13 py-16 pt-13">
-        {sticky && (
+        {c.sticky && (
           <SolidButton
             size="l"
             variant="primary"
-            isDisabled={sticky.disabled}
-            onClick={sticky.onClick}
+            isDisabled={c.sticky.disabled}
+            onClick={c.sticky.onClick}
           >
-            {sticky.label}
+            {c.sticky.label}
           </SolidButton>
         )}
       </div>

@@ -26,6 +26,7 @@ type Store = {
   forms: Record<FormKey, FormState | undefined>;
   // 생성 forKey에서 상세 id formKey로 draft 이관
   moveForm: (fromKey: string, toKey: string, opts?: { overwrite?: boolean }) => void;
+  removeForm: (key: FormKey) => void;
 
   // draft 덮어쓰기
   hydrate: (key: FormKey, next: GroupFormDraft, opts?: { force?: boolean }) => void;
@@ -94,6 +95,14 @@ export const useGroupFormStore = create<Store>((set, get) => ({
       delete nextForms[fromKey];
 
       return { forms: nextForms };
+    }),
+
+  removeForm: (key) =>
+    set((s) => {
+      if (!s.forms[key]) return s;
+      const next = { ...s.forms };
+      delete next[key];
+      return { forms: next };
     }),
 
   hydrate: (key, next, opts) => {

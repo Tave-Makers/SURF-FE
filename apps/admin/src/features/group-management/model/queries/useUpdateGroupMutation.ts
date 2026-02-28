@@ -9,31 +9,29 @@ import {
 import { useToastStore } from '@surf/ui/store/toastStore';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 
-export const useCreateGroupMutation = () => {
+export const useUpdateGroupMutation = (groupId?: number) => {
   const qc = useQueryClient();
   const showToast = useToastStore((s) => s.show);
-
-  const moveForm = useGroupFormStore((s) => s.moveForm);
   const commit = useGroupFormStore((s) => s.commit);
 
   return useMutation({
-    mutationFn: async (draft: GroupFormDraft): Promise<GroupResDto> => {
+    mutationFn: (draft: GroupFormDraft): Promise<GroupResDto> => {
+      if (!groupId) throw new Error('INVALID_GROUP_ID');
+
       const body = mapGroupDraftToReq(draft);
-      return groupApi.createGroup(body);
+      return groupApi.updateGroup({ teamId: groupId }, body);
     },
-    onSuccess: (created) => {
-      // create → {id} 로 폼 이관
-      const fromKey = 'create';
-      const toKey = `${created.teamId}`;
+    onSuccess: () => {
+      // form commit -> dirty = false
+      // 서버 데이터 hydrate 가능 상태가 됨
+      commit(String(groupId));
 
-      moveForm(fromKey, toKey, { overwrite: false });
-      commit(toKey);
-
-      // 캐시 갱신: 리스트 invalidate
+      // invalidate
       void qc.invalidateQueries({ queryKey: groupQueryKeys.lists() });
+      void qc.invalidateQueries({ queryKey: groupQueryKeys.detail(groupId!) });
     },
     onError: (err) => {
-      console.error('[Group Create Error]', err.message);
+      console.error('[Group Update Error]', err.message);
       showToast(err.message);
     },
   });

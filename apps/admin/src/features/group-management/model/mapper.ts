@@ -2,7 +2,7 @@ import { GenerationGroup } from '@/entities/group-management/model/types';
 import { toMemberTrack } from '@/entities/member/model/mapper';
 import { MemberSummary } from '@/entities/member/model/types';
 import {
-  CreateGroupRequest,
+  GroupRequest,
   GroupApiType,
   GroupDetailResDto,
   GroupGenerationResDto,
@@ -74,8 +74,8 @@ const buildMemberIdsIncludingLeader = (draft: GroupFormDraft): number[] => {
   return Array.from(ids);
 };
 
-// 그룹 생성 요청 바디 매핑
-export const mapGroupDraftToCreateReq = (draft: GroupFormDraft): CreateGroupRequest => {
+// 그룹 관련 요청 바디 매핑 (ex. 생성, 수정)
+export const mapGroupDraftToReq = (draft: GroupFormDraft): GroupRequest => {
   if (!draft.leader) {
     throw new Error('Leader is required to create a group');
   }

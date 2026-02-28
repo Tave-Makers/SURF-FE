@@ -1,6 +1,4 @@
-import { SolidButton } from '@surf/ui/button';
 import { HeaderProps, HeaderMode } from '@surf/ui/header';
-import type React from 'react';
 import { GroupManagementMode } from '@/widgets/group-management/model/types';
 
 interface MapModeToHeaderProps {
@@ -32,35 +30,5 @@ export const mapModeToHeaderProps = ({ mode, onClickEdit }: MapModeToHeaderProps
         onClickTextBtn: onClickEdit,
         hasLeftIcon: true,
       };
-  }
-};
-
-interface mapModeToStickyButtonProps {
-  mode: GroupManagementMode;
-  onClick: () => void;
-  isDisabled: boolean;
-}
-
-export const mapModeToStickyButton = ({
-  mode,
-  onClick,
-  isDisabled,
-}: mapModeToStickyButtonProps): React.ReactNode | null => {
-  switch (mode) {
-    case 'create':
-      return (
-        <SolidButton size="l" variant="primary" isDisabled={isDisabled} onClick={onClick}>
-          생성하기
-        </SolidButton>
-      );
-    case 'edit':
-      return (
-        <SolidButton size="l" variant="primary" isDisabled={isDisabled} onClick={onClick}>
-          수정하기
-        </SolidButton>
-      );
-    case 'view':
-    default:
-      return null;
   }
 };

@@ -1,0 +1,34 @@
+import LoadingCharacter1 from '@/shared/assets/icons/loading/character-1.svg';
+import LoadingCharacter2 from '@/shared/assets/icons/loading/character-2.svg';
+import LoadingCharacter3 from '@/shared/assets/icons/loading/character-3.svg';
+import LoadingCharacter4 from '@/shared/assets/icons/loading/character-4.svg';
+import LoadingCharacter5 from '@/shared/assets/icons/loading/character-5.svg';
+
+const characters = [
+  LoadingCharacter1,
+  LoadingCharacter2,
+  LoadingCharacter3,
+  LoadingCharacter4,
+  LoadingCharacter5,
+];
+
+const Page = () => {
+  return (
+    <div className="flex h-full w-full flex-col items-center justify-center">
+      <div className="flex flex-col items-center gap-10">
+        <div className="flex flex-row items-center">
+          {characters.map((Character, i) => (
+            <Character
+              key={i}
+              className="animate-float"
+              style={{ animationDelay: `${i * 0.1}s` }}
+            />
+          ))}
+        </div>
+        <span className="text-body-body8 text-foreground-tertiary">잠시만 기다려 주세요...</span>
+      </div>
+    </div>
+  );
+};
+
+export default Page;

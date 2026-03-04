@@ -28,6 +28,11 @@ export const ImgUploader = ({
   // 로컬에서만 사용하는 파일/미리보기 상태
   const [file, setFile] = useState<File | null>(null);
   const [preview, setPreview] = useState<string>('');
+  const [isError, setIsError] = useState(false);
+
+  useEffect(() => {
+    setIsError(false);
+  }, [value]);
 
   /**
    * 파일 선택 시 브라우저 objectURL 생성
@@ -50,9 +55,11 @@ export const ImgUploader = ({
    * 3) edit 모드인데 아무것도 없으면 기본 이미지
    */
   const displayUrl = useMemo(() => {
-    const previewOrValue = preview || value || '';
-    return previewOrValue || (mode === 'edit' ? DEFAULT_IMAGE.src : '');
-  }, [preview, value, mode]);
+    if (preview) return preview;
+    if (mode === 'edit' && value && !isError) return value;
+    if (mode === 'create') return '';
+    return DEFAULT_IMAGE.src;
+  }, [preview, value, mode, isError]);
 
   const hasImage = Boolean(displayUrl);
 
@@ -98,7 +105,13 @@ export const ImgUploader = ({
       >
         {hasImage ? (
           <>
-            <Image src={displayUrl} alt="banner" className="object-cover" fill />
+            <Image
+              src={displayUrl}
+              alt="banner"
+              className="object-cover"
+              fill
+              onError={() => setIsError(true)}
+            />
 
             {/* 수정 모드 오버레이 */}
             {showOverlayText && (

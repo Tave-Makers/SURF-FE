@@ -7,12 +7,18 @@ import { useImageUploader } from '@/entities/image/model/useImageUploader';
 import { PAGE_ROUTES } from '@/shared/config/path';
 import { useAlertStore } from '@surf/ui/store/alertStore';
 import { useToastStore } from '@surf/ui/store/toastStore';
+import { useUpdateBannerMutation } from './mutations';
+import { useToggleBannerStatusMutation } from './mutations';
+import { useDeleteBannerMutation } from './mutations';
 
-export const useBannerEdit = (bannerId: string, initialData: Banner[]) => {
+export const useBannerEdit = (bannerId: number, initialData: Banner | undefined) => {
   const router = useRouter();
   const { uploadImages } = useImageUploader();
   const { open: openAlert, close: closeAlert } = useAlertStore();
   const { show: showToast } = useToastStore();
+  const { mutateAsync: updateInfo } = useUpdateBannerMutation(bannerId);
+  const { mutateAsync: toggleStatus } = useToggleBannerStatusMutation(bannerId);
+  const { mutateAsync: deleteBanner } = useDeleteBannerMutation(bannerId);
 
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [initial, setInitial] = useState<Banner | null>(null);
@@ -26,20 +32,14 @@ export const useBannerEdit = (bannerId: string, initialData: Banner[]) => {
 
   // 초기 데이터 로드
   useEffect(() => {
-    const parsedId = Number(bannerId);
-    const target = Number.isNaN(parsedId) ? undefined : initialData.find((b) => b.id === parsedId);
+    if (!initialData) return;
 
-    if (!target) {
-      router.replace(PAGE_ROUTES.BANNER.LIST);
-      return;
-    }
-
-    setInitial(target);
+    setInitial(initialData);
     setForm({
-      imageUrl: target.imageUrl,
-      name: target.name,
-      linkUrl: target.linkUrl,
-      isActive: target.isActive,
+      imageUrl: initialData.imageUrl,
+      name: initialData.name,
+      linkUrl: initialData.linkUrl,
+      isActive: initialData.isActive,
     });
   }, [bannerId, initialData]);
 
@@ -73,23 +73,64 @@ export const useBannerEdit = (bannerId: string, initialData: Banner[]) => {
         if (result.status !== 'uploaded' || !result.uploadedUrl) throw new Error();
         finalUrl = result.uploadedUrl;
       }
-      const payload = {
-        name: form.name,
-        linkUrl: form.linkUrl,
-        imageUrl: finalUrl,
-        status: form.isActive,
-      };
 
-      console.log('배너 수정 API 호출:', payload);
-      // TODO: await updateBanner(payload);
+      const apiTasks: Promise<unknown>[] = [];
+
+      // 정보(이름, URL, 이미지)가 하나라도 바뀌었다면 PUT 호출
+      const hasInfoChanged =
+        initial.name !== form.name ||
+        initial.linkUrl !== form.linkUrl ||
+        initial.imageUrl !== finalUrl;
+
+      if (hasInfoChanged) {
+        apiTasks.push(
+          updateInfo({
+            name: form.name,
+            linkUrl: form.linkUrl,
+            imageUrl: finalUrl,
+          }),
+        );
+      }
+
+      // 활성 상태가 바뀌었다면 PATCH 호출
+      if (initial.isActive !== form.isActive) {
+        apiTasks.push(toggleStatus(form.isActive));
+      }
+
+      // 모든 API가 완료될 때까지 대기
+      await Promise.all(apiTasks);
       router.replace(PAGE_ROUTES.BANNER.LIST);
     } catch {
       showToast('배너 수정에 실패했습니다.');
     } finally {
       setIsSubmitting(false);
     }
-  }, [initial, isSubmitting, form, bannerFile, uploadImages, router, showToast]);
+  }, [
+    initial,
+    isSubmitting,
+    form,
+    bannerFile,
+    uploadImages,
+    router,
+    showToast,
+    updateInfo,
+    toggleStatus,
+  ]);
 
+  const handleDelete = useCallback(async () => {
+    if (isSubmitting) return;
+    setIsSubmitting(true);
+
+    try {
+      await deleteBanner();
+      showToast('배너가 삭제되었습니다.');
+      router.replace(PAGE_ROUTES.BANNER.LIST);
+    } catch {
+      showToast('배너 삭제에 실패했습니다.');
+    } finally {
+      setIsSubmitting(false);
+    }
+  }, [deleteBanner, router, showToast, isSubmitting]);
   const handleOpenSaveAlert = () => {
     openAlert({
       state: 'default',
@@ -124,7 +165,7 @@ export const useBannerEdit = (bannerId: string, initialData: Banner[]) => {
           label: '삭제하기',
           onClick: () => {
             closeAlert();
-            // TODO: onDelete 로직 실행
+            void handleDelete();
           },
         },
       ],

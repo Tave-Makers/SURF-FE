@@ -11,26 +11,28 @@ import {
   reassignDisplayOrders,
 } from '@/features/banner/lib/bannerUtils';
 import { BannerFilterType } from '@/features/banner/model/types';
+import { useBannerListQuery } from '@/features/banner/model/useGetBannerList';
 import { BannerFilter } from '@/features/banner/ui/BannerFilter';
 import { PAGE_ROUTES } from '@/shared/config/path';
 
 interface BannerListWidgetProps {
-  initialBanners: Banner[];
   isReorderMode: boolean;
   // 순서가 변경될 때마다 부모에게 최신 리스트 전달
   onBannersChange?: (updatedBanners: Banner[]) => void;
 }
 
-export const BannerListWidget = ({
-  initialBanners,
-  isReorderMode,
-  onBannersChange,
-}: BannerListWidgetProps) => {
+export const BannerListWidget = ({ isReorderMode, onBannersChange }: BannerListWidgetProps) => {
   const router = useRouter();
-  const [banners, setBanners] = useState<Banner[]>(() =>
-    reassignDisplayOrders([...initialBanners].sort((a, b) => a.displayOrder - b.displayOrder)),
-  );
+  const { data: serverBanners } = useBannerListQuery();
+  const [banners, setBanners] = useState<Banner[]>(serverBanners);
   const [filter, setFilter] = useState<BannerFilterType>('all');
+
+  // 서버 데이터가 업데이트되면 로컬 상태도 동기화 (순서 변경 모드가 아닐 때만)
+  useEffect(() => {
+    if (!isReorderMode) {
+      setBanners(serverBanners);
+    }
+  }, [serverBanners, isReorderMode]);
 
   const filteredBanners = useMemo(() => {
     const targetList = isReorderMode ? banners : getGroupedByStatus(banners);
@@ -41,7 +43,12 @@ export const BannerListWidget = ({
   // 순서 변경 모드 진입 시 순서 동기화
   useEffect(() => {
     if (isReorderMode) {
-      setBanners((current) => reassignDisplayOrders(getGroupedByStatus(current)));
+      const initialOrder = reassignDisplayOrders(getGroupedByStatus(banners));
+      setBanners(initialOrder);
+
+      // 모드 진입 시점의 리스트를 부모에게 전달
+      onBannersChange?.(initialOrder);
+      setFilter('all');
     }
   }, [isReorderMode]);
 

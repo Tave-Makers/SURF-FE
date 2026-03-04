@@ -36,15 +36,18 @@ export const MemberSearchWidget = ({ filters, totalCount }: MemberSearchWidgetPr
   }, [generations, generation, setGeneration]);
 
   // 2. 파트 메뉴 아이템 (id를 인덱스로 부여)
-  const partItems = [
-    { id: 100, label: '전체', isSelected: !part, onClick: () => setPart(undefined) },
-    ...Object.entries(toEnumPartMap).map(([label, value], index) => ({
-      id: index + 101, // 101부터 시작하는 number 타입 id
-      label: label,
-      isSelected: part === value,
-      onClick: () => setPart(value),
-    })),
-  ];
+  const partItems = useMemo(
+    () => [
+      { id: 100, label: '전체', isSelected: !part, onClick: () => setPart(undefined) },
+      ...Object.entries(toEnumPartMap).map(([label, value], index) => ({
+        id: index + 101, // 101부터 시작하는 number 타입 id
+        label: label,
+        isSelected: part === value,
+        onClick: () => setPart(value),
+      })),
+    ],
+    [part, setPart],
+  );
 
   // 3. 현재 선택된 파트의 한글 라벨 (버튼 표시용)
   const currentPartLabel = part ? toLabelPartMap[part] : '파트';

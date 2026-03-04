@@ -1,9 +1,9 @@
 import { Menu } from '@surf/ui/menu';
 import { TextInput } from '@surf/ui/text-input';
-import { useState } from 'react';
+import { useMemo, useState } from 'react';
 import { toEnumPartMap, toLabelPartMap } from '@/entities/user/model/mappers';
+import { useGenerationListQuery } from '@/features/member-search/model/queries/useGenerationListQuery';
 import { useMemberFilters } from '@/features/member-search/model/useMemberFilters';
-import { TOTAL_GENERATION } from '@/shared/constants';
 
 interface MemberSearchWidgetProps {
   filters: ReturnType<typeof useMemberFilters>;
@@ -16,19 +16,24 @@ export const MemberSearchWidget = ({ filters, totalCount }: MemberSearchWidgetPr
   const [openMenu, setOpenMenu] = useState<OpenMenuType>(null);
   const { keyword, generation, part, setKeyword, setGeneration, setPart } = filters;
 
+  const { data: generations } = useGenerationListQuery();
+
   // 1. 기수 메뉴 아이템 (id를 generation 숫자 그대로 사용)
-  const generationItems = [
-    { id: 0, label: '전체', isSelected: !generation, onClick: () => setGeneration(undefined) },
-    ...Array.from({ length: TOTAL_GENERATION }, (_, i) => {
-      const genValue = TOTAL_GENERATION - i;
-      return {
-        id: genValue, // number 타입 id
-        label: `${genValue}기`,
-        isSelected: generation === genValue,
-        onClick: () => setGeneration(genValue),
-      };
-    }),
-  ];
+  const generationItems = useMemo(() => {
+    const gens = generations ?? [];
+    return [
+      { id: 0, label: '전체', isSelected: !generation, onClick: () => setGeneration(undefined) },
+      ...gens
+        .slice()
+        .sort((a, b) => b - a)
+        .map((gen) => ({
+          id: gen,
+          label: `${gen}기`,
+          isSelected: generation === gen,
+          onClick: () => setGeneration(gen),
+        })),
+    ];
+  }, [generations, generation, setGeneration]);
 
   // 2. 파트 메뉴 아이템 (id를 인덱스로 부여)
   const partItems = [

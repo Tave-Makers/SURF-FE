@@ -1,6 +1,6 @@
 'use client';
 
-import { useSuspenseQuery } from '@tanstack/react-query';
+import { useQuery } from '@tanstack/react-query';
 
 import { generationListQueryOptions } from '@/features/member-search/model/queries/queryOptions';
 
@@ -8,5 +8,5 @@ import { generationListQueryOptions } from '@/features/member-search/model/queri
  * 전체 기수 목록 조회 훅
  */
 export function useGenerationListQuery() {
-  return useSuspenseQuery(generationListQueryOptions());
+  return useQuery(generationListQueryOptions());
 }

@@ -3,14 +3,14 @@
 import { useRouter } from 'next/navigation';
 import { useCallback, useEffect, useRef } from 'react';
 import { MemberList } from '@/entities/search/ui/MemberList';
-import { useMemberSearch } from '@/features/member-search/api/useMemberSearch';
 import { trackMemberSearchEvent } from '@/features/member-search/lib/trackMemberSearchEvent';
 import { MEMBER_SEARCH_EVENTS } from '@/features/member-search/model/constants';
+import { useInfiniteMemberSearchQuery } from '@/features/member-search/model/queries/useInfiniteMemberSearchQuery';
 import { PAGE_ROUTES } from '@/shared/config/path';
 
 interface MemberListWidgetProps {
   keyword?: string; // 검색어가 있으면 학교를, 없으면 소개글을 보여줌
-  queryResult: ReturnType<typeof useMemberSearch>;
+  queryResult: ReturnType<typeof useInfiniteMemberSearchQuery>;
   onTrackMemberSearch: (rawKeyword?: string) => void;
 }
 

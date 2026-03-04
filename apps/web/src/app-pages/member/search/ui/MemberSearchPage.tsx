@@ -3,9 +3,9 @@
 import { HeaderMode } from '@surf/ui/header';
 // import dynamic from 'next/dynamic';
 import { useEffect, useRef } from 'react';
-import { useMemberSearch } from '@/features/member-search/api/useMemberSearch';
 import { trackMemberSearchEvent } from '@/features/member-search/lib/trackMemberSearchEvent';
 import { MEMBER_SEARCH_EVENTS } from '@/features/member-search/model/constants';
+import { useInfiniteMemberSearchQuery } from '@/features/member-search/model/queries/useInfiniteMemberSearchQuery';
 import { useMemberFilters } from '@/features/member-search/model/useMemberFilters';
 import { usePageName } from '@/shared/analytics/lib/getPageName';
 import SearchEmpty from '@/shared/assets/icons/empty-space/search-empty.svg';
@@ -22,7 +22,7 @@ export const MemberSearchPage = () => {
   const filters = useMemberFilters();
   const { keyword, debouncedKeyword, generation, part } = filters;
 
-  const queryResult = useMemberSearch({ keyword, debouncedKeyword, generation, part });
+  const queryResult = useInfiniteMemberSearchQuery({ keyword, debouncedKeyword, generation, part });
 
   const isError = queryResult.isError;
   const isLoading = queryResult.isLoading;

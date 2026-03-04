@@ -118,7 +118,6 @@ export const useReorderBannerMutation = () => {
       }
       console.error('순서 변경 실패:', err);
     },
-
     onSettled: async () => {
       await queryClient.invalidateQueries({ queryKey: bannerQueryKeys.list() });
     },

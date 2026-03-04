@@ -2,7 +2,7 @@
 
 import { useSuspenseQuery } from '@tanstack/react-query';
 
-import { generationListQueryOptions } from './generationListQueryOptions';
+import { generationListQueryOptions } from '@/features/member-search/model/queries/queryOptions';
 
 /**
  * 전체 기수 목록 조회 훅

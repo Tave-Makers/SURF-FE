@@ -12,15 +12,10 @@ export function memberSearchQueryOptions(filters: MemberSearchFilters) {
     queryKey: memberSearchQueryKeys.list(filters),
 
     queryFn: async ({ pageParam = 0 }): Promise<MemberSearchResponse> => {
-      try {
-        const res = await memberSearchApi.memberSearch(
-          toMemberSearchRequest(filters, pageParam, PAGE_SIZE),
-        );
-        return res.data.data;
-      } catch (err) {
-        console.error('[memberSearchQueryOptions] API 호출 실패:', err);
-        throw err;
-      }
+      const res = await memberSearchApi.memberSearch(
+        toMemberSearchRequest(filters, pageParam, PAGE_SIZE),
+      );
+      return res;
     },
 
     initialPageParam: 0,

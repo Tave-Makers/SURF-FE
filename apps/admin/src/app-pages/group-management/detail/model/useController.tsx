@@ -1,7 +1,6 @@
 'use client';
 
 import { useToastStore } from '@surf/ui/store/toastStore';
-import type { AppRouterInstance } from 'next/dist/shared/lib/app-router-context.shared-runtime';
 import type { ReadonlyURLSearchParams } from 'next/navigation';
 import { useEffect, useMemo, useState } from 'react';
 
@@ -22,11 +21,17 @@ import type { ContentsType } from '@/shared/types/contents';
 import type { GroupManagementMode } from '@/widgets/group-management/model/types';
 import { useMemberGenerationListQuery } from '@/widgets/member-directory/model/queries/useMemberGenerationListQuery';
 
+type RouterLike = {
+  push(href: string): void;
+  replace(href: string): void;
+  back(): void;
+};
+
 type Params = {
   mode: GroupManagementMode;
   id?: string;
 
-  router: AppRouterInstance;
+  router: RouterLike;
   searchParams: ReadonlyURLSearchParams;
 };
 
@@ -134,10 +139,14 @@ export const useController = ({ mode, id, router, searchParams }: Params) => {
   };
 
   const handleDeleteGroup = async () => {
-    if (mode !== 'edit') return;
-    await deleteGroup();
-    showToast('그룹이 삭제되었습니다.');
-    router.back();
+    try {
+      if (mode !== 'edit') return;
+      await deleteGroup();
+      showToast('그룹이 삭제되었습니다.');
+      router.back();
+    } catch {
+      // onError에서 피드백 처리 완료
+    }
   };
 
   const handleSubmit = async () => {
@@ -153,8 +162,12 @@ export const useController = ({ mode, id, router, searchParams }: Params) => {
         setIsCreateNavigating(false);
       }
     } else if (mode === 'edit' && groupId) {
-      await updateGroup(safeDraft);
-      router.replace(PAGE_ROUTES.GROUP_MNG.VIEW(groupId));
+      try {
+        await updateGroup(safeDraft);
+        router.replace(PAGE_ROUTES.GROUP_MNG.VIEW(groupId));
+      } catch {
+        // onError에서 피드백 처리 완료
+      }
     }
   };
 

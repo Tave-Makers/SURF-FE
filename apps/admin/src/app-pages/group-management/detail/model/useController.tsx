@@ -3,6 +3,7 @@
 import { useToastStore } from '@surf/ui/store/toastStore';
 import type { ReadonlyURLSearchParams } from 'next/navigation';
 import { useEffect, useMemo, useState } from 'react';
+import { useShallow } from 'zustand/shallow';
 
 import { getHeaderConfig } from '@/app-pages/group-management/detail/model/getHeaderConfig';
 import { getStickyButtonConfig } from '@/app-pages/group-management/detail/model/getStickyButtonConfig';
@@ -58,24 +59,37 @@ export const useController = ({ mode, id, router, searchParams }: Params) => {
   const { mutateAsync: updateGroup, isPending: isEditPending } = useUpdateGroupMutation(groupId);
   const { mutateAsync: deleteGroup } = useDeleteGroupMutation(groupId);
 
-  // store selectors
+  // store state selectors
   const hasForm = useGroupFormStore((s) => s.forms[formKey] != null);
   const draft = useGroupFormStore((s) => s.forms[formKey]?.draft);
   const dirty = useGroupFormStore((s) => s.forms[formKey]?.dirty ?? false);
   const isValid = useGroupFormStore((s) => s.isValid(formKey));
   const canSubmit = dirty && isValid;
 
-  const hydrate = useGroupFormStore((s) => s.hydrate);
-  const removeForm = useGroupFormStore((s) => s.removeForm);
-  const resetDraft = useGroupFormStore((s) => s.resetDraft);
-
-  const setGeneration = useGroupFormStore((s) => s.setGeneration);
-  const setGroupType = useGroupFormStore((s) => s.setGroupType);
-  const setGroupName = useGroupFormStore((s) => s.setGroupName);
-  const setGroupIntroduction = useGroupFormStore((s) => s.setGroupIntroduction);
-
-  const pickLeader = useGroupFormStore((s) => s.pickLeader);
-  const removeMember = useGroupFormStore((s) => s.removeMember);
+  // store action selectors
+  const {
+    hydrate,
+    removeForm,
+    resetDraft,
+    setGeneration,
+    setGroupType,
+    setGroupName,
+    setGroupIntroduction,
+    pickLeader,
+    removeMember,
+  } = useGroupFormStore(
+    useShallow((s) => ({
+      hydrate: s.hydrate,
+      removeForm: s.removeForm,
+      resetDraft: s.resetDraft,
+      setGeneration: s.setGeneration,
+      setGroupType: s.setGroupType,
+      setGroupName: s.setGroupName,
+      setGroupIntroduction: s.setGroupIntroduction,
+      pickLeader: s.pickLeader,
+      removeMember: s.removeMember,
+    })),
+  );
 
   const initialDraft = useMemo(
     () => ({

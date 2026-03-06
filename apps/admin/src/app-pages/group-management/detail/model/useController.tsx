@@ -3,7 +3,7 @@
 import { useToastStore } from '@surf/ui/store/toastStore';
 import type { AppRouterInstance } from 'next/dist/shared/lib/app-router-context.shared-runtime';
 import type { ReadonlyURLSearchParams } from 'next/navigation';
-import { useEffect, useMemo } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 
 import { getHeaderConfig } from '@/app-pages/group-management/detail/model/getHeaderConfig';
 import { getStickyButtonConfig } from '@/app-pages/group-management/detail/model/getStickyButtonConfig';
@@ -36,8 +36,11 @@ export const useController = ({ mode, id, router, searchParams }: Params) => {
   const groupId = id ? Number(id) : undefined;
   const formKey = mode === 'create' ? 'create' : String(id);
 
+  // state
+  const [isCreateNavigating, setIsCreateNavigating] = useState<boolean>(false);
+
   // queries
-  const { data: generations } = useMemberGenerationListQuery();
+  const { data: generations, isLoading: isGenerationLoading } = useMemberGenerationListQuery();
   const maxGeneration = useMemo(() => {
     const gens = generations ?? [];
     return gens.length > 0 ? Math.max(...gens) : 0;
@@ -51,6 +54,7 @@ export const useController = ({ mode, id, router, searchParams }: Params) => {
   const { mutateAsync: deleteGroup } = useDeleteGroupMutation(groupId);
 
   // store selectors
+  const hasForm = useGroupFormStore((s) => s.forms[formKey] != null);
   const draft = useGroupFormStore((s) => s.forms[formKey]?.draft);
   const dirty = useGroupFormStore((s) => s.forms[formKey]?.dirty ?? false);
   const isValid = useGroupFormStore((s) => s.isValid(formKey));
@@ -68,20 +72,27 @@ export const useController = ({ mode, id, router, searchParams }: Params) => {
   const pickLeader = useGroupFormStore((s) => s.pickLeader);
   const removeMember = useGroupFormStore((s) => s.removeMember);
 
-  // hydrate
-  useEffect(() => {
-    if (isGroupDetailLoading) return;
-    hydrate(formKey, {
+  const initialDraft = useMemo(
+    () => ({
       generation: groupDetail?.generation ?? maxGeneration,
       groupType: groupDetail?.groupType ?? ('study' as ContentsType),
       groupName: groupDetail?.groupName ?? '',
       groupIntroduction: groupDetail?.groupIntroduction ?? '',
       leader: groupDetail?.leader,
       members: groupDetail?.members ?? [],
-    });
-  }, [hydrate, formKey, groupDetail, isGroupDetailLoading, maxGeneration]);
+    }),
+    [groupDetail, maxGeneration],
+  );
 
-  // create 폼 정리 (moveForm에서 fromKey를 삭제하지 않으므로)
+  // hydrate
+  useEffect(() => {
+    if (hasForm) return;
+    const isReady = mode === 'create' ? !isGenerationLoading : !isGroupDetailLoading;
+    if (!isReady) return;
+    hydrate(formKey, initialDraft);
+  }, [hasForm, mode, isGenerationLoading, isGroupDetailLoading, hydrate, formKey, initialDraft]);
+
+  // create 폼 정리
   useEffect(() => {
     if (mode !== 'create') {
       removeForm('create');
@@ -134,8 +145,13 @@ export const useController = ({ mode, id, router, searchParams }: Params) => {
     if (isSubmitPending) return;
 
     if (mode === 'create') {
-      const created = await createGroup(safeDraft);
-      router.replace(PAGE_ROUTES.GROUP_MNG.VIEW(created.teamId));
+      try {
+        const created = await createGroup(safeDraft);
+        setIsCreateNavigating(true);
+        router.replace(PAGE_ROUTES.GROUP_MNG.VIEW(created.teamId));
+      } catch {
+        setIsCreateNavigating(false);
+      }
     } else if (mode === 'edit' && groupId) {
       await updateGroup(safeDraft);
       router.replace(PAGE_ROUTES.GROUP_MNG.VIEW(groupId));
@@ -169,6 +185,7 @@ export const useController = ({ mode, id, router, searchParams }: Params) => {
     mode,
     canSubmit,
     isCreatePending,
+    isCreateNavigating,
     isEditPending,
     onCreate: () => void handleSubmit(),
     onEdit: openSaveEditAlert,

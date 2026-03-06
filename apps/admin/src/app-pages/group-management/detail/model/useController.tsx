@@ -92,10 +92,23 @@ export const useController = ({ mode, id, router, searchParams }: Params) => {
   // hydrate
   useEffect(() => {
     if (hasForm) return;
-    const isReady = mode === 'create' ? !isGenerationLoading : !isGroupDetailLoading;
-    if (!isReady) return;
+    if (mode === 'create') {
+      if (isGenerationLoading) return;
+    } else {
+      if (!groupId || isGroupDetailLoading || !groupDetail) return;
+    }
     hydrate(formKey, initialDraft);
-  }, [hasForm, mode, isGenerationLoading, isGroupDetailLoading, hydrate, formKey, initialDraft]);
+  }, [
+    hasForm,
+    mode,
+    isGenerationLoading,
+    groupId,
+    isGroupDetailLoading,
+    groupDetail,
+    hydrate,
+    formKey,
+    initialDraft,
+  ]);
 
   // create 폼 정리
   useEffect(() => {

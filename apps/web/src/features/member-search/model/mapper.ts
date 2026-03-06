@@ -1,6 +1,7 @@
-import { MemberSearchItemDTO, MemberSearchRequestDTO } from '../api/types';
+import { MemberSearchItemDTO, MemberSearchRequestDTO, GenerationListResDTO } from '../api/types';
 import { MemberSearchFilters, MemberSearchItem } from '@/entities/search/model/types';
 import { mapUserLevel, toLabelPartMap } from '@/entities/user/model/mappers';
+import { GenerationList } from '@/features/member-search/model/types';
 
 export function mapMemberSearchItem(dto: MemberSearchItemDTO): MemberSearchItem {
   return {
@@ -26,4 +27,16 @@ export function toMemberSearchRequest(
     generation: filters.generation ?? undefined,
     part: filters.part ?? undefined,
   };
+}
+
+// 기수 목록 API 응답 -> Domain 변환
+export function toGenerationList(dto: GenerationListResDTO): GenerationList {
+  const picked = (dto?.generations ?? []).filter(
+    (item): item is { generation: number } => typeof item?.generation === 'number',
+  );
+
+  //  number[]로 변환
+  const generations = picked.map((item) => item.generation);
+
+  return generations;
 }

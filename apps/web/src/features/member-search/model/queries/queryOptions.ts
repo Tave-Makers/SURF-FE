@@ -1,7 +1,7 @@
-import { infiniteQueryOptions } from '@tanstack/react-query';
+import { infiniteQueryOptions, queryOptions } from '@tanstack/react-query';
 import { memberSearchQueryKeys } from './queryKeys';
 import { memberSearchApi } from '@/features/member-search/api/memberSearchApi';
-import { toMemberSearchRequest, mapMemberSearchItem } from '../model/mapper';
+import { toMemberSearchRequest, mapMemberSearchItem, toGenerationList } from '../mapper';
 import { MemberSearchFilters } from '@/entities/search/model/types';
 import { MemberSearchResponse } from '@/features/member-search/api/types';
 
@@ -12,15 +12,10 @@ export function memberSearchQueryOptions(filters: MemberSearchFilters) {
     queryKey: memberSearchQueryKeys.list(filters),
 
     queryFn: async ({ pageParam = 0 }): Promise<MemberSearchResponse> => {
-      try {
-        const res = await memberSearchApi.memberSearch(
-          toMemberSearchRequest(filters, pageParam, PAGE_SIZE),
-        );
-        return res.data.data;
-      } catch (err) {
-        console.error('[memberSearchQueryOptions] API 호출 실패:', err);
-        throw err;
-      }
+      const res = await memberSearchApi.memberSearch(
+        toMemberSearchRequest(filters, pageParam, PAGE_SIZE),
+      );
+      return res;
     },
 
     initialPageParam: 0,
@@ -40,6 +35,21 @@ export function memberSearchQueryOptions(filters: MemberSearchFilters) {
         totalCount: data.pages[0]?.totalCount ?? null,
         isLast: data.pages[data.pages.length - 1]?.isLast ?? true,
       };
+    },
+  });
+}
+
+/**
+ * 기수 목록 조회 Query 옵션
+ *
+ * queryFn에서 DTO -> 도메인 모델 매핑을 수행해 캐시에 저장합니다.
+ */
+export function generationListQueryOptions() {
+  return queryOptions({
+    queryKey: memberSearchQueryKeys.generations(),
+    queryFn: async () => {
+      const dto = await memberSearchApi.getGenerationList();
+      return toGenerationList(dto);
     },
   });
 }

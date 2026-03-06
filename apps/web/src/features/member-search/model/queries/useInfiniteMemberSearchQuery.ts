@@ -1,8 +1,8 @@
 import { useInfiniteQuery } from '@tanstack/react-query';
-import { memberSearchQueryOptions } from '@/features/member-search/api/queryOptions';
+import { memberSearchQueryOptions } from '@/features/member-search/model/queries/queryOptions';
 import { MemberSearchFilters } from '@/entities/search/model/types';
 
-export function useMemberSearch(filters: MemberSearchFilters) {
+export function useInfiniteMemberSearchQuery(filters: MemberSearchFilters) {
   const queryFilters = {
     ...filters,
     keyword: filters.debouncedKeyword,

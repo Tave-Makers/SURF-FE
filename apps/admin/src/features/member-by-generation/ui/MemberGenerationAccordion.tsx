@@ -16,16 +16,18 @@ type Props = {
   keyword?: string;
   defaultOpen?: boolean;
   renderItem: (m: MemberBase) => ReactNode;
+  contentMaxHeight?: string;
 };
 
 export const MemberGenerationAccordion = ({
   generation,
   label,
   keyword,
-  defaultOpen = false,
+  defaultOpen,
   renderItem,
+  contentMaxHeight,
 }: Props) => {
-  const [open, setOpen] = useState<boolean>(defaultOpen);
+  const [open, setOpen] = useState(false);
   const contentRef = useRef<HTMLDivElement>(null);
 
   //아코디언이 열리면 데이터 fetch
@@ -56,7 +58,7 @@ export const MemberGenerationAccordion = ({
 
   return (
     <Accordion title={label ?? `${generation}기`} onToggle={onToggle} defaultOpen={defaultOpen}>
-      <div ref={contentRef} className="max-h-[36vh] overflow-y-auto">
+      <div ref={contentRef} className="overflow-y-auto" style={{ maxHeight: contentMaxHeight }}>
         <MemberList
           members={members}
           isLoading={open && (isLoading || !isHydrated)}

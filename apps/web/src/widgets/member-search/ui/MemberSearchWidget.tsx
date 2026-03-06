@@ -26,7 +26,7 @@ export const MemberSearchWidget = ({ filters, totalCount }: MemberSearchWidgetPr
     if (isError) {
       return [{ id: -2, label: '기수 목록 조회 실패', isSelected: false, onClick: () => {} }];
     }
-    const gens = generations;
+    const gens = generations ?? [];
     return [
       { id: 0, label: '전체', isSelected: !generation, onClick: () => setGeneration(undefined) },
       ...gens

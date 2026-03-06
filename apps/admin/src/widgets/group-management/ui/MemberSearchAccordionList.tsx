@@ -29,6 +29,7 @@ export const MemberSearchAccordionList = ({
           generation={generation}
           label={`${generation}기`}
           keyword={keyword}
+          defaultOpen={true}
           renderItem={(m) => (
             <SelectableMemberCard
               name={m.name}

@@ -43,7 +43,7 @@ export const useController = ({ mode, id, router, searchParams }: Params) => {
     return gens.length > 0 ? Math.max(...gens) : 0;
   }, [generations]);
 
-  const { data: groupDetail } = useGroupDetailQuery(groupId);
+  const { data: groupDetail, isLoading: isGroupDetailLoading } = useGroupDetailQuery(groupId);
 
   // mutations
   const { mutateAsync: createGroup, isPending: isCreatePending } = useCreateGroupMutation();
@@ -70,6 +70,7 @@ export const useController = ({ mode, id, router, searchParams }: Params) => {
 
   // hydrate
   useEffect(() => {
+    if (isGroupDetailLoading) return;
     hydrate(formKey, {
       generation: groupDetail?.generation ?? maxGeneration,
       groupType: groupDetail?.groupType ?? ('study' as ContentsType),
@@ -78,7 +79,14 @@ export const useController = ({ mode, id, router, searchParams }: Params) => {
       leader: groupDetail?.leader,
       members: groupDetail?.members ?? [],
     });
-  }, [hydrate, formKey, groupDetail, maxGeneration]);
+  }, [hydrate, formKey, groupDetail, isGroupDetailLoading, maxGeneration]);
+
+  // create 폼 정리 (moveForm에서 fromKey를 삭제하지 않으므로)
+  useEffect(() => {
+    if (mode !== 'create') {
+      removeForm('create');
+    }
+  }, [mode, removeForm]);
 
   const safeDraft: GroupFormDraft = draft ?? {
     generation: maxGeneration,

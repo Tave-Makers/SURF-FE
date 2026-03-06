@@ -16,11 +16,17 @@ export const MemberSearchWidget = ({ filters, totalCount }: MemberSearchWidgetPr
   const [openMenu, setOpenMenu] = useState<OpenMenuType>(null);
   const { keyword, generation, part, setKeyword, setGeneration, setPart } = filters;
 
-  const { data: generations } = useGenerationListQuery();
+  const { data: generations, isPending, isError } = useGenerationListQuery();
 
   // 1. 기수 메뉴 아이템 (id를 generation 숫자 그대로 사용)
   const generationItems = useMemo(() => {
-    const gens = generations ?? [];
+    if (isPending) {
+      return [{ id: -1, label: '기수 목록 불러오는 중…', isSelected: false, onClick: () => {} }];
+    }
+    if (isError) {
+      return [{ id: -2, label: '기수 목록 조회 실패', isSelected: false, onClick: () => {} }];
+    }
+    const gens = generations;
     return [
       { id: 0, label: '전체', isSelected: !generation, onClick: () => setGeneration(undefined) },
       ...gens
@@ -33,7 +39,7 @@ export const MemberSearchWidget = ({ filters, totalCount }: MemberSearchWidgetPr
           onClick: () => setGeneration(gen),
         })),
     ];
-  }, [generations, generation, setGeneration]);
+  }, [generations, generation, setGeneration, isPending, isError]);
 
   // 2. 파트 메뉴 아이템 (id를 인덱스로 부여)
   const partItems = useMemo(

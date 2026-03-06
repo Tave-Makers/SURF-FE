@@ -8,5 +8,9 @@ import { generationListQueryOptions } from '@/features/member-search/model/queri
  * 전체 기수 목록 조회 훅
  */
 export function useGenerationListQuery() {
-  return useQuery(generationListQueryOptions());
+  const query = useQuery(generationListQueryOptions());
+  return {
+    ...query,
+    data: query.data ?? [],
+  };
 }

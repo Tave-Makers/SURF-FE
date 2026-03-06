@@ -1,5 +1,8 @@
 import type { SignupRequestMember } from '@/entities/signup-request/model/types';
-import type { SignupRequestListResponse, SignupRequestItem } from '@/features/signup-request/api/types';
+import type {
+  SignupRequestListResponse,
+  SignupRequestItem,
+} from '@/features/signup-request/api/types';
 
 export function createSignupRequestMember(
   overrides: Partial<SignupRequestMember> = {},
@@ -61,7 +64,6 @@ export function createMockSignupRequestList(
       pageSize,
       numberOfElements: content.length,
       isLast,
-      totalMemberCount: totalElements,
     },
   };
 }

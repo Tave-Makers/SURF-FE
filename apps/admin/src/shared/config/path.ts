@@ -1,3 +1,5 @@
+const GROUP_ROOT = '/group-management';
+
 export const PAGE_ROUTES = {
   HOME: '/',
   SIGNUP_REQUEST: '/signup-request',
@@ -10,7 +12,13 @@ export const PAGE_ROUTES = {
     LIST: '/banner',
   },
   DASHBOARD: '/dashboard',
-  GROUP_MNG: '/group-management',
+  GROUP_MNG: {
+    LIST: GROUP_ROOT,
+    CREATE: `${GROUP_ROOT}/create`,
+    VIEW: (id: string | number) => `${GROUP_ROOT}/${id}`,
+    EDIT: (id: string | number) => `${GROUP_ROOT}/${id}?mode=edit`,
+    MEMBER_SEARCH: `${GROUP_ROOT}/member-search`,
+  },
   SCORE_MNG: '/score-management',
   BADGE_MNG: '/badge-management',
 } as const;

@@ -1,0 +1,39 @@
+import {
+  GroupRequest,
+  GroupResDto,
+  GroupResponse,
+  GroupApiType,
+  GroupGenerationResDto,
+  GroupGenerationListResponse,
+  GroupDetailResDto,
+  GroupDetailResponse,
+} from '@/features/group-management/api/types';
+import { axiosInstance } from '@/shared/lib/axiosInstance';
+
+export const groupApi = {
+  createGroup: async (body: GroupRequest): Promise<GroupResDto> => {
+    const res = await axiosInstance.post<GroupResponse>('/v1/admin/teams', body);
+    return res.data.data;
+  },
+  getGroupList: async (params?: { type: GroupApiType }): Promise<GroupGenerationResDto[]> => {
+    const res = await axiosInstance.get<GroupGenerationListResponse>(
+      '/v1/admin/teams',
+      params ? { params } : undefined,
+    );
+    return res.data.data;
+  },
+  getGroupDetail: async (params: { teamId: number }): Promise<GroupDetailResDto> => {
+    const { teamId } = params;
+    const res = await axiosInstance.get<GroupDetailResponse>(`/v1/admin/teams/${teamId}`);
+    return res.data.data;
+  },
+  updateGroup: async (params: { teamId: number }, body: GroupRequest): Promise<GroupResDto> => {
+    const { teamId } = params;
+    const res = await axiosInstance.put<GroupResponse>(`/v1/admin/teams/${teamId}`, body);
+    return res.data.data;
+  },
+  deleteGroup: async (params: { teamId: number }): Promise<void> => {
+    const { teamId } = params;
+    await axiosInstance.delete(`/v1/admin/teams/${teamId}`);
+  },
+};

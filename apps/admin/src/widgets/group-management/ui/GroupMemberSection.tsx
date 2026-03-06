@@ -1,15 +1,15 @@
 import { Avatar } from '@surf/ui/avatar';
 import { SolidButton } from '@surf/ui/button';
 import { FieldGroup } from '@surf/ui/field-group';
-import { MemberBase } from '@/entities/member/model/types';
+import { MemberSummary } from '@/entities/member/model/types';
 import { MemberCardBase } from '@/entities/member/ui/MemberCardBase';
 import { RemovableMemberCard } from '@/entities/member/ui/RemovableMemberCard/RemovableMemberCard';
 import { GroupManagementMode } from '@/widgets/group-management/model/types';
 
 interface GroupMemberSectionProps {
   mode: GroupManagementMode;
-  teamLeader?: MemberBase;
-  teamMembers?: MemberBase[];
+  teamLeader?: MemberSummary;
+  teamMembers?: MemberSummary[];
   /** 팀장 선택 (또는 변경) */
   onPickLeader?: () => void;
   /** 팀원 추가 */
@@ -38,13 +38,15 @@ export const GroupMemberSection = ({
       <section className="flex flex-col gap-10">
         <FieldGroup title="팀장" titleClassName="px-14" isRequired>
           {leaderEmpty ? (
-            isEditable ? (
-              <SolidButton size="s" variant="secondary" onClick={() => onPickLeader?.()}>
-                선택하기
-              </SolidButton>
-            ) : (
-              <div>등록된 팀장이 없습니다.</div>
-            )
+            <div className="flex px-13">
+              {isEditable ? (
+                <SolidButton size="s" variant="secondary" onClick={() => onPickLeader?.()}>
+                  선택하기
+                </SolidButton>
+              ) : (
+                <div>등록된 팀장이 없습니다.</div>
+              )}
+            </div>
           ) : (
             <div className="flex flex-col gap-8">
               <MemberCardBase
@@ -72,13 +74,15 @@ export const GroupMemberSection = ({
       <section className="flex flex-col gap-10">
         <FieldGroup title="팀원" titleClassName="px-14" isRequired>
           {membersEmpty ? (
-            isEditable ? (
-              <SolidButton size="s" variant="secondary" onClick={() => onAddMembers?.()}>
-                추가하기
-              </SolidButton>
-            ) : (
-              <div>등록된 팀원이 없습니다.</div>
-            )
+            <div className="px-13">
+              {isEditable ? (
+                <SolidButton size="s" variant="secondary" onClick={() => onAddMembers?.()}>
+                  추가하기
+                </SolidButton>
+              ) : (
+                <div>등록된 팀원이 없습니다.</div>
+              )}
+            </div>
           ) : (
             <div className="flex flex-col">
               {teamMembers.map((member) => (

@@ -31,3 +31,15 @@ export interface MemberSearchResponse extends MemberSearchPageMeta {
 }
 
 export type MemberSearchApiResponse = CommonResponse<MemberSearchResponse>;
+
+// 기수 목록
+export interface GenerationResDTO {
+  generation?: number; // 기수 번호
+  name?: string; // 기수 명
+}
+
+export interface GenerationListResDTO {
+  generations?: GenerationResDTO[]; // 기수 리스트
+}
+
+export type GenerationListResponse = CommonResponse<GenerationListResDTO>;

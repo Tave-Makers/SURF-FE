@@ -3,24 +3,17 @@
 import { Header, HeaderMode } from '@surf/ui/header';
 import { useRouter } from 'next/navigation';
 import { useBannerEdit } from '@/features/banner/model/useBannerEdit';
+import { useBannerById } from '@/features/banner/model/useGetBannerById';
 import { BannerFormWidget } from '@/widgets/banner/ui/BannerFormWidget';
 
 interface BannerEditPageProps {
-  bannerId: string;
+  bannerId: number;
 }
-
-const MOCK_DATA = [
-  { id: 1, name: '배너 1', imageUrl: '', isActive: true, linkUrl: '', displayOrder: 1 },
-  { id: 2, name: '배너 2', imageUrl: '', isActive: true, linkUrl: '', displayOrder: 2 },
-  { id: 3, name: '배너 3', imageUrl: '', isActive: false, linkUrl: '', displayOrder: 3 },
-  { id: 4, name: '배너 4', imageUrl: '', isActive: true, linkUrl: '', displayOrder: 4 },
-];
 
 export const BannerEditPage = ({ bannerId }: BannerEditPageProps) => {
   const router = useRouter();
-  const { state, actions } = useBannerEdit(bannerId, MOCK_DATA);
-
-  if (state.isLoading) return <div>loading...</div>;
+  const { data: targetBanner } = useBannerById(bannerId);
+  const { state, actions } = useBannerEdit(bannerId, targetBanner);
 
   return (
     <>
@@ -30,17 +23,21 @@ export const BannerEditPage = ({ bannerId }: BannerEditPageProps) => {
         hasLeftIcon
         onClickBack={() => router.back()}
       />
-      <BannerFormWidget
-        mode="edit"
-        data={state.form}
-        onChange={actions.setForm}
-        onSelectFile={actions.setBannerFile}
-        onSubmit={actions.handleOpenSaveAlert}
-        onDelete={actions.handleOpenDeleteAlert}
-        isSubmitting={state.isSubmitting}
-        canSubmit={state.canSubmit}
-        submitLabel="수정하기"
-      />
+      {state.isLoading || !targetBanner ? (
+        <div>{state.isLoading ? 'loading...' : '배너를 찾을 수 없습니다.'}</div>
+      ) : (
+        <BannerFormWidget
+          mode="edit"
+          data={state.form}
+          onChange={actions.setForm}
+          onSelectFile={actions.setBannerFile}
+          onSubmit={actions.handleOpenSaveAlert}
+          onDelete={actions.handleOpenDeleteAlert}
+          isSubmitting={state.isSubmitting}
+          canSubmit={state.canSubmit}
+          submitLabel="수정하기"
+        />
+      )}
     </>
   );
 };

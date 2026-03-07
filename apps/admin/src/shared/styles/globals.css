@@ -28,6 +28,18 @@ body {
   overflow: hidden;
 }
 
+html {
+  color-scheme: light dark;
+}
+
+html[data-theme='light'] {
+  color-scheme: light;
+}
+
+html[data-theme='dark'] {
+  color-scheme: dark;
+}
+
 /* iOS 관성 스크롤 보강용 유틸 */
 .scroll-touch {
   -webkit-overflow-scrolling: touch;

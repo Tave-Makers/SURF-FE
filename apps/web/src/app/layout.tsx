@@ -17,6 +17,7 @@ const RootLayout = ({ children }: { children: ReactNode }) => {
   return (
     <html lang="ko" suppressHydrationWarning>
       <head>
+        <meta name="color-scheme" content="light dark" />
         <link rel="preconnect" href="https://cdn.jsdelivr.net" crossOrigin="anonymous" />
         <link
           rel="preload"

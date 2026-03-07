@@ -1,0 +1,67 @@
+@keyframes float {
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-8px);
+  }
+}
+
+@keyframes dot-appear-1 {
+  0%,
+  24.9% {
+    opacity: 0;
+  }
+  25%,
+  99.9% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 0;
+  }
+}
+
+@keyframes dot-appear-2 {
+  0%,
+  49.9% {
+    opacity: 0;
+  }
+  50%,
+  99.9% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 0;
+  }
+}
+
+@keyframes dot-appear-3 {
+  0%,
+  74.9% {
+    opacity: 0;
+  }
+  75%,
+  99.9% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 0;
+  }
+}
+
+.animate-float {
+  animation: float 1.2s ease-in-out infinite;
+}
+
+.animate-dot-appear-1 {
+  animation: dot-appear-1 1.2s linear infinite;
+}
+
+.animate-dot-appear-2 {
+  animation: dot-appear-2 1.2s linear infinite;
+}
+
+.animate-dot-appear-3 {
+  animation: dot-appear-3 1.2s linear infinite;
+}

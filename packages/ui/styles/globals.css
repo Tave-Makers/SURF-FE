@@ -4,6 +4,7 @@
 @import './color-tokens.css';
 @import './scheme-tokens.css';
 @import './shadow-tokens.css';
+@import './animation.css';
 @source '../{components,hooks,lib,store}/**/*.{js,jsx,ts,tsx}';
 @source '../../**/*.{js,jsx,ts,tsx}';
 

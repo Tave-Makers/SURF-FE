@@ -31,21 +31,14 @@ export const HomePageClient = ({ heroProps }: { heroProps: HeroCardProps }) => {
   const { data: notifications } = useGetNotifications('ALL');
   const hasUnread = notifications?.some((noti) => !noti.isRead);
 
-  const fallbackCarouselImages = [
-    { src: '/images/home/conference.svg', alt: 'Conference Banner' },
-    { src: '/images/home/17th.svg', alt: '17th Banner' },
-    { src: '/images/home/sprint.svg', alt: 'Sprint Banner' },
-  ];
-
   const carouselImages = (() => {
-    if (!homeData?.carouselImages?.length) return fallbackCarouselImages;
-    const normalized = homeData.carouselImages
+    const normalized = (homeData?.carouselImages ?? [])
       .filter((img) => Boolean(img.src))
       .map((img) => ({
         ...img,
         linkUrl: img.linkUrl === null ? undefined : img.linkUrl,
       }));
-    return normalized.length > 0 ? normalized : fallbackCarouselImages;
+    return normalized;
   })();
 
   const handleShortcutClick = (link: string, label: string) => {

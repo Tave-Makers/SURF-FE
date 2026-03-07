@@ -63,7 +63,7 @@ export const Carousel = ({ images, className = '', autoPlayMs = 0 }: Props) => {
         className,
       ].join(' ')}
     >
-      {/* 1) 이미지 */}
+      {/* 이미지 */}
       <div
         className="flex h-full w-full transition-transform duration-500 ease-in-out"
         style={{ transform: `translateX(-${index * 100}%)` }}
@@ -99,10 +99,7 @@ export const Carousel = ({ images, className = '', autoPlayMs = 0 }: Props) => {
         })}
       </div>
 
-      {/* 2) dim */}
-      <div className="from-background-carousel-start to-background-carousel-end pointer-events-none absolute inset-0 z-10 bg-gradient-to-b" />
-
-      {/* 3)controlls, pagination */}
+      {/* controlls, pagination */}
       {total > 1 && (
         <>
           <button

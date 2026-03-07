@@ -1,15 +1,16 @@
 'use client';
 
 // import dynamic from 'next/dynamic';
+import LoadingCharacter1 from '@surf/ui/assets/loading/character-1.svg';
+import LoadingCharacter2 from '@surf/ui/assets/loading/character-2.svg';
+import LoadingCharacter3 from '@surf/ui/assets/loading/character-3.svg';
+import LoadingCharacter4 from '@surf/ui/assets/loading/character-4.svg';
+import LoadingCharacter5 from '@surf/ui/assets/loading/character-5.svg';
+
 import { useSearchParams, useRouter } from 'next/navigation';
 import { useEffect, useRef } from 'react';
 import { getKakaoLoginCallback } from '@/features/auth/api/getKakaoLoginCallback';
 import { useOnboardingStore } from '@/features/onboarding/model/useOnboardingStore';
-import LoadingCharacter1 from '@/shared/assets/icons/loading/character-1.svg';
-import LoadingCharacter2 from '@/shared/assets/icons/loading/character-2.svg';
-import LoadingCharacter3 from '@/shared/assets/icons/loading/character-3.svg';
-import LoadingCharacter4 from '@/shared/assets/icons/loading/character-4.svg';
-import LoadingCharacter5 from '@/shared/assets/icons/loading/character-5.svg';
 import { PAGE_ROUTES } from '@/shared/config/path';
 
 const characters = [

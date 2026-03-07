@@ -5,8 +5,20 @@ import { useSearchParams, useRouter } from 'next/navigation';
 import { useEffect, useRef } from 'react';
 import { getKakaoLoginCallback } from '@/features/auth/api/getKakaoLoginCallback';
 import { useOnboardingStore } from '@/features/onboarding/model/useOnboardingStore';
-import CallbackEmpty from '@/shared/assets/icons/empty-space/callback-empty.svg';
+import LoadingCharacter1 from '@/shared/assets/icons/loading/character-1.svg';
+import LoadingCharacter2 from '@/shared/assets/icons/loading/character-2.svg';
+import LoadingCharacter3 from '@/shared/assets/icons/loading/character-3.svg';
+import LoadingCharacter4 from '@/shared/assets/icons/loading/character-4.svg';
+import LoadingCharacter5 from '@/shared/assets/icons/loading/character-5.svg';
 import { PAGE_ROUTES } from '@/shared/config/path';
+
+const characters = [
+  LoadingCharacter1,
+  LoadingCharacter2,
+  LoadingCharacter3,
+  LoadingCharacter4,
+  LoadingCharacter5,
+];
 
 // const CallbackEmpty = dynamic(
 //   () => import('@/shared/assets/icons/empty-space/callback-empty.svg'),
@@ -66,9 +78,22 @@ const KakaoCallBackPage = () => {
 
   return (
     <div className="flex h-full w-full flex-col items-center justify-center">
-      <div className="flex flex-col items-center gap-[0.625rem]">
-        <CallbackEmpty className="h-[3.54325rem] w-[16.3125rem]" />
-        <span className="text-body-body8 text-foreground-tertiary">잠시만 기다려 주세요...</span>
+      <div className="flex flex-col items-center gap-10">
+        <div className="flex flex-row items-center">
+          {characters.map((Character, i) => (
+            <Character
+              key={i}
+              className="animate-float"
+              style={{ animationDelay: `${i * 0.1}s` }}
+            />
+          ))}
+        </div>
+        <div className="text-body-body8 text-foreground-tertiary flex items-center gap-2">
+          <span className="">잠시만 기다려 주세요</span>
+          <span className="animate-dot-appear-1 inline-block">.</span>
+          <span className="animate-dot-appear-2 inline-block">.</span>
+          <span className="animate-dot-appear-3 inline-block">.</span>
+        </div>
       </div>
     </div>
   );

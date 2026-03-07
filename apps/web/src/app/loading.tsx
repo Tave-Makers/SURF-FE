@@ -12,7 +12,7 @@ const characters = [
   LoadingCharacter5,
 ];
 
-const Page = () => {
+const Loading = () => {
   return (
     <div className="flex h-full w-full flex-col items-center justify-center">
       <div className="flex flex-col items-center gap-10">
@@ -25,10 +25,15 @@ const Page = () => {
             />
           ))}
         </div>
-        <span className="text-body-body8 text-foreground-tertiary">잠시만 기다려 주세요...</span>
+        <div className="text-body-body8 text-foreground-tertiary flex items-center gap-2">
+          <span className="">잠시만 기다려 주세요</span>
+          <span className="animate-dot-appear-1 inline-block">.</span>
+          <span className="animate-dot-appear-2 inline-block">.</span>
+          <span className="animate-dot-appear-3 inline-block">.</span>
+        </div>
       </div>
     </div>
   );
 };
 
-export default Page;
+export default Loading;

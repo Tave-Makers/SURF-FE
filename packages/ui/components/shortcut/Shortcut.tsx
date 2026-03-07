@@ -20,14 +20,14 @@ export const Shortcut = ({ type, label, imageSrc, onClick }: ShortcutProps) => {
   // rectangle
   return (
     <button
-      className="bg-background-normal-lighter rounded-5 border-border-secondary flex w-full flex-col items-start overflow-hidden border shadow-[var(--effect-shadow-lifted-x-normal,0)_var(--effect-shadow-lifted-y-normal,0)_var(--effect-shadow-lifted-blur,20px)_var(--effect-shadow-lifted-spread,6px)_rgba(0,0,0,0.04)]"
+      className="bg-background-normal-lighter rounded-5 border-border-secondary flex aspect-[7/10] w-full flex-col items-start overflow-hidden border shadow-[var(--effect-shadow-lifted-x-normal,0)_var(--effect-shadow-lifted-y-normal,0)_var(--effect-shadow-lifted-blur,20px)_var(--effect-shadow-lifted-spread,6px)_rgba(0,0,0,0.04)]"
       onClick={onClick}
     >
       {/* Label 영역 */}
       <div className="text-foreground-normal text-body-body5 px-13 pt-13">{label}</div>
 
       {/* 이미지 영역 */}
-      <div className="bg-background-normal-lighter w-full flex-1">
+      <div className="bg-background-normal-lighter rounded-b-5 aspect-[21/22] w-full flex-1">
         <img src={imageSrc} alt={label} className="h-full w-full object-cover" />
       </div>
     </button>

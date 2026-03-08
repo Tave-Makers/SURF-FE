@@ -5,7 +5,7 @@ import { AppNavigation } from '@/widgets/navigation/ui/AppNavigation';
 
 export const HomePage = () => {
   return (
-    <div className="w-full flex-1 flex-col">
+    <div className="flex h-full min-h-0 w-full flex-1 flex-col">
       <AppHeader
         overrideHeader={{
           mode: HeaderMode.Logo,

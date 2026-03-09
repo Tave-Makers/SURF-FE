@@ -10,15 +10,24 @@ export const getStickyButtonConfig = (params: {
   mode: GroupManagementMode;
   canSubmit: boolean;
   isCreatePending: boolean;
+  isCreateNavigating?: boolean; // 생성하기 버튼이 일시적으로 활성화되는 것을 막는 플래그
   isEditPending: boolean;
   onCreate: () => void;
   onEdit: () => void;
 }): StickyButtonConfig => {
-  const { mode, canSubmit, isCreatePending, isEditPending, onCreate, onEdit } = params;
+  const {
+    mode,
+    canSubmit,
+    isCreatePending,
+    isCreateNavigating = false,
+    isEditPending,
+    onCreate,
+    onEdit,
+  } = params;
 
   if (mode === 'view') return null;
 
-  const isPending = mode === 'create' ? isCreatePending : isEditPending;
+  const isPending = mode === 'create' ? isCreatePending || isCreateNavigating : isEditPending;
 
   return {
     label: isPending

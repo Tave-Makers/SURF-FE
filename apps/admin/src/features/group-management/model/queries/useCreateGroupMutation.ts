@@ -13,7 +13,7 @@ export const useCreateGroupMutation = () => {
   const qc = useQueryClient();
   const showToast = useToastStore((s) => s.show);
 
-  const moveForm = useGroupFormStore((s) => s.moveForm);
+  const copyForm = useGroupFormStore((s) => s.copyForm);
   const commit = useGroupFormStore((s) => s.commit);
 
   return useMutation({
@@ -26,7 +26,7 @@ export const useCreateGroupMutation = () => {
       const fromKey = 'create';
       const toKey = `${created.teamId}`;
 
-      moveForm(fromKey, toKey, { overwrite: false });
+      copyForm(fromKey, toKey, { overwrite: false });
       commit(toKey);
 
       // 캐시 갱신: 리스트 invalidate

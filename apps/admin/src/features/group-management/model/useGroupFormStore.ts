@@ -25,7 +25,7 @@ type FormState = {
 type Store = {
   forms: Record<FormKey, FormState | undefined>;
   // 생성 forKey에서 상세 id formKey로 draft 이관
-  moveForm: (fromKey: string, toKey: string, opts?: { overwrite?: boolean }) => void;
+  copyForm: (fromKey: string, toKey: string, opts?: { overwrite?: boolean }) => void;
   removeForm: (key: FormKey) => void;
 
   // draft 덮어쓰기
@@ -72,7 +72,7 @@ function updateDraft(cur: FormState, updater: (prev: GroupFormDraft) => GroupFor
 export const useGroupFormStore = create<Store>((set, get) => ({
   forms: {},
 
-  moveForm: (fromKey, toKey, opts) =>
+  copyForm: (fromKey, toKey, opts) =>
     set((s) => {
       if (fromKey === toKey) return s;
 
@@ -92,7 +92,7 @@ export const useGroupFormStore = create<Store>((set, get) => ({
         ...from,
         updatedAt: Date.now(),
       };
-      delete nextForms[fromKey];
+      // fromKey 삭제하지 않음 (empty space 방지)
 
       return { forms: nextForms };
     }),

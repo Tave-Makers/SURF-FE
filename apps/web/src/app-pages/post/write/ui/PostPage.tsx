@@ -125,7 +125,6 @@ const PostPage = (props: PostPageProps) => {
           onClick: () => {
             closeExitAlert();
             resetPostState();
-            setCanInitialize(false);
             router.back();
           },
         },

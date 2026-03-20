@@ -37,6 +37,7 @@ export const usePostFormStore = create<PostFormState>((set, get) => ({
       reservedAt: null,
       initialSnapshot: null,
       isEditorInitialized: false,
+      canInitialize: false,
     });
   },
   setSnapshot: (snapshot) => set({ initialSnapshot: snapshot }),

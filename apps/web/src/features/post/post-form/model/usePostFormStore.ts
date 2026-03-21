@@ -11,6 +11,7 @@ export const usePostFormStore = create<PostFormState>((set, get) => ({
   initialSnapshot: null,
   isEditorInitialized: false,
   canInitialize: false,
+  isInitialized: false,
 
   setField: (field, value) => set((state) => ({ ...state, [field]: value })),
   setEditorState: (content, images) => set({ content, images }),
@@ -42,6 +43,7 @@ export const usePostFormStore = create<PostFormState>((set, get) => ({
   },
   setSnapshot: (snapshot) => set({ initialSnapshot: snapshot }),
   setCanInitialize: (canInit) => set({ canInitialize: canInit }),
+  setIsInitialized: (isInit) => set({ isInitialized: isInit }),
 }));
 
 if (process.env.NODE_ENV === 'development') {

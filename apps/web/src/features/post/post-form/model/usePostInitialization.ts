@@ -14,46 +14,33 @@ interface Props extends PostFormActions {
   mode: PostPageMode;
   postDetail: PostDetail | undefined;
   postSchedule: PostScheduleData | undefined;
+  isPostDetailLoading: boolean;
   linkedSchedule: ScheduleFormData | null;
   setLinkedSchedule: (data: ScheduleFormData) => void;
-  isInitializedRef: React.RefObject<boolean>;
-  isScheduleFetching: boolean;
+  isInitialized: boolean;
+  isScheduleLoading: boolean;
 }
 
 export const usePostInitialization = ({
   mode,
   postDetail,
   postSchedule,
+  isPostDetailLoading,
   linkedSchedule,
   setField,
   setEditorState,
   setLinkedSchedule,
-  isInitializedRef,
-  isScheduleFetching,
+  isInitialized,
+  isScheduleLoading,
 }: Props) => {
   const { initialSnapshot, setSnapshot, content, images, canInitialize } = usePostFormStore();
 
   useEffect(() => {
     // 1. 초기화 가드
-    if (!canInitialize) return;
-    if (mode === 'create' || isInitializedRef.current) return;
-    if (mode === 'edit' && !postDetail) return;
-    // 일정이 있는 게시글인데, 일정을 아직 가져오지 못했거나 '새로 가져오는 중(Fetching)'이면 대기
-    if (postDetail?.hasSchedule && (postSchedule === undefined || isScheduleFetching)) {
-      return;
-    }
-
-    // 이미 스냅샷이 있는 경우 (뒤로가기 등 세션 유지 상황)
-    if (initialSnapshot) {
-      setEditorState(content, images);
-      isInitializedRef.current = true;
-      return;
-    }
-
-    // 게시글에 연동된 일정이 있으나, 일정 데이터가 아직 로딩 중인 경우 대기
-    if (postDetail?.hasSchedule && postSchedule === undefined) {
-      return;
-    }
+    if (isInitialized) return;
+    // 데이터 로딩 대기
+    if (mode === 'edit' && isPostDetailLoading) return;
+    if (postDetail?.hasSchedule && isScheduleLoading) return;
 
     // 2. 데이터 매핑
 
@@ -128,7 +115,7 @@ export const usePostInitialization = ({
       initialSchedule: initialScheduleData,
     });
 
-    isInitializedRef.current = true;
+    isInitialized = true;
   }, [
     mode,
     postDetail,
@@ -138,11 +125,11 @@ export const usePostInitialization = ({
     setField,
     setEditorState,
     setLinkedSchedule,
-    isInitializedRef,
+    isInitialized,
     linkedSchedule,
     content,
     images,
-    isScheduleFetching,
+    isScheduleLoading,
     canInitialize,
   ]);
 };

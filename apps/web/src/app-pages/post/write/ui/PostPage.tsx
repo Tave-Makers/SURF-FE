@@ -5,12 +5,21 @@ import { HeaderMode } from '@surf/ui/header';
 import { useAlertStore } from '@surf/ui/store/alertStore';
 import { useRouter } from 'next/navigation';
 import { useCallback, useEffect } from 'react';
+
+import { usePostDetail } from '@/entities/post/api/usePostDetail';
 import { POST_BOARDS } from '@/entities/post/model/board';
 import { POST_CATEGORIES } from '@/entities/post/model/category';
 import { POST_VALIDATION } from '@/entities/post/model/validation';
 import { PostBadge } from '@/entities/post/ui/post-badge/PostBadge';
+
+import { useImageManager } from '@/features/image/model/useImageManager';
+import { useGetPostScheduleQuery } from '@/features/post/model/useGetPostScheduleQuery';
+import { usePostEditor } from '@/features/post/post-editor/lib/usePostEditor';
 import { usePostForm } from '@/features/post/post-form/model/usePostForm';
 import { usePostFormStore } from '@/features/post/post-form/model/usePostFormStore';
+import { usePostInitialization } from '@/features/post/post-form/model/usePostInitialization';
+import { useCreatePostScheduleStore } from '@/features/schedule/create-post-schedule/model/useCreatePostScheduleStore';
+
 import { useBottomSheetStore } from '@/shared/store/bottomSheetStore';
 import { AppHeader } from '@/widgets/header/ui/AppHeader';
 import { PostEditor } from '@/widgets/post/post-editor/PostEditor';
@@ -27,10 +36,31 @@ const PostPage = (props: PostPageProps) => {
   const { mode, boardId } = props;
   const postId = mode === 'edit' ? props.postId : undefined;
 
-  // 초기화 허용 플래그 설정
-  const { setCanInitialize } = usePostFormStore();
+  // == Stores ==
+  const { isInitialized, setField, setEditorState } = usePostFormStore();
+  const { setLinkedSchedule } = useCreatePostScheduleStore();
 
-  // 로직 훅 호출 (Logic과 View의 연결 고리)
+  const openBottomSheet = useBottomSheetStore((s) => s.open);
+  const closeBottomSheet = useBottomSheetStore((s) => s.close);
+
+  // == Data fetching ==
+  const numericPostId = mode === 'edit' && postId ? Number(postId) : undefined;
+
+  // 게시글 조회
+  const { data: postDetail, isLoading: isPostDetailLoading } = usePostDetail(numericPostId!, {
+    enabled: mode === 'edit' && !!numericPostId,
+  });
+
+  // 일정 조회
+  const scheduleId = postDetail?.scheduleId;
+  const shouldFetchSchedule = !!scheduleId;
+  const { data: postSchedule, isLoading: isScheduleLoading } = useGetPostScheduleQuery(
+    numericPostId!,
+    scheduleId,
+    shouldFetchSchedule,
+  );
+
+  // == Hooks ==
   const {
     title,
     setTitle,
@@ -53,20 +83,42 @@ const PostPage = (props: PostPageProps) => {
     resetPostState,
     isPublished,
     isReserved,
-  } = usePostForm({ mode, boardId, postId });
+  } = usePostForm({ mode, boardId, postId, postDetail, postSchedule });
 
-  // 마운트시 초기화 허용
-  useEffect(() => {
-    setCanInitialize(true);
-  }, [setCanInitialize]);
+  const imageManager = useImageManager();
+  const { images } = imageManager;
+
+  const onUpdate = useCallback(
+    (html: string) => {
+      handleEditorChange({ content: html, images });
+    },
+    [handleEditorChange, images],
+  );
+
+  const editor = usePostEditor(initialContent, onUpdate);
+
+  // == Initialization ==
+
+  // 가드는 내부에서 실행
+  usePostInitialization({
+    mode,
+    postDetail,
+    isPostDetailLoading,
+    postSchedule,
+    linkedSchedule,
+    setField,
+    setEditorState,
+    setLinkedSchedule,
+    isInitialized,
+    isScheduleLoading,
+  });
+
+  // == Handlers ==
 
   const closeExitAlert = useCallback(() => {
     setShowExitAlert(false);
     closeAlert();
   }, [closeAlert, setShowExitAlert]);
-
-  const openBottomSheet = useBottomSheetStore((s) => s.open);
-  const closeBottomSheet = useBottomSheetStore((s) => s.close);
 
   const handleSaveReservation = (date: Date) => {
     setReservedAt(date);
@@ -131,15 +183,9 @@ const PostPage = (props: PostPageProps) => {
       ],
     });
     setShowExitAlert(false);
-  }, [
-    closeExitAlert,
-    openAlert,
-    resetPostState,
-    router,
-    setShowExitAlert,
-    showExitAlert,
-    setCanInitialize,
-  ]);
+  }, [closeExitAlert, openAlert, resetPostState, router, setShowExitAlert, showExitAlert]);
+
+  if (!editor) return;
 
   return (
     <div className="flex h-full w-full flex-1 flex-col">
@@ -212,6 +258,8 @@ const PostPage = (props: PostPageProps) => {
           onScheduleRemove={handleScheduleRemove}
           onReservationClick={handleOpenReservation}
           isPublished={isPublished}
+          editor={editor}
+          imageManager={imageManager}
         />
       </div>
     </div>

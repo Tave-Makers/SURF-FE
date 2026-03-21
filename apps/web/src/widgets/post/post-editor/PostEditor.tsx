@@ -3,14 +3,13 @@
 import { useKeyboardOffset } from '@surf/hooks';
 import { useAlertStore } from '@surf/ui/store/alertStore';
 import { UploadImage } from '@surf/utils';
-import { EditorContent } from '@tiptap/react';
-import { useCallback, useEffect, useRef } from 'react';
+import { Editor, EditorContent } from '@tiptap/react';
+import { useEffect, useRef } from 'react';
 import '@/features/post/post-editor/ui/PostEditor.style.css';
 import { EventCard } from '@/entities/calendar/ui/EventCard/EventCard';
 import { POST_VALIDATION } from '@/entities/post/model/validation';
 import { ImageList } from '@/entities/post/post-image/ui/ImageList';
 import { useImageManager } from '@/features/image/model/useImageManager';
-import { usePostEditor } from '@/features/post/post-editor/lib/usePostEditor';
 import { PostEditorToolbar } from '@/features/post/post-editor/ui/PostEditorToolbar';
 
 import { PostPageMode } from '@/features/post/post-form/model/types';
@@ -26,6 +25,8 @@ export type PostEditorProps = {
   onScheduleRemove: () => void;
   onReservationClick: () => void;
   isPublished: boolean;
+  editor: Editor;
+  imageManager: ReturnType<typeof useImageManager>;
 };
 
 export const PostEditor = ({
@@ -37,17 +38,16 @@ export const PostEditor = ({
   onScheduleRemove,
   onReservationClick,
   isPublished,
+  editor,
+  imageManager,
 }: PostEditorProps) => {
   /**
-   * [플래그 역할 정의]
-   * 1. canInitialize (전역): 페이지 진입 시 데이터 준비가 완료되었음을 알리는 신호 (부모 제어)
-   * 2. isInitialized (전역): 게시글 데이터가 에디터에 "생애 최초 1회" 주입되었음을 의미 (재주입 방지)
-   * 3. isLocalInitialized (지역): 현재 마운트된 에디터 인스턴스에 데이터가 주입되었는지 여부 (복귀 시 대응)
+   * isInitialized (전역): 서버 데이터가 스토어에 최초 저장 되었는지 나타내는 플래그
    */
   const {
-    isEditorInitialized: isInitialized,
-    setIsEditorInitialized: setIsInitialized,
-    canInitialize,
+    isInitialized,
+    setIsEditorInitialized: setIsInitialized, // TODO: 삭제
+    canInitialize, // TODO: 삭제
   } = usePostFormStore();
 
   const isLocalInitialized = useRef(false);
@@ -64,25 +64,10 @@ export const PostEditor = ({
     handleRemove,
     handleReorder,
     openPicker,
-  } = useImageManager();
+  } = imageManager;
 
   const keyboardOffset = useKeyboardOffset();
   const { MAX_IMAGES } = POST_VALIDATION;
-
-  // --- 1. Editor Callbacks ---
-
-  const onUpdate = useCallback(
-    (html: string) => {
-      contentRef.current = html;
-      // 초기화가 완료된 후, 유효한 페이지 세션 내에서만 부모 스토어 업데이트 전파
-      if (isInitialized && canInitialize) {
-        onChange({ content: html, images });
-      }
-    },
-    [onChange, images, isInitialized, canInitialize],
-  );
-
-  const editor = usePostEditor(storeContent, onUpdate);
 
   // --- 2. Data Initialization (로컬 & 전역 동기화) ---
 
@@ -145,13 +130,13 @@ export const PostEditor = ({
 
   /**
    * [이미지 변경 감지 및 부모 전파]
-   * 로컬 주입(isMountedRef)이 끝난 상태에서만 변경 사항을 전역 스토어로 전달 (역류 방지)
+   * 변경 사항을 전역 스토어로 전달
    */
   useEffect(() => {
-    if (!isInitialized || !canInitialize || !isLocalInitialized.current) return;
+    if (!isInitialized) return;
 
     onChange({ content: contentRef.current, images });
-  }, [images, onChange, isInitialized, canInitialize]);
+  }, [images, onChange, isInitialized]);
 
   // --- 4. Handlers & Render Helpers ---
 

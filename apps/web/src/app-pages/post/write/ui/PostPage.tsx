@@ -189,7 +189,7 @@ const PostPage = (props: PostPageProps) => {
       {/* 4. 제목 입력 */}
       <div className="flex w-full px-13">
         <label htmlFor="post-title" className="sr-only">
-          게시글 제목
+          제목
         </label>
         <input
           id="post-title"

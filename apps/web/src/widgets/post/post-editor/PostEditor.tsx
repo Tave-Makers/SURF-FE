@@ -207,7 +207,7 @@ export const PostEditor = ({
         {/* PostEditor.style.css에서 placeholder 및 focusing 스타일 정의 */}
         <button
           type="button"
-          aria-label="본문 클릭 영역"
+          aria-label="본문"
           className="absolute inset-0 z-0 cursor-text"
           onClick={() => {
             if (!editor.isFocused) editor.commands.focus('end');

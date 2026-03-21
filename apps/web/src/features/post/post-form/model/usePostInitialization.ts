@@ -17,7 +17,6 @@ interface Props extends PostFormActions {
   isPostDetailLoading: boolean;
   linkedSchedule: ScheduleFormData | null;
   setLinkedSchedule: (data: ScheduleFormData) => void;
-  isInitialized: boolean;
   isScheduleLoading: boolean;
 }
 
@@ -29,10 +28,9 @@ export const usePostInitialization = ({
   linkedSchedule,
   setField,
   setLinkedSchedule,
-  isInitialized,
   isScheduleLoading,
 }: Props) => {
-  const { initialSnapshot, setSnapshot, content, images } = usePostFormStore();
+  const { isInitialized, setIsInitialized, setSnapshot } = usePostFormStore();
 
   useEffect(() => {
     // 1. 초기화 가드
@@ -112,19 +110,17 @@ export const usePostInitialization = ({
       initialSchedule: initialScheduleData,
     });
 
-    isInitialized = true;
+    setIsInitialized(true);
   }, [
     mode,
     postDetail,
     postSchedule,
-    initialSnapshot,
     setSnapshot,
     setField,
     setLinkedSchedule,
     isInitialized,
     linkedSchedule,
-    content,
-    images,
+    isPostDetailLoading,
     isScheduleLoading,
   ]);
 };

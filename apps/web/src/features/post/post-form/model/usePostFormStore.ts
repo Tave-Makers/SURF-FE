@@ -33,6 +33,7 @@ export const usePostFormStore = create<PostFormState>((set, get) => ({
       reserved: false,
       reservedAt: null,
       initialSnapshot: null,
+      isInitialized: false,
     });
   },
   setSnapshot: (snapshot) => set({ initialSnapshot: snapshot }),

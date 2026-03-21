@@ -35,8 +35,7 @@ const PostPage = (props: PostPageProps) => {
   const postId = mode === 'edit' ? props.postId : undefined;
 
   // == Stores ==
-  const { isInitialized, setField, title, category, content, images, reserved, reservedAt } =
-    usePostFormStore();
+  const { setField, title, category, content, images, reserved, reservedAt } = usePostFormStore();
   const { linkedSchedule, setLinkedSchedule } = useCreatePostScheduleStore();
 
   const openBottomSheet = useBottomSheetStore((s) => s.open);
@@ -83,7 +82,6 @@ const PostPage = (props: PostPageProps) => {
     linkedSchedule,
     setField,
     setLinkedSchedule,
-    isInitialized,
     isScheduleLoading,
   });
 

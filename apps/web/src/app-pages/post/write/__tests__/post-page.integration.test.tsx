@@ -71,7 +71,7 @@ describe('PostPage reset after create success', () => {
       const state = usePostFormStore.getState();
       expect(state.title).toBe('');
       expect(state.content).toBe('');
-      expect(state.canInitialize).toBe(false);
+      expect(state.isInitialized).toBe(false);
     });
 
     // 상세 페이지로 라우팅

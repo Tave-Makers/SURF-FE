@@ -31,8 +31,8 @@ export const Default: Story = {
   ),
   args: {
     mode: 'create',
-    initialContent: `<p>이곳에 게시글을 작성하세요 ✍️</p>`,
-    initialImages: [],
+    content: `<p>이곳에 게시글을 작성하세요 ✍️</p>`,
+    images: [],
     onChange: onChangeMock,
   },
 };
@@ -46,8 +46,8 @@ export const Empty: Story = {
   ),
   args: {
     mode: 'create',
-    initialContent: '',
-    initialImages: [],
+    content: '',
+    images: [],
     onChange: onChangeMock,
   },
 };

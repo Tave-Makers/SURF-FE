@@ -3,13 +3,14 @@
 import { useKeyboardOffset } from '@surf/hooks';
 import { useAlertStore } from '@surf/ui/store/alertStore';
 import { UploadImage } from '@surf/utils';
-import { Editor, EditorContent } from '@tiptap/react';
-import { useEffect, useRef } from 'react';
+import { EditorContent } from '@tiptap/react';
+import { useCallback, useEffect } from 'react';
 import '@/features/post/post-editor/ui/PostEditor.style.css';
 import { EventCard } from '@/entities/calendar/ui/EventCard/EventCard';
 import { POST_VALIDATION } from '@/entities/post/model/validation';
 import { ImageList } from '@/entities/post/post-image/ui/ImageList';
 import { useImageManager } from '@/features/image/model/useImageManager';
+import { usePostEditor } from '@/features/post/post-editor/lib/usePostEditor';
 import { PostEditorToolbar } from '@/features/post/post-editor/ui/PostEditorToolbar';
 
 import { PostPageMode } from '@/features/post/post-form/model/types';
@@ -18,115 +19,44 @@ import { ScheduleFormData } from '@/features/schedule/create/model/types';
 
 export type PostEditorProps = {
   mode: PostPageMode;
-  initialContent: string; // Store에서 내려오는 전역 본문 데이터
-  initialImages: UploadImage[]; // Store에서 내려오는 전역 이미지 데이터
+  content: string; // Store에서 내려오는 전역 본문 데이터
+  images: UploadImage[]; // Store에서 내려오는 전역 이미지 데이터
   linkedSchedule: ScheduleFormData | null;
-  onChange: (data: { content: string; images: UploadImage[] }) => void;
   onScheduleRemove: () => void;
   onReservationClick: () => void;
   isPublished: boolean;
-  editor: Editor;
-  imageManager: ReturnType<typeof useImageManager>;
 };
 
 export const PostEditor = ({
-  mode,
-  initialContent: storeContent,
-  initialImages: storeImages,
   linkedSchedule,
-  onChange,
   onScheduleRemove,
   onReservationClick,
   isPublished,
-  editor,
-  imageManager,
 }: PostEditorProps) => {
   /**
    * isInitialized (전역): 서버 데이터가 스토어에 최초 저장 되었는지 나타내는 플래그
    */
-  const {
-    isInitialized,
-    setIsEditorInitialized: setIsInitialized, // TODO: 삭제
-    canInitialize, // TODO: 삭제
-  } = usePostFormStore();
-
-  const isLocalInitialized = useRef(false);
-  const contentRef = useRef<string>(storeContent);
+  const { isInitialized, setField, initialSnapshot } = usePostFormStore();
 
   const openAlert = useAlertStore((s) => s.open);
   const closeAlert = useAlertStore((s) => s.close);
 
-  const {
-    inputRef,
-    images,
-    setImages,
-    handleSelectAndUpload,
-    handleRemove,
-    handleReorder,
-    openPicker,
-  } = imageManager;
+  const { inputRef, images, handleSelectAndUpload, handleRemove, handleReorder, openPicker } =
+    useImageManager();
 
   const keyboardOffset = useKeyboardOffset();
   const { MAX_IMAGES } = POST_VALIDATION;
 
-  // --- 2. Data Initialization (로컬 & 전역 동기화) ---
-
-  /**
-   * [CASE A: 일정 페이지 복귀 대응]
-   * 전역 초기화는 이미 끝났지만(true), 컴포넌트가 재마운트되어 로컬 상태가 비어있을 때 실행
-   */
-  useEffect(() => {
-    if (!canInitialize || !editor) return;
-
-    if (isInitialized && !isLocalInitialized.current) {
-      if (storeContent) editor.commands.setContent(storeContent);
-      setImages(storeImages || []);
-
-      isLocalInitialized.current = true;
-      return;
-    }
-  }, [canInitialize, isInitialized, editor, storeContent, storeImages, setImages]);
-
-  /**
-   * [CASE B: 게시글 최초 진입 및 데이터 주입]
-   * 수정 모드의 상세 데이터를 기다리거나, 생성 모드 진입 시 최초 1회 실행
-   */
-  useEffect(() => {
-    if (!editor || isInitialized || !canInitialize) return;
-
-    if (mode === 'create') {
-      setImages(storeImages || []);
-      setIsInitialized(true);
-      isLocalInitialized.current = true;
-      return;
-    }
-
-    if (mode === 'edit') {
-      // 수정 모드는 서버 데이터(storeContent)가 로드될 때까지 대기
-      if (!storeContent) return;
-
-      const currentHtml = editor.getHTML();
-      if (currentHtml !== storeContent) {
-        editor.commands.setContent(storeContent);
-        contentRef.current = storeContent;
-      }
-
-      setImages(storeImages || []);
-      setIsInitialized(true);
-      isLocalInitialized.current = true;
-    }
-  }, [
-    editor,
-    isInitialized,
-    canInitialize,
-    storeContent,
-    storeImages,
-    mode,
-    setImages,
-    setIsInitialized,
-  ]);
-
   // --- 3. Side Effects ---
+
+  const onContentChange = useCallback(
+    (html: string) => {
+      setField('content', html);
+    },
+    [setField],
+  );
+
+  const editor = usePostEditor(initialSnapshot?.content, onContentChange);
 
   /**
    * [이미지 변경 감지 및 부모 전파]
@@ -135,8 +65,8 @@ export const PostEditor = ({
   useEffect(() => {
     if (!isInitialized) return;
 
-    onChange({ content: contentRef.current, images });
-  }, [images, onChange, isInitialized]);
+    setField('images', images);
+  }, [images, setField, isInitialized]);
 
   // --- 4. Handlers & Render Helpers ---
 

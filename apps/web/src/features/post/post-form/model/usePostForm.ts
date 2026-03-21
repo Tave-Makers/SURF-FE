@@ -1,9 +1,9 @@
-import { useCallback, useMemo, useRef, useState } from 'react';
+import { useCallback, useMemo, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { PAGE_ROUTES } from '@/shared/config/path';
 
 import { stripHtml } from '@/shared/lib/stripHtml';
-import { POST_CATEGORIES, PostCategoryKey } from '@/entities/post/model/category';
+import { POST_CATEGORIES } from '@/entities/post/model/category';
 import { POST_VALIDATION } from '@/entities/post/model/validation';
 
 import { useCreatePost } from '@/features/post/create-post/model/useCreatePost';
@@ -15,7 +15,7 @@ import { usePostFormStore } from './usePostFormStore';
 import { useCreatePostScheduleStore } from '@/features/schedule/create-post-schedule/model/useCreatePostScheduleStore';
 import { usePostDirtyCheck } from '@/features/post/post-form/model/useDirtyCheck';
 
-import { EditorState, PostPageMode } from './types';
+import { PostPageMode } from './types';
 import { useDeletePostSchedule } from '@/features/schedule/delete/model/useDelPostSchedule';
 import { useQueryClient } from '@tanstack/react-query';
 import { postQueryKeys } from '@/entities/post/api/queryKeys';
@@ -35,21 +35,9 @@ type Props = {
 export const usePostForm = ({ mode, boardId, postId, postDetail, postSchedule }: Props) => {
   const router = useRouter();
   const numericPostId = mode === 'edit' && postId ? Number(postId) : undefined;
-  const isScheduleInitializedRef = useRef(false);
 
   // 1. Store & State Management
-  const {
-    title,
-    category,
-    content,
-    images,
-    reserved,
-    reservedAt,
-    setField,
-    setEditorState,
-    resetForm,
-    setCanInitialize,
-  } = usePostFormStore();
+  const { title, category, content, images, reserved, reservedAt, resetForm } = usePostFormStore();
 
   const { linkedSchedule, clearLinkedSchedule } = useCreatePostScheduleStore();
 
@@ -73,8 +61,7 @@ export const usePostForm = ({ mode, boardId, postId, postDetail, postSchedule }:
   const resetPostState = useCallback(() => {
     clearLinkedSchedule();
     resetForm();
-    isScheduleInitializedRef.current = false;
-  }, [clearLinkedSchedule, resetForm, setCanInitialize]);
+  }, [clearLinkedSchedule, resetForm]);
 
   const isSubmitDisabled = useMemo(() => {
     const { isEmpty } = checkHasChanges();
@@ -96,13 +83,6 @@ export const usePostForm = ({ mode, boardId, postId, postDetail, postSchedule }:
   const isReserved = !!(reserved || (mode === 'edit' && postDetail?.isReserved));
 
   // 5. Event Handlers
-  const handleEditorChange = useCallback(
-    (updatedData: EditorState) => {
-      setEditorState(updatedData.content, updatedData.images);
-    },
-    [setEditorState],
-  );
-
   const handleBack = () => {
     const { hasChanges, isEmpty } = checkHasChanges();
     if (hasChanges && !isEmpty) {
@@ -272,19 +252,6 @@ export const usePostForm = ({ mode, boardId, postId, postDetail, postSchedule }:
   };
 
   return {
-    // Data & Fields
-    title,
-    setTitle: (val: string) => setField('title', val),
-    category,
-    setCategory: (val: PostCategoryKey) => setField('category', val),
-    initialContent: content,
-    initialImages: images,
-    linkedSchedule,
-    reserved,
-    setReserved: (val: boolean) => setField('reserved', val),
-    reservedAt,
-    setReservedAt: (val: Date | null) => setField('reservedAt', val),
-
     // UI State
     showExitAlert,
 
@@ -296,7 +263,6 @@ export const usePostForm = ({ mode, boardId, postId, postDetail, postSchedule }:
     setShowExitAlert,
 
     // Handlers
-    handleEditorChange,
     handleBack,
     handleSubmit,
     handleScheduleRemove: clearLinkedSchedule,

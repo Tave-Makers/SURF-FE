@@ -12,9 +12,7 @@ import { POST_CATEGORIES } from '@/entities/post/model/category';
 import { POST_VALIDATION } from '@/entities/post/model/validation';
 import { PostBadge } from '@/entities/post/ui/post-badge/PostBadge';
 
-import { useImageManager } from '@/features/image/model/useImageManager';
 import { useGetPostScheduleQuery } from '@/features/post/model/useGetPostScheduleQuery';
-import { usePostEditor } from '@/features/post/post-editor/lib/usePostEditor';
 import { usePostForm } from '@/features/post/post-form/model/usePostForm';
 import { usePostFormStore } from '@/features/post/post-form/model/usePostFormStore';
 import { usePostInitialization } from '@/features/post/post-form/model/usePostInitialization';
@@ -37,8 +35,9 @@ const PostPage = (props: PostPageProps) => {
   const postId = mode === 'edit' ? props.postId : undefined;
 
   // == Stores ==
-  const { isInitialized, setField, setEditorState } = usePostFormStore();
-  const { setLinkedSchedule } = useCreatePostScheduleStore();
+  const { isInitialized, setField, title, category, content, images, reserved, reservedAt } =
+    usePostFormStore();
+  const { linkedSchedule, setLinkedSchedule } = useCreatePostScheduleStore();
 
   const openBottomSheet = useBottomSheetStore((s) => s.open);
   const closeBottomSheet = useBottomSheetStore((s) => s.close);
@@ -62,40 +61,16 @@ const PostPage = (props: PostPageProps) => {
 
   // == Hooks ==
   const {
-    title,
-    setTitle,
-    category,
-    setCategory,
-    initialContent,
-    initialImages,
-    linkedSchedule,
     handleScheduleRemove,
     showExitAlert,
     setShowExitAlert,
-    reserved,
-    setReserved,
-    reservedAt,
-    setReservedAt,
     isSubmitDisabled,
-    handleEditorChange,
     handleBack,
     handleSubmit,
     resetPostState,
     isPublished,
     isReserved,
   } = usePostForm({ mode, boardId, postId, postDetail, postSchedule });
-
-  const imageManager = useImageManager();
-  const { images } = imageManager;
-
-  const onUpdate = useCallback(
-    (html: string) => {
-      handleEditorChange({ content: html, images });
-    },
-    [handleEditorChange, images],
-  );
-
-  const editor = usePostEditor(initialContent, onUpdate);
 
   // == Initialization ==
 
@@ -107,7 +82,6 @@ const PostPage = (props: PostPageProps) => {
     postSchedule,
     linkedSchedule,
     setField,
-    setEditorState,
     setLinkedSchedule,
     isInitialized,
     isScheduleLoading,
@@ -121,14 +95,14 @@ const PostPage = (props: PostPageProps) => {
   }, [closeAlert, setShowExitAlert]);
 
   const handleSaveReservation = (date: Date) => {
-    setReservedAt(date);
-    setReserved(true);
+    setField('reservedAt', date);
+    setField('reserved', true);
   };
 
   // 실제 예약 취소
   const handleConfirmRemove = () => {
-    setReserved(false);
-    setReservedAt(null);
+    setField('reserved', false);
+    setField('reservedAt', null);
     closeAlert();
     closeBottomSheet();
   };
@@ -185,8 +159,6 @@ const PostPage = (props: PostPageProps) => {
     setShowExitAlert(false);
   }, [closeExitAlert, openAlert, resetPostState, router, setShowExitAlert, showExitAlert]);
 
-  if (!editor) return;
-
   return (
     <div className="flex h-full w-full flex-1 flex-col">
       {/* 1. 상단 헤더 */}
@@ -214,7 +186,7 @@ const PostPage = (props: PostPageProps) => {
               props: {
                 category,
                 onSelect: (val) => {
-                  setCategory(val);
+                  setField('category', val);
                   closeBottomSheet();
                 },
                 controlsId: 'post-category-sheet',
@@ -241,7 +213,7 @@ const PostPage = (props: PostPageProps) => {
           id="post-title"
           value={title}
           maxLength={MAX_TITLE_LENGTH}
-          onChange={(e) => setTitle(e.target.value)}
+          onChange={(e) => setField('title', e.target.value)}
           placeholder="제목을 입력해주세요."
           className="text-foreground-normal placeholder:text-foreground-tertiary-lighter text-body-body3 flex flex-1 pt-10 pb-5 focus:outline-none"
         />
@@ -251,15 +223,12 @@ const PostPage = (props: PostPageProps) => {
       <div className="flex h-full flex-1 overflow-auto">
         <PostEditor
           mode={mode}
-          initialContent={initialContent}
-          initialImages={initialImages}
+          content={content}
+          images={images}
           linkedSchedule={linkedSchedule}
-          onChange={handleEditorChange}
           onScheduleRemove={handleScheduleRemove}
           onReservationClick={handleOpenReservation}
           isPublished={isPublished}
-          editor={editor}
-          imageManager={imageManager}
         />
       </div>
     </div>

@@ -9,13 +9,9 @@ export const usePostFormStore = create<PostFormState>((set, get) => ({
   reserved: false,
   reservedAt: null,
   initialSnapshot: null,
-  isEditorInitialized: false,
-  canInitialize: false,
   isInitialized: false,
 
   setField: (field, value) => set((state) => ({ ...state, [field]: value })),
-  setEditorState: (content, images) => set({ content, images }),
-  setIsEditorInitialized: (isInit) => set({ isEditorInitialized: isInit }),
   resetForm: () => {
     // 1. 현재 스토어의 이미지들 가져오기
     const { images } = get();
@@ -37,27 +33,16 @@ export const usePostFormStore = create<PostFormState>((set, get) => ({
       reserved: false,
       reservedAt: null,
       initialSnapshot: null,
-      isEditorInitialized: false,
-      canInitialize: false,
     });
   },
   setSnapshot: (snapshot) => set({ initialSnapshot: snapshot }),
-  setCanInitialize: (canInit) => set({ canInitialize: canInit }),
   setIsInitialized: (isInit) => set({ isInitialized: isInit }),
 }));
 
 if (process.env.NODE_ENV === 'development') {
   usePostFormStore.subscribe((state, prevState) => {
-    if (state.canInitialize !== prevState.canInitialize) {
-      console.log('🔔 canInitialize 변경:', prevState.canInitialize, '->', state.canInitialize);
-    }
-    if (state.isEditorInitialized !== prevState.isEditorInitialized) {
-      console.log(
-        '✅ isEditorInitialized 변경:',
-        prevState.isEditorInitialized,
-        '->',
-        state.isEditorInitialized,
-      );
+    if (state.isInitialized !== prevState.isInitialized) {
+      console.log('🔔 isInitialized 변경:', prevState.isInitialized, '->', state.isInitialized);
     }
     if (state.content !== prevState.content) {
       console.log('✍️ content 변경:', {

@@ -12,21 +12,14 @@ export interface PostFormState {
   reserved: boolean;
   reservedAt: Date | null;
   initialSnapshot: PostSnapshot | null;
-  isEditorInitialized: boolean;
-  canInitialize: boolean;
   isInitialized: boolean;
 
   // Actions
   setField: <K extends keyof PostFormState>(field: K, value: PostFormState[K]) => void;
-  setEditorState: (content: string, images: UploadImage[]) => void;
-  setIsEditorInitialized: (isInit: boolean) => void;
   resetForm: () => void;
   setSnapshot: (snapshot: PostSnapshot) => void;
-  setCanInitialize: (canInit: boolean) => void;
   setIsInitialized: (isInit: boolean) => void;
 }
-
-export type EditorState = Pick<PostFormState, 'content' | 'images'>;
 
 export type PostSnapshot = Pick<
   PostFormState,

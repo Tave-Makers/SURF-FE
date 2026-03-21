@@ -8,7 +8,7 @@ import { PostScheduleData } from '@/entities/post/api/types';
 import { UploadImage } from '@surf/utils';
 import { usePostFormStore } from './usePostFormStore';
 
-type PostFormActions = Pick<PostFormState, 'setField' | 'setEditorState'>;
+type PostFormActions = Pick<PostFormState, 'setField'>;
 
 interface Props extends PostFormActions {
   mode: PostPageMode;
@@ -28,12 +28,11 @@ export const usePostInitialization = ({
   isPostDetailLoading,
   linkedSchedule,
   setField,
-  setEditorState,
   setLinkedSchedule,
   isInitialized,
   isScheduleLoading,
 }: Props) => {
-  const { initialSnapshot, setSnapshot, content, images, canInitialize } = usePostFormStore();
+  const { initialSnapshot, setSnapshot, content, images } = usePostFormStore();
 
   useEffect(() => {
     // 1. 초기화 가드
@@ -92,6 +91,7 @@ export const usePostInitialization = ({
 
     setField('title', postDetail?.title ?? '');
     setField('content', contentValue);
+    setField('images', mappedImages);
     setField('category', initialCategory);
     setField('reserved', initialReserved);
     setField('reservedAt', initialReservedAt);
@@ -99,9 +99,6 @@ export const usePostInitialization = ({
     if (initialScheduleData && !linkedSchedule) {
       setLinkedSchedule(initialScheduleData);
     }
-
-    // 에디터 엔진에 데이터 주입
-    setEditorState(contentValue, mappedImages);
 
     // 4. 완료 및 스냅샷 저장
     setSnapshot({
@@ -123,13 +120,11 @@ export const usePostInitialization = ({
     initialSnapshot,
     setSnapshot,
     setField,
-    setEditorState,
     setLinkedSchedule,
     isInitialized,
     linkedSchedule,
     content,
     images,
     isScheduleLoading,
-    canInitialize,
   ]);
 };

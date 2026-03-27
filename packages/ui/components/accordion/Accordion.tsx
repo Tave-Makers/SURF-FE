@@ -36,10 +36,11 @@ export const Accordion = ({
     if (isOpen) {
       setMaxHeight(`${el.scrollHeight}px`);
 
+      const inner = el.firstElementChild;
       const observer = new ResizeObserver(() => {
         setMaxHeight(`${el.scrollHeight}px`);
       });
-      observer.observe(el);
+      if (inner) observer.observe(inner);
 
       return () => observer.disconnect();
     } else {

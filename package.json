@@ -23,6 +23,8 @@
     "lint:admin": "turbo run lint --filter=surf-admin",
     "lint:fix:admin": "turbo run lint --filter=surf-admin -- --fix",
     "storybook:admin": "turbo run storybook --filter=surf-admin",
+    "test:web": "pnpm --filter surf-web test",
+    "test:ui:web": "pnpm --filter surf-web test:ui",
     "test:admin": "pnpm --filter surf-admin test",
     "test:ui:admin": "pnpm --filter surf-admin test:ui"
   },

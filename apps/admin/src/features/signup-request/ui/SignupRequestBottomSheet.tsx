@@ -6,7 +6,8 @@ import { useSignupStatusActions } from '../model/useSignupStatusActions';
 import { useMemberInfoQuery } from '@/entities/member/model/queries/useMemberInfoQuery';
 import { MemberProfileSummary } from '@/entities/member/ui/MemberProfileSummary';
 import { MemberStatusBadge } from '@/entities/member/ui/MemberStatusBadge';
-import { ErrorBoundary } from '@/shared/ui/ErrorBoundary';
+import { ErrorBoundary } from '@/shared/ui/error/ErrorBoundary';
+import { ErrorState } from '@/shared/ui/error/ErrorState';
 
 declare module '@/shared/store/bottomSheetStore' {
   interface BottomSheetMap {
@@ -41,14 +42,14 @@ export const SignupRequestBottomSheet = ({
           <Sheet>
             <ErrorBoundary
               fallback={
-                <div className="text-body-body6 text-foreground-secondary">
-                  회원 정보를 불러오지 못했습니다.
+                <div className="py-20">
+                  <ErrorState message="회원 정보를 불러오지 못했습니다." fullHeight={false} />
                 </div>
               }
             >
               <Suspense
                 fallback={
-                  <div className="text-body-body6 text-foreground-secondary">로딩중...</div>
+                  <div className="text-body-body6 text-foreground-secondary py-20">로딩중...</div>
                 }
               >
                 <MemberInfoContent memberId={memberId} showAction={showAction} onClose={onClose} />

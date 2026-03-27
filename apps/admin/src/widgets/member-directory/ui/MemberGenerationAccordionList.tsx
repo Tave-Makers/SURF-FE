@@ -9,6 +9,8 @@ import { useBottomSheetStore } from '@/shared/store/bottomSheetStore';
 export interface MemberGenerationAccordionListProps {
   keyword: string;
 }
+
+const ACCORDIAN_MAX_HEIGHT = '36vh';
 export const MemberGenerationAccordionList = ({ keyword }: MemberGenerationAccordionListProps) => {
   //기수 목록 조회
   const { data: generations } = useMemberGenerationListQuery();
@@ -39,6 +41,7 @@ export const MemberGenerationAccordionList = ({ keyword }: MemberGenerationAccor
           generation={generation}
           label={`${generation}기`}
           keyword={keyword}
+          contentMaxHeight={ACCORDIAN_MAX_HEIGHT}
           renderItem={(m) => (
             <SelectableMemberCard
               name={m.name}

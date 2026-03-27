@@ -36,7 +36,7 @@ export const PostEditor = ({
   /**
    * isInitialized (전역): 서버 데이터가 스토어에 최초 저장 되었는지 나타내는 플래그
    */
-  const { isInitialized, setField, initialSnapshot } = usePostFormStore();
+  const { isInitialized, setField, content } = usePostFormStore();
 
   const openAlert = useAlertStore((s) => s.open);
   const closeAlert = useAlertStore((s) => s.close);
@@ -56,7 +56,7 @@ export const PostEditor = ({
     [setField],
   );
 
-  const editor = usePostEditor(initialSnapshot?.content, onContentChange);
+  const editor = usePostEditor(content, onContentChange);
 
   /**
    * [이미지 변경 감지 및 부모 전파]

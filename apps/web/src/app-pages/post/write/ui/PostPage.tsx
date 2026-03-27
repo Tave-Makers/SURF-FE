@@ -35,7 +35,8 @@ const PostPage = (props: PostPageProps) => {
   const postId = mode === 'edit' ? props.postId : undefined;
 
   // == Stores ==
-  const { setField, title, category, content, images, reserved, reservedAt } = usePostFormStore();
+  const { setField, title, category, content, images, reserved, reservedAt, isInitialized } =
+    usePostFormStore();
   const { linkedSchedule, setLinkedSchedule } = useCreatePostScheduleStore();
 
   const openBottomSheet = useBottomSheetStore((s) => s.open);
@@ -156,6 +157,8 @@ const PostPage = (props: PostPageProps) => {
     });
     setShowExitAlert(false);
   }, [closeExitAlert, openAlert, resetPostState, router, setShowExitAlert, showExitAlert]);
+
+  if (!isInitialized) return <div>로딩중...</div>;
 
   return (
     <div className="flex h-full w-full flex-1 flex-col">

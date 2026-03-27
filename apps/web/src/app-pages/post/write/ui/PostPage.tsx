@@ -77,6 +77,7 @@ const PostPage = (props: PostPageProps) => {
   // 가드는 내부에서 실행
   usePostInitialization({
     mode,
+    postId,
     postDetail,
     isPostDetailLoading,
     postSchedule,
@@ -84,6 +85,7 @@ const PostPage = (props: PostPageProps) => {
     setField,
     setLinkedSchedule,
     isScheduleLoading,
+    resetPostState,
   });
 
   // == Handlers ==

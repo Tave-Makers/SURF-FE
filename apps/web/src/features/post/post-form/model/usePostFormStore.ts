@@ -2,6 +2,7 @@ import { create } from 'zustand';
 import { PostFormState } from './types';
 
 export const usePostFormStore = create<PostFormState>((set, get) => ({
+  postId: '',
   title: '',
   category: 'event',
   content: '',

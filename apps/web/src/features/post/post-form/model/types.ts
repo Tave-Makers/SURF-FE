@@ -5,6 +5,7 @@ import { ScheduleFormData } from '@/features/schedule/create/model/types';
 export type PostPageMode = 'create' | 'edit';
 
 export interface PostFormState {
+  postId: string;
   title: string;
   category: PostCategoryKey;
   content: string;

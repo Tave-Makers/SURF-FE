@@ -12,16 +12,19 @@ type PostFormActions = Pick<PostFormState, 'setField'>;
 
 interface Props extends PostFormActions {
   mode: PostPageMode;
+  postId: string | undefined;
   postDetail: PostDetail | undefined;
   postSchedule: PostScheduleData | undefined;
   isPostDetailLoading: boolean;
   linkedSchedule: ScheduleFormData | null;
   setLinkedSchedule: (data: ScheduleFormData) => void;
   isScheduleLoading: boolean;
+  resetPostState: () => void;
 }
 
 export const usePostInitialization = ({
   mode,
+  postId,
   postDetail,
   postSchedule,
   isPostDetailLoading,
@@ -29,11 +32,20 @@ export const usePostInitialization = ({
   setField,
   setLinkedSchedule,
   isScheduleLoading,
+  resetPostState,
 }: Props) => {
-  const { isInitialized, setIsInitialized, setSnapshot } = usePostFormStore();
+  const { postId: storedPostId, isInitialized, setIsInitialized, setSnapshot } = usePostFormStore();
 
   useEffect(() => {
     // 1. 초기화 가드
+    const currentId = mode === 'edit' ? postId : 'create';
+
+    // 다른 게시글 데이터가 남아있으면 리셋
+    if (isInitialized && storedPostId !== currentId) {
+      resetPostState();
+      return;
+    }
+
     if (isInitialized) return;
     // 데이터 로딩 대기
     if (mode === 'edit' && isPostDetailLoading) return;
@@ -110,6 +122,7 @@ export const usePostInitialization = ({
       initialSchedule: initialScheduleData,
     });
 
+    setField('postId', currentId!);
     setIsInitialized(true);
   }, [
     mode,

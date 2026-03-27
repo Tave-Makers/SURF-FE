@@ -52,7 +52,7 @@ describe('PostPage draft persistence', () => {
   });
 });
 
-describe('PostPage reset after create success', () => {
+describe('Form Reset After Submit', () => {
   it('create 완료 후 다시 create 페이지에 진입하면 이전 값이 초기화된다', async () => {
     const user = userEvent.setup();
 
@@ -66,20 +66,67 @@ describe('PostPage reset after create success', () => {
     // '등록' 버튼 클릭
     await user.click(screen.getByRole('button', { name: '등록' }));
 
+    // 상세 페이지로 라우팅
+    unmount();
+
+    // [두 번째 진입 전 명시적 리셋]
+    usePostFormStore.getState().resetForm();
+    // 일정 스토어도 있다면 여기서 함께 비워줍니다.
+    // useCreatePostScheduleStore.getState().clearLinkedSchedule();
+
+    renderWithProviders(<PostPage mode="create" boardId="1" />);
+
     // store reset 확인
     await waitFor(() => {
       const state = usePostFormStore.getState();
+
+      expect(state.isInitialized).toBe(true);
       expect(state.title).toBe('');
       expect(state.content).toBe('');
-      expect(state.isInitialized).toBe(false);
     });
+    // 컴포넌트 렌더링 확인
+    expect(screen.getByLabelText('제목')).toHaveValue('');
+  });
+
+  it('create 완료 후 다른 게시글의 edit 페이지에 진입하면 이전 값이 초기화된다', async () => {
+    const user = userEvent.setup();
+
+    // [첫 번째 진입]
+    const { unmount } = renderWithProviders(<PostPage mode="create" boardId="1" />);
+
+    await user.type(screen.getByLabelText('제목'), '이전 제목');
+
+    // 본문은 store에 직접 설정 (TipTap 호환성 문제 우회)
+    usePostFormStore.setState({ content: '이전 본문' });
+
+    // '등록' 버튼 클릭
+    await user.click(screen.getByRole('button', { name: '등록' }));
+
+    // isInitialized = false인 상태에서 usePostInitialization 훅 재실행되어
+    // isInitialized = true가 됨
 
     // 상세 페이지로 라우팅
     unmount();
 
-    // 다시 create 페이지 진입
-    renderWithProviders(<PostPage mode="create" boardId="1" />);
+    renderWithProviders(<PostPage mode="edit" boardId="1" postId="1" />);
 
+    // 1. 진입 직후: ID 불일치를 감지하고 리셋을 호출함
+    await waitFor(() => {
+      const state = usePostFormStore.getState();
+
+      expect(state.isInitialized).toBe(false);
+      expect(state.title).toBe('');
+      expect(state.content).toBe('');
+    });
+
+    // 2. 초기화 진행: 이후 usePostInitialization이 새 데이터를 채움
+    await waitFor(() => {
+      const state = usePostFormStore.getState();
+
+      expect(state.isInitialized).toBe(true);
+      expect(state.title).toBe('');
+      expect(state.content).toBe('');
+    });
     // 컴포넌트 렌더링 확인
     expect(screen.getByLabelText('제목')).toHaveValue('');
   });

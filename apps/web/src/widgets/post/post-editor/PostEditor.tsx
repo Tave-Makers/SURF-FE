@@ -36,18 +36,34 @@ export const PostEditor = ({
   /**
    * isInitialized (전역): 서버 데이터가 스토어에 최초 저장 되었는지 나타내는 플래그
    */
-  const { isInitialized, setField, content } = usePostFormStore();
+  const {
+    isInitialized,
+    setField,
+    content: storeContent,
+    images: storeImages,
+  } = usePostFormStore();
 
   const openAlert = useAlertStore((s) => s.open);
   const closeAlert = useAlertStore((s) => s.close);
 
-  const { inputRef, images, handleSelectAndUpload, handleRemove, handleReorder, openPicker } =
-    useImageManager();
+  const {
+    inputRef,
+    images: localImages,
+    handleSelectAndUpload,
+    handleRemove,
+    handleReorder,
+    openPicker,
+  } = useImageManager({ initialImages: storeImages });
 
   const keyboardOffset = useKeyboardOffset();
   const { MAX_IMAGES } = POST_VALIDATION;
 
   // --- 3. Side Effects ---
+
+  /**
+   * [본문 변경]
+   * 변경 사항을 전역 스토어로 전달
+   */
 
   const onContentChange = useCallback(
     (html: string) => {
@@ -56,17 +72,17 @@ export const PostEditor = ({
     [setField],
   );
 
-  const editor = usePostEditor(content, onContentChange);
+  const editor = usePostEditor(storeContent, onContentChange);
 
   /**
-   * [이미지 변경 감지 및 부모 전파]
+   * [이미지 변경]
    * 변경 사항을 전역 스토어로 전달
    */
   useEffect(() => {
     if (!isInitialized) return;
 
-    setField('images', images);
-  }, [images, setField, isInitialized]);
+    setField('images', localImages);
+  }, [localImages, setField, isInitialized]);
 
   // --- 4. Handlers & Render Helpers ---
 
@@ -74,7 +90,7 @@ export const PostEditor = ({
     const files = e.target.files;
     if (!files) return;
 
-    if (images.length + files.length > MAX_IMAGES) {
+    if (localImages.length + files.length > MAX_IMAGES) {
       openAlert({
         state: 'error',
         title: '이미지 최대 장수 오류',
@@ -132,9 +148,9 @@ export const PostEditor = ({
       </div>
 
       {/* 이미지 리스트 영역 */}
-      {images.length > 0 && (
+      {localImages.length > 0 && (
         <div className="overflow-x-auto">
-          <ImageList images={images} onRemove={handleRemove} onReorder={handleReorder} />
+          <ImageList images={localImages} onRemove={handleRemove} onReorder={handleReorder} />
         </div>
       )}
 

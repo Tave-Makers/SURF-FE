@@ -3,7 +3,7 @@
 import { useInfiniteScroll } from '@surf/hooks';
 import { Accordion } from '@surf/ui/accordion';
 import { useRef, useState } from 'react';
-import type { ReactNode } from 'react';
+import type { CSSProperties, ReactNode } from 'react';
 import { useMemberBaseListQuery } from '@/entities/member/model/queries/useMemberBaseListQuery';
 import type { MemberBase } from '@/entities/member/model/types';
 
@@ -27,8 +27,11 @@ export const MemberGenerationAccordion = ({
   renderItem,
   contentMaxHeight,
 }: Props) => {
-  const [open, setOpen] = useState(false);
+  const [open, setOpen] = useState(defaultOpen ?? false);
   const contentRef = useRef<HTMLDivElement>(null);
+  const contentStyle: CSSProperties | undefined = contentMaxHeight
+    ? { maxHeight: contentMaxHeight }
+    : undefined;
 
   //아코디언이 열리면 데이터 fetch
   const { memberIds, fetchNextPage, hasNextPage, isFetchingNextPage, isLoading } =
@@ -58,7 +61,7 @@ export const MemberGenerationAccordion = ({
 
   return (
     <Accordion title={label ?? `${generation}기`} onToggle={onToggle} defaultOpen={defaultOpen}>
-      <div ref={contentRef} className="overflow-y-auto" style={{ maxHeight: contentMaxHeight }}>
+      <div ref={contentRef} className="overflow-y-auto" style={contentStyle}>
         <MemberList
           members={members}
           isLoading={open && (isLoading || !isHydrated)}

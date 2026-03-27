@@ -1,6 +1,18 @@
 import '@testing-library/jest-dom/vitest';
 import { server } from './mocks/server';
 
+if (!globalThis.ResizeObserver) {
+  class ResizeObserverMock implements ResizeObserver {
+    observe() {}
+
+    unobserve() {}
+
+    disconnect() {}
+  }
+
+  globalThis.ResizeObserver = ResizeObserverMock;
+}
+
 if (!globalThis.IntersectionObserver) {
   type IOCallback = IntersectionObserverCallback;
 

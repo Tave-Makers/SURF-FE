@@ -3,7 +3,7 @@
 import { useInfiniteScroll } from '@surf/hooks';
 import { Accordion } from '@surf/ui/accordion';
 import { useRef, useState } from 'react';
-import type { ReactNode } from 'react';
+import type { CSSProperties, ReactNode } from 'react';
 import { useMemberBaseListQuery } from '@/entities/member/model/queries/useMemberBaseListQuery';
 import type { MemberBase } from '@/entities/member/model/types';
 
@@ -16,17 +16,22 @@ type Props = {
   keyword?: string;
   defaultOpen?: boolean;
   renderItem: (m: MemberBase) => ReactNode;
+  contentMaxHeight?: string;
 };
 
 export const MemberGenerationAccordion = ({
   generation,
   label,
   keyword,
-  defaultOpen = false,
+  defaultOpen,
   renderItem,
+  contentMaxHeight,
 }: Props) => {
-  const [open, setOpen] = useState<boolean>(defaultOpen);
+  const [open, setOpen] = useState(defaultOpen ?? false);
   const contentRef = useRef<HTMLDivElement>(null);
+  const contentStyle: CSSProperties | undefined = contentMaxHeight
+    ? { maxHeight: contentMaxHeight }
+    : undefined;
 
   //아코디언이 열리면 데이터 fetch
   const { memberIds, fetchNextPage, hasNextPage, isFetchingNextPage, isLoading } =
@@ -56,7 +61,7 @@ export const MemberGenerationAccordion = ({
 
   return (
     <Accordion title={label ?? `${generation}기`} onToggle={onToggle} defaultOpen={defaultOpen}>
-      <div ref={contentRef} className="max-h-[36vh] overflow-y-auto">
+      <div ref={contentRef} className="overflow-y-auto" style={contentStyle}>
         <MemberList
           members={members}
           isLoading={open && (isLoading || !isHydrated)}

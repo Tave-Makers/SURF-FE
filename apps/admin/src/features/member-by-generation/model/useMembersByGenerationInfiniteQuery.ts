@@ -12,7 +12,7 @@ import {
 import { getMemberListByGeneration } from '../api/getMemberListByGeneration';
 import type { MemberListParams } from '../api/types';
 
-const MEMBER_BY_GENERATION_PAGE_SIZE = 5;
+const MEMBER_BY_GENERATION_PAGE_SIZE = 20;
 
 /**
  * 기수별 멤버 목록 조회 필터

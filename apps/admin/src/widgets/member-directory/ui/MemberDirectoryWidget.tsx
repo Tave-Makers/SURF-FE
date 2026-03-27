@@ -1,16 +1,16 @@
 'use client';
 
 import { Suspense, useEffect } from 'react';
-
 import { MemberGenerationAccordionList } from './MemberGenerationAccordionList';
 import { useApprovedMemberCountQuery } from '@/entities/member/model/queries/useMemberCountQuery';
 import { useSelectableListState } from '@/shared/hooks/useSelectableListState';
-import { ErrorBoundary } from '@/shared/ui/ErrorBoundary';
+import { ErrorBoundary } from '@/shared/ui/error/ErrorBoundary';
 import { SelectableListTopBar } from '@/shared/ui/SelectableListTopBar';
 
 interface MemberDirectoryWidgetProps {
   keyword: string;
 }
+
 export const MemberDirectoryWidget = ({ keyword }: MemberDirectoryWidgetProps) => {
   const { data: totalCount } = useApprovedMemberCountQuery(keyword); //승인된 전체 멤버수 조회
 
@@ -33,9 +33,7 @@ export const MemberDirectoryWidget = ({ keyword }: MemberDirectoryWidgetProps) =
       />
 
       {/* 기수별 멤버 목록 아코디언 리스트 */}
-      <ErrorBoundary
-        fallback={<div className="p-4">데이터를 불러오는 중 오류가 발생했습니다.</div>}
-      >
+      <ErrorBoundary>
         <Suspense fallback={<div className="p-4">loading...</div>}>
           <MemberGenerationAccordionList keyword={keyword} />
         </Suspense>

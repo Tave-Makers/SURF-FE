@@ -99,7 +99,6 @@ export const usePostForm = ({ mode, boardId, postId }: Props) => {
   const resetPostState = useCallback(() => {
     clearLinkedSchedule();
     resetForm();
-    setCanInitialize(false);
     isScheduleInitializedRef.current = false;
   }, [clearLinkedSchedule, resetForm, setCanInitialize]);
 
@@ -136,7 +135,6 @@ export const usePostForm = ({ mode, boardId, postId }: Props) => {
       setShowExitAlert(true);
     } else {
       resetPostState();
-      setCanInitialize(false);
       router.back();
     }
   };
@@ -288,7 +286,6 @@ export const usePostForm = ({ mode, boardId, postId }: Props) => {
       await Promise.all(invalidatePromises);
 
       resetPostState();
-      setCanInitialize(false);
       if (mode === 'create') {
         if (targetPostId) router.replace(PAGE_ROUTES.BOARD.POST_DETAIL(boardId, targetPostId));
       } else {

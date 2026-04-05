@@ -19,9 +19,15 @@
     "lint:fix:surf": "turbo run lint --filter=surf-web -- --fix",
     "storybook:surf": "turbo run storybook --filter=surf-web",
     "dev:admin": "turbo run dev --filter=surf-admin",
+    "dev:mobile": "turbo run dev --filter=surf-mobile",
     "build:admin": "turbo run build --filter=surf-admin",
     "lint:admin": "turbo run lint --filter=surf-admin",
+    "lint:mobile": "turbo run lint --filter=surf-mobile",
     "lint:fix:admin": "turbo run lint --filter=surf-admin -- --fix",
+    "check-types:mobile": "turbo run check-types --filter=surf-mobile",
+    "android:mobile": "pnpm --filter surf-mobile android",
+    "ios:mobile": "pnpm --filter surf-mobile ios",
+    "web:mobile": "pnpm --filter surf-mobile web",
     "storybook:admin": "turbo run storybook --filter=surf-admin",
     "test:web": "pnpm --filter surf-web test",
     "test:ui:web": "pnpm --filter surf-web test:ui",
@@ -43,6 +49,10 @@
     ],
     "packages/ui/**/*.{js,jsx,ts,tsx}": [
       "pnpm -C packages/ui exec eslint --max-warnings=0 --fix --no-warn-ignored",
+      "pnpm -w exec prettier --write"
+    ],
+    "apps/mobile/**/*.{js,jsx,ts,tsx}": [
+      "pnpm --filter surf-mobile exec eslint --max-warnings=0 --fix --no-warn-ignored",
       "pnpm -w exec prettier --write"
     ],
     "*.{json,md,css,scss,html}": "pnpm -w exec prettier --write"

@@ -24,7 +24,6 @@ export const Default: Story = {
     </div>
   ),
   args: {
-    mode: 'create',
     content: `<p>이곳에 게시글을 작성하세요 ✍️</p>`,
     images: [],
   },
@@ -38,7 +37,6 @@ export const Empty: Story = {
     </div>
   ),
   args: {
-    mode: 'create',
     content: '',
     images: [],
   },

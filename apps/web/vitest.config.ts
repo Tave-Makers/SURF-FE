@@ -13,6 +13,7 @@ export default defineConfig({
   },
   resolve: {
     alias: [
+      { find: /^(.*)\.svg$/, replacement: path.resolve(__dirname, './src/test/mocks/index.ts') },
       { find: '@', replacement: path.resolve(__dirname, 'src') },
       {
         find: /^@surf\/ui\/store\/(.*)$/,

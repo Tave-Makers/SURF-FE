@@ -126,12 +126,16 @@ export const usePostInitialization = ({
     setIsInitialized(true);
   }, [
     mode,
+    postId,
     postDetail,
     postSchedule,
     setSnapshot,
     setField,
     setLinkedSchedule,
     isInitialized,
+    storedPostId,
+    resetPostState,
+    setIsInitialized,
     linkedSchedule,
     isPostDetailLoading,
     isScheduleLoading,

@@ -58,5 +58,11 @@ if (process.env.NODE_ENV === 'development') {
         after: state.images,
       });
     }
+    if (state.reserved !== prevState.reserved) {
+      console.log('⏰ reserved 변경:', {
+        before: prevState.reserved,
+        after: state.reserved,
+      });
+    }
   });
 }

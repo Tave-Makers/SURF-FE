@@ -69,7 +69,6 @@ const PostPage = (props: PostPageProps) => {
     handleSubmit,
     resetPostState,
     isPublished,
-    isReserved,
   } = usePostForm({ mode, boardId, postId, postDetail, postSchedule });
 
   // == Initialization ==
@@ -201,7 +200,7 @@ const PostPage = (props: PostPageProps) => {
       </div>
 
       {/* 예약중 태그 */}
-      {isReserved && (
+      {reserved && (
         <div className="px-13 pt-10">
           <PostBadge type="reservation" />
         </div>

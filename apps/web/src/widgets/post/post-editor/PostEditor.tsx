@@ -5,12 +5,12 @@ import { useAlertStore } from '@surf/ui/store/alertStore';
 import { UploadImage } from '@surf/utils';
 import { EditorContent } from '@tiptap/react';
 import { useCallback, useEffect } from 'react';
-import '@/features/post/post-editor/ui/PostEditor.module.css';
 import { EventCard } from '@/entities/calendar/ui/EventCard/EventCard';
 import { POST_VALIDATION } from '@/entities/post/model/validation';
 import { ImageList } from '@/entities/post/post-image/ui/ImageList';
 import { useImageManager } from '@/features/image/model/useImageManager';
 import { usePostEditor } from '@/features/post/post-editor/lib/usePostEditor';
+import styles from '@/features/post/post-editor/ui/PostEditor.module.css';
 import { PostEditorToolbar } from '@/features/post/post-editor/ui/PostEditorToolbar';
 
 import { PostPageMode } from '@/features/post/post-form/model/types';
@@ -134,8 +134,9 @@ export const PostEditor = ({
   return (
     <div className="flex w-full min-w-0 flex-col gap-10">
       {/* 본문 에디터 영역 */}
-      <div className="text-foreground-normal text-body-body7 relative flex flex-1 overflow-y-auto px-13 break-all">
-        {/* PostEditor.style.css에서 placeholder 및 focusing 스타일 정의 */}
+      <div
+        className={`text-foreground-normal text-body-body7 relative flex flex-1 overflow-y-auto px-13 break-all ${styles.editor}`}
+      >
         <button
           type="button"
           aria-label="본문"

@@ -62,7 +62,8 @@ describe('Form Reset After Submit', () => {
     await user.click(screen.getByRole('button', { name: '등록' }));
     unmount();
 
-    // 폼 명시적 리셋 (create 페이지 진입 과정에서 필요)
+    // 실제 앱에서는 create page로 router.push 전에 resetForm()이 호출됨
+    // 이 테스트에서는 그 동작을 시뮬레이션
     usePostFormStore.getState().resetForm();
     // 일정 스토어도 테스트 필요시 추가
     // useCreatePostScheduleStore.getState().clearLinkedSchedule();

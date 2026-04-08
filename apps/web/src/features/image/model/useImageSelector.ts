@@ -18,6 +18,7 @@ export interface UseImageSelectorProps {
 
 export function useImageSelector({ initialImages = [] }: UseImageSelectorProps = {}) {
   const inputRef = useRef<HTMLInputElement>(null);
+  // 참고: initialImages는 첫 마운트 시에만 적용됨 (controlled re-initialization 아님)
   const [images, setImages] = useState<UploadImage[]>(initialImages);
 
   /** 파일 선택창 열기 */

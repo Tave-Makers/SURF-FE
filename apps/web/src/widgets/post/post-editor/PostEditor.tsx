@@ -5,7 +5,7 @@ import { useAlertStore } from '@surf/ui/store/alertStore';
 import { UploadImage } from '@surf/utils';
 import { EditorContent } from '@tiptap/react';
 import { useCallback, useEffect } from 'react';
-import '@/features/post/post-editor/ui/PostEditor.style.css';
+import '@/features/post/post-editor/ui/PostEditor.module.css';
 import { EventCard } from '@/entities/calendar/ui/EventCard/EventCard';
 import { POST_VALIDATION } from '@/entities/post/model/validation';
 import { ImageList } from '@/entities/post/post-image/ui/ImageList';

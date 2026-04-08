@@ -5,6 +5,7 @@ import { HeaderMode } from '@surf/ui/header';
 import { useAlertStore } from '@surf/ui/store/alertStore';
 import { useRouter } from 'next/navigation';
 import { useCallback, useEffect } from 'react';
+import Loading from '@/app/loading';
 
 import { usePostDetail } from '@/entities/post/api/usePostDetail';
 import { POST_BOARDS } from '@/entities/post/model/board';
@@ -159,7 +160,7 @@ const PostPage = (props: PostPageProps) => {
     setShowExitAlert(false);
   }, [closeExitAlert, openAlert, resetPostState, router, setShowExitAlert, showExitAlert]);
 
-  if (!isInitialized) return <div>로딩중...</div>;
+  if (!isInitialized) return <Loading />;
 
   return (
     <div className="flex h-full w-full flex-1 flex-col">

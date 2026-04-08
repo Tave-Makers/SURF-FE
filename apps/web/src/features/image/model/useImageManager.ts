@@ -5,10 +5,15 @@ import { useImageSelector, UseImageSelectorProps } from './useImageSelector';
 import { useImageUploader } from '@/entities/image/model/useImageUploader';
 import { useCallback } from 'react';
 
+/**
+ * 이미지 선택 + 업로드를 관리하는 통합 훅.
+ * UI 상태는 useImageSelector, 업로드는 useImageUploader,
+ * 전체 이미지 비즈니스 로직은 useImageManager에서 조율.
+ */
 export function useImageManager({ initialImages = [] }: UseImageSelectorProps = {}) {
   // 1. useImageSelector에 초기값 전달
   const { inputRef, images, setImages, openPicker, handleSelect, handleRemove, handleReorder } =
-    useImageSelector({ initialImages }); // selector가 인자를 받도록 구성되어야 함
+    useImageSelector({ initialImages });
 
   const { uploadImages } = useImageUploader();
 

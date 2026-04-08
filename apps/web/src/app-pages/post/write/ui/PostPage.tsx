@@ -36,9 +36,17 @@ const PostPage = (props: PostPageProps) => {
   const postId = mode === 'edit' ? props.postId : undefined;
 
   // == Stores ==
-  const { setField, title, category, content, images, reserved, reservedAt, isInitialized } =
-    usePostFormStore();
-  const { linkedSchedule, setLinkedSchedule } = useCreatePostScheduleStore();
+  const title = usePostFormStore((s) => s.title);
+  const category = usePostFormStore((s) => s.category);
+  const content = usePostFormStore((s) => s.content);
+  const images = usePostFormStore((s) => s.images);
+  const reserved = usePostFormStore((s) => s.reserved);
+  const reservedAt = usePostFormStore((s) => s.reservedAt);
+  const isInitialized = usePostFormStore((s) => s.isInitialized);
+  const setField = usePostFormStore((s) => s.setField);
+
+  const linkedSchedule = useCreatePostScheduleStore((s) => s.linkedSchedule);
+  const setLinkedSchedule = useCreatePostScheduleStore((s) => s.setLinkedSchedule);
 
   const openBottomSheet = useBottomSheetStore((s) => s.open);
   const closeBottomSheet = useBottomSheetStore((s) => s.close);
@@ -225,9 +233,9 @@ const PostPage = (props: PostPageProps) => {
       {/* 5. 본문 에디터 */}
       <div className="flex h-full flex-1 overflow-auto">
         <PostEditor
-          mode={mode}
           content={content}
           images={images}
+          setField={setField}
           linkedSchedule={linkedSchedule}
           onScheduleRemove={handleScheduleRemove}
           onReservationClick={handleOpenReservation}

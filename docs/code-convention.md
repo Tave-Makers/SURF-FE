@@ -1,4 +1,4 @@
-# Frontend Convetions
+# Frontend Conventions
 
 본 문서는 Surf 프로젝트의 **브랜치 / 커밋 / 코드 스타일** 규칙을 정의합니다.  
 기수가 바뀌더라도 일관성 있는 코드 품질과 협업 효율성을 유지하기 위함입니다.

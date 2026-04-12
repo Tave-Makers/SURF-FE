@@ -4,7 +4,7 @@
 
 ## 사용법
 
-```
+```bash
 /gen-test <파일경로> [파일경로2] ...
 ```
 
@@ -17,26 +17,27 @@
 
 각 Task 시작 시 반드시 아래 문서를 먼저 읽는다:
 - @docs/testing.md
-- @docs/conventions.md
+- @docs/code-convention.md
 
 ### 2. 파일 분류 및 생성 여부 판단
 
-대상 파일을 읽고 아래 기준으로 분류:
+대상 파일 경로에서 앱 루트(`apps/web` 또는 `apps/admin`)를 먼저 확인한 뒤 아래 기준으로 분류한다.  
+이하 표에서 `<APP_ROOT>`는 `apps/web` 또는 `apps/admin`을 의미한다.
 
 | 파일 패턴 | 테스트 종류 | 생성 위치 |
 |-----------|------------|-----------|
-| `app-pages/**/ui/*.tsx` | 통합 테스트 | `app-pages/**/__tests__/*.integration.test.tsx` |
-| `features/**/ui/*.tsx` | 인터랙션 있으면 RTL 단위 테스트, 없으면 생성 안 함 | `features/**/__tests__/*.test.tsx` |
-| `features/**/model/use*.ts` | 훅 단위 테스트 | `features/**/__tests__/*.test.ts` |
-| `features/**/model/mappers.ts` | 순수 함수 단위 테스트 | `features/**/__tests__/mappers.test.ts` |
-| `shared/lib/*.ts` | 순수 함수 단위 테스트 | `shared/lib/__tests__/*.test.ts` |
+| `<APP_ROOT>/src/app-pages/**/ui/*.tsx` | 통합 테스트 | `<APP_ROOT>/src/app-pages/**/__tests__/*.integration.test.tsx` |
+| `<APP_ROOT>/src/features/**/ui/*.tsx` | 인터랙션 있으면 RTL 단위 테스트, 없으면 생성 안 함 | `<APP_ROOT>/src/features/**/__tests__/*.test.tsx` |
+| `<APP_ROOT>/src/features/**/model/use*.ts` | 훅 단위 테스트 | `<APP_ROOT>/src/features/**/__tests__/*.test.ts` |
+| `<APP_ROOT>/src/features/**/model/mappers.ts` | 순수 함수 단위 테스트 | `<APP_ROOT>/src/features/**/__tests__/mappers.test.ts` |
+| `<APP_ROOT>/src/shared/lib/*.ts` | 순수 함수 단위 테스트 | `<APP_ROOT>/src/shared/lib/__tests__/*.test.ts` |
 
 **생성하지 않는 파일:**
 - `*/api/*.ts` — 훅 레벨에서 커버됨
 - `*/model/use*Store.ts` — 통합 테스트에서 커버됨
 - `*/index.ts` — re-export 파일
 
-`features/**/ui/*.tsx` 판단 기준:
+`<APP_ROOT>/src/features/**/ui/*.tsx` 판단 기준:
 - `onClick`, `onSubmit` 등 이벤트 핸들러 + 상태 변화 있음 → RTL 테스트 생성
 - props만 받아 렌더링 → 생성 안 함, 아래 메시지 출력:
   ```
@@ -76,11 +77,24 @@ testing.md "테스트하지 않는 것" 섹션을 반드시 준수:
 
 ### 5. 테스트 실행
 
-생성된 테스트 파일을 즉시 실행:
+대상 파일의 경로에서 어느 앱인지 판별한 뒤 `--filter`를 명시해 실행한다.
+
+**앱 판별 규칙:**
+
+| 파일 경로 패턴 | filter |
+|----------------|--------|
+| `apps/web/...` 포함 | `surf-web` |
+| `apps/admin/...` 포함 | `surf-admin` |
 
 ```bash
-pnpm vitest run <생성된 테스트 파일 경로>
+# surf-web 예시
+pnpm --filter surf-web vitest run <생성된 테스트 파일의 apps/web/ 기준 상대 경로>
+
+# surf-admin 예시
+pnpm --filter surf-admin vitest run <생성된 테스트 파일의 apps/admin/ 기준 상대 경로>
 ```
+
+> **주의:** `pnpm vitest run <경로>`만 사용하면 루트에서 실행되어 어느 workspace를 대상으로 하는지 모호해진다. 반드시 `--filter`를 붙인다.
 
 ### 6. 실패 감지 및 수정
 
@@ -103,38 +117,38 @@ pnpm vitest run <생성된 테스트 파일 경로>
 
 ### 7. 재실행 및 통과 확인
 
-수정 후 동일 명령으로 재실행. 전체 통과 확인:
+수정 후 5단계와 동일한 `--filter` 명령으로 재실행. 전체 통과 확인:
 
 ```bash
-pnpm vitest run <테스트 파일 경로>
+pnpm --filter <surf-web|surf-admin> vitest run <테스트 파일 경로>
 ```
 
 ### 8. 완료 보고
 
 **정상 케이스:**
 ```
-✅ app-pages/post/__tests__/post-page.integration.test.tsx 생성 (3개 케이스) — 통과
-✅ features/post/__tests__/LikeButton.test.tsx 생성 (2개 케이스) — 통과
-⏭ features/post/ui/PostCard.tsx — 순수 표시용 컴포넌트. Storybook으로 위임.
+✅ apps/web/src/app-pages/post/__tests__/post-page.integration.test.tsx 생성 (3개 케이스) — 통과
+✅ apps/web/src/features/post/__tests__/LikeButton.test.tsx 생성 (2개 케이스) — 통과
+⏭ apps/web/src/features/post/ui/PostCard.tsx — 순수 표시용 컴포넌트. Storybook으로 위임.
 ```
 
 **수정 후 통과:**
 ```
-✅ features/post/__tests__/mappers.test.ts 생성 (5개 케이스)
+✅ apps/web/src/features/post/__tests__/mappers.test.ts 생성 (5개 케이스)
   └ 1회 수정: getByText → getByRole('cell')로 셀렉터 변경 후 통과
 ```
 
 **소스 코드 버그 감지:**
 ```
-⚠️ features/post/__tests__/useDeletePost.test.ts — 테스트 통과 불가
+⚠️ apps/web/src/features/post/__tests__/useDeletePost.test.ts — 테스트 통과 불가
   └ 원인: onError에서 useToastStore 미사용, useAlertStore 직접 호출 중
-  └ 수정 필요: features/post/model/useDeletePost.ts line 24
+  └ 수정 필요: apps/web/src/features/post/model/useDeletePost.ts line 24
   └ 참고: conventions.md 에러 처리 섹션
 ```
 
 **3회 재시도 초과:**
 ```
-❌ features/post/__tests__/PostForm.test.tsx — 3회 시도 후 실패
+❌ apps/web/src/features/post/__tests__/PostForm.test.tsx — 3회 시도 후 실패
   └ 마지막 오류: [에러 메시지]
   └ 원인 추정: [분석 내용]
   └ 직접 확인 필요

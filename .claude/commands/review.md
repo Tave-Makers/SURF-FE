@@ -4,7 +4,7 @@
 
 ## 사용법
 
-```
+```bash
 /review <파일경로> [파일경로2] ...
 /review --staged        # git staging area 전체 대상
 ```
@@ -23,7 +23,7 @@ git diff --cached --name-only --diff-filter=ACM
 ### 1. 컨텍스트 로드
 
 각 Task 시작 시 반드시 아래 문서를 먼저 읽는다:
-- @docs/conventions.md
+- @docs/code-convention.md
 - @docs/component-patterns.md
 - 테스트 파일(`*.test.ts`, `*.test.tsx`)인 경우 @docs/testing.md 추가 로드
 

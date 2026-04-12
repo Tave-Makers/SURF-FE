@@ -33,6 +33,7 @@ Playwright 스크린샷 리포트를 만듭니다.
 ```json
 {
   "componentName": "PostCard",
+  "targetApp": "web",
   "variants": ["default", "hover", "disabled"],
   "props": [
     { "name": "title", "type": "string" },
@@ -54,6 +55,8 @@ Playwright 스크린샷 리포트를 만듭니다.
 3. 전달받은 화면 설명과 @docs/component-patterns.md 레이어 판단 기준을
    함께 참고해 적합한 레이어 제안
 4. `packages/ui`에서 재사용 가능한 컴포넌트 목록 확인
+5. `targetApp` 결정: 화면 설명이나 Figma 컨텍스트에서 대상 앱(`web` / `admin`)을 판별.
+   명확하지 않으면 승인 요청 시 함께 확인한다.
 
 **산출물:** `publish-output/spec.json`
 
@@ -62,7 +65,9 @@ Playwright 스크린샷 리포트를 만듭니다.
 ```
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 컴포넌트명: PostCard
+대상 앱: apps/web  (변경하려면 알려주세요)
 제안 레이어: entities/post
+생성 경로: apps/web/src/entities/post/ui/PostCard.tsx
 이유: Post 도메인 데이터를 표시하는 순수 표시용 컴포넌트.
       인터랙션 없음, API 연동 없음.
 
@@ -91,21 +96,27 @@ Playwright 스크린샷 리포트를 만듭니다.
 
 **작업:**
 
-1. 승인된 레이어 기준으로 FSD 폴더 구조 생성:
+1. `spec.json`의 `targetApp` 값(`web` / `admin`)을 읽어 앱 루트를 결정한다:
+   - `web` → `apps/web/src`
+   - `admin` → `apps/admin/src`
+
+   이하 경로는 모두 결정된 앱 루트(`<APP_ROOT>`) 아래에 생성한다.
+
+2. 승인된 레이어 기준으로 FSD 폴더 구조 생성:
 
 ```
 # entities인 경우
-entities/<domain>/ui/<ComponentName>.tsx
-entities/<domain>/index.ts
+<APP_ROOT>/entities/<domain>/ui/<ComponentName>.tsx
+<APP_ROOT>/entities/<domain>/index.ts
 
 # features인 경우
-features/<feature-name>/ui/<ComponentName>.tsx
-features/<feature-name>/model/  (API 연동 있을 경우)
-features/<feature-name>/index.ts
+<APP_ROOT>/features/<feature-name>/ui/<ComponentName>.tsx
+<APP_ROOT>/features/<feature-name>/model/  (API 연동 있을 경우)
+<APP_ROOT>/features/<feature-name>/index.ts
 
 # widgets인 경우
-widgets/<widget-name>/ui/<ComponentName>.tsx
-widgets/<widget-name>/index.ts
+<APP_ROOT>/widgets/<widget-name>/ui/<ComponentName>.tsx
+<APP_ROOT>/widgets/<widget-name>/index.ts
 ```
 
 2. 컴포넌트 작성 기준:
@@ -124,7 +135,7 @@ className="border-[#E2E8F0]"
 3. 기존 파일 처리:
    - **컴포넌트 파일**이 이미 존재하면 덮어쓰지 않고 중단:
      ```
-     ⛔ entities/post/ui/PostCard.tsx 이미 존재합니다.
+     ⛔ apps/web/src/entities/post/ui/PostCard.tsx 이미 존재합니다.
         덮어쓰려면 명시적으로 알려주세요.
      ```
    - **`index.ts`**가 이미 존재하면 덮어쓰지 않고 새 export만 추가(append):
@@ -145,9 +156,9 @@ className="border-[#E2E8F0]"
 
 **작업:**
 
-1. story 파일 생성 위치:
+1. story 파일 생성 위치 (`spec.json`의 `targetApp` 기준):
 ```
-<layer>/<name>/ui/<ComponentName>.stories.tsx
+apps/{targetApp}/src/<layer>/<name>/ui/<ComponentName>.stories.tsx
 ```
 
 2. story 작성 기준:
@@ -180,7 +191,7 @@ export const Hovered: Story = {
 };
 ```
 
-**산출물:** `<layer>/<name>/ui/<ComponentName>.stories.tsx`
+**산출물:** `apps/{targetApp}/src/<layer>/<name>/ui/<ComponentName>.stories.tsx`
 
 ---
 
@@ -231,11 +242,11 @@ open publish-output/report.html
    └ ⚠️ 토큰 미매핑 1건: border-color #E2E8F0
 
 ✅ Agent 2 — 컴포넌트 생성 완료
-   └ entities/post/ui/PostCard.tsx
-   └ entities/post/index.ts
+   └ apps/web/src/entities/post/ui/PostCard.tsx
+   └ apps/web/src/entities/post/index.ts
 
 ✅ Agent 3 — Storybook 생성 완료
-   └ entities/post/ui/PostCard.stories.tsx
+   └ apps/web/src/entities/post/ui/PostCard.stories.tsx
    └ 3개 story: Default, Hovered, Disabled
 
 ✅ Agent 4 — 스크린샷 리포트 생성 완료

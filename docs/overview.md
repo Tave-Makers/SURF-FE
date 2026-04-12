@@ -14,7 +14,7 @@
 
 ## 모노레포 구조
 
-```
+```text
 surf-monorepo/
 ├── apps/
 │   ├── web/          # surf-web (메인 유저 앱)
@@ -31,7 +31,7 @@ surf-monorepo/
 
 ## apps/web 디렉토리 구조 (FSD)
 
-```
+```text
 src/
 ├── app/              # Next.js App Router (라우팅만)
 │   ├── (protected)/  # 인증 필요 페이지

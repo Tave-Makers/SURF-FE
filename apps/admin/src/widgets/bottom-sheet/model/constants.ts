@@ -1,3 +1,4 @@
+import { CohortSelectBottomSheet } from '@/features/active-cohort/ui/CohortSelectBottomSheet';
 import { GenerationBottomSheet } from '@/features/group-management/ui/GenerationBottomSheet';
 import { GroupTypeBottomSheet } from '@/features/group-management/ui/GroupTypeBottomSheet';
 import { PickLeaderBottomSheet } from '@/features/group-management/ui/PickLeaderBottomSheet';
@@ -16,6 +17,7 @@ type BottomSheetComponents = {
 };
 
 export const SHEET_COMPONENTS = {
+  cohort: CohortSelectBottomSheet,
   signup: SignupRequestBottomSheet,
   member: MemberManagementSheet,
   generation: GenerationBottomSheet,

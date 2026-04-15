@@ -3,25 +3,25 @@ import { Sheet as ModalSheet } from 'react-modal-sheet';
 
 declare module '@/shared/store/bottomSheetStore' {
   interface BottomSheetMap {
-    generation: Omit<GenerationBottomSheetProps, 'isOpen' | 'onClose'>;
+    cohort: Omit<CohortSelectBottomSheetProps, 'isOpen' | 'onClose'>;
   }
 }
 
-export type GenerationBottomSheetProps = {
+export type CohortSelectBottomSheetProps = {
   isOpen: boolean;
   onClose: () => void;
-  maxGeneration: number;
-  selectedGeneration: number;
-  onSelect: (generation: number) => void;
+  maxCohort: number;
+  selectedCohort: number | null;
+  onSelect: (cohort: number) => void;
 };
 
-export const GenerationBottomSheet = ({
+export const CohortSelectBottomSheet = ({
   isOpen,
   onClose,
-  maxGeneration,
-  selectedGeneration,
+  maxCohort,
+  selectedCohort,
   onSelect,
-}: GenerationBottomSheetProps) => {
+}: CohortSelectBottomSheetProps) => {
   if (!isOpen) return null;
 
   return (
@@ -34,20 +34,20 @@ export const GenerationBottomSheet = ({
         <ModalSheet.Content>
           <Sheet>
             <div className="flex flex-col gap-5 py-15">
-              {Array.from({ length: maxGeneration }).map((_, idx) => {
-                const generation = maxGeneration - idx;
+              {Array.from({ length: maxCohort }).map((_, idx) => {
+                const cohort = maxCohort - idx;
+                const isSelected = selectedCohort === cohort;
+
                 return (
                   <button
-                    key={generation}
+                    key={cohort}
                     type="button"
-                    onClick={() => onSelect(generation)}
+                    onClick={() => onSelect(cohort)}
                     className={`text-body-body6 text-foreground-normal rounded-md px-12 py-10 text-left transition-colors ${
-                      selectedGeneration === generation
-                        ? 'bg-background-secondary font-semibold'
-                        : 'hover:bg-background-secondary'
+                      isSelected ? 'bg-background-secondary font-semibold' : 'hover:bg-background-secondary'
                     }`}
                   >
-                    {generation}기
+                    {cohort}기
                   </button>
                 );
               })}

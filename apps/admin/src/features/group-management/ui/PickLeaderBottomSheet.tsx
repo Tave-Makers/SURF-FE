@@ -1,4 +1,5 @@
 import { Avatar } from '@surf/ui/avatar';
+import { Sheet } from '@surf/ui/sheet';
 import { Sheet as ModalSheet } from 'react-modal-sheet';
 import type { MemberSummary } from '@/entities/member/model/types';
 
@@ -30,27 +31,28 @@ export const PickLeaderBottomSheet = ({
       className="mx-auto flex w-full sm:w-[min(100dvw,calc(100dvh*375/812))]"
     >
       <ModalSheet.Container>
-        <ModalSheet.Header className="bg-background-normal-lighter rounded-t-4" />
-        <ModalSheet.Content className="max-h-[45vh] overflow-y-auto">
-          <div className="bg-background-normal-lighter flex flex-col p-15">
-            {members.map((member) => (
-              <button
-                key={member.id}
-                type="button"
-                onClick={() => onSelect(member)}
-                className="hover:bg-background-secondary flex items-center gap-10 rounded-md px-12 py-10 text-left transition-colors"
-              >
-                <Avatar size="xs" src={member.profileImageUrl} alt={`${member.name} 프로필`} />
-                <span className="text-body-body6 text-foreground-normal">{member.name}</span>
-              </button>
-            ))}
+        <ModalSheet.Content>
+          <Sheet>
+            <div className="flex flex-col py-15">
+              {members.map((member) => (
+                <button
+                  key={member.id}
+                  type="button"
+                  onClick={() => onSelect(member)}
+                  className="hover:bg-background-secondary flex items-center gap-10 rounded-md px-12 py-10 text-left transition-colors"
+                >
+                  <Avatar size="xs" src={member.profileImageUrl} alt={`${member.name} 프로필`} />
+                  <span className="text-body-body6 text-foreground-normal">{member.name}</span>
+                </button>
+              ))}
 
-            {members.length === 0 && (
-              <div className="text-body-body6 text-foreground-normal px-12 py-20 text-left">
-                선택할 수 있는 멤버가 없어요.
-              </div>
-            )}
-          </div>
+              {members.length === 0 && (
+                <div className="text-body-body6 text-foreground-normal px-12 py-20 text-left">
+                  선택할 수 있는 멤버가 없어요.
+                </div>
+              )}
+            </div>
+          </Sheet>
         </ModalSheet.Content>
       </ModalSheet.Container>
       <ModalSheet.Backdrop onTap={onClose} />

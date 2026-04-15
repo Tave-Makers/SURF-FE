@@ -4,7 +4,15 @@
     "baseUrl": ".",
     "types": ["vitest/globals"],
     "paths": {
-      "@/*": ["src/*"]
+      "@/*": ["src/*"],
+      "@surf/hooks": ["../../packages/hooks/index.ts"],
+      "@surf/utils": ["../../packages/utils/index.ts"],
+      "@surf/ui/store/*": ["../../packages/ui/store/*"],
+      "@surf/ui/lib/*": ["../../packages/ui/lib/*"],
+      "@surf/ui/hooks/*": ["../../packages/ui/hooks/*"],
+      "@surf/ui/styles/*": ["../../packages/ui/styles/*"],
+      "@surf/ui/assets/*": ["../../packages/ui/assets/*"],
+      "@surf/ui/*": ["../../packages/ui/components/*/index.ts"]
     }
   },
   "include": [

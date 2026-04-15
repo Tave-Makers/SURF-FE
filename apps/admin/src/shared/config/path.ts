@@ -4,7 +4,7 @@ export const PAGE_ROUTES = {
   HOME: '/',
   SIGNUP_REQUEST: '/signup-request',
   LOGIN: '/login',
-  SETTING_ACTIVE_GENERATION: '/active-generation',
+  SETTING_ACTIVE_COHORT: '/active-cohort',
   MEMBER_MNG: '/member-management',
   BANNER: {
     CREATE: '/banner/create',

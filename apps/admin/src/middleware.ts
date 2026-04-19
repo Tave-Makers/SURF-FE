@@ -1,7 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
 
 const PUBLIC_PREFIX = [
-  '/welcome-message',
   '/login',
   '/login/callback',
   '/signup',

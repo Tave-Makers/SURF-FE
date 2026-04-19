@@ -1,6 +1,6 @@
 # review
 
-변경된 코드를 컨벤션 기준으로 검증하고 리뷰합니다.
+변경된 코드를 컨벤션 기준으로 검증·리뷰하고, 사용자가 선택한 항목만 실제 코드에 반영합니다.
 
 ## 사용법
 
@@ -17,8 +17,8 @@ git diff --cached --name-only --diff-filter=ACM
 
 ## 실행 흐름
 
-대상 파일이 여러 개면 Task 툴로 병렬 실행.
-각 Task는 아래 흐름을 독립적으로 수행.
+대상 파일이 여러 개면 Task 툴로 병렬 실행 (Phase 1–2까지).
+Phase 3 반영 단계는 사용자 선택이 필요하므로 **순차적으로** 진행한다.
 
 ### 1. 컨텍스트 로드
 
@@ -74,7 +74,11 @@ git diff --cached --name-only --diff-filter=ACM
 
 ### 4. 출력 형식
 
-파일별로 아래 형식으로 출력:
+파일별로 아래 형식으로 출력. **각 지적 항목에 ID를 부여**해 Phase 3에서 선택·참조 가능하게 한다.
+
+- 규칙 위반(❌): `[F-{번호}]` — Fail
+- 리뷰 제안(💡): `[S-{번호}]` — Suggestion
+- ID는 파일 단위로 리셋되며, 파일이 여러 개면 파일명을 prefix로 붙인다: `PostCard.tsx#F-1`
 
 ```
 ## PostCard.tsx
@@ -83,28 +87,85 @@ git diff --cached --name-only --diff-filter=ACM
 ✅ 모든 규칙 통과
 
 ### 리뷰 제안
-💡 `likeCount`가 undefined일 경우 방어 로직 없음 (line 12)
-💡 버튼에 aria-label 누락 — 스크린리더에서 의미 전달 안 됨 (line 18)
+💡 [S-1] `likeCount`가 undefined일 경우 방어 로직 없음 (line 12)
+💡 [S-2] 버튼에 aria-label 누락 — 스크린리더에서 의미 전달 안 됨 (line 18)
 
 ---
 
 ## useDeletePost.ts
 
 ### 검증 결과
-❌ [conventions.md / 에러 처리] onError에서 useToastStore 미사용
+❌ [F-1] [conventions.md / 에러 처리] onError에서 useToastStore 미사용
    → useAlertStore 직접 호출 중 (line 24)
    → 수정: useToastStore(@surf/ui/store/toastStore)로 교체
 
-❌ [conventions.md / 에러 처리] API 함수에서 의미 없는 try/catch re-throw
+❌ [F-2] [conventions.md / 에러 처리] API 함수에서 의미 없는 try/catch re-throw
    → deletePost.ts line 8
    → 수정: catch 블록 제거
 
 ### 리뷰 제안
-💡 삭제 성공 후 queryClient.invalidateQueries 호출 누락 — 목록 캐시 갱신 안 됨
+💡 [S-1] 삭제 성공 후 queryClient.invalidateQueries 호출 누락 — 목록 캐시 갱신 안 됨
+```
+
+### 5. Phase 3 — 반영 (선택 항목 적용)
+
+Phase 1–2 출력이 끝나면, 사용자에게 **반영할 항목을 선택**하도록 요청한다.
+
+#### 5.1 선택 요청
+
+`AskUserQuestion` 툴로 다음과 같이 묻는다:
+
+- 질문: "어떤 항목을 반영할까요?"
+- 선택지:
+  - `전체 반영 (❌ + 💡)`
+  - `❌ 규칙 위반만 반영`
+  - `항목 직접 선택` — 선택 시 추가로 ID 목록을 입력받는다 (예: `useDeletePost.ts#F-1, PostCard.tsx#S-2`)
+  - `반영하지 않음` — Phase 3 종료
+
+항목이 하나도 없으면 Phase 3는 건너뛴다.
+
+#### 5.2 적용
+
+선택된 각 항목에 대해 순차 처리:
+
+1. 적용 대상 파일을 `Read`로 읽는다 (이미 컨텍스트에 있지 않은 경우).
+2. `Edit` 툴로 최소 diff만 생성한다 — 리뷰 지적과 무관한 라인은 건드리지 않는다.
+3. 항목 하나 = 커밋 하나 단위로 처리할 수 있도록 **파일별·항목별로 Edit 호출을 분리**한다. 같은 파일에 여러 항목이 걸려 있다면 항목별로 순서대로 Edit.
+4. 적용 실패(Edit 매칭 실패, 충돌 등) 시 해당 항목만 **skip**하고 이유를 기록. 다른 항목은 계속 진행.
+
+#### 5.3 적용 후 검증
+
+반영 직후 아래를 수행:
+
+- 같은 파일에 타입 관련 수정이 있었다면 `pnpm tsc --noEmit` (또는 레포 표준 타입체크 명령) 실행 제안
+- 테스트 파일이 수정되었다면 해당 테스트만 실행하도록 명령 제시
+- 실제 명령 실행은 사용자 동의(AskUserQuestion) 후에만 수행
+
+#### 5.4 요약 출력
+
+마지막에 반영 결과를 하나의 블록으로 요약:
+
+```
+## 반영 결과
+
+### ✅ 적용됨 (2건)
+- useDeletePost.ts#F-1 — useToastStore 교체
+- deletePost.ts#F-2 — 불필요한 try/catch 제거
+
+### ⏭ 건너뜀 (1건)
+- PostCard.tsx#S-2 — 사용자가 선택하지 않음
+
+### ⚠️ 적용 실패 (1건)
+- useDeletePost.ts#S-1 — invalidateQueries 위치 모호, 수동 수정 권장
+
+### 후속 제안
+- `pnpm tsc --noEmit` 실행 권장
+- 변경된 파일: useDeletePost.ts, deletePost.ts
 ```
 
 ## 범위 외
 
-- 코드 자동 수정은 하지 않는다 — 수정 방향 제시만
+- **선택되지 않은 항목은 절대 수정하지 않는다** — Phase 2 제안이라도 사용자가 고르지 않았다면 건들지 말 것
 - 테스트 코드 생성은 하지 않는다 → `/gen-test` 커맨드 사용
 - 빌드/번들 최적화, 성능 프로파일링은 다루지 않는다
+- 리팩토링성 대규모 구조 변경은 Phase 3 대상이 아니다 — 별도 작업으로 제안만 한다

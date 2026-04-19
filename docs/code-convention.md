@@ -103,6 +103,137 @@ features/post/
 
 ---
 
+## 비즈니스 로직 분리 (커스텀 훅)
+
+컴포넌트는 **"무엇을 보여줄지(JSX)"** 에만 집중한다. 상태 관리, API 호출, 파생 값 계산, 이벤트 핸들러 등 **"어떻게 동작할지"** 에 해당하는 로직은 커스텀 훅으로 분리해 가독성을 높이고 뷰–로직 간 결합도를 낮춘다.
+
+### 분리 기준
+
+다음 중 하나라도 해당하면 커스텀 훅으로 뽑는다.
+
+- `useState` / `useReducer` 가 3개 이상이거나, 여러 상태가 서로 맞물려 변하는 경우
+- `useQuery` / `useMutation` 이 컴포넌트 내부에 직접 들어가는 경우
+- `useEffect` 안에서 구독/타이머/이벤트 리스너 등 **정리(cleanup)가 필요한 부수효과**를 다루는 경우
+- 다른 컴포넌트에서도 재사용될 가능성이 있는 로직
+- JSX보다 로직(이벤트 핸들러, 계산 로직)이 먼저 길게 나오는 경우
+
+### 위치 규칙
+
+- 해당 기능에서만 쓰는 훅 → `features/{domain}/model/use*.ts`
+- 여러 도메인에서 공통으로 쓰는 훅 → `shared/lib/hooks/use*.ts`
+- 파일명/훅명은 **`use` 로 시작하는 camelCase**: `usePostForm.ts` → `usePostForm()`
+
+### 반환 형태
+
+- 반환값이 2개 이하면 **튜플**, 3개 이상이면 **객체**로 반환한다. 객체 반환 시 `state` / `actions` 로 묶으면 호출부에서 의도가 드러나 좋다.
+
+```ts
+// ✅ 2개 — 튜플
+export const useToggle = (initial = false) => {
+  const [value, setValue] = useState(initial);
+  const toggle = useCallback(() => setValue((v) => !v), []);
+  return [value, toggle] as const;
+};
+
+// ✅ 3개 이상 — 객체 (state/actions 그룹핑)
+export const usePostForm = (postId: number) => {
+  // ...
+  return {
+    state: { title, content, isDirty },
+    actions: { setTitle, setContent, submit, reset },
+  };
+};
+```
+
+### Before / After
+
+```tsx
+// ❌ Before — 컴포넌트에 상태·API·핸들러가 모두 얽혀 있어 JSX가 보이지 않는다
+export const PostForm = ({ postId }: Props) => {
+  const [title, setTitle] = useState('');
+  const [content, setContent] = useState('');
+  const showToast = useToastStore((s) => s.show);
+
+  const { data } = useQuery({
+    queryKey: ['post', postId],
+    queryFn: () => fetchPost(postId),
+  });
+
+  const { mutate } = useMutation({
+    mutationFn: updatePost,
+    onSuccess: () => showToast('저장되었습니다.'),
+    onError: (error) => {
+      console.error('게시글 수정 실패:', error);
+      showToast('저장에 실패했습니다.');
+    },
+  });
+
+  useEffect(() => {
+    if (data) {
+      setTitle(data.title);
+      setContent(data.content);
+    }
+  }, [data]);
+
+  const handleSubmit = () => mutate({ postId, title, content });
+
+  return (
+    <form onSubmit={handleSubmit}>
+      <input value={title} onChange={(e) => setTitle(e.target.value)} />
+      <textarea value={content} onChange={(e) => setContent(e.target.value)} />
+      <button type="submit">저장</button>
+    </form>
+  );
+};
+```
+
+```tsx
+// ✅ After — 로직은 훅으로, 컴포넌트는 뷰에만 집중
+// features/post/model/usePostForm.ts
+export const usePostForm = (postId: number) => {
+  const [title, setTitle] = useState('');
+  const [content, setContent] = useState('');
+  const showToast = useToastStore((s) => s.show);
+
+  const { data } = usePostQuery(postId);
+  const { mutate } = useUpdatePostMutation();
+
+  useEffect(() => {
+    if (!data) return;
+    setTitle(data.title);
+    setContent(data.content);
+  }, [data]);
+
+  const submit = () => mutate({ postId, title, content });
+
+  return {
+    state: { title, content },
+    actions: { setTitle, setContent, submit },
+  };
+};
+
+// features/post/ui/PostForm.tsx
+export const PostForm = ({ postId }: Props) => {
+  const { state, actions } = usePostForm(postId);
+
+  return (
+    <form onSubmit={actions.submit}>
+      <input value={state.title} onChange={(e) => actions.setTitle(e.target.value)} />
+      <textarea value={state.content} onChange={(e) => actions.setContent(e.target.value)} />
+      <button type="submit">저장</button>
+    </form>
+  );
+};
+```
+
+### 안티 패턴
+
+- **JSX를 훅 안에서 반환하지 않는다.** 훅은 값/함수만 반환한다. 뷰를 반환하면 재사용이 어렵고 테스트가 힘들어진다.
+- **"훅을 위한 훅"을 만들지 않는다.** 한 컴포넌트에서만 쓰고, 로직이 10줄 이내이며 상태가 단순하다면 그냥 컴포넌트 안에 둔다.
+- **훅 내부에서 전역 상태를 암묵적으로 바꾸지 않는다.** 스토어를 건드린다면 훅 이름이나 반환 액션에서 그 사실이 드러나야 한다.
+
+---
+
 ## Tailwind
 
 - 토큰 기반 클래스 사용: `bg-background-normal`, `text-foreground-static-black`

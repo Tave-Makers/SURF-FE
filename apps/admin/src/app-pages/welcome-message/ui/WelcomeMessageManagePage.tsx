@@ -10,6 +10,8 @@ import { AppHeader } from '@/widgets/header/ui/AppHeader';
 
 const MAIN_MESSAGE_LIMIT = 40;
 const SUB_MESSAGE_LIMIT = 10;
+const STICKY_FOOTER_SHADOW =
+  'shadow-[var(--effect-shadow-embossed-inverse-x-normal,0)_var(--effect-shadow-embossed-inverse-y-normal,0)_var(--effect-shadow-embossed-inverse-blur,2px)_var(--effect-shadow-raised-spread,0)_var(--effect-shadow-embossed-inverse-color-normal,rgba(0,0,0,0.02)),var(--effect-shadow-embossed-inverse-x-normal,0)_var(--effect-shadow-embossed-inverse-y-secondary,-2px)_var(--effect-shadow-embossed-inverse-blur-secondary,4px)_var(--effect-shadow-embossed-inverse-spread,0)_var(--effect-shadow-embossed-inverse-color-secondary,rgba(0,0,0,0.04))]';
 
 export const WelcomeMessageManagePage = () => {
   const [isEditMode, setIsEditMode] = useState(false);
@@ -75,7 +77,7 @@ export const WelcomeMessageManagePage = () => {
       </div>
 
       {isEditMode && (
-        <div className="bg-background-normal sticky bottom-0 p-13 shadow-[var(--effect-shadow-embossed-inverse-x-normal,0)_var(--effect-shadow-embossed-inverse-y-normal,0)_var(--effect-shadow-embossed-inverse-blur,2px)_var(--effect-shadow-raised-spread,0)_var(--effect-shadow-embossed-inverse-color-normal,rgba(0,0,0,0.02)),var(--effect-shadow-embossed-inverse-x-normal,0)_var(--effect-shadow-embossed-inverse-y-secondary,-2px)_var(--effect-shadow-embossed-inverse-blur-secondary,4px)_var(--effect-shadow-embossed-inverse-spread,0)_var(--effect-shadow-embossed-inverse-color-secondary,rgba(0,0,0,0.04))]">
+        <div className={`bg-background-normal sticky bottom-0 p-13 ${STICKY_FOOTER_SHADOW}`}>
           <SolidButton
             size="l"
             variant="primary"

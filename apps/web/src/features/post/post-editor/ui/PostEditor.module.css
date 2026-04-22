@@ -4,22 +4,22 @@
 
 /* Placeholder 스타일 정의 */
 /* 커서가 placeholder 앞에 깜빡일 수 있는 실제 공간 확보 */
-.ProseMirror p.is-editor-empty:first-child {
+.editor :global(.ProseMirror p.is-editor-empty:first-child) {
   min-width: 1px;
 }
 /* placeholder 폰트 색상, 입력 커서 설정 */
-.ProseMirror p.is-editor-empty:first-child::before {
+.editor :global(.ProseMirror p.is-editor-empty:first-child::before) {
   content: attr(data-placeholder);
   color: var(--color-foreground-tertiary-lighter);
   pointer-events: none;
 }
 
 /* focus 시 outline 제거 */
-.ProseMirror:focus {
+.editor :global(.ProseMirror:focus) {
   outline: none;
 }
 
 /* focus 시 placeholder 제거 */
-.ProseMirror:focus p.is-editor-empty:first-child::before {
+.editor :global(.ProseMirror:focus p.is-editor-empty:first-child::before) {
   content: none;
 }

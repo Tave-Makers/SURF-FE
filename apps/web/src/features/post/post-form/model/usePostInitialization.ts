@@ -8,52 +8,48 @@ import { PostScheduleData } from '@/entities/post/api/types';
 import { UploadImage } from '@surf/utils';
 import { usePostFormStore } from './usePostFormStore';
 
-type PostFormActions = Pick<PostFormState, 'setField' | 'setEditorState'>;
+type PostFormActions = Pick<PostFormState, 'setField'>;
 
 interface Props extends PostFormActions {
   mode: PostPageMode;
+  postId: string | undefined;
   postDetail: PostDetail | undefined;
   postSchedule: PostScheduleData | undefined;
+  isPostDetailLoading: boolean;
   linkedSchedule: ScheduleFormData | null;
   setLinkedSchedule: (data: ScheduleFormData) => void;
-  isInitializedRef: React.RefObject<boolean>;
-  isScheduleFetching: boolean;
+  isScheduleLoading: boolean;
+  resetPostState: () => void;
 }
 
 export const usePostInitialization = ({
   mode,
+  postId,
   postDetail,
   postSchedule,
+  isPostDetailLoading,
   linkedSchedule,
   setField,
-  setEditorState,
   setLinkedSchedule,
-  isInitializedRef,
-  isScheduleFetching,
+  isScheduleLoading,
+  resetPostState,
 }: Props) => {
-  const { initialSnapshot, setSnapshot, content, images, canInitialize } = usePostFormStore();
+  const { postId: storedPostId, isInitialized, setIsInitialized, setSnapshot } = usePostFormStore();
 
   useEffect(() => {
     // 1. 초기화 가드
-    if (!canInitialize) return;
-    if (mode === 'create' || isInitializedRef.current) return;
-    if (mode === 'edit' && !postDetail) return;
-    // 일정이 있는 게시글인데, 일정을 아직 가져오지 못했거나 '새로 가져오는 중(Fetching)'이면 대기
-    if (postDetail?.hasSchedule && (postSchedule === undefined || isScheduleFetching)) {
+    const currentId = mode === 'edit' ? postId : 'create';
+
+    // 다른 게시글 데이터가 남아있으면 리셋
+    if (isInitialized && storedPostId !== currentId) {
+      resetPostState();
       return;
     }
 
-    // 이미 스냅샷이 있는 경우 (뒤로가기 등 세션 유지 상황)
-    if (initialSnapshot) {
-      setEditorState(content, images);
-      isInitializedRef.current = true;
-      return;
-    }
-
-    // 게시글에 연동된 일정이 있으나, 일정 데이터가 아직 로딩 중인 경우 대기
-    if (postDetail?.hasSchedule && postSchedule === undefined) {
-      return;
-    }
+    if (isInitialized) return;
+    // 데이터 로딩 대기
+    if (mode === 'edit' && isPostDetailLoading) return;
+    if (postDetail?.hasSchedule && isScheduleLoading) return;
 
     // 2. 데이터 매핑
 
@@ -105,6 +101,7 @@ export const usePostInitialization = ({
 
     setField('title', postDetail?.title ?? '');
     setField('content', contentValue);
+    setField('images', mappedImages);
     setField('category', initialCategory);
     setField('reserved', initialReserved);
     setField('reservedAt', initialReservedAt);
@@ -112,9 +109,6 @@ export const usePostInitialization = ({
     if (initialScheduleData && !linkedSchedule) {
       setLinkedSchedule(initialScheduleData);
     }
-
-    // 에디터 엔진에 데이터 주입
-    setEditorState(contentValue, mappedImages);
 
     // 4. 완료 및 스냅샷 저장
     setSnapshot({
@@ -128,21 +122,22 @@ export const usePostInitialization = ({
       initialSchedule: initialScheduleData,
     });
 
-    isInitializedRef.current = true;
+    setField('postId', currentId!);
+    setIsInitialized(true);
   }, [
     mode,
+    postId,
     postDetail,
     postSchedule,
-    initialSnapshot,
     setSnapshot,
     setField,
-    setEditorState,
     setLinkedSchedule,
-    isInitializedRef,
+    isInitialized,
+    storedPostId,
+    resetPostState,
+    setIsInitialized,
     linkedSchedule,
-    content,
-    images,
-    isScheduleFetching,
-    canInitialize,
+    isPostDetailLoading,
+    isScheduleLoading,
   ]);
 };

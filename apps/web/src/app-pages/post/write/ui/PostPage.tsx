@@ -5,12 +5,20 @@ import { HeaderMode } from '@surf/ui/header';
 import { useAlertStore } from '@surf/ui/store/alertStore';
 import { useRouter } from 'next/navigation';
 import { useCallback, useEffect } from 'react';
+import Loading from '@/app/loading';
+
+import { usePostDetail } from '@/entities/post/api/usePostDetail';
 import { POST_BOARDS } from '@/entities/post/model/board';
 import { POST_CATEGORIES } from '@/entities/post/model/category';
 import { POST_VALIDATION } from '@/entities/post/model/validation';
 import { PostBadge } from '@/entities/post/ui/post-badge/PostBadge';
+
+import { useGetPostScheduleQuery } from '@/features/post/model/useGetPostScheduleQuery';
 import { usePostForm } from '@/features/post/post-form/model/usePostForm';
 import { usePostFormStore } from '@/features/post/post-form/model/usePostFormStore';
+import { usePostInitialization } from '@/features/post/post-form/model/usePostInitialization';
+import { useCreatePostScheduleStore } from '@/features/schedule/create-post-schedule/model/useCreatePostScheduleStore';
+
 import { useBottomSheetStore } from '@/shared/store/bottomSheetStore';
 import { AppHeader } from '@/widgets/header/ui/AppHeader';
 import { PostEditor } from '@/widgets/post/post-editor/PostEditor';
@@ -27,56 +35,83 @@ const PostPage = (props: PostPageProps) => {
   const { mode, boardId } = props;
   const postId = mode === 'edit' ? props.postId : undefined;
 
-  // 초기화 허용 플래그 설정
-  const { setCanInitialize } = usePostFormStore();
+  // == Stores ==
+  const title = usePostFormStore((s) => s.title);
+  const category = usePostFormStore((s) => s.category);
+  const content = usePostFormStore((s) => s.content);
+  const images = usePostFormStore((s) => s.images);
+  const reserved = usePostFormStore((s) => s.reserved);
+  const reservedAt = usePostFormStore((s) => s.reservedAt);
+  const isInitialized = usePostFormStore((s) => s.isInitialized);
+  const setField = usePostFormStore((s) => s.setField);
 
-  // 로직 훅 호출 (Logic과 View의 연결 고리)
+  const linkedSchedule = useCreatePostScheduleStore((s) => s.linkedSchedule);
+  const setLinkedSchedule = useCreatePostScheduleStore((s) => s.setLinkedSchedule);
+
+  const openBottomSheet = useBottomSheetStore((s) => s.open);
+  const closeBottomSheet = useBottomSheetStore((s) => s.close);
+
+  // == Data fetching ==
+  const numericPostId = mode === 'edit' && postId ? Number(postId) : undefined;
+
+  // 게시글 조회
+  const { data: postDetail, isLoading: isPostDetailLoading } = usePostDetail(numericPostId!, {
+    enabled: mode === 'edit' && !!numericPostId,
+  });
+
+  // 일정 조회
+  const scheduleId = postDetail?.scheduleId;
+  const shouldFetchSchedule = !!scheduleId;
+  const { data: postSchedule, isLoading: isScheduleLoading } = useGetPostScheduleQuery(
+    numericPostId!,
+    scheduleId,
+    shouldFetchSchedule,
+  );
+
+  // == Hooks ==
   const {
-    title,
-    setTitle,
-    category,
-    setCategory,
-    initialContent,
-    initialImages,
-    linkedSchedule,
     handleScheduleRemove,
     showExitAlert,
     setShowExitAlert,
-    reserved,
-    setReserved,
-    reservedAt,
-    setReservedAt,
     isSubmitDisabled,
-    handleEditorChange,
     handleBack,
     handleSubmit,
     resetPostState,
     isPublished,
-    isReserved,
-  } = usePostForm({ mode, boardId, postId });
+  } = usePostForm({ mode, boardId, postId, postDetail, postSchedule });
 
-  // 마운트시 초기화 허용
-  useEffect(() => {
-    setCanInitialize(true);
-  }, [setCanInitialize]);
+  // == Initialization ==
+
+  // 가드는 내부에서 실행
+  usePostInitialization({
+    mode,
+    postId,
+    postDetail,
+    isPostDetailLoading,
+    postSchedule,
+    linkedSchedule,
+    setField,
+    setLinkedSchedule,
+    isScheduleLoading,
+    resetPostState,
+  });
+
+  // == Handlers ==
 
   const closeExitAlert = useCallback(() => {
     setShowExitAlert(false);
     closeAlert();
   }, [closeAlert, setShowExitAlert]);
 
-  const openBottomSheet = useBottomSheetStore((s) => s.open);
-  const closeBottomSheet = useBottomSheetStore((s) => s.close);
-
   const handleSaveReservation = (date: Date) => {
-    setReservedAt(date);
-    setReserved(true);
+    setField('reservedAt', date);
+    setField('reserved', true);
   };
 
   // 실제 예약 취소
   const handleConfirmRemove = () => {
-    setReserved(false);
-    setReservedAt(null);
+    setField('reserved', false);
+    setField('reservedAt', null);
     closeAlert();
     closeBottomSheet();
   };
@@ -131,15 +166,9 @@ const PostPage = (props: PostPageProps) => {
       ],
     });
     setShowExitAlert(false);
-  }, [
-    closeExitAlert,
-    openAlert,
-    resetPostState,
-    router,
-    setShowExitAlert,
-    showExitAlert,
-    setCanInitialize,
-  ]);
+  }, [closeExitAlert, openAlert, resetPostState, router, setShowExitAlert, showExitAlert]);
+
+  if (!isInitialized) return <Loading />;
 
   return (
     <div className="flex h-full w-full flex-1 flex-col">
@@ -168,7 +197,7 @@ const PostPage = (props: PostPageProps) => {
               props: {
                 category,
                 onSelect: (val) => {
-                  setCategory(val);
+                  setField('category', val);
                   closeBottomSheet();
                 },
                 controlsId: 'post-category-sheet',
@@ -180,7 +209,7 @@ const PostPage = (props: PostPageProps) => {
       </div>
 
       {/* 예약중 태그 */}
-      {isReserved && (
+      {reserved && (
         <div className="px-13 pt-10">
           <PostBadge type="reservation" />
         </div>
@@ -195,7 +224,7 @@ const PostPage = (props: PostPageProps) => {
           id="post-title"
           value={title}
           maxLength={MAX_TITLE_LENGTH}
-          onChange={(e) => setTitle(e.target.value)}
+          onChange={(e) => setField('title', e.target.value)}
           placeholder="제목을 입력해주세요."
           className="text-foreground-normal placeholder:text-foreground-tertiary-lighter text-body-body3 flex flex-1 pt-10 pb-5 focus:outline-none"
         />
@@ -204,11 +233,10 @@ const PostPage = (props: PostPageProps) => {
       {/* 5. 본문 에디터 */}
       <div className="flex h-full flex-1 overflow-auto">
         <PostEditor
-          mode={mode}
-          initialContent={initialContent}
-          initialImages={initialImages}
+          content={content}
+          images={images}
+          setField={setField}
           linkedSchedule={linkedSchedule}
-          onChange={handleEditorChange}
           onScheduleRemove={handleScheduleRemove}
           onReservationClick={handleOpenReservation}
           isPublished={isPublished}

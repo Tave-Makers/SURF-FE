@@ -10,11 +10,14 @@ const sizeStyle: Record<SpinnerSize, string> = {
   xl: 'w-16 h-16',
 };
 
-type SpinnerProps = {
+interface SpinnerProps {
   size?: SpinnerSize;
   className?: string;
-};
+  label?: string;
+}
 
-export const Spinner = ({ size = 'm', className = '' }: SpinnerProps) => {
-  return <SpinnerSvg className={`${sizeStyle[size]} ${className}`} />;
+export const Spinner = ({ size = 'm', className = '', label = '로딩 중' }: SpinnerProps) => {
+  return (
+    <SpinnerSvg className={`${sizeStyle[size]} ${className}`} role="status" aria-label={label} />
+  );
 };

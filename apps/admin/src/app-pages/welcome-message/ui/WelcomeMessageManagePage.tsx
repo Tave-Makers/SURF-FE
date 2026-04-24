@@ -5,27 +5,42 @@ import { FieldGroup } from '@surf/ui/field-group';
 import { HeaderMode } from '@surf/ui/header';
 import { TextArea } from '@surf/ui/text-area';
 
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
+import { useUpdateWelcomeMessageMutation } from '@/features/welcome-message/model/queries/useUpdateWelcomeMessageMutation';
+import { useWelcomeMessageQuery } from '@/features/welcome-message/model/queries/useWelcomeMessageQuery';
 import { AppHeader } from '@/widgets/header/ui/AppHeader';
 
 const MAIN_MESSAGE_LIMIT = 40;
 const SUB_MESSAGE_LIMIT = 10;
 
+/**
+ * 홈 화면 웰컴 메시지(메인 문구·서브 문구)를 조회·수정하는 관리 페이지.
+ *
+ * - 조회 모드: 헤더 우측 "수정" 버튼으로 편집 진입
+ * - 편집 모드: 저장 성공 시 조회 모드로 복귀, 뒤로가기 시 변경 취소(서버 데이터로 재설정)
+ * - `message` → 메인 메시지(최대 40자), `sender` → 서브 메시지(최대 10자)
+ */
 export const WelcomeMessageManagePage = () => {
   const [isEditMode, setIsEditMode] = useState(false);
-  // TODO: ADM-MES-01 — useWelcomeMessageQuery()로 조회 후 useEffect에서 setMainMessage/setSubMessage로 초기값 주입
   const [mainMessage, setMainMessage] = useState('');
   const [subMessage, setSubMessage] = useState('');
+
+  const { data } = useWelcomeMessageQuery();
+  const { mutate, isPending } = useUpdateWelcomeMessageMutation();
+
+  useEffect(() => {
+    if (!data) return;
+    setMainMessage(data.message);
+    setSubMessage(data.sender);
+  }, [data]);
 
   const canSubmit = mainMessage.trim().length > 0 && subMessage.trim().length > 0;
 
   const handleEdit = () => setIsEditMode(true);
   const handleBack = () => setIsEditMode(false);
 
-  // TODO: ADM-MES-02 — isPending을 useUpdateWelcomeMessageMutation()에서 받아 canSubmit 조건에 추가
-  const isPending = false;
   const handleSubmit = () => {
-    // TODO: ADM-MES-02 — useMutation으로 웰컴 메시지 수정, 성공 시 setIsEditMode(false)
+    mutate({ message: mainMessage, sender: subMessage }, { onSuccess: () => setIsEditMode(false) });
   };
 
   return (

@@ -41,6 +41,11 @@ export const NAV_ITEMS = [
     label: '활동배지 관리',
     path: PAGE_ROUTES.BADGE_MNG,
   },
+  {
+    id: 'welcome-msg',
+    label: '웰컴 메세지 관리',
+    path: PAGE_ROUTES.WELCOME_MSG,
+  },
 ] as const;
 
 export type TabId = (typeof NAV_ITEMS)[number]['id'];

@@ -5,9 +5,7 @@ import { FieldGroup } from '@surf/ui/field-group';
 import { HeaderMode } from '@surf/ui/header';
 import { TextArea } from '@surf/ui/text-area';
 
-import { useEffect, useState } from 'react';
-import { useUpdateWelcomeMessageMutation } from '@/features/welcome-message/model/queries/useUpdateWelcomeMessageMutation';
-import { useWelcomeMessageQuery } from '@/features/welcome-message/model/queries/useWelcomeMessageQuery';
+import { useWelcomeMessageForm } from '@/features/welcome-message';
 import { AppHeader } from '@/widgets/header/ui/AppHeader';
 
 const MAIN_MESSAGE_LIMIT = 40;
@@ -21,27 +19,9 @@ const SUB_MESSAGE_LIMIT = 10;
  * - `message` → 메인 메시지(최대 40자), `sender` → 서브 메시지(최대 10자)
  */
 export const WelcomeMessageManagePage = () => {
-  const [isEditMode, setIsEditMode] = useState(false);
-  const [mainMessage, setMainMessage] = useState('');
-  const [subMessage, setSubMessage] = useState('');
-
-  const { data } = useWelcomeMessageQuery();
-  const { mutate, isPending } = useUpdateWelcomeMessageMutation();
-
-  useEffect(() => {
-    if (!data) return;
-    setMainMessage(data.message);
-    setSubMessage(data.sender);
-  }, [data]);
-
-  const canSubmit = mainMessage.trim().length > 0 && subMessage.trim().length > 0;
-
-  const handleEdit = () => setIsEditMode(true);
-  const handleBack = () => setIsEditMode(false);
-
-  const handleSubmit = () => {
-    mutate({ message: mainMessage, sender: subMessage }, { onSuccess: () => setIsEditMode(false) });
-  };
+  const { state, actions } = useWelcomeMessageForm();
+  const { isEditMode, mainMessage, subMessage, canSubmit, isPending } = state;
+  const { setMainMessage, setSubMessage, handleEdit, handleBack, handleSubmit } = actions;
 
   return (
     <div className="flex h-dvh w-full flex-col">

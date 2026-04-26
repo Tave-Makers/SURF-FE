@@ -20,9 +20,10 @@ export const useWelcomeMessageForm = () => {
 
   useEffect(() => {
     if (!data) return;
+    if (isEditMode) return; //편집 중에는 서버 값으로 덮어쓰지 않음
     setMainMessage(data.message);
     setSubMessage(data.sender);
-  }, [data]);
+  }, [data, isEditMode]);
 
   const canSubmit = mainMessage.trim().length > 0 && subMessage.trim().length > 0;
 

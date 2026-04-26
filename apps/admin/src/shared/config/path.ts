@@ -20,5 +20,11 @@ export const PAGE_ROUTES = {
     MEMBER_SEARCH: `${GROUP_ROOT}/member-search`,
   },
   SCORE_MNG: '/score-management',
-  BADGE_MNG: '/badge-management',
+  BADGE_MNG: {
+    LIST: '/badge-management',
+    CREATE: '/badge-management/create',
+    DETAIL: (id: string | number) => `/badge-management/${id}`,
+    EDIT: (id: string | number) => `/badge-management/${id}/edit`,
+    ASSIGN: (id: string | number) => `/badge-management/${id}/assign`,
+  },
 } as const;

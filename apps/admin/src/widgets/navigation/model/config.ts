@@ -39,7 +39,7 @@ export const NAV_ITEMS = [
   {
     id: 'badge',
     label: '활동배지 관리',
-    path: PAGE_ROUTES.BADGE_MNG,
+    path: PAGE_ROUTES.BADGE_MNG.LIST,
   },
 ] as const;
 

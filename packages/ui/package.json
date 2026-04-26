@@ -56,6 +56,7 @@
     "tailwindcss": "^4"
   },
   "devDependencies": {
+    "@emotion/is-prop-valid": "^1.4.0",
     "@chromatic-com/storybook": "4.1.1",
     "@storybook/addon-a11y": "9.1.16",
     "@storybook/addon-docs": "9.1.16",

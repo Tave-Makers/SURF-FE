@@ -1,5 +1,4 @@
 import type { Meta, StoryObj } from '@storybook/nextjs';
-import { UploadImage } from '@surf/utils';
 import { PostEditor } from './PostEditor';
 
 const meta: Meta<typeof PostEditor> = {
@@ -17,11 +16,6 @@ const meta: Meta<typeof PostEditor> = {
 export default meta;
 type Story = StoryObj<typeof PostEditor>;
 
-// 공통 mock handlers
-const onChangeMock = (data: { content: string; images: UploadImage[] }) => {
-  console.log('onChange', data);
-};
-
 // 기본 예시
 export const Default: Story = {
   render: (args) => (
@@ -30,10 +24,8 @@ export const Default: Story = {
     </div>
   ),
   args: {
-    mode: 'create',
-    initialContent: `<p>이곳에 게시글을 작성하세요 ✍️</p>`,
-    initialImages: [],
-    onChange: onChangeMock,
+    content: `<p>이곳에 게시글을 작성하세요 ✍️</p>`,
+    images: [],
   },
 };
 
@@ -45,9 +37,7 @@ export const Empty: Story = {
     </div>
   ),
   args: {
-    mode: 'create',
-    initialContent: '',
-    initialImages: [],
-    onChange: onChangeMock,
+    content: '',
+    images: [],
   },
 };

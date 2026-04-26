@@ -1,13 +1,11 @@
-import { useCallback, useMemo, useRef, useState } from 'react';
+import { useCallback, useMemo, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { PAGE_ROUTES } from '@/shared/config/path';
 
 import { stripHtml } from '@/shared/lib/stripHtml';
-import { POST_CATEGORIES, PostCategoryKey } from '@/entities/post/model/category';
+import { POST_CATEGORIES } from '@/entities/post/model/category';
 import { POST_VALIDATION } from '@/entities/post/model/validation';
 
-import { usePostDetail } from '@/entities/post/api/usePostDetail';
-import { useGetPostScheduleQuery } from '@/features/post/model/useGetPostScheduleQuery';
 import { useCreatePost } from '@/features/post/create-post/model/useCreatePost';
 import { useUpdatePost } from '@/features/post/update-post/model/useUpdatePost';
 import { useCreatePostSchedule } from '@/features/schedule/create-post-schedule/model/useCreatePostSchedule';
@@ -15,60 +13,37 @@ import { useEditSchedule } from '@/features/schedule/edit/model/useEditSchedule'
 
 import { usePostFormStore } from './usePostFormStore';
 import { useCreatePostScheduleStore } from '@/features/schedule/create-post-schedule/model/useCreatePostScheduleStore';
-import { usePostInitialization } from '@/features/post/post-form/model/usePostInitialization';
 import { usePostDirtyCheck } from '@/features/post/post-form/model/useDirtyCheck';
 
-import { EditorState, PostPageMode } from './types';
+import { PostPageMode } from './types';
 import { useDeletePostSchedule } from '@/features/schedule/delete/model/useDelPostSchedule';
 import { useQueryClient } from '@tanstack/react-query';
 import { postQueryKeys } from '@/entities/post/api/queryKeys';
 import { scheduleQueryKeys } from '@/features/calendar/api/queryKeys';
 import { format } from 'date-fns';
+import { PostDetail } from '@/entities/post/model/types';
+import { PostScheduleData } from '@/entities/post/api/types';
 
 type Props = {
   mode: PostPageMode;
   boardId: string;
   postId?: string;
+  postDetail?: PostDetail;
+  postSchedule?: PostScheduleData;
 };
 
-export const usePostForm = ({ mode, boardId, postId }: Props) => {
+export const usePostForm = ({ mode, boardId, postId, postDetail, postSchedule }: Props) => {
   const router = useRouter();
   const numericPostId = mode === 'edit' && postId ? Number(postId) : undefined;
-  const isScheduleInitializedRef = useRef(false);
 
   // 1. Store & State Management
-  const {
-    title,
-    category,
-    content,
-    images,
-    reserved,
-    reservedAt,
-    setField,
-    setEditorState,
-    resetForm,
-    setCanInitialize,
-  } = usePostFormStore();
+  const { title, category, content, images, reserved, reservedAt, resetForm } = usePostFormStore();
 
-  const { linkedSchedule, setLinkedSchedule, clearLinkedSchedule } = useCreatePostScheduleStore();
+  const { linkedSchedule, clearLinkedSchedule } = useCreatePostScheduleStore();
 
   const [showExitAlert, setShowExitAlert] = useState(false);
 
-  // 2. Data Queries & Mutations
-
-  // 상세 데이터 및 일정 조회
-  const { data: postDetail } = usePostDetail(numericPostId!, {
-    enabled: mode === 'edit' && !!numericPostId,
-  });
-
-  // 일정 조회 API
-  const scheduleId = postDetail?.scheduleId;
-  const shouldFetchSchedule = !!scheduleId;
-  const { data: postSchedule, isFetching: isScheduleFetching } = useGetPostScheduleQuery(
-    numericPostId!,
-    scheduleId,
-    shouldFetchSchedule,
-  );
+  // 2. Mutations
 
   // 생성/수정 뮤테이션
   const { mutateAsync: createMutate, isPending: isCreating } = useCreatePost();
@@ -77,20 +52,7 @@ export const usePostForm = ({ mode, boardId, postId }: Props) => {
   const { mutateAsync: editScheduleMutate } = useEditSchedule();
   const { mutateAsync: deleteScheduleMutate } = useDeletePostSchedule();
 
-  // 3. Logic Hooks (Initialization & Dirty Check)
-
-  // 초기 데이터 진입 및 스냅샷 설정
-  usePostInitialization({
-    mode,
-    postDetail,
-    postSchedule,
-    linkedSchedule,
-    setField,
-    setEditorState,
-    setLinkedSchedule,
-    isInitializedRef: isScheduleInitializedRef,
-    isScheduleFetching,
-  });
+  // 3. Logic Hooks (Dirty Check)
 
   // 변경 사항 감지
   const { checkHasChanges } = usePostDirtyCheck();
@@ -99,8 +61,7 @@ export const usePostForm = ({ mode, boardId, postId }: Props) => {
   const resetPostState = useCallback(() => {
     clearLinkedSchedule();
     resetForm();
-    isScheduleInitializedRef.current = false;
-  }, [clearLinkedSchedule, resetForm, setCanInitialize]);
+  }, [clearLinkedSchedule, resetForm]);
 
   const isSubmitDisabled = useMemo(() => {
     const { isEmpty } = checkHasChanges();
@@ -116,19 +77,7 @@ export const usePostForm = ({ mode, boardId, postId }: Props) => {
   // 수정 모드이고 서버 데이터상 예약 중이 아닌 경우
   const isPublished = !!(mode === 'edit' && postDetail && !postDetail.isReserved);
 
-  // 현재 예약 중인지 판단 (배지 노출용)
-  // 클라이언트에서 새로 예약 설정을 했거나(reserved),
-  // 서버 데이터상 이미 예약 상태(postDetail.isReserved)인 경우
-  const isReserved = !!(reserved || (mode === 'edit' && postDetail?.isReserved));
-
   // 5. Event Handlers
-  const handleEditorChange = useCallback(
-    (updatedData: EditorState) => {
-      setEditorState(updatedData.content, updatedData.images);
-    },
-    [setEditorState],
-  );
-
   const handleBack = () => {
     const { hasChanges, isEmpty } = checkHasChanges();
     if (hasChanges && !isEmpty) {
@@ -298,32 +247,16 @@ export const usePostForm = ({ mode, boardId, postId }: Props) => {
   };
 
   return {
-    // Data & Fields
-    title,
-    setTitle: (val: string) => setField('title', val),
-    category,
-    setCategory: (val: PostCategoryKey) => setField('category', val),
-    initialContent: content,
-    initialImages: images,
-    linkedSchedule,
-    reserved,
-    setReserved: (val: boolean) => setField('reserved', val),
-    reservedAt,
-    setReservedAt: (val: Date | null) => setField('reservedAt', val),
-
     // UI State
     showExitAlert,
 
     isSubmitDisabled,
-    isScheduleFetching,
     isPublished,
-    isReserved,
 
     // Actions
     setShowExitAlert,
 
     // Handlers
-    handleEditorChange,
     handleBack,
     handleSubmit,
     handleScheduleRemove: clearLinkedSchedule,

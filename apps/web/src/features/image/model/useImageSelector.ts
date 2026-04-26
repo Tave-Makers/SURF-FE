@@ -11,9 +11,15 @@ import { UploadImage } from '@surf/utils';
  *
  * 서버 업로드와는 무관하며 순수하게 클라이언트 UI 상태만 관리한다.
  */
-export function useImageSelector() {
+
+export interface UseImageSelectorProps {
+  initialImages?: UploadImage[];
+}
+
+export function useImageSelector({ initialImages = [] }: UseImageSelectorProps = {}) {
   const inputRef = useRef<HTMLInputElement>(null);
-  const [images, setImages] = useState<UploadImage[]>([]);
+  // 참고: initialImages는 첫 마운트 시에만 적용됨 (controlled re-initialization 아님)
+  const [images, setImages] = useState<UploadImage[]>(initialImages);
 
   /** 파일 선택창 열기 */
   const openPicker = () => inputRef.current?.click();

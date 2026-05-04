@@ -13,6 +13,8 @@ type Props = {
   isDisabled?: boolean;
   emptyText?: string; // create + 이미지 없을 때 노출 문구
   overlayText?: string; // edit + 이미지 위 오버레이 문구
+  buttonClassName?: string;
+  imageAlt?: string;
 };
 
 export const ImgUploader = ({
@@ -22,6 +24,8 @@ export const ImgUploader = ({
   isDisabled,
   emptyText = '클릭하여 신규 이미지를 업로드 해주세요',
   overlayText = '이미지 변경',
+  buttonClassName = 'h-[9.375rem]',
+  imageAlt = 'upload preview',
 }: Props) => {
   const inputRef = useRef<HTMLInputElement>(null);
 
@@ -101,13 +105,13 @@ export const ImgUploader = ({
         type="button"
         onClick={handlePick}
         disabled={isDisabled}
-        className="rounded-3 border-border-quaternary bg-background-quaternary text-foreground-quinary-darker text-caption-caption3 relative flex h-[9.375rem] w-full items-center justify-center overflow-hidden border border-dashed"
+        className={`rounded-3 border-border-quaternary bg-background-quaternary text-foreground-quinary-darker text-caption-caption3 relative flex w-full items-center justify-center overflow-hidden border border-dashed ${buttonClassName}`}
       >
         {hasImage ? (
           <>
             <Image
               src={displayUrl}
-              alt="banner"
+              alt={imageAlt}
               className="object-cover"
               fill
               onError={() => setIsError(true)}

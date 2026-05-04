@@ -2,7 +2,6 @@
 
 import { SolidButton } from '@surf/ui/button';
 import { Sheet } from '@surf/ui/sheet';
-import { useToastStore } from '@surf/ui/store/toastStore';
 import { Wheel } from '@surf/ui/wheel-picker';
 import { useCallback, useState } from 'react';
 import { Sheet as ModalSheet } from 'react-modal-sheet';
@@ -37,11 +36,8 @@ export const CohortSelectBottomSheet = ({
     [maxCohort],
   );
 
-  const showToast = useToastStore((s) => s.show);
-
   const handleSelect = () => {
     onSelect(maxCohort - selectedIdx);
-    showToast('활동기수가 설정되었습니다.');
     onClose();
   };
 

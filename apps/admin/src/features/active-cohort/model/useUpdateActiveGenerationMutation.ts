@@ -12,6 +12,7 @@ export function useUpdateActiveGenerationMutation() {
   return useMutation({
     mutationFn: (generation: number) => updateActiveGeneration({ activeGeneration: generation }),
     onSuccess: () => {
+      showToast('활동기수가 설정되었습니다.');
       void qc.invalidateQueries({ queryKey: activeGenerationQueryKeys.all });
     },
     onError: (err) => {

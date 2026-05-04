@@ -26,3 +26,9 @@ export interface BadgeMembersResDto {
   pageSize: number;
   hasNext: boolean;
 }
+
+export type UpdateBadgeRequest = Partial<CreateBadgeRequest>;
+
+export interface RemoveBadgeMembersRequest {
+  memberIds: number[];
+}

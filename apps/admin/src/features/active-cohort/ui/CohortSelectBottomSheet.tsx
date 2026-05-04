@@ -1,4 +1,10 @@
+'use client';
+
+import { SolidButton } from '@surf/ui/button';
 import { Sheet } from '@surf/ui/sheet';
+import { useToastStore } from '@surf/ui/store/toastStore';
+import { Wheel } from '@surf/ui/wheel-picker';
+import { useCallback, useState } from 'react';
 import { Sheet as ModalSheet } from 'react-modal-sheet';
 
 declare module '@/shared/store/bottomSheetStore' {
@@ -22,7 +28,22 @@ export const CohortSelectBottomSheet = ({
   selectedCohort,
   onSelect,
 }: CohortSelectBottomSheetProps) => {
-  if (!isOpen) return null;
+  const [selectedIdx, setSelectedIdx] = useState(
+    selectedCohort !== null ? maxCohort - selectedCohort : 0,
+  );
+
+  const setCohortLabel = useCallback(
+    (_relative: number, absolute: number) => `${maxCohort - absolute}기`,
+    [maxCohort],
+  );
+
+  const showToast = useToastStore((s) => s.show);
+
+  const handleSelect = () => {
+    onSelect(maxCohort - selectedIdx);
+    showToast('활동기수가 설정되었습니다.');
+    onClose();
+  };
 
   return (
     <ModalSheet
@@ -33,24 +54,29 @@ export const CohortSelectBottomSheet = ({
       <ModalSheet.Container>
         <ModalSheet.Content>
           <Sheet>
-            <div className="flex flex-col gap-5 py-15">
-              {Array.from({ length: maxCohort }).map((_, idx) => {
-                const cohort = maxCohort - idx;
-                const isSelected = selectedCohort === cohort;
-
-                return (
-                  <button
-                    key={cohort}
-                    type="button"
-                    onClick={() => onSelect(cohort)}
-                    className={`text-body-body6 text-foreground-normal rounded-md px-12 py-10 text-left transition-colors ${
-                      isSelected ? 'bg-background-secondary font-semibold' : 'hover:bg-background-secondary'
-                    }`}
-                  >
-                    {cohort}기
-                  </button>
-                );
-              })}
+            <div className="flex flex-col gap-12 py-15">
+              <div className="relative flex h-44 w-full">
+                <div className="bg-background-secondary pointer-events-none absolute top-1/2 left-1/2 z-1 h-6.25 w-full -translate-x-1/2 -translate-y-1/2 rounded-sm" />
+                <div className="z-2 w-full">
+                  <Wheel
+                    value={selectedIdx}
+                    length={maxCohort}
+                    width={160}
+                    loop={false}
+                    setValue={setCohortLabel}
+                    onChange={setSelectedIdx}
+                    disableHighlight
+                  />
+                </div>
+              </div>
+              <div className="flex w-full flex-row gap-8">
+                <SolidButton size="l" variant="secondary" onClick={onClose}>
+                  취소하기
+                </SolidButton>
+                <SolidButton size="l" variant="primary" onClick={handleSelect}>
+                  선택하기
+                </SolidButton>
+              </div>
             </div>
           </Sheet>
         </ModalSheet.Content>

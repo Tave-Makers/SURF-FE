@@ -45,7 +45,7 @@ export const WelcomeMessageManagePage = () => {
         }
       />
 
-      <div className="flex flex-1 flex-col gap-18 px-14 py-11">
+      <div className="flex flex-1 flex-col gap-14 px-14 py-11">
         <FieldGroup title="메인 메시지" isRequired={isEditMode}>
           <TextArea
             mode="multiLine"

@@ -32,3 +32,7 @@ export type UpdateBadgeRequest = Partial<CreateBadgeRequest>;
 export interface RemoveBadgeMembersRequest {
   memberIds: number[];
 }
+
+export interface AssignBadgeMembersRequest {
+  memberIds: number[];
+}

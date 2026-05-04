@@ -1,23 +1,23 @@
 'use client';
 
 import { SelectField } from '@surf/ui/select-field';
-import { useState } from 'react';
+import { useActiveGenerationQuery } from '@/entities/active-cohort/model/queries/useActiveGenerationQuery';
+import { useUpdateActiveGenerationMutation } from '@/features/active-cohort/model/useUpdateActiveGenerationMutation';
 import { useBottomSheetStore } from '@/shared/store/bottomSheetStore';
 
 export const ActiveCohortSettingsPage = () => {
-  const [selectedCohort, setSelectedCohort] = useState<number | null>(null);
+  const { data } = useActiveGenerationQuery();
+  const { mutate } = useUpdateActiveGenerationMutation();
   const openBottomSheet = useBottomSheetStore((s) => s.open);
-  const closeBottomSheet = useBottomSheetStore((s) => s.close);
 
   const handleOpenCohortSelect = () => {
     openBottomSheet({
       type: 'cohort',
       props: {
         maxCohort: 30,
-        selectedCohort,
+        selectedCohort: data?.generation ?? null,
         onSelect: (cohort) => {
-          setSelectedCohort(cohort);
-          closeBottomSheet();
+          mutate(cohort);
         },
       },
     });
@@ -29,9 +29,9 @@ export const ActiveCohortSettingsPage = () => {
         현재 활동하는 기수를 선택해 주세요.
       </h2>
       <SelectField
-        size="m"
+        size="l"
         placeholder="활동기수를 설정해 주세요."
-        selectedValue={selectedCohort ? `${selectedCohort}기` : undefined}
+        selectedValue={data?.generation ? `${data.generation}기` : undefined}
         onClick={handleOpenCohortSelect}
       />
     </div>

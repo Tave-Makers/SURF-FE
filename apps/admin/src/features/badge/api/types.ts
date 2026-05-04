@@ -8,3 +8,21 @@ export interface CreateBadgeRequest {
 export interface BadgeResDto extends CreateBadgeRequest {
   badgeId: number;
 }
+
+export interface BadgeAwardedMemberResDto {
+  memberId: number;
+  username: string;
+  profileImageUrl?: string;
+  trackList?: {
+    generation: number;
+    part: string;
+  }[];
+  awardedAt: string;
+}
+
+export interface BadgeMembersResDto {
+  content: BadgeAwardedMemberResDto[];
+  pageNumber: number;
+  pageSize: number;
+  hasNext: boolean;
+}

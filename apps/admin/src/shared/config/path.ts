@@ -21,4 +21,5 @@ export const PAGE_ROUTES = {
   },
   SCORE_MNG: '/score-management',
   BADGE_MNG: '/badge-management',
+  WELCOME_MSG: '/welcome-message',
 } as const;

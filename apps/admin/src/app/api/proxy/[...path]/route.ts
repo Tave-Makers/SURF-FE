@@ -110,18 +110,13 @@ async function buildResponse(upstream: Response, setCookies: string[]) {
 }
 
 function applySetCookies(res: NextResponse, setCookies: string[]) {
-  if (!IS_DEV) {
-    for (const c of setCookies) res.headers.append('set-cookie', c);
-    return;
-  }
-
   for (const c of setCookies) {
     const parsed = parseSetCookie(c);
     if (!parsed) continue;
 
     res.cookies.set({
       ...parsed,
-      secure: false,
+      secure: !IS_DEV,
       sameSite: parsed.sameSite === 'none' ? 'lax' : parsed.sameSite,
       path: toProxyCookiePath(parsed.path),
     });

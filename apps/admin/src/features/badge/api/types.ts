@@ -1,3 +1,10 @@
+import { CommonResponse } from '@/shared/api/types';
+
+export interface BadgeListParams {
+  pageNum: number;
+  pageSize: number;
+}
+
 export interface CreateBadgeRequest {
   name: string;
   imageUrl: string;
@@ -8,6 +15,18 @@ export interface CreateBadgeRequest {
 export interface BadgeResDto extends CreateBadgeRequest {
   badgeId: number;
 }
+
+export interface BadgeListData {
+  content: BadgeResDto[];
+  pageNumber: number;
+  pageSize: number;
+  numberOfElements?: number;
+  isLast?: boolean;
+  hasNext?: boolean;
+  totalCount?: number;
+}
+
+export type BadgeListResponse = CommonResponse<BadgeListData>;
 
 export interface BadgeAwardedMemberResDto {
   memberId: number;

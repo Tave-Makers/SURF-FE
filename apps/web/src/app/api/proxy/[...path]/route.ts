@@ -40,6 +40,7 @@ async function proxy(req: NextRequest, path: string[]) {
 
   const headers = new Headers(req.headers);
   for (const key of HOP_BY_HOP) headers.delete(key);
+  headers.set('X-Client-Type', headers.get('X-Client-Type') ?? 'WEB');
 
   const accessToken = req.cookies.get('accessToken')?.value;
   if (accessToken && !headers.has('authorization')) {
@@ -63,7 +64,6 @@ async function proxy(req: NextRequest, path: string[]) {
 
 async function buildResponse(upstream: Response, setCookies: string[]) {
   const contentType = upstream.headers.get('content-type') ?? '';
-  const refreshValueFromUpstream = findCookieValue(setCookies, 'refreshToken');
 
   if (contentType.includes('application/json')) {
     const text = await upstream.text();
@@ -80,20 +80,7 @@ async function buildResponse(upstream: Response, setCookies: string[]) {
       headers: pickHeaders(upstream),
     });
 
-    if (!IS_DEV) {
-      for (const c of setCookies) res.headers.append('set-cookie', c);
-    } else {
-      if (refreshValueFromUpstream) {
-        res.cookies.set({
-          name: 'refreshToken',
-          value: refreshValueFromUpstream,
-          httpOnly: true,
-          secure: false,
-          sameSite: 'lax',
-          path: '/auth/refresh',
-        });
-      }
-    }
+    applySetCookies(res, setCookies);
 
     const token = extractAccessToken(parsed);
     if (token) {
@@ -116,22 +103,28 @@ async function buildResponse(upstream: Response, setCookies: string[]) {
     headers: pickHeaders(upstream),
   });
 
-  if (!IS_DEV) {
-    for (const c of setCookies) res.headers.append('set-cookie', c);
-  } else {
-    if (refreshValueFromUpstream) {
-      res.cookies.set({
-        name: 'refreshToken',
-        value: refreshValueFromUpstream,
-        httpOnly: true,
-        secure: false,
-        sameSite: 'lax',
-        path: '/auth/refresh',
-      });
-    }
-  }
+  applySetCookies(res, setCookies);
 
   return res;
+}
+
+function applySetCookies(res: NextResponse, setCookies: string[]) {
+  if (!IS_DEV) {
+    for (const c of setCookies) res.headers.append('set-cookie', c);
+    return;
+  }
+
+  for (const c of setCookies) {
+    const parsed = parseSetCookie(c);
+    if (!parsed) continue;
+
+    res.cookies.set({
+      ...parsed,
+      secure: false,
+      sameSite: parsed.sameSite === 'none' ? 'lax' : parsed.sameSite,
+      path: toProxyCookiePath(parsed.path),
+    });
+  }
 }
 
 function pickHeaders(upstream: Response): Record<string, string> {
@@ -152,21 +145,58 @@ function getSetCookies(res: Response): string[] {
   return single ? [single] : [];
 }
 
-function findCookieValue(setCookies: string[], cookieName: string): string | null {
-  for (const c of setCookies) {
-    const first = c.split(';', 1)[0];
-    const eqIdx = first.indexOf('=');
-    if (eqIdx <= 0) continue;
-    const name = first.slice(0, eqIdx).trim();
-    if (name !== cookieName) continue;
-    const value = first.slice(eqIdx + 1);
-    return value || null;
-  }
-  return null;
-}
-
 function isRecord(v: unknown): v is Record<string, unknown> {
   return typeof v === 'object' && v !== null;
+}
+
+function parseSetCookie(cookie: string) {
+  const [first, ...attributes] = cookie.split(';');
+  const eqIdx = first.indexOf('=');
+  if (eqIdx <= 0) return null;
+
+  const parsed: {
+    name: string;
+    value: string;
+    httpOnly?: boolean;
+    maxAge?: number;
+    expires?: Date;
+    sameSite?: 'lax' | 'strict' | 'none';
+    path?: string;
+  } = {
+    name: first.slice(0, eqIdx).trim(),
+    value: first.slice(eqIdx + 1),
+  };
+
+  for (const attr of attributes) {
+    const [rawKey, ...rawValueParts] = attr.trim().split('=');
+    const key = rawKey.toLowerCase();
+    const value = rawValueParts.join('=');
+
+    if (key === 'httponly') parsed.httpOnly = true;
+    if (key === 'max-age') {
+      const maxAge = Number(value);
+      if (Number.isFinite(maxAge)) parsed.maxAge = maxAge;
+    }
+    if (key === 'expires') {
+      const expires = new Date(value);
+      if (!Number.isNaN(expires.getTime())) parsed.expires = expires;
+    }
+    if (key === 'samesite') {
+      const sameSite = value.toLowerCase();
+      if (sameSite === 'lax' || sameSite === 'strict' || sameSite === 'none') {
+        parsed.sameSite = sameSite;
+      }
+    }
+    if (key === 'path') parsed.path = value;
+  }
+
+  return parsed;
+}
+
+function toProxyCookiePath(path?: string) {
+  if (!path || path === '/') return path ?? '/';
+  if (path.startsWith('/api/proxy')) return path;
+  return `/api/proxy${path}`;
 }
 
 function extractAccessToken(v: unknown): string | null {

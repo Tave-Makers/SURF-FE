@@ -6,6 +6,7 @@ import LoadingCharacter2 from '@surf/ui/assets/loading/character-2.svg';
 import LoadingCharacter3 from '@surf/ui/assets/loading/character-3.svg';
 import LoadingCharacter4 from '@surf/ui/assets/loading/character-4.svg';
 import LoadingCharacter5 from '@surf/ui/assets/loading/character-5.svg';
+import { useToastStore } from '@surf/ui/store/toastStore';
 
 import { useSearchParams, useRouter } from 'next/navigation';
 import { useEffect, useRef } from 'react';
@@ -34,8 +35,10 @@ const KakaoCallBackPage = () => {
   const router = useRouter();
   const didRun = useRef(false);
   const setOnboarding = useOnboardingStore((s) => s.setOnboarding);
+  const showToast = useToastStore((s) => s.show);
 
   const code = searchParams.get('code');
+  const state = searchParams.get('state');
 
   useEffect(() => {
     if (didRun.current) {
@@ -43,21 +46,23 @@ const KakaoCallBackPage = () => {
     }
     didRun.current = true;
 
-    if (!code) {
-      alert('잘못된 접근이에요. 다시 로그인해주세요.');
+    if (!code || !state) {
+      showToast('잘못된 접근이에요. 다시 로그인해주세요.');
       router.push(PAGE_ROUTES.LOGIN);
       return;
     }
 
     void (async () => {
       try {
-        const response = await getKakaoLoginCallback(code);
+        const response = await getKakaoLoginCallback(code, state);
 
-        if (!response?.data) {
+        const loginData = 'data' in response ? response.data : response;
+
+        if (!loginData) {
           throw new Error('로그인 응답이 비어있어요.');
         }
 
-        const { nickname, email, profileImageUrl } = response.data;
+        const { nickname, email, profileImageUrl } = loginData;
 
         setOnboarding({
           nickname,
@@ -71,11 +76,11 @@ const KakaoCallBackPage = () => {
           err instanceof Error
             ? err.message
             : '로그인 중 문제가 발생했어요. 잠시 후 다시 시도해주세요.';
-        alert(message);
+        showToast(message);
         router.push(PAGE_ROUTES.LOGIN);
       }
     })();
-  }, [code, router, setOnboarding]);
+  }, [code, state, router, setOnboarding, showToast]);
 
   return (
     <div className="flex h-full w-full flex-col items-center justify-center">

@@ -1,6 +1,6 @@
 import { AlertPayload } from '@surf/ui/store/alertStore';
 
-export function openExpelMemberConfirm({
+export function openDismissMemberConfirm({
   openAlert,
   closeAlert,
   onConfirm,
@@ -11,14 +11,14 @@ export function openExpelMemberConfirm({
 }) {
   openAlert({
     state: 'default',
-    title: '퇴출하시겠습니까?',
-    infoText: '퇴출 버튼을 누를 시 해당 멤버를 SURF에서 퇴출합니다.',
+    title: '제명하시겠습니까?',
+    infoText: '제명 버튼을 누를 시 해당 멤버를 SURF에서 제명합니다.',
     actions: [
       { type: 'solid', variant: 'secondary', label: '취소', onClick: closeAlert },
       {
         type: 'solid',
         variant: 'danger',
-        label: '퇴출하기',
+        label: '제명하기',
         onClick: () => {
           onConfirm();
           closeAlert();

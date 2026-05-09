@@ -40,7 +40,7 @@ export const Accordion = ({
 
       updateMaxHeight();
       const inner = el.firstElementChild;
-      const resizeObserver = new ResizeObserver(updateMaxHeight);
+      const resizeObserver = new ResizeObserver();
       const mutationObserver = new MutationObserver(() => {
         requestAnimationFrame(updateMaxHeight);
       });

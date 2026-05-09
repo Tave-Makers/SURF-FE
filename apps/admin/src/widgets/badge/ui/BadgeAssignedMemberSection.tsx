@@ -1,4 +1,4 @@
-import { FieldGroup } from '@surf/ui/field-group';
+import { SolidButton } from '@surf/ui/button';
 import { RemovableMemberCard } from '@/entities/member/ui/RemovableMemberCard';
 import type { BadgeAwardedMember } from '@/features/badge/model/types';
 import CareerEmpty from '@/shared/assets/icons/career-empty.svg';
@@ -9,6 +9,7 @@ type BadgeAssignedMemberSectionProps = {
   mode: BadgeManageMode;
   members: BadgeAwardedMember[];
   onRemoveMember?: (memberId: number) => void;
+  onAddMember?: () => void;
 };
 
 /**
@@ -21,12 +22,15 @@ export const BadgeAssignedMemberSection = ({
   mode,
   members,
   onRemoveMember,
+  onAddMember,
 }: BadgeAssignedMemberSectionProps) => {
   const isEdit = mode === 'edit';
 
   return (
-    <FieldGroup title="부여 인원" className="px-14">
+    <section className="flex flex-col gap-12">
+      <p className="text-title-title2 text-foreground-normal px-14">부여 인원</p>
       {members.length === 0 ? (
+        // 부여된 멤버가 없을 때 보여주는 empty state
         <div className="flex w-full justify-center py-10">
           <div className="flex flex-col items-center gap-5">
             <CareerEmpty />
@@ -34,7 +38,8 @@ export const BadgeAssignedMemberSection = ({
           </div>
         </div>
       ) : (
-        <div className="max-h-[17.5rem] w-full overflow-y-auto">
+        // 부여 멤버가 5명을 초과해도 섹션 높이가 커지지 않도록 내부 스크롤을 사용한다.
+        <div className="max-h-70 w-full overflow-y-auto">
           {members.map((member) => (
             <RemovableMemberCard
               key={member.id}
@@ -48,6 +53,14 @@ export const BadgeAssignedMemberSection = ({
           ))}
         </div>
       )}
-    </FieldGroup>
+      {/* 수정 모드에서 배지 부여 페이지로 이동하는 액션 */}
+      {isEdit && (
+        <div className="px-14">
+          <SolidButton size="s" variant="secondary" onClick={onAddMember}>
+            추가하기
+          </SolidButton>
+        </div>
+      )}
+    </section>
   );
 };

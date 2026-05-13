@@ -2,7 +2,7 @@
 
 import { useParams, useRouter } from 'next/navigation';
 import { Suspense, useEffect } from 'react';
-import { BannerEditPage } from '@/app-pages/banner/BannerEditPage';
+import { BannerEditPage } from '@/app-pages/banner/ui/BannerEditPage';
 import { PAGE_ROUTES } from '@/shared/config/path';
 
 const Page = () => {

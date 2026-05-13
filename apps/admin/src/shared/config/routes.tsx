@@ -23,8 +23,8 @@ export const createRouteConfig = (_router: RouterInstance): RouteConfig[] => [
     },
   },
   {
-    id: 'setting-active-generation',
-    path: PAGE_ROUTES.SETTING_ACTIVE_GENERATION,
+    id: 'setting-active-cohort',
+    path: PAGE_ROUTES.SETTING_ACTIVE_COHORT,
     backPath: PAGE_ROUTES.HOME,
     header: {
       mode: HeaderMode.Default,

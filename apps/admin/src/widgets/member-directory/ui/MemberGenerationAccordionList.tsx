@@ -4,14 +4,23 @@ import { useMemberGenerationListQuery } from '../model/queries/useMemberGenerati
 import { RoleBadge } from '@/entities/member/ui/RoleBadge';
 import { SelectableMemberCard } from '@/entities/member/ui/SelectableMemberCard';
 import { MemberGenerationAccordion } from '@/features/member-by-generation/ui/MemberGenerationAccordion';
+import type { SelectMode } from '@/shared/hooks/useSelectableListState';
 import { useBottomSheetStore } from '@/shared/store/bottomSheetStore';
 
 export interface MemberGenerationAccordionListProps {
   keyword: string;
+  mode: SelectMode;
+  selectedIds: Set<number>;
+  onToggleMember: (memberId: number) => void;
 }
 
 const ACCORDIAN_MAX_HEIGHT = '36vh';
-export const MemberGenerationAccordionList = ({ keyword }: MemberGenerationAccordionListProps) => {
+export const MemberGenerationAccordionList = ({
+  keyword,
+  mode,
+  selectedIds,
+  onToggleMember,
+}: MemberGenerationAccordionListProps) => {
   //기수 목록 조회
   const { data: generations } = useMemberGenerationListQuery();
 
@@ -46,8 +55,9 @@ export const MemberGenerationAccordionList = ({ keyword }: MemberGenerationAccor
             <SelectableMemberCard
               name={m.name}
               tracks={m.tracks}
-              checked={false}
-              onToggle={() => {}}
+              isSelectionEnabled={mode === 'select'}
+              checked={selectedIds.has(m.id)}
+              onToggle={() => onToggleMember(m.id)}
               leftSlot={
                 <div className="relative">
                   <Avatar src={m.profileImageUrl} size="m" />
@@ -60,13 +70,15 @@ export const MemberGenerationAccordionList = ({ keyword }: MemberGenerationAccor
               rightSlot={
                 <>
                   <RoleBadge type={m.role} />
-                  <button
-                    type="button"
-                    onClick={() => handleOpenMemberSheet(m.id)}
-                    aria-label={`${m.name} 상세 보기`}
-                  >
-                    <SurfIcon name="ChevronRight" />
-                  </button>
+                  {mode === 'view' && (
+                    <button
+                      type="button"
+                      onClick={() => handleOpenMemberSheet(m.id)}
+                      aria-label={`${m.name} 상세 보기`}
+                    >
+                      <SurfIcon name="ChevronRight" />
+                    </button>
+                  )}
                 </>
               }
             />

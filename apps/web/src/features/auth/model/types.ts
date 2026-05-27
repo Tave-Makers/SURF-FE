@@ -15,6 +15,7 @@ export type AuthState = AuthData & {
  */
 export const AUTH_EVENTS = {
   CLICK_LOGIN_KAKAO: 'click_login_kakao',
+  CLICK_LOGIN_APPLE: 'click_login_apple',
   VIEW_LOGIN_CALLBACK: 'view_login_callback',
 } as const;
 
@@ -23,5 +24,6 @@ export const AUTH_EVENTS = {
  */
 export type AuthEventPropsMap = {
   [AUTH_EVENTS.CLICK_LOGIN_KAKAO]: { login_method: string };
+  [AUTH_EVENTS.CLICK_LOGIN_APPLE]: { login_method: string };
   [AUTH_EVENTS.VIEW_LOGIN_CALLBACK]: { code_length: number };
 };

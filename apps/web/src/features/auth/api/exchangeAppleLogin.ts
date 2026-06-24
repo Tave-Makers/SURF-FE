@@ -1,5 +1,18 @@
 import type { OAuthLoginData } from './types';
 
+const TIMEOUT_MS = 15_000;
+
+async function fetchWithTimeout(url: string, init: RequestInit) {
+  const controller = new AbortController();
+  const timeoutId = setTimeout(() => controller.abort(), TIMEOUT_MS);
+
+  try {
+    return await fetch(url, { ...init, signal: controller.signal });
+  } finally {
+    clearTimeout(timeoutId);
+  }
+}
+
 type ExchangeAppleLoginParams = {
   code: string;
   state: string;
@@ -35,7 +48,7 @@ export async function exchangeAppleLogin(
     const headers: Record<string, string> = { 'X-Client-Type': 'WEB' };
     if (cookieHeader) headers['Cookie'] = cookieHeader;
 
-    const upstream = await fetch(url.toString(), {
+    const upstream = await fetchWithTimeout(url.toString(), {
       method: 'POST',
       headers,
       cache: 'no-store',

@@ -37,34 +37,14 @@ const KakaoCallBackPage = () => {
   const setOnboarding = useOnboardingStore((s) => s.setOnboarding);
   const showToast = useToastStore((s) => s.show);
 
-  const provider = searchParams.get('provider');
   const code = searchParams.get('code');
   const state = searchParams.get('state');
-  const appleNickname = searchParams.get('nickname');
-  const appleEmail = searchParams.get('email');
-  const appleProfileImageUrl = searchParams.get('profileImageUrl');
 
   useEffect(() => {
     if (didRun.current) {
       return;
     }
     didRun.current = true;
-
-    if (provider === 'apple') {
-      if (!appleNickname || !appleEmail || !appleProfileImageUrl) {
-        showToast('잘못된 접근이에요. 다시 로그인해주세요.');
-        router.push(PAGE_ROUTES.LOGIN);
-        return;
-      }
-
-      setOnboarding({
-        nickname: appleNickname,
-        email: appleEmail,
-        profileImageUrl: appleProfileImageUrl,
-      });
-      router.push(PAGE_ROUTES.HOME);
-      return;
-    }
 
     if (!code || !state) {
       showToast('잘못된 접근이에요. 다시 로그인해주세요.');
@@ -100,17 +80,7 @@ const KakaoCallBackPage = () => {
         router.push(PAGE_ROUTES.LOGIN);
       }
     })();
-  }, [
-    provider,
-    code,
-    state,
-    appleNickname,
-    appleEmail,
-    appleProfileImageUrl,
-    router,
-    setOnboarding,
-    showToast,
-  ]);
+  }, [code, state, router, setOnboarding, showToast]);
 
   return (
     <div className="flex h-full w-full flex-col items-center justify-center">

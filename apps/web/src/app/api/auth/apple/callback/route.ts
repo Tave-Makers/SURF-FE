@@ -1,7 +1,9 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { exchangeAppleLogin } from '@/features/auth/api/exchangeAppleLogin';
+import { setOAuthOnboardingCookie } from '@/features/auth/lib/onboardingCookie';
 import { applyProxyAuthToResponse } from '@/features/auth/lib/applyProxyAuthResponse';
 import { PAGE_ROUTES } from '@/shared/config/path';
+import { getAppOriginFromRequest } from '@/shared/lib/appOrigin';
 
 export const runtime = 'nodejs';
 
@@ -12,15 +14,9 @@ function getFormString(formData: FormData, key: string): string | undefined {
   return typeof value === 'string' ? value : undefined;
 }
 
-function getBaseUrl(req: NextRequest): string {
-  const proto = req.headers.get('x-forwarded-proto') ?? 'http';
-  const host = req.headers.get('host') ?? 'localhost:3000';
-  return `${proto}://${host}`;
-}
-
 export async function POST(req: NextRequest) {
   const formData = await req.formData();
-  const baseUrl = getBaseUrl(req);
+  const baseUrl = getAppOriginFromRequest(req);
 
   const error = getFormString(formData, 'error');
   if (error) {
@@ -37,7 +33,7 @@ export async function POST(req: NextRequest) {
 
   const result = await exchangeAppleLogin(
     { code, state, user },
-    'http://localhost:3000',
+    baseUrl,
     req.headers.get('cookie') ?? undefined,
   );
 
@@ -49,12 +45,9 @@ export async function POST(req: NextRequest) {
 
   const { nickname, email, profileImageUrl } = result.data;
   const redirectUrl = new URL(LOGIN_CALLBACK, baseUrl);
-  redirectUrl.searchParams.set('provider', 'apple');
-  redirectUrl.searchParams.set('nickname', nickname);
-  redirectUrl.searchParams.set('email', email);
-  redirectUrl.searchParams.set('profileImageUrl', profileImageUrl);
 
   const response = NextResponse.redirect(redirectUrl);
+  setOAuthOnboardingCookie(response, { nickname, email, profileImageUrl });
   applyProxyAuthToResponse(response, result.upstream, result.parsed);
 
   return response;

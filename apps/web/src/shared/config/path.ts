@@ -3,6 +3,13 @@ export const PAGE_ROUTES = {
   LOGIN: '/login',
   ONBOARDING: '/onboarding',
 
+  // 외부 공개 약관 (비로그인 접근)
+  PUBLIC_POLICY: {
+    SERVICE: '/terms-of-service',
+    PRIVACY: '/privacy-policy',
+    OPERATING: '/operational-policy',
+  },
+
   // 멤버 관련
   MEMBER: {
     PROFILE: (memberId: string | number) => `/member/${memberId}`,

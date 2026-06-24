@@ -3,7 +3,7 @@ import { NextResponse } from 'next/server';
 import type { OAuthLoginData } from '../api/types';
 
 export const OAUTH_ONBOARDING_COOKIE = 'oauth-onboarding';
-const OAUTH_ONBOARDING_PATH = '/api/auth/apple/onboarding';
+const OAUTH_ONBOARDING_PATH = '/api/auth/oauth/onboarding';
 const OAUTH_ONBOARDING_MAX_AGE = 60 * 5;
 
 const IS_DEV = process.env.NODE_ENV !== 'production';

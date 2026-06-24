@@ -1,11 +1,10 @@
-import KakaoCallBackPage from '@/app-pages/login/ui/KakaoCallBackPage';
+import OAuthCallbackPage from '@/app-pages/login/ui/OAuthCallbackPage';
 
 export const dynamic = 'force-dynamic';
 export const revalidate = 0;
 
-// suspense 임시 삭제
 const Page = () => {
-  return <KakaoCallBackPage />;
+  return <OAuthCallbackPage />;
 };
 
 export default Page;

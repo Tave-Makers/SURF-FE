@@ -1,16 +1,15 @@
 'use client';
 
-// import dynamic from 'next/dynamic';
 import LoadingCharacter1 from '@surf/ui/assets/loading/character-1.svg';
 import LoadingCharacter2 from '@surf/ui/assets/loading/character-2.svg';
 import LoadingCharacter3 from '@surf/ui/assets/loading/character-3.svg';
 import LoadingCharacter4 from '@surf/ui/assets/loading/character-4.svg';
 import LoadingCharacter5 from '@surf/ui/assets/loading/character-5.svg';
 import { useToastStore } from '@surf/ui/store/toastStore';
-
-import { useSearchParams, useRouter } from 'next/navigation';
+import { useRouter } from 'next/navigation';
 import { useEffect, useRef } from 'react';
-import { getKakaoLoginCallback } from '@/features/auth/api/getKakaoLoginCallback';
+
+import { getOAuthOnboarding } from '@/features/auth/api/getOAuthOnboarding';
 import { useOnboardingStore } from '@/features/onboarding/model/useOnboardingStore';
 import { PAGE_ROUTES } from '@/shared/config/path';
 
@@ -22,54 +21,20 @@ const characters = [
   LoadingCharacter5,
 ];
 
-// const CallbackEmpty = dynamic(
-//   () => import('@/shared/assets/icons/empty-space/callback-empty.svg'),
-//   {
-//     ssr: false,
-//       loading: () => <div className="h-[90px] w-[90px] rounded-5 bg-background-normal-lighter" aria-hidden="true" />,
-//   },
-// );
-
-const KakaoCallBackPage = () => {
-  const searchParams = useSearchParams();
+const OAuthCallbackPage = () => {
   const router = useRouter();
   const didRun = useRef(false);
   const setOnboarding = useOnboardingStore((s) => s.setOnboarding);
   const showToast = useToastStore((s) => s.show);
 
-  const code = searchParams.get('code');
-  const state = searchParams.get('state');
-
   useEffect(() => {
-    if (didRun.current) {
-      return;
-    }
+    if (didRun.current) return;
     didRun.current = true;
-
-    if (!code || !state) {
-      showToast('잘못된 접근이에요. 다시 로그인해주세요.');
-      router.push(PAGE_ROUTES.LOGIN);
-      return;
-    }
 
     void (async () => {
       try {
-        const response = await getKakaoLoginCallback(code, state);
-
-        const loginData = 'data' in response ? response.data : response;
-
-        if (!loginData) {
-          throw new Error('로그인 응답이 비어있어요.');
-        }
-
-        const { nickname, email, profileImageUrl } = loginData;
-
-        setOnboarding({
-          nickname,
-          email,
-          profileImageUrl,
-        });
-
+        const { nickname, email, profileImageUrl } = await getOAuthOnboarding();
+        setOnboarding({ nickname, email, profileImageUrl });
         router.push(PAGE_ROUTES.HOME);
       } catch (err) {
         const message =
@@ -80,12 +45,12 @@ const KakaoCallBackPage = () => {
         router.push(PAGE_ROUTES.LOGIN);
       }
     })();
-  }, [code, state, router, setOnboarding, showToast]);
+  }, [router, setOnboarding, showToast]);
 
   return (
     <div className="flex h-full w-full flex-col items-center justify-center">
       <div className="flex flex-col items-center gap-10">
-        <div className="flex flex-row items-center">
+        <div className="flex flex-row items-center" aria-hidden="true">
           {characters.map((Character, i) => (
             <Character
               key={i}
@@ -94,15 +59,25 @@ const KakaoCallBackPage = () => {
             />
           ))}
         </div>
-        <div className="text-body-body8 text-foreground-tertiary flex items-center gap-2">
-          <span className="">잠시만 기다려 주세요</span>
-          <span className="animate-dot-appear-1 inline-block">.</span>
-          <span className="animate-dot-appear-2 inline-block">.</span>
-          <span className="animate-dot-appear-3 inline-block">.</span>
+        <div
+          className="text-body-body8 text-foreground-tertiary flex items-center gap-2"
+          role="status"
+          aria-live="polite"
+        >
+          <span>잠시만 기다려 주세요</span>
+          <span className="animate-dot-appear-1 inline-block" aria-hidden="true">
+            .
+          </span>
+          <span className="animate-dot-appear-2 inline-block" aria-hidden="true">
+            .
+          </span>
+          <span className="animate-dot-appear-3 inline-block" aria-hidden="true">
+            .
+          </span>
         </div>
       </div>
     </div>
   );
 };
 
-export default KakaoCallBackPage;
+export default OAuthCallbackPage;

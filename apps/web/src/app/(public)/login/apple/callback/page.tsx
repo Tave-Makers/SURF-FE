@@ -1,10 +1,10 @@
 import { Suspense } from 'react';
 
-import AppleCallbackPage from '@/app-pages/login/ui/AppleCallbackPage';
+import OAuthCallbackPage from '@/app-pages/login/ui/OAuthCallbackPage';
 
 const Page = () => (
   <Suspense>
-    <AppleCallbackPage />
+    <OAuthCallbackPage />
   </Suspense>
 );
 

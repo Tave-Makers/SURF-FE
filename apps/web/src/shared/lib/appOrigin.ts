@@ -3,7 +3,8 @@ import 'server-only';
 import { headers } from 'next/headers';
 import type { NextRequest } from 'next/server';
 
-const DEFAULT_DEV_ORIGIN = 'http://localhost:3000';
+const DEFAULT_DEV_ORIGIN = 'https://tavesurf.site';
+const DEFAULT_PROD_ORIGIN = 'https://www.tavesurf.site';
 
 function normalizeOrigin(url: string): string {
   return url.replace(/\/+$/, '');
@@ -25,7 +26,7 @@ function resolveOrigin(host: string | null, proto: string): string {
   if (configured) return configured;
 
   if (process.env.NODE_ENV === 'production') {
-    return DEFAULT_DEV_ORIGIN;
+    return DEFAULT_PROD_ORIGIN;
   }
 
   if (host && isAllowedDevHost(host)) {

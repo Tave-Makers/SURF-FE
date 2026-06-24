@@ -117,7 +117,7 @@ function applySetCookies(res: NextResponse, setCookies: string[]) {
       ...parsed,
       secure: !IS_DEV,
       sameSite: parsed.sameSite === 'none' ? 'lax' : parsed.sameSite,
-      path: toProxyCookiePath(parsed.path),
+      path: toProxyCookiePath(parsed.name, parsed.path),
     });
   }
 }
@@ -188,7 +188,8 @@ function parseSetCookie(cookie: string) {
   return parsed;
 }
 
-function toProxyCookiePath(path?: string) {
+function toProxyCookiePath(name: string, path?: string) {
+  if (name === 'oauth_state') return '/';
   if (!path || path === '/') return path ?? '/';
   if (path.startsWith('/api/proxy')) return path;
   return `/api/proxy${path}`;

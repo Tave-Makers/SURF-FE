@@ -1,10 +1,11 @@
+import { Suspense } from 'react';
+
 import OAuthCallbackPage from '@/app-pages/login/ui/OAuthCallbackPage';
 
-export const dynamic = 'force-dynamic';
-export const revalidate = 0;
-
-const Page = () => {
-  return <OAuthCallbackPage />;
-};
+const Page = () => (
+  <Suspense>
+    <OAuthCallbackPage />
+  </Suspense>
+);
 
 export default Page;

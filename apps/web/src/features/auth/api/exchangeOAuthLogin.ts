@@ -71,15 +71,23 @@ export async function exchangeOAuthLogin({
   const url = new URL(config.endpoint, origin);
   url.searchParams.set('code', code);
   url.searchParams.set('state', state);
-  if (user) url.searchParams.set('user', user);
 
   try {
     const headers: Record<string, string> = { 'X-Client-Type': 'WEB' };
     if (cookieHeader) headers['Cookie'] = cookieHeader;
 
+    let body: string | undefined;
+    if (config.method === 'POST' && user) {
+      headers['Content-Type'] = 'application/x-www-form-urlencoded';
+      body = new URLSearchParams({ user }).toString();
+    } else if (user) {
+      url.searchParams.set('user', user);
+    }
+
     const upstream = await fetchWithTimeout(url.toString(), {
       method: config.method,
       headers,
+      body,
       cache: 'no-store',
     });
 

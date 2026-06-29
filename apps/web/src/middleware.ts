@@ -27,7 +27,8 @@ export function middleware(req: NextRequest) {
 
   // public route 통과
   if (PUBLIC_EXACT.includes(pathname)) return NextResponse.next();
-  if (PUBLIC_PREFIX.some((p) => pathname.startsWith(p))) return NextResponse.next();
+  if (PUBLIC_PREFIX.some((p) => pathname === p || pathname.startsWith(`${p}/`)))
+    return NextResponse.next();
 
   // optimistic 통과
   const hasAccess = req.cookies.has('accessToken');

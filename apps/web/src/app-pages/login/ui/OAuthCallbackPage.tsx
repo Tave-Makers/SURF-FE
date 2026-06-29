@@ -5,13 +5,8 @@ import LoadingCharacter2 from '@surf/ui/assets/loading/character-2.svg';
 import LoadingCharacter3 from '@surf/ui/assets/loading/character-3.svg';
 import LoadingCharacter4 from '@surf/ui/assets/loading/character-4.svg';
 import LoadingCharacter5 from '@surf/ui/assets/loading/character-5.svg';
-import { useToastStore } from '@surf/ui/store/toastStore';
-import { useRouter } from 'next/navigation';
-import { useEffect, useRef } from 'react';
 
-import { getOAuthOnboarding } from '@/features/auth/api/getOAuthOnboarding';
-import { useOnboardingStore } from '@/features/onboarding/model/useOnboardingStore';
-import { PAGE_ROUTES } from '@/shared/config/path';
+import { useOAuthCallback } from '@/features/auth/model/useOAuthCallback';
 
 const characters = [
   LoadingCharacter1,
@@ -22,30 +17,7 @@ const characters = [
 ];
 
 const OAuthCallbackPage = () => {
-  const router = useRouter();
-  const didRun = useRef(false);
-  const setOnboarding = useOnboardingStore((s) => s.setOnboarding);
-  const showToast = useToastStore((s) => s.show);
-
-  useEffect(() => {
-    if (didRun.current) return;
-    didRun.current = true;
-
-    void (async () => {
-      try {
-        const { nickname, email, profileImageUrl } = await getOAuthOnboarding();
-        setOnboarding({ nickname, email, profileImageUrl });
-        router.push(PAGE_ROUTES.HOME);
-      } catch (err) {
-        const message =
-          err instanceof Error
-            ? err.message
-            : '로그인 중 문제가 발생했어요. 잠시 후 다시 시도해주세요.';
-        showToast(message);
-        router.push(PAGE_ROUTES.LOGIN);
-      }
-    })();
-  }, [router, setOnboarding, showToast]);
+  useOAuthCallback();
 
   return (
     <div className="flex h-full w-full flex-col items-center justify-center">

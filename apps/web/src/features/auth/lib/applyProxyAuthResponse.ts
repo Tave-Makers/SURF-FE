@@ -66,7 +66,7 @@ function parseSetCookie(cookie: string) {
 }
 
 function toProxyCookiePath(name: string, path?: string) {
-  if (name === 'oauth_state') return '/';
+  if (name === 'oauth_state') return '/api/auth';
   if (!path || path === '/') return path ?? '/';
   if (path.startsWith('/api/proxy')) return path;
   return `/api/proxy${path}`;

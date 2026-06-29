@@ -14,7 +14,7 @@ const PrivacyPolicyPage = () => {
           hasLeftIcon: true,
         }}
       />
-      <PolicyDetailItem policyId="PrivacyPolicy" />
+      <PolicyDetailItem policyId="PersonalInfoPolicy" />
     </div>
   );
 };

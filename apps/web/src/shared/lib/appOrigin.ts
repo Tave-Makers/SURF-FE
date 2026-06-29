@@ -17,7 +17,10 @@ function getConfiguredOrigin(): string | undefined {
 
 function isAllowedDevHost(host: string): boolean {
   return (
-    host === 'localhost:3000' || host.startsWith('localhost:') || host.startsWith('127.0.0.1:')
+    host === 'localhost' ||
+    host === '127.0.0.1' ||
+    host.startsWith('localhost:') ||
+    host.startsWith('127.0.0.1:')
   );
 }
 

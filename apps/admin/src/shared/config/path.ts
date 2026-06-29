@@ -1,4 +1,5 @@
 const GROUP_ROOT = '/group-management';
+const SCORE_ROOT = '/score-management';
 
 export const PAGE_ROUTES = {
   HOME: '/',
@@ -19,7 +20,10 @@ export const PAGE_ROUTES = {
     EDIT: (id: string | number) => `${GROUP_ROOT}/${id}?mode=edit`,
     MEMBER_SEARCH: `${GROUP_ROOT}/member-search`,
   },
-  SCORE_MNG: '/score-management',
+  SCORE_MNG: SCORE_ROOT,
+  SCORE_MNG_ASSIGN: `${SCORE_ROOT}/assign`,
+  SCORE_MNG_ASSIGN_TARGET: (criterionId: string | number) => `${SCORE_ROOT}/assign/${criterionId}`,
+  SCORE_MNG_MEMBER: (memberId: string | number) => `${SCORE_ROOT}/member/${memberId}`,
   WELCOME_MSG: '/welcome-message',
   BADGE_MNG: {
     LIST: '/badge-management',

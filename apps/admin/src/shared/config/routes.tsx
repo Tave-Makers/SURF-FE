@@ -68,7 +68,7 @@ export const createRouteConfig = (_router: RouterInstance): RouteConfig[] => [
     backPath: PAGE_ROUTES.HOME,
     header: {
       mode: HeaderMode.Default,
-      title: '활동점수 관리',
+      title: '회원 점수 조회',
       hasLeftIcon: true,
     },
   },

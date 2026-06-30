@@ -1,9 +1,11 @@
 'use client';
 
 import { useAlertStore } from '@surf/ui/store/alertStore';
+import { useToastStore } from '@surf/ui/store/toastStore';
 import { useRouter, useSearchParams } from 'next/navigation';
 import { useEffect } from 'react';
 import Logo from '../../../../public/logo.svg';
+import { AppleLoginButton } from '@/features/auth/ui/AppleLoginButton';
 import { KakaoLoginButton } from '@/features/auth/ui/KakaoLoginButton';
 
 import { PAGE_ROUTES } from '@/shared/config/path';
@@ -13,6 +15,7 @@ export const LoginPage = () => {
   const router = useRouter();
   const openAlert = useAlertStore((s) => s.open);
   const closeAlert = useAlertStore((s) => s.close);
+  const showToast = useToastStore((s) => s.show);
 
   const msg = searchParams.get('msg');
 
@@ -36,8 +39,12 @@ export const LoginPage = () => {
           },
         ],
       });
+      return;
     }
-  }, [msg, openAlert, closeAlert, router]);
+
+    router.replace(PAGE_ROUTES.LOGIN);
+    showToast(msg);
+  }, [msg, openAlert, closeAlert, router, showToast]);
 
   function handleTestPage() {
     router.push('/login/test');
@@ -49,6 +56,7 @@ export const LoginPage = () => {
       {/* 임시 처리 <KakaoLoginButton /> */}
       <div className="flex w-full flex-col items-center gap-[1.25rem]">
         <KakaoLoginButton />
+        <AppleLoginButton />
 
         <button
           type="button"

@@ -4,7 +4,7 @@ import { HeaderMode } from '@surf/ui/header';
 import { PolicyDetailItem } from '@/entities/policy/ui/PolicyDetailItem';
 import { AppHeader } from '@/widgets/header/ui/AppHeader';
 
-const OperatingPolicyPage = () => {
+const OperationalPolicyPage = () => {
   return (
     <div className="flex h-full flex-col">
       <AppHeader
@@ -19,4 +19,4 @@ const OperatingPolicyPage = () => {
   );
 };
 
-export default OperatingPolicyPage;
+export default OperationalPolicyPage;

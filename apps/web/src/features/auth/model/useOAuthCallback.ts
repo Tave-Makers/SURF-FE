@@ -16,12 +16,17 @@ export const useOAuthCallback = () => {
     if (didRun.current) return;
     didRun.current = true;
 
+    const controller = new AbortController();
+    let cancelled = false;
+
     void (async () => {
       try {
-        const { nickname, email, profileImageUrl } = await getOAuthOnboarding();
+        const { nickname, email, profileImageUrl } = await getOAuthOnboarding(controller.signal);
+        if (cancelled) return;
         setOnboarding({ nickname, email, profileImageUrl });
         router.replace(PAGE_ROUTES.HOME);
       } catch (err) {
+        if (cancelled) return;
         const message =
           err instanceof Error
             ? err.message
@@ -30,5 +35,10 @@ export const useOAuthCallback = () => {
         router.replace(PAGE_ROUTES.LOGIN);
       }
     })();
+
+    return () => {
+      cancelled = true;
+      controller.abort();
+    };
   }, [router, setOnboarding, showToast]);
 };

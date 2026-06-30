@@ -12,8 +12,8 @@ type GetOAuthOnboardingFailure = {
 
 type GetOAuthOnboardingResponse = GetOAuthOnboardingSuccess | GetOAuthOnboardingFailure;
 
-export async function getOAuthOnboarding(): Promise<OAuthLoginData> {
-  const res = await fetch('/api/auth/oauth/onboarding', { cache: 'no-store' });
+export async function getOAuthOnboarding(signal?: AbortSignal): Promise<OAuthLoginData> {
+  const res = await fetch('/api/auth/oauth/onboarding', { cache: 'no-store', signal });
   const body = (await res.json()) as GetOAuthOnboardingResponse;
 
   if (!res.ok || !body.ok) {

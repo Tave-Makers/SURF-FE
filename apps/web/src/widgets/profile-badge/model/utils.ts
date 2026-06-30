@@ -15,7 +15,7 @@ export function dedupeAndSortBadges(items: BadgeItemDTO[]) {
   const deduped: BadgeItemDTO[] = [];
 
   for (const b of items) {
-    const sig = `${b.badgeName ?? ''}|${b.generation ?? ''}|${b.awardedAt ?? ''}`;
+    const sig = `${b.badgeId ?? ''}|${b.badgeName ?? ''}|${b.awardedAt ?? ''}`;
     if (seen.has(sig)) continue;
     seen.add(sig);
     deduped.push(b);

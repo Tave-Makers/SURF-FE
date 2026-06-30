@@ -14,7 +14,7 @@ const OperationalPolicyPage = () => {
           hasLeftIcon: true,
         }}
       />
-      <PolicyDetailItem policyId="OperationalPolicy" />
+      <PolicyDetailItem policyId="OperatingPolicy" />
     </div>
   );
 };

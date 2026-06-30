@@ -3,7 +3,7 @@ import 'server-only';
 import { headers } from 'next/headers';
 import type { NextRequest } from 'next/server';
 
-const DEFAULT_DEV_ORIGIN = 'https://tavesurf.site';
+const DEFAULT_DEV_ORIGIN = 'https://localhost:443';
 const DEFAULT_PROD_ORIGIN = 'https://www.tavesurf.site';
 
 function normalizeOrigin(url: string): string {
@@ -15,15 +15,6 @@ function getConfiguredOrigin(): string | undefined {
   return url ? normalizeOrigin(url) : undefined;
 }
 
-function isAllowedDevHost(host: string): boolean {
-  return (
-    host === 'localhost' ||
-    host === '127.0.0.1' ||
-    host.startsWith('localhost:') ||
-    host.startsWith('127.0.0.1:')
-  );
-}
-
 function resolveOrigin(host: string | null, proto: string): string {
   const configured = getConfiguredOrigin();
   if (configured) return configured;
@@ -32,7 +23,7 @@ function resolveOrigin(host: string | null, proto: string): string {
     return DEFAULT_PROD_ORIGIN;
   }
 
-  if (host && isAllowedDevHost(host)) {
+  if (host) {
     return `${proto}://${host}`;
   }
 

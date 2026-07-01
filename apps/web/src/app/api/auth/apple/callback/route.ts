@@ -20,7 +20,7 @@ export async function POST(req: NextRequest) {
 
   const error = getFormString(formData, 'error');
   if (error) {
-    return NextResponse.redirect(new URL(PAGE_ROUTES.LOGIN, baseUrl));
+    return NextResponse.redirect(new URL(PAGE_ROUTES.LOGIN, baseUrl), 303);
   }
 
   const code = getFormString(formData, 'code');
@@ -28,7 +28,7 @@ export async function POST(req: NextRequest) {
   const user = getFormString(formData, 'user');
 
   if (!code || !state) {
-    return NextResponse.redirect(new URL(PAGE_ROUTES.LOGIN, baseUrl));
+    return NextResponse.redirect(new URL(PAGE_ROUTES.LOGIN, baseUrl), 303);
   }
 
   const result = await exchangeOAuthLogin({
@@ -43,13 +43,13 @@ export async function POST(req: NextRequest) {
   if (!result.ok) {
     const loginUrl = new URL(PAGE_ROUTES.LOGIN, baseUrl);
     loginUrl.searchParams.set('msg', result.message);
-    return NextResponse.redirect(loginUrl);
+    return NextResponse.redirect(loginUrl, 303);
   }
 
   const { nickname, email, profileImageUrl } = result.data;
   const redirectUrl = new URL(LOGIN_CALLBACK, baseUrl);
 
-  const response = NextResponse.redirect(redirectUrl);
+  const response = NextResponse.redirect(redirectUrl, 303);
   setOAuthOnboardingCookie(response, { nickname, email, profileImageUrl });
   applyProxyAuthToResponse(response, result.upstream, result.parsed);
 

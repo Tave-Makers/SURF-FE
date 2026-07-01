@@ -1,4 +1,4 @@
-@import '@surf/ui/styles/globals.css';
+@import '../../../../../packages/ui/styles/globals.css';
 
 /* 뷰포트 높이 전파 */
 html,

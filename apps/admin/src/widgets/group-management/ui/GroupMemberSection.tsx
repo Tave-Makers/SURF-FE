@@ -44,7 +44,7 @@ export const GroupMemberSection = ({
                   선택하기
                 </SolidButton>
               ) : (
-                <div>등록된 팀장이 없습니다.</div>
+                <div>등록된 팀장이 없어요</div>
               )}
             </div>
           ) : (
@@ -80,7 +80,7 @@ export const GroupMemberSection = ({
                   추가하기
                 </SolidButton>
               ) : (
-                <div>등록된 팀원이 없습니다.</div>
+                <div>등록된 팀원이 없어요</div>
               )}
             </div>
           ) : (

@@ -23,8 +23,8 @@ export const createRouteConfig = (_router: RouterInstance): RouteConfig[] => [
     },
   },
   {
-    id: 'setting-active-generation',
-    path: PAGE_ROUTES.SETTING_ACTIVE_GENERATION,
+    id: 'setting-active-cohort',
+    path: PAGE_ROUTES.SETTING_ACTIVE_COHORT,
     backPath: PAGE_ROUTES.HOME,
     header: {
       mode: HeaderMode.Default,
@@ -73,12 +73,22 @@ export const createRouteConfig = (_router: RouterInstance): RouteConfig[] => [
     },
   },
   {
-    id: 'badge',
-    path: PAGE_ROUTES.BADGE_MNG,
+    id: 'badge-list',
+    path: PAGE_ROUTES.BADGE_MNG.LIST,
     backPath: PAGE_ROUTES.HOME,
     header: {
       mode: HeaderMode.Default,
-      title: '활동배지 관리',
+      title: '활동 뱃지 관리',
+      hasLeftIcon: true,
+    },
+  },
+  {
+    id: 'badge-create',
+    path: PAGE_ROUTES.BADGE_MNG.CREATE,
+    backPath: PAGE_ROUTES.BADGE_MNG.LIST,
+    header: {
+      mode: HeaderMode.Default,
+      title: '신규 뱃지 생성',
       hasLeftIcon: true,
     },
   },

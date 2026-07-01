@@ -4,7 +4,10 @@ import { useEffect, useState } from 'react';
 import { Sheet as ModalSheet } from 'react-modal-sheet';
 import { useMemberInfoQuery } from '@/entities/member/model/queries/useMemberInfoQuery';
 import { MemberProfileSummary } from '@/entities/member/ui/MemberProfileSummary';
+import { openDismissMemberConfirm } from '@/features/member/dismiss/model/openDismissMemberConfirm';
+import { useDismissMemberMutation } from '@/features/member/dismiss/model/useDismissMemberMutation';
 import { openExpelMemberConfirm } from '@/features/member/expel/model/openExpelMemberConfirm';
+import { useExpelMemberMutation } from '@/features/member/expel/model/useExpelMemberMutation';
 import { MemberRoleChangeField } from '@/features/member/role-change/ui/MemberRoleChangeField';
 
 declare module '@/shared/store/bottomSheetStore' {
@@ -33,6 +36,8 @@ export const MemberManagementSheet = ({
 
   const openAlert = useAlertStore((s) => s.open);
   const closeAlert = useAlertStore((s) => s.close);
+  const { mutate: dismissMember, isPending: isDismissPending } = useDismissMemberMutation();
+  const { mutate: expelMember, isPending: isExpelPending } = useExpelMemberMutation();
 
   useEffect(() => {
     if (!isOpen) {
@@ -40,8 +45,22 @@ export const MemberManagementSheet = ({
     }
   }, [isOpen]);
 
+  const handleDismiss = () => {
+    dismissMember(
+      { memberIds: [memberId] },
+      {
+        onSuccess: onClose,
+      },
+    );
+  };
+
   const handleExpel = () => {
-    // TODO: 제명 API 호출 및 에러 처리 구현 필요
+    expelMember(
+      { memberIds: [memberId] },
+      {
+        onSuccess: onClose,
+      },
+    );
   };
 
   return (
@@ -54,12 +73,24 @@ export const MemberManagementSheet = ({
         <ModalSheet.Content>
           <Sheet
             primaryBtn={{
-              label: '퇴출/제명하기',
+              label: '퇴출하기',
+              disabled: isDismissPending || isExpelPending,
               onClick: () =>
                 openExpelMemberConfirm({
                   openAlert,
                   closeAlert,
                   onConfirm: handleExpel,
+                }),
+            }}
+            secondaryBtn={{
+              label: '제명하기',
+
+              disabled: isDismissPending || isExpelPending,
+              onClick: () =>
+                openDismissMemberConfirm({
+                  openAlert,
+                  closeAlert,
+                  onConfirm: handleDismiss,
                 }),
             }}
           >

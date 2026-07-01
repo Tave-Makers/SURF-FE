@@ -34,15 +34,28 @@ export const Accordion = ({
     if (!el) return;
 
     if (isOpen) {
-      setMaxHeight(`${el.scrollHeight}px`);
-
-      const inner = el.firstElementChild;
-      const observer = new ResizeObserver(() => {
+      const updateMaxHeight = () => {
         setMaxHeight(`${el.scrollHeight}px`);
-      });
-      if (inner) observer.observe(inner);
+      };
 
-      return () => observer.disconnect();
+      updateMaxHeight();
+      const inner = el.firstElementChild;
+      const resizeObserver = new ResizeObserver(updateMaxHeight);
+      const mutationObserver = new MutationObserver(() => {
+        requestAnimationFrame(updateMaxHeight);
+      });
+      if (inner) {
+        resizeObserver.observe(inner);
+        mutationObserver.observe(inner, {
+          childList: true,
+          subtree: true,
+        });
+      }
+
+      return () => {
+        resizeObserver.disconnect();
+        mutationObserver.disconnect();
+      };
     } else {
       setMaxHeight('0px');
     }

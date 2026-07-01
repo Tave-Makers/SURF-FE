@@ -4,7 +4,7 @@ export const PAGE_ROUTES = {
   HOME: '/',
   SIGNUP_REQUEST: '/signup-request',
   LOGIN: '/login',
-  SETTING_ACTIVE_GENERATION: '/active-generation',
+  SETTING_ACTIVE_COHORT: '/active-cohort',
   MEMBER_MNG: '/member-management',
   BANNER: {
     CREATE: '/banner/create',
@@ -20,6 +20,12 @@ export const PAGE_ROUTES = {
     MEMBER_SEARCH: `${GROUP_ROOT}/member-search`,
   },
   SCORE_MNG: '/score-management',
-  BADGE_MNG: '/badge-management',
   WELCOME_MSG: '/welcome-message',
+  BADGE_MNG: {
+    LIST: '/badge-management',
+    CREATE: '/badge-management/create',
+    DETAIL: (id: string | number) => `/badge-management/${id}`,
+    EDIT: (id: string | number) => `/badge-management/${id}/edit`,
+    ASSIGN: (id: string | number) => `/badge-management/${id}/assign`,
+  },
 } as const;

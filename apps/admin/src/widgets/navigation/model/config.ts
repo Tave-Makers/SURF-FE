@@ -7,9 +7,9 @@ export const NAV_ITEMS = [
     path: PAGE_ROUTES.SIGNUP_REQUEST,
   },
   {
-    id: 'setting-active-generation',
+    id: 'setting-active-cohort',
     label: '활동기수 설정',
-    path: PAGE_ROUTES.SETTING_ACTIVE_GENERATION,
+    path: PAGE_ROUTES.SETTING_ACTIVE_COHORT,
   },
   {
     id: 'member',
@@ -39,7 +39,7 @@ export const NAV_ITEMS = [
   {
     id: 'badge',
     label: '활동배지 관리',
-    path: PAGE_ROUTES.BADGE_MNG,
+    path: PAGE_ROUTES.BADGE_MNG.LIST,
   },
   {
     id: 'welcome-msg',

@@ -1,9 +1,9 @@
 'use client';
 
-import { ToolBar, type ToolBarItem } from '@surf/ui/toolbar';
 import { type Editor } from '@tiptap/react';
 import { useRouter } from 'next/navigation';
 import { PAGE_ROUTES } from '@/shared/config/path';
+import { ToolBar, type ToolBarItem } from '@/shared/ui/toolbar';
 
 export const TOOLBAR_KEY = {
   CAMERA: 'camera',

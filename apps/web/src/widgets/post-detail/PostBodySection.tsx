@@ -1,12 +1,14 @@
 'use client';
 
 import { ChipToggle } from '@surf/ui/chip-toggle';
+import { useAlertStore } from '@surf/ui/store/alertStore';
 import { format } from 'date-fns';
 import { useRouter } from 'next/navigation';
 import sanitizeHtml, { IOptions } from 'sanitize-html';
 import { EventCard } from '@/entities/calendar/ui/EventCard/EventCard';
 import { PostScheduleData } from '@/entities/post/api/types';
 import { PostDetail } from '@/entities/post/model/types';
+import { FileCard } from '@/entities/post/post-file/ui/FileCard';
 import { PostImage } from '@/entities/post/ui/post-image/PostImage';
 import { PostProfile } from '@/entities/post/ui/post-profile/PostProfile';
 import { trackPostDetailEvent } from '@/features/post/lib/trackPostDetailEvent';
@@ -23,6 +25,28 @@ type PostBodySectionProps = {
 
 export const PostBodySection = ({ post, schedule, onClickLikeCount }: PostBodySectionProps) => {
   const router = useRouter();
+  const openAlert = useAlertStore((s) => s.open);
+  const closeAlert = useAlertStore((s) => s.close);
+
+  const handleFileDownload = (fileUrl: string, fileName: string) => {
+    openAlert({
+      state: 'default',
+      title: '파일을 다운로드하시겠습니까?',
+      infoText: fileName,
+      actions: [
+        { type: 'solid', label: '취소', variant: 'secondary', onClick: closeAlert },
+        {
+          type: 'solid',
+          label: '다운로드',
+          variant: 'primary',
+          onClick: () => {
+            window.open(fileUrl, '_blank', 'noopener,noreferrer');
+            closeAlert();
+          },
+        },
+      ],
+    });
+  };
 
   // 좋아요/스크랩 Mutation
   const likeMutation = useToggleLikeMutation();
@@ -90,26 +114,39 @@ export const PostBodySection = ({ post, schedule, onClickLikeCount }: PostBodySe
       />
       <div className="whitespace-pre-line" dangerouslySetInnerHTML={{ __html: cleanContent }} />
 
-      {/* 이미지 목록 */}
-      {post.imageUrlList?.map((img) =>
-        img.originalUrl?.trim() ? (
-          <PostImage key={img.imageId} src={img.originalUrl} alt={img.originalUrl} />
-        ) : null,
-      )}
+      <div className="flex flex-col gap-10">
+        {/* 이미지 목록 */}
+        {post.imageUrlList?.map((img) =>
+          img.originalUrl?.trim() ? (
+            <PostImage key={img.imageId} src={img.originalUrl} alt={img.originalUrl} />
+          ) : null,
+        )}
+        {/* 첨부 파일 목록 */}
+        {post.fileList?.map((file) => (
+          <button
+            key={file.fileId}
+            type="button"
+            className="w-full text-left"
+            onClick={() => handleFileDownload(file.fileUrl, file.originalFileName)}
+          >
+            <FileCard fileName={file.originalFileName} />
+          </button>
+        ))}
 
-      {/* 일정카드 */}
-      {schedule && (
-        <EventCard
-          scheduleId={schedule.scheduleId}
-          title={schedule.title}
-          category={schedule.category}
-          mode="reservation"
-          location={schedule.location}
-          startDate={new Date(schedule.startAt)}
-          endDate={new Date(schedule.endAt)}
-          onClickCard={handleEventCardClick}
-        />
-      )}
+        {/* 일정카드 */}
+        {schedule && (
+          <EventCard
+            scheduleId={schedule.scheduleId}
+            title={schedule.title}
+            category={schedule.category}
+            mode="reservation"
+            location={schedule.location}
+            startDate={new Date(schedule.startAt)}
+            endDate={new Date(schedule.endAt)}
+            onClickCard={handleEventCardClick}
+          />
+        )}
+      </div>
 
       {/* 좋아요 / 스크랩 */}
       <div className="flex justify-between">

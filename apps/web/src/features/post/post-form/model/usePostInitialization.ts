@@ -1,11 +1,11 @@
 import { useEffect } from 'react';
-import { getCategoriesForBoard, PostCategoryKey } from '@/entities/post/model/category';
+import { getCategoriesForBoard, type PostCategoryKey } from '@/entities/post/model/category';
 import { ScheduleCategory } from '@/entities/schedule/model/types';
 import { PostFormState, PostPageMode } from '@/features/post/post-form/model/types';
 import { ScheduleFormData } from '@/features/schedule/create/model/types';
 import { PostDetail } from '@/entities/post/model/types';
 import { PostScheduleData } from '@/entities/post/api/types';
-import { UploadImage } from '@surf/utils';
+import { UploadFile, UploadImage } from '@surf/utils';
 import { usePostFormStore } from './usePostFormStore';
 
 type PostFormActions = Pick<PostFormState, 'setField'>;
@@ -97,12 +97,25 @@ export const usePostInitialization = ({
         file: null,
       }));
 
+    // 파일 리스트 매핑
+    const mappedFiles: UploadFile[] = (postDetail?.fileList || [])
+      .sort((a, b) => a.sequence - b.sequence)
+      .map((file) => ({
+        id: String(file.fileId),
+        file: null,
+        originalFileName: file.originalFileName,
+        fileSize: 0,
+        status: 'uploaded' as const,
+        uploadedUrl: file.fileUrl,
+      }));
+
     // 3. 상태 주입
     const contentValue = postDetail?.content ?? '';
 
     setField('title', postDetail?.title ?? '');
     setField('content', contentValue);
     setField('images', mappedImages);
+    setField('files', mappedFiles);
     setField('category', initialCategory);
     setField('reserved', initialReserved);
     setField('reservedAt', initialReservedAt);
@@ -117,6 +130,7 @@ export const usePostInitialization = ({
       category: initialCategory,
       content: contentValue,
       imageUrls: mappedImages.map((img) => img.uploadedUrl!),
+      fileUrls: mappedFiles.map((f) => f.uploadedUrl!),
       reserved: initialReserved,
       reservedAt: initialReservedAt,
       scheduleId: postSchedule?.scheduleId ?? null,

@@ -37,7 +37,8 @@ export const usePostForm = ({ mode, boardId, postId, postDetail, postSchedule }:
   const numericPostId = mode === 'edit' && postId ? Number(postId) : undefined;
 
   // 1. Store & State Management
-  const { title, category, content, images, reserved, reservedAt, resetForm } = usePostFormStore();
+  const { title, category, content, images, files, reserved, reservedAt, resetForm } =
+    usePostFormStore();
 
   const { linkedSchedule, clearLinkedSchedule } = useCreatePostScheduleStore();
 
@@ -103,10 +104,19 @@ export const usePostForm = ({ mode, boardId, postId, postDetail, postSchedule }:
       return alert(`본문은 최대 ${MAX_CONTENT_LENGTH}자까지입니다.`);
     if (images.length > MAX_IMAGES) return alert(`이미지는 최대 ${MAX_IMAGES}개까지입니다.`);
 
-    const { isContentChanged, isImagesChanged, isReservationChanged } = checkHasChanges();
+    const { isContentChanged, isImagesChanged, isFilesChanged, isReservationChanged } =
+      checkHasChanges();
     const imageUrlList = images
       .filter((img) => img.uploadedUrl)
-      .map((img, idx) => ({ originalUrl: img.uploadedUrl!, sequence: idx }));
+      .map((img, idx) => ({ originalUrl: img.uploadedUrl!, sequence: idx + 1 }));
+
+    const fileList = files
+      .filter((f) => f.uploadedUrl)
+      .map((f, idx) => ({
+        fileUrl: f.uploadedUrl!,
+        originalFileName: f.originalFileName,
+        sequence: idx + 1,
+      }));
 
     const categoryId = categoryKeyToId(category, Number(boardId)) ?? 1;
 
@@ -122,6 +132,7 @@ export const usePostForm = ({ mode, boardId, postId, postDetail, postSchedule }:
           pinned: false,
           reservedAt: reservedAt ? format(reservedAt, "yyyy-MM-dd'T'HH:mm:ss") : '',
           imageUrlList,
+          fileList,
           hasSchedule: !!linkedSchedule,
           reserved,
         });
@@ -150,6 +161,8 @@ export const usePostForm = ({ mode, boardId, postId, postDetail, postSchedule }:
           isContentChanged,
           isImageChanged: isImagesChanged,
           imageUrlList,
+          isFileChanged: isFilesChanged,
+          fileList,
           hasSchedule: !!linkedSchedule,
         });
 

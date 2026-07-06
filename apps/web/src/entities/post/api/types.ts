@@ -14,6 +14,18 @@ export type ImageItemResponse = ImageItem & {
   postId: number;
 };
 
+// 게시글 첨부 파일 타입
+export type FileItem = {
+  fileUrl: string;
+  originalFileName: string;
+  sequence: number;
+};
+
+// 게시글 첨부 파일 응답 타입
+export type FileItemResponse = FileItem & {
+  fileId: number;
+};
+
 // 게시글 목록
 export type PostListItemResponse = {
   postId: number;
@@ -69,6 +81,7 @@ export type PostDetailData = {
   nickname: string;
   isMine: boolean;
   imageUrlList: ImageItemResponse[];
+  fileList: FileItemResponse[];
   viewCount: number;
   hasSchedule: boolean;
   scheduleId: number | null;

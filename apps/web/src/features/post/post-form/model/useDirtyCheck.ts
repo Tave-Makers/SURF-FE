@@ -5,7 +5,7 @@ import { usePostFormStore } from './usePostFormStore';
 import { useCreatePostScheduleStore } from '@/features/schedule/create-post-schedule/model/useCreatePostScheduleStore';
 
 export const usePostDirtyCheck = () => {
-  const { title, category, content, images, initialSnapshot, reserved, reservedAt } =
+  const { title, category, content, images, files, initialSnapshot, reserved, reservedAt } =
     usePostFormStore();
   const { linkedSchedule } = useCreatePostScheduleStore();
 
@@ -19,14 +19,16 @@ export const usePostDirtyCheck = () => {
         hasChanges: !isEmpty,
         isEmpty,
         isImagesChanged: images.length > 0,
+        isFilesChanged: files.length > 0,
         isReservationChanged: reserved || !!reservedAt,
         isScheduleChanged: !!linkedSchedule,
       };
     }
 
     // 수정 모드: 스냅샷이 있는 경우
-    // 현재 이미지 URL 리스트 가공 (uploadedUrl만 추출)
+    // 현재 이미지/파일 URL 리스트 가공
     const currentImageUrls = images.map((img) => img.uploadedUrl ?? null);
+    const currentFileUrls = files.map((f) => f.uploadedUrl ?? '');
 
     // 1. 기본 필드 비교
     const isTitleChanged = title !== initialSnapshot.title;
@@ -34,6 +36,8 @@ export const usePostDirtyCheck = () => {
     const isContentChanged = content !== initialSnapshot.content;
     const isImagesChanged =
       JSON.stringify(currentImageUrls) !== JSON.stringify(initialSnapshot.imageUrls);
+    const isFilesChanged =
+      JSON.stringify(currentFileUrls) !== JSON.stringify(initialSnapshot.fileUrls);
 
     // 2. 예약 정보 비교
     const isReservedToggleChanged = reserved !== initialSnapshot.reserved;
@@ -59,15 +63,27 @@ export const usePostDirtyCheck = () => {
         isCategoryChanged ||
         isContentChanged ||
         isImagesChanged ||
+        isFilesChanged ||
         isReservationChanged ||
         isScheduleChanged,
       isContentChanged,
       isImagesChanged,
+      isFilesChanged,
       isReservationChanged,
       isScheduleChanged,
       isEmpty,
     };
-  }, [title, category, content, images, linkedSchedule, reserved, reservedAt, initialSnapshot]);
+  }, [
+    title,
+    category,
+    content,
+    images,
+    files,
+    linkedSchedule,
+    reserved,
+    reservedAt,
+    initialSnapshot,
+  ]);
 
   return { checkHasChanges };
 };

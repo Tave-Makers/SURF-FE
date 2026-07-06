@@ -1,23 +1,37 @@
-export const POST_CATEGORIES = {
-  event: { key: 'event', id: 1, label: '행사' },
-  activity: { key: 'activity', id: 2, label: '활동' },
-  partnership: { key: 'partnership', id: 3, label: '제휴' },
-  patch: { key: 'patch', id: 4, label: '패치' },
-  etc: { key: 'etc', id: 5, label: '기타' },
-} as const;
+type CategoryItem = { key: string; id: number; label: string };
 
-export type PostCategoryKey = keyof typeof POST_CATEGORIES;
-export type PostCategoryLabel = (typeof POST_CATEGORIES)[PostCategoryKey]['label'];
+export const BOARD_CATEGORIES = {
+  1: [
+    { key: 'event', id: 1, label: '행사' },
+    { key: 'activity', id: 2, label: '활동' },
+    { key: 'partnership', id: 3, label: '제휴' },
+    { key: 'patch', id: 4, label: '패치' },
+    { key: 'etc', id: 5, label: '기타' },
+  ],
+  2: [
+    { key: 'recruit', id: 6, label: '팀원 모집' },
+    { key: 'info', id: 7, label: '정보' },
+    { key: 'qna', id: 8, label: '질문' },
+    { key: 'etc', id: 9, label: '기타' },
+  ],
+} as const satisfies Record<number, readonly CategoryItem[]>;
 
-export const categoryIdToLabel = (id: number | null | undefined) => {
-  const found = Object.values(POST_CATEGORIES).find((c) => c.id === id);
-  return found?.label ?? '기타';
-};
+const ALL_CATEGORIES = [...BOARD_CATEGORIES[1], ...BOARD_CATEGORIES[2]] as const;
 
-export const categoryIdToKey = (id?: number | null) => {
-  if (!id) return undefined;
-  return Object.values(POST_CATEGORIES).find((c) => c.id === id)?.key;
-};
+export type PostCategoryKey = (typeof ALL_CATEGORIES)[number]['key'];
+export type PostCategoryLabel = (typeof ALL_CATEGORIES)[number]['label'];
+
+export const getCategoriesForBoard = (boardId: number): readonly CategoryItem[] =>
+  (BOARD_CATEGORIES as Record<number, readonly CategoryItem[]>)[boardId] ?? BOARD_CATEGORIES[1];
+
+export const categoryIdToLabel = (id: number | null | undefined): PostCategoryLabel =>
+  ALL_CATEGORIES.find((c) => c.id === id)?.label ?? '기타';
+
+export const categoryIdToKey = (id?: number | null): string | undefined =>
+  ALL_CATEGORIES.find((c) => c.id === id)?.key;
+
+export const categoryKeyToId = (key: string, boardId: number): number | undefined =>
+  getCategoriesForBoard(boardId).find((c) => c.key === key)?.id;
 
 export const isPostCategoryKey = (value: unknown): value is PostCategoryKey =>
-  Object.keys(POST_CATEGORIES).includes(String(value));
+  ALL_CATEGORIES.some((c) => c.key === String(value));

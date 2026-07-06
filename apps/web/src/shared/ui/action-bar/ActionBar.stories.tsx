@@ -18,14 +18,9 @@ type Story = StoryObj<typeof ActionBar>;
 export const Controlled: Story = {
   render: () => {
     const [message, setMessage] = useState('');
-    const [emojiActive, setEmojiActive] = useState(false);
 
     const handleSend = (val: string) => {
       alert(`(Controlled) 전송된 메시지: ${val}`);
-    };
-
-    const handleEmojiClick = () => {
-      setEmojiActive((prev) => !prev);
     };
 
     return (
@@ -35,14 +30,7 @@ export const Controlled: Story = {
           onChange={setMessage}
           placeholder="메시지를 입력하세요"
           onSend={handleSend}
-          isEmojiActive={emojiActive}
-          onIconClick={handleEmojiClick}
         />
-        {emojiActive && (
-          <div className="text-foreground-normal text-caption-caption4">
-            😀 이모지 패널 열림 상태
-          </div>
-        )}
       </div>
     );
   },
@@ -53,32 +41,15 @@ export const Controlled: Story = {
 /* ----------------------------------------------- */
 export const Uncontrolled: Story = {
   render: () => {
-    const [emojiActive, setEmojiActive] = useState(false);
-
     const inputRef = useRef<HTMLTextAreaElement>(null);
 
     const handleSend = (val: string) => {
       alert(`(Uncontrolled) 전송된 메시지: ${val}`);
     };
 
-    const handleEmojiClick = () => {
-      setEmojiActive((prev) => !prev);
-    };
-
     return (
       <div className="w-[23.4rem] space-y-2">
-        <ActionBar
-          placeholder="댓글을 입력하세요"
-          onSend={handleSend}
-          isEmojiActive={emojiActive}
-          onIconClick={handleEmojiClick}
-          ref={inputRef}
-        />
-        {emojiActive && (
-          <div className="text-foreground-normal text-caption-caption4">
-            🪄 이모지 패널이 열려 있습니다
-          </div>
-        )}
+        <ActionBar placeholder="댓글을 입력하세요" onSend={handleSend} ref={inputRef} />
       </div>
     );
   },
@@ -89,15 +60,10 @@ export const Uncontrolled: Story = {
 /* ----------------------------------------------- */
 export const UncontrolledWithDefaultValue: Story = {
   render: () => {
-    const [emojiActive, setEmojiActive] = useState(false);
     const inputRef = useRef<HTMLTextAreaElement>(null);
 
     const handleSend = (val: string) => {
       alert(`(Uncontrolled with defaultValue) 수정된 댓글: ${val}`);
-    };
-
-    const handleEmojiClick = () => {
-      setEmojiActive((prev) => !prev);
     };
 
     return (
@@ -106,15 +72,8 @@ export const UncontrolledWithDefaultValue: Story = {
           defaultValue="기존 댓글 내용입니다 😊"
           placeholder="댓글을 수정하세요"
           onSend={handleSend}
-          isEmojiActive={emojiActive}
-          onIconClick={handleEmojiClick}
           ref={inputRef}
         />
-        {emojiActive && (
-          <div className="text-foreground-normal text-caption-caption4">
-            🪄 이모지 패널이 열려 있습니다
-          </div>
-        )}
       </div>
     );
   },

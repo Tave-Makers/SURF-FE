@@ -1,6 +1,6 @@
 'use client';
 
-import { IconName } from '../icon/SurfIcon';
+import { IconName } from '@surf/ui/icon';
 import { ToolBarItems } from './ToolBarItems';
 
 export type ToolBarItem<K extends string> = {
@@ -25,8 +25,8 @@ export const ToolBar = <K extends string>({
   return (
     <nav
       className={[
-        'gap-15 px-13 flex w-full items-center py-8',
-        'rounded-1 border-border-tertiary border-t-1 opacity-100',
+        'flex w-full items-center gap-15 px-13 py-8',
+        'rounded-1 border-border-tertiary mt-10 border-t-1 opacity-100',
         className,
       ].join(' ')}
     >

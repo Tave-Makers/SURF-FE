@@ -1,7 +1,7 @@
 'use client';
 
+import { SurfIcon, IconName } from '@surf/ui/icon';
 import { MouseEventHandler } from 'react';
-import { SurfIcon, IconName } from '../icon/SurfIcon';
 
 interface ToolBarItemsProps {
   label: string;

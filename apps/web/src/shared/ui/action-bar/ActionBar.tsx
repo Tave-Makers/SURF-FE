@@ -1,6 +1,6 @@
-import { forwardRef, useRef, useImperativeHandle } from 'react';
-import { SurfIcon } from '../icon/SurfIcon';
+import { SurfIcon } from '@surf/ui/icon';
 import { MentionTextInput } from '@surf/ui/text-input';
+import { forwardRef, useRef, useImperativeHandle } from 'react';
 
 /**
  * 범용 메시지 입력 및 전송 컴포넌트
@@ -30,15 +30,10 @@ interface ActionBarProps {
   onChange?: (val: string) => void;
   placeholder?: string;
   onSend?: (val: string) => void | boolean | Promise<void | boolean>;
-  onIconClick?: () => void;
-  isEmojiActive?: boolean;
 }
 
 export const ActionBar = forwardRef<HTMLTextAreaElement, ActionBarProps>(
-  (
-    { value, defaultValue, onChange, placeholder, onSend, onIconClick, isEmojiActive = false },
-    ref,
-  ) => {
+  ({ value, defaultValue, onChange, placeholder, onSend }, ref) => {
     const internalRef = useRef<HTMLTextAreaElement>(null);
     useImperativeHandle(ref, () => internalRef.current as HTMLTextAreaElement);
 
@@ -72,7 +67,7 @@ export const ActionBar = forwardRef<HTMLTextAreaElement, ActionBarProps>(
     };
 
     return (
-      <div className="bg-background-normal border-border-normal shadow-embossed px-13 pt-13 pb-15 flex w-full items-center gap-10 [border-top-width:var(--stroke-weight-0)]">
+      <div className="bg-background-normal border-border-normal shadow-embossed flex w-full items-center gap-10 [border-top-width:var(--stroke-weight-0)] px-13 pt-13 pb-15">
         <MentionTextInput
           mode="chat"
           ref={internalRef}
@@ -80,8 +75,6 @@ export const ActionBar = forwardRef<HTMLTextAreaElement, ActionBarProps>(
           defaultValue={defaultValue}
           onChange={onChange}
           placeholder={placeholder}
-          iconName={isEmojiActive ? 'SmileCircleSolid' : 'SmileCircle'}
-          onIconClick={onIconClick}
           onEnter={handleSend}
         />
         <button

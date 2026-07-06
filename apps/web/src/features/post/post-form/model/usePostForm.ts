@@ -3,7 +3,7 @@ import { useRouter } from 'next/navigation';
 import { PAGE_ROUTES } from '@/shared/config/path';
 
 import { stripHtml } from '@/shared/lib/stripHtml';
-import { POST_CATEGORIES } from '@/entities/post/model/category';
+import { categoryKeyToId } from '@/entities/post/model/category';
 import { POST_VALIDATION } from '@/entities/post/model/validation';
 
 import { useCreatePost } from '@/features/post/create-post/model/useCreatePost';
@@ -108,7 +108,7 @@ export const usePostForm = ({ mode, boardId, postId, postDetail, postSchedule }:
       .filter((img) => img.uploadedUrl)
       .map((img, idx) => ({ originalUrl: img.uploadedUrl!, sequence: idx }));
 
-    const categoryId = POST_CATEGORIES[category].id;
+    const categoryId = categoryKeyToId(category, Number(boardId)) ?? 1;
 
     try {
       let targetPostId = numericPostId;

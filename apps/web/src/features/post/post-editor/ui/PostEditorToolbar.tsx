@@ -10,28 +10,34 @@ export const TOOLBAR_KEY = {
   ALARM: 'alarm',
   CALENDAR: 'calendar',
   BOLD: 'bold',
+  FILE: 'file',
 } as const;
 
 export type ToolbarKey = (typeof TOOLBAR_KEY)[keyof typeof TOOLBAR_KEY];
 
-const baseItems: ToolBarItem<ToolbarKey>[] = [
+export const ALL_TOOLBAR_ITEMS: ToolBarItem<ToolbarKey>[] = [
   { key: TOOLBAR_KEY.CAMERA, label: '사진', icon: 'CameraSolid' },
   { key: TOOLBAR_KEY.ALARM, label: '예약', icon: 'AlarmSolid' },
   { key: TOOLBAR_KEY.CALENDAR, label: '일정', icon: 'CalendarSolid' },
   { key: TOOLBAR_KEY.BOLD, label: '굵게', icon: 'LetterBSolid' },
+  { key: TOOLBAR_KEY.FILE, label: '파일', icon: 'FilePlusSolid' },
 ];
 
 type Props = {
-  editor: Editor; // 볼드체 버튼 클릭시 굵기를 조절하는 포스트 에디터
-  onCameraClick: () => void; // 파일 탐색기 여는 콜백
-  onReservationClick: () => void; // 예약 버튼 클릭 시 예약 DateTimePicker 모달 오픈 콜백
-  isReservationDisabled: boolean; // 예약 비활성화 여부
+  editor: Editor;
+  items: ToolBarItem<ToolbarKey>[];
+  onCameraClick: () => void;
+  onReservationClick: () => void;
+  onFileClick: () => void;
+  isReservationDisabled: boolean;
 };
 
 export const PostEditorToolbar = ({
   editor,
+  items,
   onCameraClick,
   onReservationClick,
+  onFileClick,
   isReservationDisabled,
 }: Props) => {
   const router = useRouter();
@@ -45,6 +51,7 @@ export const PostEditorToolbar = ({
     [TOOLBAR_KEY.CALENDAR]: () => {
       router.push(PAGE_ROUTES.BOARD.POST_SCHEDULE);
     },
+    [TOOLBAR_KEY.FILE]: onFileClick,
   };
 
   const handleItemClick = (key: ToolbarKey) => {
@@ -52,16 +59,11 @@ export const PostEditorToolbar = ({
     actionMap[key]?.();
   };
 
-  const items: ToolBarItem<ToolbarKey>[] = baseItems.map((item) => {
-    const isBold = item.key === TOOLBAR_KEY.BOLD;
-    const isAlarm = item.key === TOOLBAR_KEY.ALARM;
+  const resolvedItems: ToolBarItem<ToolbarKey>[] = items.map((item) => ({
+    ...item,
+    active: item.key === TOOLBAR_KEY.BOLD ? editor.isActive('bold') : false,
+    disabled: item.key === TOOLBAR_KEY.ALARM && isReservationDisabled,
+  }));
 
-    return {
-      ...item,
-      active: isBold ? editor.isActive('bold') : false,
-      disabled: isAlarm && isReservationDisabled,
-    };
-  });
-
-  return <ToolBar items={items} onItemClick={handleItemClick} />;
+  return <ToolBar items={resolvedItems} onItemClick={handleItemClick} />;
 };

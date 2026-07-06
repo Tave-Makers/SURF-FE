@@ -1,4 +1,4 @@
-import { ImageItem } from '@/entities/post/api/types';
+import { FileItem, ImageItem } from '@/entities/post/api/types';
 
 export type CreatePostRequest = {
   boardId: number;
@@ -8,6 +8,7 @@ export type CreatePostRequest = {
   pinned?: boolean;
   reservedAt?: string | null;
   imageUrlList?: ImageItem[];
+  fileList?: FileItem[];
   hasSchedule?: boolean;
   reserved?: boolean;
 };

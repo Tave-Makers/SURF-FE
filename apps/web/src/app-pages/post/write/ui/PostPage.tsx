@@ -40,6 +40,7 @@ const PostPage = (props: PostPageProps) => {
   const category = usePostFormStore((s) => s.category);
   const content = usePostFormStore((s) => s.content);
   const images = usePostFormStore((s) => s.images);
+  const files = usePostFormStore((s) => s.files);
   const reserved = usePostFormStore((s) => s.reserved);
   const reservedAt = usePostFormStore((s) => s.reservedAt);
   const isInitialized = usePostFormStore((s) => s.isInitialized);
@@ -238,6 +239,7 @@ const PostPage = (props: PostPageProps) => {
         <PostEditor
           content={content}
           images={images}
+          files={files}
           setField={setField}
           linkedSchedule={linkedSchedule}
           onScheduleRemove={handleScheduleRemove}

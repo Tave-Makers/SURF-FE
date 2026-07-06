@@ -9,13 +9,24 @@ export interface ShortcutItem {
 
 // 앱 내 바로가기
 export const SHORTCUT_LINKS: ShortcutItem[] = [
-  { id: 1, label: '공지사항', imageSrc: '/images/home/notice.svg', link: PAGE_ROUTES.BOARD.MAIN },
+  {
+    id: 1,
+    label: '공지사항',
+    imageSrc: '/images/home/announcement.svg',
+    link: PAGE_ROUTES.BOARD.MAIN,
+  },
   { id: 2, label: '일정', imageSrc: '/images/home/calendar.svg', link: PAGE_ROUTES.CALENDAR.MAIN },
   {
     id: 3,
     label: '주소록',
-    imageSrc: '/images/home/address-book.svg',
+    imageSrc: '/images/home/member.svg',
     link: PAGE_ROUTES.MEMBER.MEMBER_SEARCH,
+  },
+  {
+    id: 4,
+    label: '게시판',
+    imageSrc: '/images/home/board.svg',
+    link: PAGE_ROUTES.BOARD.COMMUNITY,
   },
 ];
 

@@ -1,4 +1,5 @@
 import 'server-only';
+import { cache } from 'react';
 import { cookies } from 'next/headers';
 import { redirect } from 'next/navigation';
 import type { ValidStatusResponse } from '@/features/auth/api/types';
@@ -87,7 +88,7 @@ function getSetCookieHeaders(res: Response): string[] {
   return single ? [single] : [];
 }
 
-export async function verifySession() {
+export const verifySession = cache(async function verifySession() {
   try {
     const baseUrl = await getBaseUrl();
 
@@ -139,7 +140,7 @@ export async function verifySession() {
     console.error('[Auth] 예상치 못한 에러:', safeErrorMessage(error));
     redirect(PAGE_ROUTES.LOGIN);
   }
-}
+});
 
 function handleBusinessRedirect(json: ValidStatusResponse) {
   const user = json.data;

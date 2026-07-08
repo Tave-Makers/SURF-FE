@@ -11,7 +11,7 @@ const Page = async ({ params }: { params: Promise<{ boardId: string }> }) => {
 
   if (board?.adminOnly) {
     const user = await verifySession();
-    if (user.memberRole === 'member') redirect(PAGE_ROUTES.HOME);
+    if (user.memberRole === 'member') redirect(PAGE_ROUTES.UNAUTHORIZED);
   }
 
   return <PostPage mode="create" boardId={boardId} />;

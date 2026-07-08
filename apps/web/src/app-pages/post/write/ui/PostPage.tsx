@@ -13,7 +13,10 @@ import { getCategoriesForBoard } from '@/entities/post/model/category';
 import { POST_VALIDATION } from '@/entities/post/model/validation';
 import { PostBadge } from '@/entities/post/ui/post-badge/PostBadge';
 
+import { useAuthStore } from '@/features/auth/model/useAuthStore';
+
 import { useGetPostScheduleQuery } from '@/features/post/model/useGetPostScheduleQuery';
+import { TOOLBAR_KEY } from '@/features/post/post-editor/ui/PostEditorToolbar';
 import { usePostForm } from '@/features/post/post-form/model/usePostForm';
 import { usePostFormStore } from '@/features/post/post-form/model/usePostFormStore';
 import { usePostInitialization } from '@/features/post/post-form/model/usePostInitialization';
@@ -36,6 +39,7 @@ const PostPage = (props: PostPageProps) => {
   const postId = mode === 'edit' ? props.postId : undefined;
 
   // == Stores ==
+  const memberRole = useAuthStore((s) => s.memberRole);
   const title = usePostFormStore((s) => s.title);
   const category = usePostFormStore((s) => s.category);
   const content = usePostFormStore((s) => s.content);
@@ -146,6 +150,10 @@ const PostPage = (props: PostPageProps) => {
   const boardLabel = board ? board.label : '';
   const boardCategories = getCategoriesForBoard(Number(boardId));
 
+  const disabledToolbarKeys = [
+    ...(memberRole === 'member' || Number(boardId) === 2 ? [TOOLBAR_KEY.CALENDAR] : []),
+  ];
+
   const { MAX_TITLE_LENGTH } = POST_VALIDATION;
 
   useEffect(() => {
@@ -245,6 +253,7 @@ const PostPage = (props: PostPageProps) => {
           onScheduleRemove={handleScheduleRemove}
           onReservationClick={handleOpenReservation}
           isPublished={isPublished}
+          disabledToolbarKeys={disabledToolbarKeys}
         />
       </div>
     </div>

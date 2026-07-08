@@ -20,13 +20,20 @@ export type ValidStatusResponse = {
   };
 };
 
-export type KakaoLoginResponse = {
-  status: number;
-  message: string;
-  data: {
-    accessToken: string;
-    nickname: string;
-    email: string;
-    profileImageUrl: string;
-  };
+export type OAuthLoginData = {
+  nickname: string;
+  email: string;
+  profileImageUrl: string;
 };
+
+export type KakaoLoginData = OAuthLoginData & {
+  accessToken: string;
+};
+
+export type KakaoLoginResponse =
+  | {
+      status: number;
+      message: string;
+      data: KakaoLoginData;
+    }
+  | KakaoLoginData;

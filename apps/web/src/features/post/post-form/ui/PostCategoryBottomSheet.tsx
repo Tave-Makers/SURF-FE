@@ -1,6 +1,6 @@
-import { Sheet } from '@surf/ui/sheet';
+import { Sheet, SheetItem } from '@surf/ui/sheet';
 import { Sheet as ModalSheet } from 'react-modal-sheet';
-import { POST_CATEGORIES, PostCategoryKey } from '@/entities/post/model/category';
+import type { PostCategoryKey } from '@/entities/post/model/category';
 
 declare module '@/shared/store/bottomSheetStore' {
   interface BottomSheetMap {
@@ -8,10 +8,13 @@ declare module '@/shared/store/bottomSheetStore' {
   }
 }
 
+type CategoryOption = { key: string; label: string };
+
 export type PostCategoryBottomSheetProps = {
   isOpen: boolean;
   onClose: () => void;
   category: PostCategoryKey;
+  categories: readonly CategoryOption[];
   onSelect: (key: PostCategoryKey) => void;
   controlsId?: string;
 };
@@ -20,6 +23,7 @@ export const PostCategoryBottomSheet = ({
   isOpen,
   onClose,
   category,
+  categories,
   onSelect,
   controlsId,
 }: PostCategoryBottomSheetProps) => {
@@ -35,20 +39,14 @@ export const PostCategoryBottomSheet = ({
       <ModalSheet.Container>
         <ModalSheet.Content>
           <Sheet>
-            <div id={controlsId} className="flex flex-col gap-5 py-15">
-              {Object.values(POST_CATEGORIES).map((item) => (
-                <button
-                  key={item.id}
-                  type="button"
-                  onClick={() => onSelect(item.key)}
-                  className={`rounded-md px-5 py-10 text-left transition-colors ${
-                    category === item.key
-                      ? 'bg-background-secondary font-semibold'
-                      : 'hover:bg-background-secondary'
-                  }`}
-                >
-                  {item.label}
-                </button>
+            <div id={controlsId} className="flex flex-col gap-5">
+              {categories.map((item) => (
+                <SheetItem
+                  key={item.key}
+                  title={item.label}
+                  pressed={category === item.key}
+                  onClick={() => onSelect(item.key as PostCategoryKey)}
+                />
               ))}
             </div>
           </Sheet>

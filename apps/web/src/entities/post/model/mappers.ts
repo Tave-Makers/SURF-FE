@@ -61,6 +61,7 @@ export const transformDetailToPost = (item: PostDetailData): PostDetail => {
     commentCount: item.commentCount,
     writer: item.nickname,
     imageUrlList: item.imageUrlList,
+    fileList: item.fileList,
     hasSchedule: item.hasSchedule,
     categoryId: item.categoryId,
     categoryLabel: categoryIdToLabel(item.categoryId),

@@ -1,13 +1,7 @@
 import 'server-only';
-import { cookies, headers } from 'next/headers';
+import { cookies } from 'next/headers';
 import type { ServerFetchOptions } from './types';
-
-async function getBaseUrl(): Promise<string> {
-  const h = await headers();
-  const host = h.get('host');
-  const proto = h.get('x-forwarded-proto') ?? 'http';
-  return host ? `${proto}://${host}` : 'http://localhost:3000';
-}
+import { getAppOrigin } from '@/shared/lib/appOrigin';
 
 function toProxyPath(path: string): string {
   const p = path.startsWith('/') ? path : `/${path}`;
@@ -22,7 +16,7 @@ function buildCookieHeader(store: { getAll(): { name: string; value: string }[] 
 }
 
 export async function serverFetchWithCookies(path: string, options: ServerFetchOptions = {}) {
-  const baseUrl = await getBaseUrl();
+  const baseUrl = await getAppOrigin();
   const url = `${baseUrl}${toProxyPath(path)}`;
 
   const cookieStore = await cookies();

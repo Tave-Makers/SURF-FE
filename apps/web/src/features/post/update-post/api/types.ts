@@ -1,4 +1,4 @@
-import { ImageItem } from '@/entities/post/api/types';
+import { FileItem, ImageItem } from '@/entities/post/api/types';
 
 export type UpdatePostRequest = {
   title: string;
@@ -10,5 +10,7 @@ export type UpdatePostRequest = {
   isContentChanged?: boolean;
   isImageChanged?: boolean;
   imageUrlList?: ImageItem[];
+  isFileChanged?: boolean;
+  fileList?: FileItem[];
   hasSchedule?: boolean;
 };

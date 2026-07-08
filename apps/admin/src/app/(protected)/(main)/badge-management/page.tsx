@@ -1,5 +1,7 @@
+import { BadgeListPage } from '@/app-pages/badge/BadgeListPage';
+
 const Page = () => {
-  return <div className="p-6 text-title-title2 text-foreground-normal">활동배지 관리</div>;
+  return <BadgeListPage />;
 };
 
 export default Page;

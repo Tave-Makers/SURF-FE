@@ -28,17 +28,11 @@ export type UserProfileApiResponse = CommonResponse<{
 
 // 활동뱃지
 export type BadgeItemDTO = {
+  badgeId: number;
   badgeName: string;
-  generation: number;
+  badgeImageUrl: string;
+  description: string;
   awardedAt: string;
 };
 
-export type BadgePageDTO = {
-  content: BadgeItemDTO[];
-  pageNumber: number;
-  pageSize: number;
-  numberOfElements: number;
-  isLast: boolean;
-};
-
-export type BadgeApiResponse = CommonResponse<BadgePageDTO>;
+export type BadgeApiResponse = CommonResponse<BadgeItemDTO[]>;

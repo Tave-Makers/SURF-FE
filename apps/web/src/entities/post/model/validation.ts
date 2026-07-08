@@ -2,6 +2,9 @@ export const POST_VALIDATION = {
   MAX_TITLE_LENGTH: 50,
   MAX_CONTENT_LENGTH: 10_000,
   MAX_IMAGES: 10,
+  MAX_IMAGE_SIZE: 15 * 1024 * 1024, // 15MB
+  MAX_FILES: 10,
+  MAX_FILE_SIZE: 20 * 1024 * 1024, // 20MB
 } as const;
 
 export type PostValidationRule = typeof POST_VALIDATION;

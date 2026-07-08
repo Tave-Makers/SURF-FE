@@ -1,8 +1,10 @@
 import 'server-only';
-import { cookies, headers } from 'next/headers';
+import { cache } from 'react';
+import { cookies } from 'next/headers';
 import { redirect } from 'next/navigation';
 import type { ValidStatusResponse } from '@/features/auth/api/types';
 import { PAGE_ROUTES } from '@/shared/config/path';
+import { getAppOrigin } from '@/shared/lib/appOrigin';
 
 const TIMEOUT_MS = 15_000;
 
@@ -38,10 +40,7 @@ function safeErrorMessage(e: unknown): string {
 }
 
 async function getBaseUrl(): Promise<string> {
-  const h = await headers();
-  const host = h.get('host');
-  const proto = h.get('x-forwarded-proto') ?? 'http';
-  return host ? `${proto}://${host}` : 'http://localhost:3000';
+  return getAppOrigin();
 }
 
 function buildCookieHeaderFromStore(all: { name: string; value: string }[]) {
@@ -89,7 +88,7 @@ function getSetCookieHeaders(res: Response): string[] {
   return single ? [single] : [];
 }
 
-export async function verifySession() {
+export const verifySession = cache(async function verifySession() {
   try {
     const baseUrl = await getBaseUrl();
 
@@ -141,7 +140,7 @@ export async function verifySession() {
     console.error('[Auth] 예상치 못한 에러:', safeErrorMessage(error));
     redirect(PAGE_ROUTES.LOGIN);
   }
-}
+});
 
 function handleBusinessRedirect(json: ValidStatusResponse) {
   const user = json.data;

@@ -9,6 +9,9 @@ const PUBLIC_PREFIX = [
   '/robots.txt',
   '/sitemap.xml',
   '/onboarding',
+  '/terms-of-service',
+  '/privacy-policy',
+  '/operational-policy',
   '/icons',
   '/images',
   '/header-logo.svg',
@@ -24,7 +27,8 @@ export function middleware(req: NextRequest) {
 
   // public route 통과
   if (PUBLIC_EXACT.includes(pathname)) return NextResponse.next();
-  if (PUBLIC_PREFIX.some((p) => pathname.startsWith(p))) return NextResponse.next();
+  if (PUBLIC_PREFIX.some((p) => pathname === p || pathname.startsWith(`${p}/`)))
+    return NextResponse.next();
 
   // optimistic 통과
   const hasAccess = req.cookies.has('accessToken');

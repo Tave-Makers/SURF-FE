@@ -3,6 +3,13 @@ export const PAGE_ROUTES = {
   LOGIN: '/login',
   ONBOARDING: '/onboarding',
 
+  // 외부 공개 약관 (비로그인 접근)
+  PUBLIC_POLICY: {
+    SERVICE: '/terms-of-service',
+    PRIVACY: '/privacy-policy',
+    OPERATING: '/operational-policy',
+  },
+
   // 멤버 관련
   MEMBER: {
     PROFILE: (memberId: string | number) => `/member/${memberId}`,
@@ -19,13 +26,14 @@ export const PAGE_ROUTES = {
 
   // 게시판 관련
   BOARD: {
-    MAIN: '/board/1',
+    MAIN: '/board/announcement',
     SELECT_CATEGORY: (boardId: string | number) => `/board/${boardId}`,
     SEARCH: '/board/search',
     POST_DETAIL: (boardId: string | number, postId: string | number) =>
       `/board/${boardId}/post/${postId}`,
     POST_CREATE: (boardId: string | number) => `/board/${boardId}/post/create`,
     POST_SCHEDULE: '/post/schedule', // PostEditorToolbar.tsx
+    COMMUNITY: '/board/2',
   },
 
   // 마이페이지 & 설정
@@ -67,6 +75,7 @@ export const PAGE_ROUTES = {
   },
 
   NOTIFICATION: '/notification',
+  UNAUTHORIZED: '/unauthorized',
 
   // 기타
   REDIRECT: {

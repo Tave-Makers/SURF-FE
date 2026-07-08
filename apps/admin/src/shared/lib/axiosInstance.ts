@@ -5,6 +5,9 @@ export const axiosInstance = axios.create({
   baseURL: '/api/proxy',
   withCredentials: true,
   timeout: 15000,
+  headers: {
+    'X-Client-Type': 'WEB',
+  },
 });
 
 // 401이면 1번 재시도

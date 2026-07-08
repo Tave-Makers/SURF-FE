@@ -32,6 +32,12 @@ const nextConfig = {
         pathname: '/**',
       })),
 
+      {
+        protocol: 'https',
+        hostname: 'surf-bucket.s3.amazonaws.com',
+        pathname: '/**',
+      },
+
       ...(S3_HOSTNAME
         ? [
             {

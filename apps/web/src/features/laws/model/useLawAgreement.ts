@@ -19,11 +19,11 @@ export const useLawAgreement = () => {
 
   const onClickLawDetail = (id: string) => {
     if (id === 'laws1') {
-      router.push(PAGE_ROUTES.MYPAGE.POLICY.SERVICE);
+      router.push(PAGE_ROUTES.PUBLIC_POLICY.SERVICE);
     } else if (id === 'laws2') {
-      router.push(PAGE_ROUTES.MYPAGE.POLICY.PRIVACY);
+      router.push(PAGE_ROUTES.PUBLIC_POLICY.PRIVACY);
     } else if (id === 'laws3') {
-      router.push(PAGE_ROUTES.MYPAGE.POLICY.OPERATING);
+      router.push(PAGE_ROUTES.PUBLIC_POLICY.OPERATING);
     }
   };
 

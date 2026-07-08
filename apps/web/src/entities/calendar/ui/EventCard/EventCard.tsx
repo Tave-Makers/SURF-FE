@@ -121,7 +121,7 @@ export const EventCard = ({
                 }}
                 className="relative flex items-center justify-center"
               >
-                <SurfIcon size="m" name="X" className="text-foreground-normal-lighter" />
+                <SurfIcon size="m" name="X" className="text-foreground-normal" />
                 <span className="absolute -inset-4" />
               </button>
             )}

@@ -9,7 +9,7 @@ const Page = async ({ params }: { params: Promise<{ boardId: string }> }) => {
 
   const board = POST_BOARDS.find((b) => b.id === Number(boardId));
 
-  if (board?.adminOnly) {
+  if (board?.createPostAdminOnly) {
     const user = await verifySession();
     if (user.memberRole === 'member') redirect(PAGE_ROUTES.UNAUTHORIZED);
   }

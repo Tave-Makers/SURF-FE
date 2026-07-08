@@ -9,14 +9,13 @@ import { EventCard } from '@/entities/calendar/ui/EventCard/EventCard';
 import { POST_VALIDATION } from '@/entities/post/model/validation';
 import { FileCard } from '@/entities/post/post-file/ui/FileCard';
 import { ImageList } from '@/entities/post/post-image/ui/ImageList';
-import { useAuthStore } from '@/features/auth/model/useAuthStore';
 import { useImageManager } from '@/features/image/model/useImageManager';
 import { usePostEditor } from '@/features/post/post-editor/lib/usePostEditor';
 import styles from '@/features/post/post-editor/ui/PostEditor.module.css';
 import {
   ALL_TOOLBAR_ITEMS,
   PostEditorToolbar,
-  TOOLBAR_KEY,
+  type ToolbarKey,
 } from '@/features/post/post-editor/ui/PostEditorToolbar';
 import { useFileManager } from '@/features/post/post-file/model/useFileManager';
 import { PostFormState } from '@/features/post/post-form/model/types';
@@ -31,6 +30,7 @@ export type PostEditorProps = {
   onScheduleRemove: () => void;
   onReservationClick: () => void;
   isPublished: boolean;
+  disabledToolbarKeys?: ToolbarKey[];
 };
 
 export const PostEditor = memo(
@@ -43,12 +43,12 @@ export const PostEditor = memo(
     onScheduleRemove,
     onReservationClick,
     isPublished,
+    disabledToolbarKeys = [],
   }: PostEditorProps) => {
     const showToast = useToastStore((s) => s.show);
-    const memberRole = useAuthStore((s) => s.memberRole);
 
     const toolbarItems = ALL_TOOLBAR_ITEMS.filter(
-      (item) => !(item.key === TOOLBAR_KEY.CALENDAR && memberRole === 'member'),
+      (item) => !disabledToolbarKeys.includes(item.key),
     );
 
     const {

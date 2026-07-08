@@ -50,24 +50,26 @@ export function createFileUploader({ fetchPresignedUrls, bucketUrl }: CreateFile
         throw new Error('NEXT_PUBLIC_S3_BUCKET_URL 환경 변수가 설정되지 않았습니다.');
       }
 
-      let updated = [...files];
+      let updated: UploadFile[] = [...files];
 
-      const storageFileNames = files.map((f) => createStorageFileName(f.file!));
+      const storageFileNames = files.map((f) => createStorageFileName(f.file as File));
       const presignedItems = await fetchPresignedUrls(storageFileNames);
 
       if (presignedItems.length !== files.length) {
         throw new Error('presigned URL 응답 개수가 일치하지 않습니다.');
       }
 
-      updated = updated.map((f, idx) => ({
-        ...f,
-        status: 'uploading' as const,
-        key: presignedItems[idx].key,
-      }));
+      updated = updated.map(
+        (f, idx): UploadFile => ({
+          ...f,
+          status: 'uploading' as const,
+          key: presignedItems[idx].key,
+        }),
+      );
       onProgress?.(updated);
 
-      const uploadPromises = updated.map(async (uploadFile, idx) => {
-        const file = uploadFile.file!;
+      const uploadPromises = updated.map(async (uploadFile, idx): Promise<UploadFile> => {
+        const file = uploadFile.file as File;
         const { preSignedUrl, key } = presignedItems[idx];
 
         try {

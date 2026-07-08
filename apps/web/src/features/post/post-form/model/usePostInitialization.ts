@@ -1,5 +1,5 @@
 import { useEffect } from 'react';
-import { getCategoriesForBoard } from '@/entities/post/model/category';
+import { getCategoriesForBoard, type PostCategoryKey } from '@/entities/post/model/category';
 import { ScheduleCategory } from '@/entities/schedule/model/types';
 import { PostFormState, PostPageMode } from '@/features/post/post-form/model/types';
 import { ScheduleFormData } from '@/features/schedule/create/model/types';
@@ -58,7 +58,7 @@ export const usePostInitialization = ({
     // 카테고리 매핑
     const boardCats = getCategoriesForBoard(Number(boardId));
     const matched = boardCats.find((c) => c.label === postDetail?.categoryLabel);
-    const initialCategory = matched?.key ?? boardCats[0].key;
+    const initialCategory = (matched?.key ?? boardCats[0].key) as PostCategoryKey;
 
     // 예약 정보 계산
     let initialReserved = false;

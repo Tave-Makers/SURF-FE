@@ -26,13 +26,14 @@ export const PAGE_ROUTES = {
 
   // 게시판 관련
   BOARD: {
-    MAIN: '/board/1',
+    MAIN: '/board/announcement',
     SELECT_CATEGORY: (boardId: string | number) => `/board/${boardId}`,
     SEARCH: '/board/search',
     POST_DETAIL: (boardId: string | number, postId: string | number) =>
       `/board/${boardId}/post/${postId}`,
     POST_CREATE: (boardId: string | number) => `/board/${boardId}/post/create`,
     POST_SCHEDULE: '/post/schedule', // PostEditorToolbar.tsx
+    COMMUNITY: '/board/2',
   },
 
   // 마이페이지 & 설정
@@ -74,6 +75,7 @@ export const PAGE_ROUTES = {
   },
 
   NOTIFICATION: '/notification',
+  UNAUTHORIZED: '/unauthorized',
 
   // 기타
   REDIRECT: {

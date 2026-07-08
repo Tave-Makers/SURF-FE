@@ -33,10 +33,5 @@ export const categoryIdToKey = (id?: number | null): string | undefined =>
 export const categoryKeyToId = (key: string, boardId: number): number | undefined =>
   getCategoriesForBoard(boardId).find((c) => c.key === key)?.id;
 
-export const categoryKeyToId = (key: string, _boardId?: number): number | undefined =>
-  Object.values(POST_CATEGORIES).find((c) => c.key === key)?.id;
-
-export const getCategoriesForBoard = (_boardId?: number) => Object.values(POST_CATEGORIES);
-
 export const isPostCategoryKey = (value: unknown): value is PostCategoryKey =>
   ALL_CATEGORIES.some((c) => c.key === String(value));

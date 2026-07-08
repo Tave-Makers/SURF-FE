@@ -1,4 +1,4 @@
-import { Sheet } from '@surf/ui/sheet';
+import { Sheet, SheetItem } from '@surf/ui/sheet';
 import { Sheet as ModalSheet } from 'react-modal-sheet';
 import { CONTENTS_TYPE_OPTIONS } from '@/shared/constants/contents';
 import type { ContentsType } from '@/shared/types/contents';
@@ -35,18 +35,12 @@ export const GroupTypeBottomSheet = ({
           <Sheet>
             <div className="flex flex-col gap-5 py-15">
               {CONTENTS_TYPE_OPTIONS.map(({ value, label }) => (
-                <button
+                <SheetItem
                   key={value}
-                  type="button"
+                  title={label}
+                  pressed={groupType === value}
                   onClick={() => onSelect(value)}
-                  className={`text-body-body6 text-foreground-normal rounded-md px-12 py-10 text-left transition-colors ${
-                    groupType === value
-                      ? 'bg-background-secondary font-semibold'
-                      : 'hover:bg-background-secondary'
-                  }`}
-                >
-                  {label}
-                </button>
+                />
               ))}
             </div>
           </Sheet>

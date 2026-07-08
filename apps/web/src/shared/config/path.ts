@@ -75,6 +75,7 @@ export const PAGE_ROUTES = {
   },
 
   NOTIFICATION: '/notification',
+  UNAUTHORIZED: '/unauthorized',
 
   // 기타
   REDIRECT: {

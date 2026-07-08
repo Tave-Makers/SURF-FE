@@ -5,8 +5,7 @@ import { useRouter } from 'next/navigation';
 import { useCallback } from 'react';
 import { useInfiniteBoardPosts } from '@/entities/post/api/useInfiniteBoardPosts';
 import { transformListItemToPost } from '@/entities/post/model/mappers';
-import type { TabCategoryKey } from '@/entities/post/model/tab';
-import { TAB_CATEGORIES } from '@/entities/post/model/tab';
+import { BOARD_TAB_MAP } from '@/entities/post/model/tab';
 import type { Post } from '@/entities/post/model/types';
 import type { UserLevel } from '@/entities/user/model/types';
 import { PAGE_ROUTES } from '@/shared/config/path';
@@ -14,7 +13,7 @@ import { PostCardList } from '@/widgets/post-list/ui/PostCardList';
 
 type Props = {
   boardId: number;
-  category: TabCategoryKey;
+  category: string;
   userLevel: UserLevel;
 };
 
@@ -33,7 +32,8 @@ export const PostListContainer = ({ boardId, category, userLevel }: Props) => {
 
   const posts = data?.pages.flatMap((page) => page.content.map(transformListItemToPost)) ?? [];
 
-  const tabCategoryLabel = TAB_CATEGORIES[category].label;
+  const tabCategoryLabel =
+    BOARD_TAB_MAP[boardId]?.find((t) => t.value === category)?.label ?? '전체';
 
   const showCategoryBadge = tabCategoryLabel === '전체';
   const showReservationBadge = userLevel !== 'member';

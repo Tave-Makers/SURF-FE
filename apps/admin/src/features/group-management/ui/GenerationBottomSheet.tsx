@@ -1,4 +1,4 @@
-import { Sheet } from '@surf/ui/sheet';
+import { Sheet, SheetItem } from '@surf/ui/sheet';
 import { Sheet as ModalSheet } from 'react-modal-sheet';
 
 declare module '@/shared/store/bottomSheetStore' {
@@ -37,18 +37,12 @@ export const GenerationBottomSheet = ({
               {Array.from({ length: maxGeneration }).map((_, idx) => {
                 const generation = maxGeneration - idx;
                 return (
-                  <button
+                  <SheetItem
                     key={generation}
-                    type="button"
+                    title={`${generation}기`}
+                    pressed={selectedGeneration === generation}
                     onClick={() => onSelect(generation)}
-                    className={`text-body-body6 text-foreground-normal rounded-md px-12 py-10 text-left transition-colors ${
-                      selectedGeneration === generation
-                        ? 'bg-background-secondary font-semibold'
-                        : 'hover:bg-background-secondary'
-                    }`}
-                  >
-                    {generation}기
-                  </button>
+                  />
                 );
               })}
             </div>

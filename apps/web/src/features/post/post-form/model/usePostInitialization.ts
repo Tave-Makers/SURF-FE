@@ -141,6 +141,7 @@ export const usePostInitialization = ({
     setIsInitialized(true);
   }, [
     mode,
+    boardId,
     postId,
     postDetail,
     postSchedule,
@@ -154,6 +155,5 @@ export const usePostInitialization = ({
     linkedSchedule,
     isPostDetailLoading,
     isScheduleLoading,
-    boardId,
   ]);
 };

@@ -30,10 +30,11 @@ interface ActionBarProps {
   onChange?: (val: string) => void;
   placeholder?: string;
   onSend?: (val: string) => void | boolean | Promise<void | boolean>;
+  focusAfterSend?: boolean;
 }
 
 export const ActionBar = forwardRef<HTMLTextAreaElement, ActionBarProps>(
-  ({ value, defaultValue, onChange, placeholder, onSend }, ref) => {
+  ({ value, defaultValue, onChange, placeholder, onSend, focusAfterSend = true }, ref) => {
     const internalRef = useRef<HTMLTextAreaElement>(null);
     useImperativeHandle(ref, () => internalRef.current as HTMLTextAreaElement);
 
@@ -59,7 +60,11 @@ export const ActionBar = forwardRef<HTMLTextAreaElement, ActionBarProps>(
         internalRef.current.dispatchEvent(new Event('input', { bubbles: true }));
       }
 
-      internalRef.current?.focus(); // 포커스 유지
+      if (focusAfterSend) {
+        internalRef.current?.focus();
+      } else {
+        internalRef.current?.blur();
+      }
     };
 
     const handleSend = () => {

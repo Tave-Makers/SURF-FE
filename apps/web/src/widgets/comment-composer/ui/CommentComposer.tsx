@@ -259,6 +259,7 @@ export const CommentComposer = ({
             onChange={onChange}
             placeholder={replyParentId ? '답글을 입력해주세요' : '댓글을 입력해주세요'}
             onSend={onSend}
+            focusAfterSend={false}
           />
         </div>
       </div>

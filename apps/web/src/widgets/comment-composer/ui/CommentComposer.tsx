@@ -184,6 +184,8 @@ export const CommentComposer = ({
   }, [mentionOpen]);
 
   const onSend = async (text: string) => {
+    if (createMutation.isPending) return false;
+
     trackCommentEvent(COMMENT_EVENTS.CLICK_COMMENT_SUBMIT, {
       post_id: postId,
       comment_length: text.length,
@@ -199,6 +201,7 @@ export const CommentComposer = ({
       setMentionMap({});
       setMentionMemberIds([]);
       closeMentionPanel();
+      inputRef.current?.blur();
       return true;
     } catch (e) {
       console.error(e);
@@ -260,6 +263,7 @@ export const CommentComposer = ({
             placeholder={replyParentId ? '답글을 입력해주세요' : '댓글을 입력해주세요'}
             onSend={onSend}
             focusAfterSend={false}
+            disabled={createMutation.isPending}
           />
         </div>
       </div>

@@ -33,15 +33,6 @@ body {
   -webkit-overflow-scrolling: touch;
 }
 
-/* iOS Safari는 16px 미만 입력 요소 포커스 시 화면을 확대합니다. */
-@media (max-width: 768px) {
-  input,
-  select,
-  textarea {
-    font-size: 16px !important;
-  }
-}
-
 /* placeholder */
 .placeholder-body-14-600--1-24::placeholder {
   font-family:

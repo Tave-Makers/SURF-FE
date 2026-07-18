@@ -150,10 +150,10 @@ const PostPage = (props: PostPageProps) => {
   const boardLabel = board ? board.label : '';
   const boardCategories = getCategoriesForBoard(Number(boardId));
   const isGeneralBoard = Number(boardId) === 2;
+  const canUseReservationTools = memberRole !== 'member' && !isGeneralBoard;
 
   const disabledToolbarKeys = [
-    ...(memberRole === 'member' || isGeneralBoard ? [TOOLBAR_KEY.CALENDAR] : []),
-    ...(isGeneralBoard ? [TOOLBAR_KEY.ALARM] : []),
+    ...(!canUseReservationTools ? [TOOLBAR_KEY.ALARM, TOOLBAR_KEY.CALENDAR] : []),
   ];
 
   const { MAX_TITLE_LENGTH } = POST_VALIDATION;

@@ -119,6 +119,8 @@ export const usePostForm = ({ mode, boardId, postId, postDetail, postSchedule }:
       }));
 
     const categoryId = categoryKeyToId(category, Number(boardId)) ?? 1;
+    const formattedReservedAt =
+      reserved && reservedAt ? format(reservedAt, "yyyy-MM-dd'T'HH:mm:ss") : null;
 
     try {
       let targetPostId = numericPostId;
@@ -130,7 +132,7 @@ export const usePostForm = ({ mode, boardId, postId, postDetail, postSchedule }:
           title,
           content,
           pinned: false,
-          reservedAt: reservedAt ? format(reservedAt, "yyyy-MM-dd'T'HH:mm:ss") : '',
+          reservedAt: formattedReservedAt,
           imageUrlList,
           fileList,
           hasSchedule: !!linkedSchedule,
@@ -157,7 +159,8 @@ export const usePostForm = ({ mode, boardId, postId, postDetail, postSchedule }:
           categoryId,
           pinned: false,
           isReservationChanged,
-          reservedAt: reservedAt ? format(reservedAt, "yyyy-MM-dd'T'HH:mm:ss") : '',
+          reserved,
+          reservedAt: formattedReservedAt,
           isContentChanged,
           isImageChanged: isImagesChanged,
           imageUrlList,

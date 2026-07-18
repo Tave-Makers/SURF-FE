@@ -1,6 +1,6 @@
 import { SurfIcon } from '@surf/ui/icon';
 import { MentionTextInput } from '@surf/ui/text-input';
-import { forwardRef, useRef, useImperativeHandle } from 'react';
+import { forwardRef, useRef, useImperativeHandle, type KeyboardEventHandler } from 'react';
 
 /**
  * 범용 메시지 입력 및 전송 컴포넌트
@@ -32,11 +32,21 @@ interface ActionBarProps {
   onSend?: (val: string) => void | boolean | Promise<void | boolean>;
   focusAfterSend?: boolean;
   disabled?: boolean;
+  onKeyDown?: KeyboardEventHandler<HTMLTextAreaElement>;
 }
 
 export const ActionBar = forwardRef<HTMLTextAreaElement, ActionBarProps>(
   (
-    { value, defaultValue, onChange, placeholder, onSend, focusAfterSend = true, disabled },
+    {
+      value,
+      defaultValue,
+      onChange,
+      placeholder,
+      onSend,
+      focusAfterSend = true,
+      disabled,
+      onKeyDown,
+    },
     ref,
   ) => {
     const internalRef = useRef<HTMLTextAreaElement>(null);
@@ -90,6 +100,7 @@ export const ActionBar = forwardRef<HTMLTextAreaElement, ActionBarProps>(
           placeholder={placeholder}
           onEnter={handleSend}
           disabled={disabled}
+          onKeyDown={onKeyDown}
         />
         <button
           type="button"

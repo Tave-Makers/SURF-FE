@@ -144,6 +144,7 @@ export const PostBodySection = ({ post, schedule, onClickLikeCount }: PostBodySe
             startDate={new Date(schedule.startAt)}
             endDate={new Date(schedule.endAt)}
             onClickCard={handleEventCardClick}
+            showNoticeLink
           />
         )}
       </div>

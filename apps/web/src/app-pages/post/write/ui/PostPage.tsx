@@ -149,9 +149,11 @@ const PostPage = (props: PostPageProps) => {
   const board = POST_BOARDS.find((b) => b.id === Number(boardId));
   const boardLabel = board ? board.label : '';
   const boardCategories = getCategoriesForBoard(Number(boardId));
+  const isGeneralBoard = Number(boardId) === 2;
 
   const disabledToolbarKeys = [
-    ...(memberRole === 'member' || Number(boardId) === 2 ? [TOOLBAR_KEY.CALENDAR] : []),
+    ...(memberRole === 'member' || isGeneralBoard ? [TOOLBAR_KEY.CALENDAR] : []),
+    ...(isGeneralBoard ? [TOOLBAR_KEY.ALARM] : []),
   ];
 
   const { MAX_TITLE_LENGTH } = POST_VALIDATION;

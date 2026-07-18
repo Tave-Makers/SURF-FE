@@ -224,8 +224,15 @@ const PostPage = (props: PostPageProps) => {
 
       {/* 예약중 태그 */}
       {reserved && (
-        <div className="px-13 pt-10">
+        <div className="flex items-center gap-8 px-13 pt-10">
           <PostBadge type="reservation" />
+          <button
+            type="button"
+            onClick={handleRemoveReservation}
+            className="text-caption-caption5 text-foreground-tertiary underline underline-offset-2"
+          >
+            예약 취소
+          </button>
         </div>
       )}
 

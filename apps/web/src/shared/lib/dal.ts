@@ -4,12 +4,13 @@ import { cookies } from 'next/headers';
 import { redirect } from 'next/navigation';
 import type { ValidStatusResponse } from '@/features/auth/api/types';
 import { PAGE_ROUTES } from '@/shared/config/path';
-import { getAppOrigin } from '@/shared/lib/appOrigin';
+import { extractAccessToken } from '@/shared/lib/proxyCookie';
 
 const TIMEOUT_MS = 15_000;
+const BACKEND = process.env.API_BASE_URL;
 
-const VALID_PATH = '/api/proxy/v1/user/members/valid-status';
-const REFRESH_PATH = '/api/proxy/auth/refresh';
+const VALID_PATH = '/v1/user/members/valid-status';
+const REFRESH_PATH = '/auth/refresh';
 
 async function fetchWithTimeout(url: string, init: RequestInit) {
   const controller = new AbortController();
@@ -39,12 +40,50 @@ function safeErrorMessage(e: unknown): string {
   }
 }
 
-async function getBaseUrl(): Promise<string> {
-  return getAppOrigin();
+function buildBackendUrl(path: string): string {
+  if (!BACKEND) {
+    throw new Error('API_BASE_URL is not configured');
+  }
+
+  const base = BACKEND.replace(/\/+$/, '');
+  const normalizedPath = path.startsWith('/') ? path : `/${path}`;
+  return `${base}${normalizedPath}`;
 }
 
 function buildCookieHeaderFromStore(all: { name: string; value: string }[]) {
   return all.map((c) => `${c.name}=${c.value}`).join('; ');
+}
+
+function getCookieValue(cookieHeader: string, targetName: string): string | null {
+  for (const part of cookieHeader.split(';')) {
+    const p = part.trim();
+    if (!p) continue;
+
+    const eq = p.indexOf('=');
+    if (eq === -1) continue;
+
+    const name = p.slice(0, eq).trim();
+    if (name === targetName) return p.slice(eq + 1);
+  }
+
+  return null;
+}
+
+function buildAuthHeaders(cookieHeader: string): Record<string, string> {
+  const headers: Record<string, string> = {
+    'X-Client-Type': 'WEB',
+  };
+
+  if (cookieHeader) {
+    headers.cookie = cookieHeader;
+  }
+
+  const accessToken = getCookieValue(cookieHeader, 'accessToken');
+  if (accessToken) {
+    headers.authorization = `Bearer ${accessToken}`;
+  }
+
+  return headers;
 }
 
 function mergeCookieHeaderWithSetCookie(origHeader: string, setCookies: string[]) {
@@ -90,14 +129,12 @@ function getSetCookieHeaders(res: Response): string[] {
 
 export const verifySession = cache(async function verifySession() {
   try {
-    const baseUrl = await getBaseUrl();
-
     const cookieStore = await cookies();
     const cookieHeader = buildCookieHeaderFromStore(cookieStore.getAll());
 
-    const res = await fetchWithTimeout(`${baseUrl}${VALID_PATH}`, {
+    const res = await fetchWithTimeout(buildBackendUrl(VALID_PATH), {
       cache: 'no-store',
-      headers: cookieHeader ? { cookie: cookieHeader } : {},
+      headers: buildAuthHeaders(cookieHeader),
     });
 
     // 최초 검증 성공
@@ -109,20 +146,35 @@ export const verifySession = cache(async function verifySession() {
 
     // 401이면 refresh -> retry
     if (res.status === 401) {
-      const refresh = await fetchWithTimeout(`${baseUrl}${REFRESH_PATH}`, {
+      const refresh = await fetchWithTimeout(buildBackendUrl(REFRESH_PATH), {
         method: 'POST',
         cache: 'no-store',
-        headers: cookieHeader ? { cookie: cookieHeader } : {},
+        headers: buildAuthHeaders(cookieHeader),
       });
 
       if (!refresh.ok) redirect(PAGE_ROUTES.LOGIN);
 
       const setCookies = getSetCookieHeaders(refresh);
-      const newCookieHeader = mergeCookieHeaderWithSetCookie(cookieHeader, setCookies);
+      const refreshText = await refresh.text();
+      let parsedRefresh: unknown = null;
+      try {
+        parsedRefresh = refreshText ? JSON.parse(refreshText) : null;
+      } catch {
+        parsedRefresh = null;
+      }
 
-      const retry = await fetchWithTimeout(`${baseUrl}${VALID_PATH}`, {
+      const refreshedAccessToken = extractAccessToken(parsedRefresh);
+      const refreshedSetCookies = refreshedAccessToken
+        ? [`accessToken=${refreshedAccessToken}; Path=/`]
+        : [];
+      const newCookieHeader = mergeCookieHeaderWithSetCookie(cookieHeader, [
+        ...setCookies,
+        ...refreshedSetCookies,
+      ]);
+
+      const retry = await fetchWithTimeout(buildBackendUrl(VALID_PATH), {
         cache: 'no-store',
-        headers: newCookieHeader ? { cookie: newCookieHeader } : {},
+        headers: buildAuthHeaders(newCookieHeader),
       });
 
       if (!retry.ok) redirect(PAGE_ROUTES.LOGIN);

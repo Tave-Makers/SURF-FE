@@ -5,6 +5,7 @@
   "type": "module",
   "scripts": {
     "dev": "node scripts/gen-sw.js && next dev --turbopack --experimental-https --experimental-https-cert tavesurf.site.pem --experimental-https-key tavesurf.site-key.pem --port 443",
+    "dev:local": "sh scripts/dev-local.sh",
     "build": "node scripts/gen-sw.js && next build --turbopack",
     "start": "next start",
     "lint": "eslint .",

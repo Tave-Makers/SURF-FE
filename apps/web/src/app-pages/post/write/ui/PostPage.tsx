@@ -4,7 +4,7 @@ import { AccordionSelect } from '@surf/ui/accordion';
 import { HeaderMode } from '@surf/ui/header';
 import { useAlertStore } from '@surf/ui/store/alertStore';
 import { useRouter } from 'next/navigation';
-import { useCallback, useEffect } from 'react';
+import { useCallback, useEffect, useRef } from 'react';
 import Loading from '@/app/loading';
 
 import { usePostDetail } from '@/entities/post/api/usePostDetail';
@@ -22,6 +22,7 @@ import { usePostFormStore } from '@/features/post/post-form/model/usePostFormSto
 import { usePostInitialization } from '@/features/post/post-form/model/usePostInitialization';
 import { useCreatePostScheduleStore } from '@/features/schedule/create-post-schedule/model/useCreatePostScheduleStore';
 
+import { PAGE_ROUTES } from '@/shared/config/path';
 import { useBottomSheetStore } from '@/shared/store/bottomSheetStore';
 import { AppHeader } from '@/widgets/header/ui/AppHeader';
 import { PostEditor } from '@/widgets/post/post-editor/PostEditor';
@@ -34,6 +35,7 @@ const PostPage = (props: PostPageProps) => {
   const router = useRouter();
   const openAlert = useAlertStore((s) => s.open);
   const closeAlert = useAlertStore((s) => s.close);
+  const hasPushedExitGuardStateRef = useRef(false);
 
   const { mode, boardId } = props;
   const postId = mode === 'edit' ? props.postId : undefined;
@@ -79,7 +81,7 @@ const PostPage = (props: PostPageProps) => {
     showExitAlert,
     setShowExitAlert,
     isSubmitDisabled,
-    handleBack,
+    hasUnsavedChanges,
     handleSubmit,
     resetPostState,
     isPublished,
@@ -108,6 +110,26 @@ const PostPage = (props: PostPageProps) => {
     setShowExitAlert(false);
     closeAlert();
   }, [closeAlert, setShowExitAlert]);
+
+  const navigateOut = useCallback(() => {
+    resetPostState();
+
+    if (mode === 'edit' && postId) {
+      router.push(PAGE_ROUTES.BOARD.POST_DETAIL(boardId, postId));
+      return;
+    }
+
+    router.push(PAGE_ROUTES.BOARD.SELECT_CATEGORY(boardId));
+  }, [boardId, mode, postId, resetPostState, router]);
+
+  const requestExit = useCallback(() => {
+    if (hasUnsavedChanges()) {
+      setShowExitAlert(true);
+      return;
+    }
+
+    navigateOut();
+  }, [hasUnsavedChanges, navigateOut, setShowExitAlert]);
 
   const handleSaveReservation = (date: Date) => {
     setField('reservedAt', date);
@@ -172,14 +194,42 @@ const PostPage = (props: PostPageProps) => {
           variant: 'danger',
           onClick: () => {
             closeExitAlert();
-            resetPostState();
-            router.back();
+            navigateOut();
           },
         },
       ],
     });
     setShowExitAlert(false);
-  }, [closeExitAlert, openAlert, resetPostState, router, setShowExitAlert, showExitAlert]);
+  }, [closeExitAlert, navigateOut, openAlert, setShowExitAlert, showExitAlert]);
+
+  useEffect(() => {
+    if (!isInitialized) return;
+
+    if (!hasPushedExitGuardStateRef.current) {
+      hasPushedExitGuardStateRef.current = true;
+      history.pushState({ __postFormExitGuard: true }, '', window.location.href);
+    }
+
+    const handleBeforeUnload = (event: BeforeUnloadEvent) => {
+      if (!hasUnsavedChanges()) return;
+
+      event.preventDefault();
+      event.returnValue = '';
+    };
+
+    const handlePopState = () => {
+      history.go(1);
+      requestExit();
+    };
+
+    window.addEventListener('beforeunload', handleBeforeUnload);
+    window.addEventListener('popstate', handlePopState);
+
+    return () => {
+      window.removeEventListener('beforeunload', handleBeforeUnload);
+      window.removeEventListener('popstate', handlePopState);
+    };
+  }, [hasUnsavedChanges, isInitialized, requestExit]);
 
   if (!isInitialized) return <Loading />;
 
@@ -187,7 +237,7 @@ const PostPage = (props: PostPageProps) => {
     <div className="flex h-full w-full flex-1 flex-col">
       {/* 1. 상단 헤더 */}
       <AppHeader
-        customBack={handleBack}
+        customBack={requestExit}
         overrideHeader={{
           mode: HeaderMode.TextBtn,
           title: boardLabel,

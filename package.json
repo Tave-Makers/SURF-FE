@@ -4,6 +4,7 @@
   "scripts": {
     "build": "turbo run build",
     "dev": "turbo run dev",
+    "dev:surf:local": "pnpm --filter surf-web dev:local",
     "lint": "turbo run lint",
     "lint:fix": "turbo run lint -- --fix",
     "format": "pnpm -w exec prettier --write .",

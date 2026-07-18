@@ -1,6 +1,7 @@
 import type { OAuthLoginData } from './types';
 
 const TIMEOUT_MS = 15_000;
+const BACKEND = process.env.API_BASE_URL;
 
 type OAuthProvider = 'apple' | 'kakao';
 
@@ -8,7 +9,6 @@ type ExchangeOAuthLoginParams = {
   provider: OAuthProvider;
   code: string;
   state: string;
-  origin: string;
   cookieHeader?: string;
   user?: string;
 };
@@ -38,12 +38,12 @@ const PROVIDER_CONFIG: Record<
 > = {
   apple: {
     method: 'POST',
-    endpoint: '/api/proxy/login/oauth2/code/apple',
+    endpoint: '/login/oauth2/code/apple',
     label: '애플',
   },
   kakao: {
     method: 'GET',
-    endpoint: '/api/proxy/login/oauth2/code/kakao',
+    endpoint: '/login/oauth2/code/kakao',
     label: '카카오',
   },
 };
@@ -64,15 +64,15 @@ export async function exchangeOAuthLogin({
   code,
   state,
   user,
-  origin,
   cookieHeader,
 }: ExchangeOAuthLoginParams): Promise<ExchangeOAuthLoginResult> {
   const config = PROVIDER_CONFIG[provider];
-  const url = new URL(config.endpoint, origin);
-  url.searchParams.set('code', code);
-  url.searchParams.set('state', state);
 
   try {
+    const url = buildBackendUrl(config.endpoint);
+    url.searchParams.set('code', code);
+    url.searchParams.set('state', state);
+
     const headers: Record<string, string> = { 'X-Client-Type': 'WEB' };
     if (cookieHeader) headers['Cookie'] = cookieHeader;
 
@@ -89,6 +89,7 @@ export async function exchangeOAuthLogin({
       headers,
       body,
       cache: 'no-store',
+      redirect: 'manual',
     });
 
     const text = await upstream.text();
@@ -100,6 +101,14 @@ export async function exchangeOAuthLogin({
     }
 
     if (!upstream.ok) {
+      logOAuthFailure('upstream-error', {
+        provider,
+        status: upstream.status,
+        contentType: upstream.headers.get('content-type'),
+        bodyLength: text.length,
+        parsedShape: summarizeParsed(parsed),
+      });
+
       return {
         ok: false,
         message: getOAuthLoginErrorMessage(provider, upstream.status),
@@ -109,11 +118,21 @@ export async function exchangeOAuthLogin({
 
     const loginData = extractLoginData(parsed);
     if (!loginData) {
+      logOAuthFailure('invalid-response-shape', {
+        provider,
+        parsedShape: summarizeParsed(parsed),
+      });
+
       return { ok: false, message: '로그인 응답이 비어있어요.' };
     }
 
     return { ok: true, data: loginData, upstream, parsed };
-  } catch {
+  } catch (error) {
+    logOAuthFailure('fetch-error', {
+      provider,
+      message: safeErrorMessage(error),
+    });
+
     return {
       ok: false,
       message: `${config.label} 로그인 중 문제가 발생했어요. 잠시 후 다시 시도해주세요.`,
@@ -138,6 +157,50 @@ function extractLoginData(parsed: unknown): OAuthLoginData | null {
 
 function isRecord(v: unknown): v is Record<string, unknown> {
   return typeof v === 'object' && v !== null;
+}
+
+function buildBackendUrl(endpoint: string) {
+  if (!BACKEND) {
+    throw new Error('API_BASE_URL is not configured');
+  }
+
+  const base = BACKEND.replace(/\/+$/, '');
+  return new URL(endpoint, `${base}/`);
+}
+
+function logOAuthFailure(event: string, payload: Record<string, unknown>) {
+  if (process.env.NODE_ENV === 'production') return;
+
+  console.warn(`[OAuthLogin] ${event}`, payload);
+}
+
+function summarizeParsed(parsed: unknown) {
+  if (!isRecord(parsed)) {
+    return { type: parsed === null ? 'null' : typeof parsed };
+  }
+
+  const data = isRecord(parsed.data) ? parsed.data : null;
+
+  return {
+    type: 'object',
+    keys: Object.keys(parsed),
+    dataKeys: data ? Object.keys(data) : undefined,
+    hasEmail: data ? typeof data.email === 'string' : typeof parsed.email === 'string',
+    hasAccessToken: data
+      ? typeof data.accessToken === 'string'
+      : typeof parsed.accessToken === 'string',
+  };
+}
+
+function safeErrorMessage(error: unknown) {
+  if (error instanceof Error) return error.message;
+  if (typeof error === 'string') return error;
+
+  try {
+    return JSON.stringify(error);
+  } catch {
+    return String(error);
+  }
 }
 
 function getOAuthLoginErrorMessage(provider: OAuthProvider, status: number) {

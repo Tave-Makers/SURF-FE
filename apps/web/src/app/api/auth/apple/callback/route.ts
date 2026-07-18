@@ -36,7 +36,6 @@ export async function POST(req: NextRequest) {
     code,
     state,
     user,
-    origin: baseUrl,
     cookieHeader: req.headers.get('cookie') ?? undefined,
   });
 

@@ -28,7 +28,6 @@ export async function GET(req: NextRequest) {
     provider: 'kakao',
     code,
     state,
-    origin: baseUrl,
     cookieHeader: req.headers.get('cookie') ?? undefined,
   });
 

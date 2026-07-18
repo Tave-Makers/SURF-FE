@@ -18,7 +18,7 @@ export const Uncontrolled: Story = {
         defaultValue="profile"
         items={[
           { value: 'profile', label: '프로필' },
-          { value: 'badges', label: '활동뱃지' },
+          { value: 'badges', label: '활동 배지' },
         ]}
       />
     </div>
@@ -36,10 +36,10 @@ export const Controlled: Story = {
             onValueChange={setTab}
             items={[
               { value: 'profile', label: '프로필' },
-              { value: 'badges', label: '활동뱃지' },
+              { value: 'badges', label: '활동 배지' },
             ]}
           />
-          <div className="mt-4">{tab === 'profile' ? '프로필 탭' : '활동뱃지 탭'}</div>
+          <div className="mt-4">{tab === 'profile' ? '프로필 탭' : '활동 배지 탭'}</div>
         </div>
       );
     };

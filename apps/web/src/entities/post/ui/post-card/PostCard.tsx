@@ -56,7 +56,7 @@ const PostCardComponent = ({
       aria-label={`게시글: ${title}`}
     >
       <div className="flex flex-1 flex-col gap-8 self-stretch">
-        {/* 뱃지 */}
+        {/* 배지 */}
         <div className="flex gap-5">
           {shouldShowCategoryBadge && <PostBadge type="category" label={categoryName} />}
 

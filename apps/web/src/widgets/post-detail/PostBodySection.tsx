@@ -145,6 +145,7 @@ export const PostBodySection = ({ post, schedule, onClickLikeCount }: PostBodySe
             endDate={new Date(schedule.endAt)}
             onClickCard={handleEventCardClick}
             showNoticeLink
+            noticeLinkLabel="일정 바로가기"
           />
         )}
       </div>

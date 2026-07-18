@@ -4,7 +4,7 @@ import { AccordionSelect } from '@surf/ui/accordion';
 import { HeaderMode } from '@surf/ui/header';
 import { useAlertStore } from '@surf/ui/store/alertStore';
 import { useRouter } from 'next/navigation';
-import { useCallback, useEffect, useRef } from 'react';
+import { useCallback, useEffect } from 'react';
 import Loading from '@/app/loading';
 
 import { usePostDetail } from '@/entities/post/api/usePostDetail';
@@ -18,6 +18,7 @@ import { useAuthStore } from '@/features/auth/model/useAuthStore';
 import { useGetPostScheduleQuery } from '@/features/post/model/useGetPostScheduleQuery';
 import { TOOLBAR_KEY } from '@/features/post/post-editor/ui/PostEditorToolbar';
 import { usePostForm } from '@/features/post/post-form/model/usePostForm';
+import { usePostFormExitGuard } from '@/features/post/post-form/model/usePostFormExitGuard';
 import { usePostFormStore } from '@/features/post/post-form/model/usePostFormStore';
 import { usePostInitialization } from '@/features/post/post-form/model/usePostInitialization';
 import { useCreatePostScheduleStore } from '@/features/schedule/create-post-schedule/model/useCreatePostScheduleStore';
@@ -35,7 +36,6 @@ const PostPage = (props: PostPageProps) => {
   const router = useRouter();
   const openAlert = useAlertStore((s) => s.open);
   const closeAlert = useAlertStore((s) => s.close);
-  const hasPushedExitGuardStateRef = useRef(false);
 
   const { mode, boardId } = props;
   const postId = mode === 'edit' ? props.postId : undefined;
@@ -202,34 +202,11 @@ const PostPage = (props: PostPageProps) => {
     setShowExitAlert(false);
   }, [closeExitAlert, navigateOut, openAlert, setShowExitAlert, showExitAlert]);
 
-  useEffect(() => {
-    if (!isInitialized) return;
-
-    if (!hasPushedExitGuardStateRef.current) {
-      hasPushedExitGuardStateRef.current = true;
-      history.pushState({ __postFormExitGuard: true }, '', window.location.href);
-    }
-
-    const handleBeforeUnload = (event: BeforeUnloadEvent) => {
-      if (!hasUnsavedChanges()) return;
-
-      event.preventDefault();
-      event.returnValue = '';
-    };
-
-    const handlePopState = () => {
-      history.go(1);
-      requestExit();
-    };
-
-    window.addEventListener('beforeunload', handleBeforeUnload);
-    window.addEventListener('popstate', handlePopState);
-
-    return () => {
-      window.removeEventListener('beforeunload', handleBeforeUnload);
-      window.removeEventListener('popstate', handlePopState);
-    };
-  }, [hasUnsavedChanges, isInitialized, requestExit]);
+  usePostFormExitGuard({
+    enabled: isInitialized,
+    hasUnsavedChanges,
+    onRequestExit: requestExit,
+  });
 
   if (!isInitialized) return <Loading />;
 

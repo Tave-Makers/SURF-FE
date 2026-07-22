@@ -6,6 +6,7 @@ export type UpdatePostRequest = {
   categoryId?: number;
   pinned?: boolean;
   isReservationChanged?: boolean;
+  reserved?: boolean;
   reservedAt?: string | null;
   isContentChanged?: boolean;
   isImageChanged?: boolean;

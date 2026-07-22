@@ -18,10 +18,12 @@ import { useAuthStore } from '@/features/auth/model/useAuthStore';
 import { useGetPostScheduleQuery } from '@/features/post/model/useGetPostScheduleQuery';
 import { TOOLBAR_KEY } from '@/features/post/post-editor/ui/PostEditorToolbar';
 import { usePostForm } from '@/features/post/post-form/model/usePostForm';
+import { usePostFormExitGuard } from '@/features/post/post-form/model/usePostFormExitGuard';
 import { usePostFormStore } from '@/features/post/post-form/model/usePostFormStore';
 import { usePostInitialization } from '@/features/post/post-form/model/usePostInitialization';
 import { useCreatePostScheduleStore } from '@/features/schedule/create-post-schedule/model/useCreatePostScheduleStore';
 
+import { PAGE_ROUTES } from '@/shared/config/path';
 import { useBottomSheetStore } from '@/shared/store/bottomSheetStore';
 import { AppHeader } from '@/widgets/header/ui/AppHeader';
 import { PostEditor } from '@/widgets/post/post-editor/PostEditor';
@@ -79,7 +81,7 @@ const PostPage = (props: PostPageProps) => {
     showExitAlert,
     setShowExitAlert,
     isSubmitDisabled,
-    handleBack,
+    hasUnsavedChanges,
     handleSubmit,
     resetPostState,
     isPublished,
@@ -108,6 +110,26 @@ const PostPage = (props: PostPageProps) => {
     setShowExitAlert(false);
     closeAlert();
   }, [closeAlert, setShowExitAlert]);
+
+  const navigateOut = useCallback(() => {
+    resetPostState();
+
+    if (mode === 'edit' && postId) {
+      router.push(PAGE_ROUTES.BOARD.POST_DETAIL(boardId, postId));
+      return;
+    }
+
+    router.push(PAGE_ROUTES.BOARD.SELECT_CATEGORY(boardId));
+  }, [boardId, mode, postId, resetPostState, router]);
+
+  const requestExit = useCallback(() => {
+    if (hasUnsavedChanges()) {
+      setShowExitAlert(true);
+      return;
+    }
+
+    navigateOut();
+  }, [hasUnsavedChanges, navigateOut, setShowExitAlert]);
 
   const handleSaveReservation = (date: Date) => {
     setField('reservedAt', date);
@@ -150,10 +172,10 @@ const PostPage = (props: PostPageProps) => {
   const boardLabel = board ? board.label : '';
   const boardCategories = getCategoriesForBoard(Number(boardId));
   const isGeneralBoard = Number(boardId) === 2;
+  const canUseReservationTools = memberRole !== 'member' && !isGeneralBoard;
 
   const disabledToolbarKeys = [
-    ...(memberRole === 'member' || isGeneralBoard ? [TOOLBAR_KEY.CALENDAR] : []),
-    ...(isGeneralBoard ? [TOOLBAR_KEY.ALARM] : []),
+    ...(!canUseReservationTools ? [TOOLBAR_KEY.ALARM, TOOLBAR_KEY.CALENDAR] : []),
   ];
 
   const { MAX_TITLE_LENGTH } = POST_VALIDATION;
@@ -172,14 +194,19 @@ const PostPage = (props: PostPageProps) => {
           variant: 'danger',
           onClick: () => {
             closeExitAlert();
-            resetPostState();
-            router.back();
+            navigateOut();
           },
         },
       ],
     });
     setShowExitAlert(false);
-  }, [closeExitAlert, openAlert, resetPostState, router, setShowExitAlert, showExitAlert]);
+  }, [closeExitAlert, navigateOut, openAlert, setShowExitAlert, showExitAlert]);
+
+  usePostFormExitGuard({
+    enabled: isInitialized,
+    hasUnsavedChanges,
+    onRequestExit: requestExit,
+  });
 
   if (!isInitialized) return <Loading />;
 
@@ -187,7 +214,7 @@ const PostPage = (props: PostPageProps) => {
     <div className="flex h-full w-full flex-1 flex-col">
       {/* 1. 상단 헤더 */}
       <AppHeader
-        customBack={handleBack}
+        customBack={requestExit}
         overrideHeader={{
           mode: HeaderMode.TextBtn,
           title: boardLabel,
@@ -224,8 +251,15 @@ const PostPage = (props: PostPageProps) => {
 
       {/* 예약중 태그 */}
       {reserved && (
-        <div className="px-13 pt-10">
+        <div className="flex items-center gap-8 px-13 pt-10">
           <PostBadge type="reservation" />
+          <button
+            type="button"
+            onClick={handleRemoveReservation}
+            className="text-caption-caption5 text-foreground-tertiary underline underline-offset-2"
+          >
+            예약 취소
+          </button>
         </div>
       )}
 

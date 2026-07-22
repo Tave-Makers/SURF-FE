@@ -78,7 +78,7 @@ export const createRouteConfig = (_router: RouterInstance): RouteConfig[] => [
     backPath: PAGE_ROUTES.HOME,
     header: {
       mode: HeaderMode.Default,
-      title: '활동 뱃지 관리',
+      title: '활동 배지 관리',
       hasLeftIcon: true,
     },
   },
@@ -88,7 +88,7 @@ export const createRouteConfig = (_router: RouterInstance): RouteConfig[] => [
     backPath: PAGE_ROUTES.BADGE_MNG.LIST,
     header: {
       mode: HeaderMode.Default,
-      title: '신규 뱃지 생성',
+      title: '신규 배지 생성',
       hasLeftIcon: true,
     },
   },

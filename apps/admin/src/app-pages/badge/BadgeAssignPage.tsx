@@ -20,7 +20,7 @@ export const BadgeAssignPage = ({ badgeId }: BadgeAssignPageProps) => {
         customBack={actions.handleBack}
         overrideHeader={{
           mode: HeaderMode.Default,
-          title: '활동 뱃지 부여',
+          title: '활동 배지 부여',
           hasLeftIcon: true,
         }}
       />

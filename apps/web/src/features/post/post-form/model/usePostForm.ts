@@ -79,15 +79,10 @@ export const usePostForm = ({ mode, boardId, postId, postDetail, postSchedule }:
   const isPublished = !!(mode === 'edit' && postDetail && !postDetail.isReserved);
 
   // 5. Event Handlers
-  const handleBack = () => {
+  const hasUnsavedChanges = useCallback(() => {
     const { hasChanges, isEmpty } = checkHasChanges();
-    if (hasChanges && !isEmpty) {
-      setShowExitAlert(true);
-    } else {
-      resetPostState();
-      router.back();
-    }
-  };
+    return hasChanges && !isEmpty;
+  }, [checkHasChanges]);
 
   const queryClient = useQueryClient();
 
@@ -119,6 +114,8 @@ export const usePostForm = ({ mode, boardId, postId, postDetail, postSchedule }:
       }));
 
     const categoryId = categoryKeyToId(category, Number(boardId)) ?? 1;
+    const formattedReservedAt =
+      reserved && reservedAt ? format(reservedAt, "yyyy-MM-dd'T'HH:mm:ss") : null;
 
     try {
       let targetPostId = numericPostId;
@@ -130,7 +127,7 @@ export const usePostForm = ({ mode, boardId, postId, postDetail, postSchedule }:
           title,
           content,
           pinned: false,
-          reservedAt: reservedAt ? format(reservedAt, "yyyy-MM-dd'T'HH:mm:ss") : '',
+          reservedAt: formattedReservedAt,
           imageUrlList,
           fileList,
           hasSchedule: !!linkedSchedule,
@@ -157,7 +154,8 @@ export const usePostForm = ({ mode, boardId, postId, postDetail, postSchedule }:
           categoryId,
           pinned: false,
           isReservationChanged,
-          reservedAt: reservedAt ? format(reservedAt, "yyyy-MM-dd'T'HH:mm:ss") : '',
+          reserved,
+          reservedAt: formattedReservedAt,
           isContentChanged,
           isImageChanged: isImagesChanged,
           imageUrlList,
@@ -270,7 +268,7 @@ export const usePostForm = ({ mode, boardId, postId, postDetail, postSchedule }:
     setShowExitAlert,
 
     // Handlers
-    handleBack,
+    hasUnsavedChanges,
     handleSubmit,
     handleScheduleRemove: clearLinkedSchedule,
     resetPostState,

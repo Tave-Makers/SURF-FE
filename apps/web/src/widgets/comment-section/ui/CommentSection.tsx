@@ -32,11 +32,20 @@ interface Props {
   postId: number;
   memberId?: number;
   scrollRootRef?: React.RefObject<HTMLDivElement | null>;
+  isInteractionDisabled?: boolean;
+  emptyMessage?: string;
   // 답글 시작을 부모로 올림
   onStartReply: (info: { commentId: number; memberId: number; nickname: string }) => void;
 }
 
-export const CommentSection = ({ postId, memberId, scrollRootRef, onStartReply }: Props) => {
+export const CommentSection = ({
+  postId,
+  memberId,
+  scrollRootRef,
+  isInteractionDisabled = false,
+  emptyMessage = '첫 댓글을 남겨보세요!',
+  onStartReply,
+}: Props) => {
   const router = useRouter();
   const myId = useAuthStore((s) => s.memberId);
   const openBottomSheet = useBottomSheetStore((s) => s.open);
@@ -172,6 +181,7 @@ export const CommentSection = ({ postId, memberId, scrollRootRef, onStartReply }
                         : undefined
                     }
                     onLikeToggle={() => {
+                      if (isInteractionDisabled) return;
                       const nextState = c.liked ? 'off' : 'on';
                       trackCommentEvent(COMMENT_EVENTS.LIKE, {
                         target_type: 'comment',
@@ -182,10 +192,12 @@ export const CommentSection = ({ postId, memberId, scrollRootRef, onStartReply }
                         onError: () => showToast('좋아요 처리에 실패했어요'),
                       });
                     }}
-                    onReplyClick={() =>
-                      onStartReply({ commentId: c.id, memberId: c.memberId, nickname: c.nickname })
-                    }
+                    onReplyClick={() => {
+                      if (isInteractionDisabled) return;
+                      onStartReply({ commentId: c.id, memberId: c.memberId, nickname: c.nickname });
+                    }}
                     onMoreClick={() => openOptions(c)}
+                    isActionDisabled={isInteractionDisabled}
                   />
                 </div>
               );
@@ -198,9 +210,7 @@ export const CommentSection = ({ postId, memberId, scrollRootRef, onStartReply }
                   aria-hidden="true"
                   focusable="false"
                 />
-                <div className="text-body-body8 text-foreground-tertiary">
-                  첫 댓글을 남겨보세요!
-                </div>
+                <div className="text-body-body8 text-foreground-tertiary">{emptyMessage}</div>
               </div>
             )}
           </div>

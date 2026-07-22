@@ -5,7 +5,7 @@ import { Avatar } from '@surf/ui/avatar';
 import { Sheet } from '@surf/ui/sheet';
 import { SheetItem } from '@surf/ui/sheet';
 import { useToastStore } from '@surf/ui/store/toastStore';
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useRef, useState, type KeyboardEvent as ReactKeyboardEvent } from 'react';
 import type { MentionSearchResponse } from '@/features/comment/api/types';
 import { trackCommentEvent } from '@/features/comment/lib/trackCommentEvent';
 import { COMMENT_EVENTS } from '@/features/comment/model/types';
@@ -38,6 +38,16 @@ function extractMentionNicknames(text: string) {
     if (nick) res.push(nick);
   }
   return res;
+}
+
+function getCompletedMentionDeleteRange(text: string, cursorIndex: number) {
+  const left = text.slice(0, cursorIndex);
+  const match = /(^|\s)(@[^\s@]+\s)$/.exec(left);
+
+  if (!match?.[2]) return null;
+
+  const tokenStart = cursorIndex - match[2].length;
+  return { start: tokenStart, end: cursorIndex };
 }
 
 interface Props {
@@ -132,6 +142,26 @@ export const CommentComposer = ({
       setMentionAtIndex(info.atIndex);
       setMentionKeyword(info.keyword);
     }
+  };
+
+  const handleKeyDown = (event: ReactKeyboardEvent<HTMLTextAreaElement>) => {
+    if (event.key !== 'Backspace') return;
+
+    const target = event.currentTarget;
+    if (target.selectionStart !== target.selectionEnd) return;
+
+    const range = getCompletedMentionDeleteRange(value, target.selectionStart);
+    if (!range) return;
+
+    event.preventDefault();
+
+    const next = value.slice(0, range.start) + value.slice(range.end);
+    setValue(next);
+    closeMentionPanel();
+
+    requestAnimationFrame(() => {
+      inputRef.current?.setSelectionRange(range.start, range.start);
+    });
   };
 
   const pickMention = (user: MentionSearchResponse) => {
@@ -264,6 +294,7 @@ export const CommentComposer = ({
             onSend={onSend}
             focusAfterSend={false}
             disabled={createMutation.isPending}
+            onKeyDown={handleKeyDown}
           />
         </div>
       </div>

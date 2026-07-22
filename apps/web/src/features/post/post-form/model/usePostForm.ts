@@ -79,15 +79,10 @@ export const usePostForm = ({ mode, boardId, postId, postDetail, postSchedule }:
   const isPublished = !!(mode === 'edit' && postDetail && !postDetail.isReserved);
 
   // 5. Event Handlers
-  const handleBack = () => {
+  const hasUnsavedChanges = useCallback(() => {
     const { hasChanges, isEmpty } = checkHasChanges();
-    if (hasChanges && !isEmpty) {
-      setShowExitAlert(true);
-    } else {
-      resetPostState();
-      router.back();
-    }
-  };
+    return hasChanges && !isEmpty;
+  }, [checkHasChanges]);
 
   const queryClient = useQueryClient();
 
@@ -273,7 +268,7 @@ export const usePostForm = ({ mode, boardId, postId, postDetail, postSchedule }:
     setShowExitAlert,
 
     // Handlers
-    handleBack,
+    hasUnsavedChanges,
     handleSubmit,
     handleScheduleRemove: clearLinkedSchedule,
     resetPostState,

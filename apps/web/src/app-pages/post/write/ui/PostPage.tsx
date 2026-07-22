@@ -18,10 +18,12 @@ import { useAuthStore } from '@/features/auth/model/useAuthStore';
 import { useGetPostScheduleQuery } from '@/features/post/model/useGetPostScheduleQuery';
 import { TOOLBAR_KEY } from '@/features/post/post-editor/ui/PostEditorToolbar';
 import { usePostForm } from '@/features/post/post-form/model/usePostForm';
+import { usePostFormExitGuard } from '@/features/post/post-form/model/usePostFormExitGuard';
 import { usePostFormStore } from '@/features/post/post-form/model/usePostFormStore';
 import { usePostInitialization } from '@/features/post/post-form/model/usePostInitialization';
 import { useCreatePostScheduleStore } from '@/features/schedule/create-post-schedule/model/useCreatePostScheduleStore';
 
+import { PAGE_ROUTES } from '@/shared/config/path';
 import { useBottomSheetStore } from '@/shared/store/bottomSheetStore';
 import { AppHeader } from '@/widgets/header/ui/AppHeader';
 import { PostEditor } from '@/widgets/post/post-editor/PostEditor';
@@ -79,7 +81,7 @@ const PostPage = (props: PostPageProps) => {
     showExitAlert,
     setShowExitAlert,
     isSubmitDisabled,
-    handleBack,
+    hasUnsavedChanges,
     handleSubmit,
     resetPostState,
     isPublished,
@@ -108,6 +110,26 @@ const PostPage = (props: PostPageProps) => {
     setShowExitAlert(false);
     closeAlert();
   }, [closeAlert, setShowExitAlert]);
+
+  const navigateOut = useCallback(() => {
+    resetPostState();
+
+    if (mode === 'edit' && postId) {
+      router.push(PAGE_ROUTES.BOARD.POST_DETAIL(boardId, postId));
+      return;
+    }
+
+    router.push(PAGE_ROUTES.BOARD.SELECT_CATEGORY(boardId));
+  }, [boardId, mode, postId, resetPostState, router]);
+
+  const requestExit = useCallback(() => {
+    if (hasUnsavedChanges()) {
+      setShowExitAlert(true);
+      return;
+    }
+
+    navigateOut();
+  }, [hasUnsavedChanges, navigateOut, setShowExitAlert]);
 
   const handleSaveReservation = (date: Date) => {
     setField('reservedAt', date);
@@ -172,14 +194,19 @@ const PostPage = (props: PostPageProps) => {
           variant: 'danger',
           onClick: () => {
             closeExitAlert();
-            resetPostState();
-            router.back();
+            navigateOut();
           },
         },
       ],
     });
     setShowExitAlert(false);
-  }, [closeExitAlert, openAlert, resetPostState, router, setShowExitAlert, showExitAlert]);
+  }, [closeExitAlert, navigateOut, openAlert, setShowExitAlert, showExitAlert]);
+
+  usePostFormExitGuard({
+    enabled: isInitialized,
+    hasUnsavedChanges,
+    onRequestExit: requestExit,
+  });
 
   if (!isInitialized) return <Loading />;
 
@@ -187,7 +214,7 @@ const PostPage = (props: PostPageProps) => {
     <div className="flex h-full w-full flex-1 flex-col">
       {/* 1. 상단 헤더 */}
       <AppHeader
-        customBack={handleBack}
+        customBack={requestExit}
         overrideHeader={{
           mode: HeaderMode.TextBtn,
           title: boardLabel,

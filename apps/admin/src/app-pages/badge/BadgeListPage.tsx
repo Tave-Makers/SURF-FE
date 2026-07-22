@@ -17,7 +17,7 @@ export const BadgeListPage = () => {
       <div className="pointer-events-none absolute inset-0 z-50">
         <div className="pointer-events-auto absolute right-15 bottom-15">
           <Fab
-            ariaLabel="신규 뱃지 생성 버튼"
+            ariaLabel="신규 배지 생성 버튼"
             onClick={() => router.push(PAGE_ROUTES.BADGE_MNG.CREATE)}
           />
         </div>

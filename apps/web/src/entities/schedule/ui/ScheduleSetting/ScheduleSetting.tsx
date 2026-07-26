@@ -24,7 +24,7 @@ export const ScheduleSetting = ({
     <button
       type="button"
       onClick={onClick}
-      className="flex w-full flex-row items-center justify-between py-7 text-left"
+      className="flex w-full flex-row items-center justify-between py-10 text-left"
     >
       <div className="text-foreground-normal text-body-body9 flex shrink-0">{title}</div>
 

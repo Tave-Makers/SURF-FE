@@ -9,11 +9,14 @@ import Loading from '@/app/loading';
 
 import { usePostDetail } from '@/entities/post/api/usePostDetail';
 import { POST_BOARDS } from '@/entities/post/model/board';
-import { POST_CATEGORIES } from '@/entities/post/model/category';
+import { getCategoriesForBoard } from '@/entities/post/model/category';
 import { POST_VALIDATION } from '@/entities/post/model/validation';
 import { PostBadge } from '@/entities/post/ui/post-badge/PostBadge';
 
+import { useAuthStore } from '@/features/auth/model/useAuthStore';
+
 import { useGetPostScheduleQuery } from '@/features/post/model/useGetPostScheduleQuery';
+import { TOOLBAR_KEY } from '@/features/post/post-editor/ui/PostEditorToolbar';
 import { usePostForm } from '@/features/post/post-form/model/usePostForm';
 import { usePostFormStore } from '@/features/post/post-form/model/usePostFormStore';
 import { usePostInitialization } from '@/features/post/post-form/model/usePostInitialization';
@@ -36,10 +39,12 @@ const PostPage = (props: PostPageProps) => {
   const postId = mode === 'edit' ? props.postId : undefined;
 
   // == Stores ==
+  const memberRole = useAuthStore((s) => s.memberRole);
   const title = usePostFormStore((s) => s.title);
   const category = usePostFormStore((s) => s.category);
   const content = usePostFormStore((s) => s.content);
   const images = usePostFormStore((s) => s.images);
+  const files = usePostFormStore((s) => s.files);
   const reserved = usePostFormStore((s) => s.reserved);
   const reservedAt = usePostFormStore((s) => s.reservedAt);
   const isInitialized = usePostFormStore((s) => s.isInitialized);
@@ -85,6 +90,7 @@ const PostPage = (props: PostPageProps) => {
   // 가드는 내부에서 실행
   usePostInitialization({
     mode,
+    boardId,
     postId,
     postDetail,
     isPostDetailLoading,
@@ -142,6 +148,11 @@ const PostPage = (props: PostPageProps) => {
 
   const board = POST_BOARDS.find((b) => b.id === Number(boardId));
   const boardLabel = board ? board.label : '';
+  const boardCategories = getCategoriesForBoard(Number(boardId));
+
+  const disabledToolbarKeys = [
+    ...(memberRole === 'member' || Number(boardId) === 2 ? [TOOLBAR_KEY.CALENDAR] : []),
+  ];
 
   const { MAX_TITLE_LENGTH } = POST_VALIDATION;
 
@@ -189,13 +200,14 @@ const PostPage = (props: PostPageProps) => {
       {/* 2. 카테고리 선택 */}
       <div className="px-13">
         <AccordionSelect
-          title={POST_CATEGORIES[category].label}
+          title={boardCategories.find((c) => c.key === category)?.label ?? ''}
           isOpen={false}
           onClick={() => {
             openBottomSheet({
               type: 'postCategory',
               props: {
                 category,
+                categories: boardCategories,
                 onSelect: (val) => {
                   setField('category', val);
                   closeBottomSheet();
@@ -231,15 +243,17 @@ const PostPage = (props: PostPageProps) => {
       </div>
 
       {/* 5. 본문 에디터 */}
-      <div className="flex h-full flex-1 overflow-auto">
+      <div className="flex min-h-0 flex-1">
         <PostEditor
           content={content}
           images={images}
+          files={files}
           setField={setField}
           linkedSchedule={linkedSchedule}
           onScheduleRemove={handleScheduleRemove}
           onReservationClick={handleOpenReservation}
           isPublished={isPublished}
+          disabledToolbarKeys={disabledToolbarKeys}
         />
       </div>
     </div>

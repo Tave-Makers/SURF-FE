@@ -63,7 +63,7 @@ export const LawBottomSheet = ({
           </Sheet>
         </ModalSheet.Content>
       </ModalSheet.Container>
-      <ModalSheet.Backdrop className="bg-effect-overlay-dim-normal pointer-events-auto touch-none" />
+      <ModalSheet.Backdrop className="bg-effect-overlay-dim-normal touch-none" onClick={() => {}} />
     </ModalSheet>
   );
 };

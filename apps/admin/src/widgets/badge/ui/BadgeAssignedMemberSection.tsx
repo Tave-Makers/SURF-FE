@@ -34,7 +34,7 @@ export const BadgeAssignedMemberSection = ({
         <div className="flex w-full justify-center py-10">
           <div className="flex flex-col items-center gap-5">
             <CareerEmpty />
-            <p className="text-body-body8 text-foreground-tertiary">부여된 인원이 없어요!</p>
+            <p className="text-body-body8 text-foreground-tertiary">부여된 인원이 없어요</p>
           </div>
         </div>
       ) : (

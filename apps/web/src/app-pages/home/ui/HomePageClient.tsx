@@ -2,7 +2,6 @@
 
 import { Carousel } from '@surf/ui/carousel';
 import { HeaderMode } from '@surf/ui/header';
-import { Shortcut } from '@surf/ui/shortcut';
 import { useRouter } from 'next/navigation';
 import { useEffect, useRef, useState } from 'react';
 import HeaderLogo from '../../../../public/header-logo.svg';
@@ -16,6 +15,7 @@ import { trackHomeEvent } from '@/features/home-tracking/lib/trackHomeEvent';
 import { HOME_EVENTS } from '@/features/home-tracking/model/constants';
 import { usePageName } from '@/shared/analytics/lib/getPageName';
 import { PAGE_ROUTES } from '@/shared/config/path';
+import { Shortcut } from '@/shared/ui/shortcut/Shortcut';
 import { AppHeader } from '@/widgets/header/ui/AppHeader';
 
 export const HomePageClient = ({ heroProps }: { heroProps: HeroCardProps }) => {
@@ -121,18 +121,16 @@ export const HomePageClient = ({ heroProps }: { heroProps: HeroCardProps }) => {
           <Carousel images={carouselImages} />
 
           {/* 앱 내 바로가기 링크 */}
-          <div className="flex flex-row gap-11">
-            <div className="flex w-full gap-11">
-              {SHORTCUT_LINKS.map((link) => (
-                <Shortcut
-                  key={link.id}
-                  type="rectangle"
-                  label={link.label}
-                  imageSrc={link.imageSrc ?? ''}
-                  onClick={() => handleShortcutClick(link.link, link.label)}
-                />
-              ))}
-            </div>
+          <div className="grid grid-cols-2 gap-11">
+            {SHORTCUT_LINKS.map((link) => (
+              <Shortcut
+                key={link.id}
+                type="rectangle"
+                label={link.label}
+                imageSrc={link.imageSrc ?? ''}
+                onClick={() => handleShortcutClick(link.link, link.label)}
+              />
+            ))}
           </div>
 
           {/* 테이브 채널 바로가기 */}

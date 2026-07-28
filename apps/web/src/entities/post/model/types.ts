@@ -1,4 +1,4 @@
-import { ImageItemResponse } from '../api/types';
+import { FileItemResponse, ImageItemResponse } from '../api/types';
 import { POST_BOARDS } from './board';
 import { PostCategoryLabel } from './category';
 
@@ -25,6 +25,7 @@ export type PostDetail = {
   likeCount: number;
   commentCount: number;
   imageUrlList: ImageItemResponse[];
+  fileList: FileItemResponse[];
   viewCount: number;
   isMine: boolean;
   categoryId: number;

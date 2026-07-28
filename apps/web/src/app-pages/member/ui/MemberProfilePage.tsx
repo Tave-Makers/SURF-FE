@@ -63,7 +63,7 @@ export const MemberProfilePage = ({ userProfile, memberId }: Props) => {
           </FieldGroup>
         </div>
       </section>
-      <ProfileBadge />
+      <ProfileBadge memberId={memberId} />
     </div>
   );
 };

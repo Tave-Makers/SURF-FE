@@ -20,9 +20,7 @@ export const BadgeListItem = ({ imageUrl, name, onClick }: BadgeListItemProps) =
         <Image src={imageUrl} alt={name} fill className="shrink-0 object-cover" />
       </div>
 
-      <span className="text-body-body6 text-foreground-static-black min-w-0 flex-1 truncate">
-        {name}
-      </span>
+      <span className="text-body-body6 text-foreground-normal min-w-0 flex-1 truncate">{name}</span>
     </button>
   );
 };

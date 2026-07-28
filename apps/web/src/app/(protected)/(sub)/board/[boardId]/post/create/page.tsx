@@ -1,10 +1,19 @@
-'use client';
-
-import { useParams } from 'next/navigation';
+import { redirect } from 'next/navigation';
 import PostPage from '@/app-pages/post/write/ui/PostPage';
+import { POST_BOARDS } from '@/entities/post/model/board';
+import { PAGE_ROUTES } from '@/shared/config/path';
+import { verifySession } from '@/shared/lib/dal';
 
-const Page = () => {
-  const { boardId } = useParams<{ boardId: string }>();
+const Page = async ({ params }: { params: Promise<{ boardId: string }> }) => {
+  const { boardId } = await params;
+
+  const board = POST_BOARDS.find((b) => b.id === Number(boardId));
+
+  if (board?.createPostAdminOnly) {
+    const user = await verifySession();
+    if (user.memberRole === 'member') redirect(PAGE_ROUTES.UNAUTHORIZED);
+  }
+
   return <PostPage mode="create" boardId={boardId} />;
 };
 

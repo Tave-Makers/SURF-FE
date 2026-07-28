@@ -1,4 +1,4 @@
-import { Sheet } from '@surf/ui/sheet';
+import { Sheet, SheetItem } from '@surf/ui/sheet';
 import { Sheet as ModalSheet } from 'react-modal-sheet';
 import { SCHEDULE_CATEGORIES } from '@/entities/schedule/model/constants';
 import { ScheduleCategory } from '@/entities/schedule/model/types';
@@ -33,23 +33,17 @@ export const ScheduleCategoryBottomSheet = ({
       <ModalSheet.Container>
         <ModalSheet.Content>
           <Sheet>
-            <div className="rounded-4 flex flex-col gap-4 pt-16 pb-15">
+            <div className="flex flex-col gap-4">
               {SCHEDULE_CATEGORIES.map((option) => (
-                <button
+                <SheetItem
                   key={option.value}
-                  type="button"
+                  title={option.label}
+                  pressed={selectedCategory === option.value}
                   onClick={() => {
                     onSelect(option.value);
                     onClose();
                   }}
-                  className={`text-foreground-normal text-body-body6 flex w-full flex-1 items-center px-12 py-10 ${
-                    selectedCategory === option.value
-                      ? 'bg-background-secondary'
-                      : 'hover:bg-background-secondary'
-                  }`}
-                >
-                  {option.label}
-                </button>
+                />
               ))}
             </div>
           </Sheet>

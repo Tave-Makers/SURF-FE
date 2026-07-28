@@ -1,7 +1,6 @@
 'use client';
 
 import { useDebouncedValue } from '@surf/hooks';
-import { ActionBar } from '@surf/ui/action-bar';
 import { Avatar } from '@surf/ui/avatar';
 import { Sheet } from '@surf/ui/sheet';
 import { SheetItem } from '@surf/ui/sheet';
@@ -12,6 +11,7 @@ import { trackCommentEvent } from '@/features/comment/lib/trackCommentEvent';
 import { COMMENT_EVENTS } from '@/features/comment/model/types';
 import { useCreateCommentMutation } from '@/features/comment/model/useCreateCommentMutation';
 import { useMentionSearchQuery } from '@/features/comment/model/useMentionSearchQuery';
+import { ActionBar } from '@/shared/ui/action-bar';
 
 function getMentionInfo(text: string, cursorIndex: number) {
   const left = text.slice(0, cursorIndex);
@@ -259,6 +259,7 @@ export const CommentComposer = ({
             onChange={onChange}
             placeholder={replyParentId ? '답글을 입력해주세요' : '댓글을 입력해주세요'}
             onSend={onSend}
+            focusAfterSend={false}
           />
         </div>
       </div>

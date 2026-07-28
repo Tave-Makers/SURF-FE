@@ -4,7 +4,7 @@ import { useInfiniteScroll } from '@surf/hooks';
 import { useRouter } from 'next/navigation';
 import { useCallback, useMemo } from 'react';
 import type { PostListItemResponse } from '@/entities/post/api/types';
-import { POST_CATEGORIES } from '@/entities/post/model/category';
+import { categoryKeyToId } from '@/entities/post/model/category';
 import { transformListItemToPost } from '@/entities/post/model/mappers';
 import type { TabCategoryKey } from '@/entities/post/model/tab';
 import { TAB_CATEGORIES } from '@/entities/post/model/tab';
@@ -19,11 +19,6 @@ type Props = {
   category: TabCategoryKey;
   userLevel: UserLevel;
 };
-
-function categoryKeyToId(category: TabCategoryKey): number | null {
-  if (category === 'all') return null;
-  return POST_CATEGORIES[category as keyof typeof POST_CATEGORIES]?.id ?? null;
-}
 
 const SearchPostListContainer = ({ keyword, category, userLevel }: Props) => {
   const router = useRouter();
@@ -40,7 +35,7 @@ const SearchPostListContainer = ({ keyword, category, userLevel }: Props) => {
 
   const filteredItems = useMemo(() => {
     const allItems: PostListItemResponse[] = data?.pages.flatMap((p) => p.content) ?? [];
-    const id = categoryKeyToId(category);
+    const id = category === 'all' ? undefined : categoryKeyToId(category, 1);
     if (id == null) return allItems;
     return allItems.filter((x) => x.categoryId === id);
   }, [data?.pages, category]);

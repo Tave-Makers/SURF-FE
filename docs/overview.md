@@ -18,8 +18,7 @@
 surf-monorepo/
 ├── apps/
 │   ├── web/          # surf-web (메인 유저 앱)
-│   ├── admin/        # surf-admin
-│   └── mobile/
+│   └── admin/        # surf-admin
 └── packages/
     ├── ui/           # 공유 컴포넌트 (@surf/ui)
     ├── hooks/        # 공유 훅 (@surf/hooks)

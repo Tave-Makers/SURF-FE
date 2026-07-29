@@ -38,7 +38,7 @@ export const ScoreAssignPage = () => {
                 <li key={criterion.id}>
                   <button
                     type="button"
-                    className="text-body-body6 text-foreground-normal w-full px-13 py-10 text-left"
+                    className="text-body-body6 text-foreground-normal w-full px-12 py-10 text-left"
                     onClick={() =>
                       router.push(PAGE_ROUTES.SCORE_MNG_ASSIGN_TARGET(encodeURIComponent(criterion.id)))
                     }

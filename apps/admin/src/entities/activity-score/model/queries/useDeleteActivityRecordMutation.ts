@@ -11,6 +11,7 @@ export const useDeleteActivityRecordMutation = () => {
     onSuccess: () => {
       void queryClient.invalidateQueries({ queryKey: activityScoreQueryKeys.rankings() });
       void queryClient.invalidateQueries({ queryKey: activityScoreQueryKeys.activityRecords() });
+      void queryClient.invalidateQueries({ queryKey: activityScoreQueryKeys.teamMembers() });
     },
     onError: (error) => {
       console.error('[useDeleteActivityRecordMutation] 활동기록 삭제 실패:', error);

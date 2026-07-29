@@ -11,6 +11,7 @@ export const useCreateActivityRecordMutation = () => {
     onSuccess: () => {
       void queryClient.invalidateQueries({ queryKey: activityScoreQueryKeys.rankings() });
       void queryClient.invalidateQueries({ queryKey: activityScoreQueryKeys.activityRecords() });
+      void queryClient.invalidateQueries({ queryKey: activityScoreQueryKeys.teamMembers() });
     },
     onError: (error) => {
       console.error('[useCreateActivityRecordMutation] 활동 점수 부여 실패:', error);

@@ -1,5 +1,7 @@
 export type ScoreViewMode = 'individual' | 'group';
 export type ScoreGroupKind = 'study' | 'project';
+/** 회원 점수 조회 화면 상단 필터 (개인 / 스터디 / 프로젝트) */
+export type ScoreListFilter = 'individual' | ScoreGroupKind;
 export type ScoreTargetKind = 'part' | 'study' | 'project';
 export type ScoreHistoryKind = 'positive' | 'negative';
 export type ScoreCategoryId = string;
@@ -62,5 +64,13 @@ export type ScoreHistory = {
   date: string;
   label: string;
   point: number;
+  /** 해당 기록 시점까지의 상점/벌점 누적 점수 */
   balance?: number;
+};
+
+/** 대상 선택 화면에서 회원을 묶는 단위 (파트명 / 팀명) */
+export type ScoreTargetGroup = {
+  id: string;
+  title: string;
+  members: ActivityScoreMember[];
 };

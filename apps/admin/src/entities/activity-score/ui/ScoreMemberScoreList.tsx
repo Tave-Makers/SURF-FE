@@ -19,7 +19,7 @@ export const ScoreTableHeader = () => {
       <span className="text-center">파트</span>
       <span className="text-center">상점</span>
       <span className="text-center">벌점</span>
-      <span className="text-center">종합</span>
+      <span className="text-center">총합</span>
     </div>
   );
 };

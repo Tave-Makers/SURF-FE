@@ -1,11 +1,10 @@
 'use client';
 
-import { SurfIcon } from '@surf/ui/icon';
 import { useRouter } from 'next/navigation';
 import { useMemo, useState } from 'react';
 import { useMemberScoreRankingQuery } from '@/entities/activity-score/model/queries/useMemberScoreRankingQuery';
 import { useTeamScoreRankingQuery } from '@/entities/activity-score/model/queries/useTeamScoreRankingQuery';
-import type { ScoreGroupKind, ScoreViewMode } from '@/entities/activity-score/model/types';
+import type { ScoreListFilter } from '@/entities/activity-score/model/types';
 import { ScoreFilterChip } from '@/entities/activity-score/ui/ScoreFilterChip';
 import { ScoreFloatingActionButton } from '@/entities/activity-score/ui/ScoreFloatingActionButton';
 import { ScoreGroupScoreList } from '@/entities/activity-score/ui/ScoreGroupScoreList';
@@ -15,20 +14,21 @@ import {
 } from '@/entities/activity-score/ui/ScoreMemberScoreList';
 import { PAGE_ROUTES } from '@/shared/config/path';
 
-type SortMode = 'generation' | 'name';
-
-const sortLabels: Record<SortMode, string> = {
-  generation: '기수별',
-  name: '이름별',
+const FILTER_LABELS: Record<ScoreListFilter, string> = {
+  individual: '개인',
+  study: '스터디',
+  project: '프로젝트',
 };
+
+const FILTER_ORDER: ScoreListFilter[] = ['individual', 'study', 'project'];
 
 const SCORE_RANKING_PAGE_SIZE = 50;
 
 export const ScoreManagementPage = () => {
   const router = useRouter();
-  const [viewMode, setViewMode] = useState<ScoreViewMode>('individual');
-  const [groupKind, setGroupKind] = useState<ScoreGroupKind>('study');
-  const [sortMode, setSortMode] = useState<SortMode>('generation');
+  const [filter, setFilter] = useState<ScoreListFilter>('individual');
+
+  const isIndividual = filter === 'individual';
 
   const {
     data: members = [],
@@ -37,7 +37,7 @@ export const ScoreManagementPage = () => {
   } = useMemberScoreRankingQuery({
     pageNum: 0,
     pageSize: SCORE_RANKING_PAGE_SIZE,
-    enabled: viewMode === 'individual',
+    enabled: isIndividual,
   });
 
   const {
@@ -45,75 +45,40 @@ export const ScoreManagementPage = () => {
     isLoading: isTeamRankingLoading,
     isError: isTeamRankingError,
   } = useTeamScoreRankingQuery({
-    kind: groupKind,
+    kind: isIndividual ? undefined : filter,
     pageNum: 0,
     pageSize: SCORE_RANKING_PAGE_SIZE,
-    enabled: viewMode === 'group',
+    enabled: !isIndividual,
   });
 
-  const sortedMembers = useMemo(() => {
-    return [...members].sort((a, b) => {
-      if (sortMode === 'name') return a.name.localeCompare(b.name, 'ko');
-      return b.generation - a.generation;
-    });
-  }, [members, sortMode]);
+  const sortedMembers = useMemo(
+    () => [...members].sort((a, b) => b.totalScore - a.totalScore),
+    [members],
+  );
 
-  const sortedTeams = useMemo(() => {
-    return [...teams].sort((a, b) => {
-      if (sortMode === 'name') return a.name.localeCompare(b.name, 'ko');
-      return b.totalScore - a.totalScore;
-    });
-  }, [teams, sortMode]);
+  const sortedTeams = useMemo(() => [...teams].sort((a, b) => b.totalScore - a.totalScore), [teams]);
 
   const handleClickMember = (memberId: number) => {
     router.push(PAGE_ROUTES.SCORE_MNG_MEMBER(memberId));
   };
 
-  const isLoading = viewMode === 'individual' ? isMemberRankingLoading : isTeamRankingLoading;
-  const isError = viewMode === 'individual' ? isMemberRankingError : isTeamRankingError;
+  const isLoading = isIndividual ? isMemberRankingLoading : isTeamRankingLoading;
+  const isError = isIndividual ? isMemberRankingError : isTeamRankingError;
 
   return (
     <div className="relative flex h-full flex-col overflow-hidden">
-      <div className="border-border-normal flex items-center justify-between border-b px-13 py-10">
-        <div className="flex gap-8">
-          {viewMode === 'individual' ? (
-            <>
-              <ScoreFilterChip isSelected={true} onClick={() => setViewMode('individual')}>
-                개인별
-              </ScoreFilterChip>
-              <ScoreFilterChip isSelected={false} onClick={() => setViewMode('group')}>
-                그룹별
-              </ScoreFilterChip>
-            </>
-          ) : (
-            <>
-              <ScoreFilterChip isSelected={false} onClick={() => setViewMode('individual')}>
-                개인
-              </ScoreFilterChip>
-              <ScoreFilterChip
-                isSelected={groupKind === 'study'}
-                onClick={() => setGroupKind('study')}
-              >
-                스터디
-              </ScoreFilterChip>
-              <ScoreFilterChip
-                isSelected={groupKind === 'project'}
-                onClick={() => setGroupKind('project')}
-              >
-                프로젝트
-              </ScoreFilterChip>
-            </>
-          )}
+      <div className="border-border-normal flex items-center border-b px-13 pb-10">
+        <div className="flex gap-10">
+          {FILTER_ORDER.map((value) => (
+            <ScoreFilterChip
+              key={value}
+              isSelected={filter === value}
+              onClick={() => setFilter(value)}
+            >
+              {FILTER_LABELS[value]}
+            </ScoreFilterChip>
+          ))}
         </div>
-
-        <button
-          type="button"
-          className="text-body-body9 text-foreground-normal flex items-center gap-4 px-4 py-6"
-          onClick={() => setSortMode((prev) => (prev === 'generation' ? 'name' : 'generation'))}
-        >
-          <span>{sortLabels[sortMode]}</span>
-          <SurfIcon name="ChevronDown" size="s" />
-        </button>
       </div>
 
       <div className="scrollbar-hide flex-1 overflow-y-auto pb-20">
@@ -126,15 +91,11 @@ export const ScoreManagementPage = () => {
             점수 현황을 불러오지 못했습니다.
           </div>
         )}
-        {!isLoading && !isError && viewMode === 'individual' ? (
+        {!isLoading && !isError && isIndividual ? (
           <ScoreMemberScoreList members={sortedMembers} onClickMember={handleClickMember} />
         ) : null}
-        {!isLoading && !isError && viewMode === 'group' ? (
-          <ScoreGroupScoreList
-            key={groupKind}
-            teams={sortedTeams}
-            onClickMember={handleClickMember}
-          />
+        {!isLoading && !isError && !isIndividual ? (
+          <ScoreGroupScoreList key={filter} teams={sortedTeams} onClickMember={handleClickMember} />
         ) : null}
       </div>
 

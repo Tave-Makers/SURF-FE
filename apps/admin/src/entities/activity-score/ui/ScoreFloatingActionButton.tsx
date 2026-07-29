@@ -14,7 +14,7 @@ export const ScoreFloatingActionButton = ({ onClick }: ScoreFloatingActionButton
           onClick={onClick}
           className="shadow-floated bg-background-primary text-foreground-static-white hover:bg-background-primary-darker active:bg-background-primary-darker pointer-events-auto absolute right-15 bottom-15 flex h-[3.75rem] w-[3.75rem] items-center justify-center rounded-full transition-colors"
         >
-          <SurfIcon name="Edit" size="xl" />
+          <SurfIcon name="Plus" size="xl" />
         </button>
       </div>
     </div>

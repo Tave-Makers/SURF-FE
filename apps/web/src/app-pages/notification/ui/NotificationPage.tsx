@@ -4,7 +4,7 @@ import { HeaderMode } from '@surf/ui/header';
 import { useToastStore } from '@surf/ui/store/toastStore';
 import { Tab } from '@surf/ui/tab';
 import { useRouter, useSearchParams } from 'next/navigation';
-import { useEffect } from 'react';
+import { useEffect, useRef } from 'react';
 import {
   NOTIFICATION_TABS,
   type NotificationTab,
@@ -12,6 +12,9 @@ import {
 import { useGetNotifications } from '@/entities/notification/model/useGetNotifications';
 import { useReadNotification } from '@/entities/notification/model/useReadNotification';
 import { NotificationList } from '@/entities/notification/ui/NotificationList';
+import { trackNotificationEvent } from '@/features/notification-tracking/lib/trackNotificationEvent';
+import { NOTIFICATION_EVENTS } from '@/features/notification-tracking/model/constants';
+import { usePageName } from '@/shared/analytics/lib/getPageName';
 import NotificationEmpty from '@/shared/assets/icons/empty-space/notification-empty.svg';
 import { AppHeader } from '@/widgets/header/ui/AppHeader';
 
@@ -31,6 +34,8 @@ const tabItems: { value: NotificationTab; label: string }[] = [
 
 export const NotificationPage = () => {
   const router = useRouter();
+  const trackRef = useRef(false);
+  const pageName = usePageName();
   const searchParams = useSearchParams();
   const tabParam = searchParams.get('tab');
   const currentTab: NotificationTab =
@@ -47,6 +52,12 @@ export const NotificationPage = () => {
     }
   }, [showToast]);
 
+  useEffect(() => {
+    if (trackRef.current) return;
+    trackRef.current = true;
+    trackNotificationEvent(NOTIFICATION_EVENTS.PAGE_VIEW, { page_name: pageName });
+  }, [pageName]);
+
   const { data, isLoading } = useGetNotifications(currentTab);
   const { mutate: readNotification } = useReadNotification();
 
@@ -60,10 +71,25 @@ export const NotificationPage = () => {
     router.replace(`?${newParams.toString()}`);
   };
 
-  const handleNotificationClick = (id: number, deepLink: string, isRead: boolean) => {
+  const handleNotificationClick = (
+    id: number,
+    deepLink: string,
+    isRead: boolean,
+    notificationType: string,
+  ) => {
+    trackNotificationEvent(NOTIFICATION_EVENTS.NOTIFICATION_CLICK, {
+      notification_type: notificationType,
+    });
+
     // 읽지 않은 알림인 경우에만 요청 보내기
     if (!isRead) {
-      readNotification(id);
+      readNotification(id, {
+        onSuccess: () => {
+          trackNotificationEvent(NOTIFICATION_EVENTS.NOTIFICATION_READ, {
+            notification_id: `${id}`,
+          });
+        },
+      });
     }
 
     // 딥링크가 있다면 페이지 이동

@@ -22,7 +22,7 @@ const containerStyle =
 
 const textareaStyle =
   'flex-1 resize-none overflow-y-auto bg-transparent outline-none ' +
-  'text-body-body6 text-foreground-normal ' +
+  'text-body-body7 text-foreground-normal ' +
   'placeholder-foreground-quaternary ' +
   '[-ms-overflow-style:none] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden';
 

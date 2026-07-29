@@ -10,7 +10,7 @@ import type { UserProfile } from '@/entities/user/model/types';
 import { USER_LEVEL_BADGE } from '@/entities/user/ui/user-level/UserLevelBadges';
 import { formatPhoneNumber } from '@/shared/lib/phoneNumber';
 
-const infoRow = 'text-caption-caption6 text-foreground-normal flex flex-row items-center gap-5';
+const infoRow = 'text-caption-caption4 text-foreground-normal flex flex-row items-center gap-5';
 
 interface Props {
   userProfile: UserProfile;
@@ -82,20 +82,20 @@ export const ProfileHeader = ({ userProfile }: Props) => {
 
       <div className="flex flex-col gap-8">
         <div className={infoRow}>
-          <SurfIcon name="Envelope" size="s" />
+          <SurfIcon name="Envelope" size="m" />
           <span>{userProfile.email}</span>
         </div>
 
         {userProfile.phoneNumberPublic === true && nonEmptyText(userProfile.phoneNumber) ? (
           <div className={infoRow}>
-            <SurfIcon name="Telephone" size="s" />
+            <SurfIcon name="Telephone" size="m" />
             <span>{formatPhoneNumber(userProfile.phoneNumber)}</span>
           </div>
         ) : null}
 
         {universityText ? (
           <div className={infoRow}>
-            <SurfIcon name="AcademicHat" size="s" />
+            <SurfIcon name="AcademicHat" size="m" />
             <span>{universityText}</span>
           </div>
         ) : null}

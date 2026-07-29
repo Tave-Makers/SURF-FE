@@ -2,7 +2,7 @@
 
 import { AccordionSelect } from '@surf/ui/accordion';
 import { HeaderMode } from '@surf/ui/header';
-import { useAlertStore } from '@surf/ui/store/alertStore';
+import { AlertCloseOptions, useAlertStore } from '@surf/ui/store/alertStore';
 import { useRouter } from 'next/navigation';
 import { useCallback, useEffect } from 'react';
 import Loading from '@/app/loading';
@@ -104,10 +104,13 @@ const PostPage = (props: PostPageProps) => {
 
   // == Handlers ==
 
-  const closeExitAlert = useCallback(() => {
-    setShowExitAlert(false);
-    closeAlert();
-  }, [closeAlert, setShowExitAlert]);
+  const closeExitAlert = useCallback(
+    (options?: AlertCloseOptions) => {
+      setShowExitAlert(false);
+      closeAlert(options);
+    },
+    [closeAlert, setShowExitAlert],
+  );
 
   const handleSaveReservation = (date: Date) => {
     setField('reservedAt', date);
@@ -163,13 +166,13 @@ const PostPage = (props: PostPageProps) => {
       title: '변경 내용을 저장하지 않고 나가시겠습니까?',
       infoText: '작성 중인 내용은 저장되지 않습니다.',
       actions: [
-        { type: 'solid', label: '취소', variant: 'secondary', onClick: closeExitAlert },
+        { type: 'solid', label: '취소', variant: 'secondary', onClick: () => closeExitAlert() },
         {
           type: 'solid',
           label: '나가기',
           variant: 'danger',
           onClick: () => {
-            closeExitAlert();
+            closeExitAlert({ restoreFocus: false });
             resetPostState();
             router.back();
           },

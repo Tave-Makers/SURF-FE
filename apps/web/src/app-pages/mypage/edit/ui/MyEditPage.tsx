@@ -39,7 +39,7 @@ export const MyEditPage = ({ initialProfile }: Props) => {
             label: '나가기',
             variant: 'primary',
             onClick: () => {
-              closeAlert();
+              closeAlert({ restoreFocus: false });
               onConfirm();
             },
           },

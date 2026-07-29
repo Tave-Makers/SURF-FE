@@ -156,7 +156,7 @@ export const OnBoardingForm = ({ step, setStep }: OnBoardingFormProps) => {
           variant: 'primary',
           label: '확인',
           onClick: () => {
-            closeAlert();
+            closeAlert({ restoreFocus: false });
             router.replace(PAGE_ROUTES.LOGIN);
           },
         },

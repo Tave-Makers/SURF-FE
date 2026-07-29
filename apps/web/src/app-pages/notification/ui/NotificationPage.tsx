@@ -1,5 +1,6 @@
 'use client';
 
+import { useInfiniteScroll } from '@surf/hooks';
 import { HeaderMode } from '@surf/ui/header';
 import { useToastStore } from '@surf/ui/store/toastStore';
 import { Tab } from '@surf/ui/tab';
@@ -47,8 +48,17 @@ export const NotificationPage = () => {
     }
   }, [showToast]);
 
-  const { data, isLoading } = useGetNotifications(currentTab);
+  const { data, isLoading, hasNextPage, isFetchingNextPage, fetchNextPage } =
+    useGetNotifications(currentTab);
   const { mutate: readNotification } = useReadNotification();
+
+  const loadMoreRef = useInfiniteScroll({
+    hasNextPage,
+    isFetching: isFetchingNextPage,
+    onLoadMore: () => {
+      void fetchNextPage();
+    },
+  });
 
   const handleBack = () => {
     router.back();
@@ -67,9 +77,11 @@ export const NotificationPage = () => {
     }
 
     // 딥링크가 있다면 페이지 이동
+    // 서버가 'board/2/post/56' 처럼 선행 슬래시 없이 내려주므로 절대경로로 보정
     if (deepLink) {
-      const separator = deepLink.includes('?') ? '&' : '?';
-      router.push(`${deepLink}${separator}from=notification`);
+      const path = deepLink.startsWith('/') ? deepLink : `/${deepLink}`;
+      const separator = path.includes('?') ? '&' : '?';
+      router.push(`${path}${separator}from=notification`);
     }
   };
 
@@ -95,7 +107,12 @@ export const NotificationPage = () => {
     }
 
     // 데이터가 있을 때
-    return <NotificationList items={data} onItemClick={handleNotificationClick} />;
+    return (
+      <>
+        <NotificationList items={data} onItemClick={handleNotificationClick} />
+        {hasNextPage && <div ref={loadMoreRef} className="h-1 w-full" aria-hidden />}
+      </>
+    );
   };
 
   return (

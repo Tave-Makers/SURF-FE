@@ -27,7 +27,7 @@ const meta: Meta<typeof DailyActivityBadgeList> = {
     },
     maxVisible: {
       control: { type: 'number', min: 2, max: 3 },
-      description: '한 셀에 최대로 보여줄 뱃지 개수 (나머지는 "더보기"로 표시)',
+      description: '한 셀에 최대로 보여줄 배지 개수 (나머지는 "더보기"로 표시)',
     },
     isCurrentMonth: {
       control: 'boolean',

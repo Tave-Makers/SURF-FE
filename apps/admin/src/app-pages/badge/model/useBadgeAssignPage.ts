@@ -58,7 +58,7 @@ export const useBadgeAssignPage = (badgeId: number) => {
     openAlert({
       state: 'default',
       title: '부여하시겠습니까?',
-      infoText: `부여하기 버튼을 누를 시, 선택한 ${selectedIds.size}명의 인원에게 활동 뱃지가 부여됩니다.`,
+      infoText: `부여하기 버튼을 누를 시, 선택한 ${selectedIds.size}명의 인원에게 활동 배지가 부여됩니다.`,
       actions: [
         { type: 'solid', variant: 'secondary', label: '취소', onClick: closeAlert },
         {

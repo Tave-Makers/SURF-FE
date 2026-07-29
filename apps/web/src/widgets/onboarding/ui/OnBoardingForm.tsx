@@ -156,8 +156,8 @@ export const OnBoardingForm = ({ step, setStep }: OnBoardingFormProps) => {
           variant: 'primary',
           label: '확인',
           onClick: () => {
-            router.push(PAGE_ROUTES.LOGIN);
             closeAlert();
+            router.replace(PAGE_ROUTES.LOGIN);
           },
         },
       ],
@@ -175,8 +175,10 @@ export const OnBoardingForm = ({ step, setStep }: OnBoardingFormProps) => {
 
     try {
       setIsSubmitting(true);
+      // 이동은 onSubmit 성공 알럿에서만 처리한다.
+      // handleSubmit 은 검증 실패 시 throw 하지 않고 조용히 끝나므로,
+      // 여기서 이동시키면 가입 요청 없이도 화면이 넘어간다.
       await methods.handleSubmit(onSubmit)();
-      router.push(PAGE_ROUTES.HOME);
     } catch (error) {
       if (error instanceof Error && error.message === 'PROFILE_IMAGE_UPLOAD_FAILED') {
         openAlert({

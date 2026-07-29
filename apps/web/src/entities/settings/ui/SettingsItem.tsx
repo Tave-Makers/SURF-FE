@@ -50,7 +50,7 @@ export const SettingsItem = forwardRef<HTMLButtonElement, SettingsItemProps>(
               className="text-foreground-normal"
             />
           )}
-          {children && <span className="text-body-body9 text-foreground-normal">{children}</span>}
+          {children && <span className="text-body-body7 text-foreground-normal">{children}</span>}
         </div>
         {rightContent}
         {rightIconName && !rightContent && (

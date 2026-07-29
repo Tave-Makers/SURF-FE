@@ -219,7 +219,7 @@ const PostPage = (props: PostPageProps) => {
           mode: HeaderMode.TextBtn,
           title: boardLabel,
           hasLeftIcon: true,
-          text: mode === 'create' ? '등록' : '수정',
+          text: mode === 'create' ? '등록' : '완료',
           btnVariant: 'secondary',
           isDisabled: isSubmitDisabled,
           onClickTextBtn: () => void handleSubmit(),

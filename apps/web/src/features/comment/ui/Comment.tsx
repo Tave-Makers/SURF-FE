@@ -95,7 +95,7 @@ export const Comment = ({
             </p>
           </div>
           <button type="button" aria-label="댓글 더보기" className="ml-auto" onClick={onMoreClick}>
-            <SurfIcon name="Dots" size="m" />
+            <SurfIcon name="Dots" size="l" />
           </button>
         </header>
 
@@ -108,7 +108,7 @@ export const Comment = ({
         <footer className="flex gap-11">
           <button
             type="button"
-            className="text-caption-caption4 text-foreground-secondary-lighter flex items-center gap-5"
+            className="text-caption-caption4 text-foreground-secondary-lighter flex items-center gap-4 p-4"
             aria-label={`좋아요 ${likeCount}개`}
             onClick={handleLikeToggle}
             disabled={isActionDisabled}
@@ -126,7 +126,7 @@ export const Comment = ({
 
           <button
             type="button"
-            className="text-caption-caption4 text-foreground-secondary-lighter flex items-center gap-5"
+            className="text-caption-caption4 text-foreground-secondary-lighter flex items-center gap-4 p-4"
             aria-label="답글 달기"
             onClick={onReplyClick}
             disabled={isActionDisabled}

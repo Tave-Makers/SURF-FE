@@ -5,17 +5,18 @@ import tseslint from 'typescript-eslint';
 import reactPlugin from 'eslint-plugin-react';
 import reactHooksPlugin from 'eslint-plugin-react-hooks';
 import jsxA11y from 'eslint-plugin-jsx-a11y';
-import importPlugin from 'eslint-plugin-import';
+import * as importX from 'eslint-plugin-import-x';
+import { fixupPluginRules } from '@eslint/compat';
 
 /**
  * @param {{
  *  tsconfigRootDir: string,
- *  project?: string[],
+ *  react?: boolean,
  *  ignores?: string[]
  * }} opts
  */
 export function base(opts) {
-  const { tsconfigRootDir, project = ['./tsconfig.json'], ignores = [] } = opts ?? {};
+  const { tsconfigRootDir, react = false, ignores = [] } = opts ?? {};
 
   const defaultIgnores = [
     '.next/',
@@ -25,57 +26,51 @@ export function base(opts) {
     'node_modules/',
     'public/',
     'assets/',
-    '**/.storybook/**',
-    '.storybook/**',
-    '*.svg',
-    '*.ico',
-    '*.md',
-    '*.lock',
-    'pnpm-lock.yaml',
-    'next.config.js',
+    'storybook-static/',
+    'coverage/',
     'next-env.d.ts',
-    'postcss.config.mjs',
-    'tailwind.config.js',
-    'prettier.config.mjs',
   ];
 
   return [
-    // 1) ignores
     { ignores: [...defaultIgnores, ...ignores] },
 
-    // 2) language options
     {
       languageOptions: {
         globals: { ...globals.browser, ...globals.node },
-        ecmaVersion: 2020,
+        ecmaVersion: 'latest',
         sourceType: 'module',
       },
     },
 
-    // 3) JS recommended
     js.configs.recommended,
 
-    // 4) TS recommended
-    ...tseslint.configs.recommended.map((c) => ({
-      ...c,
-      files: ['**/*.{ts,tsx}'],
-    })),
-
-    // 5) TS type-checked
     ...tseslint.configs.recommendedTypeChecked.map((c) => ({
       ...c,
       files: ['**/*.{ts,tsx}'],
     })),
+
     {
       files: ['**/*.{ts,tsx}'],
       languageOptions: {
         parser: tseslint.parser,
         parserOptions: {
-          project,
+          projectService: true,
           tsconfigRootDir,
         },
       },
     },
+
+    // 설정 파일·스토리북 설정은 타입 기반 룰 제외
+    // (extends는 plain 배열에서 동작하지 않으므로 스프레드로 적용)
+    {
+      ...tseslint.configs.disableTypeChecked,
+      files: [
+        '**/*.config.{js,mjs,cjs,ts,mts}',
+        '**/.storybook/**/*.{js,ts}',
+        '**/vitest.shims.d.ts',
+      ],
+    },
+
     {
       files: ['**/*.{ts,tsx}'],
       rules: {
@@ -91,58 +86,60 @@ export function base(opts) {
       },
     },
 
-    // 6) React / a11y / import
+    // import 룰: .ts 포함 전체로 확장
     {
-      files: ['**/*.{tsx,jsx}'],
-      plugins: {
-        react: reactPlugin,
-        'react-hooks': reactHooksPlugin,
-        'jsx-a11y': jsxA11y,
-        import: importPlugin,
-      },
+      files: ['**/*.{ts,tsx,js,jsx}'],
+      plugins: { 'import-x': importX },
       settings: {
-        react: { version: 'detect' },
-        'import/resolver': { typescript: {} },
+        'import-x/resolver': { typescript: { projectService: true } },
       },
       rules: {
-        ...reactPlugin.configs.recommended.rules,
-        ...reactHooksPlugin.configs.recommended.rules,
-        ...jsxA11y.configs.recommended.rules,
-
-        'func-style': 'off',
-        'import/no-unresolved': ['error', { ignore: ['^server-only$'] }],
-        'import/no-default-export': 'error',
-        'import/no-cycle': 'warn',
-        'import/order': ['error', { alphabetize: { order: 'asc', caseInsensitive: true } }],
-        'prefer-arrow-callback': ['error', { allowNamedFunctions: false }],
-        'react/function-component-definition': [
-          'error',
-          { namedComponents: 'arrow-function', unnamedComponents: 'arrow-function' },
-        ],
-        'react/react-in-jsx-scope': 'off',
-        'react/prop-types': 'off',
+        'import-x/no-unresolved': ['error', { ignore: ['^server-only$'] }],
+        'import-x/no-default-export': 'error',
+        'import-x/no-cycle': 'warn',
+        'import-x/order': ['error', { alphabetize: { order: 'asc', caseInsensitive: true } }],
       },
     },
 
-    // 6-1) Next page-level default export 허용
+    // React 블록
+    ...(react
+      ? [
+          {
+            files: ['**/*.{tsx,jsx}'],
+            plugins: {
+              react: fixupPluginRules(reactPlugin),
+              'react-hooks': reactHooksPlugin,
+              'jsx-a11y': fixupPluginRules(jsxA11y),
+            },
+            settings: { react: { version: 'detect' } },
+            rules: {
+              ...reactPlugin.configs.recommended.rules,
+              ...reactHooksPlugin.configs.recommended.rules,
+              ...jsxA11y.configs.recommended.rules,
+              'prefer-arrow-callback': ['error', { allowNamedFunctions: false }],
+              'react/function-component-definition': [
+                'error',
+                { namedComponents: 'arrow-function', unnamedComponents: 'arrow-function' },
+              ],
+              'react/react-in-jsx-scope': 'off',
+              'react/prop-types': 'off',
+            },
+          },
+        ]
+      : []),
+
+    // Next/스토리 default export 허용
     {
       files: [
         '**/pages/**/*.{ts,tsx,js,jsx}',
-        '**/app/**/page.{ts,tsx,js,jsx}',
-        '**/app/**/layout.{ts,tsx,js,jsx}',
-        '**/app/**/template.{ts,tsx,js,jsx}',
-        '**/app/**/default.{ts,tsx,js,jsx}',
-        '**/app/**/loading.{ts,tsx,js,jsx}',
-        '**/app/**/error.{ts,tsx,js,jsx}',
-        '**/app/**/not-found.{ts,tsx,js,jsx}',
-        '**/app/**/route.{ts,tsx,js,jsx}',
-        '**/app-pages/**/*.{ts,tsx,js,jsx}',
+        '**/app/**/{page,layout,template,default,loading,error,not-found,route}.{ts,tsx,js,jsx}',
         '**/*.stories.{ts,tsx,js,jsx}',
+        '**/*.config.{js,mjs,ts}',
       ],
-      rules: { 'import/no-default-export': 'off' },
+      rules: { 'import-x/no-default-export': 'off' },
     },
 
-    // 7) scripts는 any/unsafe 완화
+    // scripts
     {
       files: ['scripts/**/*.{ts,js}'],
       rules: {

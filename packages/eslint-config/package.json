@@ -5,26 +5,28 @@
   "type": "module",
   "exports": {
     "./base": "./base.js",
-    "./expo": "./expo.js",
     "./next": "./next.js"
   },
   "devDependencies": {
-    "@types/eslint-plugin-jsx-a11y": "^6.10.0"
+    "@eslint/compat": "^2.1.0",
+    "@types/eslint-plugin-jsx-a11y": "^6.10.0",
+    "eslint-plugin-import-x": "^4.17.1"
   },
   "peerDependencies": {
-    "@eslint/js": "^9",
+    "@eslint/js": "^9 || ^10",
     "@next/eslint-plugin-next": "^15",
-    "eslint": "^9",
+    "eslint": "^9 || ^10",
     "eslint-config-prettier": "^10",
+    "@eslint/compat": "^2",
     "eslint-import-resolver-typescript": "^4",
-    "eslint-plugin-import": "^2",
+    "eslint-plugin-import-x": "^4",
     "eslint-plugin-jsx-a11y": "^6",
     "eslint-plugin-react": "^7",
     "eslint-plugin-react-hooks": "^5",
-    "eslint-plugin-storybook": "^9",
+    "eslint-plugin-storybook": "^9.1.20",
     "globals": "^16",
     "typescript": "^5",
-    "typescript-eslint": "^8"
+    "typescript-eslint": "^8.65.0"
   },
   "peerDependenciesMeta": {
     "@next/eslint-plugin-next": {

@@ -11,10 +11,10 @@
     "react": "^19"
   },
   "devDependencies": {
-    "@types/react": "^19",
-    "@surf/typescript-config": "workspace:*",
     "@surf/eslint-config": "workspace:*",
-    "eslint": "^9.39.1"
+    "@surf/typescript-config": "workspace:*",
+    "@types/react": "^19",
+    "eslint": "^10.8.0"
   },
   "exports": {
     ".": {

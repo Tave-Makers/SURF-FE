@@ -6,6 +6,7 @@ import reactPlugin from 'eslint-plugin-react';
 import reactHooksPlugin from 'eslint-plugin-react-hooks';
 import jsxA11y from 'eslint-plugin-jsx-a11y';
 import * as importX from 'eslint-plugin-import-x';
+import { createTypeScriptImportResolver } from 'eslint-import-resolver-typescript';
 import { fixupPluginRules } from '@eslint/compat';
 
 /**
@@ -91,7 +92,11 @@ export function base(opts) {
       files: ['**/*.{ts,tsx,js,jsx}'],
       plugins: { 'import-x': importX },
       settings: {
-        'import-x/resolver': { typescript: { projectService: true } },
+        'import-x/resolver-next': [
+          createTypeScriptImportResolver({
+            project: tsconfigRootDir,
+          }),
+        ],
       },
       rules: {
         'import-x/no-unresolved': ['error', { ignore: ['^server-only$'] }],

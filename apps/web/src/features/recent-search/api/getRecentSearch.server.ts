@@ -1,8 +1,8 @@
 import 'server-only';
-import type { CommonResponse } from '@/shared/api/types';
-import { serverFetchJsonGuarded } from '@/shared/api/serverFetchJsonGuarded';
-import { commonResponseGuard } from '@/shared/api/types';
 import { isStringArray } from '@/shared/api/primitives';
+import { serverFetchJsonGuarded } from '@/shared/api/serverFetchJsonGuarded';
+import type { CommonResponse } from '@/shared/api/types';
+import { commonResponseGuard } from '@/shared/api/types';
 
 export async function getRecentSearches(): Promise<string[]> {
   try {

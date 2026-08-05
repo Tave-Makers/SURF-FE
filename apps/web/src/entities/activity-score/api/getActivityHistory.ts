@@ -1,6 +1,6 @@
 import { ActivityHistoryResponse } from '../model/types';
-import { axiosInstance } from '@/shared/lib/axiosInstance';
 import { ScoreMode } from '../model/types';
+import { axiosInstance } from '@/shared/lib/axiosInstance';
 
 export const getActivityHistory = async (
   scoreType: ScoreMode,

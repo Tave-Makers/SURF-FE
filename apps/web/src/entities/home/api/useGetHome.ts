@@ -1,8 +1,8 @@
 import { useQuery } from '@tanstack/react-query';
 import { homeQueryKeys } from '../api/queryKeys';
+import { mapHomeDataToHomeUI } from '../model/mappers';
 import { getHome } from './getHome';
 import { HomeApiResponseData } from './types';
-import { mapHomeDataToHomeUI } from '../model/mappers';
 
 export const useGetHome = () => {
   return useQuery({

@@ -1,8 +1,7 @@
 import { useMemo, useState, useEffect } from 'react';
+import { toFormLocation } from '../create/api/mapper';
 import { useCreatePostScheduleStore } from '../create-post-schedule/model/useCreatePostScheduleStore';
 import { useGetSingleSchedule } from '../edit/model/useGetSingleSchedule';
-import { toFormLocation } from '../create/api/mapper';
-import { ScheduleFormData } from '../create/model/types';
 
 type InitProps = {
   entryPoint: 'calendar' | 'post';
@@ -54,7 +53,7 @@ export const useScheduleFormInit = ({
         endDate: new Date(serverData.endAt),
         location: toFormLocation(serverData.location),
         category: serverData.category || 'regular',
-      } as ScheduleFormData;
+      };
     }
     return null;
   }, [entryPoint, linkedSchedule, serverData, isHydrated]);

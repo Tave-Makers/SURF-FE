@@ -1,5 +1,5 @@
-import { axiosInstance } from '@/shared/lib/axiosInstance';
 import { EditScheduleRequest, EditScheduleResponse } from './types';
+import { axiosInstance } from '@/shared/lib/axiosInstance';
 
 export const editSchedule = async (
   scheduleId: number,

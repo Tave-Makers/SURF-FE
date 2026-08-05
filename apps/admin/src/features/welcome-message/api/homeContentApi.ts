@@ -1,9 +1,9 @@
-import { axiosInstance } from '@/shared/lib/axiosInstance';
 import {
   HomeContentResDto,
   HomeContentResponse,
   UpdateHomeContentRequest,
 } from '@/features/welcome-message/api/types';
+import { axiosInstance } from '@/shared/lib/axiosInstance';
 
 export const homeContentApi = {
   getHomeContent: async (): Promise<HomeContentResDto> => {

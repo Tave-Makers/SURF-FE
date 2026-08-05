@@ -1,6 +1,6 @@
-import { handleApiError } from '@/shared/lib/handleApiError';
 import { OnBoardingRequest, OnBoardingResponse } from '../model/types';
 import { axiosInstance } from '@/shared/lib/axiosInstance';
+import { handleApiError } from '@/shared/lib/handleApiError';
 
 export async function submitOnBoarding(data: OnBoardingRequest) {
   try {

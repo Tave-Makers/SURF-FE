@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { exchangeOAuthLogin } from '@/features/auth/api/exchangeOAuthLogin';
-import { setOAuthOnboardingCookie } from '@/features/auth/lib/onboardingCookie';
 import { applyProxyAuthToResponse } from '@/features/auth/lib/applyProxyAuthResponse';
+import { setOAuthOnboardingCookie } from '@/features/auth/lib/onboardingCookie';
 import { PAGE_ROUTES } from '@/shared/config/path';
 import { getAppOriginFromRequest } from '@/shared/lib/appOrigin';
 

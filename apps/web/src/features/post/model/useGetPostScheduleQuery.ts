@@ -1,6 +1,6 @@
 import { useQuery } from '@tanstack/react-query';
-import { PostScheduleResponse } from '@/entities/post/api/types';
 import { postApi } from '@/entities/post/api/postApi';
+import { PostScheduleResponse } from '@/entities/post/api/types';
 import { scheduleQueryKeys } from '@/features/calendar/api/queryKeys';
 
 export function useGetPostScheduleQuery(

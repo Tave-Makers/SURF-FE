@@ -1,6 +1,6 @@
 import 'server-only';
-import type { ThemeConfig, ThemeItem } from './types';
 import { assertThemeItem } from './guards';
+import type { ThemeConfig, ThemeItem } from './types';
 
 const SUPABASE_URL = process.env.SUPABASE_URL;
 

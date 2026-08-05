@@ -1,7 +1,7 @@
 import { useMutation, useQueryClient } from '@tanstack/react-query';
-import { updateBadge } from '@/features/badge/api/updateBadge';
-import { UpdateBadgeRequest } from '@/features/badge/api/types';
 import { badgeQueryKeys } from './queryKeys';
+import { UpdateBadgeRequest } from '@/features/badge/api/types';
+import { updateBadge } from '@/features/badge/api/updateBadge';
 
 export const useUpdateBadgeMutation = (badgeId?: number) => {
   const queryClient = useQueryClient();

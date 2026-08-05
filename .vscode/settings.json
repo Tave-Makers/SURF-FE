@@ -5,5 +5,10 @@
   "files.associations": {
     "*.css": "tailwindcss"
   },
-  "js/ts.experimental.useTsgo": false
+
+  "js/ts.tsdk.path": "node_modules/typescript/lib",
+  "js/ts.experimental.useTsgo": false,
+
+  "eslint.workingDirectories": [{ "mode": "auto" }],
+  "eslint.useFlatConfig": true
 }

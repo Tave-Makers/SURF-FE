@@ -1,7 +1,7 @@
 'use client';
 
-import { TrackPart } from '@/entities/user/model/types';
 import { useState, useCallback, useEffect } from 'react';
+import { TrackPart } from '@/entities/user/model/types';
 
 export function useMemberFilters() {
   const [keyword, setKeyword] = useState<string>('');

@@ -1,6 +1,6 @@
+import type { CommonResponse } from '@/shared/api/types';
 import { axiosInstance } from '@/shared/lib/axiosInstance';
 import { handleApiError } from '@/shared/lib/handleApiError';
-import type { CommonResponse } from '@/shared/api/types';
 
 export async function updateManagerPassword(password: string): Promise<CommonResponse<null>> {
   try {

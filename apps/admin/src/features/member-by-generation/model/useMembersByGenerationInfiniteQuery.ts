@@ -1,6 +1,8 @@
 'use client';
 
 import { infiniteQueryOptions, useInfiniteQuery, useQueryClient } from '@tanstack/react-query';
+import { getMemberListByGeneration } from '../api/getMemberListByGeneration';
+import type { MemberListParams } from '../api/types';
 import { toMemberBase } from '@/entities/member/model/mapper';
 import { memberQueryKeys } from '@/entities/member/model/queries/memberQueryKeys';
 import {
@@ -9,8 +11,6 @@ import {
   type InfiniteSelectResult,
   type PageWithContent,
 } from '@/shared/lib/tanstack-query/infiniteQueryUtils';
-import { getMemberListByGeneration } from '../api/getMemberListByGeneration';
-import type { MemberListParams } from '../api/types';
 
 const MEMBER_BY_GENERATION_PAGE_SIZE = 20;
 

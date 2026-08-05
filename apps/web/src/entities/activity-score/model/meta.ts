@@ -1,9 +1,9 @@
-import InstagramIcon from '@/entities/activity-score/ui/icons/instastory.svg';
-import SeminarIcon from '@/entities/activity-score/ui/icons/seminar.svg';
+import AbsenceIcon from '@/entities/activity-score/ui/icons/absent.svg';
 import BlogIcon from '@/entities/activity-score/ui/icons/blog.svg';
 import EarlyBirdIcon from '@/entities/activity-score/ui/icons/earlybird.svg';
+import InstagramIcon from '@/entities/activity-score/ui/icons/instastory.svg';
 import LateIcon from '@/entities/activity-score/ui/icons/late.svg';
-import AbsenceIcon from '@/entities/activity-score/ui/icons/absent.svg';
+import SeminarIcon from '@/entities/activity-score/ui/icons/seminar.svg';
 
 // 단일/하위 활동 메타 (툴팁 전용 label, 일부는 아이콘 포함)
 export const activityMetaMap = {

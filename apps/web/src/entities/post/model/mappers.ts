@@ -1,10 +1,10 @@
-import { PostDetailData, PostListItemResponse } from '@/entities/post/api/types';
-import { TAB_CATEGORIES, TabCategoryLabel, TabCategoryKey } from '@/entities/post/model/tab';
-import { categoryIdToLabel } from './category';
-import type { Post, PostDetail } from './types';
-import { POST_BOARDS } from './board';
 import { formatDate, formatDateTime, toKST } from '@surf/utils';
 import { toDate } from 'date-fns';
+import { POST_BOARDS } from './board';
+import { categoryIdToLabel } from './category';
+import type { Post, PostDetail } from './types';
+import { PostDetailData, PostListItemResponse } from '@/entities/post/api/types';
+import { TAB_CATEGORIES, TabCategoryLabel, TabCategoryKey } from '@/entities/post/model/tab';
 
 export const transformListItemToPost = (item: PostListItemResponse): Post => ({
   postId: item.postId,

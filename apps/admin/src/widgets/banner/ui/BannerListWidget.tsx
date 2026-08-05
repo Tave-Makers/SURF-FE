@@ -2,7 +2,7 @@
 
 import { reorderArray } from '@surf/utils';
 import { useRouter } from 'next/navigation';
-import { useEffect, useMemo, useState } from 'react';
+import { useEffect, useMemo, useRef, useState } from 'react';
 import { Banner } from '@/entities/banner/model/types';
 import { BannerDnd } from '@/entities/banner/ui/BannerDnd';
 import {
@@ -26,6 +26,7 @@ export const BannerListWidget = ({ isReorderMode, onBannersChange }: BannerListW
   const { data: serverBanners } = useBannerListQuery();
   const [banners, setBanners] = useState<Banner[]>(serverBanners);
   const [filter, setFilter] = useState<BannerFilterType>('all');
+  const wasReorderModeRef = useRef(false);
 
   // 서버 데이터가 업데이트되면 로컬 상태도 동기화 (순서 변경 모드가 아닐 때만)
   useEffect(() => {
@@ -42,7 +43,7 @@ export const BannerListWidget = ({ isReorderMode, onBannersChange }: BannerListW
 
   // 순서 변경 모드 진입 시 순서 동기화
   useEffect(() => {
-    if (isReorderMode) {
+    if (isReorderMode && !wasReorderModeRef.current) {
       const initialOrder = reassignDisplayOrders(getGroupedByStatus(banners));
       setBanners(initialOrder);
 
@@ -50,7 +51,9 @@ export const BannerListWidget = ({ isReorderMode, onBannersChange }: BannerListW
       onBannersChange?.(initialOrder);
       setFilter('all');
     }
-  }, [isReorderMode]);
+
+    wasReorderModeRef.current = isReorderMode;
+  }, [banners, isReorderMode, onBannersChange]);
 
   const handleReorder = (from: number, to: number) => {
     const nextFiltered = reorderArray(filteredBanners, from, to);

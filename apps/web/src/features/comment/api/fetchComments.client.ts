@@ -1,8 +1,8 @@
-import { axiosInstance } from '@/shared/lib/axiosInstance';
+import { COMMENT_DEFAULT_PAGE, COMMENT_PAGE_SIZE } from '../model/constant';
 import type { CommentListResponse } from '@/features/comment/api/types';
 import type { CommonResponse } from '@/shared/api/types';
+import { axiosInstance } from '@/shared/lib/axiosInstance';
 import { handleApiError } from '@/shared/lib/handleApiError';
-import { COMMENT_DEFAULT_PAGE, COMMENT_PAGE_SIZE } from '../model/constant';
 
 export async function fetchComments(
   postId: number,

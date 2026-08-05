@@ -1,10 +1,10 @@
 import { queryOptions } from '@tanstack/react-query';
 
+import { getMemberGenerationInfoClient } from '../../api/getMemberGenerationInfoClient';
+import { AdminTotalMemberListResDTO } from '../../api/types';
 import { toMemberGenerationList } from '../mapper';
 import { MemberGenerationList } from '../types';
 
-import { getMemberGenerationInfoClient } from '../../api/getMemberGenerationInfoClient';
-import { AdminTotalMemberListResDTO } from '../../api/types';
 import { memberQueryKeys } from '@/entities/member/model/queries/memberQueryKeys';
 
 interface MemberGenerationListQueryOptionsParams {

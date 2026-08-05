@@ -103,15 +103,8 @@ export const DateTimePicker = ({ value, onChange, mode = 'all' }: DateTimePicker
       const selectedDate = addDays(BASE_DATE, dateIdx);
 
       const hour12 = hourIdx + 1;
-      let hour24 = 0;
-
-      if (amPmIdx === 0) {
-        // 오전
-        hour24 = hour12 === 12 ? 0 : hour12;
-      } else {
-        // 오후
-        hour24 = hour12 === 12 ? 12 : hour12 + 12;
-      }
+      const hour24 =
+        amPmIdx === 0 ? (hour12 === 12 ? 0 : hour12) : hour12 === 12 ? 12 : hour12 + 12;
 
       const minute = MINUTES[minuteIdx];
 

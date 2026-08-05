@@ -1,5 +1,5 @@
-import { Banner } from '@/entities/banner/model/types';
 import { BannerFilterType } from '../model/types';
+import { Banner } from '@/entities/banner/model/types';
 
 // 활성 배너를 상단에, 비활성 배너를 하단에 배치하는 그룹화 함수
 export const getGroupedByStatus = (banners: Banner[]): Banner[] => {

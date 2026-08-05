@@ -1,28 +1,28 @@
-import { useCallback, useMemo, useState } from 'react';
+import { useQueryClient } from '@tanstack/react-query';
+import { format } from 'date-fns';
 import { useRouter } from 'next/navigation';
-import { PAGE_ROUTES } from '@/shared/config/path';
-
-import { stripHtml } from '@/shared/lib/stripHtml';
-import { categoryKeyToId } from '@/entities/post/model/category';
-import { POST_VALIDATION } from '@/entities/post/model/validation';
-
-import { useCreatePost } from '@/features/post/create-post/model/useCreatePost';
-import { useUpdatePost } from '@/features/post/update-post/model/useUpdatePost';
-import { useCreatePostSchedule } from '@/features/schedule/create-post-schedule/model/useCreatePostSchedule';
-import { useEditSchedule } from '@/features/schedule/edit/model/useEditSchedule';
-
-import { usePostFormStore } from './usePostFormStore';
-import { useCreatePostScheduleStore } from '@/features/schedule/create-post-schedule/model/useCreatePostScheduleStore';
-import { usePostDirtyCheck } from '@/features/post/post-form/model/useDirtyCheck';
+import { useCallback, useMemo, useState } from 'react';
 
 import { PostPageMode } from './types';
-import { useDeletePostSchedule } from '@/features/schedule/delete/model/useDelPostSchedule';
-import { useQueryClient } from '@tanstack/react-query';
+import { usePostFormStore } from './usePostFormStore';
 import { postQueryKeys } from '@/entities/post/api/queryKeys';
-import { scheduleQueryKeys } from '@/features/calendar/api/queryKeys';
-import { format } from 'date-fns';
-import { PostDetail } from '@/entities/post/model/types';
 import { PostScheduleData } from '@/entities/post/api/types';
+import { categoryKeyToId } from '@/entities/post/model/category';
+import { PostDetail } from '@/entities/post/model/types';
+import { POST_VALIDATION } from '@/entities/post/model/validation';
+
+import { scheduleQueryKeys } from '@/features/calendar/api/queryKeys';
+import { useCreatePost } from '@/features/post/create-post/model/useCreatePost';
+import { usePostDirtyCheck } from '@/features/post/post-form/model/useDirtyCheck';
+import { useUpdatePost } from '@/features/post/update-post/model/useUpdatePost';
+import { useCreatePostSchedule } from '@/features/schedule/create-post-schedule/model/useCreatePostSchedule';
+
+import { useCreatePostScheduleStore } from '@/features/schedule/create-post-schedule/model/useCreatePostScheduleStore';
+
+import { useDeletePostSchedule } from '@/features/schedule/delete/model/useDelPostSchedule';
+import { useEditSchedule } from '@/features/schedule/edit/model/useEditSchedule';
+import { PAGE_ROUTES } from '@/shared/config/path';
+import { stripHtml } from '@/shared/lib/stripHtml';
 
 type Props = {
   mode: PostPageMode;

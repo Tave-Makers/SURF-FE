@@ -1,7 +1,7 @@
 import 'server-only';
+import { homeResponseGuard } from './guards';
 import type { HomeApiResponse, HomeApiResponseData } from './types';
 import { serverFetchJsonGuarded } from '@/shared/api/serverFetchJsonGuarded';
-import { homeResponseGuard } from './guards';
 
 export async function getHome(): Promise<HomeApiResponseData> {
   const res = await serverFetchJsonGuarded<HomeApiResponse>('/v1/user/home', homeResponseGuard);

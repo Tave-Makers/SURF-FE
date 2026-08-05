@@ -1,7 +1,7 @@
 import 'server-only';
-import { cache } from 'react';
 import { cookies } from 'next/headers';
 import { redirect } from 'next/navigation';
+import { cache } from 'react';
 import type { ValidStatusResponse } from '@/features/auth/api/types';
 import { PAGE_ROUTES } from '@/shared/config/path';
 import { extractAccessToken } from '@/shared/lib/proxyCookie';

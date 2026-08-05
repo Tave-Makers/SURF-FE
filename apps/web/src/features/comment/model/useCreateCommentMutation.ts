@@ -1,6 +1,6 @@
 import { useMutation, useQueryClient } from '@tanstack/react-query';
-import { CommentCreateRequest } from '../api/types';
 import { createComment } from '../api/createComment.client';
+import { CommentCreateRequest } from '../api/types';
 import { postQueryKeys } from '@/entities/post/api/queryKeys';
 
 export function useCreateCommentMutation(postId: number) {

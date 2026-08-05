@@ -10,7 +10,7 @@ const leader = {
   name: '테이버',
   profileImageUrl: '',
   tracks,
-} as MemberSummary;
+};
 
 const members = [
   { id: 2, name: '테이버', profileImageUrl: '', tracks },

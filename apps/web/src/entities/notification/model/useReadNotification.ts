@@ -1,7 +1,7 @@
 import { useMutation, useQueryClient, type InfiniteData } from '@tanstack/react-query';
 import { readNotification } from '../api/readNotification';
-import { notificationKeys } from './queryKeys';
 import type { NotificationSlice } from '../api/types';
+import { notificationKeys } from './queryKeys';
 
 export function useReadNotification() {
   const queryClient = useQueryClient();

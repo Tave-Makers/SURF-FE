@@ -1,6 +1,6 @@
+import { UpdatePostRequest } from './types';
 import { PostDetailData, PostDetailResponse } from '@/entities/post/api/types';
 import { axiosInstance } from '@/shared/lib/axiosInstance';
-import { UpdatePostRequest } from './types';
 
 export const updatePost = async (
   postId: number,

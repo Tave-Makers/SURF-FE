@@ -1,5 +1,5 @@
-import { axiosInstance } from '@/shared/lib/axiosInstance';
 import { AdminTotalMemberListResDTO, MemberGenerationInfoResponse } from './types';
+import { axiosInstance } from '@/shared/lib/axiosInstance';
 
 /**
  * 전체 회원수 + 기수 리스트 조회 API

@@ -1,4 +1,4 @@
-import type { UserProfileApiResponse } from '@/entities/user/api/types';
+import { normalizeTextNullable } from './normalize';
 import type {
   CareerDTO,
   UserProfile,
@@ -7,7 +7,7 @@ import type {
   DateString,
   TrackPart,
 } from './types';
-import { normalizeTextNullable } from './normalize';
+import type { UserProfileApiResponse } from '@/entities/user/api/types';
 
 // 한글 → 백엔드 enum
 export const toEnumPartMap: Record<string, TrackPart> = {

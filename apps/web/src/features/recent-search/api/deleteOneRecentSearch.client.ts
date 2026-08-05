@@ -1,5 +1,5 @@
-import { axiosInstance } from '@/shared/lib/axiosInstance';
 import type { CommonResponse } from '@/shared/api/types';
+import { axiosInstance } from '@/shared/lib/axiosInstance';
 
 export async function deleteOneRecentSearch(keyword: string): Promise<boolean> {
   try {

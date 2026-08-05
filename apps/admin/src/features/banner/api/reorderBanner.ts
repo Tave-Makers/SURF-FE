@@ -1,5 +1,5 @@
-import { axiosInstance } from '@/shared/lib/axiosInstance';
 import { ReorderBannerRequest, ReorderBannerResponse } from './types';
+import { axiosInstance } from '@/shared/lib/axiosInstance';
 
 export async function reorderBanner(data: ReorderBannerRequest) {
   const response = await axiosInstance.put<ReorderBannerResponse>(

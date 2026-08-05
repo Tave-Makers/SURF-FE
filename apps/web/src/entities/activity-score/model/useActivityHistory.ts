@@ -1,8 +1,8 @@
 import { useInfiniteQuery } from '@tanstack/react-query';
 import { getActivityHistory } from '../api/getActivityHistory';
+import { toActivityHistory } from '../model/adapter';
 import { ScoreMode } from '../model/types';
 import { ActivityHistoryResponse } from '../model/types';
-import { toActivityHistory } from '../model/adapter';
 
 export const useInfiniteActivityHistory = (scoreType: ScoreMode, pageSize: number) => {
   return useInfiniteQuery({

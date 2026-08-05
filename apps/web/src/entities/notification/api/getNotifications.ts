@@ -1,5 +1,5 @@
-import { axiosInstance } from '@/shared/lib/axiosInstance';
 import type { GetNotificationsResponse, GetNotificationsRequest } from './types';
+import { axiosInstance } from '@/shared/lib/axiosInstance';
 
 export const NOTIFICATION_DEFAULT_PAGE = 0;
 export const NOTIFICATION_PAGE_SIZE = 20;

@@ -1,5 +1,5 @@
-import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { useToastStore } from '@surf/ui/store/toastStore';
+import { useMutation, useQueryClient } from '@tanstack/react-query';
 
 import { homeContentApi } from '@/features/welcome-message/api/homeContentApi';
 import { mapUpdateWelcomeMessageInputToRequest } from '@/features/welcome-message/model/mapper';

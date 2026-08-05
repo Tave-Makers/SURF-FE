@@ -1,4 +1,6 @@
 import { infiniteQueryOptions, useInfiniteQuery } from '@tanstack/react-query';
+import { mapBadgeResDtoToBadge } from '../mapper';
+import { badgeQueryKeys } from './queryKeys';
 import { Badge } from '@/entities/badge/model/types';
 import { getBadgeList } from '@/features/badge/api/getBadgeList';
 import {
@@ -7,9 +9,6 @@ import {
   InfiniteSelectResult,
   PageWithContent,
 } from '@/shared/lib/tanstack-query/infiniteQueryUtils';
-
-import { badgeQueryKeys } from './queryKeys';
-import { mapBadgeResDtoToBadge } from '../mapper';
 
 const BADGE_LIST_PAGE_SIZE = 20;
 

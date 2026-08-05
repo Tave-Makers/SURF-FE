@@ -1,4 +1,3 @@
-import { axiosInstance } from '@/shared/lib/axiosInstance';
 import type {
   FullPostListResponse,
   PostListApiResponse,
@@ -8,6 +7,7 @@ import type {
   PostScheduleResponse,
 } from './types';
 import { getValidCategory } from '@/entities/schedule/model/constants';
+import { axiosInstance } from '@/shared/lib/axiosInstance';
 
 export const postApi = {
   getMyPosts: async (params: Partial<PostApiRequest>): Promise<PostListApiResponse> => {

@@ -1,15 +1,15 @@
-import { ReservationBottomSheet } from '@/features/post/post-form/ui/ReservationBottomSheet';
-import { PostCategoryBottomSheet } from '@/features/post/post-form/ui/PostCategoryBottomSheet';
+import type { ComponentType } from 'react';
+import { CommentOptionBottomSheet } from '@/features/comment/ui/CommentOptionBottomSheet';
 import { LawBottomSheet } from '@/features/laws/ui/LawBottomSheet';
+import { TrackPickerBottomSheet } from '@/features/onboarding/ui/TrackPickerBottomSheet';
+import { PostCategoryBottomSheet } from '@/features/post/post-form/ui/PostCategoryBottomSheet';
+import { ReservationBottomSheet } from '@/features/post/post-form/ui/ReservationBottomSheet';
 import { PostLikeBottomSheet } from '@/features/post/post-like/ui/PostLikeBottomSheet';
 import { PostOptionBottomSheet } from '@/features/post/post-option/ui/PostOptionBottomSheet';
-import { TrackPickerBottomSheet } from '@/features/onboarding/ui/TrackPickerBottomSheet';
 import { ScheduleActionSheet } from '@/features/schedule/ui/ScheduleActionSheet/ScheduleActionSheet';
-import { CommentOptionBottomSheet } from '@/features/comment/ui/CommentOptionBottomSheet';
 import { ScheduleCategoryBottomSheet } from '@/features/schedule/ui/ScheduleCategoryBottomSheet';
 import { ScheduleDateBottomSheet } from '@/features/schedule/ui/ScheduleDateBottomSheet';
 import type { BottomSheetMap, BottomSheetType } from '@/shared/store/bottomSheetStore';
-import type { ComponentType } from 'react';
 
 type BottomSheetComponents = {
   [K in BottomSheetType]: ComponentType<

@@ -1,9 +1,9 @@
 'use client';
 
 import { useMutation, useQueryClient } from '@tanstack/react-query';
-import { deletePost } from '@/features/post/api/deletePost';
 import { postQueryKeys } from '@/entities/post/api/queryKeys';
 import { scheduleQueryKeys } from '@/features/calendar/api/queryKeys';
+import { deletePost } from '@/features/post/api/deletePost';
 
 export const useDeletePostMutation = () => {
   const queryClient = useQueryClient();

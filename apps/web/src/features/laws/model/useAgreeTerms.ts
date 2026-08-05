@@ -1,5 +1,5 @@
-import { useMutation } from '@tanstack/react-query';
 import { useToastStore } from '@surf/ui/store/toastStore';
+import { useMutation } from '@tanstack/react-query';
 import { agreeTerms } from '../api/agreeTerms';
 
 function formatAgreedAt(date: Date): string {

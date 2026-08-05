@@ -1,5 +1,5 @@
-import { axiosInstance } from '@/shared/lib/axiosInstance';
 import { ApiMemberStatus, MemberCountDTO, MemberCountResponse } from './types';
+import { axiosInstance } from '@/shared/lib/axiosInstance';
 
 export interface GetMemberCountParams {
   statuses: readonly ApiMemberStatus[];

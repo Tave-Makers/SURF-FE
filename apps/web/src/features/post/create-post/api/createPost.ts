@@ -1,6 +1,6 @@
+import { CreatePostRequest } from './types';
 import { PostDetailData, PostDetailResponse } from '@/entities/post/api/types';
 import { axiosInstance } from '@/shared/lib/axiosInstance';
-import { CreatePostRequest } from './types';
 
 export const createPost = async (data: CreatePostRequest): Promise<PostDetailData> => {
   try {

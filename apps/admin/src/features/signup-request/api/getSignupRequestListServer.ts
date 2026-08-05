@@ -1,6 +1,6 @@
 import 'server-only';
-import { serverFetchWithCookies } from '@/shared/api/serverFetchWithCookies';
 import { SignupRequestListResponse, SignupRequestListParams, SignupRequestListData } from './types';
+import { serverFetchWithCookies } from '@/shared/api/serverFetchWithCookies';
 
 /**
  * 가입 신청 목록 조회 API (Server Component 전용)

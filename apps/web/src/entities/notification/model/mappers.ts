@@ -1,8 +1,8 @@
 import type { NotificationCategory } from '../api/constants';
-import type { NotificationTab } from './notificationTab';
-import type { NOTIFICATION_BADGE } from '../ui/NotificationItem';
 import type { Notification } from '../api/types';
+import type { NOTIFICATION_BADGE } from '../ui/NotificationItem';
 import { NotificationItemProps } from '../ui/NotificationItem';
+import type { NotificationTab } from './notificationTab';
 
 export function mapTabToCategory(tab: NotificationTab): NotificationCategory | null {
   if (tab === 'ALL') {

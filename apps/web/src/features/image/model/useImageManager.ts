@@ -1,9 +1,9 @@
 'use client';
 
 import { UploadImage } from '@surf/utils';
+import { useCallback } from 'react';
 import { useImageSelector, UseImageSelectorProps } from './useImageSelector';
 import { useImageUploader } from '@/entities/image/model/useImageUploader';
-import { useCallback } from 'react';
 
 /**
  * 이미지 선택 + 업로드를 관리하는 통합 훅.

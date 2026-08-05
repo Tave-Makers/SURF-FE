@@ -1,8 +1,8 @@
 import { useQuery } from '@tanstack/react-query';
 import { getMemberCount, GetMemberCountParams } from '../../api/getMemberCount';
 
-import { memberQueryKeys } from './memberQueryKeys';
 import { ApiMemberStatus } from '../../api/types';
+import { memberQueryKeys } from './memberQueryKeys';
 
 export const SIGNUP_REQUEST_COUNT_STATUSES = [
   'WAITING',

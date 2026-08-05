@@ -1,15 +1,14 @@
-import { useState, useEffect, useMemo, useCallback } from 'react';
-import { useRouter } from 'next/navigation';
-
-import { safeUUID } from '@surf/utils';
-import { Banner, BannerFormData } from '@/entities/banner/model/types';
-import { useImageUploader } from '@/entities/image/model/useImageUploader';
-import { PAGE_ROUTES } from '@/shared/config/path';
 import { useAlertStore } from '@surf/ui/store/alertStore';
 import { useToastStore } from '@surf/ui/store/toastStore';
+import { safeUUID } from '@surf/utils';
+import { useRouter } from 'next/navigation';
+import { useState, useEffect, useMemo, useCallback } from 'react';
 import { useUpdateBannerMutation } from './mutations';
 import { useToggleBannerStatusMutation } from './mutations';
 import { useDeleteBannerMutation } from './mutations';
+import { Banner, BannerFormData } from '@/entities/banner/model/types';
+import { useImageUploader } from '@/entities/image/model/useImageUploader';
+import { PAGE_ROUTES } from '@/shared/config/path';
 
 export const useBannerEdit = (bannerId: number, initialData: Banner | undefined) => {
   const router = useRouter();

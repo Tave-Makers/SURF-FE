@@ -1,9 +1,9 @@
 'use client';
 
-import { updateActiveGeneration } from '@/entities/active-cohort/api/updateActiveGeneration';
-import { activeGenerationQueryKeys } from '@/entities/active-cohort/model/queries/activeGenerationQueryKeys';
 import { useToastStore } from '@surf/ui/store/toastStore';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
+import { updateActiveGeneration } from '@/entities/active-cohort/api/updateActiveGeneration';
+import { activeGenerationQueryKeys } from '@/entities/active-cohort/model/queries/activeGenerationQueryKeys';
 
 export function useUpdateActiveGenerationMutation() {
   const qc = useQueryClient();

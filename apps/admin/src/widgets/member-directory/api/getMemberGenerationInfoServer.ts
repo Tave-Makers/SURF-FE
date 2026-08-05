@@ -1,6 +1,6 @@
 import 'server-only';
-import { serverFetchWithCookies } from '@/shared/api/serverFetchWithCookies';
 import { MemberGenerationInfoResponse, AdminTotalMemberListResDTO } from './types';
+import { serverFetchWithCookies } from '@/shared/api/serverFetchWithCookies';
 
 /**
  * 전체 회원수 + 기수 리스트 조회 API(Server Component 전용)

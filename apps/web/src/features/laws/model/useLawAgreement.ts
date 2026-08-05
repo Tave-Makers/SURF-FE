@@ -1,6 +1,6 @@
-import { PAGE_ROUTES } from '@/shared/config/path';
 import { useRouter } from 'next/navigation';
 import { useAgreementStore } from './useAgreementStore';
+import { PAGE_ROUTES } from '@/shared/config/path';
 
 export const useLawAgreement = () => {
   const router = useRouter();

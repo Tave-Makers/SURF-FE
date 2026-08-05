@@ -1,6 +1,6 @@
 import 'server-only';
-import type { Guard, ServerFetchOptions } from './types';
 import { serverFetchWithCookies } from './serverFetchWithCookies';
+import type { Guard, ServerFetchOptions } from './types';
 
 export async function serverFetchJsonGuarded<T>(
   path: string,

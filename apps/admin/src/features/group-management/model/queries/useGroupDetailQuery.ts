@@ -1,6 +1,6 @@
+import { useQuery } from '@tanstack/react-query';
 import { groupApi } from '@/features/group-management/api/groupApi';
 import { mapGroupDetailResDtoToGroupFormDraft } from '@/features/group-management/model/mapper';
-import { useQuery } from '@tanstack/react-query';
 import { groupQueryKeys } from '@/features/group-management/model/queries/queryKeys';
 
 export const useGroupDetailQuery = (groupId?: number) => {

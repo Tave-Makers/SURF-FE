@@ -1,6 +1,6 @@
 import type { Meta, StoryObj } from '@storybook/nextjs';
 import { addDays, subMonths, format } from 'date-fns';
-import type { Modifiers, CalendarDay } from 'react-day-picker';
+import type { CalendarDay } from 'react-day-picker';
 import { DayChipRadio } from './DayChipRadio';
 import type { ActivityMap, DailyActivity } from '@/entities/calendar/model/types';
 
@@ -65,7 +65,7 @@ const meta: Meta<DayChipRadioProps> = {
     displayMonth: TODAY,
     activityMap: mockActivityMap,
     day: createMockDay(TODAY),
-    modifiers: {} as Modifiers,
+    modifiers: {},
   },
   decorators: [(Story) => <Story />],
 };

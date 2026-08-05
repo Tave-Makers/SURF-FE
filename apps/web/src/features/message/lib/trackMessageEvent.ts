@@ -1,4 +1,4 @@
-import { createDomainTracker } from '@/shared/lib/createDomainTracker';
 import { MessageEventPropsMap } from '../model/types';
+import { createDomainTracker } from '@/shared/lib/createDomainTracker';
 
 export const trackMessageEvent = createDomainTracker<MessageEventPropsMap>();

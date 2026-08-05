@@ -53,6 +53,14 @@ function buildRefreshUrl(): string | null {
   return `${base}${AUTH_REFRESH_PATH}`;
 }
 
+function parseJson(text: string): unknown {
+  try {
+    return text ? JSON.parse(text) : null;
+  } catch {
+    return null;
+  }
+}
+
 /** 갱신된 AT 를 현재 요청에도 반영해서 서버 컴포넌트(dal.ts)가 새 토큰을 보게 한다 */
 function buildForwardedCookieHeader(req: NextRequest, accessToken: string): string {
   const jar = new Map<string, string>();
@@ -95,14 +103,7 @@ async function refreshSession(req: NextRequest): Promise<NextResponse | null> {
   if (!upstream.ok) return null;
 
   const setCookies = getSetCookies(upstream);
-
-  let body: unknown = null;
-  try {
-    const text = await upstream.text();
-    body = text ? JSON.parse(text) : null;
-  } catch {
-    body = null;
-  }
+  const body = parseJson(await upstream.text());
 
   const accessToken = extractAccessToken(body);
 

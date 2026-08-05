@@ -1,8 +1,8 @@
+import { useToastStore } from '@surf/ui/store/toastStore';
+import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { groupApi } from '@/features/group-management/api/groupApi';
 import { groupQueryKeys } from '@/features/group-management/model/queries/queryKeys';
 import { useGroupFormStore } from '@/features/group-management/model/useGroupFormStore';
-import { useToastStore } from '@surf/ui/store/toastStore';
-import { useMutation, useQueryClient } from '@tanstack/react-query';
 
 export const useDeleteGroupMutation = (groupId?: number) => {
   const qc = useQueryClient();

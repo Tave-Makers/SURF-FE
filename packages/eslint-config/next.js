@@ -5,11 +5,19 @@ import configPrettier from 'eslint-config-prettier';
 
 import { base } from './base.js';
 
+/**
+ * @param {{
+ *  tsconfigRootDir: string,
+ *  project?: string | string[],
+ *  storybook?: boolean,
+ *  ignores?: string[]
+ * }} opts
+ */
 export function next(opts) {
-  const { tsconfigRootDir, storybook: enableStorybook = true, ignores = [] } = opts ?? {};
+  const { tsconfigRootDir, project, storybook: enableStorybook = true, ignores = [] } = opts ?? {};
 
   return [
-    ...base({ tsconfigRootDir, react: true, ignores }),
+    ...base({ tsconfigRootDir, project, react: true, ignores }),
     {
       plugins: { '@next/next': nextPlugin },
       rules: {

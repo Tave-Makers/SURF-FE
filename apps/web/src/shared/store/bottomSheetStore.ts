@@ -26,7 +26,6 @@ import { create } from 'zustand';
  */
 
 // Registry Pattern: Features will augment this interface
-// eslint-disable-next-line @typescript-eslint/no-empty-object-type
 export interface BottomSheetMap {}
 
 export type BottomSheetType = keyof BottomSheetMap;

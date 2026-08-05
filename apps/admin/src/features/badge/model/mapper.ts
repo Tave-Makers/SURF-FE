@@ -1,7 +1,7 @@
-import { Badge } from '@/entities/badge/model/types';
-import { toMemberTrack } from '@/entities/member/model/mapper';
 import { BadgeAwardedMemberResDto, BadgeResDto, CreateBadgeRequest } from '../api/types';
 import { BadgeAwardedMember, CreateBadgeInput } from './types';
+import { Badge } from '@/entities/badge/model/types';
+import { toMemberTrack } from '@/entities/member/model/mapper';
 
 /**
  * 배지 응답 DTO를 공통 Badge 도메인 모델로 변환한다.

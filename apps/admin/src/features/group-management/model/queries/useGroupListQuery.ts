@@ -1,3 +1,4 @@
+import { useQuery } from '@tanstack/react-query';
 import { groupApi } from '@/features/group-management/api/groupApi';
 import {
   mapContentsTypeToGroupApiType,
@@ -5,7 +6,6 @@ import {
 } from '@/features/group-management/model/mapper';
 import { groupQueryKeys } from '@/features/group-management/model/queries/queryKeys';
 import { ContentsType } from '@/shared/types/contents';
-import { useQuery } from '@tanstack/react-query';
 
 export const useGroupListQuery = (type?: ContentsType) => {
   return useQuery({

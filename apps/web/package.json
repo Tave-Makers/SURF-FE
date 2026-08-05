@@ -21,7 +21,8 @@
     "test": "vitest",
     "test:ui": "vitest --ui",
     "test:run": "vitest run",
-    "update-theme": "node --loader ts-node/esm scripts/update-theme.ts"
+    "update-theme": "node --loader ts-node/esm scripts/update-theme.ts",
+    "typecheck": "tsc --noEmit"
   },
   "dependencies": {
     "@amplitude/analytics-browser": "^2.25.2",

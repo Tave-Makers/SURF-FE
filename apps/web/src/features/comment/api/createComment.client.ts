@@ -1,6 +1,6 @@
-import { axiosInstance } from '@/shared/lib/axiosInstance';
 import type { CommentCreateRequest } from '@/features/comment/api/types';
 import type { CommonResponse } from '@/shared/api/types';
+import { axiosInstance } from '@/shared/lib/axiosInstance';
 import { handleApiError } from '@/shared/lib/handleApiError';
 
 export async function createComment(

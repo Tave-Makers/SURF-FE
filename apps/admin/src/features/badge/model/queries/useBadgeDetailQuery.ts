@@ -1,8 +1,7 @@
 import { useQuery } from '@tanstack/react-query';
-import { getBadgeDetail } from '@/features/badge/api/getBadgeDetail';
-
-import { badgeQueryKeys } from './queryKeys';
 import { mapBadgeResDtoToBadge } from '../mapper';
+import { badgeQueryKeys } from './queryKeys';
+import { getBadgeDetail } from '@/features/badge/api/getBadgeDetail';
 
 export const useBadgeDetailQuery = (badgeId?: number) => {
   const enabled = !!badgeId;

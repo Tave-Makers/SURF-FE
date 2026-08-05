@@ -1,7 +1,7 @@
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { deletePostSchedule } from '../api/delPostSchedule';
-import { scheduleQueryKeys } from '@/features/calendar/api/queryKeys';
 import { postQueryKeys } from '@/entities/post/api/queryKeys';
+import { scheduleQueryKeys } from '@/features/calendar/api/queryKeys';
 
 interface DeletePostScheduleParams {
   postId: number;

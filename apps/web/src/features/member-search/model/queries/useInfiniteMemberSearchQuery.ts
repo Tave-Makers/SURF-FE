@@ -1,6 +1,6 @@
 import { useInfiniteQuery } from '@tanstack/react-query';
-import { memberSearchQueryOptions } from '@/features/member-search/model/queries/queryOptions';
 import { MemberSearchFilters } from '@/entities/search/model/types';
+import { memberSearchQueryOptions } from '@/features/member-search/model/queries/queryOptions';
 
 export function useInfiniteMemberSearchQuery(filters: MemberSearchFilters) {
   const queryFilters = {

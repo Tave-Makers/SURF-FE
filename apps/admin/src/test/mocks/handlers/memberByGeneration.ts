@@ -2,8 +2,6 @@ import { http, HttpResponse } from 'msw';
 
 const TOTAL_MEMBERS_PER_GENERATION = 20;
 
-type MemberStatus = 'REGISTERING' | 'WAITING' | 'APPROVED' | 'REJECTED' | 'WITHDRAWN';
-
 function createGenerationMembers(generation: number) {
   return Array.from({ length: TOTAL_MEMBERS_PER_GENERATION }, (_, index) => {
     const memberNumber = index + 1;
@@ -15,7 +13,7 @@ function createGenerationMembers(generation: number) {
       university: 'TEST_UNIV',
       role: 'MEMBER' as const,
       createdAt: '2026-01-01',
-      memberStatus: 'APPROVED' as MemberStatus,
+      memberStatus: 'APPROVED',
       trackList: [],
     };
   });

@@ -1,5 +1,5 @@
-import { MemberRole } from '@/entities/member/model/types';
 import { AlertPayload } from '@surf/ui/store/alertStore';
+import { MemberRole } from '@/entities/member/model/types';
 
 export function openChangeMemberRoleConfirm({
   openAlert,

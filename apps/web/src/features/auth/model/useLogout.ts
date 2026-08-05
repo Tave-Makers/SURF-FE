@@ -1,8 +1,8 @@
+import { useToastStore } from '@surf/ui/store/toastStore';
 import { useMutation } from '@tanstack/react-query';
+import { useRouter } from 'next/navigation';
 import { logout } from '@/features/auth/api/logout.client';
 import { useAuthStore } from '@/features/auth/model/useAuthStore';
-import { useRouter } from 'next/navigation';
-import { useToastStore } from '@surf/ui/store/toastStore';
 
 export function useLogout() {
   const clearAuth = useAuthStore((s) => s.clearAuth);

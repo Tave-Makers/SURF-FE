@@ -1,5 +1,5 @@
-import { useCallback, useState } from 'react';
 import { safeUUID, UploadImage } from '@surf/utils';
+import { useCallback, useState } from 'react';
 import { useImageUploader } from '@/entities/image/model/useImageUploader';
 
 type SingleImageState = UploadImage;

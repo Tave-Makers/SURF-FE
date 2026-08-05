@@ -74,13 +74,7 @@ async function buildResponse(upstream: Response, setCookies: string[]) {
 
   if (contentType.includes('application/json')) {
     const text = await upstream.text();
-
-    let parsed: unknown = null;
-    try {
-      parsed = text ? JSON.parse(text) : null;
-    } catch {
-      parsed = null;
-    }
+    const parsed = parseJson(text);
 
     const res = new NextResponse(text, {
       status: upstream.status,
@@ -116,4 +110,12 @@ function pickHeaders(upstream: Response): Record<string, string> {
   if (cc) headers['cache-control'] = cc;
   if (loc) headers['location'] = loc;
   return headers;
+}
+
+function parseJson(text: string): unknown {
+  try {
+    return text ? JSON.parse(text) : null;
+  } catch {
+    return null;
+  }
 }

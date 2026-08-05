@@ -1,12 +1,11 @@
+import { UploadFile, UploadImage } from '@surf/utils';
 import { useEffect } from 'react';
+import { usePostFormStore } from './usePostFormStore';
+import { PostScheduleData } from '@/entities/post/api/types';
 import { getCategoriesForBoard, type PostCategoryKey } from '@/entities/post/model/category';
-import { ScheduleCategory } from '@/entities/schedule/model/types';
+import { PostDetail } from '@/entities/post/model/types';
 import { PostFormState, PostPageMode } from '@/features/post/post-form/model/types';
 import { ScheduleFormData } from '@/features/schedule/create/model/types';
-import { PostDetail } from '@/entities/post/model/types';
-import { PostScheduleData } from '@/entities/post/api/types';
-import { UploadFile, UploadImage } from '@surf/utils';
-import { usePostFormStore } from './usePostFormStore';
 
 type PostFormActions = Pick<PostFormState, 'setField'>;
 
@@ -82,7 +81,7 @@ export const usePostInitialization = ({
         startDate: new Date(postSchedule.startAt),
         endDate: new Date(postSchedule.endAt),
         location: postSchedule.location ?? '미정',
-        category: mappedCategory as ScheduleCategory,
+        category: mappedCategory,
       };
     }
 

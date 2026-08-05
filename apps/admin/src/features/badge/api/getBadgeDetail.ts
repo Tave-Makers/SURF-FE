@@ -1,6 +1,6 @@
-import { axiosInstance } from '@/shared/lib/axiosInstance';
-import { CommonResponse } from '@/shared/api/types';
 import { BadgeResDto } from './types';
+import { CommonResponse } from '@/shared/api/types';
+import { axiosInstance } from '@/shared/lib/axiosInstance';
 
 export async function getBadgeDetail(badgeId: number) {
   const response = await axiosInstance.get<CommonResponse<BadgeResDto>>(

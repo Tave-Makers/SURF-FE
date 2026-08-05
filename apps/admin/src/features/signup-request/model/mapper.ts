@@ -1,5 +1,5 @@
-import { toMemberStatus, toMemberTrack } from '@/entities/member/model/mapper';
 import { SignupRequestItem } from '../api/types';
+import { toMemberStatus, toMemberTrack } from '@/entities/member/model/mapper';
 import { SignupRequestMember } from '@/entities/signup-request/model/types';
 
 export function toSignupRequestMemberList(data: SignupRequestItem[]): SignupRequestMember[] {

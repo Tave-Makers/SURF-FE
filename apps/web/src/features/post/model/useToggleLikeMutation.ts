@@ -1,8 +1,8 @@
 import { InfiniteData, useMutation, useQueryClient } from '@tanstack/react-query';
 import { toggleLike } from '../api/toggleLike';
-import { PostDetail } from '@/entities/post/model/types';
 import { postQueryKeys } from '@/entities/post/api/queryKeys';
 import { PostListApiResponse } from '@/entities/post/api/types';
+import { PostDetail } from '@/entities/post/model/types';
 
 export const useToggleLikeMutation = () => {
   const queryClient = useQueryClient();

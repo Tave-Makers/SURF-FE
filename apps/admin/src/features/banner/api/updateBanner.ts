@@ -1,5 +1,5 @@
-import { axiosInstance } from '@/shared/lib/axiosInstance';
 import { UpdateBannerRequest, UpdateBannerResponse } from './types';
+import { axiosInstance } from '@/shared/lib/axiosInstance';
 
 export async function updateBanner(bannerId: number, data: UpdateBannerRequest) {
   const response = await axiosInstance.put<UpdateBannerResponse>(

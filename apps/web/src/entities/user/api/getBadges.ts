@@ -1,5 +1,5 @@
-import { axiosInstance } from '@/shared/lib/axiosInstance';
 import type { BadgeApiResponse } from './types';
+import { axiosInstance } from '@/shared/lib/axiosInstance';
 
 export type GetBadgesParams = {
   memberId: number;

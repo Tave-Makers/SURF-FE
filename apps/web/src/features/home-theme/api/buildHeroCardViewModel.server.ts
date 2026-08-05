@@ -1,9 +1,9 @@
 import 'server-only';
+import { getTheme } from './getTheme.server';
 import type { ThemeItem } from './types';
 import type { HomeApiResponseData } from '@/entities/home/api/types';
-import type { HeroCardProps } from '@/features/home-theme/ui/hero-card/HeroCard';
 import { getCharacterKeyByPart, PART_LABEL } from '@/features/home-theme/model/mappers';
-import { getTheme } from './getTheme.server';
+import type { HeroCardProps } from '@/features/home-theme/ui/hero-card/HeroCard';
 
 export async function buildHeroCardViewModel(home: HomeApiResponseData): Promise<HeroCardProps> {
   const theme: ThemeItem = await getTheme();

@@ -1,5 +1,5 @@
-import type { CommonResponse } from '@/shared/api/types';
 import type { ServerUserLevel } from '../model/types';
+import type { CommonResponse } from '@/shared/api/types';
 
 // 프로필 API response 원본
 export type UserProfileApiResponse = CommonResponse<{

@@ -11,7 +11,7 @@ let browserQueryClient: QueryClient | undefined = undefined;
  * @returns QueryClient 인스턴스
  */
 
-export default function getQueryClient() {
+export function getQueryClient() {
   if (isServer) {
     return makeQueryClient();
   } else {

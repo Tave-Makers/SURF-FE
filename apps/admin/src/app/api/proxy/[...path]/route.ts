@@ -68,13 +68,7 @@ async function buildResponse(upstream: Response, setCookies: string[]) {
 
   if (contentType.includes('application/json')) {
     const text = await upstream.text();
-
-    let parsed: unknown = null;
-    try {
-      parsed = text ? JSON.parse(text) : null;
-    } catch {
-      parsed = null;
-    }
+    const parsed = parseJson(text);
 
     const res = new NextResponse(text, {
       status: upstream.status,
@@ -143,6 +137,14 @@ function getSetCookies(res: Response): string[] {
 
 function isRecord(v: unknown): v is Record<string, unknown> {
   return typeof v === 'object' && v !== null;
+}
+
+function parseJson(text: string): unknown {
+  try {
+    return text ? JSON.parse(text) : null;
+  } catch {
+    return null;
+  }
 }
 
 function parseSetCookie(cookie: string) {

@@ -1,6 +1,6 @@
-import { axiosInstance } from '@/shared/lib/axiosInstance';
 import type { UpdateProfileRequestDTO } from '@/entities/user/model/types';
 import type { CommonResponse } from '@/shared/api/types';
+import { axiosInstance } from '@/shared/lib/axiosInstance';
 
 export async function updateMyProfile(
   payload: UpdateProfileRequestDTO,

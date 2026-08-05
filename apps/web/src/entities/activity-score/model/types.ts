@@ -1,9 +1,9 @@
+import { ActivityType } from './meta';
 import { CommonResponse } from '@/shared/api/types';
 
 // =====================
 // 카드용 타입 (Summary)
 // =====================
-import { ActivityType } from './meta';
 
 /**
  * 단일 활동 요약

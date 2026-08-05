@@ -1,8 +1,8 @@
 'use client';
 
 import { useMutation, useQueryClient } from '@tanstack/react-query';
-import { memberQueryKeys } from '@/entities/member/model/queries/memberQueryKeys';
 import { expelMember } from '../api/expelMember';
+import { memberQueryKeys } from '@/entities/member/model/queries/memberQueryKeys';
 
 type ExpelMembersParams = {
   memberIds: number[];

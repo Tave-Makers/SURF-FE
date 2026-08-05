@@ -1,9 +1,9 @@
 'use client';
 
 import { useMutation, useQueryClient } from '@tanstack/react-query';
+import { updateMemberRole } from '../api/updateMemberRole';
 import { memberQueryKeys } from '@/entities/member/model/queries/memberQueryKeys';
 import type { Member, MemberBase, MemberRole } from '@/entities/member/model/types';
-import { updateMemberRole } from '../api/updateMemberRole';
 
 type UpdateMemberRoleParams = {
   memberId: number;

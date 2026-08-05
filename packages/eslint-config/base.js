@@ -1,4 +1,6 @@
 // @ts-check
+import path from 'node:path';
+
 import js from '@eslint/js';
 import globals from 'globals';
 import tseslint from 'typescript-eslint';
@@ -12,12 +14,18 @@ import { fixupPluginRules } from '@eslint/compat';
 /**
  * @param {{
  *  tsconfigRootDir: string,
+ *  project?: string | string[],
  *  react?: boolean,
  *  ignores?: string[]
  * }} opts
  */
 export function base(opts) {
-  const { tsconfigRootDir, react = false, ignores = [] } = opts ?? {};
+  const { tsconfigRootDir, project, react = false, ignores = [] } = opts ?? {};
+  const tsconfigProject = Array.isArray(project)
+    ? project.map((item) => path.resolve(tsconfigRootDir, item))
+    : project
+      ? path.resolve(tsconfigRootDir, project)
+      : undefined;
 
   const defaultIgnores = [
     '.next/',
@@ -55,8 +63,8 @@ export function base(opts) {
       languageOptions: {
         parser: tseslint.parser,
         parserOptions: {
-          projectService: true,
           tsconfigRootDir,
+          ...(tsconfigProject ? { project: tsconfigProject } : { projectService: true }),
         },
       },
     },
@@ -94,7 +102,7 @@ export function base(opts) {
       settings: {
         'import-x/resolver-next': [
           createTypeScriptImportResolver({
-            project: tsconfigRootDir,
+            project: tsconfigProject ?? tsconfigRootDir,
           }),
         ],
       },
@@ -138,8 +146,11 @@ export function base(opts) {
       files: [
         '**/pages/**/*.{ts,tsx,js,jsx}',
         '**/app/**/{page,layout,template,default,loading,error,not-found,route}.{ts,tsx,js,jsx}',
+        '**/app-pages/**/*.{ts,tsx,js,jsx}',
         '**/*.stories.{ts,tsx,js,jsx}',
         '**/*.config.{js,mjs,ts}',
+        '**/src/test/**/*.{ts,tsx}',
+        '**/*.test.{ts,tsx}',
       ],
       rules: { 'import-x/no-default-export': 'off' },
     },

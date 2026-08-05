@@ -1,7 +1,7 @@
 import { useMutation, useQueryClient } from '@tanstack/react-query';
+import { badgeQueryKeys } from './queryKeys';
 import { removeBadgeMembers } from '@/features/badge/api/removeBadgeMember';
 import { RemoveBadgeMembersRequest } from '@/features/badge/api/types';
-import { badgeQueryKeys } from './queryKeys';
 
 export const useRemoveBadgeMembersMutation = (badgeId?: number) => {
   const queryClient = useQueryClient();

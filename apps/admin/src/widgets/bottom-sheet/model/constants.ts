@@ -1,3 +1,4 @@
+import { ComponentType } from 'react';
 import { CohortSelectBottomSheet } from '@/features/active-cohort/ui/CohortSelectBottomSheet';
 import { GenerationBottomSheet } from '@/features/group-management/ui/GenerationBottomSheet';
 import { GroupTypeBottomSheet } from '@/features/group-management/ui/GroupTypeBottomSheet';
@@ -5,7 +6,6 @@ import { PickLeaderBottomSheet } from '@/features/group-management/ui/PickLeader
 import { SignupRequestBottomSheet } from '@/features/signup-request/ui/SignupRequestBottomSheet';
 import type { BottomSheetMap, BottomSheetType } from '@/shared/store/bottomSheetStore';
 import { MemberManagementSheet } from '@/widgets/member-management-sheet/MemberManagementSheet';
-import { ComponentType } from 'react';
 
 type BottomSheetComponents = {
   [K in BottomSheetType]: ComponentType<

@@ -1,4 +1,3 @@
-import { axiosInstance } from '@/shared/lib/axiosInstance';
 import {
   GenerationListResDTO,
   GenerationListResponse,
@@ -6,6 +5,7 @@ import {
   MemberSearchRequestDTO,
   MemberSearchResponse,
 } from './types';
+import { axiosInstance } from '@/shared/lib/axiosInstance';
 
 export const memberSearchApi = {
   async memberSearch(params: MemberSearchRequestDTO): Promise<MemberSearchResponse> {

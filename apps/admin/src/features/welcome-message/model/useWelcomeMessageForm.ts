@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
-import { useWelcomeMessageQuery } from './queries/useWelcomeMessageQuery';
 import { useUpdateWelcomeMessageMutation } from './queries/useUpdateWelcomeMessageMutation';
+import { useWelcomeMessageQuery } from './queries/useWelcomeMessageQuery';
 
 /**
  * 웰컴 메시지 조회·수정 페이지의 상태와 액션을 관리하는 훅.

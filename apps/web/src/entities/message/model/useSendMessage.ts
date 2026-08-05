@@ -1,6 +1,6 @@
 import { useMutation, useQueryClient } from '@tanstack/react-query';
-import { notificationKeys } from '@/entities/notification/model/queryKeys';
 import { sendMessage } from '../api/sendMessage';
+import { notificationKeys } from '@/entities/notification/model/queryKeys';
 
 export const useSendMessage = () => {
   const queryClient = useQueryClient();

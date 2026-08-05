@@ -1,5 +1,5 @@
-import { axiosInstance } from '@/shared/lib/axiosInstance';
 import { SignupRequestListResponse, SignupRequestListParams, SignupRequestListData } from './types';
+import { axiosInstance } from '@/shared/lib/axiosInstance';
 
 /**
  * 가입 신청 목록 조회 API

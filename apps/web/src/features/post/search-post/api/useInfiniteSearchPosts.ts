@@ -1,9 +1,9 @@
 'use client';
 
 import { useInfiniteQuery } from '@tanstack/react-query';
-import { axiosInstance } from '@/shared/lib/axiosInstance';
-import type { CommonResponse } from '@/shared/api/types';
 import { PostListItemResponse } from '@/entities/post/api/types';
+import type { CommonResponse } from '@/shared/api/types';
+import { axiosInstance } from '@/shared/lib/axiosInstance';
 
 type PageData = {
   content: PostListItemResponse[];

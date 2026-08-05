@@ -1,6 +1,5 @@
-import { axiosInstance } from '@/shared/lib/axiosInstance';
-
 import { MemberListDTO, MemberListParams, MemberListResponse } from './types';
+import { axiosInstance } from '@/shared/lib/axiosInstance';
 
 /**
  * 기수별 승인 멤버 목록을 페이지 단위로 조회합니다.

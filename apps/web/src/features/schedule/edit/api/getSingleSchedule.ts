@@ -1,6 +1,6 @@
-import { axiosInstance } from '@/shared/lib/axiosInstance';
 import { SingleScheduleResponse, SingleSchedule } from './types';
 import { getValidCategory } from '@/entities/schedule/model/constants';
+import { axiosInstance } from '@/shared/lib/axiosInstance';
 
 export const getSingleSchedule = async (scheduleId: number): Promise<SingleSchedule> => {
   try {

@@ -1,5 +1,5 @@
-import { PostCategoryKey } from '@/entities/post/model/category';
 import { UploadFile, UploadImage } from '@surf/utils';
+import { PostCategoryKey } from '@/entities/post/model/category';
 import { ScheduleFormData } from '@/features/schedule/create/model/types';
 
 export type PostPageMode = 'create' | 'edit';

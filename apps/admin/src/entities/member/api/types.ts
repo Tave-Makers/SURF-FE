@@ -1,6 +1,6 @@
+import { MemberRole, TrackPart } from '../model/types';
 import { CommonResponse } from '@/shared/api/types';
 import { Nullable } from '@/shared/types/nullable';
-import { MemberRole, TrackPart } from '../model/types';
 
 /**
  * 트랙 정보

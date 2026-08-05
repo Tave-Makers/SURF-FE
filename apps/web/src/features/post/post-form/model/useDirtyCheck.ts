@@ -1,8 +1,8 @@
 import { useCallback } from 'react';
-import { stripHtml } from '@/shared/lib/stripHtml';
-import { isSameSchedule } from '@/features/schedule/lib/scheduleUtils';
 import { usePostFormStore } from './usePostFormStore';
 import { useCreatePostScheduleStore } from '@/features/schedule/create-post-schedule/model/useCreatePostScheduleStore';
+import { isSameSchedule } from '@/features/schedule/lib/scheduleUtils';
+import { stripHtml } from '@/shared/lib/stripHtml';
 
 export const usePostDirtyCheck = () => {
   const { title, category, content, images, files, initialSnapshot, reserved, reservedAt } =
@@ -46,16 +46,13 @@ export const usePostDirtyCheck = () => {
     const isReservationChanged = isReservedToggleChanged || currentTime !== initTime;
 
     // 3. 일정 정보 비교 (유틸 함수 사용)
-    let isScheduleChanged = false;
     const initialSchedule = initialSnapshot.initialSchedule;
-
-    if (!linkedSchedule && !initialSchedule) {
-      isScheduleChanged = false;
-    } else if (!linkedSchedule || !initialSchedule) {
-      isScheduleChanged = true;
-    } else {
-      isScheduleChanged = !isSameSchedule(linkedSchedule, initialSchedule);
-    }
+    const isScheduleChanged =
+      !linkedSchedule && !initialSchedule
+        ? false
+        : !linkedSchedule || !initialSchedule
+          ? true
+          : !isSameSchedule(linkedSchedule, initialSchedule);
 
     return {
       hasChanges:

@@ -18,7 +18,6 @@ import { useGroupFormStore } from '@/features/group-management/model/useGroupFor
 
 import type { GroupFormDraft } from '@/features/group-management/model/useGroupFormStore';
 import { PAGE_ROUTES } from '@/shared/config/path';
-import type { ContentsType } from '@/shared/types/contents';
 import type { GroupManagementMode } from '@/widgets/group-management/model/types';
 import { useMemberGenerationListQuery } from '@/widgets/member-directory/model/queries/useMemberGenerationListQuery';
 
@@ -94,7 +93,7 @@ export const useController = ({ mode, id, router, searchParams }: Params) => {
   const initialDraft = useMemo(
     () => ({
       generation: groupDetail?.generation ?? maxGeneration,
-      groupType: groupDetail?.groupType ?? ('study' as ContentsType),
+      groupType: groupDetail?.groupType ?? 'study',
       groupName: groupDetail?.groupName ?? '',
       groupIntroduction: groupDetail?.groupIntroduction ?? '',
       leader: groupDetail?.leader,
@@ -133,7 +132,7 @@ export const useController = ({ mode, id, router, searchParams }: Params) => {
 
   const safeDraft: GroupFormDraft = draft ?? {
     generation: maxGeneration,
-    groupType: 'study' as ContentsType,
+    groupType: 'study',
     groupName: '',
     groupIntroduction: '',
     leader: undefined,

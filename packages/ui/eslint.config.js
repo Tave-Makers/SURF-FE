@@ -1,7 +1,11 @@
 import { base } from '@surf/eslint-config/base';
 
 export default [
-  ...base({ tsconfigRootDir: import.meta.dirname, react: true }),
+  ...base({
+    tsconfigRootDir: import.meta.dirname,
+    project: './tsconfig.eslint.json',
+    react: true,
+  }),
   // stories 파일 룰 완화
   {
     files: ['**/*.stories.{ts,tsx,js,jsx}'],
@@ -10,6 +14,12 @@ export default [
       'react-hooks/exhaustive-deps': 'off',
       'import-x/order': 'off',
       'react/function-component-definition': 'off',
+    },
+  },
+  {
+    files: ['.storybook/**/*.{ts,tsx,js,jsx}', 'types/assets.d.ts'],
+    rules: {
+      'import-x/no-default-export': 'off',
     },
   },
 ];

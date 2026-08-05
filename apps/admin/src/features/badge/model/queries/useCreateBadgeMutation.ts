@@ -1,9 +1,8 @@
 import { useMutation } from '@tanstack/react-query';
+import { CreateBadgeInput } from '../types';
 import { createBadge } from '@/features/badge/api/createBadge';
 
 import { mapCreateBadgeInputToRequest } from '@/features/badge/model/mapper';
-
-import { CreateBadgeInput } from '../types';
 
 export const useCreateBadgeMutation = () => {
   return useMutation({

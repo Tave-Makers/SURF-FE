@@ -1,6 +1,6 @@
-import { axiosInstance } from '@/shared/lib/axiosInstance';
-import { CommonResponse } from '@/shared/api/types';
 import { RemoveBadgeMembersRequest } from './types';
+import { CommonResponse } from '@/shared/api/types';
+import { axiosInstance } from '@/shared/lib/axiosInstance';
 
 export async function removeBadgeMembers(badgeId: number, data: RemoveBadgeMembersRequest) {
   const response = await axiosInstance.delete<CommonResponse<null>>(

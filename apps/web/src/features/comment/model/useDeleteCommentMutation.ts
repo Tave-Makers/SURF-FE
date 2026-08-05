@@ -9,6 +9,10 @@ const isInfiniteData = (
   return 'pages' in data && Array.isArray(data.pages);
 };
 
+type PostCommentCountFields = {
+  commentCount: number;
+};
+
 export function useDeleteCommentMutation(postId: number) {
   const queryClient = useQueryClient();
   const baseKey = ['comments', postId, 'list'] as const;
@@ -20,11 +24,17 @@ export function useDeleteCommentMutation(postId: number) {
     mutationFn: (commentId: number) => deleteComment(postId, commentId),
 
     onMutate: async (commentId) => {
+      const detailKey = postQueryKeys.detail(postId);
+
       await queryClient.cancelQueries({ queryKey: baseKey });
+      await queryClient.cancelQueries({ queryKey: detailKey });
+      await queryClient.cancelQueries({ queryKey: postQueryKeys.lists() });
 
       const previousAll = queryClient.getQueriesData<
         CommentListResponse | InfiniteData<CommentListResponse>
       >({ queryKey: baseKey });
+      const previousDetail = queryClient.getQueryData<PostCommentCountFields>(detailKey);
+      let didRemoveComment = false;
 
       queryClient.setQueriesData<CommentListResponse | InfiniteData<CommentListResponse>>(
         { queryKey: baseKey },
@@ -37,6 +47,7 @@ export function useDeleteCommentMutation(postId: number) {
               pageData.comments.some((c) => c.id === commentId),
             );
             if (!hasComment) return data;
+            didRemoveComment = true;
 
             return {
               ...data,
@@ -54,6 +65,7 @@ export function useDeleteCommentMutation(postId: number) {
             const data = old;
             const existed = data.comments.some((c) => c.id === commentId);
             if (!existed) return data;
+            didRemoveComment = true;
             return {
               ...data,
               comments: removeComment(data.comments, commentId),
@@ -64,7 +76,17 @@ export function useDeleteCommentMutation(postId: number) {
         },
       );
 
-      return { previousAll };
+      if (didRemoveComment) {
+        queryClient.setQueryData<PostCommentCountFields>(detailKey, (old) => {
+          if (!old) return old;
+          return {
+            ...old,
+            commentCount: Math.max(0, old.commentCount - 1),
+          };
+        });
+      }
+
+      return { previousAll, previousDetail };
     },
 
     onError: (_err, _vars, ctx) => {
@@ -74,11 +96,14 @@ export function useDeleteCommentMutation(postId: number) {
           queryClient.setQueryData(key, data);
         });
       }
+      if (ctx?.previousDetail) {
+        queryClient.setQueryData(postQueryKeys.detail(postId), ctx.previousDetail);
+      }
     },
 
     onSettled: async () => {
       await queryClient.invalidateQueries({ queryKey: baseKey });
-      await queryClient.invalidateQueries({ queryKey: postQueryKeys.lists() });
+      void queryClient.invalidateQueries({ queryKey: postQueryKeys.lists() });
       await queryClient.invalidateQueries({ queryKey: postQueryKeys.detail(postId) });
     },
   });

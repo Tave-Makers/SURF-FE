@@ -7,7 +7,7 @@ import { useEffect, useRef, useState } from 'react';
 import HeaderLogo from '../../../../public/header-logo.svg';
 import { useGetHome } from '@/entities/home/api/useGetHome';
 import { TAVE_CHANNEL_LINKS, SPONSOR_LINKS, SHORTCUT_LINKS } from '@/entities/home/model/constants';
-import { useGetNotifications } from '@/entities/notification/model/useGetNotifications';
+import { useHasUnreadNotifications } from '@/entities/notification/model/useHasUnreadNotifications';
 import { AnnouncementBar } from '@/entities/schedule/ui/announcement-bar/AnnouncementBar';
 import type { HeroCardProps } from '@/features/home-theme/ui/hero-card/HeroCard';
 import { HeroCard } from '@/features/home-theme/ui/hero-card/HeroCard';
@@ -28,8 +28,7 @@ export const HomePageClient = ({ heroProps }: { heroProps: HeroCardProps }) => {
   const { data: homeData } = useGetHome();
   const deepLink = homeData?.announcementDeepLink ?? '';
 
-  const { data: notifications } = useGetNotifications('ALL');
-  const hasUnread = notifications?.some((noti) => !noti.isRead);
+  const { data: hasUnread } = useHasUnreadNotifications();
 
   const carouselImages = (() => {
     const normalized = (homeData?.carouselImages ?? [])

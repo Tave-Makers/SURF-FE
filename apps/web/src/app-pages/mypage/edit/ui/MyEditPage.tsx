@@ -27,7 +27,9 @@ export const MyEditPage = ({ initialProfile }: Props) => {
   const closeAlert = useAlertStore((s) => s.close);
 
   const openExitAlert = useCallback(
-    (onConfirm: () => void) => {
+    (onConfirm: () => void, options?: { leavesPage?: boolean }) => {
+      const leavesPage = options?.leavesPage ?? true;
+
       openAlert({
         state: 'default',
         title: '정말 나가시겠습니까?',
@@ -39,7 +41,8 @@ export const MyEditPage = ({ initialProfile }: Props) => {
             label: '나가기',
             variant: 'primary',
             onClick: () => {
-              closeAlert({ restoreFocus: false });
+              // 현재 문서를 유지하는 경로(예: _blank)에서는 포커스를 복원한다
+              closeAlert(leavesPage ? { restoreFocus: false } : undefined);
               onConfirm();
             },
           },
@@ -101,17 +104,20 @@ export const MyEditPage = ({ initialProfile }: Props) => {
 
       const linkTarget = anchor.getAttribute('target');
       event.preventDefault();
-      openExitAlert(() => {
-        if (linkTarget === '_blank') {
-          window.open(href, '_blank', 'noopener,noreferrer');
-          return;
-        }
-        if (href.startsWith('http')) {
-          window.location.assign(href);
-          return;
-        }
-        router.push(href);
-      });
+      openExitAlert(
+        () => {
+          if (linkTarget === '_blank') {
+            window.open(href, '_blank', 'noopener,noreferrer');
+            return;
+          }
+          if (href.startsWith('http')) {
+            window.location.assign(href);
+            return;
+          }
+          router.push(href);
+        },
+        { leavesPage: linkTarget !== '_blank' },
+      );
     };
 
     window.addEventListener('beforeunload', handleBeforeUnload);

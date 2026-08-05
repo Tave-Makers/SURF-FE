@@ -1,6 +1,6 @@
 import { SurfIcon } from '@surf/ui/icon';
 import { MentionTextInput } from '@surf/ui/text-input';
-import { forwardRef, useRef, useImperativeHandle } from 'react';
+import { forwardRef, useRef, useImperativeHandle, type KeyboardEventHandler } from 'react';
 
 /**
  * 범용 메시지 입력 및 전송 컴포넌트
@@ -31,25 +31,43 @@ interface ActionBarProps {
   placeholder?: string;
   onSend?: (val: string) => void | boolean | Promise<void | boolean>;
   focusAfterSend?: boolean;
+  disabled?: boolean;
+  onKeyDown?: KeyboardEventHandler<HTMLTextAreaElement>;
 }
 
 export const ActionBar = forwardRef<HTMLTextAreaElement, ActionBarProps>(
-  ({ value, defaultValue, onChange, placeholder, onSend, focusAfterSend = true }, ref) => {
+  (
+    {
+      value,
+      defaultValue,
+      onChange,
+      placeholder,
+      onSend,
+      focusAfterSend = true,
+      disabled,
+      onKeyDown,
+    },
+    ref,
+  ) => {
     const internalRef = useRef<HTMLTextAreaElement>(null);
+    const isSendingRef = useRef(false);
     useImperativeHandle(ref, () => internalRef.current as HTMLTextAreaElement);
 
     /** 메시지 전송 및 입력 초기화 */
     const runSend = async () => {
       const rawValue = internalRef.current?.value ?? '';
       const trimmedValue = rawValue.trim();
-      if (!trimmedValue) return;
+      if (disabled || isSendingRef.current || !trimmedValue) return;
 
       try {
+        isSendingRef.current = true;
         const result = await onSend?.(trimmedValue);
         if (result === false) return;
       } catch (error) {
         console.error('[ActionBar] onSend failed:', error);
         return;
+      } finally {
+        isSendingRef.current = false;
       }
 
       // 전송 후 입력 초기화
@@ -81,11 +99,14 @@ export const ActionBar = forwardRef<HTMLTextAreaElement, ActionBarProps>(
           onChange={onChange}
           placeholder={placeholder}
           onEnter={handleSend}
+          disabled={disabled}
+          onKeyDown={onKeyDown}
         />
         <button
           type="button"
           onClick={handleSend}
-          className="bg-background-primary hover:bg-background-primary-darker rounded-max group flex h-[2.25rem] w-[2.25rem] shrink-0 items-center justify-center self-end p-7"
+          disabled={disabled}
+          className="bg-background-primary hover:bg-background-primary-darker rounded-max group flex h-[2.25rem] w-[2.25rem] shrink-0 items-center justify-center self-end p-7 disabled:cursor-not-allowed disabled:opacity-50"
         >
           <SurfIcon
             name="ArrowUp"

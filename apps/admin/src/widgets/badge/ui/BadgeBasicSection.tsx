@@ -38,7 +38,7 @@ export const BadgeBasicSection = ({
   return (
     <>
       {/* 배지 이미지 표시/수정 영역 */}
-      <FieldGroup title="뱃지 이미지 등록" className="px-13">
+      <FieldGroup title="배지 이미지 등록" className="px-13">
         {isEdit && onSelectFile ? (
           <ImgUploader
             mode="edit"
@@ -65,7 +65,7 @@ export const BadgeBasicSection = ({
       </FieldGroup>
 
       {/* 배지 이름 표시/수정 영역 */}
-      <FieldGroup title="뱃지 이름" className="px-13">
+      <FieldGroup title="배지 이름" className="px-13">
         {isEdit && onChangeName ? (
           <TextArea
             mode="oneLine"

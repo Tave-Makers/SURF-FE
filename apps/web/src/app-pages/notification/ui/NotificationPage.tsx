@@ -80,8 +80,9 @@ export const NotificationPage = () => {
     // 서버가 'board/2/post/56' 처럼 선행 슬래시 없이 내려주므로 절대경로로 보정
     if (deepLink) {
       const path = deepLink.startsWith('/') ? deepLink : `/${deepLink}`;
-      const separator = path.includes('?') ? '&' : '?';
-      router.push(`${path}${separator}from=notification`);
+      const url = new URL(path, window.location.origin);
+      url.searchParams.set('from', 'notification');
+      router.push(`${url.pathname}${url.search}${url.hash}`);
     }
   };
 

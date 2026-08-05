@@ -16,7 +16,7 @@ import ActivityBadgeEmpty from '@/shared/assets/icons/empty-space/activity-badge
 // );
 
 interface Props {
-  memberId?: number; // 없으면 내 뱃지
+  memberId?: number; // 없으면 내 배지
 }
 
 export const ProfileBadge = ({ memberId }: Props) => {
@@ -35,7 +35,7 @@ export const ProfileBadge = ({ memberId }: Props) => {
   return (
     <section className="flex flex-col gap-16 px-13 py-13 pt-16">
       <div className="flex flex-col gap-10">
-        <h2 className="text-title-title2 text-foreground-normal">활동 뱃지</h2>
+        <h2 className="text-title-title2 text-foreground-normal">활동 배지</h2>
         {!isWaitingMemberId && !isLoading ? (
           <>
             {badges.length > 0 ? (
@@ -54,7 +54,7 @@ export const ProfileBadge = ({ memberId }: Props) => {
               <div className="flex flex-col items-center gap-3 py-16">
                 <ActivityBadgeEmpty aria-hidden="true" />
                 <span className="text-body-body8 text-foreground-tertiary">
-                  부여받은 활동 뱃지가 없어요
+                  부여받은 활동 배지가 없어요
                 </span>
               </div>
             )}

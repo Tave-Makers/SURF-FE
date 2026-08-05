@@ -197,8 +197,7 @@ const PostPage = (props: PostPageProps) => {
           variant: 'danger',
           onClick: () => {
             closeExitAlert({ restoreFocus: false });
-            resetPostState();
-            router.back();
+            navigateOut();
           },
         },
       ],

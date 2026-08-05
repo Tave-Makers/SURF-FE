@@ -23,7 +23,9 @@ export const useIntegrateAccount = () => {
   return useMutation({
     mutationFn: (integrationToken: string) => integrateAccount({ integrationToken }),
     onSuccess: () => {
-      closeBottomSheet();
+      if (useBottomSheetStore.getState().current?.type === 'accountIntegration') {
+        closeBottomSheet();
+      }
 
       openAlert({
         state: 'default',
@@ -43,8 +45,6 @@ export const useIntegrateAccount = () => {
       });
     },
     onError: (error) => {
-      // 서버 메시지는 원인을 일부러 감추도록 설계돼 있고(계정 정보 유추 방지)
-      // 사용자에게 그대로 노출할 문구가 아니므로, 콘솔에만 남기고 화면에는 자체 문구를 쓴다.
       console.error('계정 통합 실패:', error);
 
       openAlert({

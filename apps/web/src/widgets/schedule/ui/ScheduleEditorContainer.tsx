@@ -171,7 +171,7 @@ export const ScheduleEditorContainer = ({ entryPoint }: Props) => {
             label: '나가기',
             variant: 'danger',
             onClick: () => {
-              closeAlert();
+              closeAlert({ restoreFocus: false });
               router.back();
             },
           },

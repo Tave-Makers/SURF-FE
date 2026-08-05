@@ -45,7 +45,7 @@ export const MentionTextInput = forwardRef<HTMLTextAreaElement, TextInputProps>(
         {/* 강조 레이어 */}
         <div
           aria-hidden="true"
-          className="text-body-body6 pointer-events-none absolute inset-0 z-0 whitespace-pre-wrap break-words py-7 pl-11 pr-8"
+          className="text-body-body7 pointer-events-none absolute inset-0 z-0 whitespace-pre-wrap break-words py-7 pl-11 pr-8"
           style={{ color: 'transparent' }}
         >
           {mentionedText(currentValue)}

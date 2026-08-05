@@ -187,7 +187,7 @@ export const useBadgeEditForm = (
       state: 'default',
       title: '삭제하시겠습니까?',
       infoText:
-        '삭제하기 버튼을 누를 시, 해당 뱃지 데이터와 함께 부여된 회원들의 뱃지 목록에서도 해당 뱃지가 삭제됩니다.',
+        '삭제하기 버튼을 누를 시, 해당 배지 데이터와 함께 부여된 회원들의 배지 목록에서도 해당 배지가 삭제됩니다.',
       actions: [
         { type: 'solid', variant: 'secondary', label: '취소', onClick: closeAlert },
         {

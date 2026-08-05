@@ -21,6 +21,8 @@ import { useBottomSheetStore } from '@/shared/store/bottomSheetStore';
  * @param onClickCard - 카드 전체 클릭 시 호출되는 콜백 함수 (공지사항 바로가기)
  * @param onDeleteSchedule - 일정 삭제 클릭 시 호출되는 콜백 함수 (공지사항 작성 시 삭제하는 콜백 함수)
  * @param mode - 이벤트 카드 모드 (EventCardType: 'reservation', 'calendar' 중 하나)
+ * @param showNoticeLink - 공지사항 바로가기 노출 여부
+ * @param noticeLinkLabel - 바로가기 문구
  */
 export type EventCardProps = {
   category: ScheduleCategory;
@@ -35,6 +37,8 @@ export type EventCardProps = {
   onClickCard?: () => void;
   onDeleteSchedule?: () => void;
   mode?: EventCardType;
+  showNoticeLink?: boolean;
+  noticeLinkLabel?: string;
 };
 
 export const EventCard = ({
@@ -50,6 +54,8 @@ export const EventCard = ({
   onDeleteSchedule,
   mode,
   postId,
+  showNoticeLink: shouldShowNoticeLink,
+  noticeLinkLabel = '공지사항 바로가기',
 }: EventCardProps) => {
   const openBottomSheet = useBottomSheetStore((s) => s.open);
 
@@ -66,8 +72,8 @@ export const EventCard = ({
     }
   };
 
-  // 캘린더 화면에서 공지사항 바로가기 노출 여부
-  const showNoticeLink = mode === 'calendar' && hasNotice && postId !== undefined;
+  const showNoticeLink =
+    shouldShowNoticeLink ?? (mode === 'calendar' && hasNotice && postId !== undefined);
 
   // 시작일/종료일 포맷팅
   const formattedStartDate = formatScheduleDate(startDate);
@@ -98,7 +104,7 @@ export const EventCard = ({
             {showNoticeLink && (
               <div className="flex h-[1.18rem] cursor-pointer flex-row items-center gap-3">
                 <span className="text-caption-caption5 text-foreground-tertiary">
-                  공지사항 바로가기
+                  {noticeLinkLabel}
                 </span>
                 <div className="relative flex items-center justify-center">
                   <SurfIcon size="s" name="ChevronRight" className="text-foreground-tertiary" />

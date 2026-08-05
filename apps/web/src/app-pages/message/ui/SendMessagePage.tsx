@@ -66,7 +66,7 @@ export const SendMessagePage = () => {
           label: '나가기',
           onClick: () => {
             trackMessageEvent(MESSAGE_EVENTS.LEAVE_CONFIRM, { action: 'exit' });
-            closeAlert();
+            closeAlert({ restoreFocus: false });
             router.back();
           },
         },
@@ -89,7 +89,7 @@ export const SendMessagePage = () => {
       {
         onSuccess: () => {
           showToast('상대방의 이메일로 쪽지가 발송되었습니다.');
-          closeAlert();
+          closeAlert({ restoreFocus: false });
           router.back();
           trackMessageEvent(MESSAGE_EVENTS.LETTER_SEND, { success: true });
         },

@@ -26,7 +26,7 @@ export type UserProfileApiResponse = CommonResponse<{
   }>;
 }>;
 
-// 활동뱃지
+// 활동 배지
 export type BadgeItemDTO = {
   badgeId: number;
   badgeName: string;

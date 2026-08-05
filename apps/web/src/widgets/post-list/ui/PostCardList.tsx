@@ -64,7 +64,7 @@ const PostCardListComponent = ({
   }
 
   return (
-    <div className="flex flex-1 flex-col">
+    <div className="divide-border-normal flex flex-1 flex-col divide-y">
       {posts.map((post) => (
         <PostCard
           key={post.postId}

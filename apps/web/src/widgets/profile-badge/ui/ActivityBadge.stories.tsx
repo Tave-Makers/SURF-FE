@@ -13,14 +13,14 @@ type Story = StoryObj<typeof meta>;
 
 export const Default: Story = {
   args: {
-    badgeName: '17기 환영 뱃지',
+    badgeName: '17기 환영 배지',
     timestamp: '2026-06-30',
   },
 };
 
 export const Loading: Story = {
   args: {
-    badgeName: '17기 환영 뱃지',
+    badgeName: '17기 환영 배지',
     loading: true,
   },
 };
@@ -40,7 +40,7 @@ export const Many: Story = {
 
 export const Scaled: Story = {
   args: {
-    badgeName: '17기 환영 뱃지',
+    badgeName: '17기 환영 배지',
     timestamp: '2026-06-30',
     scale: 1.2,
   },

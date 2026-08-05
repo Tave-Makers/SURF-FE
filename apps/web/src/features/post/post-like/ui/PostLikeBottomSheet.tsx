@@ -37,7 +37,13 @@ export const PostLikeBottomSheet = ({
 
   return (
     <ModalSheet isOpen={isOpen} onClose={onClose}>
-      <ModalSheet.Container className="!right-0 !left-0 mx-auto w-full sm:max-w-[min(100dvw,calc(100dvh*375/812))]">
+      <ModalSheet.Container className="relative !right-0 !left-0 mx-auto w-full sm:max-w-[min(100dvw,calc(100dvh*375/812))]">
+        <ModalSheet.Header
+          unstyled
+          className="absolute top-0 right-0 left-0 z-10 h-[2.5rem] cursor-grab active:cursor-grabbing"
+        >
+          <div className="h-full w-full" aria-hidden="true" />
+        </ModalSheet.Header>
         <ModalSheet.Content>
           <Sheet title="좋아요를 누른 사람">
             <div className="flex flex-col pt-12">

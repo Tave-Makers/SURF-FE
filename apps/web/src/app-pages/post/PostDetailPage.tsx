@@ -122,7 +122,7 @@ const PostDetailPage = ({ postId }: PostDetailPageProps) => {
     trackPostDetailEvent(POST_DETAIL_EVENTS.CLICK_POST_DELETE, { post_id: numericPostId });
     deletePostMutate(numericPostId, {
       onSuccess: () => {
-        closeAlert();
+        closeAlert({ restoreFocus: false });
         router.back();
         showToast('게시글이 삭제되었습니다.');
       },
@@ -210,6 +210,12 @@ const PostDetailPage = ({ postId }: PostDetailPageProps) => {
                 postId={numericPostId}
                 memberId={memberId ?? undefined}
                 scrollRootRef={scrollRootRef}
+                isInteractionDisabled={post.isReserved}
+                emptyMessage={
+                  post.isReserved
+                    ? '예약 게시물에는 댓글을 남길 수 없어요'
+                    : '첫 댓글을 남겨보세요!'
+                }
                 onStartReply={handleStartReply}
               />
             </div>
@@ -217,12 +223,14 @@ const PostDetailPage = ({ postId }: PostDetailPageProps) => {
         </div>
 
         {/* 댓글 입력창 */}
-        <CommentComposer
-          postId={numericPostId}
-          keyboardOffset={keyboardOffset}
-          pendingReply={pendingReply}
-          onConsumedReply={handleConsumedReply}
-        />
+        {!post.isReserved && (
+          <CommentComposer
+            postId={numericPostId}
+            keyboardOffset={keyboardOffset}
+            pendingReply={pendingReply}
+            onConsumedReply={handleConsumedReply}
+          />
+        )}
       </div>
     </div>
   );

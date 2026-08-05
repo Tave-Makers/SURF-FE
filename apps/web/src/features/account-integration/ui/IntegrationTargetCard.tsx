@@ -3,7 +3,7 @@
 import { Avatar } from '@surf/ui/avatar';
 import { InfoBadge } from '@surf/ui/info-badge';
 import type { IntegrationTarget } from '../model/types';
-import { useDynamicVisibleCount } from '@/entities/search/model/useDynamicVisibleCount';
+import { useDynamicVisibleCount } from '@/shared/hooks/useDynamicVisibleCount';
 
 interface IntegrationTargetCardProps {
   target: IntegrationTarget;

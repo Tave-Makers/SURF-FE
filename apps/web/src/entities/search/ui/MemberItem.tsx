@@ -1,8 +1,8 @@
 import { Avatar } from '@surf/ui/avatar';
 import { InfoBadge } from '@surf/ui/info-badge';
 import { MemberSearchItem } from '../model/types';
-import { useDynamicVisibleCount } from '../model/useDynamicVisibleCount';
 import { USER_LEVEL_BADGE } from '@/entities/user/ui/user-level/UserLevelBadges';
+import { useDynamicVisibleCount } from '@/shared/hooks/useDynamicVisibleCount';
 
 interface MemberItemProps {
   user: MemberSearchItem;

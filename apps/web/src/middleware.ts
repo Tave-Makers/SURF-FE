@@ -50,7 +50,21 @@ function redirectToLogin(req: NextRequest) {
 function buildRefreshUrl(): string | null {
   const base = process.env.API_BASE_URL?.replace(/\/+$/, '');
   if (!base) return null;
-  return `${base}${AUTH_REFRESH_PATH}`;
+
+  let url: URL;
+  try {
+    url = new URL(`${base}${AUTH_REFRESH_PATH}`);
+  } catch {
+    console.error('[Auth] API_BASE_URL이 올바른 URL 형식이 아닙니다');
+    return null;
+  }
+
+  if (process.env.NODE_ENV === 'production' && url.protocol !== 'https:') {
+    console.error('[Auth] 프로덕션에서는 refresh 요청에 https만 허용합니다');
+    return null;
+  }
+
+  return url.toString();
 }
 
 /** 갱신된 AT 를 현재 요청에도 반영해서 서버 컴포넌트(dal.ts)가 새 토큰을 보게 한다 */
@@ -67,7 +81,7 @@ function buildForwardedCookieHeader(req: NextRequest, accessToken: string): stri
 async function refreshSession(req: NextRequest): Promise<NextResponse | null> {
   const url = buildRefreshUrl();
   if (!url) {
-    console.error('[Auth] API_BASE_URL is not configured');
+    // 구체적인 사유는 buildRefreshUrl 내부에서 이미 로깅됨
     return null;
   }
 
@@ -79,6 +93,7 @@ async function refreshSession(req: NextRequest): Promise<NextResponse | null> {
     upstream = await fetch(url, {
       method: 'POST',
       cache: 'no-store',
+      redirect: 'error',
       signal: controller.signal,
       headers: {
         'X-Client-Type': 'WEB',

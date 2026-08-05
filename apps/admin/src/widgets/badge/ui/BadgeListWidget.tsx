@@ -32,7 +32,7 @@ export const BadgeListWidget = () => {
   if (badges.length === 0) {
     return (
       <div className="flex flex-1 items-center justify-center px-13">
-        <p className="text-body-body8 text-foreground-tertiary">등록된 뱃지가 없어요.</p>
+        <p className="text-body-body8 text-foreground-tertiary">등록된 배지가 없어요.</p>
       </div>
     );
   }

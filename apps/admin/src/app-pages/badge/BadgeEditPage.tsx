@@ -19,7 +19,7 @@ export const BadgeEditPage = ({ badgeId }: BadgeEditPageProps) => {
         customBack={() => router.push(PAGE_ROUTES.BADGE_MNG.DETAIL(badgeId))}
         overrideHeader={{
           mode: HeaderMode.Default,
-          title: '활동 뱃지 관리',
+          title: '활동 배지 관리',
           hasLeftIcon: true,
         }}
       />

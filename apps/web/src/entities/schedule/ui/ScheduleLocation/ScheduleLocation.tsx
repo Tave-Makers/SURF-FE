@@ -66,7 +66,7 @@ export const ScheduleLocation = ({
 
   if (isEditing) {
     return (
-      <div className="flex h-18 w-full flex-row items-center justify-between py-7">
+      <div className="flex h-18 w-full flex-row items-center justify-between py-10">
         <div className="text-foreground-normal text-body-body9 flex shrink-0">{title}</div>
         <div className="flex flex-1 justify-end">
           <textarea
@@ -96,7 +96,7 @@ export const ScheduleLocation = ({
   return (
     <button
       type="button"
-      className="flex h-18 w-full cursor-pointer flex-row items-center justify-between py-7"
+      className="flex h-18 w-full cursor-pointer flex-row items-center justify-between py-10"
       onClick={handleClick}
       onKeyDown={handleKeyDown}
     >

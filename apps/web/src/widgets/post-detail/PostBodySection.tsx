@@ -144,21 +144,25 @@ export const PostBodySection = ({ post, schedule, onClickLikeCount }: PostBodySe
             startDate={new Date(schedule.startAt)}
             endDate={new Date(schedule.endAt)}
             onClickCard={handleEventCardClick}
+            showNoticeLink
+            noticeLinkLabel="일정 바로가기"
           />
         )}
       </div>
 
       {/* 좋아요 / 스크랩 */}
-      <div className="flex justify-between">
-        <ChipToggle
-          isClicked={post.likedByMe}
-          count={post.likeCount}
-          onToggleIcon={handleLikeToggle}
-          iconName="Heart"
-          activeColor="red"
-          onClickNumber={onClickLikeCount}
-          mode="count"
-        />
+      <div className={`flex ${post.isReserved ? 'justify-end' : 'justify-between'}`}>
+        {!post.isReserved && (
+          <ChipToggle
+            isClicked={post.likedByMe}
+            count={post.likeCount}
+            onToggleIcon={handleLikeToggle}
+            iconName="Heart"
+            activeColor="red"
+            onClickNumber={onClickLikeCount}
+            mode="count"
+          />
+        )}
 
         <ChipToggle
           isClicked={post.scrappedByMe}

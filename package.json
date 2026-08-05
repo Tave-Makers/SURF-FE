@@ -34,6 +34,10 @@
       "pnpm --filter surf-web exec eslint --max-warnings=0 --fix --no-warn-ignored",
       "pnpm -w exec prettier --write"
     ],
+    "apps/admin/**/*.{js,jsx,ts,tsx}": [
+      "pnpm --filter surf-admin exec eslint --max-warnings=0 --fix --no-warn-ignored",
+      "pnpm -w exec prettier --write"
+    ],
     "packages/hooks/**/*.{js,jsx,ts,tsx}": [
       "pnpm -C packages/hooks exec eslint --max-warnings=0 --fix --no-warn-ignored",
       "pnpm -w exec prettier --write"

@@ -49,7 +49,9 @@ const OnBoardingPage = () => {
           allAgreed: isAllRequiredChecked,
         },
       });
-    } else {
+    } else if (useBottomSheetStore.getState().current?.type === 'law') {
+      // 바텀시트 슬롯은 전역에 하나뿐이므로, 이 이펙트는 자기가 연 약관 시트만 닫는다.
+      // (계정 통합 시트 등 다른 시트가 열려 있을 때 닫아버리지 않도록 한다)
       closeBottomSheet();
     }
   }, [

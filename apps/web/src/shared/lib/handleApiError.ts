@@ -15,7 +15,14 @@ export type LoginCallBackError = {
   requestId: string;
 };
 
-export type ErrorResponse = DefaultError | LoginCallBackError;
+/** `errorCode` 없이 내려오는 백엔드 공통 응답 (예: 409 계정 충돌) */
+export type EnvelopeError = {
+  code: number;
+  message: string;
+  data?: unknown;
+};
+
+export type ErrorResponse = DefaultError | LoginCallBackError | EnvelopeError;
 
 export function handleApiError(
   error: unknown,
@@ -38,6 +45,10 @@ export function handleApiError(
           console.error(
             `[Backend Error - LoginCallback] ${data.message} (error=${data.error}, path=${data.path}, requestId=${data.requestId})`,
           );
+        } else if (typeof data.message === 'string' && data.message) {
+          // errorCode 없이 { code, message, data }만 내려오는 응답
+          message = data.message;
+          console.error(`[Backend Error] ${data.message} (code=${data.code})`);
         }
       }
 

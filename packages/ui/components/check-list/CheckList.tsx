@@ -18,10 +18,10 @@ export const CheckList = ({
   onClickItem,
 }: CheckListProps) => {
   return (
-    <div className="flex w-full items-center gap-[0.35rem] pr-[0.62rem]">
+    <div className="flex w-full items-center gap-7 pr-10">
       {/* 체크 토글 버튼 및 제목 */}
       <button
-        className="flex w-full cursor-pointer items-center justify-center gap-[0.35rem]"
+        className="flex w-full cursor-pointer items-center justify-center gap-7 py-2"
         type="button"
         aria-pressed={!!isChecked}
         aria-label={`${title} 체크 전환`}
@@ -38,7 +38,7 @@ export const CheckList = ({
         </div>
       </button>
       {/* 우측 버튼*/}
-      <button onClick={() => onClickItem?.(id)} className="cursor-pointer">
+      <button onClick={() => onClickItem?.(id)} className="cursor-pointer py-2">
         <SurfIcon name="ChevronRight" size="m" className="text-foreground-tertiary" />
       </button>
     </div>

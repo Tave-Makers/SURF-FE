@@ -33,6 +33,7 @@ export const AccountIntegrationBottomSheet = ({
 }: AccountIntegrationBottomSheetProps) => {
   const router = useRouter();
   const [isRedirecting, setIsRedirecting] = useState(false);
+  const [loginErrorMessage, setLoginErrorMessage] = useState<string | null>(null);
 
   if (!isOpen) return null;
 
@@ -47,7 +48,15 @@ export const AccountIntegrationBottomSheet = ({
 
   const handleProviderLogin = (provider: SocialProvider) => {
     setIsRedirecting(true);
-    startSocialAccountIntegrationLogin(provider, integrationToken);
+    setLoginErrorMessage(null);
+
+    const result = startSocialAccountIntegrationLogin(provider, integrationToken);
+    if (!result.ok) {
+      setIsRedirecting(false);
+      setLoginErrorMessage(
+        '로그인 정보를 임시 저장하지 못했어요. 브라우저 설정을 확인한 뒤 다시 시도해주세요.',
+      );
+    }
   };
 
   return (
@@ -81,6 +90,16 @@ export const AccountIntegrationBottomSheet = ({
                       onClick={handleProviderLogin}
                     />
                   ))}
+
+                  {loginErrorMessage && (
+                    <p
+                      role="alert"
+                      aria-live="polite"
+                      className="text-caption-caption6 text-foreground-danger px-2"
+                    >
+                      {loginErrorMessage}
+                    </p>
+                  )}
                 </div>
               )}
             </div>

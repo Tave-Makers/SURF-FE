@@ -1,18 +1,23 @@
 import type { SocialProvider } from '../api/types';
-import { savePendingSocialAccountIntegration } from './pendingSocialAccountIntegration';
+import {
+  savePendingSocialAccountIntegration,
+  type SavePendingSocialAccountIntegrationResult,
+} from './pendingSocialAccountIntegration';
 import { appleLogin } from '@/features/auth/lib/appleLogin';
 import { kakaoLogin } from '@/features/auth/lib/kakaoLogin';
 
 export function startSocialAccountIntegrationLogin(
   provider: SocialProvider,
   integrationToken: string,
-) {
-  savePendingSocialAccountIntegration({ provider, integrationToken });
+): SavePendingSocialAccountIntegrationResult {
+  const saveResult = savePendingSocialAccountIntegration({ provider, integrationToken });
+  if (!saveResult.ok) return saveResult;
 
   if (provider === 'KAKAO') {
     kakaoLogin();
-    return;
+    return saveResult;
   }
 
   appleLogin();
+  return saveResult;
 }

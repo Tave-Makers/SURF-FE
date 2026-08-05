@@ -9,6 +9,10 @@ export type PendingSocialAccountIntegration = {
   createdAt: number;
 };
 
+export type SavePendingSocialAccountIntegrationResult =
+  | { ok: true }
+  | { ok: false; reason: 'storage_unavailable' | 'write_failed' };
+
 function getSessionStorage(): Storage | null {
   if (typeof window === 'undefined') return null;
 
@@ -45,9 +49,9 @@ function parsePendingSocialAccountIntegration(
 
 export function savePendingSocialAccountIntegration(
   integration: Omit<PendingSocialAccountIntegration, 'createdAt'>,
-) {
+): SavePendingSocialAccountIntegrationResult {
   const storage = getSessionStorage();
-  if (!storage) return;
+  if (!storage) return { ok: false, reason: 'storage_unavailable' };
 
   try {
     storage.setItem(
@@ -57,8 +61,9 @@ export function savePendingSocialAccountIntegration(
         createdAt: Date.now(),
       }),
     );
+    return { ok: true };
   } catch {
-    // OAuth 로그인 자체는 진행할 수 있게 둔다.
+    return { ok: false, reason: 'write_failed' };
   }
 }
 

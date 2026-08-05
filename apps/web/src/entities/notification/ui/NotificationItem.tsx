@@ -30,7 +30,7 @@ export const NotificationItem = ({
       onClick={onClick}
       className={`w-full p-13 ${isRead ? 'bg-background-normal' : 'bg-background-notification'} flex items-center gap-15`}
     >
-      {/* 아바타 + 뱃지 박스 */}
+      {/* 아바타 + 배지 박스 */}
       {badge && (
         <div className="relative">
           <Avatar src={userImageUrl} size="m" />

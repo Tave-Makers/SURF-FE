@@ -114,6 +114,26 @@ const PostPage = (props: PostPageProps) => {
     [closeAlert, setShowExitAlert],
   );
 
+  const navigateOut = useCallback(() => {
+    resetPostState();
+
+    if (mode === 'edit' && postId) {
+      router.push(PAGE_ROUTES.BOARD.POST_DETAIL(boardId, postId));
+      return;
+    }
+
+    router.push(PAGE_ROUTES.BOARD.SELECT_CATEGORY(boardId));
+  }, [boardId, mode, postId, resetPostState, router]);
+
+  const requestExit = useCallback(() => {
+    if (hasUnsavedChanges()) {
+      setShowExitAlert(true);
+      return;
+    }
+
+    navigateOut();
+  }, [hasUnsavedChanges, navigateOut, setShowExitAlert]);
+
   const handleSaveReservation = (date: Date) => {
     setField('reservedAt', date);
     setField('reserved', true);

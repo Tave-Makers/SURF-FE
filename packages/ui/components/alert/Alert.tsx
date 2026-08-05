@@ -1,7 +1,7 @@
 'use client';
 
 import { useEffect, useId, useRef } from 'react';
-import { AlertAction, AlertState } from '../../store/alertStore';
+import { AlertAction, AlertState, useAlertStore } from '../../store/alertStore';
 import { SolidButton } from '../button/solid-button/SolidButton';
 import { TextButton } from '../button/text-button/TextButton';
 
@@ -71,7 +71,9 @@ export const Alert = ({
 
     return () => {
       window.removeEventListener('keydown', onKeyDown);
-      prevFocusedRef.current?.focus?.();
+      if (useAlertStore.getState().shouldRestoreFocus) {
+        prevFocusedRef.current?.focus?.();
+      }
       prevFocusedRef.current = null;
     };
   }, [isOpen, onClose, closeOnEsc]);

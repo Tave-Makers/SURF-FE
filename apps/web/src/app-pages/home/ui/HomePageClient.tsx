@@ -7,7 +7,7 @@ import { useEffect, useRef, useState } from 'react';
 import HeaderLogo from '../../../../public/header-logo.svg';
 import { useGetHome } from '@/entities/home/api/useGetHome';
 import { TAVE_CHANNEL_LINKS, SPONSOR_LINKS, SHORTCUT_LINKS } from '@/entities/home/model/constants';
-import { useGetNotifications } from '@/entities/notification/model/useGetNotifications';
+import { useHasUnreadNotifications } from '@/entities/notification/model/useHasUnreadNotifications';
 import { AnnouncementBar } from '@/entities/schedule/ui/announcement-bar/AnnouncementBar';
 import type { HeroCardProps } from '@/features/home-theme/ui/hero-card/HeroCard';
 import { HeroCard } from '@/features/home-theme/ui/hero-card/HeroCard';
@@ -28,8 +28,7 @@ export const HomePageClient = ({ heroProps }: { heroProps: HeroCardProps }) => {
   const { data: homeData } = useGetHome();
   const deepLink = homeData?.announcementDeepLink ?? '';
 
-  const { data: notifications } = useGetNotifications('ALL');
-  const hasUnread = notifications?.some((noti) => !noti.isRead);
+  const { data: hasUnread } = useHasUnreadNotifications();
 
   const carouselImages = (() => {
     const normalized = (homeData?.carouselImages ?? [])
@@ -134,7 +133,7 @@ export const HomePageClient = ({ heroProps }: { heroProps: HeroCardProps }) => {
           </div>
 
           {/* 테이브 채널 바로가기 */}
-          <div className="flex flex-col gap-11">
+          <div className="flex flex-col gap-16">
             <div className="text-body-body7 text-foreground-normal">TAVE 채널 바로가기</div>
             <div className="flex w-full flex-row gap-11">
               {TAVE_CHANNEL_LINKS.map((channel) => (
@@ -150,9 +149,9 @@ export const HomePageClient = ({ heroProps }: { heroProps: HeroCardProps }) => {
           </div>
 
           {/* 후원사 바로가기 */}
-          <div className="flex flex-col gap-11">
+          <div className="flex flex-col gap-16">
             <div className="text-body-body7 text-foreground-normal">후원사 바로가기</div>
-            <div className="grid grid-cols-4 gap-11">
+            <div className="grid grid-cols-4 gap-16">
               {SPONSOR_LINKS.map((sponsor) => (
                 <Shortcut
                   key={sponsor.id}

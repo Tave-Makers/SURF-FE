@@ -14,14 +14,14 @@ export async function GET(req: NextRequest) {
 
   const error = req.nextUrl.searchParams.get('error');
   if (error) {
-    return NextResponse.redirect(new URL(PAGE_ROUTES.LOGIN, baseUrl));
+    return NextResponse.redirect(new URL(PAGE_ROUTES.LOGIN, baseUrl), 303);
   }
 
   const code = req.nextUrl.searchParams.get('code');
   const state = req.nextUrl.searchParams.get('state');
 
   if (!code || !state) {
-    return NextResponse.redirect(new URL(PAGE_ROUTES.LOGIN, baseUrl));
+    return NextResponse.redirect(new URL(PAGE_ROUTES.LOGIN, baseUrl), 303);
   }
 
   const result = await exchangeOAuthLogin({
@@ -34,11 +34,11 @@ export async function GET(req: NextRequest) {
   if (!result.ok) {
     const loginUrl = new URL(PAGE_ROUTES.LOGIN, baseUrl);
     loginUrl.searchParams.set('msg', result.message);
-    return NextResponse.redirect(loginUrl);
+    return NextResponse.redirect(loginUrl, 303);
   }
 
   const { nickname, email, profileImageUrl } = result.data;
-  const response = NextResponse.redirect(new URL(LOGIN_CALLBACK, baseUrl));
+  const response = NextResponse.redirect(new URL(LOGIN_CALLBACK, baseUrl), 303);
   setOAuthOnboardingCookie(response, { nickname, email, profileImageUrl });
   applyProxyAuthToResponse(response, result.upstream, result.parsed);
 

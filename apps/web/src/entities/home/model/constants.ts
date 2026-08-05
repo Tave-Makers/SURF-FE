@@ -60,7 +60,7 @@ export const TAVE_CHANNEL_LINKS: ShortcutItem[] = [
 
 // 후원사
 export const SPONSOR_LINKS: ShortcutItem[] = [
-  { id: 1, label: 'F-Lab', link: 'https://f-lab.kr/', imageSrc: '/images/sponsor/f-lab.jpg' },
+  // { id: 1, label: 'F-Lab', link: 'https://f-lab.kr/', imageSrc: '/images/sponsor/f-lab.jpg' },
   {
     id: 2,
     label: '렛츠커리어',
@@ -73,12 +73,12 @@ export const SPONSOR_LINKS: ShortcutItem[] = [
     link: 'https://corp.alpaco.co.kr/',
     imageSrc: '/images/sponsor/alpaco.png',
   },
-  {
-    id: 4,
-    label: 'Upstage',
-    link: 'https://www.upstage.ai/',
-    imageSrc: '/images/sponsor/upstage.png',
-  },
+  // {
+  //   id: 4,
+  //   label: 'Upstage',
+  //   link: 'https://www.upstage.ai/',
+  //   imageSrc: '/images/sponsor/upstage.png',
+  // },
   {
     id: 5,
     label: '코드잇',

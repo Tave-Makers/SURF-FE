@@ -122,7 +122,7 @@ const PostDetailPage = ({ postId }: PostDetailPageProps) => {
     trackPostDetailEvent(POST_DETAIL_EVENTS.CLICK_POST_DELETE, { post_id: numericPostId });
     deletePostMutate(numericPostId, {
       onSuccess: () => {
-        closeAlert();
+        closeAlert({ restoreFocus: false });
         router.back();
         showToast('게시글이 삭제되었습니다.');
       },

@@ -63,12 +63,14 @@ export const useScoreTargetSelect = (criterionId: string) => {
     data: categories = [],
     isLoading: isActivityTypesLoading,
     isError: isActivityTypesError,
+    refetch: refetchActivityTypes,
   } = useActivityTypesQuery();
 
   const {
     data: partMemberGroups = [],
     isLoading: isPartGroupsLoading,
     isError: isPartGroupsError,
+    refetch: refetchPartGroups,
   } = useGroupedMembersByPartQuery({
     generation: activeCohort?.generation,
     enabled: targetKind === 'part',
@@ -78,6 +80,7 @@ export const useScoreTargetSelect = (criterionId: string) => {
     data: teams = [],
     isLoading: isTeamsLoading,
     isError: isTeamsError,
+    refetch: refetchTeams,
   } = useTeamsQuery({
     kind: targetKind === 'part' ? 'study' : targetKind,
     generation: activeCohort?.generation,
@@ -137,9 +140,14 @@ export const useScoreTargetSelect = (criterionId: string) => {
     });
   };
 
+  /**
+   * 탭을 바꾸면 선택도 함께 비운다.
+   * 선택을 유지하면 화면에 보이지 않는 회원이 선택 상태로 남아 의도치 않게 점수가 부여된다.
+   */
   const changeTargetKind = (kind: ScoreTargetKind) => {
     setTargetKind(kind);
     setOpenGroupIds(new Set());
+    setSelectedIds(new Set());
   };
 
   const applyScore = () => {
@@ -164,8 +172,8 @@ export const useScoreTargetSelect = (criterionId: string) => {
             createActivityRecord(
               {
                 memberIdList: Array.from(selectedIds),
-                category: criterion.category ?? criterion.categoryId,
-                activityName: criterion.activityName ?? criterion.id,
+                category: criterion.category,
+                activityName: criterion.activityName,
                 activityDate: getTodayDateString(),
               },
               {
@@ -173,8 +181,7 @@ export const useScoreTargetSelect = (criterionId: string) => {
                   showToast('점수가 적용되었습니다.');
                   router.push(PAGE_ROUTES.SCORE_MNG);
                 },
-                onError: () =>
-                  showToast('점수를 적용하지 못했습니다. 잠시 후 다시 시도해주세요.'),
+                onError: () => showToast('점수를 적용하지 못했습니다. 잠시 후 다시 시도해주세요.'),
               },
             );
           },
@@ -187,6 +194,25 @@ export const useScoreTargetSelect = (criterionId: string) => {
     isActivityTypesLoading || (targetKind === 'part' ? isPartGroupsLoading : isTeamsLoading);
   const isError =
     isActivityTypesError || (targetKind === 'part' ? isPartGroupsError : isTeamsError);
+
+  /** 현재 탭에서 실패한 조회만 다시 실행한다. */
+  const retry = useCallback(() => {
+    if (isActivityTypesError) void refetchActivityTypes();
+    if (targetKind === 'part') {
+      if (isPartGroupsError) void refetchPartGroups();
+
+      return;
+    }
+    if (isTeamsError) void refetchTeams();
+  }, [
+    isActivityTypesError,
+    isPartGroupsError,
+    isTeamsError,
+    refetchActivityTypes,
+    refetchPartGroups,
+    refetchTeams,
+    targetKind,
+  ]);
 
   return {
     state: {
@@ -208,6 +234,7 @@ export const useScoreTargetSelect = (criterionId: string) => {
       toggleMember,
       toTargetMembers,
       applyScore,
+      retry,
     },
   };
 };

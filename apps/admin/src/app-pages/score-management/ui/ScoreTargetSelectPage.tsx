@@ -22,6 +22,12 @@ const TARGET_LABELS: Record<ScoreTargetKind, string> = {
   project: '프로젝트',
 };
 
+const TARGET_EMPTY_MESSAGES: Record<ScoreTargetKind, string> = {
+  part: '조회 가능한 회원이 없습니다.',
+  study: '진행중인 스터디가 없습니다.',
+  project: '진행중인 프로젝트가 없습니다.',
+};
+
 const TARGET_ORDER: ScoreTargetKind[] = ['part', 'study', 'project'];
 
 export const ScoreTargetSelectPage = ({ criterionId }: ScoreTargetSelectPageProps) => {
@@ -95,6 +101,7 @@ export const ScoreTargetSelectPage = ({ criterionId }: ScoreTargetSelectPageProp
           state.targetKind === 'part' && (
             <ScoreTargetGroupList
               groups={state.partGroups}
+              emptyMessage={TARGET_EMPTY_MESSAGES.part}
               openIds={state.openGroupIds}
               onToggleGroup={actions.toggleGroup}
               selectedIds={state.selectedIds}
@@ -108,6 +115,7 @@ export const ScoreTargetSelectPage = ({ criterionId }: ScoreTargetSelectPageProp
           state.targetKind !== 'part' && (
             <ScoreTargetTeamList
               teams={state.teams}
+              emptyMessage={TARGET_EMPTY_MESSAGES[state.targetKind]}
               openIds={state.openGroupIds}
               onToggleGroup={actions.toggleGroup}
               toTargetMembers={actions.toTargetMembers}

@@ -1,4 +1,3 @@
-export type ScoreViewMode = 'individual' | 'group';
 export type ScoreGroupKind = 'study' | 'project';
 /** 회원 점수 조회 화면 상단 필터 (개인 / 스터디 / 프로젝트) */
 export type ScoreListFilter = 'individual' | ScoreGroupKind;
@@ -19,24 +18,6 @@ export type ActivityScoreMember = {
   negativeScore: number;
   totalScore: number;
   tracksCount: number;
-};
-
-export type ActivityScoreGroup = {
-  id: string;
-  name: string;
-  kind: ScoreGroupKind;
-  memberIds: number[];
-  defaultOpen?: boolean;
-};
-
-export type ActivityScoreTeam = {
-  id: number;
-  name: string;
-  kind: ScoreGroupKind;
-  positiveScore: number;
-  negativeScore: number;
-  totalScore: number;
-  defaultOpen?: boolean;
 };
 
 export type ScoreCriterion = {

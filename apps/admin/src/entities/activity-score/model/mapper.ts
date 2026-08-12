@@ -6,22 +6,14 @@ import type {
   MemberScoreRankingItemDto,
   ScoreRankingPageDto,
   TeamMemberScoresDto,
-  TeamScoreRankingItemDto,
 } from '../api/types';
 import type {
   ActivityScoreMember,
-  ActivityScoreTeam,
   ScoreCategory,
-  ScoreGroupKind,
   ScoreHistory,
   ScoreHistoryKind,
   ScoreType,
 } from './types';
-
-const teamTypeMap: Record<string, ScoreGroupKind> = {
-  STUDY: 'study',
-  PROJECT: 'project',
-};
 
 const partCodeMap: Record<string, string> = {
   BACKEND: 'BE',
@@ -61,13 +53,6 @@ const normalizePartCode = (part: string | null | undefined) => {
   return normalizedPart.slice(0, 2).toUpperCase();
 };
 
-const normalizeTeamKind = (teamType: string | null | undefined): ScoreGroupKind => {
-  if (teamType === 'PROJECT') return 'project';
-  if (teamType === 'STUDY') return 'study';
-
-  return 'study';
-};
-
 export const mapMemberScoreRankingItemDtoToMember = (
   dto: MemberScoreRankingItemDto,
 ): ActivityScoreMember => ({
@@ -88,22 +73,6 @@ export const mapMemberScoreRankingPageDtoToMembers = (
   dto: ScoreRankingPageDto<MemberScoreRankingItemDto>,
 ): ActivityScoreMember[] => (dto.content ?? []).map(mapMemberScoreRankingItemDtoToMember);
 
-export const mapTeamScoreRankingItemDtoToTeam = (
-  dto: TeamScoreRankingItemDto,
-  index: number,
-): ActivityScoreTeam => ({
-  id: dto.teamId,
-  name: dto.teamName ?? '',
-  kind: teamTypeMap[dto.teamType ?? ''] ?? normalizeTeamKind(dto.teamType),
-  positiveScore: toScore(dto.rewardTotal),
-  negativeScore: toScore(dto.penaltyTotal),
-  totalScore: toScore(dto.totalScore),
-  defaultOpen: index < 2,
-});
-
-export const mapTeamScoreRankingPageDtoToTeams = (
-  dto: ScoreRankingPageDto<TeamScoreRankingItemDto>,
-): ActivityScoreTeam[] => (dto.content ?? []).map(mapTeamScoreRankingItemDtoToTeam);
 
 export const mapTeamMemberScoresDtoToMembers = (dto: TeamMemberScoresDto): ActivityScoreMember[] =>
   (dto.members ?? []).map(mapMemberScoreRankingItemDtoToMember);

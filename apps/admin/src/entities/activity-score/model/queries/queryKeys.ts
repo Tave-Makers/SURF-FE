@@ -1,5 +1,3 @@
-import type { ScoreGroupKind } from '../types';
-
 export const activityScoreQueryKeys = {
   all: ['activity-score'] as const,
 
@@ -8,20 +6,6 @@ export const activityScoreQueryKeys = {
   rankings: () => [...activityScoreQueryKeys.all, 'rankings'] as const,
   memberRanking: (pageNum: number, pageSize: number) =>
     [...activityScoreQueryKeys.rankings(), 'members', pageNum, pageSize] as const,
-  teamRanking: (params: {
-    kind?: ScoreGroupKind;
-    generation?: number;
-    pageNum: number;
-    pageSize: number;
-  }) =>
-    [
-      ...activityScoreQueryKeys.rankings(),
-      'teams',
-      params.kind ?? null,
-      params.generation ?? null,
-      params.pageNum,
-      params.pageSize,
-    ] as const,
 
   teamMembers: () => [...activityScoreQueryKeys.all, 'team-members'] as const,
   teamMemberScores: (teamId: number) => [...activityScoreQueryKeys.teamMembers(), teamId] as const,

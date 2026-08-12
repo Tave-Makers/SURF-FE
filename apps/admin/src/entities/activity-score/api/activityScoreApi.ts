@@ -12,8 +12,6 @@ import type {
   MemberActivityRecordsResponse,
   TeamMemberScoresDto,
   TeamMemberScoresResponse,
-  TeamScoreRankingItemDto,
-  TeamScoreRankingResponse,
   ActivityTypeGroupDto,
 } from './types';
 
@@ -22,10 +20,6 @@ const SUCCESS_CODES = new Set([0, 200]);
 type RankingParams = {
   pageNum: number;
   pageSize: number;
-};
-
-type TeamRankingParams = RankingParams & {
-  generation?: number;
 };
 
 type MemberActivityRecordsParams = RankingParams & {
@@ -72,18 +66,6 @@ export const activityScoreApi = {
           params,
         }),
       '개인별 점수 현황을 불러오지 못했습니다.',
-    );
-  },
-
-  getTeamScoreRanking: async (
-    params: TeamRankingParams,
-  ): Promise<ScoreRankingPageDto<TeamScoreRankingItemDto>> => {
-    return requestActivityScore(
-      () =>
-        axiosInstance.get<TeamScoreRankingResponse>('/v1/admin/scores/teams', {
-          params,
-        }),
-      '팀별 점수 현황을 불러오지 못했습니다.',
     );
   },
 

@@ -1,8 +1,5 @@
 import type { CommonResponse, PageMeta } from '@/shared/api/types';
 
-export type TeamScoreApiType = 'STUDY' | 'PROJECT';
-export type ActivityScoreApiScoreType = 'REWARD' | 'PENALTY';
-
 export type ScoreRankingPageDto<TContent> = PageMeta & {
   content?: TContent[] | null;
 };
@@ -20,18 +17,6 @@ export interface MemberScoreRankingItemDto {
 
 export type MemberScoreRankingResponse =
   CommonResponse<ScoreRankingPageDto<MemberScoreRankingItemDto> | null>;
-
-export interface TeamScoreRankingItemDto {
-  teamId: number;
-  teamName: string | null;
-  teamType: string | null;
-  rewardTotal: number | null;
-  penaltyTotal: number | null;
-  totalScore: number | null;
-}
-
-export type TeamScoreRankingResponse =
-  CommonResponse<ScoreRankingPageDto<TeamScoreRankingItemDto> | null>;
 
 export interface TeamMemberScoresDto {
   teamId: number;

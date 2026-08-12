@@ -73,7 +73,7 @@ export const mapMemberScoreRankingItemDtoToMember = (
   profileImageUrl: dto.profileImageUrl ?? '',
   partCode: normalizePartCode(dto.part),
   partName: normalizePartName(dto.part),
-  generation: 0,
+  generation: toScore(dto.generation),
   groupName: '',
   positiveScore: toScore(dto.rewardTotal),
   negativeScore: toScore(dto.penaltyTotal),

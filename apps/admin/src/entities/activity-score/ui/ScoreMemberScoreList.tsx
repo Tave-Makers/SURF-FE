@@ -7,7 +7,7 @@ type ScoreMemberScoreListProps = {
 };
 
 const headerClassName =
-  'grid grid-cols-[minmax(0,1fr)_3.5rem_3.75rem_3.75rem_3.75rem] items-center px-13 pt-11 pb-8 text-body-body11 text-foreground-normal';
+  'grid grid-cols-[minmax(0,1fr)_3.5rem_3.75rem_3.75rem_3.75rem] items-center px-13 pt-11 pb-10 text-body-body11 text-foreground-normal';
 const rowClassName =
   'grid min-h-[3rem] w-full grid-cols-[minmax(0,1fr)_3.5rem_3.75rem_3.75rem_3.75rem] items-center px-13 text-left';
 const scoreClassName = 'text-body-body8 text-foreground-normal text-center';

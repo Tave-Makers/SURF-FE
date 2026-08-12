@@ -11,6 +11,7 @@ export interface MemberScoreRankingItemDto {
   memberId: number;
   profileImageUrl: string | null;
   name: string | null;
+  generation: number | null;
   part: string | null;
   rewardTotal: number | null;
   penaltyTotal: number | null;

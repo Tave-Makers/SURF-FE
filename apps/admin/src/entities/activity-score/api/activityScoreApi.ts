@@ -15,7 +15,7 @@ import type {
   ActivityTypeGroupDto,
 } from './types';
 
-const SUCCESS_CODES = new Set([0, 200]);
+const SUCCESS_CODES = new Set([0, 200, 201]);
 
 type RankingParams = {
   pageNum: number;

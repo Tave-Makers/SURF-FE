@@ -3,7 +3,6 @@ export const runtime = 'nodejs';
 
 const BACKEND = process.env.API_BASE_URL!;
 const IS_DEV = process.env.NODE_ENV !== 'production';
-console.log('[proxy] API_BASE_URL =', process.env.API_BASE_URL);
 
 const HOP_BY_HOP = new Set([
   'connection',

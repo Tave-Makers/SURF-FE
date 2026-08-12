@@ -68,6 +68,8 @@ export interface ActivityRecordDto {
   activityName: string | null;
   scoreType: string | null;
   activityDate: string | null;
+  /** 해당 기록 시점까지의 누적 점수 */
+  prefixSum: number | null;
   appliedScore: number | null;
 }
 

@@ -31,7 +31,10 @@ const partCodeMap: Record<string, string> = {
   DESIGN: 'DE',
   DATA_ANALYSIS: 'DA',
   DEEP_LEARNING: 'DL',
+  // 서버는 `part`를 Part.getDisplayName()(한글)으로 내려준다.
   백엔드: 'BE',
+  웹프론트엔드: 'FE',
+  앱프론트엔드: 'FE',
   프론트엔드: 'FE',
   프론트: 'FE',
   디자인: 'DE',
@@ -175,27 +178,10 @@ const mapActivityRecordDtoToHistory = (dto: ActivityRecordDto): ScoreHistory => 
     date: formatScoreDate(dto.activityDate),
     label: normalizeText(dto.activityName, normalizeText(dto.activityType, '-')),
     point: normalizeDelta(dto.appliedScore, dto.scoreType),
+    // 벌점 누적합은 서버에서 음수로 내려오지만, 목록의 벌점 컬럼과 동일하게 절댓값으로 표기한다.
+    balance: dto.prefixSum == null ? undefined : Math.abs(dto.prefixSum),
   };
 };
 
-/**
- * 활동기록 목록을 최신순으로 유지하면서, 각 기록 시점의 누적 점수(balance)를 함께 계산한다.
- * 서버가 누적 점수를 내려주지 않으므로 조회된 페이지 범위 안에서 오래된 기록부터 합산한다.
- */
-export const mapActivityRecordPageDtoToHistories = (
-  dto: ActivityRecordPageDto,
-): ScoreHistory[] => {
-  const histories = (dto.content ?? []).map(mapActivityRecordDtoToHistory);
-
-  let cumulative = 0;
-
-  return histories
-    .slice()
-    .reverse()
-    .map((history) => {
-      cumulative += history.point;
-
-      return { ...history, balance: cumulative };
-    })
-    .reverse();
-};
+export const mapActivityRecordPageDtoToHistories = (dto: ActivityRecordPageDto): ScoreHistory[] =>
+  (dto.content ?? []).map(mapActivityRecordDtoToHistory);

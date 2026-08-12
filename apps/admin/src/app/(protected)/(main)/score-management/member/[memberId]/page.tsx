@@ -5,11 +5,20 @@ type PageProps = {
   params: Promise<{ memberId: string }>;
 };
 
-const Page = async ({ params }: PageProps) => {
-  const { memberId: rawMemberId } = await params;
+/** URL 세그먼트는 10진수 양의 정수만 허용한다. (`1.5`, `1e3`, `0x10`, `-1` 등을 차단) */
+const parseMemberId = (rawMemberId: string) => {
+  if (!/^\d+$/.test(rawMemberId)) return null;
+
   const memberId = Number(rawMemberId);
 
-  if (!Number.isFinite(memberId)) return notFound();
+  return Number.isSafeInteger(memberId) && memberId > 0 ? memberId : null;
+};
+
+const Page = async ({ params }: PageProps) => {
+  const { memberId: rawMemberId } = await params;
+  const memberId = parseMemberId(rawMemberId);
+
+  if (memberId == null) return notFound();
 
   return <ScoreMemberDetailPage memberId={memberId} />;
 };

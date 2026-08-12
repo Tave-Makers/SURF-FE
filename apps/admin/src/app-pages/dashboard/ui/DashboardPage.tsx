@@ -92,7 +92,7 @@ const MetricCard = ({
 
 const Section = ({ title, children }: { title: string; children: ReactNode }) => {
   return (
-    <section className="flex flex-col gap-12">
+    <section className="flex min-w-0 flex-col gap-12">
       <h2 className="text-title-title3 text-foreground-normal">{title}</h2>
       {children}
     </section>
@@ -109,17 +109,22 @@ const DistributionTable = ({
   countHeader?: string;
 }) => {
   return (
-    <div className="border-border-normal overflow-hidden rounded-6 border">
+    <div className="border-border-normal min-w-0 overflow-hidden rounded-6 border">
       <table className="w-full table-fixed border-collapse">
+        <colgroup>
+          <col className="w-44" />
+          <col />
+          <col className="w-92" />
+        </colgroup>
         <thead className="bg-background-quaternary">
           <tr>
-            <th className="text-caption-caption6 text-foreground-tertiary w-36 px-8 py-8 text-left">
+            <th className="text-caption-caption6 text-foreground-tertiary px-8 py-8 text-left">
               #
             </th>
-            <th className="text-caption-caption6 text-foreground-tertiary px-8 py-8 text-left">
+            <th className="text-caption-caption6 text-foreground-tertiary min-w-0 truncate px-8 py-8 text-left">
               {labelHeader}
             </th>
-            <th className="text-caption-caption6 text-foreground-tertiary w-70 px-8 py-8 text-right">
+            <th className="text-caption-caption6 text-foreground-tertiary px-10 py-8 text-right">
               {countHeader}
             </th>
           </tr>
@@ -140,10 +145,10 @@ const DistributionTable = ({
                 <td className="text-caption-caption6 text-foreground-tertiary px-8 py-8">
                   {index}
                 </td>
-                <td className="text-caption-caption6 text-foreground-normal truncate px-8 py-8">
+                <td className="text-caption-caption6 text-foreground-normal min-w-0 truncate px-8 py-8">
                   {item.label}
                 </td>
-                <td className="text-caption-caption6 text-foreground-normal px-8 py-8 text-right">
+                <td className="text-caption-caption6 text-foreground-normal truncate px-10 py-8 text-right">
                   {formatNumber(item.count)}
                 </td>
               </tr>

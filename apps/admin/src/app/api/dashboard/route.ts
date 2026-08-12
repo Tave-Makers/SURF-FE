@@ -130,16 +130,16 @@ async function verifyDashboardAccess(req: NextRequest): Promise<AuthResult> {
 export async function GET(req: NextRequest) {
   let targetUrl: URL;
 
+  const auth = await verifyDashboardAccess(req);
+  if (!auth.ok) {
+    return jsonError(auth.message, auth.status);
+  }
+
   try {
     targetUrl = buildDashboardUrl(req);
   } catch (error) {
     console.error('[dashboard] invalid environment configuration:', errorMessage(error));
     return jsonError('서버 설정이 올바르지 않습니다.', 500);
-  }
-
-  const auth = await verifyDashboardAccess(req);
-  if (!auth.ok) {
-    return jsonError(auth.message, auth.status);
   }
 
   try {

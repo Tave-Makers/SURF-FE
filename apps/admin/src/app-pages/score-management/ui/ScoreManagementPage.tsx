@@ -4,7 +4,7 @@ import { useRouter } from 'next/navigation';
 import { useMemo, useState } from 'react';
 import { useActiveGenerationQuery } from '@/entities/active-cohort/model/queries/useActiveGenerationQuery';
 import { useMemberScoreRankingQuery } from '@/entities/activity-score/model/queries/useMemberScoreRankingQuery';
-import type { ScoreListFilter } from '@/entities/activity-score/model/types';
+import type { ScoreGroupKind, ScoreListFilter } from '@/entities/activity-score/model/types';
 import { ScoreFilterChip } from '@/entities/activity-score/ui/ScoreFilterChip';
 import { ScoreFloatingActionButton } from '@/entities/activity-score/ui/ScoreFloatingActionButton';
 import { ScoreGroupScoreList } from '@/entities/activity-score/ui/ScoreGroupScoreList';
@@ -22,6 +22,11 @@ const FILTER_LABELS: Record<ScoreListFilter, string> = {
 };
 
 const FILTER_ORDER: ScoreListFilter[] = ['individual', 'study', 'project'];
+
+const GROUP_EMPTY_MESSAGES: Record<ScoreGroupKind, string> = {
+  study: '진행중인 스터디가 없습니다.',
+  project: '진행중인 프로젝트가 없습니다.',
+};
 
 const SCORE_RANKING_PAGE_SIZE = 50;
 
@@ -104,7 +109,12 @@ export const ScoreManagementPage = () => {
           <ScoreMemberScoreList members={sortedMembers} onClickMember={handleClickMember} />
         ) : null}
         {!isLoading && !isError && !isIndividual ? (
-          <ScoreGroupScoreList key={filter} teams={teams} onClickMember={handleClickMember} />
+          <ScoreGroupScoreList
+            key={filter}
+            teams={teams}
+            emptyMessage={GROUP_EMPTY_MESSAGES[filter]}
+            onClickMember={handleClickMember}
+          />
         ) : null}
       </div>
 

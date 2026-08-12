@@ -12,6 +12,7 @@ type ScoreGroupTeam = {
 
 type ScoreGroupScoreListProps = {
   teams: ScoreGroupTeam[];
+  emptyMessage: string;
   onClickMember: (memberId: number) => void;
 };
 
@@ -68,7 +69,11 @@ const ScoreTeamAccordionItem = ({
   );
 };
 
-export const ScoreGroupScoreList = ({ teams, onClickMember }: ScoreGroupScoreListProps) => {
+export const ScoreGroupScoreList = ({
+  teams,
+  emptyMessage,
+  onClickMember,
+}: ScoreGroupScoreListProps) => {
   const [openIds, setOpenIds] = useState<Set<number>>(new Set());
 
   const handleToggle = (teamId: number) => {
@@ -82,11 +87,7 @@ export const ScoreGroupScoreList = ({ teams, onClickMember }: ScoreGroupScoreLis
   };
 
   if (teams.length === 0) {
-    return (
-      <p className="text-body-body9 text-foreground-tertiary px-13 py-12">
-        등록된 그룹이 없습니다.
-      </p>
-    );
+    return <p className="text-body-body9 text-foreground-tertiary px-13 py-12">{emptyMessage}</p>;
   }
 
   return (

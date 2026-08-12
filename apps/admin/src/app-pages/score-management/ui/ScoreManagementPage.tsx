@@ -49,7 +49,8 @@ export const ScoreManagementPage = () => {
   const {
     data: members = [],
     isLoading: isMemberRankingLoading,
-    isError: isMemberRankingError,
+    isLoadingError: isMemberRankingLoadingError,
+    isFetchNextPageError: isMemberRankingFetchNextPageError,
     fetchNextPage: fetchNextMemberRankingPage,
     hasNextPage: hasNextMemberRankingPage,
     isFetchingNextPage: isFetchingNextMemberRankingPage,
@@ -77,13 +78,13 @@ export const ScoreManagementPage = () => {
     router.push(PAGE_ROUTES.SCORE_MNG_MEMBER(memberId));
   };
 
-  const isError = isIndividual ? isMemberRankingError : isActiveCohortError || isTeamsError;
+  const isError = isIndividual ? isMemberRankingLoadingError : isActiveCohortError || isTeamsError;
   const isLoading = isIndividual
     ? isMemberRankingLoading
     : !isError && (isActiveCohortLoading || activeGeneration == null || isTeamsLoading);
 
   const memberRankingTriggerRef = useInfiniteScroll({
-    enabled: isIndividual && !isLoading && !isError,
+    enabled: isIndividual && !isLoading && !isError && !isMemberRankingFetchNextPageError,
     hasNextPage: hasNextMemberRankingPage,
     isFetching: isFetchingNextMemberRankingPage,
     onLoadMore: () => {
@@ -124,8 +125,28 @@ export const ScoreManagementPage = () => {
               <div ref={memberRankingTriggerRef} className="h-10" aria-hidden="true" />
             )}
             {isFetchingNextMemberRankingPage && (
-              <div className="text-body-body9 text-foreground-tertiary px-13 py-8">
+              <div
+                className="text-body-body9 text-foreground-tertiary px-13 py-8"
+                role="status"
+                aria-live="polite"
+              >
                 Loading...
+              </div>
+            )}
+            {isMemberRankingFetchNextPageError && (
+              <div className="flex flex-col items-start gap-8 px-13 py-8" role="alert">
+                <p className="text-body-body9 text-foreground-tertiary">
+                  추가 점수 현황을 불러오지 못했습니다.
+                </p>
+                <button
+                  type="button"
+                  className="rounded-2 border-border-quaternary text-body-body9 text-foreground-normal border px-11 py-7"
+                  onClick={() => {
+                    void fetchNextMemberRankingPage();
+                  }}
+                >
+                  다시 시도
+                </button>
               </div>
             )}
           </>

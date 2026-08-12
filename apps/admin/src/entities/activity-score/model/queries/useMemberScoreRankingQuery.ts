@@ -30,31 +30,40 @@ export const useMemberScoreRankingQuery = ({
   pageSize,
   enabled = true,
 }: UseMemberScoreRankingQueryParams) => {
-  const { data, fetchNextPage, hasNextPage, isFetchingNextPage, isLoading, isError, refetch } =
-    useInfiniteQuery(
-      infiniteQueryOptions<
-        PageWithContent<ActivityScoreMember>,
-        Error,
-        InfiniteSelectResult<ActivityScoreMember>,
-        ReturnType<typeof activityScoreQueryKeys.memberRanking>,
-        number
-      >({
-        queryKey: activityScoreQueryKeys.memberRanking(pageSize),
-        queryFn: async ({ pageParam }) => {
-          const response = await activityScoreApi.getMemberScoreRanking({
-            pageNum: pageParam,
-            pageSize,
-          });
+  const {
+    data,
+    fetchNextPage,
+    hasNextPage,
+    isFetchingNextPage,
+    isLoading,
+    isError,
+    isLoadingError,
+    isFetchNextPageError,
+    refetch,
+  } = useInfiniteQuery(
+    infiniteQueryOptions<
+      PageWithContent<ActivityScoreMember>,
+      Error,
+      InfiniteSelectResult<ActivityScoreMember>,
+      ReturnType<typeof activityScoreQueryKeys.memberRanking>,
+      number
+    >({
+      queryKey: activityScoreQueryKeys.memberRanking(pageSize),
+      queryFn: async ({ pageParam }) => {
+        const response = await activityScoreApi.getMemberScoreRanking({
+          pageNum: pageParam,
+          pageSize,
+        });
 
-          return mapMemberScoreRankingPageDtoToPage(response);
-        },
-        initialPageParam: 0,
-        getNextPageParam: getNextPageNumber,
-        select: createInfiniteDataSelector<ActivityScoreMember>(),
-        enabled,
-        retry: false,
-      }),
-    );
+        return mapMemberScoreRankingPageDtoToPage(response);
+      },
+      initialPageParam: 0,
+      getNextPageParam: getNextPageNumber,
+      select: createInfiniteDataSelector<ActivityScoreMember>(),
+      enabled,
+      retry: false,
+    }),
+  );
 
   const members = data?.items ?? [];
 
@@ -67,6 +76,8 @@ export const useMemberScoreRankingQuery = ({
     isFetchingNextPage,
     isLoading,
     isError,
+    isLoadingError,
+    isFetchNextPageError,
     refetch,
   };
 };

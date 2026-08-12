@@ -74,7 +74,8 @@ export const ScoreMemberDetailPage = ({ memberId }: ScoreMemberDetailPageProps) 
   const {
     data: currentHistories = [],
     isLoading: isHistoryLoading,
-    isError: isHistoryError,
+    isLoadingError: isHistoryLoadingError,
+    isFetchNextPageError: isHistoryFetchNextPageError,
     fetchNextPage: fetchNextHistoryPage,
     hasNextPage: hasNextHistoryPage,
     isFetchingNextPage: isFetchingNextHistoryPage,
@@ -85,7 +86,7 @@ export const ScoreMemberDetailPage = ({ memberId }: ScoreMemberDetailPageProps) 
   });
 
   const historyTriggerRef = useInfiniteScroll({
-    enabled: !isHistoryLoading && !isHistoryError,
+    enabled: !isHistoryLoading && !isHistoryLoadingError && !isHistoryFetchNextPageError,
     hasNextPage: hasNextHistoryPage,
     isFetching: isFetchingNextHistoryPage,
     onLoadMore: () => {
@@ -232,14 +233,14 @@ export const ScoreMemberDetailPage = ({ memberId }: ScoreMemberDetailPageProps) 
           >
             <ul>
               {isHistoryLoading && <li className={messageClassName}>Loading...</li>}
-              {!isHistoryLoading && isHistoryError && (
+              {!isHistoryLoading && isHistoryLoadingError && (
                 <li className={messageClassName}>점수 기록을 불러오지 못했습니다.</li>
               )}
-              {!isHistoryLoading && !isHistoryError && currentHistories.length === 0 && (
+              {!isHistoryLoading && !isHistoryLoadingError && currentHistories.length === 0 && (
                 <li className={messageClassName}>점수 기록이 없습니다.</li>
               )}
               {!isHistoryLoading &&
-                !isHistoryError &&
+                !isHistoryLoadingError &&
                 currentHistories.map((history) => (
                   <li
                     key={history.id}
@@ -271,12 +272,35 @@ export const ScoreMemberDetailPage = ({ memberId }: ScoreMemberDetailPageProps) 
                     </span>
                   </li>
                 ))}
-              {!isHistoryLoading && !isHistoryError && hasNextHistoryPage && (
-                <li aria-hidden="true">
-                  <div ref={historyTriggerRef} className="h-10" />
+              {!isHistoryLoading &&
+                !isHistoryLoadingError &&
+                !isHistoryFetchNextPageError &&
+                hasNextHistoryPage && (
+                  <li aria-hidden="true">
+                    <div ref={historyTriggerRef} className="h-10" />
+                  </li>
+                )}
+              {isFetchingNextHistoryPage && (
+                <li className={messageClassName} role="status" aria-live="polite">
+                  Loading...
                 </li>
               )}
-              {isFetchingNextHistoryPage && <li className={messageClassName}>Loading...</li>}
+              {isHistoryFetchNextPageError && (
+                <li className="flex flex-col items-start gap-8 px-13 py-8" role="alert">
+                  <p className="text-body-body9 text-foreground-tertiary">
+                    추가 점수 기록을 불러오지 못했습니다.
+                  </p>
+                  <button
+                    type="button"
+                    className="rounded-2 border-border-quaternary text-body-body9 text-foreground-normal border px-11 py-7"
+                    onClick={() => {
+                      void fetchNextHistoryPage();
+                    }}
+                  >
+                    다시 시도
+                  </button>
+                </li>
+              )}
             </ul>
           </div>
         </>

@@ -31,36 +31,45 @@ export const useMemberActivityRecordsQuery = ({
   pageSize,
   enabled = true,
 }: UseMemberActivityRecordsQueryParams) => {
-  const { data, fetchNextPage, hasNextPage, isFetchingNextPage, isLoading, isError, refetch } =
-    useInfiniteQuery(
-      infiniteQueryOptions<
-        PageWithContent<ScoreHistory>,
-        Error,
-        InfiniteSelectResult<ScoreHistory>,
-        ReturnType<typeof activityScoreQueryKeys.memberActivityRecords>,
-        number
-      >({
-        queryKey: activityScoreQueryKeys.memberActivityRecords({
-          memberId,
-          scoreType,
-          pageSize,
-        }),
-        queryFn: async ({ pageParam }) => {
-          const response = await activityScoreApi.getMemberActivityRecords(memberId, {
-            scoreType,
-            pageNum: pageParam,
-            pageSize,
-          });
-
-          return mapActivityRecordPageDtoToPage(response);
-        },
-        initialPageParam: 0,
-        getNextPageParam: getNextPageNumber,
-        select: createInfiniteDataSelector<ScoreHistory>(),
-        enabled,
-        retry: false,
+  const {
+    data,
+    fetchNextPage,
+    hasNextPage,
+    isFetchingNextPage,
+    isLoading,
+    isError,
+    isLoadingError,
+    isFetchNextPageError,
+    refetch,
+  } = useInfiniteQuery(
+    infiniteQueryOptions<
+      PageWithContent<ScoreHistory>,
+      Error,
+      InfiniteSelectResult<ScoreHistory>,
+      ReturnType<typeof activityScoreQueryKeys.memberActivityRecords>,
+      number
+    >({
+      queryKey: activityScoreQueryKeys.memberActivityRecords({
+        memberId,
+        scoreType,
+        pageSize,
       }),
-    );
+      queryFn: async ({ pageParam }) => {
+        const response = await activityScoreApi.getMemberActivityRecords(memberId, {
+          scoreType,
+          pageNum: pageParam,
+          pageSize,
+        });
+
+        return mapActivityRecordPageDtoToPage(response);
+      },
+      initialPageParam: 0,
+      getNextPageParam: getNextPageNumber,
+      select: createInfiniteDataSelector<ScoreHistory>(),
+      enabled,
+      retry: false,
+    }),
+  );
 
   const histories = data?.items ?? [];
 
@@ -73,6 +82,8 @@ export const useMemberActivityRecordsQuery = ({
     isFetchingNextPage,
     isLoading,
     isError,
+    isLoadingError,
+    isFetchNextPageError,
     refetch,
   };
 };

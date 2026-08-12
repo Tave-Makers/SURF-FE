@@ -2,7 +2,7 @@
 
 import { Accordion } from '@surf/ui/accordion';
 import { HeaderMode } from '@surf/ui/header';
-import { useRouter } from 'next/navigation';
+import Link from 'next/link';
 import { useMemo } from 'react';
 import { filterIndividualScoreCategories } from '@/entities/activity-score/model/criterion';
 import { useActivityTypesQuery } from '@/entities/activity-score/model/queries/useActivityTypesQuery';
@@ -10,7 +10,6 @@ import { PAGE_ROUTES } from '@/shared/config/path';
 import { AppHeader } from '@/widgets/header/ui/AppHeader';
 
 export const ScoreAssignPage = () => {
-  const router = useRouter();
   const { data: allCategories = [], isLoading, isError } = useActivityTypesQuery();
 
   // 대상 선택 화면이 회원만 지원하므로 팀 대상 활동은 노출하지 않는다.
@@ -43,13 +42,12 @@ export const ScoreAssignPage = () => {
               <ul className="pb-7">
                 {category.criteria.map((criterion) => (
                   <li key={criterion.id}>
-                    <button
-                      type="button"
-                      className="text-body-body6 text-foreground-normal w-full px-12 py-10 text-left"
-                      onClick={() => router.push(PAGE_ROUTES.SCORE_MNG_ASSIGN_TARGET(criterion.id))}
+                    <Link
+                      href={PAGE_ROUTES.SCORE_MNG_ASSIGN_TARGET(criterion.id)}
+                      className="text-body-body6 text-foreground-normal block w-full px-12 py-10 text-left"
                     >
                       {criterion.label}
-                    </button>
+                    </Link>
                   </li>
                 ))}
               </ul>

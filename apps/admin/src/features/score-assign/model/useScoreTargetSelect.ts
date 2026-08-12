@@ -1,10 +1,12 @@
 'use client';
 
+import { useDebouncedValue } from '@surf/hooks';
 import { useAlertStore } from '@surf/ui/store/alertStore';
 import { useToastStore } from '@surf/ui/store/toastStore';
 import { useRouter } from 'next/navigation';
 import { useCallback, useMemo, useState } from 'react';
 import { useActiveGenerationQuery } from '@/entities/active-cohort/model/queries/useActiveGenerationQuery';
+import { isTeamScoreCriterion } from '@/entities/activity-score/model/criterion';
 import { useActivityTypesQuery } from '@/entities/activity-score/model/queries/useActivityTypesQuery';
 import { useCreateActivityRecordMutation } from '@/entities/activity-score/model/queries/useCreateActivityRecordMutation';
 import type {
@@ -93,7 +95,12 @@ export const useScoreTargetSelect = (criterionId: string) => {
     [categories, criterionId],
   );
 
-  const normalizedKeyword = keyword.trim();
+  // URL로 직접 진입하는 경우를 대비한 방어. 팀 대상 활동은 회원 선택으로 부여할 수 없다.
+  const isTeamCriterion = criterion != null && isTeamScoreCriterion(criterion);
+
+  // 입력창은 keyword로 즉시 반응하고, 대량 목록 필터링은 입력이 멎은 뒤에만 수행한다.
+  const debouncedKeyword = useDebouncedValue(keyword, 300);
+  const normalizedKeyword = debouncedKeyword.trim();
 
   /** 검색은 회원 이름으로만 수행한다. */
   const filterByKeyword = useCallback(
@@ -151,7 +158,7 @@ export const useScoreTargetSelect = (criterionId: string) => {
   };
 
   const applyScore = () => {
-    if (!criterion || selectedIds.size === 0) return;
+    if (!criterion || isTeamCriterion || selectedIds.size === 0) return;
 
     openAlert({
       title: '적용하시겠습니까?',
@@ -217,6 +224,7 @@ export const useScoreTargetSelect = (criterionId: string) => {
   return {
     state: {
       criterion,
+      isTeamCriterion,
       keyword,
       targetKind,
       partGroups,
@@ -225,7 +233,7 @@ export const useScoreTargetSelect = (criterionId: string) => {
       selectedIds,
       isLoading,
       isError,
-      isApplyDisabled: selectedIds.size === 0 || !criterion || isCreatePending,
+      isApplyDisabled: selectedIds.size === 0 || !criterion || isTeamCriterion || isCreatePending,
     },
     actions: {
       setKeyword,

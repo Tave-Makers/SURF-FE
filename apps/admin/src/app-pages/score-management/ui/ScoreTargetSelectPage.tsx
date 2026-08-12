@@ -83,25 +83,38 @@ export const ScoreTargetSelectPage = ({ criterionId }: ScoreTargetSelectPageProp
             활동 종류를 찾을 수 없습니다.
           </p>
         )}
-        {!state.isLoading && !state.isError && state.criterion && state.targetKind === 'part' && (
-          <ScoreTargetGroupList
-            groups={state.partGroups}
-            openIds={state.openGroupIds}
-            onToggleGroup={actions.toggleGroup}
-            selectedIds={state.selectedIds}
-            onToggleMember={actions.toggleMember}
-          />
+        {!state.isLoading && !state.isError && state.isTeamCriterion && (
+          <p className="text-body-body9 text-foreground-tertiary px-13 py-12">
+            팀 단위로 부여하는 활동입니다. 회원 개별 부여는 지원하지 않습니다.
+          </p>
         )}
-        {!state.isLoading && !state.isError && state.criterion && state.targetKind !== 'part' && (
-          <ScoreTargetTeamList
-            teams={state.teams}
-            openIds={state.openGroupIds}
-            onToggleGroup={actions.toggleGroup}
-            toTargetMembers={actions.toTargetMembers}
-            selectedIds={state.selectedIds}
-            onToggleMember={actions.toggleMember}
-          />
-        )}
+        {!state.isLoading &&
+          !state.isError &&
+          state.criterion &&
+          !state.isTeamCriterion &&
+          state.targetKind === 'part' && (
+            <ScoreTargetGroupList
+              groups={state.partGroups}
+              openIds={state.openGroupIds}
+              onToggleGroup={actions.toggleGroup}
+              selectedIds={state.selectedIds}
+              onToggleMember={actions.toggleMember}
+            />
+          )}
+        {!state.isLoading &&
+          !state.isError &&
+          state.criterion &&
+          !state.isTeamCriterion &&
+          state.targetKind !== 'part' && (
+            <ScoreTargetTeamList
+              teams={state.teams}
+              openIds={state.openGroupIds}
+              onToggleGroup={actions.toggleGroup}
+              toTargetMembers={actions.toTargetMembers}
+              selectedIds={state.selectedIds}
+              onToggleMember={actions.toggleMember}
+            />
+          )}
       </div>
 
       <div className="px-13 pt-13 pb-16">

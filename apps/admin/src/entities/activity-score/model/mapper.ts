@@ -103,25 +103,29 @@ const formatScoreDate = (date: string | null | undefined) => {
 export const getScoreCriterionRouteId = (category: string, activityName: string) =>
   `${category}:${activityName}`;
 
+/** 서버 enum 값 형태(대문자 스네이크)인지 검사한다. 표시용 라벨이 섞여 들어오는 것을 막는다. */
+const ENUM_VALUE_PATTERN = /^[A-Z][A-Z0-9_]*$/;
+
 /**
- * 서버는 `category`/`typeName`을 enum 값으로 내려주고, 점수 부여 API도 enum 값을 요구한다.
- * 표시용 라벨(`displayName`)로 대체하면 요청이 거부되므로, enum 값이 없는 항목은 선택 대상에서 제외한다.
+ * 점수 부여 API는 `category`/`activityName`을 enum 값으로 요구한다.
+ * - `category`: 그룹의 `categoryName` (enum). `activityTypeList[].category`는 표시명이므로 쓰지 않는다.
+ * - `activityName`: `typeName` (enum). `displayName`은 표시명이다.
+ * enum 형태가 아니면 부여 요청이 거부되므로 선택 대상에서 제외한다.
  */
 const mapActivityTypeDtoToCriterion = (
   dto: ActivityTypeDto,
   categoryName: string,
 ): ScoreCriterion | null => {
   const activityName = normalizeText(dto.typeName);
-  const category = normalizeText(dto.category, categoryName);
 
-  if (!activityName || !category) return null;
+  if (!ENUM_VALUE_PATTERN.test(activityName) || !ENUM_VALUE_PATTERN.test(categoryName)) return null;
 
   const point = normalizeDelta(dto.delta, dto.scoreType);
 
   return {
-    id: getScoreCriterionRouteId(category, activityName),
+    id: getScoreCriterionRouteId(categoryName, activityName),
     categoryId: categoryName,
-    category,
+    category: categoryName,
     activityName,
     scoreType: normalizeScoreType(dto.scoreType),
     appliedTarget: normalizeText(dto.appliedTarget),
@@ -134,7 +138,7 @@ export const mapActivityTypeGroupsDtoToCategories = (
   groups: ActivityTypeGroupDto[],
 ): ScoreCategory[] =>
   groups.map((group, index) => {
-    const categoryName = normalizeText(group.category?.categoryName, `category-${index}`);
+    const categoryName = normalizeText(group.category?.categoryName);
     const criteria = (group.activityTypeList ?? [])
       .map((activityType) => mapActivityTypeDtoToCriterion(activityType, categoryName))
       .filter((criterion): criterion is ScoreCriterion => criterion !== null);

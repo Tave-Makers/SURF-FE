@@ -6,7 +6,7 @@ import { SurfIcon } from '@surf/ui/icon';
 import { InfoBadge } from '@surf/ui/info-badge';
 import { useAlertStore } from '@surf/ui/store/alertStore';
 import { useToastStore } from '@surf/ui/store/toastStore';
-import { useMemo, useState } from 'react';
+import { type KeyboardEvent, useMemo, useState } from 'react';
 import { useDeleteActivityRecordMutation } from '@/entities/activity-score/model/queries/useDeleteActivityRecordMutation';
 import { useMemberActivityRecordsQuery } from '@/entities/activity-score/model/queries/useMemberActivityRecordsQuery';
 import type { ScoreHistory, ScoreHistoryKind } from '@/entities/activity-score/model/types';
@@ -32,7 +32,14 @@ const scoreTypeByTab: Record<ScoreHistoryKind, 'REWARD' | 'PENALTY'> = {
   negative: 'PENALTY',
 };
 
+const SCORE_HISTORY_KINDS: ScoreHistoryKind[] = ['positive', 'negative'];
+
 const messageClassName = 'text-body-body9 text-foreground-tertiary px-13 py-12';
+const HISTORY_PANEL_ID = 'score-history-panel';
+
+const getHistoryTabId = (kind: ScoreHistoryKind) => `score-history-tab-${kind}`;
+const getScoreHistoryKindByIndex = (index: number): ScoreHistoryKind =>
+  SCORE_HISTORY_KINDS[index] ?? SCORE_HISTORY_KINDS[0];
 
 /** 가장 최신 기수의 트랙으로 `15기 디자인` 형태의 배지 문구를 만든다. */
 const getMemberInfoText = (tracks: MemberTrack[]) => {
@@ -75,6 +82,39 @@ export const ScoreMemberDetailPage = ({ memberId }: ScoreMemberDetailPageProps) 
   });
 
   const memberInfo = useMemo(() => getMemberInfoText(member?.tracks ?? []), [member?.tracks]);
+
+  const moveTabFocus = (kind: ScoreHistoryKind) => {
+    setActiveTab(kind);
+    document.getElementById(getHistoryTabId(kind))?.focus();
+  };
+
+  const handleTabKeyDown = (
+    event: KeyboardEvent<HTMLButtonElement>,
+    currentKind: ScoreHistoryKind,
+  ) => {
+    const currentIndex = SCORE_HISTORY_KINDS.indexOf(currentKind);
+
+    if (event.key === 'ArrowRight' || event.key === 'ArrowDown') {
+      event.preventDefault();
+      moveTabFocus(getScoreHistoryKindByIndex((currentIndex + 1) % SCORE_HISTORY_KINDS.length));
+    }
+    if (event.key === 'ArrowLeft' || event.key === 'ArrowUp') {
+      event.preventDefault();
+      moveTabFocus(
+        getScoreHistoryKindByIndex(
+          (currentIndex - 1 + SCORE_HISTORY_KINDS.length) % SCORE_HISTORY_KINDS.length,
+        ),
+      );
+    }
+    if (event.key === 'Home') {
+      event.preventDefault();
+      moveTabFocus(getScoreHistoryKindByIndex(0));
+    }
+    if (event.key === 'End') {
+      event.preventDefault();
+      moveTabFocus(getScoreHistoryKindByIndex(SCORE_HISTORY_KINDS.length - 1));
+    }
+  };
 
   const handleDelete = (history: ScoreHistory) => {
     openAlert({
@@ -144,20 +184,26 @@ export const ScoreMemberDetailPage = ({ memberId }: ScoreMemberDetailPageProps) 
               <span className="text-body-body3 text-foreground-normal pb-8">점</span>
             </div>
 
-            <div className="grid grid-cols-2">
-              {(Object.keys(tabLabels) as ScoreHistoryKind[]).map((kind) => {
+            <div className="grid grid-cols-2" role="tablist" aria-label="점수 기록 종류">
+              {SCORE_HISTORY_KINDS.map((kind) => {
                 const isActive = activeTab === kind;
 
                 return (
                   <button
                     key={kind}
+                    id={getHistoryTabId(kind)}
                     type="button"
+                    role="tab"
+                    aria-selected={isActive}
+                    aria-controls={HISTORY_PANEL_ID}
+                    tabIndex={isActive ? 0 : -1}
                     className={`text-body-body8 h-[2.75rem] border-b ${
                       isActive
                         ? 'border-foreground-normal text-foreground-normal'
                         : 'border-border-normal text-foreground-tertiary'
                     }`}
                     onClick={() => setActiveTab(kind)}
+                    onKeyDown={(event) => handleTabKeyDown(event, kind)}
                   >
                     {tabLabels[kind]}
                   </button>
@@ -166,46 +212,55 @@ export const ScoreMemberDetailPage = ({ memberId }: ScoreMemberDetailPageProps) 
             </div>
           </section>
 
-          <ul className="scrollbar-hide mt-11 flex-1 overflow-y-auto">
-            {isHistoryLoading && <li className={messageClassName}>Loading...</li>}
-            {!isHistoryLoading && isHistoryError && (
-              <li className={messageClassName}>점수 기록을 불러오지 못했습니다.</li>
-            )}
-            {!isHistoryLoading && !isHistoryError && currentHistories.length === 0 && (
-              <li className={messageClassName}>점수 기록이 없습니다.</li>
-            )}
-            {!isHistoryLoading &&
-              !isHistoryError &&
-              currentHistories.map((history) => (
-                <li
-                  key={history.id}
-                  className="grid min-h-[4.625rem] grid-cols-[2rem_4rem_1fr_4rem] items-start px-13 py-13"
-                >
-                  <button
-                    type="button"
-                    aria-label={`${history.label} 점수 기록 삭제`}
-                    className="text-foreground-normal -ml-4 flex h-15 w-15 items-center justify-center"
-                    onClick={() => handleDelete(history)}
+          <div
+            id={HISTORY_PANEL_ID}
+            role="tabpanel"
+            aria-labelledby={getHistoryTabId(activeTab)}
+            className="scrollbar-hide mt-11 flex-1 overflow-y-auto"
+          >
+            <ul>
+              {isHistoryLoading && <li className={messageClassName}>Loading...</li>}
+              {!isHistoryLoading && isHistoryError && (
+                <li className={messageClassName}>점수 기록을 불러오지 못했습니다.</li>
+              )}
+              {!isHistoryLoading && !isHistoryError && currentHistories.length === 0 && (
+                <li className={messageClassName}>점수 기록이 없습니다.</li>
+              )}
+              {!isHistoryLoading &&
+                !isHistoryError &&
+                currentHistories.map((history) => (
+                  <li
+                    key={history.id}
+                    className="grid min-h-[4.625rem] grid-cols-[2rem_4rem_1fr_4rem] items-start px-13 py-13"
                   >
-                    <SurfIcon name="X" size="m" />
-                  </button>
-                  <span className="text-body-body8 text-foreground-normal pt-1">{history.date}</span>
-                  <span className="text-body-body6 text-foreground-normal pt-1">
-                    {history.label}
-                  </span>
-                  <span className="flex flex-col items-end">
-                    <span className="text-body-body6 text-foreground-normal">
-                      {formatPoint(history.point)}
+                    <button
+                      type="button"
+                      aria-label={`${history.label} 점수 기록 삭제`}
+                      className="text-foreground-normal -ml-4 flex h-15 w-15 items-center justify-center"
+                      onClick={() => handleDelete(history)}
+                    >
+                      <SurfIcon name="X" size="m" />
+                    </button>
+                    <span className="text-body-body8 text-foreground-normal pt-1">
+                      {history.date}
                     </span>
-                    {history.balance != null && (
-                      <span className="text-body-body9 text-foreground-tertiary">
-                        {history.balance}
+                    <span className="text-body-body6 text-foreground-normal pt-1">
+                      {history.label}
+                    </span>
+                    <span className="flex flex-col items-end">
+                      <span className="text-body-body6 text-foreground-normal">
+                        {formatPoint(history.point)}
                       </span>
-                    )}
-                  </span>
-                </li>
-              ))}
-          </ul>
+                      {history.balance != null && (
+                        <span className="text-body-body9 text-foreground-tertiary">
+                          {history.balance}
+                        </span>
+                      )}
+                    </span>
+                  </li>
+                ))}
+            </ul>
+          </div>
         </>
       )}
     </div>

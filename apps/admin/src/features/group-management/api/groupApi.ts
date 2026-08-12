@@ -15,7 +15,10 @@ export const groupApi = {
     const res = await axiosInstance.post<GroupResponse>('/v1/admin/teams', body);
     return res.data.data;
   },
-  getGroupList: async (params?: { type: GroupApiType }): Promise<GroupGenerationResDto[]> => {
+  getGroupList: async (params?: {
+    type?: GroupApiType;
+    generation?: number;
+  }): Promise<GroupGenerationResDto[]> => {
     const res = await axiosInstance.get<GroupGenerationListResponse>(
       '/v1/admin/teams',
       params ? { params } : undefined,

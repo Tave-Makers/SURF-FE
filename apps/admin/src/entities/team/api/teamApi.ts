@@ -7,11 +7,16 @@ import type {
   TeamListResponse,
 } from './types';
 
+type GetTeamsParams = {
+  type?: TeamApiType;
+  generation?: number;
+};
+
 export const teamApi = {
-  /** 등록된 팀 목록을 기수 섹션 단위로 조회한다. type 미지정 시 전체. */
-  getTeams: async (type?: TeamApiType): Promise<TeamGenerationSectionDto[]> => {
+  /** 등록된 팀 목록을 기수 섹션 단위로 조회한다. type/generation 미지정 시 전체. */
+  getTeams: async (params?: GetTeamsParams): Promise<TeamGenerationSectionDto[]> => {
     const res = await axiosInstance.get<TeamListResponse>('/v1/admin/teams', {
-      params: type ? { type } : undefined,
+      params,
     });
 
     return res.data.data ?? [];

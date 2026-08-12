@@ -94,10 +94,14 @@ export const ScoreMemberDetailPage = ({ memberId }: ScoreMemberDetailPageProps) 
           label: '삭제하기',
           onClick: () => {
             closeAlert();
-            deleteActivityRecord(history.id, {
-              onSuccess: () => showToast('점수 기록이 삭제되었습니다.'),
-              onError: () => showToast('점수 기록을 삭제하지 못했습니다. 잠시 후 다시 시도해주세요.'),
-            });
+            deleteActivityRecord(
+              { activityRecordId: history.id, memberId },
+              {
+                onSuccess: () => showToast('점수 기록이 삭제되었습니다.'),
+                onError: () =>
+                  showToast('점수 기록을 삭제하지 못했습니다. 잠시 후 다시 시도해주세요.'),
+              },
+            );
           },
         },
       ],

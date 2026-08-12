@@ -1,18 +1,22 @@
 'use client';
 
 import { SurfIcon } from '@surf/ui/icon';
-import { useEffect, useMemo, useState } from 'react';
+import { useState } from 'react';
 import { useTeamMemberScoresQuery } from '../model/queries/useTeamMemberScoresQuery';
-import type { ActivityScoreTeam } from '../model/types';
 import { ScoreMemberScoreList } from './ScoreMemberScoreList';
 
+type ScoreGroupTeam = {
+  id: number;
+  name: string;
+};
+
 type ScoreGroupScoreListProps = {
-  teams: ActivityScoreTeam[];
+  teams: ScoreGroupTeam[];
   onClickMember: (memberId: number) => void;
 };
 
 type ScoreTeamAccordionItemProps = {
-  team: ActivityScoreTeam;
+  team: ScoreGroupTeam;
   isOpen: boolean;
   onToggle: () => void;
   onClickMember: (memberId: number) => void;
@@ -41,7 +45,7 @@ const ScoreTeamAccordionItem = ({
         onClick={onToggle}
         aria-expanded={isOpen}
       >
-        <span>{team.name}</span>
+        <span className="truncate">{team.name}</span>
         <SurfIcon
           name="ChevronDown"
           size="l"
@@ -65,19 +69,17 @@ const ScoreTeamAccordionItem = ({
 };
 
 export const ScoreGroupScoreList = ({ teams, onClickMember }: ScoreGroupScoreListProps) => {
-  const initialOpen = useMemo(
-    () =>
-      teams.reduce<Record<number, boolean>>((acc, team) => {
-        acc[team.id] = Boolean(team.defaultOpen);
-        return acc;
-      }, {}),
-    [teams],
-  );
-  const [openById, setOpenById] = useState(initialOpen);
+  const [openIds, setOpenIds] = useState<Set<number>>(new Set());
 
-  useEffect(() => {
-    setOpenById(initialOpen);
-  }, [initialOpen]);
+  const handleToggle = (teamId: number) => {
+    setOpenIds((prev) => {
+      const next = new Set(prev);
+      if (next.has(teamId)) next.delete(teamId);
+      else next.add(teamId);
+
+      return next;
+    });
+  };
 
   return (
     <div>
@@ -85,13 +87,8 @@ export const ScoreGroupScoreList = ({ teams, onClickMember }: ScoreGroupScoreLis
         <ScoreTeamAccordionItem
           key={team.id}
           team={team}
-          isOpen={openById[team.id] ?? false}
-          onToggle={() =>
-            setOpenById((prev) => ({
-              ...prev,
-              [team.id]: !(prev[team.id] ?? false),
-            }))
-          }
+          isOpen={openIds.has(team.id)}
+          onToggle={() => handleToggle(team.id)}
           onClickMember={onClickMember}
         />
       ))}

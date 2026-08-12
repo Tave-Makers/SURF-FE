@@ -2,8 +2,8 @@
 
 import { useRouter } from 'next/navigation';
 import { useMemo, useState } from 'react';
+import { useActiveGenerationQuery } from '@/entities/active-cohort/model/queries/useActiveGenerationQuery';
 import { useMemberScoreRankingQuery } from '@/entities/activity-score/model/queries/useMemberScoreRankingQuery';
-import { useTeamScoreRankingQuery } from '@/entities/activity-score/model/queries/useTeamScoreRankingQuery';
 import type { ScoreListFilter } from '@/entities/activity-score/model/types';
 import { ScoreFilterChip } from '@/entities/activity-score/ui/ScoreFilterChip';
 import { ScoreFloatingActionButton } from '@/entities/activity-score/ui/ScoreFloatingActionButton';
@@ -12,6 +12,7 @@ import {
   ScoreMemberScoreList,
   ScoreTableHeader,
 } from '@/entities/activity-score/ui/ScoreMemberScoreList';
+import { useTeamsQuery } from '@/entities/team/model/queries/useTeamsQuery';
 import { PAGE_ROUTES } from '@/shared/config/path';
 
 const FILTER_LABELS: Record<ScoreListFilter, string> = {
@@ -30,6 +31,9 @@ export const ScoreManagementPage = () => {
 
   const isIndividual = filter === 'individual';
 
+  // 활동 기수 설정에서 지정된 기수의 팀만 노출한다.
+  const { data: activeCohort } = useActiveGenerationQuery();
+
   const {
     data: members = [],
     isLoading: isMemberRankingLoading,
@@ -42,12 +46,11 @@ export const ScoreManagementPage = () => {
 
   const {
     data: teams = [],
-    isLoading: isTeamRankingLoading,
-    isError: isTeamRankingError,
-  } = useTeamScoreRankingQuery({
-    kind: isIndividual ? undefined : filter,
-    pageNum: 0,
-    pageSize: SCORE_RANKING_PAGE_SIZE,
+    isLoading: isTeamsLoading,
+    isError: isTeamsError,
+  } = useTeamsQuery({
+    kind: isIndividual ? 'study' : filter,
+    generation: activeCohort?.generation,
     enabled: !isIndividual,
   });
 
@@ -56,14 +59,12 @@ export const ScoreManagementPage = () => {
     [members],
   );
 
-  const sortedTeams = useMemo(() => [...teams].sort((a, b) => b.totalScore - a.totalScore), [teams]);
-
   const handleClickMember = (memberId: number) => {
     router.push(PAGE_ROUTES.SCORE_MNG_MEMBER(memberId));
   };
 
-  const isLoading = isIndividual ? isMemberRankingLoading : isTeamRankingLoading;
-  const isError = isIndividual ? isMemberRankingError : isTeamRankingError;
+  const isLoading = isIndividual ? isMemberRankingLoading : isTeamsLoading;
+  const isError = isIndividual ? isMemberRankingError : isTeamsError;
 
   return (
     <div className="relative flex h-full flex-col overflow-hidden">
@@ -95,7 +96,7 @@ export const ScoreManagementPage = () => {
           <ScoreMemberScoreList members={sortedMembers} onClickMember={handleClickMember} />
         ) : null}
         {!isLoading && !isError && !isIndividual ? (
-          <ScoreGroupScoreList key={filter} teams={sortedTeams} onClickMember={handleClickMember} />
+          <ScoreGroupScoreList key={filter} teams={teams} onClickMember={handleClickMember} />
         ) : null}
       </div>
 

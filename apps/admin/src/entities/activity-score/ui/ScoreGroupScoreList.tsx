@@ -81,6 +81,14 @@ export const ScoreGroupScoreList = ({ teams, onClickMember }: ScoreGroupScoreLis
     });
   };
 
+  if (teams.length === 0) {
+    return (
+      <p className="text-body-body9 text-foreground-tertiary px-13 py-12">
+        등록된 그룹이 없습니다.
+      </p>
+    );
+  }
+
   return (
     <div>
       {teams.map((team) => (

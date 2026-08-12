@@ -25,6 +25,12 @@ export const ScoreTableHeader = () => {
 };
 
 export const ScoreMemberScoreList = ({ members, onClickMember }: ScoreMemberScoreListProps) => {
+  if (members.length === 0) {
+    return (
+      <p className="text-body-body9 text-foreground-tertiary px-13 py-12">회원이 없습니다.</p>
+    );
+  }
+
   return (
     <ul>
       {members.map((member) => (

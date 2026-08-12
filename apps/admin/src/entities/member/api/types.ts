@@ -54,6 +54,24 @@ export interface MemberItem {
   trackList?: ApiTrack[];
 }
 
+/**
+ * 파트별 그룹 멤버 (활동 기수 기준)
+ */
+export interface MemberCardDTO {
+  memberId: number;
+  name?: string;
+  profileImageUrl?: string;
+  tracks?: ApiTrack[];
+}
+
+export interface MemberGroupedByPartDTO {
+  part?: string;
+  partDisplayName?: string;
+  members?: MemberCardDTO[];
+}
+
+export type MembersGroupedByPartResponse = CommonResponse<MemberGroupedByPartDTO[]>;
+
 /** 전체 멤버 수(전체 합) */
 export interface MemberCountDTO {
   membersCount: number;

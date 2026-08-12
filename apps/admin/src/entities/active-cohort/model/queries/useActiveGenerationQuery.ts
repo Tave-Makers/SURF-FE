@@ -17,6 +17,7 @@ export function useActiveGenerationQuery() {
       const response = await getActiveGeneration();
       return toActiveCohort(response.data);
     },
+    staleTime: Infinity,
   });
 
   useEffect(() => {

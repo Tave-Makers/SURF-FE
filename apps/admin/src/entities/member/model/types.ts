@@ -48,6 +48,15 @@ export interface MemberSummary {
 }
 
 /**
+ * 파트별로 묶인 멤버 그룹 (활동 기수 기준)
+ */
+export interface PartMemberGroup {
+  part: string;
+  partLabel: string;
+  members: MemberSummary[];
+}
+
+/**
  * 멤버 기본 정보 (목록/요약 뷰에서 사용하는 필드)
  */
 export interface MemberBase extends MemberSummary {

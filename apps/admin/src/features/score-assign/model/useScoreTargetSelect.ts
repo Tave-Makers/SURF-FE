@@ -173,7 +173,8 @@ export const useScoreTargetSelect = (criterionId: string) => {
                   showToast('점수가 적용되었습니다.');
                   router.push(PAGE_ROUTES.SCORE_MNG);
                 },
-                onError: (error) => showToast(error.message),
+                onError: () =>
+                  showToast('점수를 적용하지 못했습니다. 잠시 후 다시 시도해주세요.'),
               },
             );
           },

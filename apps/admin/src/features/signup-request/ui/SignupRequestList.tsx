@@ -2,6 +2,7 @@ import { SurfIcon } from '@surf/ui/icon';
 import { MemberStatusBadge } from '@/entities/member/ui/MemberStatusBadge';
 import { SelectableMemberCard } from '@/entities/member/ui/SelectableMemberCard';
 import { SignupRequestMember } from '@/entities/signup-request/model/types';
+import CareerEmpty from '@/shared/assets/icons/career-empty.svg';
 
 interface SignupRequestListProps {
   members: SignupRequestMember[];
@@ -23,9 +24,15 @@ export const SignupRequestList = ({
   onToggleSelect,
   onClickMore,
 }: SignupRequestListProps) => {
-  //TODO: Empty Space 적용 필요
   if (members.length === 0) {
-    return <div>가입 신청 내역이 없습니다.</div>;
+    return (
+      <div className="flex min-h-full w-full items-center justify-center px-13 py-10">
+        <div className="flex flex-col items-center gap-5 text-center">
+          <CareerEmpty />
+          <p className="text-body-body8 text-foreground-tertiary">가입 신청 내역이 없습니다.</p>
+        </div>
+      </div>
+    );
   }
 
   return (

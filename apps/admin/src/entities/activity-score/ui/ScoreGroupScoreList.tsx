@@ -4,6 +4,7 @@ import { SurfIcon } from '@surf/ui/icon';
 import { useState } from 'react';
 import { useTeamMemberScoresQuery } from '../model/queries/useTeamMemberScoresQuery';
 import { ScoreMemberScoreList } from './ScoreMemberScoreList';
+import CareerEmpty from '@/shared/assets/icons/career-empty.svg';
 
 type ScoreGroupTeam = {
   id: number;
@@ -22,6 +23,15 @@ type ScoreTeamAccordionItemProps = {
   onToggle: () => void;
   onClickMember: (memberId: number) => void;
 };
+
+const ScoreGroupEmptyState = ({ message }: { message: string }) => (
+  <div className="flex min-h-80 w-full items-center justify-center px-13 py-10">
+    <div className="flex flex-col items-center gap-5 text-center">
+      <CareerEmpty />
+      <p className="text-body-body8 text-foreground-tertiary">{message}</p>
+    </div>
+  </div>
+);
 
 const ScoreTeamAccordionItem = ({
   team,
@@ -87,7 +97,7 @@ export const ScoreGroupScoreList = ({
   };
 
   if (teams.length === 0) {
-    return <p className="text-body-body9 text-foreground-tertiary px-13 py-12">{emptyMessage}</p>;
+    return <ScoreGroupEmptyState message={emptyMessage} />;
   }
 
   return (

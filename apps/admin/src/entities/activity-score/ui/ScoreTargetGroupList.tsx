@@ -5,6 +5,7 @@ import type { ScoreTargetGroup, ScoreTargetMember } from '../model/types';
 import { ScoreTargetMemberList } from './ScoreTargetMemberList';
 import { useTeamDetailQuery } from '@/entities/team/model/queries/useTeamDetailQuery';
 import type { Team, TeamMember } from '@/entities/team/model/types';
+import CareerEmpty from '@/shared/assets/icons/career-empty.svg';
 
 type ScoreTargetSelection = {
   selectedIds: Set<number>;
@@ -19,6 +20,15 @@ type ScoreTargetGroupSectionProps = ScoreTargetSelection & {
   isLoading?: boolean;
   isError?: boolean;
 };
+
+const ScoreTargetEmptyState = ({ message }: { message: string }) => (
+  <div className="flex min-h-full w-full items-center justify-center px-13 py-10">
+    <div className="flex flex-col items-center gap-5 text-center">
+      <CareerEmpty />
+      <p className="text-body-body8 text-foreground-tertiary">{message}</p>
+    </div>
+  </div>
+);
 
 export const ScoreTargetGroupSection = ({
   title,
@@ -70,6 +80,7 @@ export const ScoreTargetGroupSection = ({
 
 type ScoreTargetGroupListProps = ScoreTargetSelection & {
   groups: ScoreTargetGroup[];
+  emptyMessage: string;
   openIds: Set<string>;
   onToggleGroup: (groupId: string) => void;
 };
@@ -77,11 +88,16 @@ type ScoreTargetGroupListProps = ScoreTargetSelection & {
 /** 파트별 대상 목록 — 회원 데이터를 이미 가지고 있는 경우 */
 export const ScoreTargetGroupList = ({
   groups,
+  emptyMessage,
   openIds,
   onToggleGroup,
   selectedIds,
   onToggleMember,
 }: ScoreTargetGroupListProps) => {
+  if (groups.length === 0) {
+    return <ScoreTargetEmptyState message={emptyMessage} />;
+  }
+
   return (
     <div>
       {groups.map((group) => (
@@ -136,6 +152,7 @@ const ScoreTargetTeamSection = ({
 
 type ScoreTargetTeamListProps = ScoreTargetSelection & {
   teams: Team[];
+  emptyMessage: string;
   openIds: Set<string>;
   onToggleGroup: (groupId: string) => void;
   toTargetMembers: (members: TeamMember[]) => ScoreTargetMember[];
@@ -144,12 +161,17 @@ type ScoreTargetTeamListProps = ScoreTargetSelection & {
 /** 스터디/프로젝트별 대상 목록 — 펼칠 때 팀 상세로 팀원을 조회한다 */
 export const ScoreTargetTeamList = ({
   teams,
+  emptyMessage,
   openIds,
   onToggleGroup,
   toTargetMembers,
   selectedIds,
   onToggleMember,
 }: ScoreTargetTeamListProps) => {
+  if (teams.length === 0) {
+    return <ScoreTargetEmptyState message={emptyMessage} />;
+  }
+
   return (
     <div>
       {teams.map((team) => (

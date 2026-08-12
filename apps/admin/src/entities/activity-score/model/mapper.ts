@@ -155,7 +155,7 @@ export const mapActivityTypeGroupsDtoToCategories = (
     };
   });
 
-const mapActivityRecordDtoToHistory = (dto: ActivityRecordDto): ScoreHistory => {
+export const mapActivityRecordDtoToHistory = (dto: ActivityRecordDto): ScoreHistory => {
   const kind = getScoreHistoryKind(dto.scoreType);
 
   return {

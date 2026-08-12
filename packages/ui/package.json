@@ -7,7 +7,8 @@
     "build": "tsc -p tsconfig.json && shx mkdir -p dist/styles dist/assets && shx cp -r styles/* dist/styles/ && shx cp -r assets/* dist/assets/",
     "storybook": "storybook dev -p 6007",
     "build-storybook": "storybook build",
-    "lint": "eslint ."
+    "lint": "eslint .",
+    "check-types": "tsc -p tsconfig.json --noEmit"
   },
   "exports": {
     "./styles/globals.css": "./dist/styles/globals.css",

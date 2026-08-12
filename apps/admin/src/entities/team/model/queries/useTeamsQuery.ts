@@ -14,7 +14,7 @@ type UseTeamsQueryParams = {
 export const useTeamsQuery = ({ kind, generation, enabled = true }: UseTeamsQueryParams) => {
   return useQuery({
     queryKey: teamQueryKeys.list({ kind, generation }),
-    queryFn: () => teamApi.getTeams(toTeamApiType(kind)),
+    queryFn: () => teamApi.getTeams({ type: toTeamApiType(kind), generation }),
     select: (sections) => mapTeamSectionsToTeams(sections, generation),
     enabled,
     retry: false,

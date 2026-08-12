@@ -17,11 +17,13 @@
     "dev:surf": "turbo run dev --filter=surf-web",
     "build:surf": "turbo run build --filter=surf-web",
     "lint:surf": "turbo run lint --filter=surf-web",
+    "check-types:surf": "turbo run check-types --filter=surf-web",
     "lint:fix:surf": "turbo run lint --filter=surf-web -- --fix",
     "storybook:surf": "turbo run storybook --filter=surf-web",
     "dev:admin": "turbo run dev --filter=surf-admin",
     "build:admin": "turbo run build --filter=surf-admin",
     "lint:admin": "turbo run lint --filter=surf-admin",
+    "check-types:admin": "turbo run check-types --filter=surf-admin",
     "lint:fix:admin": "turbo run lint --filter=surf-admin -- --fix",
     "storybook:admin": "turbo run storybook --filter=surf-admin",
     "test:web": "pnpm --filter surf-web test",
@@ -32,6 +34,10 @@
   "lint-staged": {
     "apps/web/**/*.{js,jsx,ts,tsx}": [
       "pnpm --filter surf-web exec eslint --max-warnings=0 --fix --no-warn-ignored",
+      "pnpm -w exec prettier --write"
+    ],
+    "apps/admin/**/*.{js,jsx,ts,tsx}": [
+      "pnpm --filter surf-admin exec eslint --max-warnings=0 --fix --no-warn-ignored",
       "pnpm -w exec prettier --write"
     ],
     "packages/hooks/**/*.{js,jsx,ts,tsx}": [

@@ -38,5 +38,23 @@ export const mapTeamMemberCardDtoToMember = (dto: TeamMemberCardDto): TeamMember
   })),
 });
 
-export const mapTeamDetailDtoToMembers = (dto: TeamDetailDto | null): TeamMember[] =>
-  (dto?.members ?? []).map(mapTeamMemberCardDtoToMember);
+/**
+ * 팀 상세는 `leader`를 `members`와 별도로 내려준다.
+ * 리더가 `members`에 포함되는 응답과 포함되지 않는 응답을 모두 안전하게 다루기 위해
+ * 둘을 합친 뒤 memberId 기준으로 중복을 제거한다.
+ */
+export const mapTeamDetailDtoToMembers = (dto: TeamDetailDto | null): TeamMember[] => {
+  if (!dto) return [];
+
+  const cards = [dto.leader, ...(dto.members ?? [])].filter(
+    (card): card is TeamMemberCardDto => card != null,
+  );
+
+  const membersById = new Map<number, TeamMember>();
+  cards.forEach((card) => {
+    if (membersById.has(card.memberId)) return;
+    membersById.set(card.memberId, mapTeamMemberCardDtoToMember(card));
+  });
+
+  return Array.from(membersById.values());
+};

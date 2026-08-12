@@ -32,7 +32,13 @@ export const ScoreManagementPage = () => {
   const isIndividual = filter === 'individual';
 
   // 활동 기수 설정에서 지정된 기수의 팀만 노출한다.
-  const { data: activeCohort } = useActiveGenerationQuery();
+  // 기수를 확정하기 전에 팀을 조회하면 전 기수 팀이 섞여 나오므로, 조회 성공 이후에만 팀을 요청한다.
+  const {
+    data: activeCohort,
+    isLoading: isActiveCohortLoading,
+    isError: isActiveCohortError,
+  } = useActiveGenerationQuery();
+  const activeGeneration = activeCohort?.generation;
 
   const {
     data: members = [],
@@ -50,8 +56,8 @@ export const ScoreManagementPage = () => {
     isError: isTeamsError,
   } = useTeamsQuery({
     kind: isIndividual ? 'study' : filter,
-    generation: activeCohort?.generation,
-    enabled: !isIndividual,
+    generation: activeGeneration,
+    enabled: !isIndividual && activeGeneration != null,
   });
 
   const sortedMembers = useMemo(
@@ -63,8 +69,10 @@ export const ScoreManagementPage = () => {
     router.push(PAGE_ROUTES.SCORE_MNG_MEMBER(memberId));
   };
 
-  const isLoading = isIndividual ? isMemberRankingLoading : isTeamsLoading;
-  const isError = isIndividual ? isMemberRankingError : isTeamsError;
+  const isError = isIndividual ? isMemberRankingError : isActiveCohortError || isTeamsError;
+  const isLoading = isIndividual
+    ? isMemberRankingLoading
+    : !isError && (isActiveCohortLoading || activeGeneration == null || isTeamsLoading);
 
   return (
     <div className="relative flex h-full flex-col overflow-hidden">

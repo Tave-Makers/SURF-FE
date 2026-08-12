@@ -88,7 +88,7 @@ export const ScoreTargetSelectPage = ({ criterionId }: ScoreTargetSelectPageProp
             teams={state.teams}
             openIds={state.openGroupIds}
             onToggleGroup={actions.toggleGroup}
-            filterMembers={actions.filterMembers}
+            toTargetMembers={actions.toTargetMembers}
             selectedIds={state.selectedIds}
             onToggleMember={actions.toggleMember}
           />

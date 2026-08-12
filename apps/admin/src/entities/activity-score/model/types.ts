@@ -68,9 +68,20 @@ export type ScoreHistory = {
   balance?: number;
 };
 
+/** 대상 선택 목록에 필요한 최소 회원 정보 */
+export type ScoreTargetMember = {
+  id: number;
+  name: string;
+  profileImageUrl?: string;
+  generation: number;
+  partName: string;
+  /** 참여 트랙 수 — 2 이상이면 `+n` 배지를 노출한다 */
+  trackCount: number;
+};
+
 /** 대상 선택 화면에서 회원을 묶는 단위 (파트명 / 팀명) */
 export type ScoreTargetGroup = {
   id: string;
   title: string;
-  members: ActivityScoreMember[];
+  members: ScoreTargetMember[];
 };

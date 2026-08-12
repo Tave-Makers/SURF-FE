@@ -1,9 +1,10 @@
 'use client';
 
 import { SurfIcon } from '@surf/ui/icon';
-import { useTeamMemberScoresQuery } from '../model/queries/useTeamMemberScoresQuery';
-import type { ActivityScoreMember, ActivityScoreTeam, ScoreTargetGroup } from '../model/types';
+import type { ScoreTargetGroup, ScoreTargetMember } from '../model/types';
 import { ScoreTargetMemberList } from './ScoreTargetMemberList';
+import { useTeamDetailQuery } from '@/entities/team/model/queries/useTeamDetailQuery';
+import type { Team, TeamMember } from '@/entities/team/model/types';
 
 type ScoreTargetSelection = {
   selectedIds: Set<number>;
@@ -12,7 +13,7 @@ type ScoreTargetSelection = {
 
 type ScoreTargetGroupSectionProps = ScoreTargetSelection & {
   title: string;
-  members: ActivityScoreMember[];
+  members: ScoreTargetMember[];
   isOpen: boolean;
   onToggle: () => void;
   isLoading?: boolean;
@@ -67,41 +68,6 @@ export const ScoreTargetGroupSection = ({
   );
 };
 
-type ScoreTargetTeamSectionProps = ScoreTargetSelection & {
-  team: ActivityScoreTeam;
-  isOpen: boolean;
-  onToggle: () => void;
-  filterMembers: (members: ActivityScoreMember[]) => ActivityScoreMember[];
-};
-
-const ScoreTargetTeamSection = ({
-  team,
-  isOpen,
-  onToggle,
-  filterMembers,
-  selectedIds,
-  onToggleMember,
-}: ScoreTargetTeamSectionProps) => {
-  const {
-    data: members = [],
-    isLoading,
-    isError,
-  } = useTeamMemberScoresQuery({ teamId: team.id, enabled: isOpen });
-
-  return (
-    <ScoreTargetGroupSection
-      title={team.name}
-      members={filterMembers(members)}
-      isOpen={isOpen}
-      onToggle={onToggle}
-      isLoading={isLoading}
-      isError={isError}
-      selectedIds={selectedIds}
-      onToggleMember={onToggleMember}
-    />
-  );
-};
-
 type ScoreTargetGroupListProps = ScoreTargetSelection & {
   groups: ScoreTargetGroup[];
   openIds: Set<string>;
@@ -133,19 +99,54 @@ export const ScoreTargetGroupList = ({
   );
 };
 
-type ScoreTargetTeamListProps = ScoreTargetSelection & {
-  teams: ActivityScoreTeam[];
-  openIds: Set<string>;
-  onToggleGroup: (groupId: string) => void;
-  filterMembers: (members: ActivityScoreMember[]) => ActivityScoreMember[];
+type ScoreTargetTeamSectionProps = ScoreTargetSelection & {
+  team: Team;
+  isOpen: boolean;
+  onToggle: () => void;
+  toTargetMembers: (members: TeamMember[]) => ScoreTargetMember[];
 };
 
-/** 스터디/프로젝트별 대상 목록 — 펼칠 때 팀원 목록을 조회 */
+const ScoreTargetTeamSection = ({
+  team,
+  isOpen,
+  onToggle,
+  toTargetMembers,
+  selectedIds,
+  onToggleMember,
+}: ScoreTargetTeamSectionProps) => {
+  const {
+    data: members = [],
+    isLoading,
+    isError,
+  } = useTeamDetailQuery({ teamId: team.id, enabled: isOpen });
+
+  return (
+    <ScoreTargetGroupSection
+      title={team.name}
+      members={toTargetMembers(members)}
+      isOpen={isOpen}
+      onToggle={onToggle}
+      isLoading={isLoading}
+      isError={isError}
+      selectedIds={selectedIds}
+      onToggleMember={onToggleMember}
+    />
+  );
+};
+
+type ScoreTargetTeamListProps = ScoreTargetSelection & {
+  teams: Team[];
+  openIds: Set<string>;
+  onToggleGroup: (groupId: string) => void;
+  toTargetMembers: (members: TeamMember[]) => ScoreTargetMember[];
+};
+
+/** 스터디/프로젝트별 대상 목록 — 펼칠 때 팀 상세로 팀원을 조회한다 */
 export const ScoreTargetTeamList = ({
   teams,
   openIds,
   onToggleGroup,
-  filterMembers,
+  toTargetMembers,
   selectedIds,
   onToggleMember,
 }: ScoreTargetTeamListProps) => {
@@ -157,7 +158,7 @@ export const ScoreTargetTeamList = ({
           team={team}
           isOpen={openIds.has(String(team.id))}
           onToggle={() => onToggleGroup(String(team.id))}
-          filterMembers={filterMembers}
+          toTargetMembers={toTargetMembers}
           selectedIds={selectedIds}
           onToggleMember={onToggleMember}
         />

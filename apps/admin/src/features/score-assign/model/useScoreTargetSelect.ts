@@ -4,18 +4,20 @@ import { useAlertStore } from '@surf/ui/store/alertStore';
 import { useToastStore } from '@surf/ui/store/toastStore';
 import { useRouter } from 'next/navigation';
 import { useCallback, useMemo, useState } from 'react';
+import { useActiveGenerationQuery } from '@/entities/active-cohort/model/queries/useActiveGenerationQuery';
 import { useActivityTypesQuery } from '@/entities/activity-score/model/queries/useActivityTypesQuery';
 import { useCreateActivityRecordMutation } from '@/entities/activity-score/model/queries/useCreateActivityRecordMutation';
-import { useMemberScoreRankingQuery } from '@/entities/activity-score/model/queries/useMemberScoreRankingQuery';
-import { useTeamScoreRankingQuery } from '@/entities/activity-score/model/queries/useTeamScoreRankingQuery';
 import type {
-  ActivityScoreMember,
   ScoreTargetGroup,
   ScoreTargetKind,
+  ScoreTargetMember,
 } from '@/entities/activity-score/model/types';
+import { PART_LABELS } from '@/entities/member/model/constants';
+import { useGroupedMembersByPartQuery } from '@/entities/member/model/queries/useGroupedMembersByPartQuery';
+import type { MemberSummary, TrackPart } from '@/entities/member/model/types';
+import { useTeamsQuery } from '@/entities/team/model/queries/useTeamsQuery';
+import type { TeamMember } from '@/entities/team/model/types';
 import { PAGE_ROUTES } from '@/shared/config/path';
-
-const SCORE_TARGET_PAGE_SIZE = 500;
 
 const getTodayDateString = () => {
   const today = new Date();
@@ -24,6 +26,22 @@ const getTodayDateString = () => {
   const day = String(today.getDate()).padStart(2, '0');
 
   return `${year}-${month}-${day}`;
+};
+
+const toPartLabel = (part: string) => PART_LABELS[part as TrackPart] ?? part;
+
+/** 팀 상세 / 파트 그룹 응답 모두 `tracks` 구조가 같아 동일하게 변환한다. */
+const toTargetMember = (member: TeamMember | MemberSummary): ScoreTargetMember => {
+  const [primaryTrack] = member.tracks;
+
+  return {
+    id: member.id,
+    name: member.name,
+    profileImageUrl: member.profileImageUrl,
+    generation: primaryTrack?.generation ?? 0,
+    partName: primaryTrack ? toPartLabel(primaryTrack.part) : '',
+    trackCount: member.tracks.length,
+  };
 };
 
 export const useScoreTargetSelect = (criterionId: string) => {
@@ -39,6 +57,8 @@ export const useScoreTargetSelect = (criterionId: string) => {
   const [openGroupIds, setOpenGroupIds] = useState<Set<string>>(new Set());
   const [selectedIds, setSelectedIds] = useState<Set<number>>(new Set());
 
+  const { data: activeCohort } = useActiveGenerationQuery();
+
   const {
     data: categories = [],
     isLoading: isActivityTypesLoading,
@@ -46,12 +66,11 @@ export const useScoreTargetSelect = (criterionId: string) => {
   } = useActivityTypesQuery();
 
   const {
-    data: allMembers = [],
-    isLoading: isMembersLoading,
-    isError: isMembersError,
-  } = useMemberScoreRankingQuery({
-    pageNum: 0,
-    pageSize: SCORE_TARGET_PAGE_SIZE,
+    data: partMemberGroups = [],
+    isLoading: isPartGroupsLoading,
+    isError: isPartGroupsError,
+  } = useGroupedMembersByPartQuery({
+    generation: activeCohort?.generation,
     enabled: targetKind === 'part',
   });
 
@@ -59,10 +78,9 @@ export const useScoreTargetSelect = (criterionId: string) => {
     data: teams = [],
     isLoading: isTeamsLoading,
     isError: isTeamsError,
-  } = useTeamScoreRankingQuery({
-    kind: targetKind === 'part' ? undefined : targetKind,
-    pageNum: 0,
-    pageSize: SCORE_TARGET_PAGE_SIZE,
+  } = useTeamsQuery({
+    kind: targetKind === 'part' ? 'study' : targetKind,
+    generation: activeCohort?.generation,
     enabled: targetKind !== 'part',
   });
 
@@ -75,8 +93,8 @@ export const useScoreTargetSelect = (criterionId: string) => {
   const normalizedKeyword = keyword.trim();
 
   /** 검색은 회원 이름으로만 수행한다. */
-  const filterMembers = useCallback(
-    (members: ActivityScoreMember[]) => {
+  const filterByKeyword = useCallback(
+    (members: ScoreTargetMember[]) => {
       if (!normalizedKeyword) return members;
 
       return members.filter((member) => member.name.includes(normalizedKeyword));
@@ -84,18 +102,20 @@ export const useScoreTargetSelect = (criterionId: string) => {
     [normalizedKeyword],
   );
 
-  const partGroups = useMemo<ScoreTargetGroup[]>(() => {
-    const groupMap = new Map<string, ActivityScoreMember[]>();
+  const toTargetMembers = useCallback(
+    (members: TeamMember[]) => filterByKeyword(members.map(toTargetMember)),
+    [filterByKeyword],
+  );
 
-    filterMembers(allMembers).forEach((member) => {
-      const partName = member.partName || '기타';
-      groupMap.set(partName, [...(groupMap.get(partName) ?? []), member]);
-    });
-
-    return Array.from(groupMap.entries())
-      .sort(([a], [b]) => a.localeCompare(b, 'ko'))
-      .map(([partName, members]) => ({ id: partName, title: partName, members }));
-  }, [allMembers, filterMembers]);
+  const partGroups = useMemo<ScoreTargetGroup[]>(
+    () =>
+      partMemberGroups.map((group) => ({
+        id: group.part,
+        title: group.partLabel,
+        members: filterByKeyword(group.members.map(toTargetMember)),
+      })),
+    [partMemberGroups, filterByKeyword],
+  );
 
   const toggleGroup = (groupId: string) => {
     setOpenGroupIds((prev) => {
@@ -163,8 +183,9 @@ export const useScoreTargetSelect = (criterionId: string) => {
   };
 
   const isLoading =
-    isActivityTypesLoading || (targetKind === 'part' ? isMembersLoading : isTeamsLoading);
-  const isError = isActivityTypesError || (targetKind === 'part' ? isMembersError : isTeamsError);
+    isActivityTypesLoading || (targetKind === 'part' ? isPartGroupsLoading : isTeamsLoading);
+  const isError =
+    isActivityTypesError || (targetKind === 'part' ? isPartGroupsError : isTeamsError);
 
   return {
     state: {
@@ -184,7 +205,7 @@ export const useScoreTargetSelect = (criterionId: string) => {
       changeTargetKind,
       toggleGroup,
       toggleMember,
-      filterMembers,
+      toTargetMembers,
       applyScore,
     },
   };

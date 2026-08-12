@@ -1,6 +1,20 @@
-import type { ApiCareer, MemberInformationResDTO, MemberItem } from '../api/types';
+import type {
+  ApiCareer,
+  MemberGroupedByPartDTO,
+  MemberInformationResDTO,
+  MemberItem,
+} from '../api/types';
 
-import type { Career, Member, MemberBase, MemberStatus, MemberTrack, TrackPart } from './types';
+import { PART_LABELS } from './constants';
+import type {
+  Career,
+  Member,
+  MemberBase,
+  MemberStatus,
+  MemberTrack,
+  PartMemberGroup,
+  TrackPart,
+} from './types';
 
 export const MEMBER_STATUS_MAP: Record<string, MemberStatus> = {
   REGISTERING: 'waiting',
@@ -53,6 +67,24 @@ export function toMemberBase(dto: MemberItem): MemberBase {
     registeredAt: dto.createdAt ?? '',
     status: toMemberStatus(dto.memberStatus),
     role: dto.role ?? 'MEMBER',
+  };
+}
+
+/**
+ * 파트별 그룹 DTO → 도메인 PartMemberGroup 변환
+ */
+export function toPartMemberGroup(dto: MemberGroupedByPartDTO): PartMemberGroup {
+  const part = dto.part ?? '';
+
+  return {
+    part,
+    partLabel: dto.partDisplayName ?? PART_LABELS[part as TrackPart] ?? part,
+    members: (dto.members ?? []).map((member) => ({
+      id: member.memberId,
+      name: member.name ?? '',
+      profileImageUrl: member.profileImageUrl ?? '',
+      tracks: (member.tracks ?? []).map(toMemberTrack),
+    })),
   };
 }
 

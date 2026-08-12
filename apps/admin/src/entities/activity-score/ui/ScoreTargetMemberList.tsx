@@ -1,10 +1,10 @@
 import { Avatar } from '@surf/ui/avatar';
 import { Checkbox } from '@surf/ui/checkbox';
 import { InfoBadge } from '@surf/ui/info-badge';
-import type { ActivityScoreMember } from '../model/types';
+import type { ScoreTargetMember } from '../model/types';
 
 type ScoreTargetMemberListProps = {
-  members: ActivityScoreMember[];
+  members: ScoreTargetMember[];
   selectedIds: Set<number>;
   onToggle: (memberId: number) => void;
 };
@@ -62,7 +62,7 @@ export const ScoreTargetMemberList = ({
                 </span>
                 <span className="flex gap-5">
                   {memberInfo && <InfoBadge text={memberInfo} />}
-                  {member.tracksCount > 1 && <InfoBadge text={`+${member.tracksCount - 1}`} />}
+                  {member.trackCount > 1 && <InfoBadge text={`+${member.trackCount - 1}`} />}
                 </span>
               </span>
             </div>

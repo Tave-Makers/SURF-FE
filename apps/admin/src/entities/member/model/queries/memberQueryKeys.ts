@@ -18,6 +18,10 @@ export const memberQueryKeys = {
   // 단건 캐시(멤버 카드 컴포넌트에 사용)
   base: (memberId: number) => [...memberQueryKeys.all, 'base', memberId] as const,
 
+  // 활동 기수 기준 파트별 그룹
+  groupedByPart: (generation: number) =>
+    [...memberQueryKeys.all, 'grouped-by-part', generation] as const,
+
   // 상세
   detail: (memberId: number) => [...memberQueryKeys.all, 'detail', memberId] as const,
 };

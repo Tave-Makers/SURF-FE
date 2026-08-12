@@ -1,5 +1,6 @@
 'use client';
 
+import { useInfiniteScroll } from '@surf/hooks';
 import { useRouter } from 'next/navigation';
 import { useMemo, useState } from 'react';
 import { useActiveGenerationQuery } from '@/entities/active-cohort/model/queries/useActiveGenerationQuery';
@@ -49,8 +50,10 @@ export const ScoreManagementPage = () => {
     data: members = [],
     isLoading: isMemberRankingLoading,
     isError: isMemberRankingError,
+    fetchNextPage: fetchNextMemberRankingPage,
+    hasNextPage: hasNextMemberRankingPage,
+    isFetchingNextPage: isFetchingNextMemberRankingPage,
   } = useMemberScoreRankingQuery({
-    pageNum: 0,
     pageSize: SCORE_RANKING_PAGE_SIZE,
     enabled: isIndividual,
   });
@@ -79,6 +82,15 @@ export const ScoreManagementPage = () => {
     ? isMemberRankingLoading
     : !isError && (isActiveCohortLoading || activeGeneration == null || isTeamsLoading);
 
+  const memberRankingTriggerRef = useInfiniteScroll({
+    enabled: isIndividual && !isLoading && !isError,
+    hasNextPage: hasNextMemberRankingPage,
+    isFetching: isFetchingNextMemberRankingPage,
+    onLoadMore: () => {
+      void fetchNextMemberRankingPage();
+    },
+  });
+
   return (
     <div className="relative flex h-full flex-col overflow-hidden">
       <div className="border-border-normal flex items-center border-b px-13 pb-10">
@@ -106,7 +118,17 @@ export const ScoreManagementPage = () => {
           </div>
         )}
         {!isLoading && !isError && isIndividual ? (
-          <ScoreMemberScoreList members={sortedMembers} onClickMember={handleClickMember} />
+          <>
+            <ScoreMemberScoreList members={sortedMembers} onClickMember={handleClickMember} />
+            {hasNextMemberRankingPage && (
+              <div ref={memberRankingTriggerRef} className="h-10" aria-hidden="true" />
+            )}
+            {isFetchingNextMemberRankingPage && (
+              <div className="text-body-body9 text-foreground-tertiary px-13 py-8">
+                Loading...
+              </div>
+            )}
+          </>
         ) : null}
         {!isLoading && !isError && !isIndividual ? (
           <ScoreGroupScoreList

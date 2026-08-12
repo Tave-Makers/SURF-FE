@@ -4,8 +4,8 @@ export const activityScoreQueryKeys = {
   activityTypes: () => [...activityScoreQueryKeys.all, 'activity-types'] as const,
 
   rankings: () => [...activityScoreQueryKeys.all, 'rankings'] as const,
-  memberRanking: (pageNum: number, pageSize: number) =>
-    [...activityScoreQueryKeys.rankings(), 'members', pageNum, pageSize] as const,
+  memberRanking: (pageSize: number) =>
+    [...activityScoreQueryKeys.rankings(), 'members', pageSize] as const,
 
   teamMembers: () => [...activityScoreQueryKeys.all, 'team-members'] as const,
   teamMemberScores: (teamId: number) => [...activityScoreQueryKeys.teamMembers(), teamId] as const,
@@ -14,7 +14,6 @@ export const activityScoreQueryKeys = {
   memberActivityRecords: (params: {
     memberId: number;
     scoreType: 'REWARD' | 'PENALTY';
-    pageNum: number;
     pageSize: number;
   }) =>
     [
@@ -22,7 +21,6 @@ export const activityScoreQueryKeys = {
       'members',
       params.memberId,
       params.scoreType,
-      params.pageNum,
       params.pageSize,
     ] as const,
 };

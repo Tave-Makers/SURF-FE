@@ -1,5 +1,6 @@
 'use client';
 
+import { useInfiniteScroll } from '@surf/hooks';
 import { Avatar } from '@surf/ui/avatar';
 import { HeaderMode } from '@surf/ui/header';
 import { SurfIcon } from '@surf/ui/icon';
@@ -74,11 +75,22 @@ export const ScoreMemberDetailPage = ({ memberId }: ScoreMemberDetailPageProps) 
     data: currentHistories = [],
     isLoading: isHistoryLoading,
     isError: isHistoryError,
+    fetchNextPage: fetchNextHistoryPage,
+    hasNextPage: hasNextHistoryPage,
+    isFetchingNextPage: isFetchingNextHistoryPage,
   } = useMemberActivityRecordsQuery({
     memberId,
     scoreType,
-    pageNum: 0,
     pageSize: SCORE_DETAIL_PAGE_SIZE,
+  });
+
+  const historyTriggerRef = useInfiniteScroll({
+    enabled: !isHistoryLoading && !isHistoryError,
+    hasNextPage: hasNextHistoryPage,
+    isFetching: isFetchingNextHistoryPage,
+    onLoadMore: () => {
+      void fetchNextHistoryPage();
+    },
   });
 
   const memberInfo = useMemo(() => getMemberInfoText(member?.tracks ?? []), [member?.tracks]);
@@ -259,6 +271,12 @@ export const ScoreMemberDetailPage = ({ memberId }: ScoreMemberDetailPageProps) 
                     </span>
                   </li>
                 ))}
+              {!isHistoryLoading && !isHistoryError && hasNextHistoryPage && (
+                <li aria-hidden="true">
+                  <div ref={historyTriggerRef} className="h-10" />
+                </li>
+              )}
+              {isFetchingNextHistoryPage && <li className={messageClassName}>Loading...</li>}
             </ul>
           </div>
         </>

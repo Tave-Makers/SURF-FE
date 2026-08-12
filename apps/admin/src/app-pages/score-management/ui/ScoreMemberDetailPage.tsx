@@ -70,7 +70,8 @@ export const ScoreMemberDetailPage = ({ memberId }: ScoreMemberDetailPageProps) 
     pageNum: 0,
     pageSize: SCORE_DETAIL_PAGE_SIZE,
   });
-  const memberInfo = member.generation > 0 ? `${member.generation}기 ${member.partName}` : member.partName;
+  const memberInfo =
+    member.generation > 0 ? `${member.generation}기 ${member.partName}` : member.partName;
 
   const handleDelete = (history: ScoreHistory) => {
     openAlert({
@@ -155,7 +156,7 @@ export const ScoreMemberDetailPage = ({ memberId }: ScoreMemberDetailPageProps) 
         </div>
       </section>
 
-      <ul className="scrollbar-hide flex-1 overflow-y-auto">
+      <ul className="scrollbar-hide mt-11 flex-1 overflow-y-auto">
         {isHistoryLoading && (
           <li className="text-body-body9 text-foreground-tertiary px-13 py-12">Loading...</li>
         )}
@@ -177,7 +178,7 @@ export const ScoreMemberDetailPage = ({ memberId }: ScoreMemberDetailPageProps) 
             <button
               type="button"
               aria-label={`${history.label} 점수 기록 삭제`}
-              className="text-foreground-normal -ml-4 flex h-8 w-8 items-center justify-center"
+              className="text-foreground-normal -ml-4 flex h-15 w-15 items-center justify-center"
               onClick={() => handleDelete(history)}
             >
               <SurfIcon name="X" size="m" />
@@ -189,7 +190,7 @@ export const ScoreMemberDetailPage = ({ memberId }: ScoreMemberDetailPageProps) 
                 {formatPoint(history.point)}
               </span>
               {history.balance != null && (
-                <span className="text-body-body11 text-foreground-tertiary">{history.balance}</span>
+                <span className="text-body-body9 text-foreground-tertiary">{history.balance}</span>
               )}
             </span>
           </li>

@@ -625,7 +625,6 @@ export const DashboardPage = () => {
               );
             })}
           </div>
-          <div className="from-background-normal pointer-events-none absolute bottom-4 right-0 top-0 w-24 bg-gradient-to-l to-transparent" />
         </div>
       </div>
 

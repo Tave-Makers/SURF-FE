@@ -100,8 +100,12 @@ const formatScoreDate = (date: string | null | undefined) => {
   return `${year.slice(-2)}.${month}.${day}`;
 };
 
-export const getScoreCriterionRouteId = (category: string, activityName: string) =>
-  `${category}:${activityName}`;
+/**
+ * 활동 종류의 라우팅 식별자.
+ * ActivityType enum 값은 전역에서 유일하므로 카테고리를 함께 담을 필요가 없다.
+ * (카테고리는 매칭된 항목에서 꺼내 쓴다)
+ */
+export const getScoreCriterionRouteId = (activityName: string) => activityName;
 
 /** 서버 enum 값 형태(대문자 스네이크)인지 검사한다. 표시용 라벨이 섞여 들어오는 것을 막는다. */
 const ENUM_VALUE_PATTERN = /^[A-Z][A-Z0-9_]*$/;
@@ -123,7 +127,7 @@ const mapActivityTypeDtoToCriterion = (
   const point = normalizeDelta(dto.delta, dto.scoreType);
 
   return {
-    id: getScoreCriterionRouteId(categoryName, activityName),
+    id: getScoreCriterionRouteId(activityName),
     categoryId: categoryName,
     category: categoryName,
     activityName,

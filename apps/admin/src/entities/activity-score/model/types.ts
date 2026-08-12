@@ -23,8 +23,10 @@ export type ActivityScoreMember = {
 export type ScoreCriterion = {
   id: string;
   categoryId: ScoreCategoryId;
-  category?: string;
-  activityName?: string;
+  /** 서버 ActivityCategory enum 값. 표시용 라벨이 아니다. */
+  category: string;
+  /** 서버 ActivityType enum 값. 표시용 라벨이 아니다. */
+  activityName: string;
   scoreType?: ScoreType;
   appliedTarget?: string;
   label: string;

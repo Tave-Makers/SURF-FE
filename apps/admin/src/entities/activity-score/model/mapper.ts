@@ -10,6 +10,7 @@ import type {
 import type {
   ActivityScoreMember,
   ScoreCategory,
+  ScoreCriterion,
   ScoreHistory,
   ScoreHistoryKind,
   ScoreType,
@@ -38,7 +39,8 @@ const toScore = (value: number | null | undefined) => value ?? 0;
 
 const normalizePartName = (part: string | null | undefined) => part?.trim() || '-';
 
-const normalizeText = (value: string | null | undefined, fallback = '') => value?.trim() || fallback;
+const normalizeText = (value: string | null | undefined, fallback = '') =>
+  value?.trim() || fallback;
 
 const normalizePartCode = (part: string | null | undefined) => {
   const normalizedPart = normalizePartName(part);
@@ -73,7 +75,6 @@ export const mapMemberScoreRankingPageDtoToMembers = (
   dto: ScoreRankingPageDto<MemberScoreRankingItemDto>,
 ): ActivityScoreMember[] => (dto.content ?? []).map(mapMemberScoreRankingItemDtoToMember);
 
-
 export const mapTeamMemberScoresDtoToMembers = (dto: TeamMemberScoresDto): ActivityScoreMember[] =>
   (dto.members ?? []).map(mapMemberScoreRankingItemDtoToMember);
 
@@ -102,17 +103,25 @@ const formatScoreDate = (date: string | null | undefined) => {
 export const getScoreCriterionRouteId = (category: string, activityName: string) =>
   `${category}:${activityName}`;
 
+/**
+ * 서버는 `category`/`typeName`을 enum 값으로 내려주고, 점수 부여 API도 enum 값을 요구한다.
+ * 표시용 라벨(`displayName`)로 대체하면 요청이 거부되므로, enum 값이 없는 항목은 선택 대상에서 제외한다.
+ */
 const mapActivityTypeDtoToCriterion = (
   dto: ActivityTypeDto,
   categoryName: string,
-): ScoreCategory['criteria'][number] => {
-  const activityName = normalizeText(dto.typeName, normalizeText(dto.displayName, 'UNKNOWN'));
+): ScoreCriterion | null => {
+  const activityName = normalizeText(dto.typeName);
+  const category = normalizeText(dto.category, categoryName);
+
+  if (!activityName || !category) return null;
+
   const point = normalizeDelta(dto.delta, dto.scoreType);
 
   return {
-    id: getScoreCriterionRouteId(categoryName, activityName),
+    id: getScoreCriterionRouteId(category, activityName),
     categoryId: categoryName,
-    category: normalizeText(dto.category, categoryName),
+    category,
     activityName,
     scoreType: normalizeScoreType(dto.scoreType),
     appliedTarget: normalizeText(dto.appliedTarget),
@@ -126,9 +135,9 @@ export const mapActivityTypeGroupsDtoToCategories = (
 ): ScoreCategory[] =>
   groups.map((group, index) => {
     const categoryName = normalizeText(group.category?.categoryName, `category-${index}`);
-    const criteria = (group.activityTypeList ?? []).map((activityType) =>
-      mapActivityTypeDtoToCriterion(activityType, categoryName),
-    );
+    const criteria = (group.activityTypeList ?? [])
+      .map((activityType) => mapActivityTypeDtoToCriterion(activityType, categoryName))
+      .filter((criterion): criterion is ScoreCriterion => criterion !== null);
 
     return {
       id: categoryName,

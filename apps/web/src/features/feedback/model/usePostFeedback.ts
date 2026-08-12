@@ -1,9 +1,9 @@
-import { useMutation } from '@tanstack/react-query';
 import { useAlertStore } from '@surf/ui/store/alertStore';
-import { useRouter } from 'next/navigation';
-import { PAGE_ROUTES } from '@/shared/config/path';
+import { useMutation } from '@tanstack/react-query';
 import { AxiosError } from 'axios';
-import { postFeedback } from '../api/postFeedback';
+import { useRouter } from 'next/navigation';
+import { postFeedback } from '@/features/feedback/api/postFeedback';
+import { PAGE_ROUTES } from '@/shared/config/path';
 
 // 피드백 보내기 훅
 export const usePostFeedback = () => {

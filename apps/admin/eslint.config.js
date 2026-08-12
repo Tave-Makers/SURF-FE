@@ -1,6 +1,6 @@
-import { next } from '@surf/eslint-config/next';
 import { dirname } from 'path';
 import { fileURLToPath } from 'url';
+import { next } from '@surf/eslint-config/next';
 
 const tsconfigRootDir = dirname(fileURLToPath(import.meta.url));
 

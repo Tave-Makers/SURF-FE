@@ -1,20 +1,20 @@
 import { useAlertStore } from '@surf/ui/store/alertStore';
 import { safeUUID } from '@surf/utils';
-import axios from 'axios';
 import { useRouter } from 'next/navigation';
 import { useEffect, useState } from 'react';
 import { useFormContext, useWatch } from 'react-hook-form';
 import { OnBoardingLayout } from './OnBoardingLayout';
 import { useImageUploader } from '@/entities/image/model/useImageUploader';
+import { useAccountIntegrationFlow } from '@/features/account-integration';
 import { useAgreementStore } from '@/features/laws/model/useAgreementStore';
 import { submitOnBoarding } from '@/features/onboarding/api/submitOnBoarding';
+import { isAccountIntegrationRequiredError } from '@/features/onboarding/lib/accountIntegrationError';
 import { trackOnBoardingEvent } from '@/features/onboarding/lib/trackOnBoardingEvent';
 import { ONBOARDING_EVENTS, OnBoardingFormData } from '@/features/onboarding/model/types';
 import { EmailPhoneStep } from '@/features/onboarding/ui/EmailPhoneStep';
 import { ProfileStep } from '@/features/onboarding/ui/ProfileStep';
 import { TrackUnivStep } from '@/features/onboarding/ui/TrackUnivStep';
 import { PAGE_ROUTES } from '@/shared/config/path';
-import { DefaultError } from '@/shared/lib/handleApiError';
 
 const STEP_ANALYTICS_NAMES: Record<number, 'nickname' | 'track' | 'contact'> = {
   0: 'nickname',
@@ -33,6 +33,7 @@ export const OnBoardingForm = ({ step, setStep }: OnBoardingFormProps) => {
   const closeAlert = useAlertStore((s) => s.close);
   const methods = useFormContext<OnBoardingFormData>();
   const router = useRouter();
+  const { start: startAccountIntegration } = useAccountIntegrationFlow();
   type StepConfig = {
     component: React.FC;
     title: string;
@@ -180,6 +181,12 @@ export const OnBoardingForm = ({ step, setStep }: OnBoardingFormProps) => {
       // 여기서 이동시키면 가입 요청 없이도 화면이 넘어간다.
       await methods.handleSubmit(onSubmit)();
     } catch (error) {
+      // 이메일·전화번호가 모두 기존 회원과 일치 -> 계정 통합 플로우
+      if (isAccountIntegrationRequiredError(error)) {
+        await startAccountIntegration(error.integrationToken);
+        return;
+      }
+
       if (error instanceof Error && error.message === 'PROFILE_IMAGE_UPLOAD_FAILED') {
         openAlert({
           title: '업로드 실패',
@@ -189,34 +196,15 @@ export const OnBoardingForm = ({ step, setStep }: OnBoardingFormProps) => {
         return;
       }
 
-      if (axios.isAxiosError(error) && error.response) {
-        const status = error.response.status;
-        const data = error.response.data as DefaultError;
-
-        switch (status) {
-          case 400:
-            openAlert({
-              title: '오류',
-              infoText: data.message || '입력한 정보가 올바르지 않습니다.',
-              actions: [{ type: 'text', label: '확인', onClick: closeAlert }],
-            });
-            break;
-          case 409:
-            openAlert({
-              title: '알림',
-              infoText: data.message || '이미 존재하는 회원입니다. 로그인 페이지로 이동합니다.',
-              actions: [
-                { type: 'text', label: '확인', onClick: () => router.push(PAGE_ROUTES.LOGIN) },
-              ],
-            });
-            break;
-          default:
-            openAlert({
-              title: '오류',
-              infoText: data.message || '알 수 없는 오류가 발생했습니다.',
-              actions: [{ type: 'text', label: '확인', onClick: closeAlert }],
-            });
-        }
+      // submitOnBoarding 은 handleApiError 로 서버 메시지를 담은 Error 를 던진다.
+      // (예: 409 ACCOUNT_CONFLICT_BLOCKED → "이미 사용 중인 [이메일]입니다.")
+      // 사용자가 입력값을 고쳐야 하는 경우가 대부분이므로 화면 이동 없이 안내만 한다.
+      if (error instanceof Error && error.message) {
+        openAlert({
+          title: '오류',
+          infoText: error.message,
+          actions: [{ type: 'text', label: '확인', onClick: closeAlert }],
+        });
       } else {
         openAlert({
           title: '오류',

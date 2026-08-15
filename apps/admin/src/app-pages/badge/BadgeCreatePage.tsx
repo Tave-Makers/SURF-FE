@@ -37,8 +37,10 @@ export const BadgeCreatePage = () => {
       </div>
 
       <div
-        className="bg-background-normal shadow-embossed-inverse sticky bottom-0 px-13 pt-13 pb-16"
-        style={{ paddingBottom: keyboardOffset + 16 }}
+        className="bg-background-normal shadow-embossed-inverse sticky bottom-0 px-13 pt-13"
+        style={{
+          paddingBottom: `calc(max(env(safe-area-inset-bottom), ${keyboardOffset}px) + 16px)`,
+        }}
       >
         <SolidButton
           size="l"

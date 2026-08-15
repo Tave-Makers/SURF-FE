@@ -94,8 +94,10 @@ export const BannerFormWidget = ({
 
       {/* 하단 고정 버튼*/}
       <div
-        className="sticky bottom-0 p-13 shadow-[var(--effect-shadow-embossed-inverse-x-normal,0)_var(--effect-shadow-embossed-inverse-y-normal,0)_var(--effect-shadow-embossed-inverse-blur,2px)_var(--effect-shadow-raised-spread,0)_var(--effect-shadow-embossed-inverse-color-normal,rgba(0,0,0,0.02)),_var(--effect-shadow-embossed-inverse-x-normal,0)_var(--effect-shadow-embossed-inverse-y-secondary,-2px)_var(--effect-shadow-embossed-inverse-blur-secondary,4px)_var(--effect-shadow-embossed-inverse-spread,0)_var(--effect-shadow-embossed-inverse-color-secondary,rgba(0,0,0,0.04))]"
-        style={{ paddingBottom: keyboardOffset + 16 }}
+        className="sticky bottom-0 px-13 pt-13 shadow-[var(--effect-shadow-embossed-inverse-x-normal,0)_var(--effect-shadow-embossed-inverse-y-normal,0)_var(--effect-shadow-embossed-inverse-blur,2px)_var(--effect-shadow-raised-spread,0)_var(--effect-shadow-embossed-inverse-color-normal,rgba(0,0,0,0.02)),_var(--effect-shadow-embossed-inverse-x-normal,0)_var(--effect-shadow-embossed-inverse-y-secondary,-2px)_var(--effect-shadow-embossed-inverse-blur-secondary,4px)_var(--effect-shadow-embossed-inverse-spread,0)_var(--effect-shadow-embossed-inverse-color-secondary,rgba(0,0,0,0.04))]"
+        style={{
+          paddingBottom: `calc(max(env(safe-area-inset-bottom), ${keyboardOffset}px) + 16px)`,
+        }}
       >
         <SolidButton
           size="l"

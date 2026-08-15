@@ -67,7 +67,7 @@ export const GroupManagementDetailPage = ({ mode, id }: Props) => {
         )}
       </div>
 
-      <div className="px-13 py-16 pt-13">
+      <div className="px-13 pt-13 pb-[calc(env(safe-area-inset-bottom)+16px)]">
         {c.sticky && (
           <SolidButton
             size="l"

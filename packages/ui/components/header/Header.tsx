@@ -187,7 +187,7 @@ export const Header = ({ className, ...props }: HeaderProps) => {
 
   return (
     <header
-      className={`px-13 top-0 flex h-[3rem] w-full items-center justify-between py-11 ${className ?? 'bg-background-normal'} border-border-normal border-b-[var(--stroke-weight-0)]`}
+      className={`app-header px-13 top-0 flex min-h-[3rem] w-full items-center justify-between py-11 ${className ?? 'bg-background-normal'} border-border-normal border-b-[var(--stroke-weight-0)]`}
     >
       {content}
     </header>

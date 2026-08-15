@@ -93,7 +93,7 @@ export const HomePageClient = ({ heroProps }: { heroProps: HeroCardProps }) => {
         />
       </div>
 
-      <div className="relative -mt-[3rem]">
+      <div className="app-hero-offset relative -mt-[3rem]">
         {/* Hero Card */}
         <div className="flex w-full flex-col">
           <HeroCard {...heroProps} />

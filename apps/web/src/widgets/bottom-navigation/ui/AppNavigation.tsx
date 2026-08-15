@@ -7,7 +7,7 @@ import React from 'react';
 import { BOTTOM_NAV_ITEMS, type TabId } from '../model/config';
 
 const navStyle =
-  'bottom-0 left-0 bg-background-normal-lighter rounded-t-5 shadow-embossed-inverse flex w-full justify-around pb-13';
+  'app-bottom-nav bottom-0 left-0 bg-background-normal-lighter rounded-t-5 shadow-embossed-inverse flex w-full justify-around pb-13';
 const linkStyle = 'flex flex-1 flex-col items-center gap-6 pt-13';
 
 export const AppNavigation = () => {

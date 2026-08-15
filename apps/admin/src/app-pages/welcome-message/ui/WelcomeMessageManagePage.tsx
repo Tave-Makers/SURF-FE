@@ -1,5 +1,6 @@
 'use client';
 
+import { useKeyboardOffset } from '@surf/hooks';
 import { SolidButton } from '@surf/ui/button';
 import { FieldGroup } from '@surf/ui/field-group';
 import { HeaderMode } from '@surf/ui/header';
@@ -19,12 +20,13 @@ const SUB_MESSAGE_LIMIT = 10;
  * - `message` → 메인 메시지(최대 40자), `sender` → 서브 메시지(최대 10자)
  */
 export const WelcomeMessageManagePage = () => {
+  const keyboardOffset = useKeyboardOffset();
   const { state, actions } = useWelcomeMessageForm();
   const { isEditMode, mainMessage, subMessage, canSubmit, isPending } = state;
   const { setMainMessage, setSubMessage, handleEdit, handleBack, handleSubmit } = actions;
 
   return (
-    <div className="flex h-dvh w-full flex-col">
+    <div className="flex h-full min-h-0 w-full flex-col">
       <AppHeader
         customBack={isEditMode ? handleBack : undefined}
         overrideHeader={
@@ -70,7 +72,12 @@ export const WelcomeMessageManagePage = () => {
       </div>
 
       {isEditMode && (
-        <div className={`bg-background-normal shadow-embossed-inverse bottom-0 px-13 pt-13 pb-16`}>
+        <div
+          className="bg-background-normal shadow-embossed-inverse bottom-0 px-13 pt-13"
+          style={{
+            paddingBottom: `calc(max(env(safe-area-inset-bottom), ${keyboardOffset}px) + 16px)`,
+          }}
+        >
           <SolidButton
             size="l"
             variant="primary"

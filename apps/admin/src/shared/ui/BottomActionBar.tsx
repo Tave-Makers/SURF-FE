@@ -23,10 +23,8 @@ export const BottomActionBar = ({ actions }: BottomActionBarProps) => {
 
   return (
     <div className="mx-auto flex w-full sm:w-[min(100dvw,calc(100dvh*375/812))]">
-      <div
-        className={'h-[4.5rem] w-full max-w-screen-sm pb-[calc(env(safe-area-inset-bottom)+12px)]'}
-      >
-        <div className="flex h-full w-full">
+      <div className="w-full max-w-screen-sm pb-[calc(env(safe-area-inset-bottom)+12px)]">
+        <div className="flex h-[4.5rem] w-full">
           {actions.map((a) => (
             <div key={a.key} className="flex-1">
               <SolidButton

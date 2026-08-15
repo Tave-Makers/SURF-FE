@@ -12,7 +12,7 @@ export const BadgeCreatePage = () => {
   const { state, actions } = useBadgeCreateForm();
 
   return (
-    <div className="border-border-normal bg-background-normal flex min-h-dvh flex-col border-t-[0.4px]">
+    <div className="border-border-normal bg-background-normal flex h-full min-h-0 flex-col border-t-[0.4px]">
       <div className="flex flex-1 flex-col gap-18 px-13 py-11">
         <FieldGroup title="배지 이미지 등록">
           <ImgUploader
@@ -37,8 +37,10 @@ export const BadgeCreatePage = () => {
       </div>
 
       <div
-        className="bg-background-normal shadow-embossed-inverse sticky bottom-0 px-13 pt-13 pb-16"
-        style={{ paddingBottom: keyboardOffset + 16 }}
+        className="bg-background-normal shadow-embossed-inverse sticky bottom-0 px-13 pt-13"
+        style={{
+          paddingBottom: `calc(max(env(safe-area-inset-bottom), ${keyboardOffset}px) + 16px)`,
+        }}
       >
         <SolidButton
           size="l"

@@ -65,7 +65,7 @@ export const MemberSearchPage = ({ generation, formKey }: MemberSearchPageProps)
         selectedIds={selectedIds}
         onToggle={toggleSelect}
       />
-      <div className="px-13 pt-13 pb-16">
+      <div className="px-13 pt-13 pb-[calc(env(safe-area-inset-bottom)+16px)]">
         <SolidButton
           size="l"
           variant="primary"

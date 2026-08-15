@@ -14,7 +14,7 @@
  * 위 패딩에서 빼고 아래 패딩에 그대로 더하면 패딩 총합(=높이)은 그대로인 채
  * 콘텐츠만 정확히 이 값만큼 올라간다. 더 올리려면 숫자만 키우면 된다. */
 .is-native-app .app-header {
-  --app-header-lift: 6px;
+  --app-header-lift: 12px;
 
   height: calc(3rem + var(--sat, 0px));
   padding-top: calc(var(--spacing-11) + var(--sat, 0px) - var(--app-header-lift));

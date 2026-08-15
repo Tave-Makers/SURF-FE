@@ -23,7 +23,7 @@ export const PAGE_ROUTES = {
   SCORE_MNG: SCORE_ROOT,
   SCORE_MNG_ASSIGN: `${SCORE_ROOT}/assign`,
   SCORE_MNG_ASSIGN_TARGET: (criterionId: string | number) => `${SCORE_ROOT}/assign/${criterionId}`,
-  SCORE_MNG_MEMBER: (memberId: string | number) => `${SCORE_ROOT}/member/${memberId}`,
+  SCORE_MNG_MEMBER: (memberId: string | number): string => `${SCORE_ROOT}/member/${memberId}`,
   WELCOME_MSG: '/welcome-message',
   BADGE_MNG: {
     LIST: '/badge-management',

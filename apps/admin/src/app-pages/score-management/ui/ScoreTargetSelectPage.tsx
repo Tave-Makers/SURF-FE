@@ -72,9 +72,7 @@ export const ScoreTargetSelectPage = ({ criterionId }: ScoreTargetSelectPageProp
         )}
         {!state.isLoading && state.isError && (
           <div className="flex flex-col items-start gap-8 px-13 py-12">
-            <p className="text-body-body9 text-foreground-tertiary">
-              회원 목록을 불러오지 못했습니다.
-            </p>
+            <p className="text-body-body9 text-foreground-tertiary">{state.errorMessage}</p>
             <button
               type="button"
               className="rounded-2 border-border-quaternary text-body-body9 text-foreground-normal border px-11 py-7"

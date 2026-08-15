@@ -118,11 +118,11 @@ const PostPage = (props: PostPageProps) => {
     resetPostState();
 
     if (mode === 'edit' && postId) {
-      router.push(PAGE_ROUTES.BOARD.POST_DETAIL(boardId, postId));
+      router.replace(PAGE_ROUTES.BOARD.POST_DETAIL(boardId, postId));
       return;
     }
 
-    router.push(PAGE_ROUTES.BOARD.SELECT_CATEGORY(boardId));
+    router.replace(PAGE_ROUTES.BOARD.SELECT_CATEGORY(boardId));
   }, [boardId, mode, postId, resetPostState, router]);
 
   const requestExit = useCallback(() => {

@@ -217,7 +217,6 @@ const PostPage = (props: PostPageProps) => {
     <div className="flex h-full w-full flex-1 flex-col">
       {/* 1. 상단 헤더 */}
       <AppHeader
-        customBack={requestExit}
         overrideHeader={{
           mode: HeaderMode.TextBtn,
           title: boardLabel,

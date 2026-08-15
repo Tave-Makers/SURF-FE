@@ -14,6 +14,7 @@ import { useEditSchedule } from '@/features/schedule/edit/model/useEditSchedule'
 import { usePostFormStore } from './usePostFormStore';
 import { useCreatePostScheduleStore } from '@/features/schedule/create-post-schedule/model/useCreatePostScheduleStore';
 import { usePostDirtyCheck } from '@/features/post/post-form/model/useDirtyCheck';
+import { leavePostFormGuardEntry } from '@/features/post/post-form/model/usePostFormExitGuard';
 
 import { PostPageMode } from './types';
 import { useDeletePostSchedule } from '@/features/schedule/delete/model/useDelPostSchedule';
@@ -244,6 +245,10 @@ export const usePostForm = ({ mode, boardId, postId, postDetail, postSchedule }:
 
       // 모든 무효화 작업이 완료될 때까지 대기
       await Promise.all(invalidatePromises);
+
+      // 뒤로가기 가드용 더미 히스토리 엔트리가 쌓여 있으면 먼저 걷어낸다.
+      // 남겨두면 저장 후 뒤로가기 시 비워진 글쓰기 페이지로 되돌아온다.
+      await leavePostFormGuardEntry();
 
       resetPostState();
       if (mode === 'create') {

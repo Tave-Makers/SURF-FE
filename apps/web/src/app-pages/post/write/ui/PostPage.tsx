@@ -18,7 +18,10 @@ import { useAuthStore } from '@/features/auth/model/useAuthStore';
 import { useGetPostScheduleQuery } from '@/features/post/model/useGetPostScheduleQuery';
 import { TOOLBAR_KEY } from '@/features/post/post-editor/ui/PostEditorToolbar';
 import { usePostForm } from '@/features/post/post-form/model/usePostForm';
-import { usePostFormExitGuard } from '@/features/post/post-form/model/usePostFormExitGuard';
+import {
+  leavePostFormHistory,
+  usePostFormExitGuard,
+} from '@/features/post/post-form/model/usePostFormExitGuard';
 import { usePostFormStore } from '@/features/post/post-form/model/usePostFormStore';
 import { usePostInitialization } from '@/features/post/post-form/model/usePostInitialization';
 import { useCreatePostScheduleStore } from '@/features/schedule/create-post-schedule/model/useCreatePostScheduleStore';
@@ -114,25 +117,48 @@ const PostPage = (props: PostPageProps) => {
     [closeAlert, setShowExitAlert],
   );
 
-  const navigateOut = useCallback(() => {
+  // 글쓰기 페이지를 떠날 때의 목적지.
+  const exitDestination =
+    mode === 'edit' && postId
+      ? PAGE_ROUTES.BOARD.POST_DETAIL(boardId, postId)
+      : PAGE_ROUTES.BOARD.SELECT_CATEGORY(boardId);
+
+  // 글쓰기 페이지가 차지한 히스토리 엔트리(원본 + 뒤로가기 가드용 더미)를 먼저 걷어낸다.
+  // 걷어낸 자리가 이미 목적지면(= 게시판에서 들어온 일반적인 경우) 그대로 두고,
+  // 아니라면 그 위에 목적지를 push 한다.
+  // replace로 덮어쓰면 바로 아래에 같은 URL이 한 번 더 쌓여 뒤로가기가 제자리걸음이 된다.
+  const navigateOut = useCallback(async () => {
+    const landedAt = await leavePostFormHistory();
     resetPostState();
 
-    if (mode === 'edit' && postId) {
-      router.replace(PAGE_ROUTES.BOARD.POST_DETAIL(boardId, postId));
+    if (landedAt === null) {
+      // 되돌아갈 엔트리가 없었던 경우(주소 직접 진입/새로고침). 아직 글쓰기 페이지에
+      // 있으므로 이 자리를 목적지로 덮어쓴다.
+      router.replace(exitDestination);
       return;
     }
 
-    router.replace(PAGE_ROUTES.BOARD.SELECT_CATEGORY(boardId));
-  }, [boardId, mode, postId, resetPostState, router]);
+    if (landedAt !== exitDestination) {
+      router.push(exitDestination);
+    }
+  }, [exitDestination, resetPostState, router]);
 
+  // 헤더 뒤로가기(customBack)와 브라우저 뒤로가기(popstate) 양쪽에서 호출된다.
   const requestExit = useCallback(() => {
     if (hasUnsavedChanges()) {
       setShowExitAlert(true);
       return;
     }
 
-    navigateOut();
+    void navigateOut();
   }, [hasUnsavedChanges, navigateOut, setShowExitAlert]);
+
+  usePostFormExitGuard({
+    enabled: isInitialized,
+    hasUnsavedChanges,
+    onRequestExit: requestExit,
+    onSilentExit: resetPostState,
+  });
 
   const handleSaveReservation = (date: Date) => {
     setField('reservedAt', date);
@@ -197,7 +223,7 @@ const PostPage = (props: PostPageProps) => {
           variant: 'danger',
           onClick: () => {
             closeExitAlert({ restoreFocus: false });
-            navigateOut();
+            void navigateOut();
           },
         },
       ],
@@ -205,18 +231,13 @@ const PostPage = (props: PostPageProps) => {
     setShowExitAlert(false);
   }, [closeExitAlert, navigateOut, openAlert, setShowExitAlert, showExitAlert]);
 
-  usePostFormExitGuard({
-    enabled: isInitialized,
-    hasUnsavedChanges,
-    onRequestExit: requestExit,
-  });
-
   if (!isInitialized) return <Loading />;
 
   return (
     <div className="flex h-full w-full flex-1 flex-col">
       {/* 1. 상단 헤더 */}
       <AppHeader
+        customBack={requestExit}
         overrideHeader={{
           mode: HeaderMode.TextBtn,
           title: boardLabel,

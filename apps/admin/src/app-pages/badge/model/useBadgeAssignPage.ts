@@ -34,7 +34,7 @@ export const useBadgeAssignPage = (badgeId: number) => {
 
   /** 배지 수정 화면으로 돌아간다. */
   const handleBack = () => {
-    router.push(PAGE_ROUTES.BADGE_MNG.EDIT(badgeId));
+    router.replace(PAGE_ROUTES.BADGE_MNG.EDIT(badgeId));
   };
 
   /** 선택된 멤버들에게 배지를 부여하고 수정 화면으로 이동한다. */

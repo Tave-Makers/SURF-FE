@@ -16,7 +16,7 @@ export const BadgeDetailPage = ({ badgeId }: BadgeDetailPageProps) => {
   return (
     <>
       <AppHeader
-        customBack={() => router.push(PAGE_ROUTES.BADGE_MNG.LIST)}
+        customBack={() => router.replace(PAGE_ROUTES.BADGE_MNG.LIST)}
         overrideHeader={{
           mode: HeaderMode.TextBtn,
           title: '활동 배지 관리',

@@ -16,7 +16,7 @@ export const BadgeEditPage = ({ badgeId }: BadgeEditPageProps) => {
   return (
     <>
       <AppHeader
-        customBack={() => router.push(PAGE_ROUTES.BADGE_MNG.DETAIL(badgeId))}
+        customBack={() => router.replace(PAGE_ROUTES.BADGE_MNG.DETAIL(badgeId))}
         overrideHeader={{
           mode: HeaderMode.Default,
           title: '활동 배지 관리',

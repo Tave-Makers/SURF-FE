@@ -16,19 +16,19 @@ import {
 import { useTeamsQuery } from '@/entities/team/model/queries/useTeamsQuery';
 import { PAGE_ROUTES } from '@/shared/config/path';
 
-const FILTER_LABELS: Record<ScoreListFilter, string> = {
-  individual: '개인',
-  study: '스터디',
-  project: '프로젝트',
-};
-
-const FILTER_ORDER: ScoreListFilter[] = ['individual', 'study', 'project'];
+const FILTER_OPTIONS = [
+  { value: 'individual', label: '개인' },
+  { value: 'study', label: '스터디' },
+  { value: 'project', label: '프로젝트' },
+] as const satisfies ReadonlyArray<{ value: ScoreListFilter; label: string }>;
 
 const GROUP_EMPTY_MESSAGES: Record<ScoreGroupKind, string> = {
   study: '진행중인 스터디가 없습니다.',
   project: '진행중인 프로젝트가 없습니다.',
 };
 
+const ACTIVE_GENERATION_ERROR_MESSAGE = '활동 기수 정보를 불러오지 못했습니다.';
+const SCORE_STATUS_ERROR_MESSAGE = '점수 현황을 불러오지 못했습니다.';
 const SCORE_RANKING_PAGE_SIZE = 50;
 
 export const ScoreManagementPage = () => {
@@ -45,6 +45,8 @@ export const ScoreManagementPage = () => {
     isError: isActiveCohortError,
   } = useActiveGenerationQuery();
   const activeGeneration = activeCohort?.generation;
+  const isGroupFilter = !isIndividual;
+  const canFetchTeams = isGroupFilter && activeGeneration != null;
 
   const {
     data: members = [],
@@ -66,7 +68,7 @@ export const ScoreManagementPage = () => {
   } = useTeamsQuery({
     kind: isIndividual ? 'study' : filter,
     generation: activeGeneration,
-    enabled: !isIndividual && activeGeneration != null,
+    enabled: canFetchTeams,
   });
 
   const sortedMembers = useMemo(
@@ -78,10 +80,14 @@ export const ScoreManagementPage = () => {
     router.push(PAGE_ROUTES.SCORE_MNG_MEMBER(memberId));
   };
 
-  const isError = isIndividual ? isMemberRankingLoadingError : isActiveCohortError || isTeamsError;
-  const isLoading = isIndividual
-    ? isMemberRankingLoading
-    : !isError && (isActiveCohortLoading || activeGeneration == null || isTeamsLoading);
+  const isGroupLoading = isActiveCohortLoading || activeGeneration == null || isTeamsLoading;
+  const isGroupError = isActiveCohortError || isTeamsError;
+  const isError = isIndividual ? isMemberRankingLoadingError : isGroupError;
+  const isLoading = isIndividual ? isMemberRankingLoading : !isGroupError && isGroupLoading;
+  const errorMessage =
+    isGroupFilter && isActiveCohortError
+      ? ACTIVE_GENERATION_ERROR_MESSAGE
+      : SCORE_STATUS_ERROR_MESSAGE;
 
   const memberRankingTriggerRef = useInfiniteScroll({
     enabled: isIndividual && !isLoading && !isError && !isMemberRankingFetchNextPageError,
@@ -96,13 +102,13 @@ export const ScoreManagementPage = () => {
     <div className="relative flex h-full flex-col overflow-hidden">
       <div className="border-border-normal flex items-center border-b px-13 pb-10">
         <div className="flex gap-10">
-          {FILTER_ORDER.map((value) => (
+          {FILTER_OPTIONS.map(({ value, label }) => (
             <ScoreFilterChip
               key={value}
               isSelected={filter === value}
               onClick={() => setFilter(value)}
             >
-              {FILTER_LABELS[value]}
+              {label}
             </ScoreFilterChip>
           ))}
         </div>
@@ -114,9 +120,7 @@ export const ScoreManagementPage = () => {
           <div className="text-body-body9 text-foreground-tertiary px-13 py-12">Loading...</div>
         )}
         {isError && (
-          <div className="text-body-body9 text-foreground-tertiary px-13 py-12">
-            점수 현황을 불러오지 못했습니다.
-          </div>
+          <div className="text-body-body9 text-foreground-tertiary px-13 py-12">{errorMessage}</div>
         )}
         {!isLoading && !isError && isIndividual ? (
           <>

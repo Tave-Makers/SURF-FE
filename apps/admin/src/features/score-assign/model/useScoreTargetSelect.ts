@@ -30,6 +30,9 @@ const getTodayDateString = () => {
   return `${year}-${month}-${day}`;
 };
 
+const ACTIVE_GENERATION_ERROR_MESSAGE = '활동 기수 정보를 불러오지 못했습니다.';
+const TARGET_LIST_ERROR_MESSAGE = '회원 목록을 불러오지 못했습니다.';
+
 const toPartLabel = (part: string) => PART_LABELS[part as TrackPart] ?? part;
 
 /** 팀 상세 / 파트 그룹 응답 모두 `tracks` 구조가 같아 동일하게 변환한다. */
@@ -59,7 +62,15 @@ export const useScoreTargetSelect = (criterionId: string) => {
   const [openGroupIds, setOpenGroupIds] = useState<Set<string>>(new Set());
   const [selectedIds, setSelectedIds] = useState<Set<number>>(new Set());
 
-  const { data: activeCohort } = useActiveGenerationQuery();
+  const {
+    data: activeCohort,
+    isLoading: isActiveCohortLoading,
+    isError: isActiveCohortError,
+    refetch: refetchActiveCohort,
+  } = useActiveGenerationQuery();
+  const activeGeneration = activeCohort?.generation;
+  const hasActiveGeneration = activeGeneration != null;
+  const isPartTarget = targetKind === 'part';
 
   const {
     data: categories = [],
@@ -74,8 +85,8 @@ export const useScoreTargetSelect = (criterionId: string) => {
     isError: isPartGroupsError,
     refetch: refetchPartGroups,
   } = useGroupedMembersByPartQuery({
-    generation: activeCohort?.generation,
-    enabled: targetKind === 'part',
+    generation: activeGeneration,
+    enabled: isPartTarget,
   });
 
   const {
@@ -84,9 +95,9 @@ export const useScoreTargetSelect = (criterionId: string) => {
     isError: isTeamsError,
     refetch: refetchTeams,
   } = useTeamsQuery({
-    kind: targetKind === 'part' ? 'study' : targetKind,
-    generation: activeCohort?.generation,
-    enabled: targetKind !== 'part',
+    kind: isPartTarget ? 'study' : targetKind,
+    generation: activeGeneration,
+    enabled: !isPartTarget && hasActiveGeneration,
   });
 
   const criterion = useMemo(
@@ -197,28 +208,40 @@ export const useScoreTargetSelect = (criterionId: string) => {
     });
   };
 
+  const isTargetListLoading = isPartTarget ? isPartGroupsLoading : isTeamsLoading;
+  const isTargetListError = isPartTarget ? isPartGroupsError : isTeamsError;
+  const isError = isActivityTypesError || isActiveCohortError || isTargetListError;
+  const isWaitingForActiveGeneration = !isActiveCohortError && !hasActiveGeneration;
   const isLoading =
-    isActivityTypesLoading || (targetKind === 'part' ? isPartGroupsLoading : isTeamsLoading);
-  const isError =
-    isActivityTypesError || (targetKind === 'part' ? isPartGroupsError : isTeamsError);
+    !isError &&
+    (isActivityTypesLoading ||
+      isActiveCohortLoading ||
+      isWaitingForActiveGeneration ||
+      isTargetListLoading);
+  const errorMessage = isActiveCohortError
+    ? ACTIVE_GENERATION_ERROR_MESSAGE
+    : TARGET_LIST_ERROR_MESSAGE;
 
   /** 현재 탭에서 실패한 조회만 다시 실행한다. */
   const retry = useCallback(() => {
+    if (isActiveCohortError) void refetchActiveCohort();
     if (isActivityTypesError) void refetchActivityTypes();
-    if (targetKind === 'part') {
+    if (isPartTarget) {
       if (isPartGroupsError) void refetchPartGroups();
 
       return;
     }
     if (isTeamsError) void refetchTeams();
   }, [
+    isActiveCohortError,
     isActivityTypesError,
+    isPartTarget,
     isPartGroupsError,
     isTeamsError,
+    refetchActiveCohort,
     refetchActivityTypes,
     refetchPartGroups,
     refetchTeams,
-    targetKind,
   ]);
 
   return {
@@ -233,6 +256,7 @@ export const useScoreTargetSelect = (criterionId: string) => {
       selectedIds,
       isLoading,
       isError,
+      errorMessage,
       isApplyDisabled: selectedIds.size === 0 || !criterion || isTeamCriterion || isCreatePending,
     },
     actions: {

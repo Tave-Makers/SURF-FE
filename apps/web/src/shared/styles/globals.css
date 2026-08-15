@@ -1,4 +1,5 @@
 @import '../../../../../packages/ui/styles/globals.css';
+@import './safe-area-native.css';
 
 /* 뷰포트 높이 전파 */
 html,

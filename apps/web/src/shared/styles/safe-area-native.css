@@ -1,0 +1,13 @@
+/*
+ * 네이티브 앱 WebView 전용 세이프에어리어 대응.
+ * .is-native-app / --sat,--sar,--sab,--sal 은 WebView 로드 시 앱에서 <html>에 주입한다.
+ * 이 클래스가 없는 일반 브라우저에서는 아래 규칙이 매칭되지 않아 기존 화면과 동일하다.
+ */
+
+.is-native-app .app-header {
+  padding-top: calc(var(--spacing-11) + var(--sat, 0px)); /* py-11의 top 값 + 세이프에어리어 */
+}
+
+.is-native-app .app-bottom-nav {
+  padding-bottom: calc(var(--spacing-13) + var(--sab, 0px)); /* pb-13 값 + 세이프에어리어 */
+}

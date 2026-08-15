@@ -112,9 +112,9 @@ const DistributionTable = ({
     <div className="border-border-normal min-w-0 overflow-hidden rounded-6 border">
       <table className="w-full table-fixed border-collapse">
         <colgroup>
-          <col className="w-44" />
+          <col className="w-[2.5rem]" />
           <col />
-          <col className="w-92" />
+          <col className="w-[5rem]" />
         </colgroup>
         <thead className="bg-background-quaternary">
           <tr>
@@ -303,7 +303,7 @@ const TrafficPanel = ({ data }: { data: DashboardResponse }) => {
   const latestMau = data.traffic.mau.at(-1);
 
   return (
-    <div className="flex flex-col gap-22">
+    <div className="flex flex-col gap-16">
       <div className="grid grid-cols-2 gap-10">
         <MetricCard label="DAU latest" value={formatNumber(latestDau?.users)} />
         <MetricCard label="WAU latest" value={formatNumber(latestWau?.users)} />
@@ -339,7 +339,7 @@ const KpiPanel = ({ data }: { data: DashboardResponse }) => {
   const activityIndex = sumKpi(data.kpi_daily, 'activity_index');
 
   return (
-    <div className="flex flex-col gap-22">
+    <div className="flex flex-col gap-16">
       <div className="grid grid-cols-2 gap-10">
         <MetricCard label="Posts" value={formatNumber(posts)} />
         <MetricCard label="Comments" value={formatNumber(comments)} />
@@ -384,7 +384,7 @@ const KpiPanel = ({ data }: { data: DashboardResponse }) => {
 
 const FunnelPanel = ({ data }: { data: DashboardResponse }) => {
   return (
-    <div className="flex flex-col gap-22">
+    <div className="flex flex-col gap-16">
       <FunnelTable items={data.funnel} />
       <Section title="Attempt to Matched">
         <HorizontalBarChart
@@ -400,7 +400,7 @@ const FunnelPanel = ({ data }: { data: DashboardResponse }) => {
 
 const ChurnPanel = ({ data }: { data: DashboardResponse }) => {
   return (
-    <div className="flex flex-col gap-22">
+    <div className="flex flex-col gap-16">
       <Section title="Status Bucket">
         <VerticalBarChart
           items={data.churn.buckets.map((item) => ({
@@ -418,7 +418,7 @@ const ChurnPanel = ({ data }: { data: DashboardResponse }) => {
 
 const ContentPanel = ({ data }: { data: DashboardResponse }) => {
   return (
-    <div className="flex flex-col gap-22">
+    <div className="flex flex-col gap-16">
       <Section title="page_url Top">
         <DistributionTable
           items={data.content.page_url_top.map((item) => ({
@@ -443,7 +443,7 @@ const ContentPanel = ({ data }: { data: DashboardResponse }) => {
 
 const NoticePanel = ({ data }: { data: DashboardResponse }) => {
   return (
-    <div className="flex flex-col gap-22">
+    <div className="flex flex-col gap-16">
       <div className="grid grid-cols-2 gap-10">
         <MetricCard label="Notice Open Rate" value={formatPercent(data.notice.open_rate)} />
         <MetricCard label="Notice Reach" value={formatNumber(data.notice.reach)} />
@@ -466,7 +466,7 @@ const NoticePanel = ({ data }: { data: DashboardResponse }) => {
 
 const DebugPanel = ({ data }: { data: DashboardResponse }) => {
   return (
-    <div className="flex flex-col gap-24">
+    <div className="flex flex-col gap-16">
       <div className="grid grid-cols-2 gap-10">
         <MetricCard label="page_view rows" value={formatNumber(data.debug.page_view_rows)} />
         <MetricCard
@@ -671,7 +671,7 @@ export const DashboardPage = () => {
         <div className="text-caption-caption6 text-foreground-tertiary">조회 기간: {periodText}</div>
 
         {isPending ? (
-          <div className="text-body-body9 text-foreground-tertiary py-40 text-center">
+          <div className="text-body-body9 text-foreground-tertiary py-19 text-center">
             대시보드 데이터를 불러오는 중입니다.
           </div>
         ) : null}

@@ -33,6 +33,14 @@ body {
   -webkit-overflow-scrolling: touch;
 }
 
+.dashboard-tab-scrollbar {
+  scrollbar-width: none;
+}
+
+.dashboard-tab-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+
 /* placeholder */
 .placeholder-body-14-600--1-24::placeholder {
   font-family:

@@ -4,8 +4,20 @@
  * 이 클래스가 없는 일반 브라우저에서는 아래 규칙이 매칭되지 않아 기존 화면과 동일하다.
  */
 
+/* 헤더는 높이를 정확히 (3rem + sat) 으로 고정한다.
+ * padding-top 만 늘리면 Tailwind 의 min-h-[3rem] 이 그대로 48px 이라
+ * 실제 높이가 max(48px, 12px + sat + 콘텐츠 + 12px) 로 커지고,
+ * 아래 .app-hero-offset 이 가정하는 (48px + sat) 과 어긋나 헤더/히어로가 함께 밀린다.
+ * box-sizing: border-box 기준이라 콘텐츠 영역은 웹과 동일하게 24px 로 유지된다. */
 .is-native-app .app-header {
+  height: calc(3rem + var(--sat, 0px));
   padding-top: calc(var(--spacing-11) + var(--sat, 0px)); /* py-11의 top 값 + 세이프에어리어 */
+}
+
+/* 홈 히어로는 헤더(3rem) 밑으로 겹치도록 -mt-[3rem]로 끌어올려져 있다.
+ * 위에서 헤더 높이를 3rem + sat 로 고정했으므로 오프셋도 정확히 같은 값으로 늘린다. */
+.is-native-app .app-hero-offset {
+  margin-top: calc(-3rem - var(--sat, 0px));
 }
 
 .is-native-app .app-bottom-nav {

@@ -42,7 +42,7 @@ export const BannerFormWidget = ({
   );
 
   return (
-    <div className="border-border-normal flex min-h-screen flex-col border-t-[0.4px] pt-11">
+    <div className="border-border-normal flex min-h-0 flex-1 flex-col border-t-[0.4px] pt-11">
       <div className="flex flex-1 flex-col gap-[1.125rem] px-14 pb-40">
         {/* 수정 모드: 활성화 토글 */}
         {mode === 'edit' && (

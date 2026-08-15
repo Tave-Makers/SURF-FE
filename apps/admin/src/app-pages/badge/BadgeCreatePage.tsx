@@ -12,7 +12,7 @@ export const BadgeCreatePage = () => {
   const { state, actions } = useBadgeCreateForm();
 
   return (
-    <div className="border-border-normal bg-background-normal flex min-h-dvh flex-col border-t-[0.4px]">
+    <div className="border-border-normal bg-background-normal flex h-full min-h-0 flex-col border-t-[0.4px]">
       <div className="flex flex-1 flex-col gap-18 px-13 py-11">
         <FieldGroup title="배지 이미지 등록">
           <ImgUploader

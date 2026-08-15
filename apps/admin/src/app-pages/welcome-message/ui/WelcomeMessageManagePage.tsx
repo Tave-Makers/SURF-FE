@@ -24,7 +24,7 @@ export const WelcomeMessageManagePage = () => {
   const { setMainMessage, setSubMessage, handleEdit, handleBack, handleSubmit } = actions;
 
   return (
-    <div className="flex h-dvh w-full flex-col">
+    <div className="flex h-full min-h-0 w-full flex-col">
       <AppHeader
         customBack={isEditMode ? handleBack : undefined}
         overrideHeader={

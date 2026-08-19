@@ -215,6 +215,16 @@ export const createRouteConfig = (router: RouterInstance): RouteConfig[] => [
     },
   },
   {
+    id: 'post-report',
+    path: /^\/board\/\d+\/post\/\d+\/report$/,
+    backPath: PAGE_ROUTES.BOARD.MAIN,
+    header: {
+      mode: HeaderMode.Default,
+      title: '신고하기',
+      hasLeftIcon: true,
+    },
+  },
+  {
     id: 'mypage-password',
     path: PAGE_ROUTES.MYPAGE.PASSWORD,
     backPath: PAGE_ROUTES.MYPAGE.MAIN,

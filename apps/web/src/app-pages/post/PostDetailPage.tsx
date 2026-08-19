@@ -16,6 +16,7 @@ import { useDeletePostMutation } from '@/features/post/model/useDeletePostMutati
 import { useGetPostLikesQuery } from '@/features/post/model/useGetPostLikesQuery';
 import { useGetPostScheduleQuery } from '@/features/post/model/useGetPostScheduleQuery';
 import { usePageName } from '@/shared/analytics/lib/getPageName';
+import { PAGE_ROUTES } from '@/shared/config/path';
 import { useBottomSheetStore } from '@/shared/store/bottomSheetStore';
 import { CommentComposer } from '@/widgets/comment-composer/ui/CommentComposer';
 import { CommentSection } from '@/widgets/comment-section/ui/CommentSection';
@@ -149,7 +150,7 @@ const PostDetailPage = ({ postId }: PostDetailPageProps) => {
             ],
           });
         },
-        onReport: () => showToast('신고 기능은 준비 중입니다.'),
+        onReport: () => router.push(PAGE_ROUTES.BOARD.POST_REPORT(post.boardId, numericPostId)),
       },
     });
   };
@@ -160,6 +161,10 @@ const PostDetailPage = ({ postId }: PostDetailPageProps) => {
 
   const handleConsumedReply = () => {
     setPendingReply(null);
+  };
+
+  const handleReportComment = (commentId: number) => {
+    router.push(PAGE_ROUTES.BOARD.POST_REPORT(post.boardId, numericPostId, { commentId }));
   };
   return (
     <div className="flex h-full flex-col">
@@ -217,6 +222,7 @@ const PostDetailPage = ({ postId }: PostDetailPageProps) => {
                     : '첫 댓글을 남겨보세요!'
                 }
                 onStartReply={handleStartReply}
+                onReportComment={handleReportComment}
               />
             </div>
           </div>

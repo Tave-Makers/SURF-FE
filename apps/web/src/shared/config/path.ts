@@ -49,6 +49,7 @@ export const PAGE_ROUTES = {
     FEEDBACK: '/settings/feedback',
     SCRAPS: '/settings/scraps',
     MY_POSTS: '/settings/my-posts',
+    BLOCKED_MEMBERS: '/settings/blocked-members',
     MODE: '/settings/mode',
     POLICY: {
       MAIN: '/settings/policy',

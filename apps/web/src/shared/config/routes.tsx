@@ -111,6 +111,16 @@ export const createRouteConfig = (router: RouterInstance): RouteConfig[] => [
     },
   },
   {
+    id: 'mypage-blocked-members',
+    path: PAGE_ROUTES.MYPAGE.BLOCKED_MEMBERS,
+    backPath: PAGE_ROUTES.MYPAGE.SETTINGS,
+    header: {
+      mode: HeaderMode.Default,
+      title: '차단한 회원 리스트',
+      hasLeftIcon: true,
+    },
+  },
+  {
     id: 'mypage-policy',
     path: PAGE_ROUTES.MYPAGE.POLICY.MAIN,
     backPath: PAGE_ROUTES.MYPAGE.SETTINGS,

@@ -9,6 +9,7 @@ import { CommentOptionBottomSheet } from '@/features/comment/ui/CommentOptionBot
 import { ScheduleCategoryBottomSheet } from '@/features/schedule/ui/ScheduleCategoryBottomSheet';
 import { ScheduleDateBottomSheet } from '@/features/schedule/ui/ScheduleDateBottomSheet';
 import { AccountIntegrationBottomSheet } from '@/features/account-integration/ui/AccountIntegrationBottomSheet';
+import { MemberBlockBottomSheet } from '@/features/block/ui/MemberBlockBottomSheet';
 import type { BottomSheetMap, BottomSheetType } from '@/shared/store/bottomSheetStore';
 import type { ComponentType } from 'react';
 
@@ -33,4 +34,5 @@ export const SHEET_COMPONENTS = {
   scheduleCategory: ScheduleCategoryBottomSheet,
   scheduleDate: ScheduleDateBottomSheet,
   accountIntegration: AccountIntegrationBottomSheet,
+  memberBlock: MemberBlockBottomSheet,
 } satisfies BottomSheetComponents;

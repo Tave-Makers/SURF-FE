@@ -2,12 +2,15 @@
 
 import { SolidButton } from '@surf/ui/button';
 import { FieldGroup } from '@surf/ui/field-group';
+import { HeaderMode, type HeaderProps } from '@surf/ui/header';
 import { useRouter } from 'next/navigation';
 import type { UserProfile } from '@/entities/user/model/types';
 import { CareerCard } from '@/entities/user/ui/career-card/CareerCard';
 import { useAuthStore } from '@/features/auth/model/useAuthStore';
+import { useBlockMember } from '@/features/block';
 import CareerEmpty from '@/shared/assets/icons/empty-space/career-empty.svg';
 import { PAGE_ROUTES } from '@/shared/config/path';
+import { AppHeader } from '@/widgets/header/ui/AppHeader';
 import { ProfileBadge } from '@/widgets/profile-badge/ui/ProfileBadge';
 import { ProfileHeader } from '@/widgets/profile-header/ui/ProfileHeader';
 
@@ -20,6 +23,22 @@ export const MemberProfilePage = ({ userProfile, memberId }: Props) => {
   const router = useRouter();
   const myId = useAuthStore((s) => s.memberId);
   const isMe = myId != null && myId === memberId;
+  const openBlockSheet = useBlockMember(memberId);
+
+  // 주소록/게시글 등 진입점에서 push되어 들어오므로 back이 기본, 직접 진입 시에만 주소록으로
+  const handleBack = () => {
+    if (window.history.length > 1) {
+      router.back();
+      return;
+    }
+    router.push(PAGE_ROUTES.MEMBER.MEMBER_SEARCH);
+  };
+
+  const overrideHeader: HeaderProps = {
+    mode: HeaderMode.Default,
+    hasLeftIcon: true,
+    icons: isMe ? [] : [{ label: 'Dots', onClickIcon: openBlockSheet }],
+  };
 
   function handleMessage() {
     if (isMe) return;
@@ -34,36 +53,40 @@ export const MemberProfilePage = ({ userProfile, memberId }: Props) => {
   }
 
   return (
-    <div className="flex h-full flex-col overflow-y-auto">
-      <ProfileHeader userProfile={userProfile} />
-      <div className="w-full px-13">
-        <SolidButton size="s" variant="secondary" onClick={handleMessage} isDisabled={isMe}>
-          쪽지 보내기
-        </SolidButton>
-      </div>
-      <section className="flex flex-col gap-16 px-13 pt-16">
-        <div className="flex flex-col gap-10">
-          <FieldGroup title="경력">
-            {userProfile.careers.length > 0 ? (
-              <ul className="flex flex-col gap-10">
-                {userProfile.careers.map((c) => (
-                  <li key={c.careerId ?? `${c.companyName}-${c.startDate}`}>
-                    <CareerCard item={c} />
-                  </li>
-                ))}
-              </ul>
-            ) : (
-              <div className="flex flex-col items-center gap-3 py-16">
-                <CareerEmpty aria-hidden="true" />
-                <span className="text-body-body8 text-foreground-tertiary">
-                  등록된 경력이 없어요
-                </span>
-              </div>
-            )}
-          </FieldGroup>
+    <div className="flex h-full flex-col">
+      <AppHeader customBack={handleBack} overrideHeader={overrideHeader} />
+
+      <div className="flex flex-1 flex-col overflow-y-auto">
+        <ProfileHeader userProfile={userProfile} />
+        <div className="w-full px-13">
+          <SolidButton size="s" variant="secondary" onClick={handleMessage} isDisabled={isMe}>
+            쪽지 보내기
+          </SolidButton>
         </div>
-      </section>
-      <ProfileBadge memberId={memberId} />
+        <section className="flex flex-col gap-16 px-13 pt-16">
+          <div className="flex flex-col gap-10">
+            <FieldGroup title="경력">
+              {userProfile.careers.length > 0 ? (
+                <ul className="flex flex-col gap-10">
+                  {userProfile.careers.map((c) => (
+                    <li key={c.careerId ?? `${c.companyName}-${c.startDate}`}>
+                      <CareerCard item={c} />
+                    </li>
+                  ))}
+                </ul>
+              ) : (
+                <div className="flex flex-col items-center gap-3 py-16">
+                  <CareerEmpty aria-hidden="true" />
+                  <span className="text-body-body8 text-foreground-tertiary">
+                    등록된 경력이 없어요
+                  </span>
+                </div>
+              )}
+            </FieldGroup>
+          </div>
+        </section>
+        <ProfileBadge memberId={memberId} />
+      </div>
     </div>
   );
 };

@@ -162,15 +162,6 @@ export const createRouteConfig = (router: RouterInstance): RouteConfig[] => [
       hasLeftIcon: true,
     },
   },
-  {
-    id: 'profile',
-    path: /^\/member\/\d+$/,
-    backPath: PAGE_ROUTES.MEMBER.MEMBER_SEARCH,
-    header: {
-      mode: HeaderMode.Default,
-      hasLeftIcon: true,
-    },
-  },
   // {
   //   id: 'board',
   //   path: PAGE_ROUTES.BOARD.MAIN,

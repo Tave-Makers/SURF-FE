@@ -19,14 +19,19 @@ type ReportTarget = {
  * 신고 화면에 보여줄 대상(게시글 또는 댓글)의 작성자·제목/내용을 해석한다.
  * commentId가 있으면 댓글 신고, 없으면 게시글 신고.
  */
-export const useReportTarget = (postId: number, commentId: number | null) => {
+export const useReportTarget = (
+  postId: number,
+  commentId: number | null,
+  options?: { enabled?: boolean },
+) => {
+  const enabled = options?.enabled ?? true;
   const isCommentReport = commentId !== null;
 
   const {
     data: post,
     isLoading: isPostLoading,
     isError: isPostError,
-  } = usePostDetail(postId, { enabled: !isCommentReport });
+  } = usePostDetail(postId, { enabled: enabled && !isCommentReport });
 
   const {
     data: commentPages,
@@ -35,7 +40,7 @@ export const useReportTarget = (postId: number, commentId: number | null) => {
     fetchNextPage,
     hasNextPage,
     isFetchingNextPage,
-  } = useInfiniteCommentsQuery(postId, COMMENT_PAGE_SIZE, isCommentReport);
+  } = useInfiniteCommentsQuery(postId, COMMENT_PAGE_SIZE, enabled && isCommentReport);
 
   const targetComment = isCommentReport
     ? (commentPages?.pages
@@ -45,9 +50,9 @@ export const useReportTarget = (postId: number, commentId: number | null) => {
 
   // 신고 대상 댓글이 아직 불러오지 않은 페이지에 있을 수 있어, 찾을 때까지 다음 페이지를 가져온다
   useEffect(() => {
-    if (!isCommentReport || targetComment || !hasNextPage || isFetchingNextPage) return;
+    if (!enabled || !isCommentReport || targetComment || !hasNextPage || isFetchingNextPage) return;
     void fetchNextPage();
-  }, [isCommentReport, targetComment, hasNextPage, isFetchingNextPage, fetchNextPage]);
+  }, [enabled, isCommentReport, targetComment, hasNextPage, isFetchingNextPage, fetchNextPage]);
 
   const isCommentSearching =
     isCommentReport && !targetComment && (isCommentsLoading || isFetchingNextPage || hasNextPage);

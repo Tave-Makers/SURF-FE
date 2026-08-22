@@ -18,6 +18,7 @@ import { useGetPostScheduleQuery } from '@/features/post/model/useGetPostSchedul
 import { usePageName } from '@/shared/analytics/lib/getPageName';
 import { PAGE_ROUTES } from '@/shared/config/path';
 import { useBottomSheetStore } from '@/shared/store/bottomSheetStore';
+import { PageError, PageLoading } from '@/shared/ui/page-status/PageStatus';
 import { CommentComposer } from '@/widgets/comment-composer/ui/CommentComposer';
 import { CommentSection } from '@/widgets/comment-section/ui/CommentSection';
 import { AppHeader } from '@/widgets/header/ui/AppHeader';
@@ -83,18 +84,9 @@ const PostDetailPage = ({ postId }: PostDetailPageProps) => {
 
   // 로딩/에러 처리
   if (isLoading || (scheduleId && isScheduleLoading))
-    return (
-      <div className="flex h-full w-full items-center justify-center">
-        {/* <span>불러오는 중...</span> */}
-      </div>
-    );
+    return <PageLoading label="게시글을 불러오는 중이에요" />;
 
-  if (isError || !post)
-    return (
-      <div className="flex h-full w-full items-center justify-center">
-        <span>게시글을 불러오지 못했습니다.</span>
-      </div>
-    );
+  if (isError || !post) return <PageError message="게시글을 불러오지 못했습니다." />;
 
   if (scheduleId && isScheduleError) {
     if (process.env.NODE_ENV === 'development') {

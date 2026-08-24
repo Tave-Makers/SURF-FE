@@ -11,12 +11,7 @@ type PageLoadingProps = {
 };
 
 export const PageLoading = ({ label = '불러오는 중이에요' }: PageLoadingProps) => (
-  <div
-    role="status"
-    aria-live="polite"
-    className="flex h-full w-full items-center justify-center"
-    aria-hidden="true"
-  >
+  <div role="status" aria-live="polite" className="flex h-full w-full items-center justify-center">
     <span className="sr-only">{label}</span>
   </div>
 );

@@ -90,9 +90,9 @@ const PostDetailPage = ({ postId }: PostDetailPageProps) => {
 
   if (isError || !post)
     return (
-      <div className="flex h-full w-full items-center justify-center">
-        <div className="flex flex-col items-center gap-11 text-center">
-          <p className="text-body-body8 text-foreground-tertiary">게시글을 불러오지 못했습니다.</p>
+      <PageError
+        message="게시글을 불러오지 못했습니다."
+        action={
           <div className="w-[10rem]">
             <SolidButton
               size="s"
@@ -106,8 +106,8 @@ const PostDetailPage = ({ postId }: PostDetailPageProps) => {
               게시판으로 이동
             </SolidButton>
           </div>
-        </div>
-      </div>
+        }
+      />
     );
 
   if (scheduleId && isScheduleError) {

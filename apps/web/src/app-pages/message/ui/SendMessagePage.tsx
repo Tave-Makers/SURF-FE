@@ -94,8 +94,8 @@ export const SendMessagePage = () => {
           trackMessageEvent(MESSAGE_EVENTS.LETTER_SEND, { success: true });
         },
         onError: () => {
-          // 실패 토스트는 useSendMessage에서 띄우므로 알러트만 닫아 화면을 되돌린다
-          closeAlert({ restoreFocus: false });
+          // 실패 시에는 폼에 그대로 남으므로 다이얼로그를 연 요소로 포커스를 되돌린다
+          closeAlert();
           trackMessageEvent(MESSAGE_EVENTS.LETTER_SEND, { success: false });
         },
       },

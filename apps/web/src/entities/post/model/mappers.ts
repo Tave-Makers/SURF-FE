@@ -1,5 +1,4 @@
 import { PostDetailData, PostListItemResponse } from '@/entities/post/api/types';
-import { TAB_CATEGORIES, TabCategoryLabel, TabCategoryKey } from '@/entities/post/model/tab';
 import { categoryIdToLabel } from './category';
 import type { Post, PostDetail } from './types';
 import { POST_BOARDS } from './board';
@@ -23,13 +22,6 @@ export const transformListItemToPost = (item: PostListItemResponse): Post => ({
   thumbnailUrl: item.thumbnailImageUrl ?? undefined,
   categoryName: categoryIdToLabel(item.categoryId),
 });
-
-export const tabKeyToLabel = (key: string): TabCategoryLabel => {
-  if (key in TAB_CATEGORIES) {
-    return TAB_CATEGORIES[key as TabCategoryKey].label;
-  }
-  return TAB_CATEGORIES.all.label;
-};
 
 export const boardIdToLabel = (id: number | null) => {
   if (id === null) return null;

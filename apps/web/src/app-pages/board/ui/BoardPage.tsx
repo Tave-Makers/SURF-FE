@@ -62,7 +62,7 @@ const BoardPage = ({ boardId: boardIdProp }: { boardId: string }) => {
           icons: [
             {
               label: 'Search',
-              onClickIcon: () => router.push(PAGE_ROUTES.BOARD.SEARCH),
+              onClickIcon: () => router.push(PAGE_ROUTES.BOARD.SEARCH({ boardId })),
             },
           ],
         }}

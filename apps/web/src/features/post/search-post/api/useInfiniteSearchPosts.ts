@@ -12,13 +12,22 @@ type PageData = {
   last: boolean;
 };
 
-export function useInfiniteSearchPosts(param: string, size = 10) {
+type SearchPostsParams = {
+  param: string;
+  // 지정하면 해당 게시판 내에서만 검색, 미지정 시 통합 검색
+  boardId?: number;
+  // TODO(BE): categoryId 파라미터 추가 요청 중. 추가되면 여기로 받아 서버 필터링으로 전환
+  // (현재는 SearchPostListContainer에서 클라이언트 필터링)
+  size?: number;
+};
+
+export function useInfiniteSearchPosts({ param, boardId, size = 10 }: SearchPostsParams) {
   return useInfiniteQuery({
-    queryKey: ['search-posts', param, size],
+    queryKey: ['search-posts', param, boardId, size],
     initialPageParam: 0,
     queryFn: async ({ pageParam }) => {
       const res = await axiosInstance.get<CommonResponse<PageData>>('/v1/user/search/posts', {
-        params: { param, page: pageParam, size },
+        params: { param, page: pageParam, size, ...(boardId !== undefined && { boardId }) },
       });
       return res.data.data;
     },

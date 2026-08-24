@@ -30,7 +30,25 @@ export const PAGE_ROUTES = {
   BOARD: {
     MAIN: '/board/1',
     SELECT_CATEGORY: (boardId: string | number) => `/board/${boardId}`,
-    SEARCH: '/board/search',
+    // 검색은 진입한 게시판 안에서만 수행한다(boardId 미지정 시 통합 검색)
+    SEARCH: (params?: { boardId?: string | number; keyword?: string; category?: string }) => {
+      const searchParams = new URLSearchParams();
+
+      if (params?.boardId !== undefined) {
+        searchParams.set('boardId', String(params.boardId));
+      }
+
+      if (params?.keyword) {
+        searchParams.set('keyword', params.keyword);
+      }
+
+      if (params?.category) {
+        searchParams.set('category', params.category);
+      }
+
+      const query = searchParams.toString();
+      return query ? `/board/search?${query}` : '/board/search';
+    },
     POST_DETAIL: (boardId: string | number, postId: string | number) =>
       `/board/${boardId}/post/${postId}`,
     POST_CREATE: (boardId: string | number) => `/board/${boardId}/post/create`,

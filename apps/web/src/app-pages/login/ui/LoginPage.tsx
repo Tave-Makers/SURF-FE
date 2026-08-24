@@ -46,10 +46,6 @@ export const LoginPage = () => {
     showToast(msg);
   }, [msg, openAlert, closeAlert, router, showToast]);
 
-  function handleTestPage() {
-    router.push('/login/test');
-  }
-
   return (
     <div className="flex h-dvh w-dvw flex-col items-center gap-[6.75rem] px-15 pt-[16.81rem]">
       <Logo width={163.684} height={55.04} />
@@ -57,14 +53,6 @@ export const LoginPage = () => {
       <div className="flex w-full flex-col items-center gap-[1.25rem]">
         <KakaoLoginButton />
         <AppleLoginButton />
-
-        <button
-          type="button"
-          className="m-0 cursor-pointer border-none bg-transparent p-0 underline"
-          onClick={handleTestPage}
-        >
-          이메일로 체험하기
-        </button>
       </div>
     </div>
   );

@@ -1,10 +1,11 @@
 'use client';
 
 import { useKeyboardOffset } from '@surf/hooks';
+import { SolidButton } from '@surf/ui/button';
 import { HeaderMode } from '@surf/ui/header';
 import { useAlertStore } from '@surf/ui/store/alertStore';
 import { useToastStore } from '@surf/ui/store/toastStore';
-import { usePathname, useRouter, useSearchParams } from 'next/navigation';
+import { useParams, usePathname, useRouter, useSearchParams } from 'next/navigation';
 import { useEffect, useRef, useState } from 'react';
 import { usePostDetail } from '@/entities/post/api/usePostDetail';
 import { categoryIdToKey } from '@/entities/post/model/category';
@@ -16,6 +17,7 @@ import { useDeletePostMutation } from '@/features/post/model/useDeletePostMutati
 import { useGetPostLikesQuery } from '@/features/post/model/useGetPostLikesQuery';
 import { useGetPostScheduleQuery } from '@/features/post/model/useGetPostScheduleQuery';
 import { usePageName } from '@/shared/analytics/lib/getPageName';
+import { PAGE_ROUTES } from '@/shared/config/path';
 import { useBottomSheetStore } from '@/shared/store/bottomSheetStore';
 import { CommentComposer } from '@/widgets/comment-composer/ui/CommentComposer';
 import { CommentSection } from '@/widgets/comment-section/ui/CommentSection';
@@ -28,6 +30,7 @@ interface PostDetailPageProps {
 
 const PostDetailPage = ({ postId }: PostDetailPageProps) => {
   const pathname = usePathname();
+  const { boardId } = useParams<{ boardId?: string }>();
   const router = useRouter();
   const numericPostId = Number(postId);
   const keyboardOffset = useKeyboardOffset();
@@ -91,7 +94,22 @@ const PostDetailPage = ({ postId }: PostDetailPageProps) => {
   if (isError || !post)
     return (
       <div className="flex h-full w-full items-center justify-center">
-        <span>게시글을 불러오지 못했습니다.</span>
+        <div className="flex flex-col items-center gap-11 text-center">
+          <p className="text-body-body8 text-foreground-tertiary">게시글을 불러오지 못했습니다.</p>
+          <div className="w-[10rem]">
+            <SolidButton
+              size="s"
+              variant="secondary"
+              onClick={() =>
+                router.push(
+                  boardId ? PAGE_ROUTES.BOARD.SELECT_CATEGORY(boardId) : PAGE_ROUTES.BOARD.MAIN,
+                )
+              }
+            >
+              게시판으로 이동
+            </SolidButton>
+          </div>
+        </div>
       </div>
     );
 
@@ -169,10 +187,10 @@ const PostDetailPage = ({ postId }: PostDetailPageProps) => {
           title: post.boardLabel ?? '',
           hasLeftIcon: true,
           icons: [
-            {
-              label: 'FatCornerUpRight',
-              onClickIcon: () => showToast('공유 기능은 준비 중입니다.'),
-            },
+            // {
+            //   label: 'FatCornerUpRight',
+            //   onClickIcon: () => showToast('공유 기능은 준비 중입니다.'),
+            // },
             {
               label: 'Dots',
               onClickIcon: handleOpenOptions,

@@ -2,13 +2,20 @@
 
 import { useAlertStore } from '@surf/ui/store/alertStore';
 import { useToastStore } from '@surf/ui/store/toastStore';
+import Link from 'next/link';
 import { useRouter, useSearchParams } from 'next/navigation';
-import { useEffect } from 'react';
+import { Fragment, useEffect } from 'react';
 import Logo from '../../../../public/logo.svg';
 import { AppleLoginButton } from '@/features/auth/ui/AppleLoginButton';
 import { KakaoLoginButton } from '@/features/auth/ui/KakaoLoginButton';
 
 import { PAGE_ROUTES } from '@/shared/config/path';
+
+const PUBLIC_POLICY_LINKS = [
+  { href: PAGE_ROUTES.PUBLIC_POLICY.SERVICE, label: '서비스 이용약관' },
+  { href: PAGE_ROUTES.PUBLIC_POLICY.PRIVACY, label: '개인정보 처리방침' },
+  { href: PAGE_ROUTES.PUBLIC_POLICY.OPERATING, label: '운영정책' },
+] as const;
 
 export const LoginPage = () => {
   const searchParams = useSearchParams();
@@ -53,6 +60,23 @@ export const LoginPage = () => {
       <div className="flex w-full flex-col items-center gap-[1.25rem]">
         <KakaoLoginButton />
         <AppleLoginButton />
+        <nav aria-label="서비스 정책" className="flex items-center justify-center gap-x-6">
+          {PUBLIC_POLICY_LINKS.map(({ href, label }, index) => (
+            <Fragment key={href}>
+              {index > 0 && (
+                <span aria-hidden="true" className="text-caption-caption4 text-foreground-tertiary">
+                  |
+                </span>
+              )}
+              <Link
+                href={href}
+                className="text-caption-caption4 text-foreground-tertiary underline underline-offset-2"
+              >
+                {label}
+              </Link>
+            </Fragment>
+          ))}
+        </nav>
       </div>
     </div>
   );

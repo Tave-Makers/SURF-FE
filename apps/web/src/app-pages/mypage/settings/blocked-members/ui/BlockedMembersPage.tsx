@@ -1,11 +1,28 @@
 'use client';
 
+import { useInfiniteScroll } from '@surf/hooks';
+
 import { BlockedMemberList, useBlockedMembersQuery, useUnblockMember } from '@/features/block';
 import SearchEmpty from '@/shared/assets/icons/empty-space/search-empty.svg';
 
 const BlockedMembersPage = () => {
-  const { data: members, isLoading, isError } = useBlockedMembersQuery();
+  const {
+    data: members,
+    isLoading,
+    isError,
+    hasNextPage,
+    isFetchingNextPage,
+    fetchNextPage,
+  } = useBlockedMembersQuery();
   const confirmUnblock = useUnblockMember();
+
+  const loadMoreRef = useInfiniteScroll({
+    hasNextPage,
+    isFetching: isFetchingNextPage,
+    onLoadMore: () => {
+      void fetchNextPage();
+    },
+  });
 
   if (isLoading) return <div className="flex h-full w-full items-center justify-center" />;
 
@@ -32,7 +49,15 @@ const BlockedMembersPage = () => {
     );
   }
 
-  return <BlockedMemberList members={members} onSelectMember={confirmUnblock} />;
+  // (sub) 레이아웃이 overflow-hidden이라 스크롤 컨테이너는 페이지가 직접 만든다
+  return (
+    <div className="flex h-full">
+      <div className="flex-1 overflow-y-auto">
+        <BlockedMemberList members={members} onSelectMember={confirmUnblock} />
+        {hasNextPage && <div ref={loadMoreRef} className="h-1 w-full" aria-hidden />}
+      </div>
+    </div>
+  );
 };
 
 export default BlockedMembersPage;

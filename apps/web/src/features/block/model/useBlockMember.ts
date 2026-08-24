@@ -27,7 +27,7 @@ export const useBlockMember = (memberId: number) => {
           onClick: () => {
             // 차단 후 진입점 화면으로 이동하므로 포커스 복원을 건너뛴다
             closeAlert({ restoreFocus: false });
-            mutate({ targetMemberId: memberId });
+            mutate({ memberId });
           },
         },
       ],

@@ -1,18 +1,21 @@
 'use client';
 
-import { useQuery } from '@tanstack/react-query';
+import { useInfiniteQuery } from '@tanstack/react-query';
 
-import type { BlockedMemberResponse } from '../api/types';
+import {
+  BLOCKED_MEMBERS_DEFAULT_PAGE,
+  BLOCKED_MEMBERS_PAGE_SIZE,
+  fetchBlockedMembers,
+} from '../api/fetchBlockedMembers.client';
+import { toBlockedMember } from './mappers';
 import { blockQueryKeys } from './queryKeys';
 
-/**
- * 차단한 회원 목록 조회
- *
- * TODO: 백엔드 차단 API 미연동 상태. 스펙 확정 후 queryFn을 실제 조회로 교체
- *  (예: GET /v1/user/blocks → BlockedMemberListResponse)
- */
+/** 차단한 회원 목록 조회 (최신순, 무한 스크롤) */
 export const useBlockedMembersQuery = () =>
-  useQuery({
+  useInfiniteQuery({
     queryKey: blockQueryKeys.blockedMembers(),
-    queryFn: (): Promise<BlockedMemberResponse[]> => Promise.resolve([]),
+    queryFn: ({ pageParam }) => fetchBlockedMembers(pageParam, BLOCKED_MEMBERS_PAGE_SIZE),
+    initialPageParam: BLOCKED_MEMBERS_DEFAULT_PAGE,
+    getNextPageParam: (lastPage) => (lastPage.hasNext ? lastPage.pageNumber + 1 : undefined),
+    select: (data) => data.pages.flatMap((page) => page.content.map(toBlockedMember)),
   });

@@ -2,47 +2,45 @@
 
 import { useToastStore } from '@surf/ui/store/toastStore';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
-import { useRouter } from 'next/navigation';
+import { useRouter, useSearchParams } from 'next/navigation';
 
-import type { BlockMemberRequest } from '../api/types';
-import { PAGE_ROUTES } from '@/shared/config/path';
-import { BLOCK_ERROR_MESSAGE, BLOCK_SUCCESS_MESSAGE } from './constants';
+import { blockMember } from '../api/blockMember.client';
+import { resolveBlockExitPath } from '../lib/resolveBlockExitPath';
+import { resolveErrorMessage } from '../lib/resolveErrorMessage';
+import {
+  BLOCK_ERROR_MESSAGE,
+  BLOCK_ERROR_MESSAGE_BY_STATUS,
+  BLOCK_SUCCESS_MESSAGE,
+} from './constants';
 
-/**
- * 회원 차단 뮤테이션
- *
- * TODO: 백엔드 차단 API 미연동 상태. 스펙 확정 후 아래만 교체하면 됩니다.
- *  1. `features/block/api/blockMember.client.ts` 추가 (예: POST /v1/user/blocks)
- *  2. 여기 mutationFn을 해당 함수 호출로 교체
- *  3. `api/types.ts`의 BlockMemberRequest를 실제 DTO에 맞게 수정
- */
+/** 회원 차단 뮤테이션 — POST /v1/user/blocks */
 export const useBlockMemberMutation = () => {
   const router = useRouter();
+  const searchParams = useSearchParams();
   const queryClient = useQueryClient();
   const showToast = useToastStore((s) => s.show);
 
   return useMutation({
-    mutationFn: (request: BlockMemberRequest) => {
-      console.warn('[차단] API 미연동 상태입니다. 요청 값:', request);
-      return Promise.resolve();
-    },
+    mutationFn: blockMember,
     onSuccess: () => {
-      // 차단된 회원의 글/댓글은 게시글·댓글·검색 등 앱 전반에 걸쳐 있어 전체를 무효화한다.
-      void queryClient.invalidateQueries();
+      // 차단된 회원의 글/댓글은 게시글·댓글·검색 등 앱 전반에 걸쳐 있다.
+      // invalidate는 캐시를 stale로만 표시해 재조회 전까지 이전 데이터를 그대로 내주므로,
+      // 차단한 회원의 본문이 잠깐 보였다가 사라진다. 아예 제거해서 그 노출을 막는다.
+      queryClient.removeQueries();
 
       // 토스트는 전역 store라 이동 후 진입점 화면에서 그대로 노출됩니다.
       showToast(BLOCK_SUCCESS_MESSAGE);
 
-      // 프로필은 게시글/주소록 등 진입점에서 push되어 들어오므로 back이면 원래 화면으로 돌아간다.
-      if (window.history.length > 1) {
-        router.back();
-        return;
-      }
-      router.push(PAGE_ROUTES.MEMBER.MEMBER_SEARCH);
+      // 차단한 회원의 게시글 상세는 404가 되므로 back()으로 돌려보내지 않는다.
+      // replace라 프로필이 히스토리에서 빠져 뒤로가기가 차단한 회원 화면으로 되돌지 않는다.
+      router.replace(resolveBlockExitPath(searchParams.get('boardId')));
+
+      // 프로필 차단 여부는 서버에서 판정하므로, 캐시된 RSC 응답이 남지 않도록 갱신한다
+      router.refresh();
     },
     onError: (error) => {
       console.error('회원 차단 실패:', error);
-      showToast(BLOCK_ERROR_MESSAGE);
+      showToast(resolveErrorMessage(error, BLOCK_ERROR_MESSAGE_BY_STATUS, BLOCK_ERROR_MESSAGE));
     },
   });
 };

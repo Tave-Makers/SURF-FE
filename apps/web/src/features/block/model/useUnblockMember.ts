@@ -11,7 +11,7 @@ export const useUnblockMember = () => {
   const closeAlert = useAlertStore((s) => s.close);
   const { mutate } = useUnblockMemberMutation();
 
-  const confirmUnblock = (targetMemberId: number) => {
+  const confirmUnblock = (memberId: number) => {
     openAlert({
       state: 'default',
       title: UNBLOCK_CONFIRM_TITLE,
@@ -24,7 +24,7 @@ export const useUnblockMember = () => {
           label: '해제하기',
           onClick: () => {
             closeAlert();
-            mutate({ targetMemberId });
+            mutate(memberId);
           },
         },
       ],

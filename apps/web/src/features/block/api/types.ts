@@ -1,29 +1,29 @@
 import type { CommonResponse } from '@/shared/api/types';
 
-/**
- * 회원 차단 요청
- *
- * TODO: 백엔드 차단 API 스펙 확정 후 실제 DTO에 맞게 수정
- * (엔드포인트 / 필드명 미확정 상태)
- */
-export type BlockMemberRequest = {
-  targetMemberId: number;
-};
-
-export type BlockMemberResponse = CommonResponse<null>;
-
-/** 차단 해제 요청 */
-export type UnblockMemberRequest = {
-  targetMemberId: number;
-};
-
-export type UnblockMemberResponse = CommonResponse<null>;
-
-/** 차단한 회원 목록 아이템 */
-export type BlockedMemberResponse = {
+/** 차단 회원 정보 — 차단 등록 응답 / 목록 아이템 공통 스키마 */
+export interface BlockedMemberDTO {
   memberId: number;
-  nickname: string;
-  profileImageUrl?: string;
-};
+  name: string;
+  profileImageUrl: string | null;
+  blockedAt: string;
+}
 
-export type BlockedMemberListResponse = CommonResponse<BlockedMemberResponse[]>;
+/** 차단 등록 요청 — POST /v1/user/blocks */
+export interface BlockMemberRequest {
+  memberId: number;
+}
+
+export type BlockMemberResponse = CommonResponse<BlockedMemberDTO>;
+
+/** 차단 목록 슬라이스 — GET /v1/user/blocks (최신순, 나를 차단한 회원은 제외) */
+export interface BlockedMemberSlice {
+  content: BlockedMemberDTO[];
+  pageNumber: number;
+  pageSize: number;
+  hasNext: boolean;
+}
+
+export type BlockedMemberListResponse = CommonResponse<BlockedMemberSlice>;
+
+/** 차단 해제 — DELETE /v1/user/blocks/{userId} */
+export type UnblockMemberResponse = CommonResponse<null>;

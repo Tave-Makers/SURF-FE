@@ -2,10 +2,10 @@
 
 import { Avatar } from '@surf/ui/avatar';
 
-import type { BlockedMemberResponse } from '../api/types';
+import type { BlockedMember } from '../model/types';
 
 type BlockedMemberListProps = {
-  members: BlockedMemberResponse[];
+  members: BlockedMember[];
   onSelectMember: (memberId: number) => void;
 };
 
@@ -19,9 +19,9 @@ export const BlockedMemberList = ({ members, onSelectMember }: BlockedMemberList
           onClick={() => onSelectMember(member.memberId)}
           className="flex w-full items-center gap-8 px-12 py-10 text-left"
         >
-          <Avatar size="xs" src={member.profileImageUrl} alt={`${member.nickname} 프로필 이미지`} />
+          <Avatar size="xs" src={member.profileImageUrl} alt={`${member.name} 프로필 이미지`} />
           <span className="text-body-body6 text-foreground-normal min-w-0 flex-1 truncate">
-            {member.nickname}
+            {member.name}
           </span>
         </button>
       </li>

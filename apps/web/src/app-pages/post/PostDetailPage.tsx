@@ -132,6 +132,7 @@ const PostDetailPage = ({ postId }: PostDetailPageProps) => {
         likedUsers: result.data ?? [],
         isLoading: result.isFetching,
         isError: result.isError,
+        boardId: post.boardId,
       },
     });
   };
@@ -227,6 +228,7 @@ const PostDetailPage = ({ postId }: PostDetailPageProps) => {
               <CommentSection
                 postId={numericPostId}
                 memberId={memberId ?? undefined}
+                boardId={post.boardId}
                 scrollRootRef={scrollRootRef}
                 isInteractionDisabled={post.isReserved}
                 emptyMessage={

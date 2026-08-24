@@ -1,9 +1,11 @@
 import { Avatar } from '@surf/ui/avatar';
-import { useParams, useRouter } from 'next/navigation';
+import { useRouter } from 'next/navigation';
 import { PAGE_ROUTES } from '@/shared/config/path';
 
 type PostProfileProps = {
   memberId: number | null;
+  /** 프로필에서 차단했을 때 돌아올 게시판. 라우팅을 아는 상위에서 내려준다 */
+  boardId?: number;
   profileImgUrl?: string;
   nickname: string;
   date: string;
@@ -13,6 +15,7 @@ type PostProfileProps = {
 
 export const PostProfile = ({
   memberId,
+  boardId,
   profileImgUrl,
   nickname,
   date,
@@ -20,7 +23,6 @@ export const PostProfile = ({
   viewCount,
 }: PostProfileProps) => {
   const router = useRouter();
-  const { boardId } = useParams<{ boardId?: string }>();
 
   const isClickable = memberId !== null;
 

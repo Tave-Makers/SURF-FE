@@ -4,7 +4,7 @@ import { useAlertStore } from '@surf/ui/store/alertStore';
 import { useToastStore } from '@surf/ui/store/toastStore';
 import { toDate, toKST, formatDateTime } from '@surf/utils';
 // import dynamic from 'next/dynamic';
-import { useParams, useRouter } from 'next/navigation';
+import { useRouter } from 'next/navigation';
 import { useEffect, useRef } from 'react';
 
 import { useAuthStore } from '@/features/auth/model/useAuthStore';
@@ -31,6 +31,8 @@ import { useBottomSheetStore } from '@/shared/store/bottomSheetStore';
 interface Props {
   postId: number;
   memberId?: number;
+  /** 작성자 프로필에서 차단했을 때 돌아올 게시판 */
+  boardId?: number;
   scrollRootRef?: React.RefObject<HTMLDivElement | null>;
   isInteractionDisabled?: boolean;
   emptyMessage?: string;
@@ -41,13 +43,13 @@ interface Props {
 export const CommentSection = ({
   postId,
   memberId,
+  boardId,
   scrollRootRef,
   isInteractionDisabled = false,
   emptyMessage = '첫 댓글을 남겨보세요!',
   onStartReply,
 }: Props) => {
   const router = useRouter();
-  const { boardId } = useParams<{ boardId?: string }>();
   const myId = useAuthStore((s) => s.memberId);
   const openBottomSheet = useBottomSheetStore((s) => s.open);
 

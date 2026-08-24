@@ -1,6 +1,6 @@
 import { Avatar } from '@surf/ui/avatar';
 import { Sheet, SheetItem } from '@surf/ui/sheet';
-import { useParams, useRouter } from 'next/navigation';
+import { useRouter } from 'next/navigation';
 import { Sheet as ModalSheet } from 'react-modal-sheet';
 import { PAGE_ROUTES } from '@/shared/config/path';
 
@@ -20,6 +20,8 @@ export type PostLikeBottomSheetProps = {
   isOpen: boolean;
   onClose: () => void;
   likedUsers: LikedUser[];
+  /** 프로필에서 차단했을 때 돌아올 게시판 */
+  boardId?: number;
   isLoading: boolean;
   isError: boolean;
 };
@@ -28,11 +30,11 @@ export const PostLikeBottomSheet = ({
   isOpen,
   onClose,
   likedUsers,
+  boardId,
   isLoading,
   isError,
 }: PostLikeBottomSheetProps) => {
   const router = useRouter();
-  const { boardId } = useParams<{ boardId?: string }>();
 
   if (!isOpen) return null;
 

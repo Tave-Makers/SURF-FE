@@ -1,6 +1,6 @@
-export { MemberBlockBottomSheet } from './ui/MemberBlockBottomSheet';
+export { MemberOptionBottomSheet } from './ui/MemberOptionBottomSheet';
 export { BlockedMemberList } from './ui/BlockedMemberList';
-export { useBlockMember } from './model/useBlockMember';
+export { useMemberOptions } from './model/useMemberOptions';
 export { useUnblockMember } from './model/useUnblockMember';
 export { useBlockedMembersQuery } from './model/useBlockedMembersQuery';
 export type { BlockedMember } from './model/types';

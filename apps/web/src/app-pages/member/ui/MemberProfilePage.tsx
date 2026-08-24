@@ -7,7 +7,7 @@ import { useRouter } from 'next/navigation';
 import type { UserProfile } from '@/entities/user/model/types';
 import { CareerCard } from '@/entities/user/ui/career-card/CareerCard';
 import { useAuthStore } from '@/features/auth/model/useAuthStore';
-import { useBlockMember } from '@/features/block';
+import { useMemberOptions } from '@/features/block';
 import CareerEmpty from '@/shared/assets/icons/empty-space/career-empty.svg';
 import { PAGE_ROUTES } from '@/shared/config/path';
 import { AppHeader } from '@/widgets/header/ui/AppHeader';
@@ -23,7 +23,9 @@ export const MemberProfilePage = ({ userProfile, memberId }: Props) => {
   const router = useRouter();
   const myId = useAuthStore((s) => s.memberId);
   const isMe = myId != null && myId === memberId;
-  const openBlockSheet = useBlockMember(memberId);
+  const openMemberOptionSheet = useMemberOptions(memberId, {
+    onReport: () => router.push(PAGE_ROUTES.MEMBER.REPORT(memberId)),
+  });
 
   // (sub) 레이아웃의 AppHeader는 routes.tsx에 항목이 없어야 렌더되지 않는다.
   // 헤더를 이 페이지가 직접 그리므로 뒤로가기도 여기서 처리한다.
@@ -38,7 +40,7 @@ export const MemberProfilePage = ({ userProfile, memberId }: Props) => {
   const overrideHeader: HeaderProps = {
     mode: HeaderMode.Default,
     hasLeftIcon: true,
-    icons: isMe ? [] : [{ label: 'Dots', onClickIcon: openBlockSheet }],
+    icons: isMe ? [] : [{ label: 'Dots', onClickIcon: openMemberOptionSheet }],
   };
 
   function handleMessage() {

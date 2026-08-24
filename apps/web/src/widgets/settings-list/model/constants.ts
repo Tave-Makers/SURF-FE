@@ -22,8 +22,8 @@ export const SETTINGS_ITEMS: SettingsItemType[] = [
   },
   {
     id: 'feedback',
-    leftIconName: 'ChatDots',
-    text: '피드백 보내기',
+    leftIconName: 'Envelope',
+    text: '문의 · 피드백 보내기',
     action: { type: 'NAVIGATE', payload: PAGE_ROUTES.MYPAGE.FEEDBACK },
   },
   {

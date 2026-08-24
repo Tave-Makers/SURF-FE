@@ -2,13 +2,22 @@
 
 import { useAlertStore } from '@surf/ui/store/alertStore';
 import { useToastStore } from '@surf/ui/store/toastStore';
+import Link from 'next/link';
 import { useRouter, useSearchParams } from 'next/navigation';
-import { useEffect } from 'react';
+import { Fragment, useEffect } from 'react';
 import Logo from '../../../../public/logo.svg';
 import { AppleLoginButton } from '@/features/auth/ui/AppleLoginButton';
 import { KakaoLoginButton } from '@/features/auth/ui/KakaoLoginButton';
 
 import { PAGE_ROUTES } from '@/shared/config/path';
+
+const PUBLIC_POLICY_LINKS = [
+  { href: PAGE_ROUTES.PUBLIC_POLICY.SERVICE, label: '서비스 이용약관' },
+  { href: PAGE_ROUTES.PUBLIC_POLICY.PRIVACY, label: '개인정보 처리방침' },
+  { href: PAGE_ROUTES.PUBLIC_POLICY.OPERATING, label: '운영정책' },
+] as const;
+
+const PUBLIC_SUPPORT_LINK = { href: PAGE_ROUTES.SUPPORT, label: '문의' } as const;
 
 export const LoginPage = () => {
   const searchParams = useSearchParams();
@@ -46,25 +55,40 @@ export const LoginPage = () => {
     showToast(msg);
   }, [msg, openAlert, closeAlert, router, showToast]);
 
-  function handleTestPage() {
-    router.push('/login/test');
-  }
-
   return (
     <div className="flex h-dvh w-dvw flex-col items-center gap-[6.75rem] px-15 pt-[16.81rem]">
       <Logo width={163.684} height={55.04} />
-      {/* 임시 처리 <KakaoLoginButton /> */}
       <div className="flex w-full flex-col items-center gap-[1.25rem]">
         <KakaoLoginButton />
         <AppleLoginButton />
-
-        <button
-          type="button"
-          className="m-0 cursor-pointer border-none bg-transparent p-0 underline"
-          onClick={handleTestPage}
-        >
-          이메일로 체험하기
-        </button>
+        <nav aria-label="서비스 정책 및 문의" className="flex flex-col items-center gap-y-4">
+          <div className="flex items-center justify-center gap-x-6">
+            {PUBLIC_POLICY_LINKS.map(({ href, label }, index) => (
+              <Fragment key={href}>
+                {index > 0 && (
+                  <span
+                    aria-hidden="true"
+                    className="text-caption-caption4 text-foreground-tertiary"
+                  >
+                    |
+                  </span>
+                )}
+                <Link
+                  href={href}
+                  className="text-caption-caption4 text-foreground-tertiary underline underline-offset-2"
+                >
+                  {label}
+                </Link>
+              </Fragment>
+            ))}
+          </div>
+          <Link
+            href={PUBLIC_SUPPORT_LINK.href}
+            className="text-caption-caption4 text-foreground-tertiary underline underline-offset-2"
+          >
+            {PUBLIC_SUPPORT_LINK.label}
+          </Link>
+        </nav>
       </div>
     </div>
   );

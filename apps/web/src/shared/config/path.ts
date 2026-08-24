@@ -9,12 +9,15 @@ export const PAGE_ROUTES = {
     PRIVACY: '/privacy-policy',
     OPERATING: '/operational-policy',
   },
+  SUPPORT: '/support',
 
   // 멤버 관련
   MEMBER: {
     // boardId는 차단 후 돌아갈 게시판을 알기 위한 진입 맥락 (게시글/댓글에서 진입한 경우에만 붙는다)
     PROFILE: (memberId: string | number, boardId?: string | number) =>
       boardId === undefined ? `/member/${memberId}` : `/member/${memberId}?boardId=${boardId}`,
+    // 프로필(닉네임·프로필 사진·자기소개) 신고. 게시글/댓글 신고와 별개 대상이다.
+    REPORT: (memberId: string | number) => `/member/${memberId}/report`,
     MEMBER_SEARCH: '/member/search',
   },
 

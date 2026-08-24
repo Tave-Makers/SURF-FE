@@ -64,7 +64,6 @@ async function proxy(req: NextRequest, path: string[]) {
   const setCookies = getSetCookies(upstream);
   console.log('[proxy] upstream status:', upstream.status);
   console.log('[proxy] upstream content-type:', upstream.headers.get('content-type'));
-  console.log('[proxy] upstream set-cookie:', setCookies);
 
   return buildResponse(upstream, setCookies);
 }

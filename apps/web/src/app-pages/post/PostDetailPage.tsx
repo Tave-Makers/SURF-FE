@@ -19,6 +19,7 @@ import { useGetPostScheduleQuery } from '@/features/post/model/useGetPostSchedul
 import { usePageName } from '@/shared/analytics/lib/getPageName';
 import { PAGE_ROUTES } from '@/shared/config/path';
 import { useBottomSheetStore } from '@/shared/store/bottomSheetStore';
+import { PageError, PageLoading } from '@/shared/ui/page-status/PageStatus';
 import { CommentComposer } from '@/widgets/comment-composer/ui/CommentComposer';
 import { CommentSection } from '@/widgets/comment-section/ui/CommentSection';
 import { AppHeader } from '@/widgets/header/ui/AppHeader';
@@ -85,11 +86,7 @@ const PostDetailPage = ({ postId }: PostDetailPageProps) => {
 
   // 로딩/에러 처리
   if (isLoading || (scheduleId && isScheduleLoading))
-    return (
-      <div className="flex h-full w-full items-center justify-center">
-        {/* <span>불러오는 중...</span> */}
-      </div>
-    );
+    return <PageLoading label="게시글을 불러오는 중이에요" />;
 
   if (isError || !post)
     return (
@@ -168,7 +165,7 @@ const PostDetailPage = ({ postId }: PostDetailPageProps) => {
             ],
           });
         },
-        onReport: () => showToast('신고 기능은 준비 중입니다.'),
+        onReport: () => router.push(PAGE_ROUTES.BOARD.POST_REPORT(post.boardId, numericPostId)),
       },
     });
   };
@@ -179,6 +176,10 @@ const PostDetailPage = ({ postId }: PostDetailPageProps) => {
 
   const handleConsumedReply = () => {
     setPendingReply(null);
+  };
+
+  const handleReportComment = (commentId: number) => {
+    router.push(PAGE_ROUTES.BOARD.POST_REPORT(post.boardId, numericPostId, { commentId }));
   };
   return (
     <div className="flex h-full flex-col">
@@ -237,6 +238,7 @@ const PostDetailPage = ({ postId }: PostDetailPageProps) => {
                     : '첫 댓글을 남겨보세요!'
                 }
                 onStartReply={handleStartReply}
+                onReportComment={handleReportComment}
               />
             </div>
           </div>

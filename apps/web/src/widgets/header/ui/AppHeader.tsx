@@ -33,7 +33,8 @@ export const AppHeader = ({ customBack, overrideHeader, className }: AppHeaderPr
       if (window.history.length > 1) {
         router.back();
       } else {
-        router.push(currentRoute.backPath);
+        const { backPath } = currentRoute;
+        router.push(typeof backPath === 'function' ? backPath(pathname) : backPath);
       }
     } else {
       if (window.history.length > 1) router.back();

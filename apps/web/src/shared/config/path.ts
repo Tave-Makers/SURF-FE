@@ -32,6 +32,14 @@ export const PAGE_ROUTES = {
     POST_DETAIL: (boardId: string | number, postId: string | number) =>
       `/board/${boardId}/post/${postId}`,
     POST_CREATE: (boardId: string | number) => `/board/${boardId}/post/create`,
+    POST_REPORT: (
+      boardId: string | number,
+      postId: string | number,
+      options?: { commentId?: number },
+    ) => {
+      const path = `/board/${boardId}/post/${postId}/report`;
+      return options?.commentId !== undefined ? `${path}?commentId=${options.commentId}` : path;
+    },
     POST_SCHEDULE: '/post/schedule', // PostEditorToolbar.tsx
     COMMUNITY: '/board/2',
   },

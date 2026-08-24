@@ -1,6 +1,6 @@
 import type { IconName } from '@surf/ui/icon';
 // Alert 종류 정의
-export type AlertType = 'logout' | 'withdraw' | null;
+export type AlertType = 'logout' | 'withdraw' | 'contact' | null;
 
 // action 타입 정의
 export type Action =

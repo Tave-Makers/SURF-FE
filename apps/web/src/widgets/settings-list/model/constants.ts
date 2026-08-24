@@ -27,6 +27,12 @@ export const SETTINGS_ITEMS: SettingsItemType[] = [
     action: { type: 'NAVIGATE', payload: PAGE_ROUTES.MYPAGE.FEEDBACK },
   },
   {
+    id: 'contact',
+    leftIconName: 'Envelope',
+    text: '문의하기',
+    action: { type: 'OPEN_ALERT', payload: 'contact' },
+  },
+  {
     id: 'mode',
     leftIconName: 'CircleHalfSolid',
     text: '테마 변경',

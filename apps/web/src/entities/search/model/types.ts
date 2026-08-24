@@ -8,6 +8,7 @@ export interface MemberSearchItem {
   avatarUrl: string | null;
   level: UserLevel;
   chips: string[];
+  isBlocked: boolean;
 }
 
 export interface MemberSearchFilters {

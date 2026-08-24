@@ -20,6 +20,8 @@ export interface MemberSearchItemDTO {
     generation: number;
     part: TrackPart;
   }[];
+  /** 내가 차단한 회원인지 — 차단해도 목록에서 제외되지 않고 표기만 된다 */
+  blockedByMe: boolean;
 }
 
 export interface MemberSearchPageMeta extends PageMeta {

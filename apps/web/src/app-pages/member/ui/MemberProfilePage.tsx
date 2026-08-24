@@ -25,7 +25,8 @@ export const MemberProfilePage = ({ userProfile, memberId }: Props) => {
   const isMe = myId != null && myId === memberId;
   const openBlockSheet = useBlockMember(memberId);
 
-  // 주소록/게시글 등 진입점에서 push되어 들어오므로 back이 기본, 직접 진입 시에만 주소록으로
+  // (sub) 레이아웃의 AppHeader는 routes.tsx에 항목이 없어야 렌더되지 않는다.
+  // 헤더를 이 페이지가 직접 그리므로 뒤로가기도 여기서 처리한다.
   const handleBack = () => {
     if (window.history.length > 1) {
       router.back();

@@ -17,6 +17,8 @@ const PUBLIC_POLICY_LINKS = [
   { href: PAGE_ROUTES.PUBLIC_POLICY.OPERATING, label: '운영정책' },
 ] as const;
 
+const PUBLIC_SUPPORT_LINK = { href: PAGE_ROUTES.SUPPORT, label: '문의' } as const;
+
 export const LoginPage = () => {
   const searchParams = useSearchParams();
   const router = useRouter();
@@ -56,26 +58,36 @@ export const LoginPage = () => {
   return (
     <div className="flex h-dvh w-dvw flex-col items-center gap-[6.75rem] px-15 pt-[16.81rem]">
       <Logo width={163.684} height={55.04} />
-      {/* 임시 처리 <KakaoLoginButton /> */}
       <div className="flex w-full flex-col items-center gap-[1.25rem]">
         <KakaoLoginButton />
         <AppleLoginButton />
-        <nav aria-label="서비스 정책" className="flex items-center justify-center gap-x-6">
-          {PUBLIC_POLICY_LINKS.map(({ href, label }, index) => (
-            <Fragment key={href}>
-              {index > 0 && (
-                <span aria-hidden="true" className="text-caption-caption4 text-foreground-tertiary">
-                  |
-                </span>
-              )}
-              <Link
-                href={href}
-                className="text-caption-caption4 text-foreground-tertiary underline underline-offset-2"
-              >
-                {label}
-              </Link>
-            </Fragment>
-          ))}
+        <nav aria-label="서비스 정책 및 문의" className="flex flex-col items-center gap-y-4">
+          <div className="flex items-center justify-center gap-x-6">
+            {PUBLIC_POLICY_LINKS.map(({ href, label }, index) => (
+              <Fragment key={href}>
+                {index > 0 && (
+                  <span
+                    aria-hidden="true"
+                    className="text-caption-caption4 text-foreground-tertiary"
+                  >
+                    |
+                  </span>
+                )}
+                <Link
+                  href={href}
+                  className="text-caption-caption4 text-foreground-tertiary underline underline-offset-2"
+                >
+                  {label}
+                </Link>
+              </Fragment>
+            ))}
+          </div>
+          <Link
+            href={PUBLIC_SUPPORT_LINK.href}
+            className="text-caption-caption4 text-foreground-tertiary underline underline-offset-2"
+          >
+            {PUBLIC_SUPPORT_LINK.label}
+          </Link>
         </nav>
       </div>
     </div>

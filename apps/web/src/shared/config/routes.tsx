@@ -116,7 +116,7 @@ export const createRouteConfig = (router: RouterInstance): RouteConfig[] => [
     backPath: PAGE_ROUTES.MYPAGE.SETTINGS,
     header: {
       mode: HeaderMode.Default,
-      title: '차단한 회원 리스트',
+      title: '차단한 회원 해제하기',
       hasLeftIcon: true,
     },
   },

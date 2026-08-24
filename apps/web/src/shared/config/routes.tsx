@@ -8,9 +8,12 @@ type RouterInstance = ReturnType<typeof useRouter>;
 export type RouteConfig = {
   id: string;
   path: string | RegExp;
-  backPath: string;
+  /** 동적 세그먼트가 있는 경로는 현재 pathname으로 뒤로가기 경로를 계산한다 */
+  backPath: string | ((pathname: string) => string);
   header: HeaderProps;
 };
+
+const POST_REPORT_PATH = /^\/board\/(\d+)\/post\/(\d+)\/report$/;
 
 export const createRouteConfig = (router: RouterInstance): RouteConfig[] => [
   // {
@@ -200,24 +203,16 @@ export const createRouteConfig = (router: RouterInstance): RouteConfig[] => [
     },
   },
   {
-    id: 'post-detail',
-    // 게시글 목록이랑 합친 후 동적 세그먼트로 변경 예정
-    path: PAGE_ROUTES.BOARD.POST_DETAIL('[boardId]', '[postId]'),
-    backPath: PAGE_ROUTES.BOARD.MAIN,
-    header: {
-      mode: HeaderMode.Default,
-      title: '공지사항',
-      hasLeftIcon: true,
-      icons: [
-        { label: 'FatCornerUpRight', onClickIcon: () => alert('공유') },
-        { label: 'Dots', onClickIcon: () => alert('메뉴') },
-      ],
-    },
-  },
-  {
     id: 'post-report',
-    path: /^\/board\/\d+\/post\/\d+\/report$/,
-    backPath: PAGE_ROUTES.BOARD.MAIN,
+    path: POST_REPORT_PATH,
+    // 신고 화면은 게시글 상세에서만 진입하므로 해당 상세로 돌려보낸다
+    backPath: (pathname) => {
+      const matched = pathname.match(POST_REPORT_PATH);
+      if (!matched) return PAGE_ROUTES.BOARD.MAIN;
+
+      const [, boardId, postId] = matched;
+      return PAGE_ROUTES.BOARD.POST_DETAIL(boardId, postId);
+    },
     header: {
       mode: HeaderMode.Default,
       title: '신고하기',

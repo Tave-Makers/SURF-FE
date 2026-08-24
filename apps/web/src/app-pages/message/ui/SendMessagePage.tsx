@@ -9,10 +9,10 @@ import { useToastStore } from '@surf/ui/store/toastStore';
 import { TextArea } from '@surf/ui/text-area';
 import { useRouter, useSearchParams } from 'next/navigation';
 import { useEffect, useMemo, useState } from 'react';
-import { useSendMessage } from '@/entities/message/model/useSendMessage';
 import { Callout } from '@/entities/message/ui/callout/Callout';
 import { trackMessageEvent } from '@/features/message/lib/trackMessageEvent';
 import { MESSAGE_EVENTS } from '@/features/message/model/types';
+import { useSendMessage } from '@/features/message/model/useSendMessage';
 import { usePageName } from '@/shared/analytics/lib/getPageName';
 import { AppHeader } from '@/widgets/header/ui/AppHeader';
 

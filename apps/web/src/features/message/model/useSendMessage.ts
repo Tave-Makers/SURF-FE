@@ -1,7 +1,7 @@
 import { useToastStore } from '@surf/ui/store/toastStore';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { notificationKeys } from '@/entities/notification/model/queryKeys';
-import { sendMessage } from '../api/sendMessage';
+import { sendMessage } from '../api/sendMessage.client';
 
 const SEND_MESSAGE_ERROR_MESSAGE = '쪽지를 보내지 못했습니다.';
 

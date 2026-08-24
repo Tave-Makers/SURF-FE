@@ -1,6 +1,6 @@
 import { Avatar } from '@surf/ui/avatar';
 import { Sheet, SheetItem } from '@surf/ui/sheet';
-import { useRouter } from 'next/navigation';
+import { useParams, useRouter } from 'next/navigation';
 import { Sheet as ModalSheet } from 'react-modal-sheet';
 import { PAGE_ROUTES } from '@/shared/config/path';
 
@@ -32,6 +32,7 @@ export const PostLikeBottomSheet = ({
   isError,
 }: PostLikeBottomSheetProps) => {
   const router = useRouter();
+  const { boardId } = useParams<{ boardId?: string }>();
 
   if (!isOpen) return null;
 
@@ -77,7 +78,7 @@ export const PostLikeBottomSheet = ({
                       title={user.name}
                       node={<Avatar size="xs" src={user.profileImageUrl} className="rounded-3!" />}
                       onClick={() => {
-                        router.push(PAGE_ROUTES.MEMBER.PROFILE(user.id!));
+                        router.push(PAGE_ROUTES.MEMBER.PROFILE(user.id!, boardId));
                         onClose();
                       }}
                     />

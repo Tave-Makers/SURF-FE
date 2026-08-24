@@ -4,7 +4,7 @@ import { useAlertStore } from '@surf/ui/store/alertStore';
 import { useToastStore } from '@surf/ui/store/toastStore';
 import { toDate, toKST, formatDateTime } from '@surf/utils';
 // import dynamic from 'next/dynamic';
-import { useRouter } from 'next/navigation';
+import { useParams, useRouter } from 'next/navigation';
 import { useEffect, useRef } from 'react';
 
 import { useAuthStore } from '@/features/auth/model/useAuthStore';
@@ -47,6 +47,7 @@ export const CommentSection = ({
   onStartReply,
 }: Props) => {
   const router = useRouter();
+  const { boardId } = useParams<{ boardId?: string }>();
   const myId = useAuthStore((s) => s.memberId);
   const openBottomSheet = useBottomSheetStore((s) => s.open);
 
@@ -176,7 +177,7 @@ export const CommentSection = ({
                     onProfileClick={
                       isClickable
                         ? () => {
-                            router.push(PAGE_ROUTES.MEMBER.PROFILE(c.memberId));
+                            router.push(PAGE_ROUTES.MEMBER.PROFILE(c.memberId, boardId));
                           }
                         : undefined
                     }

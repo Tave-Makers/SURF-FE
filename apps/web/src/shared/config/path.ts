@@ -12,7 +12,9 @@ export const PAGE_ROUTES = {
 
   // 멤버 관련
   MEMBER: {
-    PROFILE: (memberId: string | number) => `/member/${memberId}`,
+    // boardId는 차단 후 돌아갈 게시판을 알기 위한 진입 맥락 (게시글/댓글에서 진입한 경우에만 붙는다)
+    PROFILE: (memberId: string | number, boardId?: string | number) =>
+      boardId === undefined ? `/member/${memberId}` : `/member/${memberId}?boardId=${boardId}`,
     MEMBER_SEARCH: '/member/search',
   },
 

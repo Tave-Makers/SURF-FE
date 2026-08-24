@@ -1,5 +1,5 @@
 import { Avatar } from '@surf/ui/avatar';
-import { useRouter } from 'next/navigation';
+import { useParams, useRouter } from 'next/navigation';
 import { PAGE_ROUTES } from '@/shared/config/path';
 
 type PostProfileProps = {
@@ -20,6 +20,7 @@ export const PostProfile = ({
   viewCount,
 }: PostProfileProps) => {
   const router = useRouter();
+  const { boardId } = useParams<{ boardId?: string }>();
 
   const isClickable = memberId !== null;
 
@@ -33,7 +34,7 @@ export const PostProfile = ({
         onClick={
           isClickable
             ? () => {
-                router.push(PAGE_ROUTES.MEMBER.PROFILE(memberId));
+                router.push(PAGE_ROUTES.MEMBER.PROFILE(memberId, boardId));
               }
             : undefined
         }
@@ -43,7 +44,7 @@ export const PostProfile = ({
           <button
             type="button"
             onClick={() => {
-              router.push(PAGE_ROUTES.MEMBER.PROFILE(memberId));
+              router.push(PAGE_ROUTES.MEMBER.PROFILE(memberId, boardId));
             }}
             className="text-body-body6 text-foreground-normal"
           >

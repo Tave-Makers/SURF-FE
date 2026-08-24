@@ -24,6 +24,7 @@ const mockMembers: MemberSearchItem[] = [
     level: 'admin',
     chips: ['15기 디자인', '15기 프론트엔드'],
     avatarUrl: null,
+    isBlocked: false,
   },
   {
     userId: 2,
@@ -33,6 +34,7 @@ const mockMembers: MemberSearchItem[] = [
     level: 'president',
     chips: ['15기 디자인', '15기 백엔드'],
     avatarUrl: null,
+    isBlocked: false,
   },
   {
     userId: 3,
@@ -42,6 +44,7 @@ const mockMembers: MemberSearchItem[] = [
     level: 'manager',
     chips: ['15기 프론트엔드', '15기 백엔드'],
     avatarUrl: null,
+    isBlocked: true,
   },
   {
     userId: 4,
@@ -52,6 +55,7 @@ const mockMembers: MemberSearchItem[] = [
     level: 'member',
     chips: ['15기 딥러닝', '15기 데이터분석'],
     avatarUrl: null,
+    isBlocked: false,
   },
 ];
 

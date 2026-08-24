@@ -114,6 +114,16 @@ export const createRouteConfig = (router: RouterInstance): RouteConfig[] => [
     },
   },
   {
+    id: 'mypage-blocked-members',
+    path: PAGE_ROUTES.MYPAGE.BLOCKED_MEMBERS,
+    backPath: PAGE_ROUTES.MYPAGE.SETTINGS,
+    header: {
+      mode: HeaderMode.Default,
+      title: '차단한 회원 해제하기',
+      hasLeftIcon: true,
+    },
+  },
+  {
     id: 'mypage-policy',
     path: PAGE_ROUTES.MYPAGE.POLICY.MAIN,
     backPath: PAGE_ROUTES.MYPAGE.SETTINGS,
@@ -160,15 +170,6 @@ export const createRouteConfig = (router: RouterInstance): RouteConfig[] => [
     id: 'onboarding',
     path: PAGE_ROUTES.ONBOARDING,
     backPath: PAGE_ROUTES.LOGIN,
-    header: {
-      mode: HeaderMode.Default,
-      hasLeftIcon: true,
-    },
-  },
-  {
-    id: 'profile',
-    path: /^\/member\/\d+$/,
-    backPath: PAGE_ROUTES.MEMBER.MEMBER_SEARCH,
     header: {
       mode: HeaderMode.Default,
       hasLeftIcon: true,

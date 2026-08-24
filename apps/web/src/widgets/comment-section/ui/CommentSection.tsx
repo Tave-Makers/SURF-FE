@@ -31,6 +31,8 @@ import { useBottomSheetStore } from '@/shared/store/bottomSheetStore';
 interface Props {
   postId: number;
   memberId?: number;
+  /** 작성자 프로필에서 차단했을 때 돌아올 게시판 */
+  boardId?: number;
   scrollRootRef?: React.RefObject<HTMLDivElement | null>;
   isInteractionDisabled?: boolean;
   emptyMessage?: string;
@@ -43,6 +45,7 @@ interface Props {
 export const CommentSection = ({
   postId,
   memberId,
+  boardId,
   scrollRootRef,
   isInteractionDisabled = false,
   emptyMessage = '첫 댓글을 남겨보세요!',
@@ -175,7 +178,7 @@ export const CommentSection = ({
                     onProfileClick={
                       isClickable
                         ? () => {
-                            router.push(PAGE_ROUTES.MEMBER.PROFILE(c.memberId));
+                            router.push(PAGE_ROUTES.MEMBER.PROFILE(c.memberId, boardId));
                           }
                         : undefined
                     }

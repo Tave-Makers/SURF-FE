@@ -23,6 +23,7 @@ const mockUser: MemberSearchItem = {
   level: 'admin',
   chips: ['15기 프론트엔드', '15기 디자인'],
   avatarUrl: null,
+  isBlocked: false,
 };
 
 export const Default: Story = {
@@ -90,6 +91,15 @@ export const NoChips: Story = {
     user: {
       ...mockUser,
       chips: [],
+    },
+  },
+};
+
+export const Blocked: Story = {
+  args: {
+    user: {
+      ...mockUser,
+      isBlocked: true,
     },
   },
 };

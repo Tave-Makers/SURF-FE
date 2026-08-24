@@ -1,10 +1,11 @@
 'use client';
 
 import { useKeyboardOffset } from '@surf/hooks';
+import { SolidButton } from '@surf/ui/button';
 import { HeaderMode } from '@surf/ui/header';
 import { useAlertStore } from '@surf/ui/store/alertStore';
 import { useToastStore } from '@surf/ui/store/toastStore';
-import { usePathname, useRouter, useSearchParams } from 'next/navigation';
+import { useParams, usePathname, useRouter, useSearchParams } from 'next/navigation';
 import { useEffect, useRef, useState } from 'react';
 import { usePostDetail } from '@/entities/post/api/usePostDetail';
 import { categoryIdToKey } from '@/entities/post/model/category';
@@ -30,6 +31,7 @@ interface PostDetailPageProps {
 
 const PostDetailPage = ({ postId }: PostDetailPageProps) => {
   const pathname = usePathname();
+  const { boardId } = useParams<{ boardId?: string }>();
   const router = useRouter();
   const numericPostId = Number(postId);
   const keyboardOffset = useKeyboardOffset();
@@ -86,7 +88,27 @@ const PostDetailPage = ({ postId }: PostDetailPageProps) => {
   if (isLoading || (scheduleId && isScheduleLoading))
     return <PageLoading label="게시글을 불러오는 중이에요" />;
 
-  if (isError || !post) return <PageError message="게시글을 불러오지 못했습니다." />;
+  if (isError || !post)
+    return (
+      <PageError
+        message="게시글을 불러오지 못했습니다."
+        action={
+          <div className="w-[10rem]">
+            <SolidButton
+              size="s"
+              variant="secondary"
+              onClick={() =>
+                router.push(
+                  boardId ? PAGE_ROUTES.BOARD.SELECT_CATEGORY(boardId) : PAGE_ROUTES.BOARD.MAIN,
+                )
+              }
+            >
+              게시판으로 이동
+            </SolidButton>
+          </div>
+        }
+      />
+    );
 
   if (scheduleId && isScheduleError) {
     if (process.env.NODE_ENV === 'development') {
@@ -107,6 +129,7 @@ const PostDetailPage = ({ postId }: PostDetailPageProps) => {
         likedUsers: result.data ?? [],
         isLoading: result.isFetching,
         isError: result.isError,
+        boardId: post.boardId,
       },
     });
   };
@@ -166,10 +189,10 @@ const PostDetailPage = ({ postId }: PostDetailPageProps) => {
           title: post.boardLabel ?? '',
           hasLeftIcon: true,
           icons: [
-            {
-              label: 'FatCornerUpRight',
-              onClickIcon: () => showToast('공유 기능은 준비 중입니다.'),
-            },
+            // {
+            //   label: 'FatCornerUpRight',
+            //   onClickIcon: () => showToast('공유 기능은 준비 중입니다.'),
+            // },
             {
               label: 'Dots',
               onClickIcon: handleOpenOptions,
@@ -206,6 +229,7 @@ const PostDetailPage = ({ postId }: PostDetailPageProps) => {
               <CommentSection
                 postId={numericPostId}
                 memberId={memberId ?? undefined}
+                boardId={post.boardId}
                 scrollRootRef={scrollRootRef}
                 isInteractionDisabled={post.isReserved}
                 emptyMessage={

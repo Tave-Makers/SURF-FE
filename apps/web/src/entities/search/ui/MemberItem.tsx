@@ -11,7 +11,7 @@ interface MemberItemProps {
 }
 
 export const MemberItem = ({ user, keyword, onClick }: MemberItemProps) => {
-  const { name, university, bio, level, chips } = user;
+  const { name, university, bio, level, chips, isBlocked } = user;
 
   const subText = keyword && keyword.trim() !== '' ? university : bio;
 
@@ -28,7 +28,12 @@ export const MemberItem = ({ user, keyword, onClick }: MemberItemProps) => {
   const remainingCount = chips.length - visibleCount;
 
   return (
-    <button onClick={onClick} className="flex w-full gap-11 overflow-hidden p-12">
+    // 차단한 회원은 프로필로 들어갈 수 없다 ('차단됨' 표기가 이유를 알려준다)
+    <button
+      onClick={onClick}
+      disabled={isBlocked}
+      className="flex w-full gap-11 overflow-hidden p-12 disabled:cursor-default"
+    >
       {/* 프로필 이미지 */}
       <Avatar size="m" src={user.avatarUrl ?? undefined} />
 
@@ -40,6 +45,11 @@ export const MemberItem = ({ user, keyword, onClick }: MemberItemProps) => {
             <span>{name}</span>
             {BadgeIcon && <BadgeIcon className="h-[1.125rem] w-[1.125rem] shrink-0" />}
           </h3>
+
+          {/* 차단 표기 — 스펙상 차단해도 목록에서 제외하지 않고 표기만 한다 */}
+          {isBlocked && (
+            <span className="text-caption-caption6 text-foreground-tertiary shrink-0">차단됨</span>
+          )}
 
           {/* 기수 (칩 목록) */}
           <ul ref={containerRef} className="flex min-w-0 flex-1 gap-5 overflow-hidden">

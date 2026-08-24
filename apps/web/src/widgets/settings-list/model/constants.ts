@@ -33,6 +33,12 @@ export const SETTINGS_ITEMS: SettingsItemType[] = [
     action: { type: 'NAVIGATE', payload: PAGE_ROUTES.MYPAGE.MODE },
   },
   {
+    id: 'blocked-members',
+    leftIconName: 'SmileCircle',
+    text: '차단한 회원 리스트',
+    action: { type: 'NAVIGATE', payload: PAGE_ROUTES.MYPAGE.BLOCKED_MEMBERS },
+  },
+  {
     id: 'policy',
     leftIconName: 'InfoCircle',
     text: '이용약관',

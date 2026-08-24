@@ -51,7 +51,10 @@ const BoardPage = ({ boardId: boardIdProp }: { boardId: string }) => {
 
   return (
     <div className="flex h-full min-h-0 flex-col">
+      {/* 게시판은 홈의 하위 화면이다. 차단 후 replace 등으로 직전 엔트리가 바뀔 수 있어
+          back() 대신 홈으로 고정한다. */}
       <AppHeader
+        customBack={() => router.push(PAGE_ROUTES.HOME)}
         overrideHeader={{
           mode: HeaderMode.Default,
           title: boardInfo?.label ?? '',

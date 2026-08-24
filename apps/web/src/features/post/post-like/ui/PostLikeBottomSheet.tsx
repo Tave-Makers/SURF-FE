@@ -20,6 +20,8 @@ export type PostLikeBottomSheetProps = {
   isOpen: boolean;
   onClose: () => void;
   likedUsers: LikedUser[];
+  /** 프로필에서 차단했을 때 돌아올 게시판 */
+  boardId?: number;
   isLoading: boolean;
   isError: boolean;
 };
@@ -28,6 +30,7 @@ export const PostLikeBottomSheet = ({
   isOpen,
   onClose,
   likedUsers,
+  boardId,
   isLoading,
   isError,
 }: PostLikeBottomSheetProps) => {
@@ -77,7 +80,7 @@ export const PostLikeBottomSheet = ({
                       title={user.name}
                       node={<Avatar size="xs" src={user.profileImageUrl} className="rounded-3!" />}
                       onClick={() => {
-                        router.push(PAGE_ROUTES.MEMBER.PROFILE(user.id!));
+                        router.push(PAGE_ROUTES.MEMBER.PROFILE(user.id!, boardId));
                         onClose();
                       }}
                     />

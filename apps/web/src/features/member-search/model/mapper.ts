@@ -12,6 +12,7 @@ export function mapMemberSearchItem(dto: MemberSearchItemDTO): MemberSearchItem 
     avatarUrl: dto.profileImageUrl,
     level: mapUserLevel(dto.role),
     chips: dto.trackList.map((t) => `${t.generation}기 ${toLabelPartMap[t.part]}`),
+    isBlocked: dto.blockedByMe,
   };
 }
 

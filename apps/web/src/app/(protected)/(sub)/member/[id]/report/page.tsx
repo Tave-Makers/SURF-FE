@@ -27,7 +27,8 @@ const Page = async ({ params }: Props) => {
     <MemberReportPage
       memberId={memberId}
       username={profile.username}
-      selfIntroduction={profile.selfIntroduction}
+      university={profile.university}
+      graduateSchool={profile.graduateSchool}
     />
   );
 };

@@ -1,4 +1,5 @@
 'use client';
+import Image from 'next/image';
 import { useState } from 'react';
 
 export const PostImage = ({ src, alt }: { src: string; alt: string }) => {
@@ -13,6 +14,15 @@ export const PostImage = ({ src, alt }: { src: string; alt: string }) => {
   }
 
   return (
-    <img src={src} alt={alt} className="w-full rounded-[0.5rem]" onError={() => setError(true)} />
+    <Image
+      src={src}
+      alt={alt}
+      width={800}
+      height={600}
+      sizes="100vw"
+      style={{ width: '100%', height: 'auto' }}
+      className="rounded-[0.5rem]"
+      onError={() => setError(true)}
+    />
   );
 };

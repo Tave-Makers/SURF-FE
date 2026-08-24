@@ -36,6 +36,8 @@ interface Props {
   emptyMessage?: string;
   // 답글 시작을 부모로 올림
   onStartReply: (info: { commentId: number; memberId: number; nickname: string }) => void;
+  // 댓글 신고 화면 이동을 부모로 올림 (boardId를 아는 쪽에서 라우팅)
+  onReportComment: (commentId: number) => void;
 }
 
 export const CommentSection = ({
@@ -45,6 +47,7 @@ export const CommentSection = ({
   isInteractionDisabled = false,
   emptyMessage = '첫 댓글을 남겨보세요!',
   onStartReply,
+  onReportComment,
 }: Props) => {
   const router = useRouter();
   const { boardId } = useParams<{ boardId?: string }>();
@@ -97,7 +100,7 @@ export const CommentSection = ({
       props: {
         isMine: isMine(c),
         onDelete: () => clickDelete(c.id),
-        onReport: clickReport,
+        onReport: () => onReportComment(c.id),
       },
     });
   };
@@ -137,10 +140,6 @@ export const CommentSection = ({
         },
       ],
     });
-  };
-
-  const clickReport = () => {
-    showToast('신고 기능 준비 중입니다.');
   };
 
   if (isLoading) {

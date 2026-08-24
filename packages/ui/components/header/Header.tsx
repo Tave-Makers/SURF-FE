@@ -70,7 +70,7 @@ export type HeaderProps = (
 const renderLeftIcon = (hasLeftIcon?: boolean, onClickBack?: () => void) =>
   hasLeftIcon && (
     <button
-      className="-m-8 shrink-0 border-none bg-transparent p-8"
+      className="-m-8 flex shrink-0 border-none bg-transparent p-8"
       onClick={onClickBack}
       type="button"
     >
@@ -90,7 +90,7 @@ const renderRightIcons = (icons: MaxThree<HeaderIcon> = []) => (
         icon.label && (
           <button
             key={idx}
-            className="relative -m-8 shrink-0 border-none bg-transparent p-8"
+            className="relative -m-8 flex shrink-0 border-none bg-transparent p-8"
             onClick={icon.onClickIcon}
             type="button"
           >
@@ -103,6 +103,16 @@ const renderRightIcons = (icons: MaxThree<HeaderIcon> = []) => (
     )}
   </div>
 );
+
+// 헤더 높이는 3rem(48px)로 고정이고, 내용 높이에 맞춰 세로 패딩만 달라진다.
+// - 아이콘/타이틀(24px) → py-11(12px) : 24 + 24 = 48
+// - 검색창(36px)        → py-7(6px)   : 36 + 12 = 48
+const paddingByMode: Record<HeaderMode, string> = {
+  [HeaderMode.Default]: 'px-13 py-11',
+  [HeaderMode.Logo]: 'px-13 py-11',
+  [HeaderMode.TextBtn]: 'px-13 py-11',
+  [HeaderMode.SearchBar]: 'py-7 pl-13 pr-11',
+};
 
 export const Header = ({ className, ...props }: HeaderProps) => {
   let content: React.ReactNode;
@@ -166,7 +176,7 @@ export const Header = ({ className, ...props }: HeaderProps) => {
         <>
           {renderLeftIcon(hasLeftIcon, onClickBack)}
           {renderTitle(title)}
-          <div className="ml-auto flex justify-center">
+          <div className="-my-7 ml-auto flex justify-center">
             <TextButton
               size="s"
               variant={btnVariant}
@@ -187,7 +197,7 @@ export const Header = ({ className, ...props }: HeaderProps) => {
 
   return (
     <header
-      className={`app-header px-13 top-0 flex min-h-[3rem] w-full items-center justify-between py-11 ${className ?? 'bg-background-normal'} border-border-normal border-b-[var(--stroke-weight-0)]`}
+      className={`app-header ${paddingByMode[props.mode]} top-0 flex h-[3rem] w-full shrink-0 items-center justify-between ${className ?? 'bg-background-normal'} border-border-normal border-b-[var(--stroke-weight-0)]`}
     >
       {content}
     </header>

@@ -6,7 +6,6 @@ import { SETTINGS_ITEMS } from '../model/constants';
 import { SettingsItem } from '@/entities/settings/ui/SettingsItem';
 import { useLogout } from '@/features/auth/model/useLogout';
 import { useWithdraw } from '@/features/auth/model/useWithdraw';
-import { SUPPORT_EMAIL, SUPPORT_MAILTO } from '@/shared/config/contact';
 
 export const SettingsList = () => {
   const router = useRouter();
@@ -53,32 +52,10 @@ export const SettingsList = () => {
       case 'OPEN_ALERT':
         if (payload === 'logout') openLogoutAlert();
         if (payload === 'withdraw') openWithdrawAlert();
-        if (payload === 'contact') openContactAlert();
         break;
       default:
         break;
     }
-  };
-
-  // 메일 앱이 없는 기기에서도 주소를 확인할 수 있도록 본문에 이메일을 그대로 노출한다.
-  const openContactAlert = () => {
-    openAlert({
-      state: 'default',
-      title: '문의하기',
-      infoText: `서비스 이용, 신고 처리, 개인정보 관련 문의는\n아래 이메일로 보내주세요.\n\n${SUPPORT_EMAIL}`,
-      actions: [
-        { type: 'solid', label: '닫기', onClick: closeAlert, variant: 'secondary' },
-        {
-          type: 'solid',
-          label: '메일 보내기',
-          onClick: () => {
-            closeAlert();
-            window.location.href = SUPPORT_MAILTO;
-          },
-          variant: 'primary',
-        },
-      ],
-    });
   };
 
   const openWithdrawAlert = () => {

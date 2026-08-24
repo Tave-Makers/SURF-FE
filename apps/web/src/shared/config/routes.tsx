@@ -110,7 +110,7 @@ export const createRouteConfig = (router: RouterInstance): RouteConfig[] => [
     backPath: PAGE_ROUTES.MYPAGE.SETTINGS,
     header: {
       mode: HeaderMode.Default,
-      title: '피드백 보내기',
+      title: '문의 · 피드백 보내기',
       hasLeftIcon: true,
     },
   },

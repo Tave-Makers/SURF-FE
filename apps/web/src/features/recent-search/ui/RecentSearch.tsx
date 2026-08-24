@@ -19,15 +19,16 @@ const textStyle = 'text-body-body6 text-foreground-normal';
 
 interface RecentSearchProps {
   recentKeywords: string[];
+  boardId?: number;
 }
 
-export const RecentSearch = ({ recentKeywords }: RecentSearchProps) => {
+export const RecentSearch = ({ recentKeywords, boardId }: RecentSearchProps) => {
   const router = useRouter();
   const [items, setItems] = useState(recentKeywords);
   const [isDeleting, setIsDeleting] = useState(false);
 
   const handleSelect = (k: string) => {
-    router.push(`${PAGE_ROUTES.BOARD.SEARCH}?keyword=${encodeURIComponent(k)}`);
+    router.push(PAGE_ROUTES.BOARD.SEARCH({ boardId, keyword: k }));
   };
 
   const openAlert = useAlertStore((s) => s.open);

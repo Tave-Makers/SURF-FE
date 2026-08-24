@@ -11,6 +11,7 @@ import { ReportTargetSummary } from './ReportTargetSummary';
 type ReportFormProps = {
   targetType: ReportTargetType;
   targetId: number;
+  writerLabel?: string;
   writer: string;
   contentLabel: string;
   content: string;
@@ -19,6 +20,7 @@ type ReportFormProps = {
 export const ReportForm = ({
   targetType,
   targetId,
+  writerLabel,
   writer,
   contentLabel,
   content,
@@ -28,7 +30,12 @@ export const ReportForm = ({
   return (
     <div className="bg-background-normal flex h-full flex-col">
       <div className="flex flex-1 flex-col overflow-y-auto">
-        <ReportTargetSummary writer={writer} contentLabel={contentLabel} content={content} />
+        <ReportTargetSummary
+          writerLabel={writerLabel}
+          writer={writer}
+          contentLabel={contentLabel}
+          content={content}
+        />
         <ReportReasonList
           selectedReason={state.selectedReason}
           onSelectReason={actions.selectReason}

@@ -6,8 +6,13 @@ import { useBottomSheetStore } from '@/shared/store/bottomSheetStore';
 import { BLOCK_CONFIRM_INFO_TEXT, BLOCK_CONFIRM_TITLE } from './constants';
 import { useBlockMemberMutation } from './useBlockMemberMutation';
 
-/** 차단 바텀시트 → 확인 다이얼로그 → 차단 접수까지의 흐름을 묶는다. */
-export const useBlockMember = (memberId: number) => {
+type UseMemberOptionsParams = {
+  /** 프로필 신고 화면으로 이동. 라우팅은 경로를 아는 호출부가 담당한다. */
+  onReport: () => void;
+};
+
+/** 회원 프로필의 신고·차단 시트 → (차단은) 확인 다이얼로그 → 차단 접수까지의 흐름을 묶는다. */
+export const useMemberOptions = (memberId: number, { onReport }: UseMemberOptionsParams) => {
   const openBottomSheet = useBottomSheetStore((s) => s.open);
   const openAlert = useAlertStore((s) => s.open);
   const closeAlert = useAlertStore((s) => s.close);
@@ -34,9 +39,9 @@ export const useBlockMember = (memberId: number) => {
     });
   };
 
-  const openBlockSheet = () => {
-    openBottomSheet({ type: 'memberBlock', props: { onBlock: confirmBlock } });
+  const openMemberOptionSheet = () => {
+    openBottomSheet({ type: 'memberOption', props: { onReport, onBlock: confirmBlock } });
   };
 
-  return openBlockSheet;
+  return openMemberOptionSheet;
 };

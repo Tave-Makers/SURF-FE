@@ -14,6 +14,7 @@ export type RouteConfig = {
 };
 
 const POST_REPORT_PATH = /^\/board\/(\d+)\/post\/(\d+)\/report$/;
+const MEMBER_REPORT_PATH = /^\/member\/(\d+)\/report$/;
 
 export const createRouteConfig = (router: RouterInstance): RouteConfig[] => [
   // {
@@ -213,6 +214,23 @@ export const createRouteConfig = (router: RouterInstance): RouteConfig[] => [
 
       const [, boardId, postId] = matched;
       return PAGE_ROUTES.BOARD.POST_DETAIL(boardId, postId);
+    },
+    header: {
+      mode: HeaderMode.Default,
+      title: '신고하기',
+      hasLeftIcon: true,
+    },
+  },
+  {
+    id: 'member-report',
+    path: MEMBER_REPORT_PATH,
+    // 프로필 신고는 해당 회원 프로필에서만 진입하므로 그 프로필로 돌려보낸다
+    backPath: (pathname) => {
+      const matched = pathname.match(MEMBER_REPORT_PATH);
+      if (!matched) return PAGE_ROUTES.MEMBER.MEMBER_SEARCH;
+
+      const [, memberId] = matched;
+      return PAGE_ROUTES.MEMBER.PROFILE(memberId);
     },
     header: {
       mode: HeaderMode.Default,

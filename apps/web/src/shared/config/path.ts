@@ -9,6 +9,7 @@ export const PAGE_ROUTES = {
     PRIVACY: '/privacy-policy',
     OPERATING: '/operational-policy',
   },
+  SUPPORT: '/support',
 
   // 멤버 관련
   MEMBER: {

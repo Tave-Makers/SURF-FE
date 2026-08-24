@@ -19,6 +19,7 @@ const PUBLIC_PREFIX = [
   '/terms-of-service',
   '/privacy-policy',
   '/operational-policy',
+  '/support',
   '/icons',
   '/images',
   '/header-logo.svg',

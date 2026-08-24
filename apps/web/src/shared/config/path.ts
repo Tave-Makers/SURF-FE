@@ -38,7 +38,7 @@ export const PAGE_ROUTES = {
       options?: { commentId?: number },
     ) => {
       const path = `/board/${boardId}/post/${postId}/report`;
-      return options?.commentId ? `${path}?commentId=${options.commentId}` : path;
+      return options?.commentId !== undefined ? `${path}?commentId=${options.commentId}` : path;
     },
     POST_SCHEDULE: '/post/schedule', // PostEditorToolbar.tsx
     COMMUNITY: '/board/2',

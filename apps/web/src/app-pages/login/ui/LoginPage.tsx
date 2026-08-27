@@ -59,8 +59,10 @@ export const LoginPage = () => {
     <div className="flex h-dvh w-dvw flex-col items-center gap-[6.75rem] px-15 pt-[16.81rem]">
       <Logo width={163.684} height={55.04} />
       <div className="flex w-full flex-col items-center gap-[1.25rem]">
-        <KakaoLoginButton />
-        <AppleLoginButton />
+        <div className="native-hidden flex w-full flex-col items-center gap-[1.25rem]">
+          <KakaoLoginButton />
+          <AppleLoginButton />
+        </div>
         <nav aria-label="서비스 정책 및 문의" className="flex flex-col items-center gap-y-4">
           <div className="flex items-center justify-center gap-x-6">
             {PUBLIC_POLICY_LINKS.map(({ href, label }, index) => (

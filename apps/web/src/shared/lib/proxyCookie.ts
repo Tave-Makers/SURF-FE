@@ -108,3 +108,22 @@ export function applyAccessTokenCookie(res: NextResponse, token: string): void {
     maxAge: 60 * 30,
   });
 }
+
+/**
+ * APP 로그인 흐름은 refreshToken 을 Set-Cookie 가 아니라 응답 본문으로 준다.
+ * WEB 세션과 동일하게 동작시키려면 여기서 직접 쿠키로 심어야 한다.
+ *
+ * Path 는 반드시 '/' 여야 한다. middleware 가 페이지 요청에서 refreshToken 존재를 보고
+ * AT 재발급 여부를 판단하기 때문이다.
+ */
+export function applyRefreshTokenCookie(res: NextResponse, token: string, maxAge: number): void {
+  res.cookies.set({
+    name: 'refreshToken',
+    value: token,
+    httpOnly: true,
+    secure: !IS_DEV,
+    sameSite: 'lax',
+    path: '/',
+    maxAge,
+  });
+}

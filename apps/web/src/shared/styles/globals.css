@@ -47,10 +47,3 @@ body {
   text-transform: none;
   text-decoration: none;
 }
-
-/* 네이티브 앱 WebView 전용.
-   앱은 카카오/애플 네이티브 SDK 로그인을 쓰므로 웹 OAuth 리다이렉트 버튼을 감춘다.
-   (WebView 안에서는 카카오 웹 로그인이 정상 동작하지 않는다) */
-.is-native-app .native-hidden {
-  display: none;
-}

@@ -19,6 +19,13 @@ export type NotificationSlice = {
 
 export type GetNotificationsResponse = CommonResponse<NotificationSlice>;
 
+/** GET /v1/user/notifications/unread */
+export type UnreadNotificationStatus = {
+  hasUnread: boolean;
+};
+
+export type UnreadNotificationResponse = CommonResponse<UnreadNotificationStatus>;
+
 export type Notification = {
   id: number;
   actorProfileImageUrl?: string | null;

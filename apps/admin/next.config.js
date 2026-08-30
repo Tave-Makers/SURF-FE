@@ -36,6 +36,12 @@ const nextConfig = {
         pathname: "/**",
       })),
 
+      {
+        protocol: "https",
+        hostname: "tavesurf-prod.s3.ap-northeast-2.amazonaws.com",
+        pathname: "/**",
+      },
+
       ...(S3_HOSTNAME
         ? [
             {

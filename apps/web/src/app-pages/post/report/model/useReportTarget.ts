@@ -1,10 +1,7 @@
 'use client';
 
-import { useEffect } from 'react';
-
 import { usePostDetail } from '@/entities/post/api/usePostDetail';
-import { COMMENT_PAGE_SIZE } from '@/features/comment/model/constant';
-import { useInfiniteCommentsQuery } from '@/features/comment/model/useInfiniteCommentsQuery';
+import { useCommentQuery } from '@/features/comment/model/useCommentQuery';
 import type { ReportTargetType } from '@/features/report';
 
 type ReportTarget = {
@@ -34,30 +31,12 @@ export const useReportTarget = (
   } = usePostDetail(postId, { enabled: enabled && !isCommentReport });
 
   const {
-    data: commentPages,
-    isLoading: isCommentsLoading,
-    isError: isCommentsError,
-    fetchNextPage,
-    hasNextPage,
-    isFetchingNextPage,
-  } = useInfiniteCommentsQuery(postId, COMMENT_PAGE_SIZE, enabled && isCommentReport);
+    data: targetComment,
+    isLoading: isCommentLoading,
+    isError: isCommentError,
+  } = useCommentQuery(commentId, enabled);
 
-  const targetComment = isCommentReport
-    ? (commentPages?.pages
-        .flatMap((page) => page.comments)
-        .find((comment) => comment.id === commentId) ?? null)
-    : null;
-
-  // 신고 대상 댓글이 아직 불러오지 않은 페이지에 있을 수 있어, 찾을 때까지 다음 페이지를 가져온다
-  useEffect(() => {
-    if (!enabled || !isCommentReport || targetComment || !hasNextPage || isFetchingNextPage) return;
-    void fetchNextPage();
-  }, [enabled, isCommentReport, targetComment, hasNextPage, isFetchingNextPage, fetchNextPage]);
-
-  const isCommentSearching =
-    isCommentReport && !targetComment && (isCommentsLoading || isFetchingNextPage || hasNextPage);
-
-  const isLoading = isCommentReport ? isCommentSearching : isPostLoading;
+  const isLoading = isCommentReport ? isCommentLoading : isPostLoading;
 
   const target: ReportTarget | null = (() => {
     if (isCommentReport) {
@@ -81,7 +60,7 @@ export const useReportTarget = (
     };
   })();
 
-  const isError = isCommentReport ? isCommentsError || (!isLoading && !target) : isPostError;
+  const isError = isCommentReport ? isCommentError || (!isLoading && !target) : isPostError;
 
   return { target, isLoading, isError };
 };

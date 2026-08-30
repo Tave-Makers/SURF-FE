@@ -37,13 +37,14 @@ export const EmailPhoneStep = () => {
           )}
         />
       </FieldGroup>
-      <FieldGroup title="전화번호" isRequired>
+      <FieldGroup title="전화번호">
         <Controller
           control={control}
           name="phoneNumber"
           rules={{
-            required: '전화번호는 필수 입력값입니다',
-            pattern: { value: /^01[0-9]\d{8}$/, message: '11자리 숫자로 입력해주세요.' },
+            // 선택 입력이므로 값이 있을 때만 형식을 본다 (pattern은 빈 문자열도 거른다)
+            validate: (value) =>
+              !value || /^01[0-9]\d{8}$/.test(value) || '11자리 숫자로 입력해주세요.',
           }}
           render={({ field, fieldState }) => (
             <TextArea
@@ -54,7 +55,7 @@ export const EmailPhoneStep = () => {
               onBlur={field.onBlur}
               placeholder="01012345678"
               errorMessage={fieldState.error?.message}
-              guideMessage="정확한 전화번호를 숫자만 입력해주세요."
+              guideMessage="선택 입력이에요. 입력하시면 운영진이 긴급 연락에 사용합니다."
             />
           )}
         />

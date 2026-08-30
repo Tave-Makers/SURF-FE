@@ -354,7 +354,6 @@ export const EditProfileForm = forwardRef<EditProfileFormHandle, Props>(
 
           <FieldGroup
             title="전화번호"
-            isRequired
             headerRight={
               <Controller
                 control={control}
@@ -369,8 +368,9 @@ export const EditProfileForm = forwardRef<EditProfileFormHandle, Props>(
               control={control}
               name="phoneNumber"
               rules={{
-                required: '전화번호는 필수에요.',
-                pattern: { value: /^01[0-9]\d{7,8}$/, message: '숫자만 10~11자리로 입력해주세요.' },
+                // 선택 입력 — 값이 있을 때만 형식을 본다 (pattern은 빈 문자열도 거른다)
+                validate: (value) =>
+                  !value || /^01[0-9]\d{7,8}$/.test(value) || '숫자만 10~11자리로 입력해주세요.',
               }}
               render={({ field }) => (
                 <TextArea

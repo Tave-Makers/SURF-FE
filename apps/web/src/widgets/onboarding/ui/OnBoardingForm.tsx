@@ -74,11 +74,15 @@ export const OnBoardingForm = ({ step, setStep }: OnBoardingFormProps) => {
   const watchedPhoneNumber = useWatch({ control, name: 'phoneNumber' });
 
   const isValidEmail = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(watchedEmail ?? '');
-  const isValidPhone = /^[0-9]{10,11}$/.test(watchedPhoneNumber ?? '');
+  // 전화번호는 선택 입력 — 비워두거나, 채웠다면 형식이 맞아야 한다
+  const isValidPhone = !watchedPhoneNumber?.trim() || /^[0-9]{10,11}$/.test(watchedPhoneNumber);
 
+  // '추가하기'는 빈 행을 먼저 붙이므로, 하나라도 미완성이면 진행을 막아야 한다.
+  // some()이면 빈 행이 남은 채 통과해 서버가 tracks[n].part=null 로 400을 낸다.
   const hasValidTrack =
     Array.isArray(watchedTracks) &&
-    watchedTracks.some((t) => t?.generation != null && t?.part != null);
+    watchedTracks.length > 0 &&
+    watchedTracks.every((t) => t?.generation != null && t?.part != null);
 
   const canProceedByField: Partial<Record<keyof OnBoardingFormData, boolean>> = {
     name: (watchedName?.trim().length ?? 0) >= 2,
@@ -135,6 +139,9 @@ export const OnBoardingForm = ({ step, setStep }: OnBoardingFormProps) => {
     };
 
     delete submitData.profileImage;
+
+    // 선택 입력이므로 비어 있으면 키 자체를 보내지 않는다
+    if (!submitData.phoneNumber?.trim()) delete submitData.phoneNumber;
 
     const filledCount = Object.values(submitData).filter(
       (v) => v !== '' && v !== null && !(Array.isArray(v) && v.length === 0),

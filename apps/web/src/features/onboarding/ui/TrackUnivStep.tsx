@@ -16,10 +16,21 @@ import { ONBOARDING_EVENTS, OnBoardingFormData } from '@/features/onboarding/mod
 import { useBottomSheetStore } from '@/shared/store/bottomSheetStore';
 
 export const TrackUnivStep = () => {
-  const { control, setValue } = useFormContext<OnBoardingFormData>();
+  const {
+    control,
+    setValue,
+    formState: { errors },
+  } = useFormContext<OnBoardingFormData>();
   const { fields, append, remove, update } = useFieldArray({
     control,
     name: 'tracks',
+    rules: {
+      // '추가하기'가 빈 행을 먼저 붙이므로, 미완성 행이 남으면 제출을 막는다.
+      // 서버는 tracks[n].part / generation 이 null이면 400을 낸다.
+      validate: (value) =>
+        (value ?? []).every((t) => t?.generation != null && t?.part != null) ||
+        '기수와 파트를 모두 선택하거나, 비어 있는 항목을 삭제해주세요.',
+    },
   });
   const watchedTracks = useWatch({ control, name: 'tracks' }) ?? [];
 
@@ -107,6 +118,11 @@ export const TrackUnivStep = () => {
             </div>
           ))}
         </FieldGroup>
+        {errors.tracks?.root && (
+          <p role="alert" className="text-body-body9 text-foreground-danger pt-3">
+            {errors.tracks.root.message}
+          </p>
+        )}
         {/* 추가 버튼 */}
         {fields.every((t) => t.generation && t.part) && (
           <SolidButton

@@ -1,6 +1,7 @@
 import { useMutation } from '@tanstack/react-query';
 import { useToastStore } from '@surf/ui/store/toastStore';
 import { agreeTerms } from '../api/agreeTerms';
+import { useAgreementStore } from './useAgreementStore';
 
 function formatAgreedAt(date: Date): string {
   const yyyy = date.getFullYear();
@@ -13,10 +14,14 @@ function formatAgreedAt(date: Date): string {
 
 export function useAgreeTerms() {
   const showToast = useToastStore((s) => s.show);
+  const setAgreed = useAgreementStore((s) => s.setAgreed);
 
   return useMutation({
     mutationFn: agreeTerms,
+    // 동의 확정은 mutation 레벨에서 처리한다. mutate() 호출별 콜백은 요청 중
+    // 컴포넌트가 언마운트되면(약관 상세로 이동 등) 실행되지 않아 동의가 유실된다.
     onSuccess: () => {
+      setAgreed(true);
       showToast(formatAgreedAt(new Date()));
     },
     onError: (e) => {

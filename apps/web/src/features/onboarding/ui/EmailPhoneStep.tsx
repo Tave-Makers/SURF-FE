@@ -2,6 +2,7 @@ import { FieldGroup } from '@surf/ui/field-group';
 import { TextArea } from '@surf/ui/text-area';
 import { Controller, useFormContext } from 'react-hook-form';
 import { trackOnBoardingEvent } from '../lib/trackOnBoardingEvent';
+import { isValidPhoneNumber, PHONE_NUMBER_ERROR_MESSAGE } from '@/entities/user/lib/phoneNumber';
 import { ONBOARDING_EVENTS, OnBoardingFormData } from '@/features/onboarding/model/types';
 import { formatPhoneNumber, onlyDigits } from '@/shared/lib/phoneNumber';
 
@@ -37,13 +38,13 @@ export const EmailPhoneStep = () => {
           )}
         />
       </FieldGroup>
-      <FieldGroup title="전화번호" isRequired>
+      <FieldGroup title="전화번호">
         <Controller
           control={control}
           name="phoneNumber"
           rules={{
-            required: '전화번호는 필수 입력값입니다',
-            pattern: { value: /^01[0-9]\d{8}$/, message: '11자리 숫자로 입력해주세요.' },
+            // 선택 입력이므로 값이 있을 때만 형식을 본다 (pattern은 빈 문자열도 거른다)
+            validate: (value) => isValidPhoneNumber(value) || PHONE_NUMBER_ERROR_MESSAGE,
           }}
           render={({ field, fieldState }) => (
             <TextArea

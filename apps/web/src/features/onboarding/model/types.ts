@@ -8,7 +8,8 @@ export type OnBoardingFormData = {
   university: string;
   graduateSchool?: string;
   email: string;
-  phoneNumber: string;
+  /** 선택 입력 — App Store 심사 지침 5.1.1(v)에 따라 필수로 요구하지 않는다 */
+  phoneNumber?: string;
 };
 
 export type OnboardingInitData = {
@@ -29,7 +30,8 @@ export type OnBoardingRequest = {
   university: string;
   graduateSchool?: string | null;
   email: string;
-  phoneNumber: string;
+  /** 미입력 시 키를 보내지 않는다 */
+  phoneNumber?: string;
 };
 export type TrackInfo = {
   generation: number | null;

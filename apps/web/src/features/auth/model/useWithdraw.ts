@@ -1,4 +1,5 @@
 import { useMutation } from '@tanstack/react-query';
+import { unregisterDeviceToken } from '@/entities/notification/lib/unregisterDeviceToken';
 import { withdraw } from '@/features/auth/api/withdraw.client';
 import { useAuthStore } from '@/features/auth/model/useAuthStore';
 import { useRouter } from 'next/navigation';
@@ -10,7 +11,12 @@ export function useWithdraw() {
   const router = useRouter();
 
   return useMutation({
-    mutationFn: withdraw,
+    mutationFn: async () => {
+      // 탈퇴는 제명과 달리 서버가 디바이스 토큰을 지우지 않는다 (SURF-BE #389 기준).
+      // 로그아웃과 같이 access token이 살아있을 때 직접 지운다 — 실패해도 탈퇴는 진행
+      await unregisterDeviceToken();
+      await withdraw();
+    },
     onSuccess: () => {
       clearAuth();
       showToast('탈퇴가 완료되었습니다.');

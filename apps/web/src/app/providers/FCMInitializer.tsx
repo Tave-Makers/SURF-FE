@@ -2,6 +2,7 @@
 
 import { isAxiosError } from 'axios';
 import { useEffect, useRef } from 'react';
+import { FCM_REGISTERED_FLAG_KEY } from '@/entities/notification/lib/deviceTokenStorage';
 import { useRegisterToken } from '@/entities/notification/model/useRegisterToken';
 import { getValidStatus } from '@/features/auth/api/getValidStatus';
 import { useAuthStore } from '@/features/auth/model/useAuthStore';
@@ -80,7 +81,7 @@ export const FCMInitializer = () => {
         await getValidStatus();
 
         // 2. 이미 등록되었다면 스킵
-        const isRegistered = sessionStorage.getItem('isFcmRegistered');
+        const isRegistered = sessionStorage.getItem(FCM_REGISTERED_FLAG_KEY);
         if (isRegistered === 'true') {
           if (process.env.NODE_ENV === 'development') {
             console.log('[FCMInitializer] Token already registered in session. Skipping.');

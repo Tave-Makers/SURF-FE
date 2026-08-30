@@ -55,7 +55,7 @@ export const EmailPhoneStep = () => {
               onBlur={field.onBlur}
               placeholder="01012345678"
               errorMessage={fieldState.error?.message}
-              guideMessage="선택 입력이에요. 입력하시면 운영진이 긴급 연락에 사용합니다."
+              guideMessage="정확한 전화번호를 숫자만 입력해주세요."
             />
           )}
         />

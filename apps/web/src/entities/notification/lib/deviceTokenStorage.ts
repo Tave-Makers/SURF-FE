@@ -9,32 +9,56 @@ const DEVICE_TOKEN_KEY = 'fcmDeviceToken';
 /** 한 세션 안에서 웹 푸시 등록을 중복 실행하지 않기 위한 플래그 */
 export const FCM_REGISTERED_FLAG_KEY = 'isFcmRegistered';
 
-export function saveRegisteredDeviceToken(token: string) {
+let registeredDeviceTokenFallback: string | null = null;
+
+export function saveRegisteredDeviceToken(token: string): boolean {
+  registeredDeviceTokenFallback = token;
+
   try {
     localStorage.setItem(DEVICE_TOKEN_KEY, token);
+    return true;
   } catch {
-    // 저장 실패 시 로그아웃에서 토큰을 못 지울 뿐, 등록 자체는 유효하다
+    // 저장소가 막혀도 같은 런타임 안에서는 fallback으로 삭제를 시도할 수 있다
+    return false;
   }
 }
 
 export function readRegisteredDeviceToken(): string | null {
   try {
-    return localStorage.getItem(DEVICE_TOKEN_KEY);
+    return localStorage.getItem(DEVICE_TOKEN_KEY) ?? registeredDeviceTokenFallback;
   } catch {
-    return null;
+    return registeredDeviceTokenFallback;
   }
 }
 
-/** 보관 중인 토큰과 세션 등록 플래그를 함께 비운다 (같은 세션에서 재로그인하면 다시 등록되도록) */
-export function clearDeviceTokenRegistration() {
+export function saveFcmRegisteredFlag() {
   try {
-    localStorage.removeItem(DEVICE_TOKEN_KEY);
+    sessionStorage.setItem(FCM_REGISTERED_FLAG_KEY, 'true');
   } catch {
-    // ignore
+    // 플래그 저장 실패 시 중복 등록될 수 있으나, 서버 등록 결과와 토큰 보관은 유지한다
   }
+}
+
+export function clearFcmRegisteredFlag() {
   try {
     sessionStorage.removeItem(FCM_REGISTERED_FLAG_KEY);
   } catch {
     // ignore
   }
+}
+
+export function clearRegisteredDeviceToken() {
+  registeredDeviceTokenFallback = null;
+
+  try {
+    localStorage.removeItem(DEVICE_TOKEN_KEY);
+  } catch {
+    // ignore
+  }
+}
+
+/** 보관 중인 토큰과 세션 등록 플래그를 함께 비운다 (같은 세션에서 재로그인하면 다시 등록되도록) */
+export function clearDeviceTokenRegistration() {
+  clearRegisteredDeviceToken();
+  clearFcmRegisteredFlag();
 }

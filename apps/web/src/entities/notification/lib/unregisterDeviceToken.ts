@@ -1,6 +1,10 @@
 import { getNativePushToken } from '@/shared/lib/nativePush';
 import { deleteDeviceToken } from '../api/deleteDeviceToken';
-import { clearDeviceTokenRegistration, readRegisteredDeviceToken } from './deviceTokenStorage';
+import {
+  clearDeviceTokenRegistration,
+  clearFcmRegisteredFlag,
+  readRegisteredDeviceToken,
+} from './deviceTokenStorage';
 
 /**
  * 이 기기의 FCM 토큰 등록을 해제한다.
@@ -17,9 +21,10 @@ export async function unregisterDeviceToken(): Promise<void> {
 
   try {
     if (token) await deleteDeviceToken({ token });
+    clearDeviceTokenRegistration();
   } catch (error) {
     console.error('디바이스 토큰 삭제 실패:', error);
-  } finally {
-    clearDeviceTokenRegistration();
+    // 삭제 재시도에 필요한 토큰은 보존하고, 다음 로그인/초기화에서 등록 로직은 다시 돌 수 있게 한다
+    clearFcmRegisteredFlag();
   }
 }

@@ -53,6 +53,8 @@ type CalendarProps = {
   onMonthChange: (date: Date) => void;
   schedules: ActivityMap;
   initialSelectedDate?: Date;
+  onDateClick?: (date: Date) => void;
+  onEventClick?: (scheduleId: number, postId?: number) => void;
 };
 
 export const Calendar = ({
@@ -60,6 +62,8 @@ export const Calendar = ({
   onMonthChange,
   schedules,
   initialSelectedDate,
+  onDateClick,
+  onEventClick,
 }: CalendarProps) => {
   const router = useRouter();
   const [selectedDay, setSelectedDay] = useState<Date>(initialSelectedDate || new Date());
@@ -71,8 +75,9 @@ export const Calendar = ({
       if (!date) return;
       setSelectedDay(date);
       onMonthChange(date);
+      onDateClick?.(date);
     },
-    [onMonthChange],
+    [onMonthChange, onDateClick],
   );
 
   // DayPicker의 DayButton 커스텀 컴포넌트
@@ -146,6 +151,7 @@ export const Calendar = ({
                 postId={_ev.postId}
                 isAdmin={memberRole !== 'member'}
                 onClickCard={() => {
+                  onEventClick?.(_ev.id, _ev.postId);
                   if (!_ev.postId) return;
                   router.push(PAGE_ROUTES.BOARD.POST_DETAIL(1, _ev.postId));
                 }}

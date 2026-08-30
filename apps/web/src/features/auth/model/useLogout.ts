@@ -1,4 +1,5 @@
 import { useMutation } from '@tanstack/react-query';
+import { unregisterDeviceToken } from '@/entities/notification/lib/unregisterDeviceToken';
 import { logout } from '@/features/auth/api/logout.client';
 import { useAuthStore } from '@/features/auth/model/useAuthStore';
 import { useRouter } from 'next/navigation';
@@ -10,7 +11,11 @@ export function useLogout() {
   const router = useRouter();
 
   return useMutation({
-    mutationFn: logout,
+    mutationFn: async () => {
+      // 토큰 삭제는 access token이 살아있을 때만 가능하므로 로그아웃보다 먼저 (실패해도 진행)
+      await unregisterDeviceToken();
+      await logout();
+    },
     onSuccess: () => {
       clearAuth();
       showToast('로그아웃 되었습니다.');

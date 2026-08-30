@@ -15,6 +15,8 @@ export type UserProfileApiResponse = CommonResponse<{
   role: ServerUserLevel;
   activityScore: number;
   isActive: boolean;
+  /** 내가 이 회원을 차단했는지 (단방향). 본인 프로필은 항상 false */
+  blockedByMe: boolean;
   trackList: Array<{ generation: number; part: string }>;
   careerList: Array<{
     careerId: number;

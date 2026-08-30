@@ -3,7 +3,12 @@ import { TextArea } from '@surf/ui/text-area';
 import { Controller, useFormContext } from 'react-hook-form';
 import { trackOnBoardingEvent } from '../lib/trackOnBoardingEvent';
 import { ONBOARDING_EVENTS, OnBoardingFormData } from '@/features/onboarding/model/types';
-import { formatPhoneNumber, onlyDigits } from '@/shared/lib/phoneNumber';
+import {
+  formatPhoneNumber,
+  isValidPhoneNumber,
+  onlyDigits,
+  PHONE_NUMBER_ERROR_MESSAGE,
+} from '@/shared/lib/phoneNumber';
 
 export const EmailPhoneStep = () => {
   const { control } = useFormContext<OnBoardingFormData>();
@@ -43,8 +48,7 @@ export const EmailPhoneStep = () => {
           name="phoneNumber"
           rules={{
             // 선택 입력이므로 값이 있을 때만 형식을 본다 (pattern은 빈 문자열도 거른다)
-            validate: (value) =>
-              !value || /^01[0-9]\d{8}$/.test(value) || '11자리 숫자로 입력해주세요.',
+            validate: (value) => isValidPhoneNumber(value) || PHONE_NUMBER_ERROR_MESSAGE,
           }}
           render={({ field, fieldState }) => (
             <TextArea

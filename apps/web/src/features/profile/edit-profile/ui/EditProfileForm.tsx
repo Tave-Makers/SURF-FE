@@ -38,7 +38,12 @@ import type { DateString, UpdateProfileRequestDTO, UserProfile } from '@/entitie
 import { ProfileImageUploader } from '@/features/profile/ui/upload-profile-image/ProfileImageUploader';
 
 import { PAGE_ROUTES } from '@/shared/config/path';
-import { formatPhoneNumber, onlyDigits } from '@/shared/lib/phoneNumber';
+import {
+  formatPhoneNumber,
+  isValidPhoneNumber,
+  onlyDigits,
+  PHONE_NUMBER_ERROR_MESSAGE,
+} from '@/shared/lib/phoneNumber';
 
 export interface EditProfileFormHandle {
   submit: () => void;
@@ -369,8 +374,7 @@ export const EditProfileForm = forwardRef<EditProfileFormHandle, Props>(
               name="phoneNumber"
               rules={{
                 // 선택 입력 — 값이 있을 때만 형식을 본다 (pattern은 빈 문자열도 거른다)
-                validate: (value) =>
-                  !value || /^01[0-9]\d{7,8}$/.test(value) || '숫자만 10~11자리로 입력해주세요.',
+                validate: (value) => isValidPhoneNumber(value) || PHONE_NUMBER_ERROR_MESSAGE,
               }}
               render={({ field }) => (
                 <TextArea

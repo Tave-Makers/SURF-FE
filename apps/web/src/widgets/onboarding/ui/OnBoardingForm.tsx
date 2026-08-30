@@ -15,6 +15,7 @@ import { EmailPhoneStep } from '@/features/onboarding/ui/EmailPhoneStep';
 import { ProfileStep } from '@/features/onboarding/ui/ProfileStep';
 import { TrackUnivStep } from '@/features/onboarding/ui/TrackUnivStep';
 import { PAGE_ROUTES } from '@/shared/config/path';
+import { isValidPhoneNumber } from '@/shared/lib/phoneNumber';
 
 const STEP_ANALYTICS_NAMES: Record<number, 'nickname' | 'track' | 'contact'> = {
   0: 'nickname',
@@ -74,8 +75,9 @@ export const OnBoardingForm = ({ step, setStep }: OnBoardingFormProps) => {
   const watchedPhoneNumber = useWatch({ control, name: 'phoneNumber' });
 
   const isValidEmail = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(watchedEmail ?? '');
-  // 전화번호는 선택 입력 — 비워두거나, 채웠다면 형식이 맞아야 한다
-  const isValidPhone = !watchedPhoneNumber?.trim() || /^[0-9]{10,11}$/.test(watchedPhoneNumber);
+  // 전화번호는 선택 입력 — 비워두거나, 채웠다면 형식이 맞아야 한다.
+  // 필드 규칙과 같은 정규식을 써야 버튼만 활성화되고 trigger에서 막히는 일이 없다.
+  const isValidPhone = isValidPhoneNumber(watchedPhoneNumber);
 
   // '추가하기'는 빈 행을 먼저 붙이므로, 하나라도 미완성이면 진행을 막아야 한다.
   // some()이면 빈 행이 남은 채 통과해 서버가 tracks[n].part=null 로 400을 낸다.

@@ -38,9 +38,9 @@ const OnBoardingPage = () => {
         props: {
           agreements,
           onCheck: handleCheck,
+          // 서버 기록이 성공해야 시트가 닫힌다 (실패 시 재시도 가능)
           onClickPrimaryBtn: () => {
-            confirmAgreement();
-            closeBottomSheet();
+            confirmAgreement(() => closeBottomSheet());
           },
           onClickLawDetail: (id: string) => {
             onClickLawDetail(id);

@@ -3,7 +3,6 @@
 import { useInfiniteScroll } from '@surf/hooks';
 import { useRouter } from 'next/navigation';
 import { useCallback, useMemo } from 'react';
-import type { PostListItemResponse } from '@/entities/post/api/types';
 import { categoryKeyToId } from '@/entities/post/model/category';
 import { transformListItemToPost } from '@/entities/post/model/mappers';
 import { BOARD_TAB_MAP } from '@/entities/post/model/tab';
@@ -23,8 +22,10 @@ type Props = {
 const SearchPostListContainer = ({ keyword, boardId, category, userLevel }: Props) => {
   const router = useRouter();
 
+  const categoryId = category === 'all' ? undefined : categoryKeyToId(category, boardId);
+
   const { data, fetchNextPage, hasNextPage, isFetchingNextPage, isLoading, error } =
-    useInfiniteSearchPosts({ param: keyword, boardId });
+    useInfiniteSearchPosts({ param: keyword, boardId, categoryId });
 
   const loadMoreRef = useInfiniteScroll({
     enabled: true,
@@ -33,19 +34,10 @@ const SearchPostListContainer = ({ keyword, boardId, category, userLevel }: Prop
     isFetching: isFetchingNextPage,
   });
 
-  // TODO(BE): GET /v1/user/search/posts에 categoryId 파라미터 추가 요청 필요.
-  // 현재 검색 API는 boardId까지만 지원해 카테고리 탭을 서버에서 거를 수 없고,
-  // 아래처럼 이미 받아온 페이지 안에서만 필터링한다 → 다음 페이지를 더 불러오기 전까지
-  // 해당 카테고리 글이 실제보다 적게 보이고, 페이지네이션 카운트도 어긋난다.
-  // 파라미터가 추가되면 이 useMemo를 걷어내고 useInfiniteSearchPosts로 넘긴다.
-  const filteredItems = useMemo(() => {
-    const allItems: PostListItemResponse[] = data?.pages.flatMap((p) => p.content) ?? [];
-    const id = category === 'all' ? undefined : categoryKeyToId(category, boardId);
-    if (id == null) return allItems;
-    return allItems.filter((x) => x.categoryId === id);
-  }, [data?.pages, category, boardId]);
-
-  const posts = useMemo(() => filteredItems.map(transformListItemToPost), [filteredItems]);
+  const posts = useMemo(
+    () => data?.pages.flatMap((page) => page.content.map(transformListItemToPost)) ?? [],
+    [data?.pages],
+  );
 
   const tabCategoryLabel =
     BOARD_TAB_MAP[boardId]?.find((t) => t.value === category)?.label ?? '전체';

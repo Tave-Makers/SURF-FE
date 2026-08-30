@@ -16,18 +16,29 @@ type SearchPostsParams = {
   param: string;
   // 지정하면 해당 게시판 내에서만 검색, 미지정 시 통합 검색
   boardId?: number;
-  // TODO(BE): categoryId 파라미터 추가 요청 중. 추가되면 여기로 받아 서버 필터링으로 전환
-  // (현재는 SearchPostListContainer에서 클라이언트 필터링)
+  // 지정하면 해당 카테고리 내에서만 검색. 카테고리는 게시판에 속하므로 boardId보다 우선한다
+  categoryId?: number;
   size?: number;
 };
 
-export function useInfiniteSearchPosts({ param, boardId, size = 10 }: SearchPostsParams) {
+export function useInfiniteSearchPosts({
+  param,
+  boardId,
+  categoryId,
+  size = 10,
+}: SearchPostsParams) {
   return useInfiniteQuery({
-    queryKey: ['search-posts', param, boardId, size],
+    queryKey: ['search-posts', param, boardId, categoryId, size],
     initialPageParam: 0,
     queryFn: async ({ pageParam }) => {
       const res = await axiosInstance.get<CommonResponse<PageData>>('/v1/user/search/posts', {
-        params: { param, page: pageParam, size, ...(boardId !== undefined && { boardId }) },
+        params: {
+          param,
+          page: pageParam,
+          size,
+          ...(boardId !== undefined && { boardId }),
+          ...(categoryId !== undefined && { categoryId }),
+        },
       });
       return res.data.data;
     },

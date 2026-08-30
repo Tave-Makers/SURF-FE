@@ -2,13 +2,9 @@ import { FieldGroup } from '@surf/ui/field-group';
 import { TextArea } from '@surf/ui/text-area';
 import { Controller, useFormContext } from 'react-hook-form';
 import { trackOnBoardingEvent } from '../lib/trackOnBoardingEvent';
+import { isValidPhoneNumber, PHONE_NUMBER_ERROR_MESSAGE } from '@/entities/user/lib/phoneNumber';
 import { ONBOARDING_EVENTS, OnBoardingFormData } from '@/features/onboarding/model/types';
-import {
-  formatPhoneNumber,
-  isValidPhoneNumber,
-  onlyDigits,
-  PHONE_NUMBER_ERROR_MESSAGE,
-} from '@/shared/lib/phoneNumber';
+import { formatPhoneNumber, onlyDigits } from '@/shared/lib/phoneNumber';
 
 export const EmailPhoneStep = () => {
   const { control } = useFormContext<OnBoardingFormData>();

@@ -6,7 +6,7 @@ import { useAgreementStore } from './useAgreementStore';
 export const useLawAgreement = () => {
   const router = useRouter();
 
-  const { agreements, setAgreement, isAgreed, setAgreed } = useAgreementStore();
+  const { agreements, setAgreement, isAgreed } = useAgreementStore();
   const { mutate: agreeTerms, isPending: isAgreeing } = useAgreeTerms();
 
   const handleCheck = (id: string, checked: boolean) => {
@@ -17,16 +17,14 @@ export const useLawAgreement = () => {
    * 동의 이력을 서버에 먼저 남기고, 성공했을 때만 진행시킨다.
    * 로컬 플래그만 세우면 sessionStorage에만 남아 동의 증빙이 되지 않는다.
    * 실패하면 시트를 닫지 않아 사용자가 다시 시도할 수 있다.
+   *
+   * isAgreed 확정은 useAgreeTerms의 mutation 레벨 onSuccess가 맡는다.
+   * 여기 콜백은 시트 닫기처럼 화면이 살아 있을 때만 의미 있는 정리에만 쓴다.
    */
-  const confirmAgreement = (onSuccess?: () => void) => {
+  const confirmAgreement = (onCompleted?: () => void) => {
     if (isAgreeing) return;
 
-    agreeTerms(undefined, {
-      onSuccess: () => {
-        setAgreed(true);
-        onSuccess?.();
-      },
-    });
+    agreeTerms(undefined, { onSuccess: () => onCompleted?.() });
   };
 
   const isAllRequiredChecked = agreements.laws1 && agreements.laws2 && agreements.laws3;

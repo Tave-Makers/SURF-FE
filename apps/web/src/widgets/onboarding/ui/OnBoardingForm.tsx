@@ -5,6 +5,7 @@ import { useEffect, useState } from 'react';
 import { useFormContext, useWatch } from 'react-hook-form';
 import { OnBoardingLayout } from './OnBoardingLayout';
 import { useImageUploader } from '@/entities/image/model/useImageUploader';
+import { isValidPhoneNumber } from '@/entities/user/lib/phoneNumber';
 import { useAccountIntegrationFlow } from '@/features/account-integration';
 import { useAgreementStore } from '@/features/laws/model/useAgreementStore';
 import { submitOnBoarding } from '@/features/onboarding/api/submitOnBoarding';
@@ -15,7 +16,6 @@ import { EmailPhoneStep } from '@/features/onboarding/ui/EmailPhoneStep';
 import { ProfileStep } from '@/features/onboarding/ui/ProfileStep';
 import { TrackUnivStep } from '@/features/onboarding/ui/TrackUnivStep';
 import { PAGE_ROUTES } from '@/shared/config/path';
-import { isValidPhoneNumber } from '@/shared/lib/phoneNumber';
 
 const STEP_ANALYTICS_NAMES: Record<number, 'nickname' | 'track' | 'contact'> = {
   0: 'nickname',
@@ -142,8 +142,10 @@ export const OnBoardingForm = ({ step, setStep }: OnBoardingFormProps) => {
 
     delete submitData.profileImage;
 
-    // 선택 입력이므로 비어 있으면 키 자체를 보내지 않는다
+    // 선택 입력이므로 비어 있으면 키 자체를 보내지 않는다.
+    // 대학원은 체크박스만 켜고 비워둘 수 있어 빈 문자열이 실려 나갈 수 있다.
     if (!submitData.phoneNumber?.trim()) delete submitData.phoneNumber;
+    if (!submitData.graduateSchool?.trim()) delete submitData.graduateSchool;
 
     const filledCount = Object.values(submitData).filter(
       (v) => v !== '' && v !== null && !(Array.isArray(v) && v.length === 0),

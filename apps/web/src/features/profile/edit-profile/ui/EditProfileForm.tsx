@@ -32,18 +32,14 @@ import type { CareerForm, FormValues } from '../model/types';
 import { CareerItem } from './CareerItem';
 import { useImageUploader } from '@/entities/image/model/useImageUploader';
 import { updateMyProfile } from '@/entities/user/api/updateMyProfile.client';
+import { isValidPhoneNumber, PHONE_NUMBER_ERROR_MESSAGE } from '@/entities/user/lib/phoneNumber';
 import { normalizeTextString } from '@/entities/user/model/normalize';
 import type { DateString, UpdateProfileRequestDTO, UserProfile } from '@/entities/user/model/types';
 
 import { ProfileImageUploader } from '@/features/profile/ui/upload-profile-image/ProfileImageUploader';
 
 import { PAGE_ROUTES } from '@/shared/config/path';
-import {
-  formatPhoneNumber,
-  isValidPhoneNumber,
-  onlyDigits,
-  PHONE_NUMBER_ERROR_MESSAGE,
-} from '@/shared/lib/phoneNumber';
+import { formatPhoneNumber, onlyDigits } from '@/shared/lib/phoneNumber';
 
 export interface EditProfileFormHandle {
   submit: () => void;

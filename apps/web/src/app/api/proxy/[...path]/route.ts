@@ -86,9 +86,10 @@ async function buildResponse(upstream: Response, setCookies: string[]) {
       headers: pickHeaders(upstream),
     });
 
-    applyUpstreamSetCookies(res, setCookies);
+    const sessionCleared = applyUpstreamSetCookies(res, setCookies);
 
-    const token = extractAccessToken(parsed);
+    // 세션을 끝낸 응답(로그아웃·탈퇴)의 본문에 토큰이 남아 있어도 다시 심지 않는다
+    const token = sessionCleared ? null : extractAccessToken(parsed);
     if (token) {
       applyAccessTokenCookie(res, token);
     }

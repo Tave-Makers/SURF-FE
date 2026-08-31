@@ -2,8 +2,11 @@ import { useMutation } from '@tanstack/react-query';
 import { unregisterDeviceToken } from '@/entities/notification/lib/unregisterDeviceToken';
 import { logout } from '@/features/auth/api/logout.client';
 import { useAuthStore } from '@/features/auth/model/useAuthStore';
+import { postToNative } from '@/shared/lib/nativeBridge';
 import { useRouter } from 'next/navigation';
 import { useToastStore } from '@surf/ui/store/toastStore';
+
+const LOGOUT_MESSAGE = '로그아웃 되었습니다.';
 
 export function useLogout() {
   const clearAuth = useAuthStore((s) => s.clearAuth);
@@ -18,7 +21,9 @@ export function useLogout() {
     },
     onSuccess: () => {
       clearAuth();
-      showToast('로그아웃 되었습니다.');
+      // 앱은 /login 도착을 보고 로그아웃을 추측한다. 명시적으로 알려 주면 바로 로그인 화면으로 돌아간다
+      postToNative({ type: 'LOGGED_OUT', message: LOGOUT_MESSAGE });
+      showToast(LOGOUT_MESSAGE);
       router.replace('/login');
     },
     onError: (e) => {

@@ -1,4 +1,4 @@
-import { useCallback, useMemo, useState } from 'react';
+import { useCallback, useMemo, useRef, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { PAGE_ROUTES } from '@/shared/config/path';
 
@@ -23,6 +23,7 @@ import { postQueryKeys } from '@/entities/post/api/queryKeys';
 import { scheduleQueryKeys } from '@/features/calendar/api/queryKeys';
 import { format } from 'date-fns';
 import { PostDetail } from '@/entities/post/model/types';
+import type { UploadImage } from '@surf/utils';
 import { PostScheduleData } from '@/entities/post/api/types';
 
 type Props = {
@@ -32,6 +33,13 @@ type Props = {
   postDetail?: PostDetail;
   postSchedule?: PostScheduleData;
 };
+
+/**
+ * 아직 S3 업로드가 끝나지 않은 상태.
+ * 이 상태로 등록하면 uploadedUrl 이 없어 첨부가 조용히 누락된다.
+ */
+const isUploadInFlight = (status: UploadImage['status']) =>
+  status === 'pending' || status === 'uploading';
 
 export const usePostForm = ({ mode, boardId, postId, postDetail, postSchedule }: Props) => {
   const router = useRouter();
@@ -45,11 +53,17 @@ export const usePostForm = ({ mode, boardId, postId, postDetail, postSchedule }:
 
   const [showExitAlert, setShowExitAlert] = useState(false);
 
+  // 뮤테이션의 isPending 은 본 요청만 덮는다. 등록은 그 뒤로도 일정 생성·캐시 무효화·
+  // 라우팅까지 이어지므로, 그 사이 버튼이 다시 살아나지 않도록 전 구간을 직접 표시한다.
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  // 상태 반영 전 연타로 두 번 들어오는 것을 막는다
+  const submittingRef = useRef(false);
+
   // 2. Mutations
 
   // 생성/수정 뮤테이션
-  const { mutateAsync: createMutate, isPending: isCreating } = useCreatePost();
-  const { mutateAsync: updateMutate, isPending: isUpdating } = useUpdatePost(numericPostId!);
+  const { mutateAsync: createMutate } = useCreatePost();
+  const { mutateAsync: updateMutate } = useUpdatePost(numericPostId!);
   const { mutateAsync: createScheduleMutate } = useCreatePostSchedule();
   const { mutateAsync: editScheduleMutate } = useEditSchedule();
   const { mutateAsync: deleteScheduleMutate } = useDeletePostSchedule();
@@ -65,15 +79,25 @@ export const usePostForm = ({ mode, boardId, postId, postDetail, postSchedule }:
     resetForm();
   }, [clearLinkedSchedule, resetForm]);
 
+  // 첨부가 아직 올라가는 중이면 등록을 막는다
+  const isUploading = useMemo(
+    () =>
+      images.some((img) => isUploadInFlight(img.status)) ||
+      files.some((file) => isUploadInFlight(file.status)),
+    [images, files],
+  );
+
   const isSubmitDisabled = useMemo(() => {
     const { isEmpty } = checkHasChanges();
     return (
       !title.trim() ||
       stripHtml(content).trim() === '' ||
       stripHtml(content).trim() === '<p></p>' ||
-      isEmpty
+      isEmpty ||
+      isUploading ||
+      isSubmitting
     );
-  }, [title, content, checkHasChanges]);
+  }, [title, content, checkHasChanges, isUploading, isSubmitting]);
 
   // 이미 발행된 글인지 판단 (툴바 비활성화용)
   // 수정 모드이고 서버 데이터상 예약 중이 아닌 경우
@@ -88,7 +112,7 @@ export const usePostForm = ({ mode, boardId, postId, postDetail, postSchedule }:
   const queryClient = useQueryClient();
 
   const handleSubmit = async () => {
-    if (isCreating || isUpdating) return;
+    if (submittingRef.current) return;
 
     // Validation
     const { MAX_TITLE_LENGTH, MAX_CONTENT_LENGTH, MAX_IMAGES } = POST_VALIDATION;
@@ -117,6 +141,9 @@ export const usePostForm = ({ mode, boardId, postId, postDetail, postSchedule }:
     const categoryId = categoryKeyToId(category, Number(boardId)) ?? 1;
     const formattedReservedAt =
       reserved && reservedAt ? format(reservedAt, "yyyy-MM-dd'T'HH:mm:ss") : null;
+
+    submittingRef.current = true;
+    setIsSubmitting(true);
 
     try {
       let targetPostId = numericPostId;
@@ -259,6 +286,9 @@ export const usePostForm = ({ mode, boardId, postId, postDetail, postSchedule }:
     } catch (err) {
       console.error('게시글 처리 실패', err);
       alert('게시글 저장 중 오류가 발생했습니다.');
+    } finally {
+      submittingRef.current = false;
+      setIsSubmitting(false);
     }
   };
 

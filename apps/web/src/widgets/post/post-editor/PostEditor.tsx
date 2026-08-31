@@ -6,7 +6,7 @@ import { UploadFile, UploadImage } from '@surf/utils';
 import { EditorContent } from '@tiptap/react';
 import { memo, useCallback, useEffect } from 'react';
 import { EventCard } from '@/entities/calendar/ui/EventCard/EventCard';
-import { POST_VALIDATION } from '@/entities/post/model/validation';
+import { POST_FILE_ACCEPT, POST_VALIDATION } from '@/entities/post/model/validation';
 import { FileCard } from '@/entities/post/post-file/ui/FileCard';
 import { ImageList } from '@/entities/post/post-image/ui/ImageList';
 import { useImageManager } from '@/features/image/model/useImageManager';
@@ -195,7 +195,7 @@ export const PostEditor = memo(
               <input
                 ref={fileInputRef}
                 type="file"
-                accept=".pdf,.doc,.docx,.xls,.xlsx,.ppt,.pptx,.zip,.txt"
+                accept={POST_FILE_ACCEPT}
                 multiple
                 className="hidden"
                 onChange={(e) => {
@@ -209,6 +209,7 @@ export const PostEditor = memo(
                     <FileCard
                       key={file.id}
                       fileName={file.originalFileName}
+                      status={file.status}
                       onRemove={() => handleFileRemove(index)}
                     />
                   ))}
@@ -245,6 +246,7 @@ export const PostEditor = memo(
     return (
       prevProps.content === nextProps.content &&
       prevProps.images === nextProps.images &&
+      prevProps.files === nextProps.files &&
       prevProps.linkedSchedule === nextProps.linkedSchedule &&
       prevProps.isPublished === nextProps.isPublished
     );

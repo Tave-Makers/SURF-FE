@@ -124,6 +124,16 @@ export const usePostForm = ({ mode, boardId, postId, postDetail, postSchedule }:
       return;
     }
 
+    // 실패한 첨부도 uploadedUrl 이 없어 그대로 걸러진다. 등록 버튼을 잠가 버리면
+    // 스스로 풀리지 않는 상태라 이유를 알 수 없으므로, 눌렀을 때 안내한다.
+    const hasFailedAttachment =
+      images.some((img) => img.status === 'error') || files.some((f) => f.status === 'error');
+
+    if (hasFailedAttachment) {
+      showToast('업로드에 실패한 첨부가 있어요. 삭제 후 다시 등록해주세요.');
+      return;
+    }
+
     // Validation
     const { MAX_TITLE_LENGTH, MAX_CONTENT_LENGTH, MAX_IMAGES } = POST_VALIDATION;
     const textContent = stripHtml(content);

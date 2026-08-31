@@ -134,6 +134,7 @@ export function base(opts) {
         '**/app/**/default.{ts,tsx,js,jsx}',
         '**/app/**/loading.{ts,tsx,js,jsx}',
         '**/app/**/error.{ts,tsx,js,jsx}',
+        '**/app/**/global-error.{ts,tsx,js,jsx}',
         '**/app/**/not-found.{ts,tsx,js,jsx}',
         '**/app/**/route.{ts,tsx,js,jsx}',
         '**/app-pages/**/*.{ts,tsx,js,jsx}',

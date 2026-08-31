@@ -1,3 +1,4 @@
+import { useToastStore } from '@surf/ui/store/toastStore';
 import { useCallback, useMemo, useRef, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { PAGE_ROUTES } from '@/shared/config/path';
@@ -52,6 +53,8 @@ export const usePostForm = ({ mode, boardId, postId, postDetail, postSchedule }:
   const { linkedSchedule, clearLinkedSchedule } = useCreatePostScheduleStore();
 
   const [showExitAlert, setShowExitAlert] = useState(false);
+
+  const showToast = useToastStore((s) => s.show);
 
   // 뮤테이션의 isPending 은 본 요청만 덮는다. 등록은 그 뒤로도 일정 생성·캐시 무효화·
   // 라우팅까지 이어지므로, 그 사이 버튼이 다시 살아나지 않도록 전 구간을 직접 표시한다.
@@ -113,6 +116,13 @@ export const usePostForm = ({ mode, boardId, postId, postDetail, postSchedule }:
 
   const handleSubmit = async () => {
     if (submittingRef.current) return;
+
+    // isSubmitDisabled 는 렌더 결과라 status 변경과 탭이 겹치면 옛 값으로 실행된다.
+    // 여기서 막지 않으면 uploadedUrl 이 없는 첨부가 조용히 걸러진 채 등록된다.
+    if (isUploading) {
+      showToast('첨부 업로드가 끝난 뒤 등록해주세요');
+      return;
+    }
 
     // Validation
     const { MAX_TITLE_LENGTH, MAX_CONTENT_LENGTH, MAX_IMAGES } = POST_VALIDATION;

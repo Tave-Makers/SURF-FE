@@ -18,7 +18,7 @@ export const ErrorPage = ({ error, reset }: ErrorPageProps) => {
   return (
     <div className="flex h-full w-full items-center justify-center">
       <div className="flex flex-col items-center gap-16 text-center">
-        <div className="flex flex-col items-center gap-11">
+        <div className="flex flex-col items-center gap-5">
           <ErrorStateIcon aria-hidden="true" />
           <p className="text-body-body8 text-foreground-tertiary">
             일시적인 오류가 발생했어요

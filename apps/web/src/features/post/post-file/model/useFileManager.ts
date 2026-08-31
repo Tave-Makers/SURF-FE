@@ -4,35 +4,10 @@ import { safeUUID, UploadFile } from '@surf/utils';
 import { useToastStore } from '@surf/ui/store/toastStore';
 import { useCallback, useRef, useState } from 'react';
 import { useFileUploader } from '@/entities/post/post-file/model/useFileUploader';
+import { describeFailedNames } from '@/shared/lib/describeUploadFailure';
 
 type UseFileManagerProps = {
   initialFiles?: UploadFile[];
-};
-
-/** 토스트 뷰포트가 375px 로 묶여 있어, 긴 이름은 확장자만 남기고 줄인다 */
-const MAX_TOAST_FILE_NAME = 20;
-
-const MAX_EXTENSION_LENGTH = 10;
-
-const shortenFileName = (name: string) => {
-  if (name.length <= MAX_TOAST_FILE_NAME) return name;
-
-  const lastDot = name.lastIndexOf('.');
-  // 확장자로 보기 어려울 만큼 길면 그냥 이름의 일부로 취급한다
-  const hasExtension = lastDot > 0 && name.length - lastDot <= MAX_EXTENSION_LENGTH;
-  const ext = hasExtension ? name.slice(lastDot) : '';
-  const base = hasExtension ? name.slice(0, lastDot) : name;
-
-  return `${base.slice(0, MAX_TOAST_FILE_NAME - ext.length - 1)}…${ext}`;
-};
-
-/** 실패한 파일이 여러 개면 첫 이름만 보여주고 나머지는 개수로 접는다 */
-const describeFailedFiles = (failed: UploadFile[]) => {
-  const [first, ...rest] = failed;
-  if (!first) return '파일';
-
-  const name = shortenFileName(first.originalFileName);
-  return rest.length > 0 ? `${name} 외 ${rest.length}개` : name;
 };
 
 export function useFileManager({ initialFiles = [] }: UseFileManagerProps = {}) {
@@ -87,7 +62,10 @@ export function useFileManager({ initialFiles = [] }: UseFileManagerProps = {}) 
         const failed = uploaded.filter((f) => f.status === 'error');
         if (failed.length > 0) {
           showToast(
-            `${describeFailedFiles(failed)} 업로드에 실패했어요. 삭제 후 다시 첨부해주세요.`,
+            `${describeFailedNames(
+              failed.map((f) => f.originalFileName),
+              '파일',
+            )} 업로드에 실패했어요. 삭제 후 다시 첨부해주세요.`,
           );
         }
       } catch (err) {
@@ -96,7 +74,10 @@ export function useFileManager({ initialFiles = [] }: UseFileManagerProps = {}) 
         // presigned 발급 단계에서 터지면 'pending' 으로 남아 실패가 화면에 드러나지 않는다
         applyUploadedState(newlySelected.map((f) => ({ ...f, status: 'error' as const })));
         showToast(
-          `${describeFailedFiles(newlySelected)} 업로드에 실패했어요. 잠시 후 다시 시도해주세요.`,
+          `${describeFailedNames(
+            newlySelected.map((f) => f.originalFileName),
+            '파일',
+          )} 업로드에 실패했어요. 잠시 후 다시 시도해주세요.`,
         );
       }
     },

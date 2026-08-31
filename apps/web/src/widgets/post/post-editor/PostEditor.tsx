@@ -209,6 +209,7 @@ export const PostEditor = memo(
                     <FileCard
                       key={file.id}
                       fileName={file.originalFileName}
+                      status={file.status}
                       onRemove={() => handleFileRemove(index)}
                     />
                   ))}

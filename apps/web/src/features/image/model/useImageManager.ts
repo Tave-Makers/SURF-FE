@@ -50,6 +50,10 @@ export function useImageManager({ initialImages = [] }: UseImageSelectorProps = 
         applyUploadedState(uploadedChunk);
       } catch (err) {
         console.error('이미지 업로드 중 오류 발생', err);
+
+        // presigned 발급 단계에서 터지면 'pending' 으로 남는다.
+        // 그대로 두면 업로드가 끝나지 않은 것으로 보여 등록 버튼이 영구히 잠긴다.
+        applyUploadedState(newlySelected.map((img) => ({ ...img, status: 'error' as const })));
       }
     },
     [handleSelect, uploadImages, applyUploadedState],

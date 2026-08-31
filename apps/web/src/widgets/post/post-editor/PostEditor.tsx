@@ -246,6 +246,7 @@ export const PostEditor = memo(
     return (
       prevProps.content === nextProps.content &&
       prevProps.images === nextProps.images &&
+      prevProps.files === nextProps.files &&
       prevProps.linkedSchedule === nextProps.linkedSchedule &&
       prevProps.isPublished === nextProps.isPublished
     );

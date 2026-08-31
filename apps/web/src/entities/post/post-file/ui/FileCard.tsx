@@ -16,6 +16,12 @@ export const FileCard = ({ fileName, status, onRemove }: FileCardProps) => {
         <p className="text-body-body6 text-foreground-tertiary truncate">{fileName}</p>
       </div>
 
+      {status === 'error' && (
+        <p role="alert" className="text-body-body6 text-foreground-danger shrink-0">
+          업로드 실패
+        </p>
+      )}
+
       {status === 'uploading' && (
         <div
           role="status"

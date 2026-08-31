@@ -1,11 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 
-import {
-  applyAccessTokenCookie,
-  applyUpstreamSetCookies,
-  extractAccessToken,
-  getSetCookies,
-} from '@/shared/lib/proxyCookie';
+import { applyProxyAuthToResponse } from '@/features/auth/lib/applyProxyAuthResponse';
+import { applyUpstreamSetCookies, getSetCookies } from '@/shared/lib/proxyCookie';
 
 export const runtime = 'nodejs';
 
@@ -61,14 +57,13 @@ async function proxy(req: NextRequest, path: string[]) {
     redirect: 'manual',
   });
 
-  const setCookies = getSetCookies(upstream);
   console.log('[proxy] upstream status:', upstream.status);
   console.log('[proxy] upstream content-type:', upstream.headers.get('content-type'));
 
-  return buildResponse(upstream, setCookies);
+  return buildResponse(upstream);
 }
 
-async function buildResponse(upstream: Response, setCookies: string[]) {
+async function buildResponse(upstream: Response) {
   const contentType = upstream.headers.get('content-type') ?? '';
 
   if (contentType.includes('application/json')) {
@@ -86,12 +81,8 @@ async function buildResponse(upstream: Response, setCookies: string[]) {
       headers: pickHeaders(upstream),
     });
 
-    applyUpstreamSetCookies(res, setCookies);
-
-    const token = extractAccessToken(parsed);
-    if (token) {
-      applyAccessTokenCookie(res, token);
-    }
+    // OAuth 콜백 라우트와 같은 규칙을 쓴다. 여기서 따로 구현하면 규칙이 갈라진다.
+    applyProxyAuthToResponse(res, upstream, parsed);
 
     return res;
   }
@@ -101,7 +92,8 @@ async function buildResponse(upstream: Response, setCookies: string[]) {
     headers: pickHeaders(upstream),
   });
 
-  applyUpstreamSetCookies(res, setCookies);
+  // 본문이 JSON 이 아니면 심을 토큰도 없다. 쿠키만 그대로 넘긴다.
+  applyUpstreamSetCookies(res, getSetCookies(upstream));
 
   return res;
 }

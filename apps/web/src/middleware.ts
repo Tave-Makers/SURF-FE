@@ -131,7 +131,12 @@ async function refreshSession(req: NextRequest): Promise<NextResponse | null> {
   const res = NextResponse.next({ request: { headers } });
 
   // proxy 경유 요청과 동일한 규칙(Path 재작성 포함)으로 브라우저에 쿠키 반영
-  applyUpstreamSetCookies(res, setCookies);
+  const sessionCleared = applyUpstreamSetCookies(res, setCookies);
+
+  // RT 를 지우는 응답이 왔다면 재발급이 아니라 세션 종료다.
+  // 새 AT 를 심지 말고, 호출부가 redirectToLogin 으로 쿠키를 정리하게 둔다.
+  if (sessionCleared) return null;
+
   applyAccessTokenCookie(res, accessToken);
 
   return res;

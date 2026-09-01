@@ -5,14 +5,6 @@ export type NativePushToken = {
   platform: NativePushPlatform;
 };
 
-declare global {
-  interface Window {
-    /** 네이티브 앱 WebView 에서만 주입된다. */
-    __SURF_NATIVE__?: { platform: string };
-    __SURF_NATIVE_PUSH__?: unknown;
-  }
-}
-
 /** 네이티브가 토큰을 주입한 뒤 발생시키는 이벤트. */
 export const NATIVE_PUSH_EVENT = 'surf:native-push';
 

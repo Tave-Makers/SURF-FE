@@ -56,7 +56,12 @@ export const AccountIntegrationBottomSheet = ({
       setLoginErrorMessage(
         '로그인 정보를 임시 저장하지 못했어요. 브라우저 설정을 확인한 뒤 다시 시도해주세요.',
       );
+      return;
     }
+
+    // 앱의 네이티브 로그인은 이 화면 위에 시트로 뜬다. 취소하면 여기로 그대로 돌아오므로
+    // 페이지를 떠나는 리다이렉트와 달리 버튼을 잠가둘 이유가 없다
+    if (result.via === 'native') setIsRedirecting(false);
   };
 
   return (

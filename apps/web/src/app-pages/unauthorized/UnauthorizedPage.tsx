@@ -1,5 +1,5 @@
 import Link from 'next/link';
-import ErrorPageIcon from '@/shared/assets/icons/error-page-icon.svg';
+import ErrorStateIcon from '@/shared/assets/icons/error/error-state-icon.svg';
 import { PAGE_ROUTES } from '@/shared/config/path';
 
 export const UnauthorizedPage = () => {
@@ -7,7 +7,7 @@ export const UnauthorizedPage = () => {
     <div className="flex h-full w-full items-center justify-center">
       <div className="flex flex-col items-center gap-16 text-center">
         <div className="flex flex-col items-center gap-11">
-          <ErrorPageIcon aria-hidden="true" />
+          <ErrorStateIcon aria-hidden="true" />
           <p className="text-body-body8 text-foreground-tertiary">접근 권한이 없어요</p>
         </div>
         <Link

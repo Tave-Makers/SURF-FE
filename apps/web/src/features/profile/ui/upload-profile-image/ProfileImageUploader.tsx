@@ -1,6 +1,7 @@
 'use client';
 
 import { Avatar, AvatarSize } from '@surf/ui/avatar';
+import { useToastStore } from '@surf/ui/store/toastStore';
 import { useMemo, useRef, useEffect, memo } from 'react';
 import { validateProfileImage } from '@/features/profile/lib/validateProfileImage';
 
@@ -18,6 +19,7 @@ const ProfileImageUploaderComponent = ({
   imageSize = 'xl',
 }: Props) => {
   const inputRef = useRef<HTMLInputElement>(null);
+  const showToast = useToastStore((s) => s.show);
 
   const previewUrl = useMemo(() => {
     if (!file) return null;
@@ -37,7 +39,7 @@ const ProfileImageUploaderComponent = ({
       await validateProfileImage(selected);
       onChange(selected);
     } catch (error) {
-      if (error instanceof Error) alert(error.message);
+      if (error instanceof Error) showToast(error.message);
       e.target.value = '';
     }
   };

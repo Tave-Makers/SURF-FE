@@ -134,15 +134,24 @@ export const usePostForm = ({ mode, boardId, postId, postDetail, postSchedule }:
       return;
     }
 
-    // Validation
+    // 상위 가드(maxLength, CharacterCount, 이미지 개수 제한)는 입력 시점만 막는다.
+    // 수정 모드처럼 폼 바깥에서 들어온 값은 한도를 넘을 수 있어 제출 직전에 한 번 더 본다.
     const { MAX_TITLE_LENGTH, MAX_CONTENT_LENGTH, MAX_IMAGES } = POST_VALIDATION;
-    const textContent = stripHtml(content);
 
-    if (title.length > MAX_TITLE_LENGTH)
-      return alert(`제목은 최대 ${MAX_TITLE_LENGTH}자까지입니다.`);
-    if (textContent.length > MAX_CONTENT_LENGTH)
-      return alert(`본문은 최대 ${MAX_CONTENT_LENGTH}자까지입니다.`);
-    if (images.length > MAX_IMAGES) return alert(`이미지는 최대 ${MAX_IMAGES}개까지입니다.`);
+    if (title.length > MAX_TITLE_LENGTH) {
+      showToast(`제목은 최대 ${MAX_TITLE_LENGTH}자까지 입력할 수 있어요`);
+      return;
+    }
+
+    if (stripHtml(content).length > MAX_CONTENT_LENGTH) {
+      showToast(`본문은 최대 ${MAX_CONTENT_LENGTH.toLocaleString()}자까지 입력할 수 있어요`);
+      return;
+    }
+
+    if (images.length > MAX_IMAGES) {
+      showToast(`이미지는 최대 ${MAX_IMAGES}장까지 업로드할 수 있어요`);
+      return;
+    }
 
     const { isContentChanged, isImagesChanged, isFilesChanged, isReservationChanged } =
       checkHasChanges();
@@ -305,7 +314,7 @@ export const usePostForm = ({ mode, boardId, postId, postDetail, postSchedule }:
       }
     } catch (err) {
       console.error('게시글 처리 실패', err);
-      alert('게시글 저장 중 오류가 발생했습니다.');
+      showToast('게시글 저장에 실패했어요. 잠시 후 다시 시도해주세요.');
     } finally {
       submittingRef.current = false;
       setIsSubmitting(false);

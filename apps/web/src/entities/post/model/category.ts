@@ -13,6 +13,7 @@ export const BOARD_CATEGORIES = {
     { key: 'info', id: 7, label: '정보' },
     { key: 'qna', id: 8, label: '질문' },
     { key: 'etc', id: 9, label: '기타' },
+    { key: 'itsme', id: 10, label: '나야나' },
   ],
 } as const satisfies Record<number, readonly CategoryItem[]>;
 

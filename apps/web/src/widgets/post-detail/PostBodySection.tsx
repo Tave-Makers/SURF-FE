@@ -113,7 +113,10 @@ export const PostBodySection = ({ post, schedule, onClickLikeCount }: PostBodySe
         time={post.time}
         viewCount={post.viewCount}
       />
-      <div className="whitespace-pre-line" dangerouslySetInnerHTML={{ __html: cleanContent }} />
+      <div
+        className="whitespace-pre-line [&_p]:min-h-[1lh]"
+        dangerouslySetInnerHTML={{ __html: cleanContent }}
+      />
 
       <div className="flex flex-col gap-10">
         {/* 이미지 목록 */}

@@ -113,7 +113,6 @@ export const PostBodySection = ({ post, schedule, onClickLikeCount }: PostBodySe
         time={post.time}
         viewCount={post.viewCount}
       />
-      {/* 빈 문단(<p></p>)은 높이 0이라 엔터로 넣은 빈 줄이 사라진다. min-h로 한 줄 높이 확보 */}
       <div
         className="whitespace-pre-line [&_p]:min-h-[1lh]"
         dangerouslySetInnerHTML={{ __html: cleanContent }}

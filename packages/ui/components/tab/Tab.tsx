@@ -17,7 +17,7 @@ interface TabProps {
 const baseStyle = 'flex w-full shadow-[inset_0_-1px_0_0_var(--color-border-normal)]';
 
 const tabStyle =
-  'relative flex-1 p-10 text-body-body8 transition-colors' +
+  'relative flex-1 whitespace-nowrap p-10 text-body-body8 transition-colors' +
   ' after:absolute after:bottom-0 after:left-0 after:h-[2px] after:w-full' +
   ' after:bg-foreground-normal after:origin-center after:scale-x-0' +
   ' after:transition-transform after:duration-200';
@@ -55,7 +55,11 @@ export const Tab = ({ items, value, defaultValue, onValueChange }: TabProps) => 
 
   return (
     <div className={baseStyle}>
-      <div className="flex w-full" role="tablist" aria-orientation="horizontal">
+      <div
+        className="scrollbar-hide flex w-full overflow-x-auto"
+        role="tablist"
+        aria-orientation="horizontal"
+      >
         {items.map((item) => {
           const isActive = item.value === activeValue;
 

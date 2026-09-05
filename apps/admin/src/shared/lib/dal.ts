@@ -97,12 +97,15 @@ function getSetCookieHeaders(res: Response): string[] {
  * 대신 일반 에러로 던져 (protected) 트리의 error.tsx(재시도 가능)로 위임한다.
  */
 export async function verifySession() {
+  // headers()/cookies() 는 정적 생성 시도 중엔 Next.js가 "이 라우트는 dynamic이다"라고
+  // 알리려고 일부러 예외를 던진다(redirect()의 NEXT_REDIRECT와 같은 원리). try 안에 두면
+  // 그 신호가 아래 catch에서 일반 에러로 둔갑해 next build 자체가 실패한다. try 밖에서 미리 읽어
+  // Next.js 프레임워크로 그대로 전달되게 한다.
+  const baseUrl = await getBaseUrl();
+  const cookieStore = await cookies();
+  const cookieHeader = buildCookieHeaderFromStore(cookieStore.getAll());
+
   try {
-    const baseUrl = await getBaseUrl();
-
-    const cookieStore = await cookies();
-    const cookieHeader = buildCookieHeaderFromStore(cookieStore.getAll());
-
     const res = await fetchWithTimeout(`${baseUrl}${VALID_PATH}`, {
       cache: 'no-store',
       headers: cookieHeader ? { cookie: cookieHeader } : {},

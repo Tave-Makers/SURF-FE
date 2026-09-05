@@ -1,7 +1,7 @@
 'use client';
 import { useDebouncedValue } from '@surf/hooks';
 import { TextInput } from '@surf/ui/text-input';
-import { useState } from 'react';
+import { Suspense, useState } from 'react';
 import { SignupRequestListWidget } from '@/widgets/signup-request/ui/SignupRequestListWidget';
 
 /**
@@ -23,7 +23,9 @@ export const SignupRequestPage = () => {
           onChange={(value) => setKeyword(value)}
         />
       </div>
-      <SignupRequestListWidget keyword={debouncedKeyword} />
+      <Suspense fallback={<div>Loading...</div>}>
+        <SignupRequestListWidget keyword={debouncedKeyword} />
+      </Suspense>
     </main>
   );
 };

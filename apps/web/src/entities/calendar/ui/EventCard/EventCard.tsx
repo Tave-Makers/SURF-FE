@@ -175,8 +175,8 @@ export const EventCard = ({
             </div>
 
             {/* 장소 */}
-            <div className="text-caption-caption2 text-foreground-normal-lighter mt-3 flex gap-5">
-              <div className="shrink-0">장소 :</div>
+            <div className="text-caption-caption2 text-foreground-normal-lighter mt-3 flex items-center gap-5">
+              <div>장소 :</div>
               <div>{location ? location : '미정'}</div>
             </div>
           </div>

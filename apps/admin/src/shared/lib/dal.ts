@@ -88,6 +88,14 @@ function getSetCookieHeaders(res: Response): string[] {
   return single ? [single] : [];
 }
 
+/**
+ * "로그인 아님이 확정된 경우"에만 /login으로 보낸다.
+ *
+ * 확정 = valid-status 가 401을 주고, 그걸 복구하려던 refresh 마저 실패한 경우뿐이다.
+ * 그 외(네트워크 에러, 타임아웃, valid-status의 401 아닌 실패, refresh 성공 후 재검증 실패 등)는
+ * 세션이 멀쩡한데도 일시적인 문제로 로그아웃 취급될 수 있으므로 로그인으로 보내지 않는다.
+ * 대신 일반 에러로 던져 (protected) 트리의 error.tsx(재시도 가능)로 위임한다.
+ */
 export async function verifySession() {
   try {
     const baseUrl = await getBaseUrl();
@@ -105,35 +113,41 @@ export async function verifySession() {
       return;
     }
 
-    // 401이면 refresh -> retry
-    if (res.status === 401) {
-      const refresh = await fetchWithTimeout(`${baseUrl}${REFRESH_PATH}`, {
-        method: 'POST',
-        cache: 'no-store',
-        headers: cookieHeader ? { cookie: cookieHeader } : {},
-      });
-
-      if (!refresh.ok) redirect(PAGE_ROUTES.LOGIN);
-
-      const setCookies = getSetCookieHeaders(refresh);
-      const newCookieHeader = mergeCookieHeaderWithSetCookie(cookieHeader, setCookies);
-
-      const retry = await fetchWithTimeout(`${baseUrl}${VALID_PATH}`, {
-        cache: 'no-store',
-        headers: newCookieHeader ? { cookie: newCookieHeader } : {},
-      });
-
-      if (!retry.ok) redirect(PAGE_ROUTES.LOGIN);
-
-      return;
+    // 401이 아니면(403/500 등) "로그인 안 됨"이 아니라 다른 문제다. 로그인으로 보내지 않는다.
+    if (res.status !== 401) {
+      throw new Error(`[Auth] valid-status 응답 이상: ${res.status}`);
     }
 
-    console.error(`[Auth] 검증 실패: ${res.status}`);
-    redirect(PAGE_ROUTES.LOGIN);
+    // 401 -> refresh 시도
+    const refresh = await fetchWithTimeout(`${baseUrl}${REFRESH_PATH}`, {
+      method: 'POST',
+      cache: 'no-store',
+      headers: cookieHeader ? { cookie: cookieHeader } : {},
+    });
+
+    // refresh 자체가 실패 = 재발급도 안 된다는 뜻이므로 로그인 아님이 확정된다. 여기서만 리다이렉트.
+    if (!refresh.ok) redirect(PAGE_ROUTES.LOGIN);
+
+    const setCookies = getSetCookieHeaders(refresh);
+    const newCookieHeader = mergeCookieHeaderWithSetCookie(cookieHeader, setCookies);
+
+    const retry = await fetchWithTimeout(`${baseUrl}${VALID_PATH}`, {
+      cache: 'no-store',
+      headers: newCookieHeader ? { cookie: newCookieHeader } : {},
+    });
+
+    // refresh는 성공했는데 재검증이 또 실패 -> 확정된 로그아웃이 아니라 애매한 상태.
+    // 로그인으로 보내면 방금 새로 받은 토큰을 버리는 셈이므로 에러 화면으로 위임한다.
+    if (!retry.ok) {
+      throw new Error(`[Auth] refresh 후 재검증 실패: ${retry.status}`);
+    }
   } catch (error: unknown) {
     if (isNextRedirectError(error)) throw error;
 
-    console.error('[Auth] 예상치 못한 에러:', safeErrorMessage(error));
-    redirect(PAGE_ROUTES.LOGIN);
+    console.error(
+      '[Auth] 세션 확인 실패 (로그인 아님으로 단정하지 않고 에러 화면으로 위임):',
+      safeErrorMessage(error),
+    );
+    throw new Error('세션 확인에 실패했습니다. 다시 시도해주세요.');
   }
 }

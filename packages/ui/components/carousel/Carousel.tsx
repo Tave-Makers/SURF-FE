@@ -82,11 +82,13 @@ export const Carousel = ({ images, className = '', autoPlayMs = 0 }: Props) => {
             </div>
           );
 
-          return img.linkUrl ? (
-            <a key={`${img.src}-${i}`} href={img.linkUrl} className="h-full w-full flex-shrink-0">
-              {content}
-            </a>
-          ) : (
+          // linkUrl 이동 임시 비활성화. 복구 시 아래 주석 해제.
+          // return img.linkUrl ? (
+          //   <a key={`${img.src}-${i}`} href={img.linkUrl} className="h-full w-full flex-shrink-0">
+          //     {content}
+          //   </a>
+          // ) : (
+          return (
             <button
               key={`${img.src}-${i}`}
               type="button"

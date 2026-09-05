@@ -2,7 +2,7 @@
 import { useDebouncedValue } from '@surf/hooks';
 import { TextInput } from '@surf/ui/text-input';
 
-import { Suspense, useState } from 'react';
+import { useState } from 'react';
 import { MemberDirectoryWidget } from '@/widgets/member-directory/ui/MemberDirectoryWidget';
 
 /**
@@ -25,9 +25,7 @@ export const MemberManagementPage = () => {
           onChange={(value) => setKeyword(value)}
         />
       </div>
-      <Suspense fallback={<div>Loading...</div>}>
-        <MemberDirectoryWidget keyword={debouncedKeyword} />
-      </Suspense>
+      <MemberDirectoryWidget keyword={debouncedKeyword} />
     </main>
   );
 };

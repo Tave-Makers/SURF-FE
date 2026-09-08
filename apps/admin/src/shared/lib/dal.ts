@@ -80,6 +80,14 @@ function mergeCookieHeaderWithSetCookie(origHeader: string, setCookies: string[]
     .join('; ');
 }
 
+/**
+ * 인증 실패로 볼 상태 코드.
+ * 서버(Spring Security)는 토큰이 아예 없으면 403, 만료·무효면 401을 준다.
+ */
+function isAuthFailure(status: number): boolean {
+  return status === 401 || status === 403;
+}
+
 function getSetCookieHeaders(res: Response): string[] {
   const anyHeaders = res.headers as unknown as { getSetCookie?: () => string[] | undefined };
   if (typeof anyHeaders.getSetCookie === 'function') return anyHeaders.getSetCookie() ?? [];
@@ -91,10 +99,10 @@ function getSetCookieHeaders(res: Response): string[] {
 /**
  * "로그인 아님이 확정된 경우"에만 /login으로 보낸다.
  *
- * 확정 = valid-status가 401을 준 뒤, 그걸 복구하려던 refresh 자체가 실패했거나
- * refresh는 성공했지만 재검증까지 실패한 경우다.
- * 그 외(네트워크 에러, 타임아웃, valid-status의 401 아닌 실패 등)는 로그인 문제가 아니라
- * 일시적인 인프라 문제일 수 있으므로 로그인으로 보내지 않는다.
+ * 확정 = valid-status가 인증 실패(401/403)를 준 뒤, 그걸 복구하려던 refresh 자체가
+ * 실패했거나 refresh는 성공했지만 재검증까지 실패한 경우다.
+ * 그 외(네트워크 에러, 타임아웃, 5xx 등)는 로그인 문제가 아니라 일시적인 인프라
+ * 문제일 수 있으므로 로그인으로 보내지 않는다.
  * 대신 일반 에러로 던져 (protected) 트리의 error.tsx(재시도 가능)로 위임한다.
  */
 export async function verifySession() {
@@ -117,12 +125,13 @@ export async function verifySession() {
       return;
     }
 
-    // 401이 아니면(403/500 등) "로그인 안 됨"이 아니라 다른 문제다. 로그인으로 보내지 않는다.
-    if (res.status !== 401) {
+    // 인증 실패가 아니면(5xx 등) "로그인 안 됨"이 아니라 다른 문제다. 로그인으로 보내지 않는다.
+    // 서버는 토큰이 아예 없으면 403, 만료·무효면 401을 주므로 둘 다 인증 실패로 본다.
+    if (!isAuthFailure(res.status)) {
       throw new Error(`[Auth] valid-status 응답 이상: ${res.status}`);
     }
 
-    // 401 -> refresh 시도
+    // 인증 실패 -> refresh 시도
     const refresh = await fetchWithTimeout(`${baseUrl}${REFRESH_PATH}`, {
       method: 'POST',
       cache: 'no-store',

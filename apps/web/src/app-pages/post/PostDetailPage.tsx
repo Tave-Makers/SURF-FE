@@ -204,8 +204,8 @@ const PostDetailPage = ({ postId }: PostDetailPageProps) => {
       {/* 본문 */}
       <div className="relative flex h-full min-h-0 w-full flex-col">
         {/* 스크롤 영역 */}
-        <div ref={scrollRootRef} className="flex-1 overflow-y-auto">
-          <div className="flex flex-col gap-[0.62rem] px-13 pt-13">
+        <div ref={scrollRootRef} className="flex-1 overflow-x-hidden overflow-y-auto">
+          <div className="flex flex-col gap-[0.62rem] px-13 pt-13 break-all">
             <PostHeader
               title={post.title}
               category={{

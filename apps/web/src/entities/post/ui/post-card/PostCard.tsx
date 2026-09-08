@@ -66,7 +66,7 @@ const PostCardComponent = ({
         {/* 본문 */}
         <div className="flex flex-col items-start gap-5 self-stretch">
           <h3 className="text-body-body6 text-foreground-normal line-clamp-2">{title}</h3>
-          <p className="text-body-body7 text-foreground-normal-lighter line-clamp-1">
+          <p className="text-body-body7 text-foreground-normal-lighter line-clamp-1 break-all">
             {stripHtml(content)}
           </p>
 

@@ -135,7 +135,9 @@ export async function verifySession() {
     const refresh = await fetchWithTimeout(`${baseUrl}${REFRESH_PATH}`, {
       method: 'POST',
       cache: 'no-store',
-      headers: cookieHeader ? { cookie: cookieHeader } : {},
+      headers: cookieHeader
+        ? { cookie: cookieHeader, 'X-Refresh-Origin': 'rsc' }
+        : { 'X-Refresh-Origin': 'rsc' },
     });
 
     // refresh 자체가 실패 = 재발급도 안 된다는 뜻이므로 로그인 아님이 확정된다.
@@ -155,10 +157,7 @@ export async function verifySession() {
   } catch (error: unknown) {
     if (isNextRedirectError(error)) throw error;
 
-    console.error(
-      '[Auth] 세션 확인 실패:',
-      safeErrorMessage(error),
-    );
+    console.error('[Auth] 세션 확인 실패:', safeErrorMessage(error));
     throw new Error('세션 확인에 실패했습니다. 다시 시도해주세요.');
   }
 }

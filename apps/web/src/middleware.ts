@@ -106,6 +106,7 @@ async function refreshSession(req: NextRequest): Promise<NextResponse | null> {
       signal: controller.signal,
       headers: {
         'X-Client-Type': 'WEB',
+        'X-Refresh-Origin': 'middleware',
         cookie: req.headers.get('cookie') ?? '',
       },
     });

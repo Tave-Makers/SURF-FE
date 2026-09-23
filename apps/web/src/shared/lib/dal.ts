@@ -149,7 +149,7 @@ export const verifySession = cache(async function verifySession() {
       const refresh = await fetchWithTimeout(buildBackendUrl(REFRESH_PATH), {
         method: 'POST',
         cache: 'no-store',
-        headers: buildAuthHeaders(cookieHeader),
+        headers: { ...buildAuthHeaders(cookieHeader), 'X-Refresh-Origin': 'rsc' },
       });
 
       if (!refresh.ok) redirect(PAGE_ROUTES.LOGIN);

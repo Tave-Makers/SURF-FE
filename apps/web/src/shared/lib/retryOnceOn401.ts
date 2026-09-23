@@ -21,7 +21,7 @@ function isRefreshRequest(config: AxiosConfig): boolean {
 
 function refreshOnce(client: AxiosInstance): Promise<void> {
   refreshPromise ??= client
-    .post(AUTH_REFRESH_PATH, null)
+    .post(AUTH_REFRESH_PATH, null, { headers: { 'X-Refresh-Origin': 'csr' } })
     .then(() => undefined)
     .finally(() => {
       refreshPromise = null;

@@ -4,13 +4,11 @@ import { cookies } from 'next/headers';
 import { redirect } from 'next/navigation';
 import type { ValidStatusResponse } from '@/features/auth/api/types';
 import { PAGE_ROUTES } from '@/shared/config/path';
-import { extractAccessToken } from '@/shared/lib/proxyCookie';
 
 const TIMEOUT_MS = 15_000;
 const BACKEND = process.env.API_BASE_URL;
 
 const VALID_PATH = '/v1/user/members/valid-status';
-const REFRESH_PATH = '/auth/refresh';
 
 async function fetchWithTimeout(url: string, init: RequestInit) {
   const controller = new AbortController();
@@ -86,47 +84,6 @@ function buildAuthHeaders(cookieHeader: string): Record<string, string> {
   return headers;
 }
 
-function mergeCookieHeaderWithSetCookie(origHeader: string, setCookies: string[]) {
-  if (!setCookies.length) return origHeader;
-
-  const jar = new Map<string, string>();
-
-  // 기존 Cookie 헤더 파싱
-  for (const part of origHeader.split(';')) {
-    const p = part.trim();
-    if (!p) continue;
-    const eq = p.indexOf('=');
-    if (eq === -1) continue;
-    const name = p.slice(0, eq).trim();
-    const value = p.slice(eq + 1);
-    jar.set(name, value);
-  }
-
-  // Set-Cookie로 받은 쿠키로 덮어쓰기
-  for (const sc of setCookies) {
-    const first = sc.split(';')[0]?.trim();
-    if (!first) continue;
-    const eq = first.indexOf('=');
-    if (eq === -1) continue;
-    const name = first.slice(0, eq).trim();
-    const value = first.slice(eq + 1);
-    jar.set(name, value);
-  }
-
-  // Cookie 헤더로 직렬화
-  return Array.from(jar.entries())
-    .map(([k, v]) => `${k}=${v}`)
-    .join('; ');
-}
-
-function getSetCookieHeaders(res: Response): string[] {
-  const anyHeaders = res.headers as unknown as { getSetCookie?: () => string[] | undefined };
-  if (typeof anyHeaders.getSetCookie === 'function') return anyHeaders.getSetCookie() ?? [];
-
-  const single = res.headers.get('set-cookie');
-  return single ? [single] : [];
-}
-
 export const verifySession = cache(async function verifySession() {
   try {
     const cookieStore = await cookies();
@@ -144,46 +101,9 @@ export const verifySession = cache(async function verifySession() {
       return handleBusinessRedirect(json);
     }
 
-    // 401이면 refresh -> retry
-    if (res.status === 401) {
-      const refresh = await fetchWithTimeout(buildBackendUrl(REFRESH_PATH), {
-        method: 'POST',
-        cache: 'no-store',
-        headers: { ...buildAuthHeaders(cookieHeader), 'X-Refresh-Origin': 'rsc' },
-      });
-
-      if (!refresh.ok) redirect(PAGE_ROUTES.LOGIN);
-
-      const setCookies = getSetCookieHeaders(refresh);
-      const refreshText = await refresh.text();
-      let parsedRefresh: unknown = null;
-      try {
-        parsedRefresh = refreshText ? JSON.parse(refreshText) : null;
-      } catch {
-        parsedRefresh = null;
-      }
-
-      const refreshedAccessToken = extractAccessToken(parsedRefresh);
-      const refreshedSetCookies = refreshedAccessToken
-        ? [`accessToken=${refreshedAccessToken}; Path=/`]
-        : [];
-      const newCookieHeader = mergeCookieHeaderWithSetCookie(cookieHeader, [
-        ...setCookies,
-        ...refreshedSetCookies,
-      ]);
-
-      const retry = await fetchWithTimeout(buildBackendUrl(VALID_PATH), {
-        cache: 'no-store',
-        headers: buildAuthHeaders(newCookieHeader),
-      });
-
-      if (!retry.ok) redirect(PAGE_ROUTES.LOGIN);
-
-      const raw: unknown = await retry.json();
-      const json = raw as ValidStatusResponse;
-      return handleBusinessRedirect(json);
-    }
-
+    // middleware가 페이지 렌더 전에 이미 AT를 갱신했어야 한다(exp까지 확인함).
+    // 그런데도 401이면 여기서 refresh를 다시 시도하지 않는다 — RSC는 회전된
+    // 쿠키를 브라우저에 못 심어서 RT만 태우고 재사용 감지로 이어질 수 있다.
     console.error(`[Auth] 검증 실패: ${res.status}`);
     redirect(PAGE_ROUTES.LOGIN);
   } catch (error: unknown) {

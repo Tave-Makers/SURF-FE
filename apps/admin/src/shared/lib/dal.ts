@@ -6,7 +6,6 @@ import { PAGE_ROUTES } from '@/shared/config/path';
 const TIMEOUT_MS = 15_000;
 
 const VALID_PATH = '/api/proxy/v1/user/members/valid-status';
-const REFRESH_PATH = '/api/proxy/auth/refresh';
 
 async function fetchWithTimeout(url: string, init: RequestInit) {
   const controller = new AbortController();
@@ -47,53 +46,12 @@ function buildCookieHeaderFromStore(all: { name: string; value: string }[]) {
   return all.map((c) => `${c.name}=${c.value}`).join('; ');
 }
 
-function mergeCookieHeaderWithSetCookie(origHeader: string, setCookies: string[]) {
-  if (!setCookies.length) return origHeader;
-
-  const jar = new Map<string, string>();
-
-  // 기존 Cookie 헤더 파싱
-  for (const part of origHeader.split(';')) {
-    const p = part.trim();
-    if (!p) continue;
-    const eq = p.indexOf('=');
-    if (eq === -1) continue;
-    const name = p.slice(0, eq).trim();
-    const value = p.slice(eq + 1);
-    jar.set(name, value);
-  }
-
-  // Set-Cookie로 받은 쿠키로 덮어쓰기
-  for (const sc of setCookies) {
-    const first = sc.split(';')[0]?.trim();
-    if (!first) continue;
-    const eq = first.indexOf('=');
-    if (eq === -1) continue;
-    const name = first.slice(0, eq).trim();
-    const value = first.slice(eq + 1);
-    jar.set(name, value);
-  }
-
-  // Cookie 헤더로 직렬화
-  return Array.from(jar.entries())
-    .map(([k, v]) => `${k}=${v}`)
-    .join('; ');
-}
-
 /**
  * 인증 실패로 볼 상태 코드.
  * 서버(Spring Security)는 토큰이 아예 없으면 403, 만료·무효면 401을 준다.
  */
 function isAuthFailure(status: number): boolean {
   return status === 401 || status === 403;
-}
-
-function getSetCookieHeaders(res: Response): string[] {
-  const anyHeaders = res.headers as unknown as { getSetCookie?: () => string[] | undefined };
-  if (typeof anyHeaders.getSetCookie === 'function') return anyHeaders.getSetCookie() ?? [];
-
-  const single = res.headers.get('set-cookie');
-  return single ? [single] : [];
 }
 
 /**
@@ -131,29 +89,11 @@ export async function verifySession() {
       throw new Error(`[Auth] valid-status 응답 이상: ${res.status}`);
     }
 
-    // 인증 실패 -> refresh 시도
-    const refresh = await fetchWithTimeout(`${baseUrl}${REFRESH_PATH}`, {
-      method: 'POST',
-      cache: 'no-store',
-      headers: cookieHeader
-        ? { cookie: cookieHeader, 'X-Refresh-Origin': 'rsc' }
-        : { 'X-Refresh-Origin': 'rsc' },
-    });
-
-    // refresh 자체가 실패 = 재발급도 안 된다는 뜻이므로 로그인 아님이 확정된다.
-    if (!refresh.ok) redirect(PAGE_ROUTES.LOGIN);
-
-    const setCookies = getSetCookieHeaders(refresh);
-    const newCookieHeader = mergeCookieHeaderWithSetCookie(cookieHeader, setCookies);
-
-    const retry = await fetchWithTimeout(`${baseUrl}${VALID_PATH}`, {
-      cache: 'no-store',
-      headers: newCookieHeader ? { cookie: newCookieHeader } : {},
-    });
-
-    // refresh는 성공했는데 재검증도 실패 -> 갱신한 토큰으로도 세션이 유효하지 않다는 뜻이므로
-    // 이 역시 로그인 아님으로 확정한다.
-    if (!retry.ok) redirect(PAGE_ROUTES.LOGIN);
+    // middleware가 페이지 렌더 전에 이미 AT를 갱신했어야 한다(exp까지 확인함).
+    // 그런데도 인증 실패면 여기서 refresh를 다시 시도하지 않는다 — RSC는 회전된
+    // 쿠키를 브라우저에 못 심어서 RT만 태우고 재사용 감지로 이어질 수 있다.
+    // middleware가 이미 걸러줬어야 하는 경우이므로 로그인 아님으로 확정한다.
+    redirect(PAGE_ROUTES.LOGIN);
   } catch (error: unknown) {
     if (isNextRedirectError(error)) throw error;
 

@@ -76,6 +76,29 @@ function parseJson(text: string): unknown {
   }
 }
 
+function base64UrlDecode(input: string): string {
+  const base64 = input.replace(/-/g, '+').replace(/_/g, '/');
+  const padded = base64.padEnd(base64.length + ((4 - (base64.length % 4)) % 4), '=');
+  return atob(padded);
+}
+
+/**
+ * AT JWT 의 exp 클레임만 읽는다(서명 검증 아님) — "갱신이 필요한가"를 판단하는
+ * 용도라, 위조된 값이 통과해도 실제 인가는 백엔드가 Authorization 헤더로 다시
+ * 검증한다. 만료 10초 이내도 갱신 대상으로 봐서 요청 도중 만료되는 걸 막는다.
+ */
+function isAccessTokenFresh(token: string): boolean {
+  const payload = token.split('.')[1];
+  if (!payload) return false;
+
+  try {
+    const { exp } = JSON.parse(base64UrlDecode(payload)) as { exp?: unknown };
+    return typeof exp === 'number' && exp * 1000 > Date.now() + 10_000;
+  } catch {
+    return false;
+  }
+}
+
 /** 갱신된 AT 를 현재 요청에도 반영해서 서버 컴포넌트(dal.ts)가 새 토큰을 보게 한다 */
 function buildForwardedCookieHeader(req: NextRequest, accessToken: string): string {
   const jar = new Map<string, string>();
@@ -160,8 +183,9 @@ export async function middleware(req: NextRequest) {
     return hasSession ? NextResponse.next() : redirectToLogin(req);
   }
 
-  // AT 쿠키가 살아있으면 optimistic 통과 (실제 검증은 dal.ts)
-  if (req.cookies.has('accessToken')) return NextResponse.next();
+  // AT 가 실제로 살아있으면 통과 (쿠키 존재만으론 안 본다 — exp 까지 확인)
+  const accessToken = req.cookies.get('accessToken')?.value;
+  if (accessToken && isAccessTokenFresh(accessToken)) return NextResponse.next();
 
   // AT 도 RT 도 없으면 진짜 비로그인
   if (!req.cookies.has('refreshToken')) return redirectToLogin(req);
@@ -169,7 +193,8 @@ export async function middleware(req: NextRequest) {
   // prefetch 로는 RT 를 소모하지 않는다 (RT 회전 레이스 방지)
   if (req.headers.get('next-router-prefetch') === '1') return NextResponse.next();
 
-  // AT 만 만료 -> RT 로 재발급하고 통과
+  // AT 가 없거나 만료됨 -> RT 로 재발급하고 통과 (RSC는 재발급을 시도하지 않는다 —
+  // 쿠키를 못 심어서 RT 만 태우고 브라우저는 옛 값을 계속 보내게 된다)
   const refreshed = await refreshSession(req);
   return refreshed ?? redirectToLogin(req);
 }
